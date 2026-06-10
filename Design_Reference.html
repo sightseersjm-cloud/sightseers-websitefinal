@@ -9044,7 +9044,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
         <a href="#" onclick="nav('tours')" id="n-tours">Tours ▾</a>
         <div class="dropdown">
           <div class="dropdown-submenu">
-            <a href="#" class="submenu-toggle" onclick="nav('tours');return false;">All Tours <i class="fas fa-chevron-right"></i></a>
+            <a href="#" class="submenu-toggle" onclick="nav('tours');return false;">Experiences <i class="fas fa-chevron-right"></i></a>
             <div class="dropdown-nested">
               <a href="#" onclick="openToursFilter('all');return false;">All Experiences</a>
               <a href="#" onclick="openToursFilter('water');return false;">Water Experiences</a>
@@ -10115,11 +10115,15 @@ body.theme-night .page .tag{
   <section class="tours-sec curated-tours-sec" id="tourListSection">
   <div class="tours-wrap curated-wrap">
     <div class="sec-head center reveal">
-      <span class="sec-pre">All Tours</span>
-      <h2 class="sec-title">Water Experiences, Land Experiences & Signature Packages</h2>
+      <span class="sec-pre">Curate Your Experience</span>
+      <h2 class="sec-title">Bespoke Caribbean Adventures, Tailored to You</h2>
     </div>
 
     <div class="curated-shell">
+      <div style="text-align:center;margin-bottom:28px;padding:22px 28px;background:linear-gradient(135deg,rgba(6,58,99,.03),rgba(239,135,49,.04));border:1px solid rgba(6,58,99,.07);border-radius:22px">
+        <p style="font-size:14px;color:var(--grey);line-height:1.8;margin:0 auto 14px;max-width:680px">Every trip is different. Browse our experiences for inspiration, then let us craft a bespoke itinerary around your group, interests and pace.</p>
+        <a href="#" class="btn-primary" onclick="openLinkedStartPlanning();return false;" style="display:inline-flex;gap:8px;align-items:center"><i class="fas fa-wand-magic-sparkles"></i>Build Your Own Experience</a>
+      </div>
       <div class="curated-topbar">
         <div class="tour-filters curated-type-filters">
           <button class="tf-btn on curated-type-btn" data-type="all" onclick="setCuratedType('all',this);return false;">All Experiences</button>
@@ -10197,7 +10201,7 @@ body.theme-night .page .tag{
         </div>
         <div class="tour-side-actions">
           <button class="pd-add-btn" id="tdAddBtn" onclick="addTourToCart()"><i class="fas fa-shopping-bag"></i>Add to Cart</button>
-          <button class="tour-secondary-btn" id="tdBookBtn" onclick="bookTourNow()"><i class="fas fa-calendar-check"></i>Book This Tour</button>
+          <button class="tour-secondary-btn" id="tdBookBtn" onclick="bookTourNow()"><i class="fas fa-calendar-check"></i>Request This Experience</button>
         </div>
         <div class="tour-side-points" id="tdMeta"></div>
         <div class="tour-highlight-row" id="tdHighlights"></div>
@@ -12337,7 +12341,7 @@ body.theme-night .page .tag{
         <span class="sec-pre">Trusted Connections</span>
         <h2 class="sec-title">Brands We Partner With</h2>
         <div class="partner-page-intro">
-          <p class="partner-page-copy">Discover the travel brands, operators and airport-service partners that help Sight Seers deliver a polished Caribbean experience. Each connection on this page supports smoother arrivals, stronger on-island service and a more elevated journey from first inquiry to final departure.</p>
+          <p class="partner-page-copy">Discover the excursion operators, airport lounges and travel brands that help Sight Seers curate bespoke Caribbean experiences. Every partner supports smoother arrivals, elevated on-island service and a more seamless journey from first inquiry to final departure.</p>
         </div>
       </div>
 
@@ -12389,6 +12393,24 @@ body.theme-night .page .tag{
           <span class="partner-category"><i class="fas fa-plane-departure"></i> Departure Lounge</span>
           <div class="partner-name">Club Kingston</div>
           <div class="partner-note">Departure lounge and premium airport support for travelers moving through Kingston with comfort and efficiency.</div>
+          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a class="partner-item" href="https://www.islandroutes.com/caribbean-tours/jamaica" target="_blank" rel="noopener" title="Island Routes Caribbean Adventures">
+          <img class="partner-logo" src="https://www.islandroutes.com/content/dam/islandroutes/logo/island-routes-logo.svg" alt="Island Routes Caribbean Adventures" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="partner-placeholder" style="display:none">Island Routes</div>
+          <span class="partner-category"><i class="fas fa-route"></i> Excursion Partner</span>
+          <div class="partner-name">Island Routes Caribbean Adventures</div>
+          <div class="partner-note">The Caribbean's leading adventure tour company offering curated day tours, private escapes and authentic island experiences across 12 countries.</div>
+          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a class="partner-item" href="https://www.viator.com/Jamaica/d34-ttd" target="_blank" rel="noopener" title="Viator">
+          <img class="partner-logo" src="https://cdn.worldvectorlogo.com/logos/viator-1.svg" alt="Viator" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="partner-placeholder" style="display:none">Viator</div>
+          <span class="partner-category"><i class="fas fa-ticket"></i> Booking Platform</span>
+          <div class="partner-name">Viator</div>
+          <div class="partner-note">A trusted global platform for booking tours and experiences, connecting travelers with top-rated activities in the Caribbean and beyond.</div>
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
 
@@ -35980,7 +36002,7 @@ body.theme-night .page .tag{
       : `<button type="button" class="btn-primary" onclick='openStartPlanning(${JSON.stringify(item.country)}, ${JSON.stringify(item.title)}, ${JSON.stringify(typeLabel)}, ${JSON.stringify(note)})'><i class="fas fa-paper-plane"></i>Inquire Now</button>`;
     const metaMarkup = isJamaicaPackage
       ? ``
-      : `<div>${isPackage ? '' : `<div class="curated-tour-price">${item.priceLabel}</div>`}<span class="curated-tour-duration">${item.duration}</span></div>`;
+      : `<div>${isPackage ? '' : `<div class="curated-tour-price">${item.priceLabel && !item.priceLabel.toLowerCase().startsWith('from') && !item.priceLabel.toLowerCase().includes('custom') ? 'From ' + item.priceLabel : item.priceLabel}</div>`}<span class="curated-tour-duration">${item.duration}</span></div>`;
     const toplineLeft = isPackage
       ? `<div><span class="curated-tour-country">${item.country}</span></div>`
       : `<div><span class="curated-tour-country">${item.country}</span><span class="curated-tour-type"><i class="fas fa-compass"></i>${typeLabel}</span></div>`;
