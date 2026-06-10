@@ -1,0 +1,61 @@
+const { put } = require('@vercel/blob');
+const db = require('./_lib/db');
+const { requireAdmin, uid } = require('./_lib/auth');
+
+module.exports = async function handler(req, res) {
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method === 'GET') {
+    const images = await db.listImages('site-images/');
+    return res.status(200).json({ ok: true, images });
+  }
+
+  if (req.method === 'POST') {
+    const admin = requireAdmin(req, res);
+    if (!admin) return;
+
+    const { action } = req.body;
+
+    if (action === 'delete') {
+      const { url } = req.body;
+      if (!url) return res.status(400).json({ error: 'Image URL required' });
+      const removed = await db.deleteBlob(url);
+      return res.status(200).json({ ok: true, deleted: removed });
+    }
+
+    const { filename, data, type, folder } = req.body;
+    if (!filename || !data) return res.status(400).json({ error: 'Filename and data required' });
+
+    try {
+      const ext = filename.split('.').pop() || 'jpg';
+      const safeName = uid() + '.' + ext;
+      const path = (folder || 'site-images') + '/' + safeName;
+
+      const buffer = Buffer.from(data, 'base64');
+      const blob = await put(path, buffer, {
+        access: 'public',
+        contentType: type || 'image/jpeg'
+      });
+
+      const meta = await db.getCollection('image-meta');
+      meta.push({
+        id: uid(),
+        url: blob.url,
+        pathname: blob.pathname,
+        originalName: filename,
+        size: buffer.length,
+        type: type || 'image/jpeg',
+        folder: folder || 'site-images',
+        uploadedBy: admin.id,
+        uploadedAt: new Date().toISOString()
+      });
+      await db.setCollection('image-meta', meta);
+
+      return res.status(200).json({ ok: true, url: blob.url, pathname: blob.pathname });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
+};
