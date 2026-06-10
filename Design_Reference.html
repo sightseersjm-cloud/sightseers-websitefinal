@@ -281,6 +281,37 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .aicon-name{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:2px}
 .aicon-desc{font-size:12px;color:var(--grey);line-height:1.6}
 
+/* ======== DESTINATION SLIDER ======== */
+.dest-slider{position:relative;width:100%;height:85vh;min-height:500px;max-height:800px;overflow:hidden;background:#0a1628}
+.dest-slider-track{position:relative;width:100%;height:100%}
+.dest-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.08);transition:opacity .9s cubic-bezier(.4,0,.2,1),transform 4.5s cubic-bezier(.4,0,.2,1);z-index:0}
+.dest-slide.active{opacity:1;transform:scale(1);z-index:1}
+.dest-slide-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,30,55,.78) 0%,rgba(6,30,55,.35) 40%,rgba(0,0,0,.15) 100%)}
+.dest-slide-content{position:absolute;bottom:0;left:0;right:0;padding:60px 70px 70px;z-index:2;transform:translateY(15px);opacity:0;transition:transform .7s cubic-bezier(.4,0,.2,1) .3s,opacity .7s ease .3s}
+.dest-slide.active .dest-slide-content{transform:translateY(0);opacity:1}
+.dest-slide-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:50px;background:rgba(255,255,255,.13);backdrop-filter:blur(12px);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;border:1px solid rgba(255,255,255,.15)}
+.dest-slide-title{font-family:'Playfair Display',serif;font-size:clamp(42px,7vw,86px);color:#fff;margin:0 0 14px;line-height:1.05;text-shadow:0 4px 30px rgba(0,0,0,.3)}
+.dest-slide-desc{color:rgba(255,255,255,.85);font-size:clamp(15px,1.4vw,19px);max-width:520px;margin:0 0 28px;line-height:1.6}
+.dest-slide-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:50px;background:linear-gradient(135deg,var(--amber),#e8962e);color:#fff;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 8px 25px rgba(228,150,30,.35)}
+.dest-slide-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 35px rgba(228,150,30,.5)}
+.dest-slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center}
+.dest-slider-arrow:hover{background:rgba(255,255,255,.25);transform:translateY(-50%) scale(1.08)}
+.dest-slider-prev{left:28px}
+.dest-slider-next{right:28px}
+.dest-slider-dots{position:absolute;bottom:28px;right:70px;display:flex;gap:10px;z-index:5}
+.dest-slider-dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.3);border:2px solid rgba(255,255,255,.4);cursor:pointer;transition:all .3s;padding:0}
+.dest-slider-dot.active{background:#fff;border-color:#fff;transform:scale(1.2)}
+.dest-slider-progress{position:absolute;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,.1);z-index:5}
+.dest-slider-progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--amber),#f0b95a);transition:width .05s linear;border-radius:0 2px 2px 0}
+@media(max-width:768px){
+  .dest-slider{height:70vh;min-height:420px}
+  .dest-slide-content{padding:30px 24px 50px}
+  .dest-slider-arrow{width:42px;height:42px;font-size:14px}
+  .dest-slider-prev{left:12px}
+  .dest-slider-next{right:12px}
+  .dest-slider-dots{right:24px;bottom:18px}
+}
+
 /* ======== TOURS FILTER ======== */
 .tours-sec{padding:90px 0}
 .tours-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
@@ -1759,9 +1790,17 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .auth-submit:hover,.admin-btn:hover{background:linear-gradient(135deg,var(--navy),#0d5371);transform:translateY(-1px)}
 .admin-btn.secondary,.auth-submit.secondary{background:rgba(255,255,255,.88);color:var(--navy);border:1px solid rgba(6,58,99,.10);box-shadow:none}
 .admin-btn.secondary:hover,.auth-submit.secondary:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
-.account-auth-grid{display:grid;grid-template-columns:1fr;gap:18px;align-items:start}
-.account-auth-panel{padding:24px;border-radius:28px;border:1px solid rgba(6,58,99,.09);background:linear-gradient(180deg,#ffffff 0%,#f8fbff 65%,#fffaf3 100%);box-shadow:0 16px 34px rgba(12,29,47,.05)}
-.account-auth-side{display:grid;gap:16px}
+.account-auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;border-radius:28px;overflow:hidden;box-shadow:0 20px 50px rgba(12,29,47,.08);border:1px solid rgba(6,58,99,.09)}
+.account-auth-panel{padding:36px 32px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 65%,#fffaf3 100%)}
+.account-auth-visual{position:relative;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85') center/cover;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:36px}
+.account-auth-visual::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,55,.15) 0%,rgba(6,30,55,.75) 100%)}
+.account-auth-visual-inner{position:relative;z-index:1;color:#fff}
+.account-auth-visual-inner h3{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 10px;line-height:1.2}
+.account-auth-visual-inner p{font-size:14px;opacity:.85;margin:0 0 20px;line-height:1.6}
+.account-auth-visual-perks{display:flex;flex-direction:column;gap:10px}
+.account-auth-visual-perks span{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.9)}
+.account-auth-visual-perks i{color:var(--amber);font-size:14px}
+@media(max-width:768px){.account-auth-grid{grid-template-columns:1fr}.account-auth-visual{min-height:220px}}
 .account-auth-blurb,.account-auth-mini{padding:22px;border-radius:26px;border:1px solid rgba(6,58,99,.09);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(247,251,255,.98));box-shadow:0 16px 34px rgba(12,29,47,.05)}
 .account-auth-blurb h3,.account-auth-mini h3,.perk-card h3{font-size:1.04rem;font-weight:800;color:var(--navy);margin-bottom:10px}
 .account-auth-blurb p,.account-auth-mini p,.perk-card p{font-size:12px;color:var(--grey);line-height:1.78}
@@ -5321,7 +5360,7 @@ body.theme-night .luxe-blog-side-actions .btn-secondary{
 #p-account .account-shell-head{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:16px!important;align-items:end!important;padding-bottom:12px!important}
 #p-account .account-shell-title p{max-width:56ch!important;font-size:12px!important;line-height:1.6!important}
 #p-account .account-top-actions{display:flex!important;flex-wrap:wrap!important;justify-content:flex-end!important;gap:10px!important}
-#p-account .account-auth-grid{grid-template-columns:1fr!important;gap:16px!important;align-items:start!important}
+#p-account .account-auth-grid{grid-template-columns:1fr 1fr!important;gap:0!important;align-items:stretch!important}
 #p-account .account-benefit-list{gap:10px!important}
 #p-account .dashboard-shell{gap:12px!important}
 #p-account .dashboard-hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:14px!important;align-items:center!important;padding:18px 20px!important;border-radius:24px!important}
@@ -10064,6 +10103,80 @@ body.theme-night .page .tag{
      TOURS PAGE
 ════════════════════════════════════ -->
 <div class="page" id="p-tours">
+
+  <!-- ── Destination Slider ── -->
+  <div class="dest-slider" id="destSlider">
+    <div class="dest-slider-track" id="destSliderTrack">
+      <div class="dest-slide active" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-umbrella-beach"></i> Caribbean</span>
+          <h2 class="dest-slide-title">Jamaica</h2>
+          <p class="dest-slide-desc">Waterfalls, white sand beaches, and vibrant culture await on every coast.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Jamaica',document.querySelector('[data-country=Jamaica]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1580541631950-7282082b02f4?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-water"></i> Island Paradise</span>
+          <h2 class="dest-slide-title">Barbados</h2>
+          <p class="dest-slide-desc">Crystal-clear waters, coral reefs, and world-class dining on a sun-kissed island.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Barbados',document.querySelector('[data-country=Barbados]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-mountain-sun"></i> Tropical Peaks</span>
+          <h2 class="dest-slide-title">Saint Lucia</h2>
+          <p class="dest-slide-desc">Iconic Pitons, volcanic beaches, and lush rainforest adventures.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Saint Lucia',document.querySelector('[data-country=\"Saint Lucia\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1548574505-5e239809ee19?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-fish"></i> Ocean Blue</span>
+          <h2 class="dest-slide-title">The Bahamas</h2>
+          <p class="dest-slide-desc">Swimming pigs, underwater caves, and 700 islands of pure paradise.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('The Bahamas',document.querySelector('[data-country=\"The Bahamas\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1570737209810-ee5a1d723f38?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-leaf"></i> Hidden Gem</span>
+          <h2 class="dest-slide-title">Belize</h2>
+          <p class="dest-slide-desc">Ancient Mayan ruins, the Great Blue Hole, and untouched jungle trails.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Belize',document.querySelector('[data-country=Belize]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-palette"></i> Colorful Culture</span>
+          <h2 class="dest-slide-title">Cura&ccedil;ao</h2>
+          <p class="dest-slide-desc">Pastel-painted Willemstad, hidden coves, and vibrant island nightlife.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Curaçao',document.querySelector('[data-country=Curaçao]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1585255318859-f5c15f4cffe9?w=1600&q=85')">
+        <div class="dest-slide-overlay"></div>
+        <div class="dest-slide-content">
+          <span class="dest-slide-badge"><i class="fas fa-music"></i> Rhythm & Sun</span>
+          <h2 class="dest-slide-title">Dominican Republic</h2>
+          <p class="dest-slide-desc">Merengue rhythms, pristine Punta Cana beaches, and mountain escapes.</p>
+          <button class="dest-slide-btn" onclick="setCuratedCountry('Dominican Republic',document.querySelector('[data-country=\"Dominican Republic\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
+        </div>
+      </div>
+    </div>
+    <button class="dest-slider-arrow dest-slider-prev" onclick="destSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="dest-slider-arrow dest-slider-next" onclick="destSlide(1)"><i class="fas fa-chevron-right"></i></button>
+    <div class="dest-slider-dots" id="destSliderDots"></div>
+    <div class="dest-slider-progress" id="destSliderProgress"><div class="dest-slider-progress-bar"></div></div>
+  </div>
+
   <section class="tours-sec curated-tours-sec" id="tourListSection">
   <div class="tours-wrap curated-wrap">
     <div class="sec-head center reveal">
@@ -12416,6 +12529,19 @@ body.theme-night .page .tag{
                       <button class="auth-submit" onclick="signinGuest()"><i class="fas fa-right-to-bracket"></i>Sign In</button>
                     </div>
                     <div class="inline-status" id="signinStatus"></div>
+                  </div>
+                </div>
+
+                <div class="account-auth-visual">
+                  <div class="account-auth-visual-inner">
+                    <h3>Your next adventure starts here</h3>
+                    <p>Join travelers exploring the Caribbean's best-kept secrets with Sight Seers.</p>
+                    <div class="account-auth-visual-perks">
+                      <span><i class="fas fa-check-circle"></i> Save tours and return to planning faster</span>
+                      <span><i class="fas fa-check-circle"></i> Track bookings from your personal dashboard</span>
+                      <span><i class="fas fa-check-circle"></i> Unlock exclusive member-only experiences</span>
+                      <span><i class="fas fa-check-circle"></i> Get personalized trip recommendations</span>
+                    </div>
                   </div>
                 </div>
 
@@ -35949,6 +36075,53 @@ body.theme-night .page .tag{
     const typeText = labelForType(window.curatedTourType);
     el.textContent = `${list.length} ${typeText} • ${countryText}`;
   }
+
+  /* ── Destination Slider ── */
+  (function(){
+    var current=0, timer=null, INTERVAL=5500;
+    var slides=document.querySelectorAll('.dest-slide');
+    var dotsWrap=document.getElementById('destSliderDots');
+    var progressBar=document.querySelector('.dest-slider-progress-bar');
+    if(!slides.length) return;
+    slides.forEach(function(_,i){
+      var dot=document.createElement('button');
+      dot.className='dest-slider-dot'+(i===0?' active':'');
+      dot.onclick=function(){goTo(i);};
+      if(dotsWrap) dotsWrap.appendChild(dot);
+    });
+    var dots=document.querySelectorAll('.dest-slider-dot');
+    function goTo(idx){
+      slides[current].classList.remove('active');
+      if(dots[current]) dots[current].classList.remove('active');
+      current=(idx+slides.length)%slides.length;
+      slides[current].classList.add('active');
+      if(dots[current]) dots[current].classList.add('active');
+      restartTimer();
+    }
+    function restartTimer(){
+      clearInterval(timer);
+      if(progressBar){progressBar.style.transition='none';progressBar.style.width='0%';}
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        if(progressBar){progressBar.style.transition='width '+INTERVAL+'ms linear';progressBar.style.width='100%';}
+      });});
+      timer=setInterval(function(){goTo(current+1);},INTERVAL);
+    }
+    window.destSlide=function(dir){goTo(current+dir);};
+    window.destSliderClose=function(){
+      var slider=document.getElementById('destSlider');
+      if(slider) slider.scrollIntoView({behavior:'smooth'});
+    };
+    var slider=document.getElementById('destSlider');
+    if(slider){
+      var startX=0;
+      slider.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
+      slider.addEventListener('touchend',function(e){
+        var diff=startX-e.changedTouches[0].clientX;
+        if(Math.abs(diff)>50) goTo(current+(diff>0?1:-1));
+      },{passive:true});
+    }
+    restartTimer();
+  })();
 
   function renderCuratedTours(){
     const grid = document.getElementById('curatedToursGrid');
