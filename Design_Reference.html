@@ -10112,79 +10112,6 @@ body.theme-night .page .tag{
 ════════════════════════════════════ -->
 <div class="page" id="p-tours">
 
-  <!-- ── Destination Slider ── -->
-  <div class="dest-slider" id="destSlider">
-    <div class="dest-slider-track" id="destSliderTrack">
-      <div class="dest-slide active" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-umbrella-beach"></i> Caribbean</span>
-          <h2 class="dest-slide-title">Jamaica</h2>
-          <p class="dest-slide-desc">Waterfalls, white sand beaches, and vibrant culture await on every coast.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Jamaica',document.querySelector('[data-country=Jamaica]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1580541631950-7282082b02f4?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-water"></i> Island Paradise</span>
-          <h2 class="dest-slide-title">Barbados</h2>
-          <p class="dest-slide-desc">Crystal-clear waters, coral reefs, and world-class dining on a sun-kissed island.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Barbados',document.querySelector('[data-country=Barbados]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-mountain-sun"></i> Tropical Peaks</span>
-          <h2 class="dest-slide-title">Saint Lucia</h2>
-          <p class="dest-slide-desc">Iconic Pitons, volcanic beaches, and lush rainforest adventures.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Saint Lucia',document.querySelector('[data-country=\"Saint Lucia\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1548574505-5e239809ee19?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-fish"></i> Ocean Blue</span>
-          <h2 class="dest-slide-title">The Bahamas</h2>
-          <p class="dest-slide-desc">Swimming pigs, underwater caves, and 700 islands of pure paradise.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('The Bahamas',document.querySelector('[data-country=\"The Bahamas\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1570737209810-ee5a1d723f38?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-leaf"></i> Hidden Gem</span>
-          <h2 class="dest-slide-title">Belize</h2>
-          <p class="dest-slide-desc">Ancient Mayan ruins, the Great Blue Hole, and untouched jungle trails.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Belize',document.querySelector('[data-country=Belize]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-palette"></i> Colorful Culture</span>
-          <h2 class="dest-slide-title">Cura&ccedil;ao</h2>
-          <p class="dest-slide-desc">Pastel-painted Willemstad, hidden coves, and vibrant island nightlife.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Curaçao',document.querySelector('[data-country=Curaçao]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-      <div class="dest-slide" style="background-image:url('https://images.unsplash.com/photo-1585255318859-f5c15f4cffe9?w=1600&q=85')">
-        <div class="dest-slide-overlay"></div>
-        <div class="dest-slide-content">
-          <span class="dest-slide-badge"><i class="fas fa-music"></i> Rhythm & Sun</span>
-          <h2 class="dest-slide-title">Dominican Republic</h2>
-          <p class="dest-slide-desc">Merengue rhythms, pristine Punta Cana beaches, and mountain escapes.</p>
-          <button class="dest-slide-btn" onclick="setCuratedCountry('Dominican Republic',document.querySelector('[data-country=\"Dominican Republic\"]'));destSliderClose();return false;"><i class="fas fa-compass"></i>Explore Tours</button>
-        </div>
-      </div>
-    </div>
-    <button class="dest-slider-arrow dest-slider-prev" onclick="destSlide(-1)"><i class="fas fa-chevron-left"></i></button>
-    <button class="dest-slider-arrow dest-slider-next" onclick="destSlide(1)"><i class="fas fa-chevron-right"></i></button>
-    <div class="dest-slider-dots" id="destSliderDots"></div>
-    <div class="dest-slider-progress" id="destSliderProgress"><div class="dest-slider-progress-bar"></div></div>
-  </div>
-
   <section class="tours-sec curated-tours-sec" id="tourListSection">
   <div class="tours-wrap curated-wrap">
     <div class="sec-head center reveal">
@@ -11359,81 +11286,80 @@ body.theme-night .page .tag{
 ════════════════════════════════════ -->
 <style id="memory-album-styles">
 /* ===== MEMORY ALBUM GALLERY ===== */
-#p-gallery{background:linear-gradient(180deg,#0b1e35 0%,#0f2a43 36%,#071523 100%);min-height:100vh}
-.mem-hero{position:relative;height:320px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;padding-bottom:38px}
-.mem-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:background-image .8s ease;filter:brightness(.45) saturate(1.1)}
-.mem-hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,21,35,1) 0%,rgba(7,21,35,.6) 42%,rgba(7,21,35,.18) 100%)}
-.mem-hero-copy{position:relative;z-index:2;text-align:center;color:#fff}
-.mem-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
+#p-gallery{background:#ffffff;min-height:100vh}
+.mem-hero{position:relative;padding:100px 30px 60px;text-align:center;background:#fff}
+.mem-hero-bg{display:none}
+.mem-hero-copy{position:relative;z-index:2;max-width:680px;margin:0 auto}
+.mem-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
 .mem-hero-eyebrow i{color:var(--orange)}
-.mem-hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1;letter-spacing:-.5px;color:#fff;margin-bottom:8px}
-.mem-hero-title em{display:block;font-style:italic;font-weight:400;font-size:.72em;color:rgba(255,255,255,.72)}
-.mem-hero-sub{font-size:13px;color:rgba(255,255,255,.55);letter-spacing:.5px}
+.mem-hero-title{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(2.8rem,5.5vw,4.4rem);font-weight:700;line-height:1.06;letter-spacing:-.03em;color:#1d1d1f;margin-bottom:12px}
+.mem-hero-title em{display:block;font-style:normal;font-weight:400;font-size:.5em;color:#86868b;margin-top:8px;letter-spacing:0}
+.mem-hero-sub{font-size:15px;color:#86868b;letter-spacing:.01em;line-height:1.5}
 
-/* Country slider */
-.mem-country-rail{position:sticky;top:84px;z-index:50;background:rgba(7,21,35,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07);padding:0}
-.mem-country-track{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;max-width:1300px;margin:0 auto;padding:0 20px}
+/* Country tabs — Apple segment control style */
+.mem-country-rail{position:sticky;top:84px;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08);padding:0}
+.mem-country-track{display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;max-width:900px;margin:0 auto;padding:10px 20px}
 .mem-country-track::-webkit-scrollbar{display:none}
-.mem-country-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 20px 12px;border:none;background:none;cursor:pointer;position:relative;transition:all .22s}
-.mem-country-btn::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:var(--orange);border-radius:999px;transform:scaleX(0);transition:transform .22s}
-.mem-country-btn.active::after{transform:scaleX(1)}
-.mem-country-flag{font-size:22px;transition:transform .22s}
-.mem-country-btn:hover .mem-country-flag,.mem-country-btn.active .mem-country-flag{transform:scale(1.18)}
-.mem-country-name{font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.45);transition:color .22s;white-space:nowrap}
-.mem-country-btn.active .mem-country-name,.mem-country-btn:hover .mem-country-name{color:#fff}
-.mem-country-count{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.5px;transition:color .22s}
-.mem-country-btn.active .mem-country-count{color:var(--orange)}
+.mem-country-btn{flex:0 0 auto;display:flex;align-items:center;gap:0;padding:8px 18px;border:none;border-radius:980px;background:transparent;cursor:pointer;position:relative;transition:all .22s}
+.mem-country-btn.active{background:#1d1d1f;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mem-country-btn::after{display:none}
+.mem-country-flag{display:none}
+.mem-country-name{font-size:13px;font-weight:600;letter-spacing:-.01em;text-transform:none;color:#1d1d1f;transition:color .22s;white-space:nowrap}
+.mem-country-btn.active .mem-country-name{color:#fff}
+.mem-country-btn:hover .mem-country-name{color:var(--orange)}
+.mem-country-btn.active:hover .mem-country-name{color:#fff}
+.mem-country-count{display:none}
 
-/* Photo grid */
-.mem-shell{max-width:1300px;margin:0 auto;padding:36px 24px 80px}
-.mem-album-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding:18px 22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px}
-.mem-album-flag{font-size:36px}
-.mem-album-title{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800;color:#fff;line-height:1.1;margin-bottom:4px}
-.mem-album-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6}
-.mem-album-badge{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:rgba(239,135,49,.14);border:1px solid rgba(239,135,49,.25);color:var(--orange);font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;white-space:nowrap}
+/* Photo grid — clean Apple-style */
+.mem-shell{max-width:1200px;margin:0 auto;padding:40px 24px 80px}
+.mem-album-header{display:flex;align-items:center;gap:14px;margin-bottom:32px;padding:0}
+.mem-album-flag{display:none}
+.mem-album-title{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;color:#1d1d1f;line-height:1.1;letter-spacing:-.02em;margin-bottom:2px}
+.mem-album-desc{font-size:14px;color:#86868b;line-height:1.5}
+.mem-album-badge{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:980px;background:rgba(0,0,0,.04);border:none;color:#86868b;font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;white-space:nowrap}
 
-/* Masonry / polaroid grid */
-.mem-grid{columns:4 200px;column-gap:14px;transition:opacity .35s}
+/* Masonry grid */
+.mem-grid{columns:4 220px;column-gap:16px;transition:opacity .35s}
 .mem-grid.fading{opacity:0}
-@media(max-width:900px){.mem-grid{columns:3 160px}}
-@media(max-width:640px){.mem-grid{columns:2 140px}}
-.mem-photo{break-inside:avoid;margin-bottom:14px;cursor:pointer;position:relative;border-radius:16px;overflow:hidden;background:#0f2236;transition:transform .28s,box-shadow .28s}
-.mem-photo:hover{transform:translateY(-4px) scale(1.015);box-shadow:0 22px 50px rgba(0,0,0,.55)}
-.mem-photo img{width:100%;display:block;transition:transform .45s,filter .45s}
-.mem-photo:hover img{transform:scale(1.06);filter:brightness(1.06) saturate(1.08)}
-.mem-photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,15,28,.7) 0%,rgba(5,15,28,0) 55%);opacity:0;transition:opacity .28s}
+@media(max-width:900px){.mem-grid{columns:3 180px}}
+@media(max-width:640px){.mem-grid{columns:2 150px}}
+.mem-photo{break-inside:avoid;margin-bottom:16px;cursor:pointer;position:relative;border-radius:20px;overflow:hidden;background:#f5f5f7;transition:transform .32s cubic-bezier(.25,.1,.25,1),box-shadow .32s cubic-bezier(.25,.1,.25,1)}
+.mem-photo:hover{transform:scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,.12)}
+.mem-photo img{width:100%;display:block;transition:transform .5s cubic-bezier(.25,.1,.25,1)}
+.mem-photo:hover img{transform:scale(1.04)}
+.mem-photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 50%);opacity:0;transition:opacity .3s}
 .mem-photo:hover .mem-photo-overlay{opacity:1}
-.mem-photo-tag{position:absolute;bottom:12px;left:12px;right:12px;display:flex;align-items:center;gap:8px;transform:translateY(8px);opacity:0;transition:all .28s}
+.mem-photo-tag{position:absolute;bottom:14px;left:14px;right:14px;display:flex;align-items:center;gap:8px;transform:translateY(6px);opacity:0;transition:all .3s cubic-bezier(.25,.1,.25,1)}
 .mem-photo:hover .mem-photo-tag{transform:translateY(0);opacity:1}
-.mem-photo-label{font-size:11px;font-weight:700;color:#fff;line-height:1.3;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.mem-photo-zoom{margin-left:auto;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.mem-photo-label{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;font-size:12px;font-weight:600;color:#fff;line-height:1.3}
+.mem-photo-zoom{margin-left:auto;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
 
-/* Polaroid variant for featured photos */
-.mem-photo.featured{padding:10px 10px 34px;background:#fff;border-radius:6px;box-shadow:0 8px 28px rgba(0,0,0,.4);transform:rotate(calc(var(--rot,0) * 1deg))}
-.mem-photo.featured:hover{transform:rotate(0deg) translateY(-6px) scale(1.02)}
-.mem-photo.featured img{border-radius:4px}
-.mem-photo.featured .mem-photo-overlay{border-radius:4px}
-.mem-photo.featured .mem-photo-caption{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:10px;color:#888;font-weight:600;letter-spacing:.5px}
+/* No polaroid style — clean uniform cards */
+.mem-photo.featured{padding:0;background:#f5f5f7;border-radius:20px;box-shadow:none;transform:none}
+.mem-photo.featured:hover{transform:scale(1.02)}
+.mem-photo.featured img{border-radius:20px}
+.mem-photo.featured .mem-photo-overlay{border-radius:20px}
+.mem-photo.featured .mem-photo-caption{display:none}
 
-/* Lightbox */
+/* Lightbox — frosted glass Apple style */
 .mem-lightbox{position:fixed;inset:0;z-index:3500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .mem-lightbox.open{opacity:1;pointer-events:auto}
-.mem-lb-bg{position:absolute;inset:0;background:rgba(3,10,22,.92);backdrop-filter:blur(12px)}
+.mem-lb-bg{position:absolute;inset:0;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
 .mem-lb-card{position:relative;z-index:1;max-width:min(1100px,calc(100vw - 32px));max-height:calc(100vh - 40px);display:flex;flex-direction:column;align-items:center;gap:14px}
-.mem-lb-img{max-width:100%;max-height:calc(100vh - 140px);object-fit:contain;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:scale(.92);transition:transform .3s}
+.mem-lb-img{max-width:100%;max-height:calc(100vh - 140px);object-fit:contain;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.18);transform:scale(.94);transition:transform .35s cubic-bezier(.25,.1,.25,1)}
 .mem-lightbox.open .mem-lb-img{transform:scale(1)}
-.mem-lb-caption{color:rgba(255,255,255,.65);font-size:13px;letter-spacing:.5px;text-align:center}
-.mem-lb-close{position:absolute;top:-14px;right:-14px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;z-index:2}
-.mem-lb-close:hover{background:var(--orange)}
-.mem-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:2}
-.mem-lb-nav:hover{background:var(--orange);border-color:var(--orange)}
-.mem-lb-prev{left:-60px}
-.mem-lb-next{right:-60px}
+.mem-lb-caption{color:#86868b;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;font-size:14px;font-weight:500;letter-spacing:0;text-align:center}
+.mem-lb-close{position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.06);border:none;color:#1d1d1f;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;z-index:2}
+.mem-lb-close:hover{background:rgba(0,0,0,.1)}
+.mem-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.06);border:none;color:#1d1d1f;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:2}
+.mem-lb-nav:hover{background:rgba(0,0,0,.1)}
+.mem-lb-prev{left:-56px}
+.mem-lb-next{right:-56px}
 @media(max-width:768px){.mem-lb-prev{left:-44px}.mem-lb-next{right:-44px}}
 
 /* Stagger animation */
-@keyframes memPhotoReveal{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
-.mem-photo{animation:memPhotoReveal .4s ease both}
+@keyframes memPhotoReveal{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.mem-photo{animation:memPhotoReveal .45s cubic-bezier(.25,.1,.25,1) both}
 
 /* ======== NIGHT MODE READABILITY PATCH ======== */
 body.theme-night .tour-card h1,
@@ -11737,11 +11663,11 @@ body.theme-night .page .tag{
 
 <div class="page" id="p-gallery">
   <div class="mem-hero">
-    <div class="mem-hero-bg" id="memHeroBg" style="background-image:url('https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=1600&q=80')"></div>
+    <div class="mem-hero-bg" id="memHeroBg"></div>
     <div class="mem-hero-copy">
-      <div class="mem-hero-eyebrow"><i class="fas fa-camera-retro"></i>Caribbean Memory Album</div>
-      <h1 class="mem-hero-title">Island Memories<em>A photo journey through the Caribbean</em></h1>
-      <p class="mem-hero-sub">Select a country · browse moments · click to open full view</p>
+      <div class="mem-hero-eyebrow"><i class="fas fa-camera-retro"></i>Gallery</div>
+      <h1 class="mem-hero-title">Island Memories<em>Browse photos from across the Caribbean.</em></h1>
+      <p class="mem-hero-sub">Select a destination below to explore the collection.</p>
     </div>
   </div>
 
@@ -11893,11 +11819,8 @@ body.theme-night .page .tag{
     const track = document.getElementById('memCountryTrack');
     if(!track) return;
     track.innerHTML = Object.keys(ALBUM_DATA).map(name => {
-      const d = ALBUM_DATA[name];
       return `<button type="button" class="mem-country-btn${name===activeCountry?' active':''}" onclick="selectMemAlbum('${name.replace("'","\\'")}')">
-        <span class="mem-country-flag">${d.flag}</span>
         <span class="mem-country-name">${name}</span>
-        <span class="mem-country-count">${d.photos.length} photos</span>
       </button>`;
     }).join('');
   }
@@ -11906,12 +11829,11 @@ body.theme-night .page .tag{
     const d = ALBUM_DATA[name];
     const el = document.getElementById('memAlbumHeader');
     if(!el) return;
-    el.innerHTML = `<span class="mem-album-flag">${d.flag}</span>
-      <div>
+    el.innerHTML = `<div>
         <div class="mem-album-title">${name}</div>
         <div class="mem-album-desc">${d.desc}</div>
       </div>
-      <span class="mem-album-badge"><i class="fas fa-images"></i>${d.photos.length} memories</span>`;
+      <span class="mem-album-badge"><i class="fas fa-images"></i> ${d.photos.length} photos</span>`;
   }
 
   function buildGrid(name){
@@ -35398,9 +35320,8 @@ body.theme-night .page .tag{
         if(bg && d.hero) bg.style.backgroundImage = `url('${d.hero}')`;
         // Update header
         const header = document.getElementById('memAlbumHeader');
-        if(header) header.innerHTML = `<span class="mem-album-flag">${d.flag||''}</span>
-          <div><div class="mem-album-title">${name}</div><div class="mem-album-desc">${d.desc||''}</div></div>
-          <span class="mem-album-badge"><i class="fas fa-images"></i>${d.photos.length} memories</span>`;
+        if(header) header.innerHTML = `<div><div class="mem-album-title">${name}</div><div class="mem-album-desc">${d.desc||''}</div></div>
+          <span class="mem-album-badge"><i class="fas fa-images"></i> ${d.photos.length} photos</span>`;
         // Update grid
         const grid = document.getElementById('memGrid');
         if(grid){
@@ -36097,52 +36018,8 @@ body.theme-night .page .tag{
     el.textContent = `${list.length} ${typeText} • ${countryText}`;
   }
 
-  /* ── Destination Slider ── */
-  (function(){
-    var current=0, timer=null, INTERVAL=5500;
-    var slides=document.querySelectorAll('.dest-slide');
-    var dotsWrap=document.getElementById('destSliderDots');
-    var progressBar=document.querySelector('.dest-slider-progress-bar');
-    if(!slides.length) return;
-    slides.forEach(function(_,i){
-      var dot=document.createElement('button');
-      dot.className='dest-slider-dot'+(i===0?' active':'');
-      dot.onclick=function(){goTo(i);};
-      if(dotsWrap) dotsWrap.appendChild(dot);
-    });
-    var dots=document.querySelectorAll('.dest-slider-dot');
-    function goTo(idx){
-      slides[current].classList.remove('active');
-      if(dots[current]) dots[current].classList.remove('active');
-      current=(idx+slides.length)%slides.length;
-      slides[current].classList.add('active');
-      if(dots[current]) dots[current].classList.add('active');
-      restartTimer();
-    }
-    function restartTimer(){
-      clearInterval(timer);
-      if(progressBar){progressBar.style.transition='none';progressBar.style.width='0%';}
-      requestAnimationFrame(function(){requestAnimationFrame(function(){
-        if(progressBar){progressBar.style.transition='width '+INTERVAL+'ms linear';progressBar.style.width='100%';}
-      });});
-      timer=setInterval(function(){goTo(current+1);},INTERVAL);
-    }
-    window.destSlide=function(dir){goTo(current+dir);};
-    window.destSliderClose=function(){
-      var slider=document.getElementById('destSlider');
-      if(slider) slider.scrollIntoView({behavior:'smooth'});
-    };
-    var slider=document.getElementById('destSlider');
-    if(slider){
-      var startX=0;
-      slider.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
-      slider.addEventListener('touchend',function(e){
-        var diff=startX-e.changedTouches[0].clientX;
-        if(Math.abs(diff)>50) goTo(current+(diff>0?1:-1));
-      },{passive:true});
-    }
-    restartTimer();
-  })();
+  window.destSlide=function(){};
+  window.destSliderClose=function(){};
 
   function renderCuratedTours(){
     const grid = document.getElementById('curatedToursGrid');
