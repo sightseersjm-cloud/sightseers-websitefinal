@@ -103,11 +103,11 @@
 
   /* ── Accounts (admin) ────────────── */
 
-  function listAccounts() { return api('accounts', 'GET'); }
-  function createAccount(data) { return api('accounts', 'POST', Object.assign({ action: 'create' }, data)); }
-  function updateAccount(data) { return api('accounts', 'POST', Object.assign({ action: 'update' }, data)); }
-  function deleteAccount(id) { return api('accounts', 'POST', { action: 'delete', id: id }); }
-  function resetAccountPassword(id, newPassword) { return api('accounts', 'POST', { action: 'reset-password', id: id, newPassword: newPassword }); }
+  function listAccounts() { return api('auth', 'GET'); }
+  function createAccount(data) { return api('auth', 'POST', Object.assign({ action: 'admin-create' }, data)); }
+  function updateAccount(data) { return api('auth', 'POST', Object.assign({ action: 'admin-update' }, data)); }
+  function deleteAccount(id) { return api('auth', 'POST', { action: 'admin-delete', id: id }); }
+  function resetAccountPassword(id, newPassword) { return api('auth', 'POST', { action: 'admin-reset-password', id: id, newPassword: newPassword }); }
 
   /* ── Sections ─────────────────────── */
 
@@ -152,10 +152,10 @@
 
   /* ── Pages ────────────────────────── */
 
-  function getPages() { return api('pages', 'GET'); }
-  function getPage(id) { return api('pages?id=' + encodeURIComponent(id), 'GET'); }
-  function updatePage(data) { return api('pages', 'POST', Object.assign({ action: 'update' }, data)); }
-  function updatePageSeo(data) { return api('pages', 'POST', Object.assign({ action: 'update-seo' }, data)); }
+  function getPages() { return api('content?type=pages', 'GET'); }
+  function getPage(id) { return api('content?type=pages&page=' + encodeURIComponent(id), 'GET'); }
+  function updatePage(data) { return api('content', 'POST', Object.assign({ action: 'update-page' }, data)); }
+  function updatePageSeo(data) { return api('content', 'POST', Object.assign({ action: 'update-seo' }, data)); }
 
   /* ── Tours ────────────────────────── */
 
