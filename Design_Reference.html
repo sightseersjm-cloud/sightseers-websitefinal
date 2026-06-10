@@ -16033,7 +16033,8 @@ function unlockAdminPortal(){
   const input=document.getElementById('adminPasscode');
   const status=document.getElementById('adminUnlockStatus');
   if(!input||!status) return;
-  if(input.value===ADMIN_PASSCODE){
+  const isAdminUser=window.SS&&window.SS.isAdmin&&window.SS.isAdmin();
+  if(input.value===ADMIN_PASSCODE||isAdminUser){
     adminUnlocked=true;
     sessionStorage.setItem('ss_admin_unlocked','1');
     updateAdminPortalState();
@@ -16170,21 +16171,45 @@ function signupGuest(){
   const phone=document.getElementById('signupPhone')?.value.trim();
   const style=document.getElementById('signupStyle')?.value||'Adventure';
   if(!name||!email||!password){return setStatus('authStatus','Please complete your name, email and password.','err');}
-  const users=getUsers();
-  if(users.find(u=>u.email===email)){return setStatus('authStatus','An account with that email already exists. Try signing in instead.','err');}
-  const user={name,email,password,phone,style,createdAt:new Date().toISOString()};
-  users.push(user); setUsers(users); setCurrentUser(user);
-  setStatus('authStatus','Account created. You are now signed in.','ok');
+  setStatus('authStatus','Creating account...','');
+  if(window.SS&&window.SS.signup){
+    window.SS.signup({name,email,password,phone,style}).then(function(res){
+      setCurrentUser(res.user);
+      setStatus('authStatus','Account created. You are now signed in.','ok');
+    }).catch(function(err){
+      setStatus('authStatus',err.message||'Could not create account.','err');
+    });
+  }else{
+    const users=getUsers();
+    if(users.find(u=>u.email===email)){return setStatus('authStatus','An account with that email already exists. Try signing in instead.','err');}
+    const user={name,email,password,phone,style,createdAt:new Date().toISOString()};
+    users.push(user); setUsers(users); setCurrentUser(user);
+    setStatus('authStatus','Account created. You are now signed in.','ok');
+  }
 }
 function signinGuest(){
   const email=document.getElementById('signinEmail')?.value.trim().toLowerCase();
   const password=document.getElementById('signinPassword')?.value;
-  const user=getUsers().find(u=>u.email===email&&u.password===password);
-  if(!user){return setStatus('signinStatus','We could not find a matching account with those details.','err');}
-  setCurrentUser(user);
-  setStatus('signinStatus','Signed in successfully.','ok');
+  if(!email||!password){return setStatus('signinStatus','Please enter your email and password.','err');}
+  setStatus('signinStatus','Signing in...','');
+  if(window.SS&&window.SS.signin){
+    window.SS.signin(email,password).then(function(res){
+      setCurrentUser(res.user);
+      setStatus('signinStatus','Signed in successfully.','ok');
+    }).catch(function(err){
+      setStatus('signinStatus',err.message||'Invalid email or password.','err');
+    });
+  }else{
+    const user=getUsers().find(u=>u.email===email&&u.password===password);
+    if(!user){return setStatus('signinStatus','We could not find a matching account with those details.','err');}
+    setCurrentUser(user);
+    setStatus('signinStatus','Signed in successfully.','ok');
+  }
 }
-function logoutGuest(){setCurrentUser(null);}
+function logoutGuest(){
+  if(window.SS&&window.SS.signout) window.SS.signout();
+  setCurrentUser(null);
+}
 function updateAccountUI(){
   const user=getCurrentUser();
   const guestView=document.getElementById('accountGuestView');

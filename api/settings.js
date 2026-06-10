@@ -1,4 +1,5 @@
 const { put, list } = require('@vercel/blob');
+const { getUser, requireAdmin } = require('./_lib/auth');
 
 const SETTINGS_PATH = 'ss-admin/settings.json';
 
@@ -24,13 +25,23 @@ async function writeSettings(data) {
 }
 
 module.exports = async function handler(req, res) {
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
   if (req.method === 'GET') {
     const data = await readSettings();
     return res.status(200).json(data);
   }
 
   if (req.method === 'POST') {
+    const user = getUser(req);
     const { key, value } = req.body;
+    if (!key) return res.status(400).json({ error: 'Key required' });
+
+    const adminKeys = ['ss_site_settings', 'ss_page_editor_settings', 'ss_stay_page_settings', 'ss_customer_gallery'];
+    if (adminKeys.includes(key) && (!user || user.role !== 'admin')) {
+      return res.status(403).json({ error: 'Admin access required for this setting' });
+    }
+
     const current = await readSettings();
     current[key] = value;
     await writeSettings(current);
