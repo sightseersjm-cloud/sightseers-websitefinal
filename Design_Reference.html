@@ -1506,9 +1506,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .tc-media::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,18,31,.92) 4%,rgba(7,18,31,.18) 48%,rgba(7,18,31,.08) 100%);z-index:1}
 .tc-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
 .tour-card:hover .tc-media img{transform:scale(1.08)}
-.tc-topbar{position:absolute;top:18px;left:18px;right:18px;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.tc-topbar{position:absolute;top:18px;left:18px;right:18px;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .tc-tag{position:static;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);backdrop-filter:blur(7px);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:8px 14px;color:#fff;font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
-.tc-price-pill{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;background:#fff;color:var(--navy);border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.5px;box-shadow:0 10px 24px rgba(0,0,0,.12);white-space:nowrap;max-width:100%;text-align:center}
+.tc-price-pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;background:#fff;color:var(--navy);border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.3px;box-shadow:0 10px 24px rgba(0,0,0,.12);white-space:nowrap;max-width:100%;text-align:center}
 .tc-overlay-meta{position:absolute;left:22px;right:22px;bottom:20px;z-index:2;color:#fff}
 .tc-rating-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:14px}
 .tc-rating-badge i{color:#ffd25f}
@@ -3166,65 +3166,29 @@ body,body::before,body::after,.navbar,.topbar,.searchbar,.dropdown,.dropdown-nes
   transition:background .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease,transform .35s ease,filter .35s ease;
 }
 body.theme-night{
-  background:
-    radial-gradient(circle at 18% 18%,rgba(82,132,255,.14) 0,transparent 18%),
-    radial-gradient(circle at 82% 12%,rgba(67,217,173,.11) 0,transparent 18%),
-    radial-gradient(circle at 50% 120%,rgba(239,135,49,.14) 0,transparent 32%),
-    linear-gradient(180deg,#040a14 0%,#081624 32%,#0a1d2e 60%,#0b2438 100%);
-  color:#edf6ff;
+  background:#000;
+  color:#f5f5f7;
 }
-body.theme-night::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-2;
-  background:
-    radial-gradient(2px 2px at 8% 16%,rgba(255,255,255,.9) 0 98%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 22% 30%,rgba(164,220,255,.8) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 38% 12%,rgba(255,255,255,.92) 0 98%,transparent 100%),
-    radial-gradient(1.8px 1.8px at 54% 24%,rgba(137,203,255,.78) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 68% 14%,rgba(255,255,255,.88) 0 98%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 84% 28%,rgba(186,228,255,.78) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 91% 10%,rgba(255,255,255,.85) 0 98%,transparent 100%);
-  opacity:.85;
-  animation:nightSkyFloat 18s linear infinite alternate;
-}
-body.theme-night::after{
-  content:'';
-  position:fixed;
-  inset:auto -12% -12% -12%;
-  height:42vh;
-  pointer-events:none;
-  z-index:-1;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(75,122,255,.12),transparent 58%),
-    linear-gradient(180deg,rgba(4,12,21,0),rgba(4,12,21,.64) 42%,rgba(4,12,21,.9) 100%);
-  filter:blur(8px);
-}
-@keyframes nightSkyFloat{
-  0%{transform:translate3d(0,0,0);opacity:.72}
-  50%{transform:translate3d(0,-6px,0);opacity:.94}
-  100%{transform:translate3d(0,4px,0);opacity:.78}
-}
+body.theme-night::before{content:none}
+body.theme-night::after{content:none}
 body.theme-night .navbar{
-  background:rgba(6,14,28,.72);
-  border-color:rgba(174,217,255,.12);
-  box-shadow:0 18px 42px rgba(0,0,0,.28);
-  backdrop-filter:blur(18px) saturate(155%);
+  background:rgba(22,22,22,.82);
+  border-color:rgba(255,255,255,.08);
+  box-shadow:none;
+  backdrop-filter:blur(20px) saturate(180%);
 }
 body.theme-night .topbar{
-  background:linear-gradient(90deg,rgba(5,16,31,.94),rgba(9,39,62,.94) 52%,rgba(14,63,82,.94) 100%);
-  border-bottom:1px solid rgba(174,217,255,.08);
+  background:#1c1c1e;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 body.theme-night .searchbar,
 body.theme-night .sb-field,
 body.theme-night .ss-bot-quick,
 body.theme-night .ss-bot-input{
-  background:linear-gradient(180deg,rgba(12,27,43,.92),rgba(10,23,38,.92))!important;
-  color:#edf6ff;
-  border-color:rgba(174,217,255,.1)!important;
-  box-shadow:0 18px 36px rgba(1,8,18,.24);
+  background:#1c1c1e!important;
+  color:#f5f5f7;
+  border-color:rgba(255,255,255,.1)!important;
+  box-shadow:none;
 }
 body.theme-night .dropdown,
 body.theme-night .dropdown-nested,
@@ -3264,11 +3228,11 @@ body.theme-night .discover-jm-metric,
 body.theme-night .discover-jm-stat,
 body.theme-night .discover-jm-distance-table,
 body.theme-night .property-card{
-  background:linear-gradient(180deg,rgba(13,28,45,.92) 0%,rgba(9,23,38,.96) 100%)!important;
-  border:1px solid rgba(174,217,255,.1)!important;
-  color:#edf6ff!important;
-  box-shadow:0 20px 44px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.03);
-  backdrop-filter:blur(14px) saturate(140%);
+  background:#1c1c1e!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  color:#f5f5f7!important;
+  box-shadow:none;
+  backdrop-filter:none;
 }
 body.theme-night .tour-card:hover,
 body.theme-night .shop-card:hover,
@@ -3279,9 +3243,9 @@ body.theme-night .contact-box:hover,
 body.theme-night .dest-package-card:hover,
 body.theme-night .mba-getaway-card:hover,
 body.theme-night .property-card:hover{
-  box-shadow:0 26px 54px rgba(0,0,0,.24),0 0 0 1px rgba(239,135,49,.18),0 0 32px rgba(80,132,255,.12);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
 }
-body.theme-night .page-hero::before{background:linear-gradient(180deg,rgba(2,8,16,.34),rgba(2,8,16,.74))}
+body.theme-night .page-hero::before{background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.7))}
 body.theme-night .about-sec,
 body.theme-night .testi-sec,
 body.theme-night .reviews-sec,
@@ -3296,8 +3260,7 @@ body.theme-night .blog-page,
 body.theme-night .passport-renewal-page,
 body.theme-night .contactpage,
 body.theme-night .policypage{
-  background:
-    linear-gradient(180deg,rgba(8,22,36,.94) 0%,rgba(10,28,44,.96) 52%,rgba(8,22,36,.98) 100%)!important;
+  background:#000!important;
 }
 body.theme-night .sec-title,
 body.theme-night .ph-title,
@@ -3323,7 +3286,7 @@ body.theme-night .discover-jm-title,
 body.theme-night .discover-jm-media-copy h3,
 body.theme-night .discover-jm-destination span,
 body.theme-night .policy-head h2{
-  color:#f6fbff!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .sec-sub,
 body.theme-night .tc-copy,
@@ -3351,59 +3314,49 @@ body.theme-night .discover-jm-source-card p,
 body.theme-night .discover-jm-source-link span,
 body.theme-night .discover-jm-hidden p,
 body.theme-night .discover-jm-footnote{
-  color:#bcd0e6!important;
+  color:#86868b!important;
 }
 body.theme-night .utility-link{
-  background:linear-gradient(180deg,rgba(15,34,54,.95),rgba(10,24,39,.95));
-  border-color:rgba(174,217,255,.12);
-  color:#f5fbff!important;
-  box-shadow:0 14px 30px rgba(0,0,0,.22);
+  background:#1c1c1e;
+  border-color:rgba(255,255,255,.08);
+  color:#f5f5f7!important;
+  box-shadow:none;
 }
 body.theme-night .theme-toggle-btn{
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 28% 24%,rgba(255,255,255,.2),transparent 24%),
-    linear-gradient(135deg,#102844,#0f3d62 48%,#0e5f73 100%);
-  color:#fff!important;
-  border-color:rgba(186,228,255,.2);
-  box-shadow:0 0 0 1px rgba(186,228,255,.08),0 16px 34px rgba(0,0,0,.24),0 0 24px rgba(67,217,173,.12);
+  background:#2c2c2e;
+  color:#f5f5f7!important;
+  border-color:rgba(255,255,255,.12);
+  box-shadow:none;
 }
-body.theme-night .theme-toggle-btn::before{
-  content:'';
-  position:absolute;
-  inset:-45% auto auto -20%;
-  width:90%;
-  height:180%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  transform:rotate(24deg);
-  animation:themeToggleSweep 3.4s ease-in-out infinite;
-}
-@keyframes themeToggleSweep{
-  0%,100%{left:-55%;opacity:.12}
-  50%{left:120%;opacity:.34}
-}
+body.theme-night .theme-toggle-btn::before{content:none}
 body.theme-night .theme-toggle-btn:hover,
 body.theme-night .theme-toggle-btn.act{
-  transform:translateY(-2px) scale(1.02);
-  box-shadow:0 0 0 1px rgba(186,228,255,.12),0 18px 34px rgba(0,0,0,.26),0 0 32px rgba(239,135,49,.18);
+  transform:translateY(-1px);
+  background:#3a3a3c;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 body.theme-night .btn-primary,
 body.theme-night .btn-book{
-  background:linear-gradient(135deg,#ef8731,#f3a54e 55%,#ffd089);
+  background:#ef8731;
   color:#fff!important;
-  box-shadow:0 16px 34px rgba(239,135,49,.26);
+  box-shadow:none;
+}
+body.theme-night .btn-primary:hover,
+body.theme-night .btn-book:hover{
+  background:#f59a4a;
 }
 body.theme-night .btn-secondary,
 body.theme-night .btn-outline{
-  background:rgba(255,255,255,.03);
-  border-color:rgba(186,228,255,.24)!important;
-  color:#f5fbff!important;
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.16)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .btn-secondary:hover,
 body.theme-night .btn-outline:hover{
-  background:rgba(255,255,255,.08)!important;
-  border-color:rgba(239,135,49,.34)!important;
+  background:rgba(255,255,255,.1)!important;
+  border-color:rgba(255,255,255,.24)!important;
 }
 body.theme-night input,
 body.theme-night select,
@@ -3417,20 +3370,20 @@ body.theme-night .fg textarea,
 body.theme-night .field-col input,
 body.theme-night .field-col textarea,
 body.theme-night .field-col select{
-  background:linear-gradient(180deg,rgba(9,24,38,.98),rgba(12,29,46,.98))!important;
-  border-color:rgba(174,217,255,.12)!important;
-  color:#f5fbff!important;
+  background:#1c1c1e!important;
+  border-color:rgba(255,255,255,.1)!important;
+  color:#f5f5f7!important;
   box-shadow:none;
 }
 body.theme-night input::placeholder,
-body.theme-night textarea::placeholder{color:rgba(188,208,230,.68)!important}
+body.theme-night textarea::placeholder{color:rgba(255,255,255,.3)!important}
 body.theme-night .discover-jm-chip{
-  background:rgba(255,255,255,.03)!important;
-  color:#eaf4ff!important;
+  background:rgba(255,255,255,.06)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .discover-jm-chip:hover,
 body.theme-night .discover-jm-chip.on{
-  background:linear-gradient(135deg,#ef8731,#f3a54e)!important;
+  background:#ef8731!important;
   color:#fff!important;
   border-color:transparent!important;
 }
@@ -3439,31 +3392,25 @@ body.theme-night .mba-getaway-highlights span,
 body.theme-night .discover-jm-hidden-label,
 body.theme-night .discover-jm-metric,
 body.theme-night .discover-jm-stat{
-  background:rgba(255,255,255,.04)!important;
-  border-color:rgba(174,217,255,.09)!important;
-  color:#f5fbff!important;
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.08)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .lamtour-stage{
-  background:
-    radial-gradient(circle at 20% 16%,rgba(255,245,211,.16),transparent 14%),
-    radial-gradient(circle at 76% 14%,rgba(128,167,255,.14),transparent 18%),
-    linear-gradient(180deg,#020811 0%,#081a30 26%,#08213a 58%,#04101e 100%);
+  background:#000;
 }
 body.theme-night .lamtour-stage::before{
-  background:
-    radial-gradient(circle at 20% 18%,rgba(255,255,255,.09),transparent 16%),
-    radial-gradient(circle at 74% 12%,rgba(255,255,255,.05),transparent 10%),
-    linear-gradient(180deg,rgba(255,255,255,.03) 0%,rgba(255,255,255,0) 24%,rgba(0,0,0,.3) 82%,rgba(0,0,0,.46) 100%);
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.4) 100%);
 }
 body.theme-night .lamtour-stage::after{
-  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.96) 0%,rgba(212,233,255,.86) 26%,rgba(125,161,210,.34) 56%,rgba(125,161,210,0) 76%);
-  box-shadow:0 0 90px rgba(146,181,226,.28),0 0 34px rgba(255,245,211,.22);
+  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.9) 0%,rgba(200,200,200,.5) 30%,transparent 70%);
+  box-shadow:0 0 60px rgba(255,255,255,.15);
 }
 body.theme-night .dest-explorer-overlay,
 body.theme-night .slide::before{
-  background:linear-gradient(180deg,rgba(4,12,21,.14) 0%,rgba(4,12,21,.36) 34%,rgba(4,12,21,.86) 100%);
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.4) 40%,rgba(0,0,0,.85) 100%);
 }
-body.theme-night .footer{background:linear-gradient(180deg,#07111d 0%,#06111a 100%)!important}
+body.theme-night .footer{background:#000!important}
 body.theme-night .footer-wordmark span,
 body.theme-night .sec-pre,
 body.theme-night .dest-packages-kicker,
@@ -9002,24 +8949,24 @@ body.theme-night .page .tag{
 .team-gloss-body p{font-size:12px!important;line-height:1.75!important} 
 @media (max-width:768px){.team-gloss-grid{grid-template-columns:1fr}.team-gloss-media img{width:112px!important;height:112px!important}.team-gloss-tag{left:92px!important;top:82px!important}} 
 
-/* Luxury night mode redesign */
-body.theme-night{background:radial-gradient(circle at top,rgba(16,43,70,.88),rgba(4,11,20,1) 42%,rgba(2,7,14,1) 100%)!important;color:rgba(240,247,255,.88)!important} 
-body.theme-night::before{background:radial-gradient(circle at 15% 20%,rgba(112,194,87,.08),rgba(112,194,87,0) 24%),radial-gradient(circle at 85% 10%,rgba(239,135,49,.12),rgba(239,135,49,0) 24%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))!important;opacity:1!important} 
-body.theme-night .navbar{background:rgba(5,12,22,.72)!important;border-bottom-color:rgba(255,255,255,.08)!important;box-shadow:0 18px 40px rgba(0,0,0,.28)!important} 
-body.theme-night .topbar{background:linear-gradient(90deg,#031323,#0a2a41 55%,#0a3040 100%)!important} 
-body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-mag-card,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:linear-gradient(180deg,rgba(10,20,34,.9),rgba(6,14,24,.92))!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 24px 54px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.05)!important;color:rgba(240,247,255,.88)!important} 
-body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,body.theme-night .partners-sec,body.theme-night .about-sec{background:transparent!important} 
-body.theme-night .shop-card::before{opacity:.5} 
-body.theme-night .sc-meta span,body.theme-night .shop-hero-tag,body.theme-night .partner-tag,body.theme-night .blog-chip--soft{background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.08)!important;color:#d5e7ff!important} 
-body.theme-night .sec-title,body.theme-night .bc-title,body.theme-night .team-gloss-body h3,body.theme-night .partners-grid-title h3,body.theme-night .pd-name,body.theme-night .ph-title,body.theme-night .sc-name,body.theme-night .shop-hero-copy h3,body.theme-night .partners-premium-aside h4{color:#f4f8ff!important} 
-body.theme-night .sec-sub,body.theme-night .bc-excerpt,body.theme-night .team-gloss-body p,body.theme-night .partner-note,body.theme-night .sc-desc,body.theme-night .shop-hero-aside p,body.theme-night .discover-jm-source-card p{color:rgba(219,232,246,.72)!important} 
-body.theme-night .blog-side-card--cta{background:linear-gradient(135deg,rgba(12,46,74,.96),rgba(11,67,91,.95) 58%,rgba(176,96,34,.92) 140%)!important} 
-body.theme-night .theme-toggle-btn{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02))!important;border:1px solid rgba(255,255,255,.08)!important;box-shadow:0 10px 24px rgba(0,0,0,.2)} 
-body.theme-night .cart-panel{background:linear-gradient(180deg,rgba(8,16,28,.96),rgba(4,10,18,.98))!important;border-left-color:rgba(255,255,255,.08)!important} 
-body.theme-night .cart-progress,body.theme-night .cart-empty,body.theme-night .ci-qty{background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.08)!important} 
-body.theme-night .ci-qty button,body.theme-night .cart-mini-btn{background:rgba(255,255,255,.06)!important;color:#eef6ff!important;border-color:rgba(255,255,255,.08)!important} 
-body.theme-night .cart-panel-head,body.theme-night .cart-panel-foot{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))!important} 
-body.theme-night .logo-image{border:none!important;border-radius:0!important;padding:0!important;box-shadow:none!important;filter:drop-shadow(0 12px 24px rgba(0,0,0,.28))!important} 
+/* Apple-style night mode overrides */
+body.theme-night{background:#000!important;color:#f5f5f7!important}
+body.theme-night::before{content:none!important;background:none!important}
+body.theme-night .navbar{background:rgba(22,22,22,.82)!important;border-bottom-color:rgba(255,255,255,.08)!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(180%)}
+body.theme-night .topbar{background:#1c1c1e!important}
+body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-mag-card,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important;color:#f5f5f7!important}
+body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,body.theme-night .partners-sec,body.theme-night .about-sec{background:#000!important}
+body.theme-night .shop-card::before{opacity:.5}
+body.theme-night .sc-meta span,body.theme-night .shop-hero-tag,body.theme-night .partner-tag,body.theme-night .blog-chip--soft{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important;color:#f5f5f7!important}
+body.theme-night .sec-title,body.theme-night .bc-title,body.theme-night .team-gloss-body h3,body.theme-night .partners-grid-title h3,body.theme-night .pd-name,body.theme-night .ph-title,body.theme-night .sc-name,body.theme-night .shop-hero-copy h3,body.theme-night .partners-premium-aside h4{color:#f5f5f7!important}
+body.theme-night .sec-sub,body.theme-night .bc-excerpt,body.theme-night .team-gloss-body p,body.theme-night .partner-note,body.theme-night .sc-desc,body.theme-night .shop-hero-aside p,body.theme-night .discover-jm-source-card p{color:#86868b!important}
+body.theme-night .blog-side-card--cta{background:#2c2c2e!important}
+body.theme-night .theme-toggle-btn{background:#2c2c2e!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:none}
+body.theme-night .cart-panel{background:#1c1c1e!important;border-left-color:rgba(255,255,255,.08)!important}
+body.theme-night .cart-progress,body.theme-night .cart-empty,body.theme-night .ci-qty{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important}
+body.theme-night .ci-qty button,body.theme-night .cart-mini-btn{background:rgba(255,255,255,.08)!important;color:#f5f5f7!important;border-color:rgba(255,255,255,.1)!important}
+body.theme-night .cart-panel-head,body.theme-night .cart-panel-foot{background:rgba(255,255,255,.03)!important}
+body.theme-night .logo-image{border:none!important;border-radius:0!important;padding:0!important;box-shadow:none!important;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))!important}
 </style>
 </head>
 <body>
@@ -10035,7 +9982,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">After-dark standout</small>
             <h3>Night Glow Lagoon Experience</h3>
             <p>Two memorable moments, one smooth booking. A glowing-water evening designed to feel rare, easy, and worth saying yes to.</p>
-            <div class="popular-meta"><strong>Starting from $69</strong><span class="popular-cta">View Experience</span></div>
+            <div class="popular-meta"><strong>From $69</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAskSightSeers('Interested in the Blue Hole Escape in Jamaica with waterfall stops and a well-paced adventure day.')">
@@ -10045,7 +9992,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Adventure favorite</small>
             <h3>Blue Hole Escape</h3>
             <p>Cliff jumps, hidden pools, and a clear plan from start to finish. Built for guests who want adventure without the friction.</p>
-            <div class="popular-meta"><strong>Starting from $85</strong><span class="popular-cta">View Experience</span></div>
+            <div class="popular-meta"><strong>From $85</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAskSightSeers('Interested in the Bamboo Rafting Experience in Jamaica with a calm scenic pace and premium touches.')">
@@ -10055,7 +10002,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Soft-luxury favorite</small>
             <h3>Bamboo Rafting Experience</h3>
             <p>Slow, scenic, and beautifully paced. A relaxed river experience for couples, friends, and guests who want to unwind well.</p>
-            <div class="popular-meta"><strong>Starting from $55</strong><span class="popular-cta">View Experience</span></div>
+            <div class="popular-meta"><strong>From $55</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAskSightSeers('Interested in the Catamaran Party Cruise in Jamaica with music, open-bar energy and seamless group planning.')">
@@ -10065,7 +10012,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Social energy</small>
             <h3>Catamaran Party Cruise</h3>
             <p>Sun, music, and open-water energy. A clean, easy choice for groups who want the day to feel lively from the moment it starts.</p>
-            <div class="popular-meta"><strong>Starting from $79</strong><span class="popular-cta">View Experience</span></div>
+            <div class="popular-meta"><strong>From $79</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
       </div>
@@ -10406,7 +10353,7 @@ body.theme-night .page .tag{
       <div class="transfers-premium-hero reveal">
         <div class="transfers-premium-copy">
           <span class="transfers-premium-kicker"><i class="fas fa-route"></i> Sight Seers Transfers</span>
-          <h1 class="transfers-premium-title">Airport pickups, VIP rides and luxury coaches that feel ready from the first stop.</h1>
+          <h1 class="transfers-premium-title">Sight Seers Transfers</h1>
           <p class="transfers-premium-sub">Choose from polished airport pickups, VIP executive transfers, Mercedes options and larger group coaches built for weddings, retreats, school trips, corporate movement and premium island arrivals.</p>
           <div class="transfers-premium-actions">
             <a href="https://calendly.com/sightseersjm/30min" target="_blank" rel="noopener noreferrer" class="btn-primary"><i class="fas fa-calendar-check"></i>Book a Discovery Call</a>
@@ -11209,7 +11156,7 @@ body.theme-night .page .tag{
      ABOUT PAGE
 ════════════════════════════════════ -->
 <div class="page" id="p-about">
-  <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Where Passion for Travel Meets Meaningful Luxury Experiences</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><div id="aboutReadMoreContent" class="about-readmore" aria-hidden="true"><div class="about-readmore-inner"><p class="sec-sub" style="margin-bottom:18px">Some of the most defining moments came during university, taking weekend trips with friends when finals were approaching just to clear our minds, or right after exams to unwind and celebrate the journey. Sometimes those escapes meant quick weekend trips to other Caribbean islands, stepping into a different culture, a different rhythm, even if just for a few days. Those trips were never just about the destination. They were about the laughter, the conversations, the freedom, and the feeling of being fully present with the people around you.</p><p class="sec-sub" style="margin-bottom:18px">That same spirit carried into traveling beyond borders, even taking trips with friends to other countries to participate in 5K walk and run events, simply for the experience, the challenge, and the memories created along the way. It meant visiting family members living different lives across the world, gaining new perspectives, and deepening connections. And sometimes, it was as simple as commuting across towns or traveling with friends to uncover hidden gems right here at home in Jamaica, places you pass every day but never truly see until you slow down and explore.</p><p class="sec-sub" style="margin-bottom:18px">Through these experiences, it became clear that travel is not just about where you go, but how it makes you feel and who you share it with. Exploring the Caribbean beyond the surface, discovering hidden gems, connecting with people, and experiencing the culture in its most authentic form revealed that these moments were too meaningful not to share.</p><p class="sec-sub" style="margin-bottom:18px">Whether it is an adrenaline filled ATV ride through Jamaica’s mountains, a peaceful catamaran cruise at sunset, or discovering secluded beaches across the Caribbean, we bring these moments to life in a way that feels authentic, seamless, and thoughtfully curated. More importantly, we give travelers the freedom to curate their own group experiences, blending adventure, connection, and luxury to create something truly their own.</p><p class="sec-sub" style="margin-bottom:24px">This is more than a business. It is a vision brought to life through passion, shared experiences, and the belief that travel has the power to transform how people feel, connect, and experience the world.<br><br>— D. Allen</p></div></div><div class="about-actions"><button type="button" class="btn-secondary" id="aboutReadMoreBtn" onclick="toggleAboutReadMore()" aria-expanded="false" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)"><span>Read More</span> <i class="fas fa-chevron-down"></i></button><a href="#" class="btn-primary" onclick="nav('booking')"><i class="fas fa-paper-plane"></i>Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85" alt="About"><div class="about-badge"><strong>2</strong><span>Years of<br>Excellence</span></div></div></div></section>
+  <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Where Passion for Travel Meets Meaningful Luxury Experiences</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><p class="sec-sub" style="margin-bottom:18px">Some of the most defining moments came during university, taking weekend trips with friends when finals were approaching just to clear our minds, or right after exams to unwind and celebrate the journey. Sometimes those escapes meant quick weekend trips to other Caribbean islands, stepping into a different culture, a different rhythm, even if just for a few days. Those trips were never just about the destination. They were about the laughter, the conversations, the freedom, and the feeling of being fully present with the people around you.</p><p class="sec-sub" style="margin-bottom:18px">That same spirit carried into traveling beyond borders, even taking trips with friends to other countries to participate in 5K walk and run events, simply for the experience, the challenge, and the memories created along the way. It meant visiting family members living different lives across the world, gaining new perspectives, and deepening connections. And sometimes, it was as simple as commuting across towns or traveling with friends to uncover hidden gems right here at home in Jamaica, places you pass every day but never truly see until you slow down and explore.</p><p class="sec-sub" style="margin-bottom:18px">Through these experiences, it became clear that travel is not just about where you go, but how it makes you feel and who you share it with. Exploring the Caribbean beyond the surface, discovering hidden gems, connecting with people, and experiencing the culture in its most authentic form revealed that these moments were too meaningful not to share.</p><p class="sec-sub" style="margin-bottom:18px">Whether it is an adrenaline filled ATV ride through Jamaica’s mountains, a peaceful catamaran cruise at sunset, or discovering secluded beaches across the Caribbean, we bring these moments to life in a way that feels authentic, seamless, and thoughtfully curated. More importantly, we give travelers the freedom to curate their own group experiences, blending adventure, connection, and luxury to create something truly their own.</p><p class="sec-sub" style="margin-bottom:24px">This is more than a business. It is a vision brought to life through passion, shared experiences, and the belief that travel has the power to transform how people feel, connect, and experience the world.<br><br>— D. Allen</p></div></div><div class="about-actions"><a href="#" class="btn-primary" onclick="nav('booking')"><i class="fas fa-paper-plane"></i>Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85" alt="About"><div class="about-badge"><strong>2</strong><span>Years of<br>Excellence</span></div></div></div></section>
 
   <section class="team-gloss-sec" id="aboutGallerySection">
   <div class="team-wrap">
@@ -12227,12 +12174,6 @@ body.theme-night .page .tag{
             <div class="blog-side-meta">Guide · Jan 5, 2025</div>
             <h4>Club Mobay VIP Lounge: Everything to Know</h4>
             <p>Fast-track the airport experience with premium lounge access, arrival support, and a smoother first impression of Jamaica.</p>
-          </article>
-          <article class="blog-side-card blog-side-card--cta">
-            <span class="blog-chip blog-chip--dark">Plan with Sight Seers</span>
-            <h4>Need a polished itinerary?</h4>
-            <p>Turn inspiration into a custom experience with tours, transfers, villa support, and concierge-style planning.</p>
-            <a href="#" class="btn-primary" onclick="nav('booking');return false;"><i class="fas fa-paper-plane"></i>Start Planning</a>
           </article>
         </aside>
       </div>
@@ -13944,47 +13885,47 @@ const STAY_TYPES=[
   {value:'villa',label:'Villa'}
 ];
 const STAYS=[
-  {id:1,title:'Montego Bay Hillside Vacation Rentals',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $245 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A polished Jamaica Vacation Rentals with airy interiors, coastal access and flexible rooming for couples or small groups.',highlights:['Chef-ready kitchen','Airport transfer add-on','North coast base']},
-  {id:2,title:'Ocho Rios Seaview Villa',country:'Jamaica',type:'villa',tag:'Villa',price:'Starting from $620 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A more elevated Jamaica villa stay with private pool energy, spacious lounging and room to pair tours into one easy plan.',highlights:['Private pool','Tour pairing','Group ready']},
-  {id:15,title:'Negril Sunset Beach Condo',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $285 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A laid-back Jamaica beachfront condo with sunset access, modern finishes and a smooth base for west coast stays.',highlights:['Seven Mile Beach area','Sunset-facing balcony','Couples friendly']},
-  {id:16,title:'Port Antonio Garden Villa',country:'Jamaica',type:'villa',tag:'Villa',price:'Starting from $710 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A lush Jamaica villa hideaway with tropical gardens, private lounging zones and a quieter east-coast mood.',highlights:['Private garden setting','Quiet luxury feel','Ideal for long weekends']},
-  {id:17,title:'Runaway Bay Family Retreat',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $260 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A clean north-coast rental with multiple bedrooms, breezy interiors and easy access to beach and attraction days.',highlights:['Family sized layout','Near Ocho Rios corridor','Pool access']},
+  {id:1,title:'Montego Bay Hillside Vacation Rentals',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'From $245 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A polished Jamaica Vacation Rentals with airy interiors, coastal access and flexible rooming for couples or small groups.',highlights:['Chef-ready kitchen','Airport transfer add-on','North coast base']},
+  {id:2,title:'Ocho Rios Seaview Villa',country:'Jamaica',type:'villa',tag:'Villa',price:'From $620 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A more elevated Jamaica villa stay with private pool energy, spacious lounging and room to pair tours into one easy plan.',highlights:['Private pool','Tour pairing','Group ready']},
+  {id:15,title:'Negril Sunset Beach Condo',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'From $285 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A laid-back Jamaica beachfront condo with sunset access, modern finishes and a smooth base for west coast stays.',highlights:['Seven Mile Beach area','Sunset-facing balcony','Couples friendly']},
+  {id:16,title:'Port Antonio Garden Villa',country:'Jamaica',type:'villa',tag:'Villa',price:'From $710 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A lush Jamaica villa hideaway with tropical gardens, private lounging zones and a quieter east-coast mood.',highlights:['Private garden setting','Quiet luxury feel','Ideal for long weekends']},
+  {id:17,title:'Runaway Bay Family Retreat',country:'Jamaica',type:'airbnb',tag:'Vacation Rentals',price:'From $260 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A clean north-coast rental with multiple bedrooms, breezy interiors and easy access to beach and attraction days.',highlights:['Family sized layout','Near Ocho Rios corridor','Pool access']},
 
-  {id:3,title:'West Coast Beach Vacation Rentals',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $280 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Barbados Vacation Rentals styled for guests who want modern comfort, beach proximity and a clean island-home feel.',highlights:['Near beach clubs','Modern interiors','Easy weekend stay']},
-  {id:4,title:'Barbados Platinum Coast Villa',country:'Barbados',type:'villa',tag:'Villa',price:'Starting from $880 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A premium west coast villa tailored for refined groups, celebratory stays and upscale island downtime.',highlights:['Luxury coast','Concierge support','Private gathering space']},
-  {id:18,title:'Holetown Chic Holiday Apartment',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $295 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A polished Barbados apartment stay with shopping, dining and west coast beach access all within easy reach.',highlights:['Walkable Holetown base','Modern kitchen','Short-stay friendly']},
-  {id:19,title:'Speightstown Oceanview Villa',country:'Barbados',type:'villa',tag:'Villa',price:'Starting from $760 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A north Barbados villa with calming sea views, private outdoor dining and a relaxed upscale atmosphere.',highlights:['Oceanview terrace','Quiet coast feel','Private plunge pool']},
-  {id:20,title:'South Coast Garden Stay',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'An easy Barbados rental near the south coast built for beach days, nightlife access and flexible island pacing.',highlights:['Near St. Lawrence Gap','Great for friends','Comfortable base']},
+  {id:3,title:'West Coast Beach Vacation Rentals',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'From $280 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Barbados Vacation Rentals styled for guests who want modern comfort, beach proximity and a clean island-home feel.',highlights:['Near beach clubs','Modern interiors','Easy weekend stay']},
+  {id:4,title:'Barbados Platinum Coast Villa',country:'Barbados',type:'villa',tag:'Villa',price:'From $880 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A premium west coast villa tailored for refined groups, celebratory stays and upscale island downtime.',highlights:['Luxury coast','Concierge support','Private gathering space']},
+  {id:18,title:'Holetown Chic Holiday Apartment',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'From $295 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A polished Barbados apartment stay with shopping, dining and west coast beach access all within easy reach.',highlights:['Walkable Holetown base','Modern kitchen','Short-stay friendly']},
+  {id:19,title:'Speightstown Oceanview Villa',country:'Barbados',type:'villa',tag:'Villa',price:'From $760 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A north Barbados villa with calming sea views, private outdoor dining and a relaxed upscale atmosphere.',highlights:['Oceanview terrace','Quiet coast feel','Private plunge pool']},
+  {id:20,title:'South Coast Garden Stay',country:'Barbados',type:'airbnb',tag:'Vacation Rentals',price:'From $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'An easy Barbados rental near the south coast built for beach days, nightlife access and flexible island pacing.',highlights:['Near St. Lawrence Gap','Great for friends','Comfortable base']},
 
-  {id:5,title:'Rodney Bay Vacation Rentals Stay',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $265 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A Saint Lucia Vacation Rentals with soft tropical styling, easy access to dining and the flexibility travelers want for a scenic stay.',highlights:['Dining nearby','Flexible stay','Scenic base']},
-  {id:6,title:'Pitons View Villa Retreat',country:'Saint Lucia',type:'villa',tag:'Villa',price:'Starting from $945 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A luxury Saint Lucia villa positioned for dramatic views, restorative downtime and beautiful celebration moments.',highlights:['Pitons outlook','Private terrace','Retreat worthy']},
-  {id:21,title:'Soufriere Hillside Escape',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $290 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A scenic Saint Lucia rental with lush hillside energy and easy access to the island’s iconic southwest experiences.',highlights:['Near Soufriere sights','Balcony views','Couples retreat']},
-  {id:22,title:'Marigot Bay Luxury Residence',country:'Saint Lucia',type:'villa',tag:'Villa',price:'Starting from $835 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A refined Saint Lucia villa for travelers who want marina access, polished interiors and an elevated base.',highlights:['Marina area location','Upscale interiors','Great for yacht-day pairing']},
-  {id:23,title:'Castries Coastal Apartment',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $235 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A flexible city-coast apartment stay for guests who want convenience, beaches and quick movement around the island.',highlights:['Convenient Castries base','Good for short stays','Easy transport links']},
+  {id:5,title:'Rodney Bay Vacation Rentals Stay',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'From $265 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A Saint Lucia Vacation Rentals with soft tropical styling, easy access to dining and the flexibility travelers want for a scenic stay.',highlights:['Dining nearby','Flexible stay','Scenic base']},
+  {id:6,title:'Pitons View Villa Retreat',country:'Saint Lucia',type:'villa',tag:'Villa',price:'From $945 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A luxury Saint Lucia villa positioned for dramatic views, restorative downtime and beautiful celebration moments.',highlights:['Pitons outlook','Private terrace','Retreat worthy']},
+  {id:21,title:'Soufriere Hillside Escape',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'From $290 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A scenic Saint Lucia rental with lush hillside energy and easy access to the island’s iconic southwest experiences.',highlights:['Near Soufriere sights','Balcony views','Couples retreat']},
+  {id:22,title:'Marigot Bay Luxury Residence',country:'Saint Lucia',type:'villa',tag:'Villa',price:'From $835 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A refined Saint Lucia villa for travelers who want marina access, polished interiors and an elevated base.',highlights:['Marina area location','Upscale interiors','Great for yacht-day pairing']},
+  {id:23,title:'Castries Coastal Apartment',country:'Saint Lucia',type:'airbnb',tag:'Vacation Rentals',price:'From $235 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A flexible city-coast apartment stay for guests who want convenience, beaches and quick movement around the island.',highlights:['Convenient Castries base','Good for short stays','Easy transport links']},
 
-  {id:7,title:'Nassau Harbour Vacation Rentals',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $310 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A bright Bahamas Vacation Rentals for guests who want water access, nightlife options and a stylish city-meets-island base.',highlights:['Harbour access','Social-ready','Island apartment style']},
-  {id:8,title:'Exuma Private Villa Escape',country:'The Bahamas',type:'villa',tag:'Villa',price:'Starting from $1,050 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A premium Bahamas villa built for larger groups, polished boat-day planning and the kind of stay that feels special from arrival.',highlights:['Boat-day pairing','Private luxury','Celebration fit']},
-  {id:24,title:'Paradise Island Modern Suite',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $345 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A sleek Bahamas suite near Paradise Island with resort access energy and a polished contemporary look.',highlights:['Paradise Island access','Modern finishes','Great for couples']},
-  {id:25,title:'Harbour Island Pink Sand Villa',country:'The Bahamas',type:'villa',tag:'Villa',price:'Starting from $1,180 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A standout Bahamas villa for refined escapes, celebration stays and private beach-led downtime.',highlights:['Pink sand area access','Premium coastal style','Celebration worthy']},
-  {id:26,title:'Bimini Beachfront Retreat',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $325 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A breezy Bahamas rental set up for fishing trips, beach days and a more relaxed out-island pace.',highlights:['Beachfront feel','Out-island atmosphere','Boat-trip friendly']},
+  {id:7,title:'Nassau Harbour Vacation Rentals',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'From $310 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A bright Bahamas Vacation Rentals for guests who want water access, nightlife options and a stylish city-meets-island base.',highlights:['Harbour access','Social-ready','Island apartment style']},
+  {id:8,title:'Exuma Private Villa Escape',country:'The Bahamas',type:'villa',tag:'Villa',price:'From $1,050 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A premium Bahamas villa built for larger groups, polished boat-day planning and the kind of stay that feels special from arrival.',highlights:['Boat-day pairing','Private luxury','Celebration fit']},
+  {id:24,title:'Paradise Island Modern Suite',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'From $345 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A sleek Bahamas suite near Paradise Island with resort access energy and a polished contemporary look.',highlights:['Paradise Island access','Modern finishes','Great for couples']},
+  {id:25,title:'Harbour Island Pink Sand Villa',country:'The Bahamas',type:'villa',tag:'Villa',price:'From $1,180 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A standout Bahamas villa for refined escapes, celebration stays and private beach-led downtime.',highlights:['Pink sand area access','Premium coastal style','Celebration worthy']},
+  {id:26,title:'Bimini Beachfront Retreat',country:'The Bahamas',type:'airbnb',tag:'Vacation Rentals',price:'From $325 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A breezy Bahamas rental set up for fishing trips, beach days and a more relaxed out-island pace.',highlights:['Beachfront feel','Out-island atmosphere','Boat-trip friendly']},
 
-  {id:9,title:'Ambergris Caye Vacation Rentals Loft',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $225 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A Belize Vacation Rentals option ideal for guests who want reef access, relaxed pacing and an easy-going island-home setup.',highlights:['Reef access','Island loft feel','Couples friendly']},
-  {id:10,title:'Placencia Coast Villa',country:'Belize',type:'villa',tag:'Villa',price:'Starting from $730 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A Belize villa stay with extra privacy, water-facing calm and enough room to blend nature plans with premium comfort.',highlights:['Coastal privacy','Nature pairing','Premium comfort']},
-  {id:27,title:'Caye Caulker Breezy Bungalow',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $205 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A relaxed Belize bungalow stay for easy reef days, island biking and laid-back travel flow.',highlights:['Easy island vibe','Great for reef tours','Walkable base']},
-  {id:28,title:'San Ignacio Jungle Villa',country:'Belize',type:'villa',tag:'Villa',price:'Starting from $640 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A Belize inland villa with jungle atmosphere, spacious family zones and easy access to cave and ruin adventures.',highlights:['Jungle-lodge feel','Adventure ready','Spacious layout']},
-  {id:29,title:'Placencia Lagoon Apartment',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $215 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Belize lagoon-side apartment made for easy coastal stays, beach access and calm morning views.',highlights:['Lagoon outlook','Beach nearby','Good for extended stays']},
+  {id:9,title:'Ambergris Caye Vacation Rentals Loft',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'From $225 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A Belize Vacation Rentals option ideal for guests who want reef access, relaxed pacing and an easy-going island-home setup.',highlights:['Reef access','Island loft feel','Couples friendly']},
+  {id:10,title:'Placencia Coast Villa',country:'Belize',type:'villa',tag:'Villa',price:'From $730 / night',img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85',copy:'A Belize villa stay with extra privacy, water-facing calm and enough room to blend nature plans with premium comfort.',highlights:['Coastal privacy','Nature pairing','Premium comfort']},
+  {id:27,title:'Caye Caulker Breezy Bungalow',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'From $205 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A relaxed Belize bungalow stay for easy reef days, island biking and laid-back travel flow.',highlights:['Easy island vibe','Great for reef tours','Walkable base']},
+  {id:28,title:'San Ignacio Jungle Villa',country:'Belize',type:'villa',tag:'Villa',price:'From $640 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A Belize inland villa with jungle atmosphere, spacious family zones and easy access to cave and ruin adventures.',highlights:['Jungle-lodge feel','Adventure ready','Spacious layout']},
+  {id:29,title:'Placencia Lagoon Apartment',country:'Belize',type:'airbnb',tag:'Vacation Rentals',price:'From $215 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Belize lagoon-side apartment made for easy coastal stays, beach access and calm morning views.',highlights:['Lagoon outlook','Beach nearby','Good for extended stays']},
 
-  {id:11,title:'Punta Cana Vacation Rentals Residence',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $240 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Dominican Republic Vacation Rentals with resort-area convenience, beach access and flexible booking support for short stays.',highlights:['Resort district','Beach nearby','Flexible booking']},
-  {id:12,title:'Cap Cana Luxury Villa',country:'Dominican Republic',type:'villa',tag:'Villa',price:'Starting from $990 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A villa-forward DR stay designed for group glamour, nightlife pairing and elevated tropical downtime.',highlights:['Cap Cana feel','Group luxury','Celebration ready']},
-  {id:30,title:'Santo Domingo Heritage Loft',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $210 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A stylish Santo Domingo rental for guests mixing culture, dining and city-led exploration into their island trip.',highlights:['Historic city access','Modern loft design','Culture-trip friendly']},
-  {id:31,title:'Samana Oceanfront Villa',country:'Dominican Republic',type:'villa',tag:'Villa',price:'Starting from $860 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A Dominican Republic villa with wide sea views, private lounging and a calm premium atmosphere.',highlights:['Oceanfront setting','Private pool feel','Nature-meets-luxury']},
-  {id:32,title:'Bavaro Palm Residence',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A clean Bavaro rental with beach-club access energy, polished interiors and easy day-trip planning.',highlights:['Near Bavaro Beach','Resort-area access','Great for friend groups']},
+  {id:11,title:'Punta Cana Vacation Rentals Residence',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'From $240 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Dominican Republic Vacation Rentals with resort-area convenience, beach access and flexible booking support for short stays.',highlights:['Resort district','Beach nearby','Flexible booking']},
+  {id:12,title:'Cap Cana Luxury Villa',country:'Dominican Republic',type:'villa',tag:'Villa',price:'From $990 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A villa-forward DR stay designed for group glamour, nightlife pairing and elevated tropical downtime.',highlights:['Cap Cana feel','Group luxury','Celebration ready']},
+  {id:30,title:'Santo Domingo Heritage Loft',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'From $210 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A stylish Santo Domingo rental for guests mixing culture, dining and city-led exploration into their island trip.',highlights:['Historic city access','Modern loft design','Culture-trip friendly']},
+  {id:31,title:'Samana Oceanfront Villa',country:'Dominican Republic',type:'villa',tag:'Villa',price:'From $860 / night',img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=85',copy:'A Dominican Republic villa with wide sea views, private lounging and a calm premium atmosphere.',highlights:['Oceanfront setting','Private pool feel','Nature-meets-luxury']},
+  {id:32,title:'Bavaro Palm Residence',country:'Dominican Republic',type:'airbnb',tag:'Vacation Rentals',price:'From $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A clean Bavaro rental with beach-club access energy, polished interiors and easy day-trip planning.',highlights:['Near Bavaro Beach','Resort-area access','Great for friend groups']},
 
-  {id:13,title:'Willemstad Vacation Rentals Hideaway',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A Curaçao Vacation Rentals with colorful design notes, easy town access and a polished home-base feel for modern travelers.',highlights:['Design-led stay','Town access','Relaxed city-island mix']},
-  {id:14,title:'Jan Thiel Coastal Villa',country:'Curaçao',type:'villa',tag:'Villa',price:'Starting from $810 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A Curaçao villa option for guests who want beach club energy, private comfort and clean Caribbean styling.',highlights:['Beach club area','Private comfort','Longer stay ready']},
-  {id:33,title:'Blue Bay Resort Apartment',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $245 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Curaçao apartment stay with resort-style access, beach convenience and an easy modern setup.',highlights:['Blue Bay access','Beach close by','Contemporary interiors']},
-  {id:34,title:'Westpunt Cliffside Villa',country:'Curaçao',type:'villa',tag:'Villa',price:'Starting from $845 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A dramatic Curaçao villa for scenic coastal stays, diving days and polished downtime.',highlights:['Cliffside setting','Great for divers','Sunset terrace']},
-  {id:35,title:'Pietermaai Design Stay',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'Starting from $235 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A colorful Curaçao rental in a lively design district with food, nightlife and walkable waterfront appeal.',highlights:['Pietermaai district','Boutique-style stay','Good for couples']}
+  {id:13,title:'Willemstad Vacation Rentals Hideaway',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'From $255 / night',img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=85',copy:'A Curaçao Vacation Rentals with colorful design notes, easy town access and a polished home-base feel for modern travelers.',highlights:['Design-led stay','Town access','Relaxed city-island mix']},
+  {id:14,title:'Jan Thiel Coastal Villa',country:'Curaçao',type:'villa',tag:'Villa',price:'From $810 / night',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85',copy:'A Curaçao villa option for guests who want beach club energy, private comfort and clean Caribbean styling.',highlights:['Beach club area','Private comfort','Longer stay ready']},
+  {id:33,title:'Blue Bay Resort Apartment',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'From $245 / night',img:'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=85',copy:'A Curaçao apartment stay with resort-style access, beach convenience and an easy modern setup.',highlights:['Blue Bay access','Beach close by','Contemporary interiors']},
+  {id:34,title:'Westpunt Cliffside Villa',country:'Curaçao',type:'villa',tag:'Villa',price:'From $845 / night',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',copy:'A dramatic Curaçao villa for scenic coastal stays, diving days and polished downtime.',highlights:['Cliffside setting','Great for divers','Sunset terrace']},
+  {id:35,title:'Pietermaai Design Stay',country:'Curaçao',type:'airbnb',tag:'Vacation Rentals',price:'From $235 / night',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=85',copy:'A colorful Curaçao rental in a lively design district with food, nightlife and walkable waterfront appeal.',highlights:['Pietermaai district','Boutique-style stay','Good for couples']}
 ];
 const STAY_ADMIN_STORAGE_KEY='ss_stay_page_settings';
 const DEFAULT_STAY_PAGE_SETTINGS={
@@ -14102,53 +14043,53 @@ const DESTINATION_PACKAGE_COPY={
 
 const DESTINATION_PACKAGE_DATA={
   'Jamaica':[
-    {title:'Bamboo Rafting Signature Day',tag:'Most Requested',type:'Curated Package',duration:'Half day',price:'Starting from $75',img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',blurb:'A relaxed river-forward Jamaica itinerary inspired by strong marketplace demand for bamboo rafting and limestone massage style experiences.',highlights:['Bamboo rafting','Foot massage-style add-on','Private transfer option'],tourId:1},
-    {title:'Club Mobay Arrival & Lounge Upgrade',tag:'VIP Arrival',type:'Airport Add-On',duration:'Same day',price:'Starting from $35',img:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=85',blurb:'A polished airport experience designed for guests who want arrival support, lounge comfort and a smoother first impression.',highlights:['Airport fast-track feel','Arrival support','Premium travel pacing']},
-    {title:'Horseback & Bamboo Combo Escape',tag:'Island Combo',type:'Adventure Pairing',duration:'Full day',price:'Starting from $95',img:'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=85',blurb:'An energetic day pairing river culture with a horseback route for guests wanting more motion in one itinerary.',highlights:['Two-in-one experience','Photo stops','Group-friendly']},
-    {title:'Luxury South Coast Weekend',tag:'Luxury Stay',type:'Weekend Escape',duration:'3 days / 2 nights',price:'Starting from $540',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'A villa or resort-led Jamaica weekend with curated excursions, beach time and polished downtime.',highlights:['Villa or resort stay','Private itinerary support','Weekend-ready flow']}
+    {title:'Bamboo Rafting Signature Day',tag:'Most Requested',type:'Curated Package',duration:'Half day',price:'From $75',img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',blurb:'A relaxed river-forward Jamaica itinerary inspired by strong marketplace demand for bamboo rafting and limestone massage style experiences.',highlights:['Bamboo rafting','Foot massage-style add-on','Private transfer option'],tourId:1},
+    {title:'Club Mobay Arrival & Lounge Upgrade',tag:'VIP Arrival',type:'Airport Add-On',duration:'Same day',price:'From $35',img:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=85',blurb:'A polished airport experience designed for guests who want arrival support, lounge comfort and a smoother first impression.',highlights:['Airport fast-track feel','Arrival support','Premium travel pacing']},
+    {title:'Horseback & Bamboo Combo Escape',tag:'Island Combo',type:'Adventure Pairing',duration:'Full day',price:'From $95',img:'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=85',blurb:'An energetic day pairing river culture with a horseback route for guests wanting more motion in one itinerary.',highlights:['Two-in-one experience','Photo stops','Group-friendly']},
+    {title:'Luxury South Coast Weekend',tag:'Luxury Stay',type:'Weekend Escape',duration:'3 days / 2 nights',price:'From $540',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'A villa or resort-led Jamaica weekend with curated excursions, beach time and polished downtime.',highlights:['Villa or resort stay','Private itinerary support','Weekend-ready flow']}
   ],
   'Barbados':[
-    {title:'Catamaran Snorkel Cruise with Lunch',tag:'Best Seller',type:'Curated Package',duration:'Half day',price:'Starting from $85',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A sea-turtle and shipwreck style Barbados day inspired by current popular catamaran listings.',highlights:['Catamaran sail','Lunch included','Open-bar style experience']},
-    {title:'Turtle & Shipwreck Snorkel Cruise',tag:'Sea Escape',type:'Water Excursion',duration:'Half day',price:'Starting from $65',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85',blurb:'Great for guests wanting marine life, easy snorkeling and a social cruise feel without overbuilding the day.',highlights:['Turtle stop','Shipwreck snorkeling','Coastal sailing']},
-    {title:'Island Coastal Tour with Lunch',tag:'Land & Sea',type:'Day Tour',duration:'6 hours',price:'Starting from $40',img:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',blurb:'A balanced island route combining sightseeing, local flavor and a medium-paced Barbados overview.',highlights:['Scenic coast route','Lunch stop','Great for first-timers']},
-    {title:'Private Tours Barbados',tag:'Private Luxury',type:'Custom Excursion',duration:'Flexible',price:'Starting from $75',img:'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=1200&q=85',blurb:'For guests who want tailored routing, a private vehicle feel and higher-touch itinerary control.',highlights:['Private setup','Custom route','Couples or small groups']}
+    {title:'Catamaran Snorkel Cruise with Lunch',tag:'Best Seller',type:'Curated Package',duration:'Half day',price:'From $85',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A sea-turtle and shipwreck style Barbados day inspired by current popular catamaran listings.',highlights:['Catamaran sail','Lunch included','Open-bar style experience']},
+    {title:'Turtle & Shipwreck Snorkel Cruise',tag:'Sea Escape',type:'Water Excursion',duration:'Half day',price:'From $65',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85',blurb:'Great for guests wanting marine life, easy snorkeling and a social cruise feel without overbuilding the day.',highlights:['Turtle stop','Shipwreck snorkeling','Coastal sailing']},
+    {title:'Island Coastal Tour with Lunch',tag:'Land & Sea',type:'Day Tour',duration:'6 hours',price:'From $40',img:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',blurb:'A balanced island route combining sightseeing, local flavor and a medium-paced Barbados overview.',highlights:['Scenic coast route','Lunch stop','Great for first-timers']},
+    {title:'Private Tours Barbados',tag:'Private Luxury',type:'Custom Excursion',duration:'Flexible',price:'From $75',img:'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=1200&q=85',blurb:'For guests who want tailored routing, a private vehicle feel and higher-touch itinerary control.',highlights:['Private setup','Custom route','Couples or small groups']}
   ],
   'Saint Lucia':[
-    {title:'Mud Bath & Waterfall Escape',tag:'Top Rated',type:'Curated Package',duration:'Full day',price:'Starting from $105',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A wellness-style Saint Lucia day built around Sulphur Springs energy, waterfall stops and scenic Soufriere routing.',highlights:['Mud bath stop','Waterfall visit','Scenic transfer route']},
-    {title:'Soufriere Scenic Highlights',tag:'Island Favorite',type:'Day Tour',duration:'Full day',price:'Starting from $95',img:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',blurb:'An elevated land tour for guests wanting iconic views, piton scenery and a polished island overview.',highlights:['Soufriere route','Pitons viewpoints','Photo-rich itinerary']},
-    {title:'Sulphur Springs & Toraille Falls',tag:'Wellness Escape',type:'Spa & Nature',duration:'Half day',price:'Starting from $85',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A shorter-format option for travelers prioritizing restorative moments and one strong scenic pairing.',highlights:['Sulphur Springs','Toraille Falls','Shorter time commitment']},
-    {title:'Aerial Tram & Nature Day',tag:'Nature Experience',type:'Adventure Leisure',duration:'Half day',price:'Starting from $70',img:'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=85',blurb:'A lighter Saint Lucia option built for soft adventure, scenic elevation and relaxed sightseeing.',highlights:['Rainforest lift','Soft adventure','Family-friendly']}
+    {title:'Mud Bath & Waterfall Escape',tag:'Top Rated',type:'Curated Package',duration:'Full day',price:'From $105',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A wellness-style Saint Lucia day built around Sulphur Springs energy, waterfall stops and scenic Soufriere routing.',highlights:['Mud bath stop','Waterfall visit','Scenic transfer route']},
+    {title:'Soufriere Scenic Highlights',tag:'Island Favorite',type:'Day Tour',duration:'Full day',price:'From $95',img:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',blurb:'An elevated land tour for guests wanting iconic views, piton scenery and a polished island overview.',highlights:['Soufriere route','Pitons viewpoints','Photo-rich itinerary']},
+    {title:'Sulphur Springs & Toraille Falls',tag:'Wellness Escape',type:'Spa & Nature',duration:'Half day',price:'From $85',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A shorter-format option for travelers prioritizing restorative moments and one strong scenic pairing.',highlights:['Sulphur Springs','Toraille Falls','Shorter time commitment']},
+    {title:'Aerial Tram & Nature Day',tag:'Nature Experience',type:'Adventure Leisure',duration:'Half day',price:'From $70',img:'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=85',blurb:'A lighter Saint Lucia option built for soft adventure, scenic elevation and relaxed sightseeing.',highlights:['Rainforest lift','Soft adventure','Family-friendly']}
   ],
   'The Bahamas':[
-    {title:'3 Islands Pigs, Snorkel & Turtles',tag:'Best Seller',type:'Curated Package',duration:'4 hours',price:'Starting from $89',img:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',blurb:'A Nassau water day inspired by high-interest island-hopping listings with pigs, snorkeling and turtle stops.',highlights:['Island hopping','Snorkel stop','Beach club feel']},
-    {title:'Rose Island Swimming Pigs',tag:'Popular',type:'Half-Day Excursion',duration:'4 hours',price:'Starting from $69',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A shorter-format Bahamas favorite for guests who want clear water, playful moments and quick booking appeal.',highlights:['Rose Island','Swimming pigs','Beach time']},
-    {title:'Private Beach Club & Snorkel Day',tag:'VIP Water Day',type:'Premium Excursion',duration:'4 hours',price:'Starting from $119',img:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',blurb:'A more polished Nassau day with private-beach energy and easy premium upsell potential.',highlights:['Private beach club','Lunch add-on feel','Premium pacing']},
-    {title:'Sunset Dinner Cruise',tag:'Evening Favorite',type:'Evening Cruise',duration:'2.5 hours',price:'Starting from $99',img:'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1200&q=85',blurb:'An appealing evening option for couples and groups wanting a softer luxury finish to the day.',highlights:['Sunset sail','Dinner cruise feel','Couples-friendly']}
+    {title:'3 Islands Pigs, Snorkel & Turtles',tag:'Best Seller',type:'Curated Package',duration:'4 hours',price:'From $89',img:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',blurb:'A Nassau water day inspired by high-interest island-hopping listings with pigs, snorkeling and turtle stops.',highlights:['Island hopping','Snorkel stop','Beach club feel']},
+    {title:'Rose Island Swimming Pigs',tag:'Popular',type:'Half-Day Excursion',duration:'4 hours',price:'From $69',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A shorter-format Bahamas favorite for guests who want clear water, playful moments and quick booking appeal.',highlights:['Rose Island','Swimming pigs','Beach time']},
+    {title:'Private Beach Club & Snorkel Day',tag:'VIP Water Day',type:'Premium Excursion',duration:'4 hours',price:'From $119',img:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',blurb:'A more polished Nassau day with private-beach energy and easy premium upsell potential.',highlights:['Private beach club','Lunch add-on feel','Premium pacing']},
+    {title:'Sunset Dinner Cruise',tag:'Evening Favorite',type:'Evening Cruise',duration:'2.5 hours',price:'From $99',img:'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1200&q=85',blurb:'An appealing evening option for couples and groups wanting a softer luxury finish to the day.',highlights:['Sunset sail','Dinner cruise feel','Couples-friendly']}
   ],
   'Belize':[
-    {title:'Reef & Rainforest Discovery',tag:'Dual Experience',type:'Curated Package',duration:'4 days / 3 nights',price:'Starting from $760',img:'https://images.unsplash.com/photo-1504374902538-16c5a5b3db3e?w=1200&q=85',blurb:'A Belize itinerary shaped around reef access, inland scenery and a richer sense of discovery.',highlights:['Reef adventure','Nature-led contrast','Concierge planning']},
-    {title:'Ambergris Caye Luxury Stay',tag:'Island Stay',type:'Luxury Escape',duration:'3 days / 2 nights',price:'Starting from $845',img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=85',blurb:'A refined Belize island break with high-touch lodging, boat options and slower premium pacing.',highlights:['Luxury lodging','Boat excursion option','Island ease']},
-    {title:'Belize Blue Hole Escape',tag:'Bucket List',type:'Adventure Package',duration:'Full day',price:'Starting from $525',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'For travelers who want an iconic Belize marine day anchored by one of the region’s best-known natural features.',highlights:['Iconic marine route','Adventure-led day','Premium logistics']},
-    {title:'Placencia Coastal Luxury Stay',tag:'Beachfront Stay',type:'Leisure Package',duration:'3 days / 2 nights',price:'Starting from $805',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A beach-forward Placencia stay with polished downtime, curated seafood dining and easy private planning.',highlights:['Beachfront stay','Seafood dining','Private planning']}
+    {title:'Reef & Rainforest Discovery',tag:'Dual Experience',type:'Curated Package',duration:'4 days / 3 nights',price:'From $760',img:'https://images.unsplash.com/photo-1504374902538-16c5a5b3db3e?w=1200&q=85',blurb:'A Belize itinerary shaped around reef access, inland scenery and a richer sense of discovery.',highlights:['Reef adventure','Nature-led contrast','Concierge planning']},
+    {title:'Ambergris Caye Luxury Stay',tag:'Island Stay',type:'Luxury Escape',duration:'3 days / 2 nights',price:'From $845',img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=85',blurb:'A refined Belize island break with high-touch lodging, boat options and slower premium pacing.',highlights:['Luxury lodging','Boat excursion option','Island ease']},
+    {title:'Belize Blue Hole Escape',tag:'Bucket List',type:'Adventure Package',duration:'Full day',price:'From $525',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'For travelers who want an iconic Belize marine day anchored by one of the region’s best-known natural features.',highlights:['Iconic marine route','Adventure-led day','Premium logistics']},
+    {title:'Placencia Coastal Luxury Stay',tag:'Beachfront Stay',type:'Leisure Package',duration:'3 days / 2 nights',price:'From $805',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A beach-forward Placencia stay with polished downtime, curated seafood dining and easy private planning.',highlights:['Beachfront stay','Seafood dining','Private planning']}
   ],
   'Dominican Republic':[
-    {title:'Punta Cana Luxury Escape',tag:'Best Seller',type:'Curated Package',duration:'4 days / 3 nights',price:'Starting from $680',img:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',blurb:'All-inclusive-adjacent luxury with curated beach club access, poolside days and premium resort-area coordination.',highlights:['Resort-area stay','Beach club access','Private planning support']},
-    {title:'Cap Cana Signature Stay',tag:'Luxury Stay',type:'Premium Package',duration:'4 days / 3 nights',price:'Starting from $1,150',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',blurb:'A refined Cap Cana villa or resort package with concierge touch, marina views and polished tropical luxury.',highlights:['Cap Cana villa feel','Marina views','Concierge support']},
-    {title:'Dominican Republic MBA Experience',tag:'MBA Experience',type:'Leadership Travel',duration:'4 days / 3 nights',price:'Starting from $1,050',img:'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200&q=85',blurb:'A polished DR MBA stay combining premium resorts, alumni networking, curated dinners and professional development.',highlights:['Premium resort base','Networking dinners','Leadership flow']},
-    {title:'Samaná Bay Discovery',tag:'Nature Escape',type:'Adventure Package',duration:'3 days / 2 nights',price:'Starting from $745',img:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=85',blurb:'Explore humpback whale watching, Los Haitises caves, lush jungle and Samaná bay scenery in a premium guided setting.',highlights:['Whale watching season','Jungle excursion','Premium guide service']}
+    {title:'Punta Cana Luxury Escape',tag:'Best Seller',type:'Curated Package',duration:'4 days / 3 nights',price:'From $680',img:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',blurb:'All-inclusive-adjacent luxury with curated beach club access, poolside days and premium resort-area coordination.',highlights:['Resort-area stay','Beach club access','Private planning support']},
+    {title:'Cap Cana Signature Stay',tag:'Luxury Stay',type:'Premium Package',duration:'4 days / 3 nights',price:'From $1,150',img:'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=85',blurb:'A refined Cap Cana villa or resort package with concierge touch, marina views and polished tropical luxury.',highlights:['Cap Cana villa feel','Marina views','Concierge support']},
+    {title:'Dominican Republic MBA Experience',tag:'MBA Experience',type:'Leadership Travel',duration:'4 days / 3 nights',price:'From $1,050',img:'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200&q=85',blurb:'A polished DR MBA stay combining premium resorts, alumni networking, curated dinners and professional development.',highlights:['Premium resort base','Networking dinners','Leadership flow']},
+    {title:'Samaná Bay Discovery',tag:'Nature Escape',type:'Adventure Package',duration:'3 days / 2 nights',price:'From $745',img:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=85',blurb:'Explore humpback whale watching, Los Haitises caves, lush jungle and Samaná bay scenery in a premium guided setting.',highlights:['Whale watching season','Jungle excursion','Premium guide service']}
   ],
   'Curaçao':[
-    {title:'Willemstad Color & Coast',tag:'Design Escape',type:'Curated Package',duration:'3 days / 2 nights',price:'Starting from $690',img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',blurb:'A stylish Curaçao stay balancing colorful waterfront culture, curated dining and coastal leisure.',highlights:['Willemstad charm','Dining reservations','Coastal downtime']},
-    {title:'Curaçao Beach Club Weekend',tag:'Luxury Weekend',type:'Weekend Escape',duration:'3 days / 2 nights',price:'Starting from $730',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A bright and social weekend flow with beach clubs, premium stays and clean Caribbean energy.',highlights:['Beach club access','Premium stay','Social atmosphere']},
-    {title:'Curaçao Leisure Pairing',tag:'Relaxed Luxury',type:'Island Escape',duration:'4 days / 3 nights',price:'Starting from $845',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'Perfect for travelers who want a slower luxury pace with time for swimming, dining and private add-ons.',highlights:['Relaxed luxury','Private add-ons','Longer stay flow']},
-    {title:'Jan Thiel Beach Escape',tag:'Beach Club',type:'Leisure Package',duration:'3 days / 2 nights',price:'Starting from $715',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A bright Jan Thiel package centered on beach clubs, easy water access and a refined social feel.',highlights:['Beach club access','Waterfront stay','Refined social energy']}
+    {title:'Willemstad Color & Coast',tag:'Design Escape',type:'Curated Package',duration:'3 days / 2 nights',price:'From $690',img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',blurb:'A stylish Curaçao stay balancing colorful waterfront culture, curated dining and coastal leisure.',highlights:['Willemstad charm','Dining reservations','Coastal downtime']},
+    {title:'Curaçao Beach Club Weekend',tag:'Luxury Weekend',type:'Weekend Escape',duration:'3 days / 2 nights',price:'From $730',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',blurb:'A bright and social weekend flow with beach clubs, premium stays and clean Caribbean energy.',highlights:['Beach club access','Premium stay','Social atmosphere']},
+    {title:'Curaçao Leisure Pairing',tag:'Relaxed Luxury',type:'Island Escape',duration:'4 days / 3 nights',price:'From $845',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',blurb:'Perfect for travelers who want a slower luxury pace with time for swimming, dining and private add-ons.',highlights:['Relaxed luxury','Private add-ons','Longer stay flow']},
+    {title:'Jan Thiel Beach Escape',tag:'Beach Club',type:'Leisure Package',duration:'3 days / 2 nights',price:'From $715',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',blurb:'A bright Jan Thiel package centered on beach clubs, easy water access and a refined social feel.',highlights:['Beach club access','Waterfront stay','Refined social energy']}
   ]
 };
 
 const MBA_GETAWAY_CARDS=[
-  {tourId:5,destination:'Jamaica',title:'Jamaica MBA Luxury Getaway',price:'Starting from $950',img:'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200&q=85',copy:'A fun luxury Jamaica getaway with villa booking support, excursions, party planning and a polished weekend-away feel.',highlights:['Villa support','Excursions','Weekend social flow']},
-  {tourId:11,destination:'Barbados',title:'Barbados MBA Luxury Getaway',price:'Starting from $1,250',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85',copy:'A Barbados MBA getaway built around beachfront stays, nightlife options, premium island pacing and relaxed graduate connection.',highlights:['Beachfront stay','Nightlife planning','Graduate getaway']},
-  {tourId:12,destination:'Saint Lucia',title:'Saint Lucia MBA Luxury Getaway',price:'Starting from $1,450',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=85',copy:'A Saint Lucia luxury weekend with scenic stays, curated excursions, party-ready options and a softer MBA lifestyle angle.',highlights:['Scenic luxury','Curated excursions','Villa weekend energy']}
+  {tourId:5,destination:'Jamaica',title:'Jamaica MBA Luxury Getaway',price:'From $950',img:'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200&q=85',copy:'A fun luxury Jamaica getaway with villa booking support, excursions, party planning and a polished weekend-away feel.',highlights:['Villa support','Excursions','Weekend social flow']},
+  {tourId:11,destination:'Barbados',title:'Barbados MBA Luxury Getaway',price:'From $1,250',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85',copy:'A Barbados MBA getaway built around beachfront stays, nightlife options, premium island pacing and relaxed graduate connection.',highlights:['Beachfront stay','Nightlife planning','Graduate getaway']},
+  {tourId:12,destination:'Saint Lucia',title:'Saint Lucia MBA Luxury Getaway',price:'From $1,450',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=85',copy:'A Saint Lucia luxury weekend with scenic stays, curated excursions, party-ready options and a softer MBA lifestyle angle.',highlights:['Scenic luxury','Curated excursions','Villa weekend energy']}
 ];
 
 const BLOGS=[
@@ -14509,7 +14450,7 @@ function renderTours(filter,gridId){
   g.innerHTML=list.slice(0,max).map(t=>{
     const isMba=t.type==='mba';
     const location=getTourMetaValue(t,'Location')||'Jamaica';
-    const pricePill=t.price!==null?`Starting from ${t.priceLabel}`:'Custom Quote';
+    const pricePill=t.price!==null?`From ${t.priceLabel}`:'Custom Quote';
     const copy=(t.desc||'').length>118?`${t.desc.slice(0,118).trim()}…`:t.desc;
     const gallery=isMba&&Array.isArray(t.imgs)&&t.imgs.length?`<div class="tc-gallery">${t.imgs.slice(0,3).map((img,idx)=>`<img src="${img}" alt="${t.title} image ${idx+1}" loading="lazy">`).join('')}</div>`:'';
     const primaryLabel=isMba?'View Experience':'View Tour';
@@ -15225,7 +15166,7 @@ function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
     'p-tours': { title:'Custom Package', type:'Custom Package', notes:'Interested in planning a custom tour or excursion with Sight Seers.' }
   };
   const context = contextMap[activePage] || {};
-  openStartPlanning('', packageTitle || context.title || '', packageType || context.type || 'Custom Package', notes || context.notes || 'Interested in planning an experience with Sight Seers.');
+  openStartPlanning('Jamaica', packageTitle || context.title || '', packageType || context.type || 'Custom Package', notes || context.notes || 'Interested in planning an experience with Sight Seers.');
   return false;
 }
 function openBookingForTour(tourId=null){
@@ -15437,7 +15378,7 @@ function openStartPlanning(destination='', packageTitle='', packageType='', note
   nav('booking');
   setTimeout(()=>{
     applyBookingPrefill({
-      destination: destination || '',
+      destination: destination || 'Jamaica',
       type: selection.experienceType || packageType || 'Custom Package',
       packageName: packageTitle || '',
       format: selection.preferredFormat || packageType || packageTitle || '',
@@ -35457,11 +35398,11 @@ window.scrollPopularTours=function(dir){
 .curated-tour-copy h3{font-size:1.28rem;line-height:1.08;margin-bottom:8px;max-width:85%}
 .curated-tour-copy p{font-size:12px;line-height:1.7;color:rgba(255,255,255,.84)}
 .curated-tour-body{padding:22px;display:flex;flex-direction:column;flex:1}
-.curated-tour-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.curated-tour-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
 .curated-tour-country{display:block;font-size:11px;font-weight:800;letter-spacing:1.35px;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
 .curated-tour-type{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(112,194,87,.12);color:#2d7640;font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;flex-wrap:nowrap;min-width:max-content;line-height:1}
-.curated-tour-price{font-size:.95rem;font-weight:900;color:var(--navy);white-space:nowrap;line-height:1.15;text-align:right;max-width:100%;overflow-wrap:normal}
-.curated-tour-duration{display:block;font-size:10px;font-weight:700;color:var(--grey);margin-top:4px;text-align:right;white-space:nowrap}
+.curated-tour-price{font-size:.82rem;font-weight:900;color:var(--navy);white-space:nowrap;line-height:1.15;text-align:right;max-width:100%;overflow-wrap:normal}
+.curated-tour-duration{display:block;font-size:9px;font-weight:700;color:var(--grey);margin-top:4px;text-align:right;white-space:nowrap}
 .curated-tour-card.is-package{border-color:rgba(239,135,49,.16);box-shadow:0 20px 44px rgba(6,58,99,.08)}
 .curated-tour-card.is-package .curated-tour-body{background:linear-gradient(180deg,#ffffff 0%,#fbfdff 58%,#fff8f0 100%)}
 .curated-tour-card.is-package .curated-tour-topline{align-items:flex-start}
@@ -35888,61 +35829,61 @@ body.theme-night .page .tag{
 <script id="ssc-2026-curated-data">
 (function(){
   const CURATED_TOURS = [
-    {country:'Jamaica',type:'water',label:'Water Experience',title:'Bamboo Rafting with Limestone Massage',priceLabel:'Starting from $80',priceValue:80,duration:'3-5 hours',image:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',hero:'River calm with premium island energy',desc:'A Jamaica favorite with a relaxed raft ride, local hosting, and one of the easiest soft-luxury add-ons for Montego Bay itineraries.',highlights:['Relaxed river glide experience','Strong couples and group appeal','Easy add-on for resort stays']},
-    {country:'Jamaica',type:'water',label:'Water Experience',title:'Luminous Lagoon Night Experience',priceLabel:'Starting from $70–$88',priceValue:70,duration:'Evening',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'A glowing Jamaica night tour guests remember',desc:'A bioluminescent lagoon excursion that adds a magical evening experience to beach-led itineraries and short stays.',highlights:['High wow-factor after dark','Easy pairing with dinner or rafting day','Great for couples and groups']},
-    {country:'Jamaica',type:'land',label:'Land Experience',title:'Montego Bay ATV Ride Experience',priceLabel:'Starting from $99',priceValue:99,duration:'2 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Off-road energy through the hills',desc:'A strong land-based adventure option for travelers who want speed, mud, and a more adrenaline-led Jamaica day.',highlights:['Great ATV entry package','Works well for adventure travelers','Easy upsell with water add-ons']},
-    {country:'Jamaica',type:'land',label:'Land Experience',title:'ATV, River Rafting & Blue Hole Combo',priceLabel:'Starting from $175',priceValue:175,duration:'Half day to full day',image:'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=85',hero:'A full Jamaica combo with adventure and water stops',desc:'A stronger combo package for guests who want an ATV ride plus two of Jamaica’s most in-demand outdoor experiences in one booking.',highlights:['Three-in-one experience appeal','Great hero combo for active travelers','Good value perception for groups']},
+    {country:'Jamaica',type:'water',label:'Water Experience',title:'Bamboo Rafting with Limestone Massage',priceLabel:'From $80',priceValue:80,duration:'3-5 hours',image:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',hero:'River calm with premium island energy',desc:'A Jamaica favorite with a relaxed raft ride, local hosting, and one of the easiest soft-luxury add-ons for Montego Bay itineraries.',highlights:['Relaxed river glide experience','Strong couples and group appeal','Easy add-on for resort stays']},
+    {country:'Jamaica',type:'water',label:'Water Experience',title:'Luminous Lagoon Night Experience',priceLabel:'From $70–$88',priceValue:70,duration:'Evening',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'A glowing Jamaica night tour guests remember',desc:'A bioluminescent lagoon excursion that adds a magical evening experience to beach-led itineraries and short stays.',highlights:['High wow-factor after dark','Easy pairing with dinner or rafting day','Great for couples and groups']},
+    {country:'Jamaica',type:'land',label:'Land Experience',title:'Montego Bay ATV Ride Experience',priceLabel:'From $99',priceValue:99,duration:'2 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Off-road energy through the hills',desc:'A strong land-based adventure option for travelers who want speed, mud, and a more adrenaline-led Jamaica day.',highlights:['Great ATV entry package','Works well for adventure travelers','Easy upsell with water add-ons']},
+    {country:'Jamaica',type:'land',label:'Land Experience',title:'ATV, River Rafting & Blue Hole Combo',priceLabel:'From $175',priceValue:175,duration:'Half day to full day',image:'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=85',hero:'A full Jamaica combo with adventure and water stops',desc:'A stronger combo package for guests who want an ATV ride plus two of Jamaica’s most in-demand outdoor experiences in one booking.',highlights:['Three-in-one experience appeal','Great hero combo for active travelers','Good value perception for groups']},
 
-    {country:'Jamaica',type:'package',label:'Custom Package',title:'Essential Escape',priceLabel:'Starting from $65',priceValue:65,duration:'Flexible package',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Simple. Direct. Ready when you are.',desc:'A clear starting point for guests who want the core experience without extra friction, extra layers, or unnecessary decisions.',highlights:['Core experience access','Meeting-point option','Straightforward timing']},
-    {country:'Jamaica',type:'package',label:'Custom Package',title:'Signature Escape',priceLabel:'Starting from $95',priceValue:95,duration:'Flexible package',image:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',hero:'Our most popular way to travel.',desc:'Built for guests who want a smoother day, clearer inclusions, and the confidence that the details are already handled well.',highlights:['Transportation included','Guided support','Refreshments included']},
-    {country:'Jamaica',type:'package',label:'Custom Package',title:'Elevated Escape',priceLabel:'Starting from $140',priceValue:140,duration:'Flexible package',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'More comfort. More ease. More of the moment.',desc:'A premium-feel package for travelers who want a smaller-group atmosphere, stronger touches, and a more polished island flow.',highlights:['Smaller-group feel','Premium add-on or dining','Content-ready moments']},
-    {country:'Jamaica',type:'package',label:'Custom Package',title:'Private Luxury Experience',priceLabel:'Starting from $280+',priceValue:280,duration:'Flexible package',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Luxury, fully on your terms.',desc:'A concierge-style private setup for guests who want the vehicle, vessel, timing, and overall experience shaped entirely around them.',highlights:['Private vehicle or yacht','Flexible itinerary','Concierge-level coordination']},
+    {country:'Jamaica',type:'package',label:'Custom Package',title:'Essential Escape',priceLabel:'From $65',priceValue:65,duration:'Flexible package',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Simple. Direct. Ready when you are.',desc:'A clear starting point for guests who want the core experience without extra friction, extra layers, or unnecessary decisions.',highlights:['Core experience access','Meeting-point option','Straightforward timing']},
+    {country:'Jamaica',type:'package',label:'Custom Package',title:'Signature Escape',priceLabel:'From $95',priceValue:95,duration:'Flexible package',image:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85',hero:'Our most popular way to travel.',desc:'Built for guests who want a smoother day, clearer inclusions, and the confidence that the details are already handled well.',highlights:['Transportation included','Guided support','Refreshments included']},
+    {country:'Jamaica',type:'package',label:'Custom Package',title:'Elevated Escape',priceLabel:'From $140',priceValue:140,duration:'Flexible package',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'More comfort. More ease. More of the moment.',desc:'A premium-feel package for travelers who want a smaller-group atmosphere, stronger touches, and a more polished island flow.',highlights:['Smaller-group feel','Premium add-on or dining','Content-ready moments']},
+    {country:'Jamaica',type:'package',label:'Custom Package',title:'Private Luxury Experience',priceLabel:'From $280+',priceValue:280,duration:'Flexible package',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Luxury, fully on your terms.',desc:'A concierge-style private setup for guests who want the vehicle, vessel, timing, and overall experience shaped entirely around them.',highlights:['Private vehicle or yacht','Flexible itinerary','Concierge-level coordination']},
 
-    {country:'Barbados',type:'water',label:'Water Experience',title:'Catamaran Snorkel Cruise with Lunch',priceLabel:'Starting from $85',priceValue:85,duration:'5 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Sea turtles, lunch, and open-water ease',desc:'A polished Barbados sea day with snorkeling, lunch, and an easy social feel that works across couples, friends, and celebration groups.',highlights:['Popular full sea-day format','Lunch and snorkel included','Strong turtle and shipwreck appeal']},
-    {country:'Barbados',type:'water',label:'Water Experience',title:'Carlisle Bay Turtle & Shipwreck Boat Cruise',priceLabel:'Starting from $36',priceValue:36,duration:'1.5 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Short-format snorkel with strong value',desc:'A quicker Barbados water option for guests who want turtles and shipwreck snorkeling without committing to a full day.',highlights:['Lower entry price point','Easy fit for cruise and short-stay guests','Great family-friendly option']},
-    {country:'Barbados',type:'water',label:'Water Experience',title:'Beach Day & Turtle Swim Experience',priceLabel:'Starting from $50',priceValue:50,duration:'6 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Simple, sunny, and easy to sell',desc:'A Barbados beach-and-water combination with turtle swim appeal and a comfortable pace for mixed-age travelers.',highlights:['Beach chair and umbrella feel','Great for relaxed vacation pacing','Strong broad-market appeal']},
-    {country:'Barbados',type:'land',label:'Land Experience',title:'Harrison’s Cave & Hunte’s Gardens Escape',priceLabel:'Starting from $155',priceValue:155,duration:'5 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Lush interiors and iconic island sights',desc:'A scenic inland Barbados route centered on cave discovery and elevated sightseeing away from the beach.',highlights:['Strong sightseeing value','Good for mixed-interest groups','Comfortable half-day inland flow']},
-    {country:'Barbados',type:'land',label:'Land Experience',title:'Mount Gay Rum Distillery Experience',priceLabel:'Starting from $105',priceValue:105,duration:'5 hours',image:'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=85',hero:'Classic Barbados flavor and culture',desc:'A polished land package built around the island’s rum heritage, tastings, and easy cultural storytelling.',highlights:['Great adult-only add-on','Good culture-plus-tasting option','Pairs well with beach itineraries']},
+    {country:'Barbados',type:'water',label:'Water Experience',title:'Catamaran Snorkel Cruise with Lunch',priceLabel:'From $85',priceValue:85,duration:'5 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Sea turtles, lunch, and open-water ease',desc:'A polished Barbados sea day with snorkeling, lunch, and an easy social feel that works across couples, friends, and celebration groups.',highlights:['Popular full sea-day format','Lunch and snorkel included','Strong turtle and shipwreck appeal']},
+    {country:'Barbados',type:'water',label:'Water Experience',title:'Carlisle Bay Turtle & Shipwreck Boat Cruise',priceLabel:'From $36',priceValue:36,duration:'1.5 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Short-format snorkel with strong value',desc:'A quicker Barbados water option for guests who want turtles and shipwreck snorkeling without committing to a full day.',highlights:['Lower entry price point','Easy fit for cruise and short-stay guests','Great family-friendly option']},
+    {country:'Barbados',type:'water',label:'Water Experience',title:'Beach Day & Turtle Swim Experience',priceLabel:'From $50',priceValue:50,duration:'6 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Simple, sunny, and easy to sell',desc:'A Barbados beach-and-water combination with turtle swim appeal and a comfortable pace for mixed-age travelers.',highlights:['Beach chair and umbrella feel','Great for relaxed vacation pacing','Strong broad-market appeal']},
+    {country:'Barbados',type:'land',label:'Land Experience',title:'Harrison’s Cave & Hunte’s Gardens Escape',priceLabel:'From $155',priceValue:155,duration:'5 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Lush interiors and iconic island sights',desc:'A scenic inland Barbados route centered on cave discovery and elevated sightseeing away from the beach.',highlights:['Strong sightseeing value','Good for mixed-interest groups','Comfortable half-day inland flow']},
+    {country:'Barbados',type:'land',label:'Land Experience',title:'Mount Gay Rum Distillery Experience',priceLabel:'From $105',priceValue:105,duration:'5 hours',image:'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=85',hero:'Classic Barbados flavor and culture',desc:'A polished land package built around the island’s rum heritage, tastings, and easy cultural storytelling.',highlights:['Great adult-only add-on','Good culture-plus-tasting option','Pairs well with beach itineraries']},
 
-    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Sulphur Springs Mud Bath & Waterfall',priceLabel:'Starting from $100–$110',priceValue:100,duration:'4-6 hours',image:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85',hero:'A wellness-led Saint Lucia classic',desc:'A signature Saint Lucia outing built around volcanic mud baths, waterfall stops, and the scenic Soufrière side of the island.',highlights:['Wellness plus sightseeing in one','Very recognizable St. Lucia experience','Great for couples and small groups']},
-    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Volcanic Wellness, Pitons & Waterfalls',priceLabel:'Starting from $144',priceValue:144,duration:'6 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Premium-feel scenery with spa-style moments',desc:'A fuller Saint Lucia package for guests who want iconic views, natural spa moments, and a stronger scenic route.',highlights:['Excellent honeymoon-style appeal','Combines multiple top sights','Premium all-day feel']},
-    {country:'Saint Lucia',type:'land',label:'Land Experience',title:'Soufrière Tour with Mud Bath and Waterfalls',priceLabel:'Starting from $100',priceValue:100,duration:'6 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Land-led exploration with signature island stops',desc:'A Saint Lucia inland tour with strong sightseeing value for guests who want volcano, waterfall, and village scenery in one day.',highlights:['Very broad guest appeal','One of the easiest Saint Lucia hero tours','Good for resort guests wanting a day out']},
+    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Sulphur Springs Mud Bath & Waterfall',priceLabel:'From $100–$110',priceValue:100,duration:'4-6 hours',image:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85',hero:'A wellness-led Saint Lucia classic',desc:'A signature Saint Lucia outing built around volcanic mud baths, waterfall stops, and the scenic Soufrière side of the island.',highlights:['Wellness plus sightseeing in one','Very recognizable St. Lucia experience','Great for couples and small groups']},
+    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Volcanic Wellness, Pitons & Waterfalls',priceLabel:'From $144',priceValue:144,duration:'6 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Premium-feel scenery with spa-style moments',desc:'A fuller Saint Lucia package for guests who want iconic views, natural spa moments, and a stronger scenic route.',highlights:['Excellent honeymoon-style appeal','Combines multiple top sights','Premium all-day feel']},
+    {country:'Saint Lucia',type:'land',label:'Land Experience',title:'Soufrière Tour with Mud Bath and Waterfalls',priceLabel:'From $100',priceValue:100,duration:'6 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Land-led exploration with signature island stops',desc:'A Saint Lucia inland tour with strong sightseeing value for guests who want volcano, waterfall, and village scenery in one day.',highlights:['Very broad guest appeal','One of the easiest Saint Lucia hero tours','Good for resort guests wanting a day out']},
 
-    {country:'The Bahamas',type:'water',label:'Water Experience',title:'3 Islands Tour, Snorkel, Pig Beach, Turtles & Lunch',priceLabel:'Starting from $89',priceValue:89,duration:'4 hours',image:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',hero:'A fast-selling Nassau multi-stop favorite',desc:'A Bahamas day built around swimming pigs, reef time, turtle encounters, and lunch—strong for first-time visitors.',highlights:['Big activity count for the price','Very marketable social-media appeal','Great for groups and short stays']},
-    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Pigs, Snorkel, Turtles & Private Beach Club',priceLabel:'Starting from $119',priceValue:119,duration:'4 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Beach-club energy with standout island moments',desc:'A more polished Bahamas water day with pigs, snorkeling, turtle encounters, and a private beach-club finish.',highlights:['Beach-club upgrade feel','Good for premium leisure travelers','Popular Nassau add-on']},
-    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Reef Snorkeling, Turtles, Lunch & Beach Club',priceLabel:'Starting from $99',priceValue:99,duration:'4 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Water-first Nassau itinerary with easy appeal',desc:'A cleaner reef-and-beach format for guests who prefer turtles and snorkeling over a pig-beach focus.',highlights:['Good family-friendly alternative','Balanced water and shore time','Easy to pair with resort stays']},
-    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Bahamas Culture Tour with Electric Trolley',priceLabel:'Starting from $55',priceValue:55,duration:'2.5 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A lighter Nassau sightseeing option with broad appeal',desc:'A relaxed Bahamas land experience built around city highlights, local culture, and a comfortable trolley format that works well for mixed groups.',highlights:['Easy half-day sightseeing option','Great for cruise guests and short stays','Good fit for families and older travelers']},
-    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Historic City Tour with Drink and Food Tasting',priceLabel:'Starting from $150',priceValue:150,duration:'2.5 hours',image:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85',hero:'Food, culture, and old Nassau in one route',desc:'A Nassau land experience that layers city landmarks with Bahamian tastings for travelers who want history, flavor, and a social pace.',highlights:['Strong culture-and-food positioning','Excellent non-beach add-on','Great couples and group option']},
-    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Nassau ATV Island Half-Day City Tour',priceLabel:'Starting from $200',priceValue:200,duration:'3-4 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'An adventure-led Nassau land day with city energy',desc:'A Bahamas ATV experience for guests who want more action, more movement, and a land-based way to explore Nassau beyond the beach.',highlights:['High-energy ATV option for adventure travelers','Good contrast to water excursions','Strong appeal for friend groups']},
+    {country:'The Bahamas',type:'water',label:'Water Experience',title:'3 Islands Tour, Snorkel, Pig Beach, Turtles & Lunch',priceLabel:'From $89',priceValue:89,duration:'4 hours',image:'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85',hero:'A fast-selling Nassau multi-stop favorite',desc:'A Bahamas day built around swimming pigs, reef time, turtle encounters, and lunch—strong for first-time visitors.',highlights:['Big activity count for the price','Very marketable social-media appeal','Great for groups and short stays']},
+    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Pigs, Snorkel, Turtles & Private Beach Club',priceLabel:'From $119',priceValue:119,duration:'4 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Beach-club energy with standout island moments',desc:'A more polished Bahamas water day with pigs, snorkeling, turtle encounters, and a private beach-club finish.',highlights:['Beach-club upgrade feel','Good for premium leisure travelers','Popular Nassau add-on']},
+    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Reef Snorkeling, Turtles, Lunch & Beach Club',priceLabel:'From $99',priceValue:99,duration:'4 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Water-first Nassau itinerary with easy appeal',desc:'A cleaner reef-and-beach format for guests who prefer turtles and snorkeling over a pig-beach focus.',highlights:['Good family-friendly alternative','Balanced water and shore time','Easy to pair with resort stays']},
+    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Bahamas Culture Tour with Electric Trolley',priceLabel:'From $55',priceValue:55,duration:'2.5 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A lighter Nassau sightseeing option with broad appeal',desc:'A relaxed Bahamas land experience built around city highlights, local culture, and a comfortable trolley format that works well for mixed groups.',highlights:['Easy half-day sightseeing option','Great for cruise guests and short stays','Good fit for families and older travelers']},
+    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Historic City Tour with Drink and Food Tasting',priceLabel:'From $150',priceValue:150,duration:'2.5 hours',image:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85',hero:'Food, culture, and old Nassau in one route',desc:'A Nassau land experience that layers city landmarks with Bahamian tastings for travelers who want history, flavor, and a social pace.',highlights:['Strong culture-and-food positioning','Excellent non-beach add-on','Great couples and group option']},
+    {country:'The Bahamas',type:'land',label:'Land Experience',title:'Nassau ATV Island Half-Day City Tour',priceLabel:'From $200',priceValue:200,duration:'3-4 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'An adventure-led Nassau land day with city energy',desc:'A Bahamas ATV experience for guests who want more action, more movement, and a land-based way to explore Nassau beyond the beach.',highlights:['High-energy ATV option for adventure travelers','Good contrast to water excursions','Strong appeal for friend groups']},
 
-    {country:'Belize',type:'water',label:'Water Experience',title:'Hol Chan Marine Reserve Small-Group Tour',priceLabel:'Starting from $129',priceValue:129,duration:'5.5 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Belize reef color and marine-life energy',desc:'A strong Belize hero package centered on Hol Chan, reef visibility, and the marine encounters travelers actively search for.',highlights:['Second-largest barrier reef appeal','Great marine-life storytelling value','Excellent Ambergris/Caye Caulker fit']},
-    {country:'Belize',type:'land',label:'Land Experience',title:'ATM Cave Full-Day Adventure',priceLabel:'Starting from $140–$165',priceValue:140,duration:'7-8 hours',image:'https://images.unsplash.com/photo-1465311440653-ba9b1d9b0f5b?w=1200&q=85',hero:'High-adventure Belize inland classic',desc:'A bucket-list Belize cave experience for active travelers wanting movement, history, and a standout jungle story.',highlights:['One of Belize’s best-known inland tours','High adventure positioning','Strong bragging-right appeal']},
-    {country:'Belize',type:'land',label:'Land Experience',title:'Cave Tubing with Optional Zipline',priceLabel:'Starting from $95',priceValue:95,duration:'7-8 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Adventure without the ATM intensity',desc:'A Belize jungle package built for guests who want cave tubing and a zipline option in a more approachable format.',highlights:['Great for broader traveler mix','Easy combo of jungle and fun','Strong shore-excursion appeal']},
-    {country:'Belize',type:'land',label:'Land Experience',title:'ATV Expedition to El Pilar Maya Ruins',priceLabel:'Starting from $140',priceValue:140,duration:'4.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'ATV trail riding with a Maya-site finish',desc:'A strong Belize ATV package for travelers who want jungle riding plus an ancient ruins payoff.',highlights:['Excellent ATV add-on for adventure travelers','Jungle-and-ruins pairing sells well','Shorter than a full-day cave trip']},
+    {country:'Belize',type:'water',label:'Water Experience',title:'Hol Chan Marine Reserve Small-Group Tour',priceLabel:'From $129',priceValue:129,duration:'5.5 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Belize reef color and marine-life energy',desc:'A strong Belize hero package centered on Hol Chan, reef visibility, and the marine encounters travelers actively search for.',highlights:['Second-largest barrier reef appeal','Great marine-life storytelling value','Excellent Ambergris/Caye Caulker fit']},
+    {country:'Belize',type:'land',label:'Land Experience',title:'ATM Cave Full-Day Adventure',priceLabel:'From $140–$165',priceValue:140,duration:'7-8 hours',image:'https://images.unsplash.com/photo-1465311440653-ba9b1d9b0f5b?w=1200&q=85',hero:'High-adventure Belize inland classic',desc:'A bucket-list Belize cave experience for active travelers wanting movement, history, and a standout jungle story.',highlights:['One of Belize’s best-known inland tours','High adventure positioning','Strong bragging-right appeal']},
+    {country:'Belize',type:'land',label:'Land Experience',title:'Cave Tubing with Optional Zipline',priceLabel:'From $95',priceValue:95,duration:'7-8 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Adventure without the ATM intensity',desc:'A Belize jungle package built for guests who want cave tubing and a zipline option in a more approachable format.',highlights:['Great for broader traveler mix','Easy combo of jungle and fun','Strong shore-excursion appeal']},
+    {country:'Belize',type:'land',label:'Land Experience',title:'ATV Expedition to El Pilar Maya Ruins',priceLabel:'From $140',priceValue:140,duration:'4.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'ATV trail riding with a Maya-site finish',desc:'A strong Belize ATV package for travelers who want jungle riding plus an ancient ruins payoff.',highlights:['Excellent ATV add-on for adventure travelers','Jungle-and-ruins pairing sells well','Shorter than a full-day cave trip']},
 
-    {country:'Curaçao',type:'water',label:'Water Experience',title:'Klein Curaçao Full-Day Boat Trip',priceLabel:'Starting from $150–$152',priceValue:150,duration:'9 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Bright-blue sailing with island-escape value',desc:'A Curaçao favorite with white sand, snorkeling, and a full-day catamaran or yacht feel that travelers love.',highlights:['Bucket-list feel for Curaçao visitors','Strong visual marketing value','Works for couples and groups']},
-    {country:'Curaçao',type:'water',label:'Water Experience',title:'Turtle Bay Snorkel & Blue Room Style Escape',priceLabel:'Starting from itinerary pricing',priceValue:0,duration:'Half day',image:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',hero:'A scenic west-coast water option',desc:'A flexible Curaçao water route built around sea turtles, west-coast beaches, and Blue Room-style snorkeling stops.',highlights:['Great for guests who want a shorter sea day','Strong turtle appeal','Easy family-friendly format']},
-    {country:'Curaçao',type:'land',label:'Land Experience',title:'Offroad UTV / Buggy Adventure',priceLabel:'Starting from $194 per group',priceValue:194,duration:'3.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'Rugged coastline and buggy adventure energy',desc:'A high-energy Curaçao land package that reaches beaches and coastline spots regular cars cannot access.',highlights:['Excellent ATV/buggy upsell','Strong adventure and couples appeal','Good half-day option']},
+    {country:'Curaçao',type:'water',label:'Water Experience',title:'Klein Curaçao Full-Day Boat Trip',priceLabel:'From $150–$152',priceValue:150,duration:'9 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Bright-blue sailing with island-escape value',desc:'A Curaçao favorite with white sand, snorkeling, and a full-day catamaran or yacht feel that travelers love.',highlights:['Bucket-list feel for Curaçao visitors','Strong visual marketing value','Works for couples and groups']},
+    {country:'Curaçao',type:'water',label:'Water Experience',title:'Turtle Bay Snorkel & Blue Room Style Escape',priceLabel:'From itinerary pricing',priceValue:0,duration:'Half day',image:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85',hero:'A scenic west-coast water option',desc:'A flexible Curaçao water route built around sea turtles, west-coast beaches, and Blue Room-style snorkeling stops.',highlights:['Great for guests who want a shorter sea day','Strong turtle appeal','Easy family-friendly format']},
+    {country:'Curaçao',type:'land',label:'Land Experience',title:'Offroad UTV / Buggy Adventure',priceLabel:'From $194 per group',priceValue:194,duration:'3.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'Rugged coastline and buggy adventure energy',desc:'A high-energy Curaçao land package that reaches beaches and coastline spots regular cars cannot access.',highlights:['Excellent ATV/buggy upsell','Strong adventure and couples appeal','Good half-day option']},
 
-    {country:'Dominican Republic',type:'water',label:'Water Experience',title:'Saona Island Cruise with Lunch & Open Bar',priceLabel:'Starting from $70–$82',priceValue:70,duration:'8-9.5 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'A classic Punta Cana island day',desc:'A strong-value Dominican Republic water package with catamaran energy, lunch, drinks, and the beach imagery guests expect.',highlights:['Very recognizable excursion choice','Good first-pick package for Punta Cana','Strong value-to-experience ratio']},
-    {country:'Dominican Republic',type:'water',label:'Water Experience',title:'Saona Luxury Catamaran Small-Group Escape',priceLabel:'Starting from $169',priceValue:169,duration:'10 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'A more elevated Saona day at small-group pace',desc:'A premium Dominican Republic island escape for guests who want the Saona experience with more comfort and a stronger luxury feel.',highlights:['Premium upgrade path','Excellent for couples and celebration trips','Small-group positioning']},
-    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Punta Cana ATV & Buggy Water Cave Adventure',priceLabel:'Starting from $29–$36',priceValue:29,duration:'3-4 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'A high-conversion ATV package with beach and cave appeal',desc:'A lower-entry-price Punta Cana ATV and buggy option with cave swim stops and strong mass-market appeal.',highlights:['Very accessible starting price','Strong ATV package for groups','Easy add-on for resort travelers']},
-    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Bayahibe ATV Buggy Jungle & Caves',priceLabel:'Starting from $57',priceValue:57,duration:'4 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Mud, trails, and cave-style adventure',desc:'A land-forward Dominican Republic package for travelers wanting more off-road action beyond beach-only days.',highlights:['Clear adventure positioning','Good half-day package','Works well with younger groups']},
+    {country:'Dominican Republic',type:'water',label:'Water Experience',title:'Saona Island Cruise with Lunch & Open Bar',priceLabel:'From $70–$82',priceValue:70,duration:'8-9.5 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'A classic Punta Cana island day',desc:'A strong-value Dominican Republic water package with catamaran energy, lunch, drinks, and the beach imagery guests expect.',highlights:['Very recognizable excursion choice','Good first-pick package for Punta Cana','Strong value-to-experience ratio']},
+    {country:'Dominican Republic',type:'water',label:'Water Experience',title:'Saona Luxury Catamaran Small-Group Escape',priceLabel:'From $169',priceValue:169,duration:'10 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'A more elevated Saona day at small-group pace',desc:'A premium Dominican Republic island escape for guests who want the Saona experience with more comfort and a stronger luxury feel.',highlights:['Premium upgrade path','Excellent for couples and celebration trips','Small-group positioning']},
+    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Punta Cana ATV & Buggy Water Cave Adventure',priceLabel:'From $29–$36',priceValue:29,duration:'3-4 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'A high-conversion ATV package with beach and cave appeal',desc:'A lower-entry-price Punta Cana ATV and buggy option with cave swim stops and strong mass-market appeal.',highlights:['Very accessible starting price','Strong ATV package for groups','Easy add-on for resort travelers']},
+    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Bayahibe ATV Buggy Jungle & Caves',priceLabel:'From $57',priceValue:57,duration:'4 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'Mud, trails, and cave-style adventure',desc:'A land-forward Dominican Republic package for travelers wanting more off-road action beyond beach-only days.',highlights:['Clear adventure positioning','Good half-day package','Works well with younger groups']},
 
-    {country:'Jamaica',type:'water',label:'Water Experience',title:'Montego Bay Jet Car & Parasailing Experience',priceLabel:'Starting from $221–$260',priceValue:221,duration:'2 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Luxury-water thrill with high-visibility appeal',desc:'A high-energy Montego Bay water package built for travelers who want the look and feel of a premium sports-car-on-water experience paired with parasailing.',highlights:['Jet car hero package for social content','Strong premium upsell for couples and groups','Easy fit for short Montego Bay stays']},
-    {country:'Jamaica',type:'water',label:'Water Experience',title:'Jet Car & Jet Ski Beach Combo',priceLabel:'Starting from $190–$225',priceValue:190,duration:'1.5-2 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Fast-paced Montego Bay water combo',desc:'A strong Jamaica action package for travelers who want jet car excitement and a second high-energy ride on the water in one outing.',highlights:['Excellent for adrenaline travelers','Pairs well with beach-club add-ons','Easy premium half-day option']},
+    {country:'Jamaica',type:'water',label:'Water Experience',title:'Montego Bay Jet Car & Parasailing Experience',priceLabel:'From $221–$260',priceValue:221,duration:'2 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'Luxury-water thrill with high-visibility appeal',desc:'A high-energy Montego Bay water package built for travelers who want the look and feel of a premium sports-car-on-water experience paired with parasailing.',highlights:['Jet car hero package for social content','Strong premium upsell for couples and groups','Easy fit for short Montego Bay stays']},
+    {country:'Jamaica',type:'water',label:'Water Experience',title:'Jet Car & Jet Ski Beach Combo',priceLabel:'From $190–$225',priceValue:190,duration:'1.5-2 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Fast-paced Montego Bay water combo',desc:'A strong Jamaica action package for travelers who want jet car excitement and a second high-energy ride on the water in one outing.',highlights:['Excellent for adrenaline travelers','Pairs well with beach-club add-ons','Easy premium half-day option']},
 
-    {country:'Barbados',type:'land',label:'Land Experience',title:'Island Safari Jeep & Scenic Coast Tour',priceLabel:'Starting from $95–$135',priceValue:95,duration:'5-6 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A scenic inland-and-coast Barbados drive',desc:'A land-led Barbados package with off-the-main-road viewpoints, local storytelling, and the kind of easy adventure many tourists want beyond the beach.',highlights:['Strong sightseeing package for mixed groups','Good culture and coastline balance','Comfortable alternative to full water days']},
+    {country:'Barbados',type:'land',label:'Land Experience',title:'Island Safari Jeep & Scenic Coast Tour',priceLabel:'From $95–$135',priceValue:95,duration:'5-6 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A scenic inland-and-coast Barbados drive',desc:'A land-led Barbados package with off-the-main-road viewpoints, local storytelling, and the kind of easy adventure many tourists want beyond the beach.',highlights:['Strong sightseeing package for mixed groups','Good culture and coastline balance','Comfortable alternative to full water days']},
 
-    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Pitons Catamaran Cruise, Snorkel & Lunch',priceLabel:'Starting from $105',priceValue:105,duration:'Full day',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Iconic Piton views with a polished sea-day format',desc:'A popular Saint Lucia water package built around catamaran cruising, snorkeling stops, lunch, and headline scenery guests instantly recognize.',highlights:['Excellent honeymoon and couples appeal','Full-day premium water experience','Strong visual pull for the front end of the site']},
+    {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Pitons Catamaran Cruise, Snorkel & Lunch',priceLabel:'From $105',priceValue:105,duration:'Full day',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',hero:'Iconic Piton views with a polished sea-day format',desc:'A popular Saint Lucia water package built around catamaran cruising, snorkeling stops, lunch, and headline scenery guests instantly recognize.',highlights:['Excellent honeymoon and couples appeal','Full-day premium water experience','Strong visual pull for the front end of the site']},
 
-    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Nassau Jet Car Water Experience',priceLabel:'Starting from $150–$209',priceValue:150,duration:'15-30 minutes',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'One of the most eye-catching Nassau water rides',desc:'A short-format Bahamas adrenaline package that photographs extremely well and adds a modern premium thrill option to Nassau itineraries.',highlights:['High-conversion visual package','Great upsell for short stays and cruise guests','Easy social-media standout experience']},
+    {country:'The Bahamas',type:'water',label:'Water Experience',title:'Nassau Jet Car Water Experience',priceLabel:'From $150–$209',priceValue:150,duration:'15-30 minutes',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85',hero:'One of the most eye-catching Nassau water rides',desc:'A short-format Bahamas adrenaline package that photographs extremely well and adds a modern premium thrill option to Nassau itineraries.',highlights:['High-conversion visual package','Great upsell for short stays and cruise guests','Easy social-media standout experience']},
 
-    {country:'Belize',type:'water',label:'Water Experience',title:'Caye Caulker 7-Stop Snorkeling Reef Experience',priceLabel:'Starting from $110',priceValue:110,duration:'6 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Barrier reef color with a fuller stop count',desc:'A Belize water day built for guests who want a broader reef itinerary with multiple snorkeling stops and strong marine-life appeal.',highlights:['Barrier reef hero experience','More stop variety for value-minded travelers','Excellent for active island days']},
+    {country:'Belize',type:'water',label:'Water Experience',title:'Caye Caulker 7-Stop Snorkeling Reef Experience',priceLabel:'From $110',priceValue:110,duration:'6 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85',hero:'Barrier reef color with a fuller stop count',desc:'A Belize water day built for guests who want a broader reef itinerary with multiple snorkeling stops and strong marine-life appeal.',highlights:['Barrier reef hero experience','More stop variety for value-minded travelers','Excellent for active island days']},
 
-    {country:'Curaçao',type:'land',label:'Land Experience',title:'Off-Road Buggy Tour North Coast Adventure',priceLabel:'Starting from $145–$194',priceValue:145,duration:'2.5-3.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'Dusty trails, wave views, and rugged coastline energy',desc:'A strong Curaçao land package for tourists who want buggy action, scenic lookout points, and a more adventurous island day.',highlights:['Great adventure-led half-day choice','Excellent visual contrast to beach packages','Appeals to couples, friends, and younger groups']},
+    {country:'Curaçao',type:'land',label:'Land Experience',title:'Off-Road Buggy Tour North Coast Adventure',priceLabel:'From $145–$194',priceValue:145,duration:'2.5-3.5 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85',hero:'Dusty trails, wave views, and rugged coastline energy',desc:'A strong Curaçao land package for tourists who want buggy action, scenic lookout points, and a more adventurous island day.',highlights:['Great adventure-led half-day choice','Excellent visual contrast to beach packages','Appeals to couples, friends, and younger groups']},
 
-    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Punta Cana Buggy, Cave Swim & Macao Beach',priceLabel:'Starting from $35–$70',priceValue:35,duration:'4 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A broad-appeal DR adventure package',desc:'A very marketable Dominican Republic land experience combining buggy trails, cave swim stops, and one of Punta Cana’s best-known beach add-ons.',highlights:['Very attractive entry pricing','Good first-pick land package for Punta Cana','Easy fit for friend groups and resort guests']},
+    {country:'Dominican Republic',type:'land',label:'Land Experience',title:'Punta Cana Buggy, Cave Swim & Macao Beach',priceLabel:'From $35–$70',priceValue:35,duration:'4 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85',hero:'A broad-appeal DR adventure package',desc:'A very marketable Dominican Republic land experience combining buggy trails, cave swim stops, and one of Punta Cana’s best-known beach add-ons.',highlights:['Very attractive entry pricing','Good first-pick land package for Punta Cana','Easy fit for friend groups and resort guests']},
 
     {country:'Jamaica',type:'mba',label:'MBA Experience',title:'MBA Leadership Escape',priceLabel:'Custom Quote',priceValue:0,duration:'2-4 days',image:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85',hero:'Professional travel with elevated island flow',desc:'An MBA-focused Jamaica package mixing premium stays, networking dinners, curated activities, and destination-led downtime.',highlights:['Great for alumni groups and cohorts','Blends leisure with purpose-led moments','Can include villas, dinners, and curated speakers']},
     {country:'Barbados',type:'mba',label:'MBA Experience',title:'MBA Executive Retreat',priceLabel:'Custom Quote',priceValue:0,duration:'Weekend or multi-day',image:'https://images.unsplash.com/photo-1515169067868-5387ec356754?w=1200&q=85',hero:'Refined group travel with sharper purpose',desc:'A Barbados MBA retreat concept designed around executive-level relaxation, relationship building, and premium group flow.',highlights:['Fits professional retreats and leadership circles','Balanced between business and leisure','High-end group-ready format']},
@@ -35975,7 +35916,7 @@ body.theme-night .page .tag{
     const primaryAction = `<button type="button" class="btn-primary" onclick='openStartPlanning(${JSON.stringify(item.country)}, ${JSON.stringify(item.title)}, ${JSON.stringify(typeLabel)}, ${JSON.stringify(note)})'><i class="fas fa-paper-plane"></i>Inquire Now</button>`;
     const metaMarkup = isJamaicaPackage
       ? ``
-      : `<div>${isPackage ? '' : `<div class="curated-tour-price">${item.priceLabel && !item.priceLabel.toLowerCase().startsWith('starting') && !item.priceLabel.toLowerCase().includes('custom') ? 'Starting from ' + item.priceLabel : item.priceLabel}</div>`}<span class="curated-tour-duration">${item.duration}</span></div>`;
+      : `<div>${isPackage ? '' : `<div class="curated-tour-price">${item.priceLabel && !item.priceLabel.toLowerCase().startsWith('starting') && !item.priceLabel.toLowerCase().startsWith('from') && !item.priceLabel.toLowerCase().includes('custom') ? 'From ' + item.priceLabel : item.priceLabel}</div>`}<span class="curated-tour-duration">${item.duration}</span></div>`;
     const toplineLeft = isPackage
       ? `<div><span class="curated-tour-country">${item.country}</span></div>`
       : `<div><span class="curated-tour-country">${item.country}</span><span class="curated-tour-type"><i class="fas fa-compass"></i>${typeLabel}</span></div>`;
