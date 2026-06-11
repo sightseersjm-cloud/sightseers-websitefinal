@@ -9020,9 +9020,10 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           <a href="#" onclick="openGalleryPage();return false;">Gallery</a>
           <a href="#" onclick="nav('discoverjamaica')">Discover Jamaica</a>
           <a href="#" onclick="nav('blog')" id="n-blog">Blog</a>
+          <a href="#" onclick="nav('partners')" id="n-partners">Partners</a>
+          <a href="#" onclick="nav('vtours')" id="n-vtours">V-Tours</a>
         </div>
       </li>
-      <li class="nav-item"><a href="#" onclick="nav('partners')" id="n-partners">Partners</a></li>
       <li class="nav-item"><a href="#" onclick="nav('contact')" id="n-contact">Travel Form</a></li>
       <li class="nav-item"><a href="#" onclick="nav('booking')" class="btn-book">Start Planning</a></li>
     </ul>
@@ -9069,6 +9070,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   <a href="#" onclick="nav('discoverjamaica');closeMob()">Discover Jamaica</a>
   <a href="#" onclick="nav('blog');closeMob()">Blog</a>
   <a href="#" onclick="nav('partners');closeMob()">Partners</a>
+  <a href="#" onclick="nav('vtours');closeMob()">V-Tours</a>
   <a href="#" onclick="nav('account');closeMob()">Guest Account</a>
   <a href="#" id="n-admin-mobile" class="admin-hidden-link" onclick="nav('admin');closeMob()">Admin Portal</a>
   <a href="#" onclick="nav('contact');closeMob()">Travel Form</a>
@@ -12400,6 +12402,244 @@ body.theme-night .page .tag{
   </section>
 </div>
 
+<div class="page" id="p-vtours">
+  <style>
+/* ======== V-TOURS PAGE ======== */
+.vt-hero{position:relative;min-height:520px;background:linear-gradient(135deg,#063a63 0%,#0d5371 40%,#1a7a9e 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 30px 80px}
+.vt-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08) 0%,transparent 50%),radial-gradient(circle at 70% 80%,rgba(239,135,49,.1) 0%,transparent 40%)}
+.vt-hero-inner{position:relative;z-index:2;max-width:780px}
+.vt-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:8px 20px;font-size:12px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:2px;margin-bottom:28px}
+.vt-hero-badge i{color:var(--orange)}
+.vt-hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,64px);color:#fff;line-height:1.1;margin-bottom:20px;letter-spacing:-1px}
+.vt-hero h1 span{color:var(--orange)}
+.vt-hero-sub{font-size:18px;color:rgba(255,255,255,.75);line-height:1.7;max-width:620px;margin:0 auto 36px}
+.vt-hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:12px}
+.vt-hero-stat{text-align:center}
+.vt-hero-stat strong{display:block;font-family:'Playfair Display',serif;font-size:32px;color:#fff}
+.vt-hero-stat span{font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+
+.vt-sec{padding:80px 0;position:relative}
+.vt-wrap{max-width:1100px;margin:0 auto;padding:0 30px}
+.vt-sec--alt{background:#f7fbff}
+.vt-sec--dark{background:var(--navy);color:#fff}
+
+.vt-grid-5{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:40px}
+.vt-cat-card{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:22px;padding:32px 24px;text-align:center;transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s cubic-bezier(.25,.46,.45,.94)}
+.vt-cat-card:hover{transform:translateY(-8px);box-shadow:0 20px 48px rgba(0,0,0,.1)}
+.vt-cat-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--orange),#ff8d47);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px;color:#fff}
+.vt-cat-card h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.vt-cat-card p{font-size:13px;color:#617087;line-height:1.6}
+
+.vt-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;margin-top:48px;counter-reset:step}
+.vt-step{position:relative;padding:28px 24px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:22px;counter-increment:step;transition:transform .3s cubic-bezier(.25,.46,.45,.94),box-shadow .3s}
+.vt-step:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.08)}
+.vt-step::before{content:counter(step,decimal-leading-zero);font-family:'Playfair Display',serif;font-size:36px;color:var(--orange);opacity:.35;font-weight:700;line-height:1;margin-bottom:12px;display:block}
+.vt-step h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.vt-step p{font-size:13px;color:#617087;line-height:1.65}
+
+.vt-devices{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:48px}
+.vt-device{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:36px 28px;backdrop-filter:blur(8px);transition:transform .4s cubic-bezier(.25,.46,.45,.94),border-color .3s}
+.vt-device:hover{transform:translateY(-6px);border-color:rgba(239,135,49,.3)}
+.vt-device-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);background:rgba(239,135,49,.12);padding:4px 12px;border-radius:999px;margin-bottom:16px}
+.vt-device h3{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
+.vt-device .vt-device-maker{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:16px}
+.vt-device ul{list-style:none;padding:0;margin:0}
+.vt-device ul li{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;padding-left:20px;position:relative}
+.vt-device ul li::before{content:'';position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+
+.vt-cta-block{text-align:center;padding:80px 30px;background:linear-gradient(135deg,var(--orange),#ff8d47);border-radius:28px;margin:0 30px}
+.vt-cta-block h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);color:#fff;margin-bottom:16px}
+.vt-cta-block p{font-size:16px;color:rgba(255,255,255,.85);max-width:520px;margin:0 auto 28px;line-height:1.7}
+.vt-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--navy);font-size:14px;font-weight:700;padding:16px 36px;border-radius:999px;border:none;cursor:pointer;transition:transform .3s,box-shadow .3s;text-decoration:none}
+.vt-cta-btn:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.15)}
+
+.vt-revenue{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-top:40px}
+.vt-rev-card{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:24px 20px;text-align:center}
+.vt-rev-card strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:4px}
+.vt-rev-card span{font-size:12px;color:#617087}
+
+@media(max-width:768px){
+  .vt-hero{min-height:420px;padding:80px 20px 60px}
+  .vt-hero-stats{gap:24px}
+  .vt-hero-stat strong{font-size:24px}
+  .vt-cta-block{margin:0 16px;padding:52px 20px}
+  .vt-devices{grid-template-columns:1fr}
+}
+body.theme-night .vt-sec--alt{background:#0a1929}
+body.theme-night .vt-cat-card,body.theme-night .vt-step,body.theme-night .vt-rev-card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08)}
+body.theme-night .vt-cat-card h3,body.theme-night .vt-step h4,body.theme-night .vt-rev-card strong{color:#fff}
+body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt-rev-card span{color:rgba(255,255,255,.55)}
+  </style>
+
+  <!-- HERO -->
+  <div class="vt-hero">
+    <div class="vt-hero-inner reveal">
+      <div class="vt-hero-badge"><i class="fas fa-broadcast-tower"></i> Beta Launch 2025</div>
+      <h1>V-Tours: <span>Live. Interactive. Borderless.</span></h1>
+      <p class="vt-hero-sub">A guide-led virtual experience platform connecting curious explorers to the Caribbean's most vibrant culture, cuisine, and landscapes in real time, from anywhere in the world.</p>
+      <div class="vt-hero-stats">
+        <div class="vt-hero-stat"><strong>5+</strong><span>Experience Categories</span></div>
+        <div class="vt-hero-stat"><strong>7+</strong><span>Caribbean Destinations</span></div>
+        <div class="vt-hero-stat"><strong>1:1</strong><span>Private Guide Access</span></div>
+        <div class="vt-hero-stat"><strong>3</strong><span>Device Tiers</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT IS V-TOURS -->
+  <section class="vt-sec">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">The Concept</span>
+        <h2 class="sec-title">What is V-Tours?</h2>
+        <p class="sec-sub center">V-Tours is a live, interactive virtual experience platform and a digital extension of Sight Seers Caribbean Adventures. A vetted expert guide wears a camera rig and streams in real time. You watch, speak, point at items on screen, ask questions, and even purchase physical goods from local shops, all without leaving home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 EXPERIENCE CATEGORIES -->
+  <section class="vt-sec vt-sec--alt">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">What You Can Experience</span>
+        <h2 class="sec-title">5 Experience Categories</h2>
+      </div>
+      <div class="vt-grid-5 reveal">
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-landmark"></i></div>
+          <h3>Culture and Landmarks</h3>
+          <p>Guided live tours through historic sites, UNESCO landmarks, and culturally significant locations across the Caribbean.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-shopping-bag"></i></div>
+          <h3>Personal Shopping</h3>
+          <p>Live shopping tours through local boutiques, artisan markets, and fashion districts with full in-session purchasing.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-utensils"></i></div>
+          <h3>Food and Drink</h3>
+          <p>Virtual cooking classes, street food market tours, rum tastings, and live mixology masterclasses with full interaction.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-palette"></i></div>
+          <h3>Learning and Creativity</h3>
+          <p>Skill-building live sessions from creative experts covering color grading, music mixing, photography, and visual arts.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-mountain"></i></div>
+          <h3>Nature and Outdoors</h3>
+          <p>Immersive live tours of rainforests, waterfalls, marine environments, hiking trails, and wildlife encounters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="vt-sec">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">The Experience Flow</span>
+        <h2 class="sec-title">How V-Tours Works</h2>
+      </div>
+      <div class="vt-steps reveal">
+        <div class="vt-step">
+          <h4>Browse and Book</h4>
+          <p>Explore a curated catalogue across 5 categories and 7+ Caribbean destinations. Filter by guide, language, price, and availability.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Enter the Live Session</h4>
+          <p>One click launches the V-Tours interface. No app download required. The guide is already live and streaming in real time.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Interact in Real Time</h4>
+          <p>Point at items on screen to direct the guide. Ask questions. The guide responds instantly with live two-way audio and video.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Shop in Session</h4>
+          <p>Guides tag authentic local goods in real time. Add to cart, checkout instantly, and have items shipped directly to your door.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Capture and Share</h4>
+          <p>Take screenshots at any moment, creating personal memories from the guide's perspective. Share instantly to social media.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVICE TIERS -->
+  <section class="vt-sec vt-sec--dark">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre" style="color:#ffe97a">Built for the Future</span>
+        <h2 class="sec-title" style="color:#fff">Three Device Tiers</h2>
+        <p class="sec-sub center" style="color:rgba(255,255,255,.6)">Engineered from day one to support the next generation of consumer hardware, seamlessly upgrading from standard screens to fully spatial computing.</p>
+      </div>
+      <div class="vt-devices reveal">
+        <div class="vt-device">
+          <div class="vt-device-badge">Guide Equipment</div>
+          <h3>Ray-Ban Meta</h3>
+          <div class="vt-device-maker">Smart Glasses by Meta</div>
+          <ul>
+            <li>Hands-free first-person POV streaming</li>
+            <li>Natural walking tours with no handheld camera</li>
+            <li>Built-in spatial audio capture</li>
+            <li>Available now for beta launch</li>
+          </ul>
+        </div>
+        <div class="vt-device">
+          <div class="vt-device-badge">Explorer Headset</div>
+          <h3>Meta Quest</h3>
+          <div class="vt-device-maker">VR Headset by Meta</div>
+          <ul>
+            <li>360-degree live stream inside a VR headset</li>
+            <li>Full spatial awareness of the destination</li>
+            <li>Group sessions share the same virtual space</li>
+            <li>Hand tracking for in-VR purchases</li>
+          </ul>
+        </div>
+        <div class="vt-device">
+          <div class="vt-device-badge">Premium Tier</div>
+          <h3>Apple Vision Pro</h3>
+          <div class="vt-device-maker">Spatial Computing by Apple</div>
+          <ul>
+            <li>Guide's feed fills your physical room as a spatial window</li>
+            <li>Eye tracking replaces clicking to point and direct</li>
+            <li>Natural hand gestures for shopping and interaction</li>
+            <li>Premium-tier pricing for the highest-fidelity sessions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING SNAPSHOT -->
+  <section class="vt-sec vt-sec--alt">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">Pricing</span>
+        <h2 class="sec-title">Session Pricing</h2>
+      </div>
+      <div class="vt-revenue reveal">
+        <div class="vt-rev-card"><strong>$35 - $95</strong><span>1-on-1 Private Sessions</span></div>
+        <div class="vt-rev-card"><strong>$18 - $45</strong><span>Group Sessions (2-10)</span></div>
+        <div class="vt-rev-card"><strong>$250 - $800</strong><span>Corporate and Events</span></div>
+        <div class="vt-rev-card"><strong>$19.99/mo</strong><span>V-Tours Club Membership</span></div>
+        <div class="vt-rev-card"><strong>$55 - $150</strong><span>VR Premium Sessions</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="vt-sec">
+    <div class="vt-cta-block reveal">
+      <h2>Ready to Explore the Caribbean from Anywhere?</h2>
+      <p>V-Tours is launching in private beta. Be among the first to experience the Caribbean like never before.</p>
+      <a href="mailto:info@sightseerscaribbean.com?subject=V-Tours%20Beta%20Interest&body=Hi%20Sight%20Seers%2C%0A%0AI%E2%80%99m%20interested%20in%20joining%20the%20V-Tours%20beta.%0A%0APlease%20add%20me%20to%20the%20waitlist.%0A%0AThank%20you!" class="vt-cta-btn"><i class="fas fa-paper-plane"></i> Join the Beta Waitlist</a>
+    </div>
+  </section>
+
+</div>
+
 <!-- ════════════════════════════════════
      GLOBAL FOOTER
 ════════════════════════════════════ -->
@@ -13117,6 +13357,7 @@ body.theme-night .page .tag{
         <li><a href="#" onclick="nav('shop')"><i class="fas fa-chevron-right"></i>Travel Shop</a></li>
         <li><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
         <li><a href="#" onclick="nav('partners')"><i class="fas fa-chevron-right"></i>Our Partners</a></li>
+        <li><a href="#" onclick="nav('vtours')"><i class="fas fa-chevron-right"></i>V-Tours</a></li>
         <li><a href="#" onclick="nav('passport')"><i class="fas fa-chevron-right"></i>Passport Renewal</a></li>
         <li><a href="#" onclick="nav('booking')"><i class="fas fa-chevron-right"></i>Start Planning</a></li>
       </ul>
@@ -16422,7 +16663,7 @@ function nav(id,opts={}){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   const el=document.getElementById('p-'+id);if(el)el.classList.add('on');
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':(id==='discoverjamaica'?'n-about':'n-'+id)));
+  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='vtours'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   if(!opts.skipScroll){ smoothScrollToY(0,900); }
   if(id==='tours'){
