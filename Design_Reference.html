@@ -455,8 +455,8 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .popular-kicker{display:block;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.76);margin-bottom:8px}
 .popular-info h3{font-size:1.22rem;line-height:1.12;margin-bottom:10px}
 .popular-info p{font-size:12px;line-height:1.7;color:rgba(255,255,255,.84);min-height:60px}
-.popular-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
-.popular-meta strong{font-size:1.05rem;color:#fff}
+.popular-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;flex-wrap:wrap}
+.popular-meta strong{font-size:.92rem;color:#fff;white-space:nowrap}
 .popular-meta span{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(239,135,49,.94);font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#fff}
 @media (max-width:980px){.popular-track{grid-auto-columns:minmax(260px, 70%)}}
 @media (max-width:640px){.popular-track{grid-auto-columns:minmax(240px, 86%)}.popular-card{min-height:320px}}
@@ -1506,9 +1506,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .tc-media::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,18,31,.92) 4%,rgba(7,18,31,.18) 48%,rgba(7,18,31,.08) 100%);z-index:1}
 .tc-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
 .tour-card:hover .tc-media img{transform:scale(1.08)}
-.tc-topbar{position:absolute;top:18px;left:18px;right:18px;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.tc-topbar{position:absolute;top:18px;left:18px;right:18px;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .tc-tag{position:static;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);backdrop-filter:blur(7px);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:8px 14px;color:#fff;font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
-.tc-price-pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;background:#fff;color:var(--navy);border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1px;box-shadow:0 10px 24px rgba(0,0,0,.12)}
+.tc-price-pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;background:#fff;color:var(--navy);border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.3px;box-shadow:0 10px 24px rgba(0,0,0,.12);white-space:nowrap}
 .tc-overlay-meta{position:absolute;left:22px;right:22px;bottom:20px;z-index:2;color:#fff}
 .tc-rating-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:14px}
 .tc-rating-badge i{color:#ffd25f}
@@ -10401,7 +10401,7 @@ body.theme-night .page .tag{
       <div class="transfers-premium-hero reveal">
         <div class="transfers-premium-copy">
           <span class="transfers-premium-kicker"><i class="fas fa-route"></i> Sight Seers Transfers</span>
-          <h1 class="transfers-premium-title">Airport pickups, VIP rides and luxury coaches that feel ready from the first stop.</h1>
+          <h1 class="transfers-premium-title">Sight Seers Transfers</h1>
           <p class="transfers-premium-sub">Choose from polished airport pickups, VIP executive transfers, Mercedes options and larger group coaches built for weddings, retreats, school trips, corporate movement and premium island arrivals.</p>
           <div class="transfers-premium-actions">
             <a href="https://calendly.com/sightseersjm/30min" target="_blank" rel="noopener noreferrer" class="btn-primary"><i class="fas fa-calendar-check"></i>Book a Discovery Call</a>
@@ -15186,7 +15186,7 @@ function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
     'p-tours': { title:'Custom Package', type:'Custom Package', notes:'Interested in planning a custom tour or excursion with Sight Seers.' }
   };
   const context = contextMap[activePage] || {};
-  openStartPlanning('', packageTitle || context.title || '', packageType || context.type || 'Custom Package', notes || context.notes || 'Interested in planning an experience with Sight Seers.');
+  openStartPlanning('Jamaica', packageTitle || context.title || '', packageType || context.type || 'Custom Package', notes || context.notes || 'Interested in planning an experience with Sight Seers.');
   return false;
 }
 function openBookingForTour(tourId=null){
@@ -15420,7 +15420,7 @@ function openStartPlanning(destination='', packageTitle='', packageType='', note
   nav('booking');
   setTimeout(()=>{
     applyBookingPrefill({
-      destination: destination || '',
+      destination: destination || 'Jamaica',
       type: selection.experienceType || packageType || 'Custom Package',
       packageName: packageTitle || '',
       format: selection.preferredFormat || packageType || packageTitle || '',
@@ -35482,11 +35482,11 @@ window.scrollPopularTours=function(dir){
 .curated-tour-copy h3{font-size:1.28rem;line-height:1.08;margin-bottom:8px;max-width:85%}
 .curated-tour-copy p{font-size:12px;line-height:1.7;color:rgba(255,255,255,.84)}
 .curated-tour-body{padding:22px;display:flex;flex-direction:column;flex:1}
-.curated-tour-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.curated-tour-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
 .curated-tour-country{display:block;font-size:11px;font-weight:800;letter-spacing:1.35px;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
 .curated-tour-type{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(112,194,87,.12);color:#2d7640;font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;white-space:nowrap;flex-wrap:nowrap;min-width:max-content;line-height:1}
-.curated-tour-price{font-size:1.12rem;font-weight:900;color:var(--navy);white-space:nowrap;line-height:1.15;text-align:right;max-width:100%;overflow-wrap:normal}
-.curated-tour-duration{display:block;font-size:11px;font-weight:700;color:var(--grey);margin-top:4px;text-align:right}
+.curated-tour-price{font-size:.82rem;font-weight:900;color:var(--navy);white-space:nowrap;line-height:1.15;text-align:right;max-width:100%;overflow-wrap:normal}
+.curated-tour-duration{display:block;font-size:9px;font-weight:700;color:var(--grey);margin-top:4px;text-align:right;white-space:nowrap}
 .curated-tour-card.is-package{border-color:rgba(239,135,49,.16);box-shadow:0 20px 44px rgba(6,58,99,.08)}
 .curated-tour-card.is-package .curated-tour-body{background:linear-gradient(180deg,#ffffff 0%,#fbfdff 58%,#fff8f0 100%)}
 .curated-tour-card.is-package .curated-tour-topline{align-items:flex-start}
