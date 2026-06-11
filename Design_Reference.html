@@ -116,8 +116,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .sb-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:3px}
 .sb-select,.sb-input{border:none;outline:none;font-family:'Raleway',sans-serif;font-size:13px;font-weight:600;color:var(--dark);background:transparent;width:100%;cursor:pointer}
 .sb-date-row{display:flex;align-items:center;gap:6px}
-.sb-date-input{width:auto;flex:1;min-width:0;padding:2px 0;font-size:12px;cursor:pointer}
-.sb-date-input::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6}
+.sb-date-input{width:auto;flex:1;min-width:0;padding:2px 0;font-size:12px;cursor:pointer;position:relative}
+.sb-date-input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.sb-field:has(.sb-date-input){cursor:pointer}
 .sb-date-sep{font-size:12px;color:var(--grey);flex-shrink:0}
 .sb-btn{background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;border:none;padding:0 34px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;gap:10px;transition:all .25s;white-space:nowrap}
 .sb-btn:hover{background:linear-gradient(135deg,var(--navy),#0d5371);transform:translateY(-1px)}
@@ -9167,7 +9168,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <div class="searchbar">
   <div class="sb-wrap">
     <div class="sb-field"><i class="fas fa-map-marker-alt"></i><div><div class="sb-label">Destination</div><select class="sb-select" id="sbDest"><option value="">All Caribbean</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curaçao</option></select></div></div>
-    <div class="sb-field"><i class="fas fa-calendar-alt"></i><div><div class="sb-label">Travel Dates</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
+    <div class="sb-field" onclick="document.getElementById('sbDateFrom').showPicker?.()" style="cursor:pointer"><i class="fas fa-calendar-alt"></i><div><div class="sb-label">Travel Dates</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
     <div class="sb-field"><i class="fas fa-compass"></i><div><div class="sb-label">Experience Style</div><select class="sb-select" id="sbStyle"><option value="">All Excursions</option><option>Water Adventures</option><option>Land Excursions</option><option>MBA Experiences</option><option>Custom Packages</option><option>Yacht Charters</option><option>Efoil Surfboarding</option></select></div></div>
     <div class="sb-field"><i class="fas fa-users"></i><div><div class="sb-label">Travel Party</div><select class="sb-select" id="sbParty"><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
     <button class="sb-btn" onclick="submitSearchBar()"><i class="fas fa-paper-plane"></i>Submit</button>
@@ -9709,7 +9710,7 @@ body.theme-night .page .tag{
   <div class="sec-head center reveal jm3d-head">
     <span class="sec-pre discover-jamaica-pre">Discover Jamaica</span>
     <h2 class="sec-title">Explore the Island's Iconic Landmarks</h2>
-    <p class="sec-sub center">Click any glowing pin to uncover Jamaica's most beloved tourist destinations — from cascading waterfalls to historic great houses and reggae shrines.</p>
+    <p class="sec-sub center"></p>
   </div>
 </div>
 <div class="jm3d-stage-outer reveal" style="width:100%;margin:0;padding:0">
@@ -15156,28 +15157,19 @@ function submitSearchBar(){
   const dateTo=document.getElementById('sbDateTo')?.value||'';
   const style=document.getElementById('sbStyle')?.value||'';
   const party=document.getElementById('sbParty')?.value||'';
-  const parts=[];
-  if(dest) parts.push(`Destination: ${dest}`);
+  const lines=[];
+  lines.push('Destination: '+(dest||'Jamaica'));
   if(dateFrom){
     const df=new Date(dateFrom+'T12:00:00');
-    parts.push(`Travel dates: ${df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}${dateTo?' – '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):''}`);
+    let dateStr=df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    if(dateTo) dateStr+=' – '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    lines.push('Travel Dates: '+dateStr);
   }
-  if(style) parts.push(`Experience style: ${style}`);
-  if(party) parts.push(`Travel party: ${party}`);
-  const noteText=parts.length?parts.join('. ')+'.' :'Interested in exploring Caribbean experiences with Sight Seers.';
-  const bookingType=style||'Custom Package';
-  nav('booking');
-  setTimeout(()=>{
-    applyBookingPrefill({
-      destination:dest||'Jamaica',
-      type:bookingType,
-      packageName:'',
-      format:style||'',
-      notes:noteText
-    });
-    const dateField=document.getElementById('b_date');
-    if(dateField&&dateFrom) dateField.value=dateFrom;
-  },140);
+  if(style) lines.push('Experience Style: '+style);
+  if(party) lines.push('Travel Party: '+party);
+  const subject=encodeURIComponent('New Trip Inquiry from Sight Seers');
+  const body=encodeURIComponent('Hi Sight Seers,\n\nI would like to plan a trip with the following details:\n\n'+lines.join('\n')+'\n\nPlease get back to me with options.\n\nThank you!');
+  window.location.href='mailto:info@sightseerscaribbean.com?subject='+subject+'&body='+body;
 }
 function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
   const activePage = document.querySelector('.page.on')?.id || '';
