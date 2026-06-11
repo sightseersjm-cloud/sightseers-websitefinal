@@ -8905,29 +8905,25 @@ body.theme-night .page .tag{
 
 /* Blog editorial */
 .blog-editorial-sec{padding:94px 0;background:linear-gradient(180deg,#f8fbff 0%,#ffffff 40%,#fff8ef 100%)}
-.blog-slider-wrap{position:relative;margin-top:10px}
-.blog-slider-track{display:grid;grid-auto-flow:column;grid-auto-columns:300px;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.blog-slider-track::-webkit-scrollbar{display:none}
-.blog-slider-card{scroll-snap-align:start;display:flex;flex-direction:column;border-radius:20px;background:#fff;border:1px solid rgba(0,0,0,.06);overflow:hidden;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease}
-.blog-slider-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.1)}
-.blog-slider-media{height:200px;overflow:hidden}
-.blog-slider-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.blog-slider-card:hover .blog-slider-media img{transform:scale(1.05)}
-.blog-slider-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
-.blog-slider-cat{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
-.blog-slider-body h3{font-size:1.05rem;font-weight:700;line-height:1.2;color:var(--navy);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.blog-slider-body p{font-size:13px;line-height:1.6;color:var(--grey);flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.blog-slider-date{font-size:11px;font-weight:600;color:rgba(0,0,0,.35);margin-top:12px}
-.blog-slider-nav{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
-.blog-slider-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.1);background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;font-size:14px}
-.blog-slider-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
-body.theme-night .blog-slider-card{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important}
-body.theme-night .blog-slider-body h3{color:#f5f5f7!important}
-body.theme-night .blog-slider-body p{color:#86868b!important}
-body.theme-night .blog-slider-date{color:rgba(255,255,255,.3)!important}
-body.theme-night .blog-slider-btn{background:#1c1c1e;border-color:rgba(255,255,255,.1);color:#f5f5f7}
-body.theme-night .blog-slider-btn:hover{background:#ef8731;border-color:transparent;color:#fff}
-@media (max-width:768px){.blog-slider-track{grid-auto-columns:260px}} 
+.blog-gallery-window{overflow:hidden;border-radius:28px;margin-top:10px}
+.blog-gallery-track{display:flex;gap:20px;width:max-content;animation:blogGalleryRun 40s linear infinite}
+.blog-gallery-window:hover .blog-gallery-track{animation-play-state:paused}
+.blog-gallery-item{width:320px;flex:0 0 auto;border-radius:22px;overflow:hidden;cursor:pointer;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 12px 32px rgba(14,36,62,.07);transition:transform .3s ease,box-shadow .3s ease}
+.blog-gallery-item:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(14,36,62,.12)}
+.blog-gallery-media{height:200px;overflow:hidden}
+.blog-gallery-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.blog-gallery-item:hover .blog-gallery-media img{transform:scale(1.05)}
+.blog-gallery-body{padding:18px 20px 20px;display:flex;flex-direction:column}
+.blog-gallery-cat{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.blog-gallery-body h3{font-size:1.05rem;font-weight:700;line-height:1.2;color:var(--navy);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.blog-gallery-body p{font-size:13px;line-height:1.6;color:var(--grey);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.blog-gallery-date{font-size:11px;font-weight:600;color:rgba(0,0,0,.35);margin-top:12px}
+@keyframes blogGalleryRun{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+body.theme-night .blog-gallery-item{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important}
+body.theme-night .blog-gallery-body h3{color:#f5f5f7!important}
+body.theme-night .blog-gallery-body p{color:#86868b!important}
+body.theme-night .blog-gallery-date{color:rgba(255,255,255,.3)!important}
+@media(max-width:768px){.blog-gallery-item{width:260px}.blog-gallery-media{height:170px}}
 
 /* Team smaller + circular */
 .team-gloss-sec{padding:24px 0 74px!important} 
@@ -8947,8 +8943,8 @@ body.theme-night{background:#000!important;color:#f5f5f7!important}
 body.theme-night::before{content:none!important;background:none!important}
 body.theme-night .navbar{background:rgba(22,22,22,.82)!important;border-bottom-color:rgba(255,255,255,.08)!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(180%)}
 body.theme-night .topbar{background:#1c1c1e!important}
-body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-mag-card,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important;color:#f5f5f7!important}
-body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,body.theme-night .partners-sec,body.theme-night .about-sec{background:#000!important}
+body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-gallery-item,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important;color:#f5f5f7!important}
+body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,.blog-gallery-item,body.theme-night .partners-sec,body.theme-night .about-sec{background:#000!important}
 body.theme-night .shop-card::before{opacity:.5}
 body.theme-night .sc-meta span,body.theme-night .shop-hero-tag,body.theme-night .partner-tag,body.theme-night .blog-chip--soft{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important;color:#f5f5f7!important}
 body.theme-night .sec-title,body.theme-night .bc-title,body.theme-night .team-gloss-body h3,body.theme-night .partners-grid-title h3,body.theme-night .pd-name,body.theme-night .ph-title,body.theme-night .sc-name,body.theme-night .shop-hero-copy h3,body.theme-night .partners-premium-aside h4{color:#f5f5f7!important}
@@ -12110,67 +12106,118 @@ body.theme-night .page .tag{
         <p class="sec-sub center">An editorial-style blog experience with featured stories, destination notes, and planning inspiration that feels more like a premium travel magazine.</p>
       </div>
 
-      <div class="blog-editorial-shell reveal">
-        <article class="blog-featured-story" onclick="openBlog(1)">
-          <div class="blog-featured-media">
-            <img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1200&q=85" alt="Top excursions in Jamaica">
-            <div class="blog-featured-overlay"></div>
-            <div class="blog-featured-copy">
-              <span class="blog-chip">Featured Story</span>
-              <span class="blog-featured-meta">Jamaica · Mar 15, 2025</span>
+      <div class="blog-gallery-window reveal">
+        <div class="blog-gallery-track">
+          <article class="blog-gallery-item" onclick="openBlog(1)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=900&q=85" alt="Top excursions in Jamaica"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Jamaica</span>
               <h3>Top 10 Must-Do Excursions in Jamaica</h3>
               <p>From bamboo rafting on the Rio Grande to soaring on a zip-line, this guide brings together iconic experiences and premium planning inspiration.</p>
-              <a href="#" class="bc-read" onclick="openBlog(1);return false;">Read Feature <i class="fas fa-arrow-right"></i></a>
+              <span class="blog-gallery-date">Mar 15, 2025</span>
             </div>
-          </div>
-        </article>
-
-        <aside class="blog-side-stack">
-          <article class="blog-side-card" onclick="openBlog(5)">
-            <span class="blog-chip blog-chip--soft">Airport Luxury</span>
-            <div class="blog-side-meta">Guide · Jan 5, 2025</div>
-            <h4>Club Mobay VIP Lounge: Everything to Know</h4>
-            <p>Fast-track the airport experience with premium lounge access, arrival support, and a smoother first impression of Jamaica.</p>
           </article>
-        </aside>
-      </div>
-
-      <div class="blog-magazine-grid reveal">
-        <article class="blog-mag-card" onclick="openBlog(3)">
-          <div class="blog-mag-media"><img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=900&q=85" alt="Barbados beaches"></div>
-          <div class="blog-mag-body">
-            <div class="bc-meta"><span class="bc-cat">Barbados</span><span class="bc-date">Feb 28, 2025</span></div>
-            <h3 class="bc-title">A Complete Guide to Barbados Beaches</h3>
-            <p class="bc-excerpt">The calm west coast, the surf towns, and the stretches of sand worth planning a whole trip around.</p>
-          </div>
-        </article>
-
-        <article class="blog-mag-card" onclick="openBlog(2)">
-          <div class="blog-mag-media"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&q=85" alt="Group trip planning"></div>
-          <div class="blog-mag-body">
-            <div class="bc-meta"><span class="bc-cat">Travel Tips</span><span class="bc-date">Feb 10, 2025</span></div>
-            <h3 class="bc-title">How to Plan the Perfect Caribbean Group Trip</h3>
-            <p class="bc-excerpt">The practical guide to making group travel feel coordinated, elevated, and memorable from start to finish.</p>
-          </div>
-        </article>
-
-        <article class="blog-mag-card" onclick="openBlog(4)">
-          <div class="blog-mag-media"><img src="https://images.unsplash.com/photo-1560179406-1c6c60e0dc76?w=900&q=85" alt="Saint Lucia Pitons"></div>
-          <div class="blog-mag-body">
-            <div class="bc-meta"><span class="bc-cat">Saint Lucia</span><span class="bc-date">Jan 22, 2025</span></div>
-            <h3 class="bc-title">Hiking the Pitons: A Saint Lucia Adventure</h3>
-            <p class="bc-excerpt">A destination story for travelers who want the wow factor, the views, and the right prep before they go.</p>
-          </div>
-        </article>
-
-        <article class="blog-mag-card" onclick="openBlog(6)">
-          <div class="blog-mag-media"><img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?w=900&q=85" alt="Swimming pigs Bahamas"></div>
-          <div class="blog-mag-body">
-            <div class="bc-meta"><span class="bc-cat">The Bahamas</span><span class="bc-date">Dec 18, 2024</span></div>
-            <h3 class="bc-title">Swimming with Pigs: The Bahamas' Wildest Experience</h3>
-            <p class="bc-excerpt">One of the Caribbean’s most playful signature experiences, with notes on where to go and what to expect.</p>
-          </div>
-        </article>
+          <article class="blog-gallery-item" onclick="openBlog(5)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=900&q=85" alt="Club Mobay VIP Lounge"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Airport Luxury</span>
+              <h3>Club Mobay VIP Lounge: Everything to Know</h3>
+              <p>Fast-track the airport experience with premium lounge access, arrival support, and a smoother first impression of Jamaica.</p>
+              <span class="blog-gallery-date">Jan 5, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(3)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=900&q=85" alt="Barbados beaches"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Barbados</span>
+              <h3>A Complete Guide to Barbados Beaches</h3>
+              <p>The calm west coast, the surf towns, and the stretches of sand worth planning a whole trip around.</p>
+              <span class="blog-gallery-date">Feb 28, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(2)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&q=85" alt="Group trip planning"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Travel Tips</span>
+              <h3>How to Plan the Perfect Caribbean Group Trip</h3>
+              <p>The practical guide to making group travel feel coordinated, elevated, and memorable from start to finish.</p>
+              <span class="blog-gallery-date">Feb 10, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(4)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1560179406-1c6c60e0dc76?w=900&q=85" alt="Saint Lucia Pitons"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Saint Lucia</span>
+              <h3>Hiking the Pitons: A Saint Lucia Adventure</h3>
+              <p>A destination story for travelers who want the wow factor, the views, and the right prep before they go.</p>
+              <span class="blog-gallery-date">Jan 22, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(6)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?w=900&q=85" alt="Swimming pigs Bahamas"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">The Bahamas</span>
+              <h3>Swimming with Pigs: The Wildest Experience</h3>
+              <p>One of the most playful signature experiences, with notes on where to go and what to expect.</p>
+              <span class="blog-gallery-date">Dec 18, 2024</span>
+            </div>
+          </article>
+          <!-- Duplicated for infinite scroll -->
+          <article class="blog-gallery-item" onclick="openBlog(1)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=900&q=85" alt="Top excursions in Jamaica"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Jamaica</span>
+              <h3>Top 10 Must-Do Excursions in Jamaica</h3>
+              <p>From bamboo rafting on the Rio Grande to soaring on a zip-line, this guide brings together iconic experiences and premium planning inspiration.</p>
+              <span class="blog-gallery-date">Mar 15, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(5)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=900&q=85" alt="Club Mobay VIP Lounge"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Airport Luxury</span>
+              <h3>Club Mobay VIP Lounge: Everything to Know</h3>
+              <p>Fast-track the airport experience with premium lounge access, arrival support, and a smoother first impression of Jamaica.</p>
+              <span class="blog-gallery-date">Jan 5, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(3)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=900&q=85" alt="Barbados beaches"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Barbados</span>
+              <h3>A Complete Guide to Barbados Beaches</h3>
+              <p>The calm west coast, the surf towns, and the stretches of sand worth planning a whole trip around.</p>
+              <span class="blog-gallery-date">Feb 28, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(2)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&q=85" alt="Group trip planning"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Travel Tips</span>
+              <h3>How to Plan the Perfect Caribbean Group Trip</h3>
+              <p>The practical guide to making group travel feel coordinated, elevated, and memorable from start to finish.</p>
+              <span class="blog-gallery-date">Feb 10, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(4)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1560179406-1c6c60e0dc76?w=900&q=85" alt="Saint Lucia Pitons"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">Saint Lucia</span>
+              <h3>Hiking the Pitons: A Saint Lucia Adventure</h3>
+              <p>A destination story for travelers who want the wow factor, the views, and the right prep before they go.</p>
+              <span class="blog-gallery-date">Jan 22, 2025</span>
+            </div>
+          </article>
+          <article class="blog-gallery-item" onclick="openBlog(6)">
+            <div class="blog-gallery-media"><img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?w=900&q=85" alt="Swimming pigs Bahamas"></div>
+            <div class="blog-gallery-body">
+              <span class="blog-gallery-cat">The Bahamas</span>
+              <h3>Swimming with Pigs: The Wildest Experience</h3>
+              <p>One of the most playful signature experiences, with notes on where to go and what to expect.</p>
+              <span class="blog-gallery-date">Dec 18, 2024</span>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
