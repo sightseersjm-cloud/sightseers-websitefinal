@@ -108,7 +108,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .ha-next{right:30px}
 
 /* ======== SEARCH BAR ======== */
-.searchbar{background:linear-gradient(90deg,#ffffff 0%,#f8fcf9 100%);box-shadow:0 14px 38px rgba(6,58,99,.1);position:relative;z-index:10}
+.searchbar{background:linear-gradient(90deg,#ffffff 0%,#f8fcf9 100%);box-shadow:none;position:relative;z-index:10}
 .sb-wrap{max-width:1200px;margin:0 auto;display:flex;align-items:stretch}
 .sb-field{flex:1;display:flex;align-items:center;gap:10px;padding:14px 16px;border-right:1px solid var(--border)}
 .sb-field:hover{background:#f5fbf7}
@@ -18595,17 +18595,7 @@ body.theme-night .page .tag{
   position:relative;
   isolation:isolate;
 }
-.hero::after{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:-1px;
-  height:156px;
-  background:linear-gradient(180deg,rgba(231,246,255,0) 0%,rgba(231,246,255,.10) 32%,rgba(226,243,252,.42) 68%,#e8f6fd 100%);
-  pointer-events:none;
-  z-index:2;
-}
+.hero::after{display:none}
 .searchbar{
   position:relative;
   z-index:18;
