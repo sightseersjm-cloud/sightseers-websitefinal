@@ -9171,6 +9171,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <div class="sb-field" onclick="document.getElementById('sbDateFrom').showPicker?.()" style="cursor:pointer"><i class="fas fa-calendar-alt"></i><div><div class="sb-label">Travel Dates</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
     <div class="sb-field"><i class="fas fa-compass"></i><div><div class="sb-label">Experience Style</div><select class="sb-select" id="sbStyle"><option value="">All Excursions</option><option>Water Adventures</option><option>Land Excursions</option><option>MBA Experiences</option><option>Custom Packages</option><option>Yacht Charters</option><option>Efoil Surfboarding</option></select></div></div>
     <div class="sb-field"><i class="fas fa-users"></i><div><div class="sb-label">Travel Party</div><select class="sb-select" id="sbParty"><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
+    <div class="sb-field"><i class="fas fa-wallet"></i><div><div class="sb-label">Trip Budget</div><select class="sb-select" id="sbBudget"><option value="">Select Budget</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500 – $5,000</option><option>$5,000 – $10,000</option><option>$10,000+</option></select></div></div>
     <button class="sb-btn" onclick="submitSearchBar()"><i class="fas fa-paper-plane"></i>Submit</button>
   </div>
 </div>
@@ -11925,6 +11926,7 @@ body.theme-night .page .tag{
         <div class="form-row"><div class="fg" style="grid-column:1/-1"><label>Selected Experience</label><input type="text" id="b_package" readonly></div></div>
         
         <div class="form-row"><div class="fg"><label>Travel Date *</label><input type="date" id="b_dt"></div><div class="fg"><label>Travel Party *</label><select id="b_gs"><option value="">Select</option><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
+        <div class="form-row"><div class="fg"><label>Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500 – $5,000</option><option>$5,000 – $10,000</option><option>$10,000+</option></select></div></div>
         <div class="fg"><label>Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
         
         <div class="upsell-section">
@@ -15157,6 +15159,7 @@ function submitSearchBar(){
   const dateTo=document.getElementById('sbDateTo')?.value||'';
   const style=document.getElementById('sbStyle')?.value||'';
   const party=document.getElementById('sbParty')?.value||'';
+  const budget=document.getElementById('sbBudget')?.value||'';
   const lines=[];
   lines.push('Destination: '+(dest||'Jamaica'));
   if(dateFrom){
@@ -15167,6 +15170,7 @@ function submitSearchBar(){
   }
   if(style) lines.push('Experience Style: '+style);
   if(party) lines.push('Travel Party: '+party);
+  if(budget) lines.push('Trip Budget: '+budget);
   const subject=encodeURIComponent('New Trip Inquiry from Sight Seers');
   const body=encodeURIComponent('Hi Sight Seers,\n\nI would like to plan a trip with the following details:\n\n'+lines.join('\n')+'\n\nPlease get back to me with options.\n\nThank you!');
   window.location.href='mailto:info@sightseerscaribbean.com?subject='+subject+'&body='+body;
@@ -16584,6 +16588,11 @@ function submitBook(){
   const em=document.getElementById('b_em').value;
   const dest=document.getElementById('b_dest').value;
   const type=document.getElementById('b_type').value;
+  const budget=document.getElementById('b_budget')?.value||'';
+  if(budget && notesField){
+    const budgetLine=`Trip Budget: ${budget}.`;
+    if(!notesField.value.includes(budgetLine)) notesField.value=`${notesField.value?notesField.value.trim()+' ':''}${budgetLine}`.trim();
+  }
   if(!fn||!em||!dest||!type){alert('Please fill in all required fields.');return;}
   document.getElementById('bookMsg').style.display='block';
   window.open('https://forms.gle/BkHmahaTkhyBxWzMA','_blank');
