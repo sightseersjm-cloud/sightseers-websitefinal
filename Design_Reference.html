@@ -3166,65 +3166,29 @@ body,body::before,body::after,.navbar,.topbar,.searchbar,.dropdown,.dropdown-nes
   transition:background .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease,transform .35s ease,filter .35s ease;
 }
 body.theme-night{
-  background:
-    radial-gradient(circle at 18% 18%,rgba(82,132,255,.14) 0,transparent 18%),
-    radial-gradient(circle at 82% 12%,rgba(67,217,173,.11) 0,transparent 18%),
-    radial-gradient(circle at 50% 120%,rgba(239,135,49,.14) 0,transparent 32%),
-    linear-gradient(180deg,#040a14 0%,#081624 32%,#0a1d2e 60%,#0b2438 100%);
-  color:#edf6ff;
+  background:#000;
+  color:#f5f5f7;
 }
-body.theme-night::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-2;
-  background:
-    radial-gradient(2px 2px at 8% 16%,rgba(255,255,255,.9) 0 98%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 22% 30%,rgba(164,220,255,.8) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 38% 12%,rgba(255,255,255,.92) 0 98%,transparent 100%),
-    radial-gradient(1.8px 1.8px at 54% 24%,rgba(137,203,255,.78) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 68% 14%,rgba(255,255,255,.88) 0 98%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 84% 28%,rgba(186,228,255,.78) 0 98%,transparent 100%),
-    radial-gradient(2px 2px at 91% 10%,rgba(255,255,255,.85) 0 98%,transparent 100%);
-  opacity:.85;
-  animation:nightSkyFloat 18s linear infinite alternate;
-}
-body.theme-night::after{
-  content:'';
-  position:fixed;
-  inset:auto -12% -12% -12%;
-  height:42vh;
-  pointer-events:none;
-  z-index:-1;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(75,122,255,.12),transparent 58%),
-    linear-gradient(180deg,rgba(4,12,21,0),rgba(4,12,21,.64) 42%,rgba(4,12,21,.9) 100%);
-  filter:blur(8px);
-}
-@keyframes nightSkyFloat{
-  0%{transform:translate3d(0,0,0);opacity:.72}
-  50%{transform:translate3d(0,-6px,0);opacity:.94}
-  100%{transform:translate3d(0,4px,0);opacity:.78}
-}
+body.theme-night::before{content:none}
+body.theme-night::after{content:none}
 body.theme-night .navbar{
-  background:rgba(6,14,28,.72);
-  border-color:rgba(174,217,255,.12);
-  box-shadow:0 18px 42px rgba(0,0,0,.28);
-  backdrop-filter:blur(18px) saturate(155%);
+  background:rgba(22,22,22,.82);
+  border-color:rgba(255,255,255,.08);
+  box-shadow:none;
+  backdrop-filter:blur(20px) saturate(180%);
 }
 body.theme-night .topbar{
-  background:linear-gradient(90deg,rgba(5,16,31,.94),rgba(9,39,62,.94) 52%,rgba(14,63,82,.94) 100%);
-  border-bottom:1px solid rgba(174,217,255,.08);
+  background:#1c1c1e;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 body.theme-night .searchbar,
 body.theme-night .sb-field,
 body.theme-night .ss-bot-quick,
 body.theme-night .ss-bot-input{
-  background:linear-gradient(180deg,rgba(12,27,43,.92),rgba(10,23,38,.92))!important;
-  color:#edf6ff;
-  border-color:rgba(174,217,255,.1)!important;
-  box-shadow:0 18px 36px rgba(1,8,18,.24);
+  background:#1c1c1e!important;
+  color:#f5f5f7;
+  border-color:rgba(255,255,255,.1)!important;
+  box-shadow:none;
 }
 body.theme-night .dropdown,
 body.theme-night .dropdown-nested,
@@ -3264,11 +3228,11 @@ body.theme-night .discover-jm-metric,
 body.theme-night .discover-jm-stat,
 body.theme-night .discover-jm-distance-table,
 body.theme-night .property-card{
-  background:linear-gradient(180deg,rgba(13,28,45,.92) 0%,rgba(9,23,38,.96) 100%)!important;
-  border:1px solid rgba(174,217,255,.1)!important;
-  color:#edf6ff!important;
-  box-shadow:0 20px 44px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.03);
-  backdrop-filter:blur(14px) saturate(140%);
+  background:#1c1c1e!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  color:#f5f5f7!important;
+  box-shadow:none;
+  backdrop-filter:none;
 }
 body.theme-night .tour-card:hover,
 body.theme-night .shop-card:hover,
@@ -3279,9 +3243,9 @@ body.theme-night .contact-box:hover,
 body.theme-night .dest-package-card:hover,
 body.theme-night .mba-getaway-card:hover,
 body.theme-night .property-card:hover{
-  box-shadow:0 26px 54px rgba(0,0,0,.24),0 0 0 1px rgba(239,135,49,.18),0 0 32px rgba(80,132,255,.12);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
 }
-body.theme-night .page-hero::before{background:linear-gradient(180deg,rgba(2,8,16,.34),rgba(2,8,16,.74))}
+body.theme-night .page-hero::before{background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.7))}
 body.theme-night .about-sec,
 body.theme-night .testi-sec,
 body.theme-night .reviews-sec,
@@ -3296,8 +3260,7 @@ body.theme-night .blog-page,
 body.theme-night .passport-renewal-page,
 body.theme-night .contactpage,
 body.theme-night .policypage{
-  background:
-    linear-gradient(180deg,rgba(8,22,36,.94) 0%,rgba(10,28,44,.96) 52%,rgba(8,22,36,.98) 100%)!important;
+  background:#000!important;
 }
 body.theme-night .sec-title,
 body.theme-night .ph-title,
@@ -3323,7 +3286,7 @@ body.theme-night .discover-jm-title,
 body.theme-night .discover-jm-media-copy h3,
 body.theme-night .discover-jm-destination span,
 body.theme-night .policy-head h2{
-  color:#f6fbff!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .sec-sub,
 body.theme-night .tc-copy,
@@ -3351,59 +3314,49 @@ body.theme-night .discover-jm-source-card p,
 body.theme-night .discover-jm-source-link span,
 body.theme-night .discover-jm-hidden p,
 body.theme-night .discover-jm-footnote{
-  color:#bcd0e6!important;
+  color:#86868b!important;
 }
 body.theme-night .utility-link{
-  background:linear-gradient(180deg,rgba(15,34,54,.95),rgba(10,24,39,.95));
-  border-color:rgba(174,217,255,.12);
-  color:#f5fbff!important;
-  box-shadow:0 14px 30px rgba(0,0,0,.22);
+  background:#1c1c1e;
+  border-color:rgba(255,255,255,.08);
+  color:#f5f5f7!important;
+  box-shadow:none;
 }
 body.theme-night .theme-toggle-btn{
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 28% 24%,rgba(255,255,255,.2),transparent 24%),
-    linear-gradient(135deg,#102844,#0f3d62 48%,#0e5f73 100%);
-  color:#fff!important;
-  border-color:rgba(186,228,255,.2);
-  box-shadow:0 0 0 1px rgba(186,228,255,.08),0 16px 34px rgba(0,0,0,.24),0 0 24px rgba(67,217,173,.12);
+  background:#2c2c2e;
+  color:#f5f5f7!important;
+  border-color:rgba(255,255,255,.12);
+  box-shadow:none;
 }
-body.theme-night .theme-toggle-btn::before{
-  content:'';
-  position:absolute;
-  inset:-45% auto auto -20%;
-  width:90%;
-  height:180%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  transform:rotate(24deg);
-  animation:themeToggleSweep 3.4s ease-in-out infinite;
-}
-@keyframes themeToggleSweep{
-  0%,100%{left:-55%;opacity:.12}
-  50%{left:120%;opacity:.34}
-}
+body.theme-night .theme-toggle-btn::before{content:none}
 body.theme-night .theme-toggle-btn:hover,
 body.theme-night .theme-toggle-btn.act{
-  transform:translateY(-2px) scale(1.02);
-  box-shadow:0 0 0 1px rgba(186,228,255,.12),0 18px 34px rgba(0,0,0,.26),0 0 32px rgba(239,135,49,.18);
+  transform:translateY(-1px);
+  background:#3a3a3c;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 body.theme-night .btn-primary,
 body.theme-night .btn-book{
-  background:linear-gradient(135deg,#ef8731,#f3a54e 55%,#ffd089);
+  background:#ef8731;
   color:#fff!important;
-  box-shadow:0 16px 34px rgba(239,135,49,.26);
+  box-shadow:none;
+}
+body.theme-night .btn-primary:hover,
+body.theme-night .btn-book:hover{
+  background:#f59a4a;
 }
 body.theme-night .btn-secondary,
 body.theme-night .btn-outline{
-  background:rgba(255,255,255,.03);
-  border-color:rgba(186,228,255,.24)!important;
-  color:#f5fbff!important;
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.16)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .btn-secondary:hover,
 body.theme-night .btn-outline:hover{
-  background:rgba(255,255,255,.08)!important;
-  border-color:rgba(239,135,49,.34)!important;
+  background:rgba(255,255,255,.1)!important;
+  border-color:rgba(255,255,255,.24)!important;
 }
 body.theme-night input,
 body.theme-night select,
@@ -3417,20 +3370,20 @@ body.theme-night .fg textarea,
 body.theme-night .field-col input,
 body.theme-night .field-col textarea,
 body.theme-night .field-col select{
-  background:linear-gradient(180deg,rgba(9,24,38,.98),rgba(12,29,46,.98))!important;
-  border-color:rgba(174,217,255,.12)!important;
-  color:#f5fbff!important;
+  background:#1c1c1e!important;
+  border-color:rgba(255,255,255,.1)!important;
+  color:#f5f5f7!important;
   box-shadow:none;
 }
 body.theme-night input::placeholder,
-body.theme-night textarea::placeholder{color:rgba(188,208,230,.68)!important}
+body.theme-night textarea::placeholder{color:rgba(255,255,255,.3)!important}
 body.theme-night .discover-jm-chip{
-  background:rgba(255,255,255,.03)!important;
-  color:#eaf4ff!important;
+  background:rgba(255,255,255,.06)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .discover-jm-chip:hover,
 body.theme-night .discover-jm-chip.on{
-  background:linear-gradient(135deg,#ef8731,#f3a54e)!important;
+  background:#ef8731!important;
   color:#fff!important;
   border-color:transparent!important;
 }
@@ -3439,31 +3392,25 @@ body.theme-night .mba-getaway-highlights span,
 body.theme-night .discover-jm-hidden-label,
 body.theme-night .discover-jm-metric,
 body.theme-night .discover-jm-stat{
-  background:rgba(255,255,255,.04)!important;
-  border-color:rgba(174,217,255,.09)!important;
-  color:#f5fbff!important;
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.08)!important;
+  color:#f5f5f7!important;
 }
 body.theme-night .lamtour-stage{
-  background:
-    radial-gradient(circle at 20% 16%,rgba(255,245,211,.16),transparent 14%),
-    radial-gradient(circle at 76% 14%,rgba(128,167,255,.14),transparent 18%),
-    linear-gradient(180deg,#020811 0%,#081a30 26%,#08213a 58%,#04101e 100%);
+  background:#000;
 }
 body.theme-night .lamtour-stage::before{
-  background:
-    radial-gradient(circle at 20% 18%,rgba(255,255,255,.09),transparent 16%),
-    radial-gradient(circle at 74% 12%,rgba(255,255,255,.05),transparent 10%),
-    linear-gradient(180deg,rgba(255,255,255,.03) 0%,rgba(255,255,255,0) 24%,rgba(0,0,0,.3) 82%,rgba(0,0,0,.46) 100%);
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.4) 100%);
 }
 body.theme-night .lamtour-stage::after{
-  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.96) 0%,rgba(212,233,255,.86) 26%,rgba(125,161,210,.34) 56%,rgba(125,161,210,0) 76%);
-  box-shadow:0 0 90px rgba(146,181,226,.28),0 0 34px rgba(255,245,211,.22);
+  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.9) 0%,rgba(200,200,200,.5) 30%,transparent 70%);
+  box-shadow:0 0 60px rgba(255,255,255,.15);
 }
 body.theme-night .dest-explorer-overlay,
 body.theme-night .slide::before{
-  background:linear-gradient(180deg,rgba(4,12,21,.14) 0%,rgba(4,12,21,.36) 34%,rgba(4,12,21,.86) 100%);
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.4) 40%,rgba(0,0,0,.85) 100%);
 }
-body.theme-night .footer{background:linear-gradient(180deg,#07111d 0%,#06111a 100%)!important}
+body.theme-night .footer{background:#000!important}
 body.theme-night .footer-wordmark span,
 body.theme-night .sec-pre,
 body.theme-night .dest-packages-kicker,
@@ -8995,24 +8942,24 @@ body.theme-night .page .tag{
 .team-gloss-body p{font-size:12px!important;line-height:1.75!important} 
 @media (max-width:768px){.team-gloss-grid{grid-template-columns:1fr}.team-gloss-media img{width:112px!important;height:112px!important}.team-gloss-tag{left:92px!important;top:82px!important}} 
 
-/* Luxury night mode redesign */
-body.theme-night{background:radial-gradient(circle at top,rgba(16,43,70,.88),rgba(4,11,20,1) 42%,rgba(2,7,14,1) 100%)!important;color:rgba(240,247,255,.88)!important} 
-body.theme-night::before{background:radial-gradient(circle at 15% 20%,rgba(112,194,87,.08),rgba(112,194,87,0) 24%),radial-gradient(circle at 85% 10%,rgba(239,135,49,.12),rgba(239,135,49,0) 24%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))!important;opacity:1!important} 
-body.theme-night .navbar{background:rgba(5,12,22,.72)!important;border-bottom-color:rgba(255,255,255,.08)!important;box-shadow:0 18px 40px rgba(0,0,0,.28)!important} 
-body.theme-night .topbar{background:linear-gradient(90deg,#031323,#0a2a41 55%,#0a3040 100%)!important} 
-body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-mag-card,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:linear-gradient(180deg,rgba(10,20,34,.9),rgba(6,14,24,.92))!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 24px 54px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.05)!important;color:rgba(240,247,255,.88)!important} 
-body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,body.theme-night .partners-sec,body.theme-night .about-sec{background:transparent!important} 
-body.theme-night .shop-card::before{opacity:.5} 
-body.theme-night .sc-meta span,body.theme-night .shop-hero-tag,body.theme-night .partner-tag,body.theme-night .blog-chip--soft{background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.08)!important;color:#d5e7ff!important} 
-body.theme-night .sec-title,body.theme-night .bc-title,body.theme-night .team-gloss-body h3,body.theme-night .partners-grid-title h3,body.theme-night .pd-name,body.theme-night .ph-title,body.theme-night .sc-name,body.theme-night .shop-hero-copy h3,body.theme-night .partners-premium-aside h4{color:#f4f8ff!important} 
-body.theme-night .sec-sub,body.theme-night .bc-excerpt,body.theme-night .team-gloss-body p,body.theme-night .partner-note,body.theme-night .sc-desc,body.theme-night .shop-hero-aside p,body.theme-night .discover-jm-source-card p{color:rgba(219,232,246,.72)!important} 
-body.theme-night .blog-side-card--cta{background:linear-gradient(135deg,rgba(12,46,74,.96),rgba(11,67,91,.95) 58%,rgba(176,96,34,.92) 140%)!important} 
-body.theme-night .theme-toggle-btn{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02))!important;border:1px solid rgba(255,255,255,.08)!important;box-shadow:0 10px 24px rgba(0,0,0,.2)} 
-body.theme-night .cart-panel{background:linear-gradient(180deg,rgba(8,16,28,.96),rgba(4,10,18,.98))!important;border-left-color:rgba(255,255,255,.08)!important} 
-body.theme-night .cart-progress,body.theme-night .cart-empty,body.theme-night .ci-qty{background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.08)!important} 
-body.theme-night .ci-qty button,body.theme-night .cart-mini-btn{background:rgba(255,255,255,.06)!important;color:#eef6ff!important;border-color:rgba(255,255,255,.08)!important} 
-body.theme-night .cart-panel-head,body.theme-night .cart-panel-foot{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))!important} 
-body.theme-night .logo-image{border:none!important;border-radius:0!important;padding:0!important;box-shadow:none!important;filter:drop-shadow(0 12px 24px rgba(0,0,0,.28))!important} 
+/* Apple-style night mode overrides */
+body.theme-night{background:#000!important;color:#f5f5f7!important}
+body.theme-night::before{content:none!important;background:none!important}
+body.theme-night .navbar{background:rgba(22,22,22,.82)!important;border-bottom-color:rgba(255,255,255,.08)!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(180%)}
+body.theme-night .topbar{background:#1c1c1e!important}
+body.theme-night .searchbar,body.theme-night .dropdown,body.theme-night .dropdown-nested,body.theme-night .shop-card,body.theme-night .blog-mag-card,body.theme-night .blog-side-card,body.theme-night .team-gloss-card,body.theme-night .partners-premium-aside,body.theme-night .shop-hero-aside,body.theme-night .discover-jm-copy,body.theme-night .discover-jm-source-card,body.theme-night .discover-jm-hidden,body.theme-night .discover-jm-search,body.theme-night .discover-jm-chip,body.theme-night .discover-jm-source-link,body.theme-night .discover-jm-metric,body.theme-night .discover-jm-stat,body.theme-night .discover-jm-distance-table,body.theme-night .property-card,body.theme-night .review-card,body.theme-night .team-card,body.theme-night .contact-box,body.theme-night .booking-form,body.theme-night .info-card,body.theme-night .faq-card,body.theme-night .dest-packages-shell,body.theme-night .dt-tour-card,body.theme-night .tour-note-box,body.theme-night .postcard-sec,body.theme-night .landmark-card,body.theme-night .landmark-meta,body.theme-night .customer-card,body.theme-night .passport-card,body.theme-night .community-panel,body.theme-night .special-card{background:#1c1c1e!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important;color:#f5f5f7!important}
+body.theme-night .shop-sec,body.theme-night .blog-editorial-sec,body.theme-night .partners-sec,body.theme-night .about-sec{background:#000!important}
+body.theme-night .shop-card::before{opacity:.5}
+body.theme-night .sc-meta span,body.theme-night .shop-hero-tag,body.theme-night .partner-tag,body.theme-night .blog-chip--soft{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important;color:#f5f5f7!important}
+body.theme-night .sec-title,body.theme-night .bc-title,body.theme-night .team-gloss-body h3,body.theme-night .partners-grid-title h3,body.theme-night .pd-name,body.theme-night .ph-title,body.theme-night .sc-name,body.theme-night .shop-hero-copy h3,body.theme-night .partners-premium-aside h4{color:#f5f5f7!important}
+body.theme-night .sec-sub,body.theme-night .bc-excerpt,body.theme-night .team-gloss-body p,body.theme-night .partner-note,body.theme-night .sc-desc,body.theme-night .shop-hero-aside p,body.theme-night .discover-jm-source-card p{color:#86868b!important}
+body.theme-night .blog-side-card--cta{background:#2c2c2e!important}
+body.theme-night .theme-toggle-btn{background:#2c2c2e!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:none}
+body.theme-night .cart-panel{background:#1c1c1e!important;border-left-color:rgba(255,255,255,.08)!important}
+body.theme-night .cart-progress,body.theme-night .cart-empty,body.theme-night .ci-qty{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important}
+body.theme-night .ci-qty button,body.theme-night .cart-mini-btn{background:rgba(255,255,255,.08)!important;color:#f5f5f7!important;border-color:rgba(255,255,255,.1)!important}
+body.theme-night .cart-panel-head,body.theme-night .cart-panel-foot{background:rgba(255,255,255,.03)!important}
+body.theme-night .logo-image{border:none!important;border-radius:0!important;padding:0!important;box-shadow:none!important;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))!important}
 </style>
 </head>
 <body>
@@ -12186,12 +12133,6 @@ body.theme-night .page .tag{
             <h4>Club Mobay VIP Lounge: Everything to Know</h4>
             <p>Fast-track the airport experience with premium lounge access, arrival support, and a smoother first impression of Jamaica.</p>
           </article>
-          <article class="blog-side-card blog-side-card--cta">
-            <span class="blog-chip blog-chip--dark">Plan with Sight Seers</span>
-            <h4>Need a polished itinerary?</h4>
-            <p>Turn inspiration into a custom experience with tours, transfers, villa support, and concierge-style planning.</p>
-            <a href="#" class="btn-primary" onclick="nav('booking');return false;"><i class="fas fa-paper-plane"></i>Start Planning</a>
-          </article>
         </aside>
       </div>
 
@@ -15109,7 +15050,7 @@ function bindBookingSelectionSync(){
   }
 }
 function applyBookingPrefill(prefill={}){
-  const map=[['b_dest',prefill.destination||''],['b_type',prefill.type||''],['b_package',prefill.packageName||'']];
+  const map=[['b_dest',prefill.destination||'Jamaica'],['b_type',prefill.type||''],['b_package',prefill.packageName||'']];
   map.forEach(([id,val])=>{
     const el=document.getElementById(id);
     if(!el||!val) return;
@@ -15164,7 +15105,7 @@ function openBookingCustom(destination, packageName, type='Start Planning', note
   nav('booking');
   setTimeout(()=>{
     applyBookingPrefill({
-      destination:destination||'',
+      destination:destination||'Jamaica',
       type:bookingType,
       packageName:packageName||'',
       format:'',
@@ -28980,6 +28921,8 @@ document.addEventListener('DOMContentLoaded', function(){
 function openYachtBooking(title, category, note){
   if (typeof nav === 'function') nav('booking');
   setTimeout(function(){
+    var dest = document.getElementById('b_dest');
+    if(dest){var jm=[...dest.options].find(o=>o.text==='Jamaica');if(jm)dest.value=jm.value;}
     var service = document.getElementById('b_service');
     var notes = document.getElementById('b_notes');
     if(service){
