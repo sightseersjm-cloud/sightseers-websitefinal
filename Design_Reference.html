@@ -115,6 +115,10 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .sb-field i{color:var(--orange);font-size:18px;min-width:18px}
 .sb-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:3px}
 .sb-select,.sb-input{border:none;outline:none;font-family:'Raleway',sans-serif;font-size:13px;font-weight:600;color:var(--dark);background:transparent;width:100%;cursor:pointer}
+.sb-date-row{display:flex;align-items:center;gap:6px}
+.sb-date-input{width:auto;flex:1;min-width:0;padding:2px 0;font-size:12px;cursor:pointer}
+.sb-date-input::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6}
+.sb-date-sep{font-size:12px;color:var(--grey);flex-shrink:0}
 .sb-btn{background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;border:none;padding:0 34px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;gap:10px;transition:all .25s;white-space:nowrap}
 .sb-btn:hover{background:linear-gradient(135deg,var(--navy),#0d5371);transform:translateY(-1px)}
 
@@ -9166,11 +9170,11 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <!-- SEARCH BAR -->
 <div class="searchbar">
   <div class="sb-wrap">
-    <div class="sb-field"><i class="fas fa-map-marker-alt"></i><div><div class="sb-label">Destination</div><select class="sb-select"><option>All Caribbean</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curaçao</option></select></div></div>
-    <div class="sb-field"><i class="fas fa-calendar-alt"></i><div><div class="sb-label">When Are You Traveling</div><select class="sb-select"><option>Any Month</option><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select></div></div>
-    <div class="sb-field"><i class="fas fa-compass"></i><div><div class="sb-label">Experience Style</div><select class="sb-select"><option>All Excursions</option><option>Water Adventures</option><option>Land Excursions</option><option>MBA Experiences</option><option>Custom Packages</option><option>Yacht Charters</option><option>Efoil Surfboarding</option></select></div></div>
-    <div class="sb-field"><i class="fas fa-users"></i><div><div class="sb-label">Travel Party</div><select class="sb-select"><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
-    <button class="sb-btn" onclick="nav('tours')"><i class="fas fa-search"></i>Discover Experiences</button>
+    <div class="sb-field"><i class="fas fa-map-marker-alt"></i><div><div class="sb-label">Destination</div><select class="sb-select" id="sbDest"><option value="">All Caribbean</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curaçao</option></select></div></div>
+    <div class="sb-field"><i class="fas fa-calendar-alt"></i><div><div class="sb-label">Travel Dates</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
+    <div class="sb-field"><i class="fas fa-compass"></i><div><div class="sb-label">Experience Style</div><select class="sb-select" id="sbStyle"><option value="">All Excursions</option><option>Water Adventures</option><option>Land Excursions</option><option>MBA Experiences</option><option>Custom Packages</option><option>Yacht Charters</option><option>Efoil Surfboarding</option></select></div></div>
+    <div class="sb-field"><i class="fas fa-users"></i><div><div class="sb-label">Travel Party</div><select class="sb-select" id="sbParty"><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
+    <button class="sb-btn" onclick="submitSearchBar()"><i class="fas fa-paper-plane"></i>Submit</button>
   </div>
 </div>
 
@@ -15098,6 +15102,35 @@ function openBookingCustom(destination, packageName, type='Start Planning', note
       notes:notes||`Interested in ${packageName||'a custom experience'}${destination?` in ${destination}`:''}.`
     });
   },120);
+}
+function submitSearchBar(){
+  const dest=document.getElementById('sbDest')?.value||'';
+  const dateFrom=document.getElementById('sbDateFrom')?.value||'';
+  const dateTo=document.getElementById('sbDateTo')?.value||'';
+  const style=document.getElementById('sbStyle')?.value||'';
+  const party=document.getElementById('sbParty')?.value||'';
+  const parts=[];
+  if(dest) parts.push(`Destination: ${dest}`);
+  if(dateFrom){
+    const df=new Date(dateFrom+'T12:00:00');
+    parts.push(`Travel dates: ${df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}${dateTo?' – '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):''}`);
+  }
+  if(style) parts.push(`Experience style: ${style}`);
+  if(party) parts.push(`Travel party: ${party}`);
+  const noteText=parts.length?parts.join('. ')+'.' :'Interested in exploring Caribbean experiences with Sight Seers.';
+  const bookingType=style||'Custom Package';
+  nav('booking');
+  setTimeout(()=>{
+    applyBookingPrefill({
+      destination:dest||'Jamaica',
+      type:bookingType,
+      packageName:'',
+      format:style||'',
+      notes:noteText
+    });
+    const dateField=document.getElementById('b_date');
+    if(dateField&&dateFrom) dateField.value=dateFrom;
+  },140);
 }
 function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
   const activePage = document.querySelector('.page.on')?.id || '';
