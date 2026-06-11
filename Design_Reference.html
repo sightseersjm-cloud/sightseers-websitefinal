@@ -9976,7 +9976,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">After-dark standout</small>
             <h3>Night Glow Lagoon Experience</h3>
             <p>Two memorable moments, one smooth booking. A glowing-water evening designed to feel rare, easy, and worth saying yes to.</p>
-            <div class="popular-meta"><strong>from $95</strong><span class="popular-cta">Add to Cart</span></div>
+            <div class="popular-meta"><strong>from $95</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAddPopularTour('Jamaica','Blue Hole Escape',120,'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=85','Land Experience','Interested in the Blue Hole Escape in Jamaica with waterfall stops and a well-paced adventure day.')">
@@ -9986,7 +9986,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Adventure favorite</small>
             <h3>Blue Hole Escape</h3>
             <p>Cliff jumps, hidden pools, and a clear plan from start to finish. Built for guests who want adventure without the friction.</p>
-            <div class="popular-meta"><strong>from $120</strong><span class="popular-cta">Add to Cart</span></div>
+            <div class="popular-meta"><strong>from $120</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAddPopularTour('Jamaica','Bamboo Rafting Experience',75,'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85','Bamboo Rafting','Interested in the Bamboo Rafting Experience in Jamaica with a calm scenic pace and premium touches.')">
@@ -9996,7 +9996,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Soft-luxury favorite</small>
             <h3>Bamboo Rafting Experience</h3>
             <p>Slow, scenic, and beautifully paced. A relaxed river experience for couples, friends, and guests who want to unwind well.</p>
-            <div class="popular-meta"><strong>from $75</strong><span class="popular-cta">Add to Cart</span></div>
+            <div class="popular-meta"><strong>from $75</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
         <article class="popular-card" onclick="quickAddPopularTour('Jamaica','Catamaran Party Cruise',110,'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85','Water Experience','Interested in the Catamaran Party Cruise in Jamaica with music, open-bar energy and seamless group planning.')">
@@ -10006,7 +10006,7 @@ body.theme-night .page .tag{
             <small class="popular-kicker">Social energy</small>
             <h3>Catamaran Party Cruise</h3>
             <p>Sun, music, and open-water energy. A clean, easy choice for groups who want the day to feel lively from the moment it starts.</p>
-            <div class="popular-meta"><strong>from $110</strong><span class="popular-cta">Add to Cart</span></div>
+            <div class="popular-meta"><strong>from $110</strong><span class="popular-cta">View Experience</span></div>
           </div>
         </article>
       </div>
@@ -10147,8 +10147,7 @@ body.theme-night .page .tag{
           </div>
         </div>
         <div class="tour-side-actions">
-          <button class="pd-add-btn" id="tdAddBtn" onclick="addTourToCart()"><i class="fas fa-shopping-bag"></i>Add to Cart</button>
-          <button class="tour-secondary-btn" id="tdBookBtn" onclick="bookTourNow()"><i class="fas fa-calendar-check"></i>Request This Experience</button>
+          <button class="pd-add-btn" id="tdAddBtn" onclick="openBookingForTour()"><i class="fas fa-paper-plane"></i>Request This Experience</button>
         </div>
         <div class="tour-side-points" id="tdMeta"></div>
         <div class="tour-highlight-row" id="tdHighlights"></div>
@@ -12199,15 +12198,6 @@ body.theme-night .page .tag{
           <div class="blog-sections luxe-blog-sections" id="blogSections"></div>
         </article>
         <aside class="luxe-blog-side">
-          <div class="luxe-blog-side-card">
-            <span class="luxe-side-overline">Plan the experience</span>
-            <h3>Turn this inspiration into a real itinerary.</h3>
-            <p id="blogCtaText">Ready to turn the article into a real trip? Let Sight Seers help you plan the right island experience.</p>
-            <div class="luxe-blog-side-actions">
-              <a href="#" class="btn-primary" onclick="closeBlog();nav('booking')"><i class="fas fa-paper-plane"></i>Plan This Trip</a>
-              <a href="#contact" class="btn-secondary" onclick="closeBlog();nav('contact')"><i class="fab fa-whatsapp"></i>Send Inquiry</a>
-            </div>
-          </div>
           <div class="luxe-blog-mini-gallery" id="blogMiniGallery"></div>
         </aside>
       </div>
@@ -12244,7 +12234,7 @@ body.theme-night .page .tag{
       <div class="tourmode-actions">
         <button class="btn-primary" onclick="restartRhythmTour()"><i class="fas fa-play"></i>Restart Tour</button>
         <button class="btn-outline" onclick="bookRhythm(currentRhythmKey)">Book This Ride <i class="fas fa-arrow-right"></i></button>
-        <button class="btn-outline" onclick="cartRhythm(currentRhythmKey)"><i class="fas fa-shopping-bag"></i>Add to Cart</button>
+        <button class="btn-outline" onclick="bookRhythm(currentRhythmKey)"><i class="fas fa-paper-plane"></i>Request Experience</button>
       </div>
       <div class="tourmode-chest" id="tourReward">
         <div class="tourmode-chest-icon"><i class="fas fa-gift"></i></div>
@@ -14895,9 +14885,9 @@ function openTour(id){
     bookBtn.innerHTML='<i class="fas fa-user-tie"></i>Schedule Consultation';
     bookBtn.onclick=()=>openBookingForTour();
   } else {
-    addBtn.innerHTML='<i class="fas fa-shopping-bag"></i>Add to Cart';
-    addBtn.onclick=addTourToCart;
-    bookBtn.innerHTML='<i class="fas fa-calendar-check"></i>Book This Tour';
+    addBtn.innerHTML='<i class="fas fa-paper-plane"></i>Request This Experience';
+    addBtn.onclick=()=>openBookingForTour();
+    bookBtn.style.display='none';
     bookBtn.onclick=bookTourNow;
   }
   setTimeout(()=>{window.scrollTo({top:0,behavior:'smooth'});},50);
@@ -15155,33 +15145,12 @@ function switchTourTab(btn,id){
   if(id==='gallery'){setTimeout(()=>document.getElementById('tdMainImg')?.scrollIntoView({behavior:'smooth',block:'center'}),40);}
 }
 function quickAddTour(id){
-  const t=TOURS.find(x=>x.id===id); if(!t||t.price===null) return;
-  const option=(t.options&&t.options[0])||'Standard Tour';
-  const existing=cart.find(i=>i.id===`tour-${t.id}`&&i.metaValue===option);
-  if(existing){existing.qty+=1;}else{cart.push({id:`tour-${t.id}`,name:t.title,price:t.price,img:t.imgs[0],metaLabel:'Experience',metaValue:option,qty:1});}
-  renderCart();
-  openCart();
+  const t=TOURS.find(x=>x.id===id); if(!t) return;
+  openBookingForTour(t.id);
 }
 
 function quickAddPopularTour(destination,title,price,img,type='Tour Experience',notes=''){
-  const cartId = `popular-${String(destination||'jamaica').toLowerCase().replace(/[^a-z0-9]+/g,'-')}-${String(title||'tour').toLowerCase().replace(/[^a-z0-9]+/g,'-')}`;
-  const existing = cart.find(i=>i.id===cartId && i.metaValue===type);
-  if(existing){
-    existing.qty += 1;
-  }else{
-    cart.push({
-      id: cartId,
-      name: title,
-      price: Number(price)||0,
-      img: img || '',
-      metaLabel: 'Experience',
-      metaValue: type || 'Tour Experience',
-      qty: 1,
-      notes: notes || ''
-    });
-  }
-  renderCart();
-  openCart();
+  openBookingCustom(destination||'Jamaica', title, type, notes||`Interested in ${title} in ${destination||'Jamaica'}.`);
 }
 
 function initDestinationTourCards(){
@@ -15496,25 +15465,7 @@ function parseDisplayPriceToNumber(value=''){
 }
 
 function addCustomPackageToCart(destination='', packageTitle='', packageType='Package', priceValue=0, imageUrl='', note=''){
-  const numericPrice = Number(priceValue) || 0;
-  const cartId = `custom-${slugifyDestination(destination)}-${String(packageTitle||'package').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}`;
-  const existing = cart.find(i=>i.id===cartId && i.metaValue===packageType);
-  if(existing){
-    existing.qty += 1;
-  }else{
-    cart.push({
-      id: cartId,
-      name: packageTitle || 'Curated Package',
-      price: numericPrice,
-      img: imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85',
-      metaLabel: 'Destination',
-      metaValue: destination || packageType || 'Caribbean',
-      qty: 1,
-      note: note || ''
-    });
-  }
-  renderCart();
-  openCart();
+  openStartPlanning(destination||'Jamaica', packageTitle, packageType, note||`Interested in ${packageTitle||'this package'} in ${destination||'Jamaica'}.`);
 }
 function renderDestinationCard(d){
   const active=d.name===activeDestination;
@@ -16886,8 +16837,7 @@ function quickAskSightSeers(text){
 function describeTourForBot(tour, opener='Open tour'){
   if(!tour) return [];
   const actions=[{label:opener,type:'tour',target:String(tour.id)}];
-  if(tour.price!==null) actions.push({label:'Add to Cart',type:'tourcart',target:String(tour.id)});
-  else actions.push({label:'Request Quote',type:'nav',target:'booking'});
+  actions.push({label:'Request Experience',type:'nav',target:'booking'});
   return actions;
 }
 function getBotReply(message){
@@ -16980,7 +16930,7 @@ function submitSightSeersBot(){
 function runSightSeersBotAction(action,target,label){
   if(action==='nav' && target){toggleSightSeersBot(false); nav(target); return;}
   if(action==='tour' && target){toggleSightSeersBot(false); openTour(Number(target)); return;}
-  if(action==='tourcart' && target){toggleSightSeersBot(false); openTour(Number(target)); setTimeout(()=>addTourToCart(),140); return;}
+  if(action==='tourcart' && target){toggleSightSeersBot(false); nav('booking'); return;}
   if(action==='product' && target){toggleSightSeersBot(false); openProduct(Number(target)); return;}
   if(action==='cart'){toggleSightSeersBot(false); openCart(); return;}
   if(action==='external' && target){window.open(target,'_blank'); return;}
@@ -35940,9 +35890,7 @@ body.theme-night .page .tag{
     const isJamaicaPackage = isPackage && item.country === 'Jamaica';
     const hasPrice = Number(item.priceValue||0) > 0;
     const packageTier = '';
-    const primaryAction = (hasPrice && !isPackage)
-      ? `<button type="button" class="btn-primary" onclick='addCustomPackageToCart(${JSON.stringify(item.country)}, ${JSON.stringify(item.title)}, ${JSON.stringify(typeLabel)}, ${Number(item.priceValue||0)}, ${JSON.stringify(item.image)}, ${JSON.stringify(note)})'><i class="fas fa-shopping-bag"></i>Add to Cart</button>`
-      : `<button type="button" class="btn-primary" onclick='openStartPlanning(${JSON.stringify(item.country)}, ${JSON.stringify(item.title)}, ${JSON.stringify(typeLabel)}, ${JSON.stringify(note)})'><i class="fas fa-paper-plane"></i>Inquire Now</button>`;
+    const primaryAction = `<button type="button" class="btn-primary" onclick='openStartPlanning(${JSON.stringify(item.country)}, ${JSON.stringify(item.title)}, ${JSON.stringify(typeLabel)}, ${JSON.stringify(note)})'><i class="fas fa-paper-plane"></i>Inquire Now</button>`;
     const metaMarkup = isJamaicaPackage
       ? ``
       : `<div>${isPackage ? '' : `<div class="curated-tour-price">${item.priceLabel && !item.priceLabel.toLowerCase().startsWith('from') && !item.priceLabel.toLowerCase().includes('custom') ? 'From ' + item.priceLabel : item.priceLabel}</div>`}<span class="curated-tour-duration">${item.duration}</span></div>`;
