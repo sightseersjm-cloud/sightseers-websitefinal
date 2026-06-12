@@ -12699,6 +12699,7 @@ body.theme-night .vt-empty-state h4{color:#fff}
 
 .vt-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:calc(100vw - 48px);max-width:1400px;height:calc(100vh - 48px);max-height:920px;z-index:10001;border-radius:20px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);opacity:0;pointer-events:none;transition:all .5s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;background:#f0f2f5}
 .vt-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+#vt-modal-content{width:100%;height:100%;overflow:hidden}
 
 .vt-modal .vt-dash-frame{border-radius:0!important;border:none!important;box-shadow:none!important;height:100%;display:flex;flex-direction:column}
 .vt-modal .vt-dash-body{flex:1;overflow:auto}
@@ -13745,29 +13746,31 @@ function vtBuyHotspot(){
 })();
 
 /* ═══════ APPLE-STYLE EXPAND ═══════ */
+var vtExpandedFrame=null;var vtExpandedParent=null;var vtExpandedNext=null;
 function vtExpandDash(which){
-  var overlay=document.getElementById('vt-modal-overlay');
   var modal=document.getElementById('vt-modal');
   if(modal.classList.contains('open')){vtCollapseDash();return}
   var frame=document.getElementById(which==='explorer'?'vt-explorer-frame':'vt-guide-frame');
   if(!frame)return;
+  vtExpandedFrame=frame;
+  vtExpandedParent=frame.parentNode;
+  vtExpandedNext=frame.nextSibling;
   var content=document.getElementById('vt-modal-content');
-  content.innerHTML=frame.outerHTML;
-  /* Remove ID from clone to avoid duplicates */
-  content.firstChild.removeAttribute('id');
-  /* Re-wire all onclick handlers */
-  content.querySelectorAll('[onclick]').forEach(function(el){
-    var fn=el.getAttribute('onclick');
-    el.setAttribute('onclick',fn);
-  });
-  overlay.classList.add('open');modal.classList.add('open');
+  content.appendChild(frame);
+  document.getElementById('vt-modal-overlay').classList.add('open');
+  modal.classList.add('open');
   document.body.style.overflow='hidden';
-  vtStartStream();
+  if(!vtStreamActive)vtStartStream();
 }
 function vtCollapseDash(){
   document.getElementById('vt-modal-overlay').classList.remove('open');
   document.getElementById('vt-modal').classList.remove('open');
   document.body.style.overflow='';
+  if(vtExpandedFrame&&vtExpandedParent){
+    if(vtExpandedNext){vtExpandedParent.insertBefore(vtExpandedFrame,vtExpandedNext)}
+    else{vtExpandedParent.appendChild(vtExpandedFrame)}
+  }
+  vtExpandedFrame=null;vtExpandedParent=null;vtExpandedNext=null;
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape')vtCollapseDash()});
 
