@@ -12694,6 +12694,8 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-360-market-floor{position:absolute;bottom:0;left:0;width:300%;height:25%;background:linear-gradient(180deg,#8b5230 0%,#a0694a 30%,#b8815e 60%,#c4915e 100%);animation:vtPanSlow 30s linear infinite}
 .vt-360-market-people{position:absolute;bottom:20%;left:0;width:300%;height:35%}
 
+/* ======== EXPAND STACKING FIX ======== */
+body.vt-expanding .page,body.vt-expanding .reveal,body.vt-expanding .vt-sec,body.vt-expanding .vt-wrap,body.vt-expanding .vt-dash-panel,body.vt-expanding .vt-dash-showcase{transform:none!important;animation:none!important;will-change:auto!important;filter:none!important;perspective:none!important;contain:none!important;transition:none!important}
 /* ======== APPLE-STYLE EXPAND/POPOUT ======== */
 .vt-expand-btn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:13px;color:rgba(255,255,255,.7)}
 .vt-expand-btn:hover{background:rgba(255,255,255,.2);color:#fff;transform:scale(1.1)}
@@ -12708,7 +12710,7 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-dash-frame.vt-fullscreen .vt-session-video{min-height:420px!important}
 .vt-dash-frame.vt-fullscreen .vt-live-grid{grid-template-columns:repeat(3,1fr)}
 .vt-dash-frame.vt-fullscreen .vt-expand-btn i::before{content:"\f066"}
-@keyframes vtFullIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@keyframes vtFullIn{from{opacity:0}to{opacity:1}}
 
 .vt-fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10000;opacity:0;pointer-events:none;transition:opacity .35s}
 .vt-fs-overlay.open{opacity:1;pointer-events:auto}
@@ -14459,6 +14461,7 @@ function vtExpandDash(which){
   var frame=document.getElementById(which==='explorer'?'vt-explorer-frame':'vt-guide-frame');
   if(!frame)return;
   vtExpandedFrame=frame;
+  document.body.classList.add('vt-expanding');
   var ov=document.getElementById('vt-fs-overlay');
   if(!ov){ov=document.createElement('div');ov.id='vt-fs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseDash;document.body.appendChild(ov)}
   var cl=document.getElementById('vt-fs-close');
@@ -14472,6 +14475,7 @@ function vtExpandDash(which){
 function vtCollapseDash(){
   if(!vtExpandedFrame)return;
   vtExpandedFrame.classList.remove('vt-fullscreen');
+  document.body.classList.remove('vt-expanding');
   var ov=document.getElementById('vt-fs-overlay');if(ov)ov.classList.remove('open');
   var cl=document.getElementById('vt-fs-close');if(cl)cl.classList.remove('open');
   document.body.style.overflow='';
@@ -14513,6 +14517,7 @@ function vtExpandSession(){
   var session=document.getElementById('vt-active-session');if(!session)return;
   if(vtSessionExpanded){vtCollapseSession();return}
   vtSessionExpanded=true;
+  document.body.classList.add('vt-expanding');
   var ov=document.getElementById('vt-sfs-overlay');
   if(!ov){ov=document.createElement('div');ov.id='vt-sfs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseSession;document.body.appendChild(ov)}
   ov.classList.add('open');
@@ -14534,6 +14539,7 @@ function vtCollapseSession(){
     var body=session.closest('.vt-dash-body');if(body)body.style.overflow='';
     var main=session.closest('.vt-dash-main');if(main)main.style.overflow='';
   }
+  document.body.classList.remove('vt-expanding');
   var ov=document.getElementById('vt-sfs-overlay');if(ov)ov.classList.remove('open');
   document.body.style.overflow='';
 }
