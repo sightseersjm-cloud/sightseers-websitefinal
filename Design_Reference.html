@@ -13063,18 +13063,19 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 .vt-sentiment-bar{height:24px;background:rgba(255,255,255,.06);border-radius:12px;overflow:hidden}
 .vt-sentiment-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:12px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;transition:width .5s}
 .vt-sentiment-fill span{color:#fff;font-size:10px;font-weight:700}
-.vt-sentiment-emojis{display:flex;flex-wrap:wrap;gap:12px;padding:16px 0;justify-content:center}
-.vt-emoji-float{font-size:24px;animation:vtEmojiPop 2s ease infinite}
-@keyframes vtEmojiPop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.15)}}
+.vt-sentiment-emojis{display:flex;flex-wrap:wrap;gap:16px;padding:20px 0;justify-content:center;perspective:600px}
+.vt-emoji-float{font-size:36px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.1);animation:vtEmojiPop 2.5s ease infinite;cursor:default;transition:transform .2s,box-shadow .2s;position:relative}
+.vt-emoji-float:hover{transform:scale(1.2) translateY(-4px)!important;box-shadow:0 8px 28px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15);z-index:2}
+@keyframes vtEmojiPop{0%{transform:translateY(0) scale(1) rotateX(0deg)}25%{transform:translateY(-6px) scale(1.08) rotateX(3deg)}50%{transform:translateY(-10px) scale(1.12) rotateX(-2deg)}75%{transform:translateY(-4px) scale(1.05) rotateX(1deg)}100%{transform:translateY(0) scale(1) rotateX(0deg)}}
 .vt-sentiment-keywords{padding:16px;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.04);text-align:center}
 .vt-sentiment-kw-title{font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:12px}
 .vt-kw{display:inline-block;color:rgba(255,255,255,.6);margin:4px 8px;font-weight:600}
 
 /* ======== TIP/GIFT STREAM ======== */
 .vt-gift-stream{display:flex;flex-direction:column;gap:6px}
-.vt-gift-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid rgba(255,255,255,.04);transition:all .2s}
+.vt-gift-item{display:flex;align-items:center;gap:14px;padding:12px 16px;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.05);transition:all .25s}
 .vt-gift-item:hover{background:rgba(255,255,255,.04)}
-.vt-gift-emoji{font-size:24px}
+.vt-gift-emoji{font-size:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.15);flex-shrink:0}
 .vt-gift-info{flex:1}
 .vt-gift-info strong{color:#fff;font-size:12px}
 .vt-gift-info small{display:block;color:rgba(255,255,255,.35);font-size:10px;margin-top:2px}
@@ -13218,6 +13219,14 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 .vt-dash-light .vt-pricing-row span{color:#617087!important}
 .vt-dash-light .vt-pricing-val strong{color:var(--navy)!important}
 .vt-dash-light .vt-toggle-slider{background:rgba(0,0,0,.15)!important}
+.vt-dash-light .vt-emoji-float{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.06);box-shadow:0 4px 16px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.8)}
+.vt-dash-light .vt-emoji-float:hover{box-shadow:0 8px 28px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.9)}
+.vt-dash-light .vt-gift-emoji{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.06);box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.vt-dash-light .vt-gift-item{background:rgba(0,0,0,.01);border-color:rgba(0,0,0,.04)}
+.vt-dash-light .vt-gift-item:hover{background:rgba(0,0,0,.03)}
+.vt-dash-light .vt-sentiment-meter{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.06)}
+.vt-dash-light .vt-sentiment-bar{background:rgba(0,0,0,.06)}
+.vt-dash-light .vt-sentiment-keywords{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.04)}
 /* ======== V-TOURS RESPONSIVE ======== */
 @media(max-width:1024px){
 .vt-tabs{gap:0;flex-wrap:wrap}
@@ -13573,7 +13582,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                 </div>
                 <div class="vt-social-feed-label">Recent Activity</div>
                 <div class="vt-social-feed">
-                  <div class="vt-social-post"><div class="vt-social-post-avatar">KJ</div><div class="vt-social-post-body"><strong>Kevin J.</strong> completed <em>Blue Lagoon Morning Walk</em> and rated it <span class="stars"><i class="fas fa-star" style="color:#fbbf24"></i><i class="fas fa-star" style="color:#fbbf24"></i><i class="fas fa-star" style="color:#fbbf24"></i><i class="fas fa-star" style="color:#fbbf24"></i><i class="fas fa-star" style="color:#fbbf24"></i></span><div class="vt-social-post-time">12 minutes ago</div><div class="vt-social-post-text">"Absolutely incredible. The guide Marcus made us feel like we were really there. Bought a Blue Mahoe seedling!"</div></div></div>
+                  <div class="vt-social-post"><div class="vt-social-post-avatar">KJ</div><div class="vt-social-post-body"><strong>Kevin J.</strong> completed <em>Blue Lagoon Morning Walk</em> and rated it <span class="stars" style="letter-spacing:2px">&#11088;&#11088;&#11088;&#11088;&#11088;</span><div class="vt-social-post-time">12 minutes ago</div><div class="vt-social-post-text">"Absolutely incredible. The guide Marcus made us feel like we were really there. Bought a Blue Mahoe seedling!"</div></div></div>
                   <div class="vt-social-post"><div class="vt-social-post-avatar">MR</div><div class="vt-social-post-body"><strong>Mia R.</strong> earned the <em>Shopaholic</em> badge <i class="fas fa-shopping-cart" style="color:var(--orange)"></i><div class="vt-social-post-time">45 minutes ago</div></div></div>
                   <div class="vt-social-post"><div class="vt-social-post-avatar">TW</div><div class="vt-social-post-body"><strong>Tyler W.</strong> booked <em>Rio Grande River Raft Tour</em> for Saturday<div class="vt-social-post-time">2 hours ago</div><div class="vt-social-post-actions"><div class="vt-social-post-btn" onclick="vtToast('<i class=\'fas fa-check\'></i> You are booked for Rio Grande too!')">Join trip</div><div class="vt-social-post-btn sec" onclick="vtToast('<i class=\'fas fa-heart\'></i> Liked!')"><i class="fas fa-heart"></i></div></div></div></div>
                 </div>
@@ -13740,13 +13749,13 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
               <div class="vt-dash-view" id="vt-guide-sentiment">
                 <div class="vt-dash-header"><h2><i class="fas fa-smile-beam" style="color:var(--orange);margin-right:8px"></i>Live Sentiment</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats">
-                  <div class="vt-dash-stat"><strong style="font-size:28px"><i class="fas fa-smile" style="color:var(--orange)"></i></strong><span>Current Mood</span><small>Positive 94%</small></div>
+                  <div class="vt-dash-stat"><strong style="font-size:32px;line-height:1">&#128522;</strong><span>Current Mood</span><small>Positive 94%</small></div>
                   <div class="vt-dash-stat"><strong>247</strong><span>Active Viewers</span><small>Peak: 312</small></div>
                   <div class="vt-dash-stat"><strong>8.7</strong><span>Engagement Score</span><small>Above avg</small></div>
                   <div class="vt-dash-stat"><strong>42</strong><span>Chat Messages/Min</span><small>High activity</small></div>
                 </div>
                 <div class="vt-sentiment-meter"><div class="vt-sentiment-label">Crowd Mood</div><div class="vt-sentiment-bar"><div class="vt-sentiment-fill" style="width:94%"><span>94% Positive</span></div></div></div>
-                <div class="vt-sentiment-emojis"><span class="vt-emoji-float" style="animation-delay:0s"><i class="fas fa-heart" style="color:#ef4444"></i></span><span class="vt-emoji-float" style="animation-delay:.3s"><i class="fas fa-thumbs-up" style="color:var(--orange)"></i></span><span class="vt-emoji-float" style="animation-delay:.6s"><i class="fas fa-heart" style="color:#ef4444"></i></span><span class="vt-emoji-float" style="animation-delay:.9s"><i class="fas fa-fire" style="color:#f97316"></i></span><span class="vt-emoji-float" style="animation-delay:1.2s"><i class="fas fa-tree" style="color:#22c55e"></i></span><span class="vt-emoji-float" style="animation-delay:1.5s"><i class="fas fa-camera" style="color:#3b82f6"></i></span><span class="vt-emoji-float" style="animation-delay:1.8s"><i class="fas fa-hands" style="color:var(--orange)"></i></span></div>
+                <div class="vt-sentiment-emojis"><span class="vt-emoji-float" style="animation-delay:0s">&#128525;</span><span class="vt-emoji-float" style="animation-delay:.4s">&#128079;</span><span class="vt-emoji-float" style="animation-delay:.8s">&#10084;&#65039;</span><span class="vt-emoji-float" style="animation-delay:1.2s">&#128293;</span><span class="vt-emoji-float" style="animation-delay:1.6s">&#127796;</span><span class="vt-emoji-float" style="animation-delay:2s">&#128247;</span><span class="vt-emoji-float" style="animation-delay:2.4s">&#128588;</span></div>
                 <div class="vt-sentiment-keywords"><div class="vt-sentiment-kw-title">Top Chat Keywords</div><span class="vt-kw" style="font-size:18px">beautiful</span> <span class="vt-kw" style="font-size:14px">amazing</span> <span class="vt-kw" style="font-size:16px">wow</span> <span class="vt-kw" style="font-size:12px">Jamaica</span> <span class="vt-kw" style="font-size:15px">love this</span> <span class="vt-kw" style="font-size:13px">want to buy</span> <span class="vt-kw" style="font-size:11px">can you show</span> <span class="vt-kw" style="font-size:17px">stunning</span></div>
               </div>
 
@@ -13757,15 +13766,15 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                   <div class="vt-dash-stat"><strong>$284</strong><span>Today's Tips</span><small>32 gifts</small></div>
                   <div class="vt-dash-stat"><strong>$1,420</strong><span>This Week</span><small>+38% vs last</small></div>
                   <div class="vt-dash-stat"><strong>$5,840</strong><span>All Time Tips</span><small>Since Jan 2025</small></div>
-                  <div class="vt-dash-stat"><strong><i class="fas fa-tree" style="color:#22c55e"></i></strong><span>Top Gift</span><small>Palm Tree ($10)</small></div>
+                  <div class="vt-dash-stat"><strong style="font-size:28px;line-height:1">&#127796;</strong><span>Top Gift</span><small>Palm Tree ($10)</small></div>
                 </div>
                 <h4 style="color:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:20px 0 12px">Recent Gift Stream</h4>
                 <div class="vt-gift-stream">
-                  <div class="vt-gift-item"><span class="vt-gift-emoji"><i class="fas fa-tree" style="color:#22c55e"></i></span><div class="vt-gift-info"><strong>Kevin J.</strong> sent a Palm Tree<small>$10.00 — 2 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji"><i class="fas fa-star" style="color:#fbbf24"></i></span><div class="vt-gift-info"><strong>Mia R.</strong> sent a Gold Star<small>$5.00 — 5 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji"><i class="fas fa-fan" style="color:#a78bfa"></i></span><div class="vt-gift-info"><strong>Tyler W.</strong> sent a Conch Shell<small>$25.00 — 8 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji"><i class="fas fa-tree" style="color:#22c55e"></i></span><div class="vt-gift-info"><strong>Lisa M.</strong> sent a Palm Tree<small>$10.00 — 12 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji"><i class="fas fa-gem" style="color:#60a5fa"></i></span><div class="vt-gift-info"><strong>James P.</strong> sent a Diamond<small>$50.00 — 15 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127796;</span><div class="vt-gift-info"><strong>Kevin J.</strong> sent a Palm Tree<small>$10.00 — 2 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#11088;</span><div class="vt-gift-info"><strong>Mia R.</strong> sent a Gold Star<small>$5.00 — 5 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#128026;</span><div class="vt-gift-info"><strong>Tyler W.</strong> sent a Conch Shell<small>$25.00 — 8 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127796;</span><div class="vt-gift-info"><strong>Lisa M.</strong> sent a Palm Tree<small>$10.00 — 12 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#128142;</span><div class="vt-gift-info"><strong>James P.</strong> sent a Diamond<small>$50.00 — 15 min ago</small></div></div>
                 </div>
               </div>
 
