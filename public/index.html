@@ -12788,6 +12788,12 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 
 .vt-dash-showcase{margin-top:28px}
 .vt-dash-frame{background:#0d1b2a;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.vt-topbar-actions{display:flex;align-items:center;gap:8px}
+.vt-topbar-theme-btn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:13px;color:rgba(255,255,255,.7)}
+.vt-topbar-theme-btn:hover{background:rgba(255,255,255,.2);color:#fff;transform:scale(1.1)}
+.vt-dash-light .vt-topbar-theme-btn{background:rgba(0,0,0,.06);color:var(--navy)}
+.vt-dash-light .vt-topbar-theme-btn:hover{background:rgba(0,0,0,.1)}
+.vt-dash-light .vt-dash-topbar{background:var(--navy)}
 .vt-dash-topbar{display:flex;align-items:center;justify-content:space-between;background:var(--navy);padding:10px 20px;color:#fff;font-size:13px;font-weight:700}
 .vt-dash-topbar .vt-logo{font-size:15px;letter-spacing:1px}
 .vt-dash-topbar .vt-portal-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.5)}
@@ -13126,10 +13132,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
 
 /* ======== DASHBOARD LIGHT MODE ======== */
-.vt-dash-theme-btn{padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);font-size:12px;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .25s}
-.vt-dash-theme-btn:hover{background:rgba(255,255,255,.1);color:#fff}
-.vt-dash-light .vt-dash-theme-btn{border-color:rgba(0,0,0,.08);background:#fff;color:var(--navy)}
-.vt-dash-light .vt-dash-theme-btn:hover{background:#f0f2f5}
+
 
 .vt-dash-light{background:#f0f2f5!important;border-color:rgba(0,0,0,.08)!important;box-shadow:0 20px 60px rgba(0,0,0,.08)!important}
 .vt-dash-light .vt-dash-sidebar{background:#fff!important;border-right-color:rgba(0,0,0,.06)!important}
@@ -13202,6 +13205,24 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 .vt-dash-light .vt-replay-card-info strong{color:var(--navy)!important}
 .vt-dash-light .vt-replay-card-info span{color:#617087!important}
 .vt-dash-light .vt-replay-card-info small{color:#99a3b0!important}
+.vt-dash-light .vt-ai-bubble{background:rgba(0,0,0,.04)!important;border-color:rgba(0,0,0,.06)!important;color:#333!important}
+.vt-dash-light .vt-ai-msg.user .vt-ai-bubble{background:rgba(239,135,49,.1)!important;color:var(--navy)!important}
+.vt-dash-light .vt-ai-msg.user .vt-ai-avatar{background:linear-gradient(135deg,var(--navy),#0d5371)!important}
+.vt-dash-light .vt-ai-typing span{background:#99a3b0!important}
+.vt-dash-light .vt-passport-tier{background:rgba(0,0,0,.02)!important;border-color:rgba(0,0,0,.06)!important}
+.vt-dash-light .vt-passport-tier-info strong{color:var(--navy)!important}
+.vt-dash-light .vt-passport-tier-info span{color:#617087!important}
+.vt-dash-light .vt-passport-xp{background:rgba(0,0,0,.06)!important}
+.vt-dash-light .vt-passport-xp-label{color:#99a3b0!important}
+.vt-dash-light .vt-passport-stamps{color:#333!important}
+.vt-dash-light .vt-passport-stamp{background:rgba(0,0,0,.02)!important;border-color:rgba(0,0,0,.06)!important}
+.vt-dash-light .vt-social-friend{background:rgba(0,0,0,.02)!important;border-color:rgba(0,0,0,.04)!important}
+.vt-dash-light .vt-social-friend:hover{background:rgba(0,0,0,.04)!important}
+.vt-dash-light .vt-social-friend-avatar.off{background:rgba(0,0,0,.06)!important;color:#99a3b0!important}
+.vt-dash-light .vt-social-friend-info span{color:#99a3b0!important}
+.vt-dash-light .vt-social-post{background:rgba(0,0,0,.02)!important;border-color:rgba(0,0,0,.04)!important}
+.vt-dash-light .vt-replay-card-meta{color:#99a3b0!important}
+
 .vt-dash-light .vt-sentiment-label{color:var(--navy)!important}
 .vt-dash-light .vt-sentiment-bar{background:rgba(0,0,0,.06)!important}
 .vt-dash-light .vt-sentiment-kw-title{color:#99a3b0!important}
@@ -13307,7 +13328,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
             <div class="vt-portal-label">Explorer Portal</div>
-            <div class="vt-expand-btn" onclick="vtExpandDash('explorer')" title="Expand to full screen"><i class="fas fa-expand"></i></div>
+            <div class="vt-topbar-actions"><div class="vt-topbar-theme-btn" onclick="vtToggleDashTheme('explorer')" title="Toggle light/dark mode"><i class="fas fa-sun" id="vt-exp-theme-icon"></i></div><div class="vt-expand-btn" onclick="vtExpandDash('explorer')" title="Expand to full screen"><i class="fas fa-expand"></i></div></div>
           </div>
           <div class="vt-dash-body">
             <div class="vt-dash-sidebar" id="vt-exp-sidebar">
@@ -13320,7 +13341,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Smart</div>
-                <a href="#" onclick="vtExpNav('concierge',this);return false"><i class="fas fa-robot"></i> AI Concierge</a>
+                <a href="#" onclick="vtExpNav('concierge',this);return false"><i class="fas fa-wand-magic-sparkles"></i> AI Concierge</a>
                 <a href="#" onclick="vtExpNav('passport',this);return false"><i class="fas fa-passport"></i> Passport</a>
                 <a href="#" onclick="vtExpNav('social',this);return false"><i class="fas fa-users"></i> Social</a>
                 <a href="#" onclick="vtExpNav('replays',this);return false"><i class="fas fa-play-circle"></i> Replays</a>
@@ -13343,7 +13364,6 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                 <div class="vt-dash-header">
                   <h2>Explore / Live Now</h2>
                   <div class="vt-dash-header-actions">
-                    <div class="vt-dash-theme-btn" onclick="vtToggleDashTheme('explorer')"><i class="fas fa-sun" id="vt-exp-theme-icon"></i> <span id="vt-exp-theme-label">Light</span></div>
                     <div class="vt-dash-header-btn" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a:nth-child(3)'))">Browse All</div>
                     <div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-calendar-check\'></i> Tour scheduler coming soon!')">Schedule Tour</div>
                   </div>
@@ -13536,7 +13556,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
               <!-- VIEW: AI Concierge -->
               <div class="vt-dash-view" id="vt-exp-concierge">
-                <div class="vt-dash-header"><h2><i class="fas fa-robot" style="color:var(--orange);margin-right:8px"></i>AI Trip Concierge</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-wand-magic-sparkles" style="color:var(--orange);margin-right:8px"></i>AI Trip Concierge</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-concierge">
                   <div class="vt-concierge-chat" id="vt-concierge-chat">
                     <div class="vt-ai-msg bot"><div class="vt-ai-avatar"><i class="fas fa-wand-magic-sparkles"></i></div><div class="vt-ai-bubble">Hi Sarah! I am your V-Tours AI concierge. I can help you find the perfect tour, plan your Caribbean adventure, or answer questions about any destination. What sounds good today?</div></div>
@@ -13618,7 +13638,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
             <div class="vt-portal-label">Guide Portal</div>
-            <div class="vt-expand-btn" onclick="vtExpandDash('guide')" title="Expand to full screen"><i class="fas fa-expand"></i></div>
+            <div class="vt-topbar-actions"><div class="vt-topbar-theme-btn" onclick="vtToggleDashTheme('guide')" title="Toggle light/dark mode"><i class="fas fa-sun" id="vt-guide-theme-icon"></i></div><div class="vt-expand-btn" onclick="vtExpandDash('guide')" title="Expand to full screen"><i class="fas fa-expand"></i></div></div>
           </div>
           <div class="vt-dash-body">
             <div class="vt-dash-sidebar" id="vt-guide-sidebar">
@@ -13660,7 +13680,6 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                 <div class="vt-dash-header">
                   <h2><span class="vt-dash-live-dot"></span>Guide Dashboard</h2>
                   <div class="vt-dash-header-actions">
-                    <div class="vt-dash-theme-btn" onclick="vtToggleDashTheme('guide')"><i class="fas fa-sun" id="vt-guide-theme-icon"></i> <span id="vt-guide-theme-label">Light</span></div>
                     <div class="vt-dash-header-btn" onclick="vtGuideNav('tours',document.querySelector('#vt-guide-sidebar a:nth-child(3)'))">Add Tour</div>
                     <div class="vt-dash-header-btn primary" onclick="vtGoLive()">Go Live Now</div>
                   </div>
@@ -13768,15 +13787,15 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                   <div class="vt-dash-stat"><strong>$284</strong><span>Today's Tips</span><small>32 gifts</small></div>
                   <div class="vt-dash-stat"><strong>$1,420</strong><span>This Week</span><small>+38% vs last</small></div>
                   <div class="vt-dash-stat"><strong>$5,840</strong><span>All Time Tips</span><small>Since Jan 2025</small></div>
-                  <div class="vt-dash-stat"><strong style="font-size:28px;line-height:1">&#127796;</strong><span>Top Gift</span><small>Palm Tree ($10)</small></div>
+                  <div class="vt-dash-stat"><strong style="font-size:28px;line-height:1">&#127754;</strong><span>Top Gift</span><small>Tropical Sunset ($15)</small></div>
                 </div>
                 <h4 style="color:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:20px 0 12px">Recent Gift Stream</h4>
                 <div class="vt-gift-stream">
-                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127796;</span><div class="vt-gift-info"><strong>Kevin J.</strong> sent a Palm Tree<small>$10.00 — 2 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#11088;</span><div class="vt-gift-info"><strong>Mia R.</strong> sent a Gold Star<small>$5.00 — 5 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#128026;</span><div class="vt-gift-info"><strong>Tyler W.</strong> sent a Conch Shell<small>$25.00 — 8 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127796;</span><div class="vt-gift-info"><strong>Lisa M.</strong> sent a Palm Tree<small>$10.00 — 12 min ago</small></div></div>
-                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#128142;</span><div class="vt-gift-info"><strong>James P.</strong> sent a Diamond<small>$50.00 — 15 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127754;</span><div class="vt-gift-info"><strong>Kevin J.</strong> sent a Tropical Sunset<small>$15.00 — 2 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127965;</span><div class="vt-gift-info"><strong>Mia R.</strong> sent a Desert Island<small>$25.00 — 5 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#129416;</span><div class="vt-gift-info"><strong>Tyler W.</strong> sent a Sea Turtle<small>$20.00 — 8 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#127754;</span><div class="vt-gift-info"><strong>Lisa M.</strong> sent a Tropical Sunset<small>$15.00 — 12 min ago</small></div></div>
+                  <div class="vt-gift-item"><span class="vt-gift-emoji">&#128038;</span><div class="vt-gift-info"><strong>James P.</strong> sent a Hummingbird<small>$50.00 — 15 min ago</small></div></div>
                 </div>
               </div>
 
@@ -14036,28 +14055,18 @@ function vtToggleDashTheme(which){
   var frame=document.getElementById(frameId);
   if(!frame)return;
   var isLight=frame.classList.toggle('vt-dash-light');
-  var iconId=which==='explorer'?'vt-exp-theme-icon':'vt-guide-theme-icon';
-  var labelId=which==='explorer'?'vt-exp-theme-label':'vt-guide-theme-label';
-  var icon=document.getElementById(iconId);
-  var label=document.getElementById(labelId);
-  if(icon){icon.className=isLight?'fas fa-moon':'fas fa-sun'}
-  if(label){label.textContent=isLight?'Dark':'Light'}
+  var icon=document.getElementById(which==='explorer'?'vt-exp-theme-icon':'vt-guide-theme-icon');
+  if(icon)icon.className=isLight?'fas fa-moon':'fas fa-sun';
   try{localStorage.setItem('vt-dash-theme-'+which,isLight?'light':'dark')}catch(e){}
 }
 function vtRestoreDashTheme(){
   ['explorer','guide'].forEach(function(w){
     try{
-      var pref=localStorage.getItem('vt-dash-theme-'+w);
-      if(pref==='light'){
-        var frameId=w==='explorer'?'vt-explorer-frame':'vt-guide-frame';
-        var frame=document.getElementById(frameId);
+      if(localStorage.getItem('vt-dash-theme-'+w)==='light'){
+        var frame=document.getElementById(w==='explorer'?'vt-explorer-frame':'vt-guide-frame');
         if(frame)frame.classList.add('vt-dash-light');
-        var iconId=w==='explorer'?'vt-exp-theme-icon':'vt-guide-theme-icon';
-        var labelId=w==='explorer'?'vt-exp-theme-label':'vt-guide-theme-label';
-        var icon=document.getElementById(iconId);
-        var label=document.getElementById(labelId);
+        var icon=document.getElementById(w==='explorer'?'vt-exp-theme-icon':'vt-guide-theme-icon');
         if(icon)icon.className='fas fa-moon';
-        if(label)label.textContent='Dark';
       }
     }catch(e){}
   });
