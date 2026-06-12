@@ -12470,6 +12470,20 @@ body.theme-night .vt-cat-card,body.theme-night .vt-step,body.theme-night .vt-rev
 body.theme-night .vt-cat-card h3,body.theme-night .vt-step h4,body.theme-night .vt-rev-card strong{color:#fff}
 body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt-rev-card span{color:rgba(255,255,255,.55)}
 /* ======== V-TOURS DASHBOARD MOCKUPS ======== */
+/* ======== V-TOURS DASHBOARD TABS ======== */
+.vt-dash-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:36px}
+.vt-dash-tab{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;transition:all .35s cubic-bezier(.25,.46,.45,.94);border:2px solid rgba(0,0,0,.08);background:#fff;color:var(--navy);user-select:none}
+.vt-dash-tab i{font-size:16px;transition:color .3s}
+.vt-dash-tab:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.vt-dash-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 8px 28px rgba(6,58,99,.25)}
+.vt-dash-tab.active i{color:var(--orange)}
+.vt-dash-panel{display:none;animation:vtFadeIn .5s ease}
+.vt-dash-panel.active{display:block}
+@keyframes vtFadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+body.theme-night .vt-dash-tab{background:#0d1b2a;color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.08)}
+body.theme-night .vt-dash-tab:hover{box-shadow:0 8px 24px rgba(0,0,0,.3)}
+body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+
 .vt-dash-showcase{margin-top:48px}
 .vt-dash-frame{background:#f0f2f5;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,.08);box-shadow:0 20px 60px rgba(0,0,0,.1)}
 .vt-dash-topbar{display:flex;align-items:center;justify-content:space-between;background:var(--navy);padding:10px 20px;color:#fff;font-size:13px;font-weight:700}
@@ -12621,96 +12635,21 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
     </div>
   </div>
 
-  <!-- WHAT IS V-TOURS -->
-  <section class="vt-sec">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">The Concept</span>
-        <h2 class="sec-title">What is V-Tours?</h2>
-        <p class="sec-sub center">V-Tours is a live, interactive virtual experience platform and a digital extension of Sight Seers Caribbean Adventures. A vetted expert guide wears a camera rig and streams in real time. You watch, speak, point at items on screen, ask questions, and even purchase physical goods from local shops, all without leaving home.</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- 5 EXPERIENCE CATEGORIES -->
+  <!-- DASHBOARD SHOWCASE (TABBED) -->
   <section class="vt-sec vt-sec--alt">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
-        <span class="sec-pre">What You Can Experience</span>
-        <h2 class="sec-title">5 Experience Categories</h2>
+        <span class="sec-pre">Platform Preview</span>
+        <h2 class="sec-title">See the V-Tours Experience</h2>
+        <p class="sec-sub center">Click below to explore both sides of the platform: the Explorer view for guests, and the Guide Portal for tour operators.</p>
       </div>
-      <div class="vt-grid-5 reveal">
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-landmark"></i></div>
-          <h3>Culture and Landmarks</h3>
-          <p>Guided live tours through historic sites, UNESCO landmarks, and culturally significant locations across the Caribbean.</p>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-shopping-bag"></i></div>
-          <h3>Personal Shopping</h3>
-          <p>Live shopping tours through local boutiques, artisan markets, and fashion districts with full in-session purchasing.</p>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-utensils"></i></div>
-          <h3>Food and Drink</h3>
-          <p>Virtual cooking classes, street food market tours, rum tastings, and live mixology masterclasses with full interaction.</p>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-palette"></i></div>
-          <h3>Learning and Creativity</h3>
-          <p>Skill-building live sessions from creative experts covering color grading, music mixing, photography, and visual arts.</p>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-mountain"></i></div>
-          <h3>Nature and Outdoors</h3>
-          <p>Immersive live tours of rainforests, waterfalls, marine environments, hiking trails, and wildlife encounters.</p>
-        </div>
+      <div class="vt-dash-tabs reveal">
+        <div class="vt-dash-tab active" onclick="vtSwitchTab('explorer')"><i class="fas fa-compass"></i> Explorer Dashboard</div>
+        <div class="vt-dash-tab" onclick="vtSwitchTab('guide')"><i class="fas fa-user-tie"></i> Guide Portal</div>
       </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="vt-sec">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">The Experience Flow</span>
-        <h2 class="sec-title">How V-Tours Works</h2>
-      </div>
-      <div class="vt-steps reveal">
-        <div class="vt-step">
-          <h4>Browse and Book</h4>
-          <p>Explore a curated catalogue across 5 categories and 7+ Caribbean destinations. Filter by guide, language, price, and availability.</p>
-        </div>
-        <div class="vt-step">
-          <h4>Enter the Live Session</h4>
-          <p>One click launches the V-Tours interface. No app download required. The guide is already live and streaming in real time.</p>
-        </div>
-        <div class="vt-step">
-          <h4>Interact in Real Time</h4>
-          <p>Point at items on screen to direct the guide. Ask questions. The guide responds instantly with live two-way audio and video.</p>
-        </div>
-        <div class="vt-step">
-          <h4>Shop in Session</h4>
-          <p>Guides tag authentic local goods in real time. Add to cart, checkout instantly, and have items shipped directly to your door.</p>
-        </div>
-        <div class="vt-step">
-          <h4>Capture and Share</h4>
-          <p>Take screenshots at any moment, creating personal memories from the guide's perspective. Share instantly to social media.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- EXPLORER DASHBOARD -->
-  <section class="vt-sec vt-sec--alt">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">Explorer Experience</span>
-        <h2 class="sec-title">The Explorer Dashboard</h2>
-        <p class="sec-sub center">Browse live sessions, join an active stream, interact with a guide, and shop in real time. This is what the V-Tours experience looks like.</p>
-      </div>
-      <div class="vt-dash-showcase reveal">
+      <div class="vt-dash-panel active" id="vt-panel-explorer">
+<div class="vt-dash-showcase reveal">
         <div class="vt-dash-frame">
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
@@ -12813,19 +12752,9 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-
-  <!-- GUIDE PORTAL -->
-  <section class="vt-sec">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">Guide Experience</span>
-        <h2 class="sec-title">The Guide Portal</h2>
-        <p class="sec-sub center">Independent tour guides self-register, manage their tours, set availability, tag shop items, and track earnings from a single clean dashboard.</p>
       </div>
-      <div class="vt-dash-showcase reveal">
+      <div class="vt-dash-panel" id="vt-panel-guide">
+<div class="vt-dash-showcase reveal">
         <div class="vt-dash-frame">
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
@@ -12930,8 +12859,91 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
           </div>
         </div>
       </div>
+      </div>
     </div>
   </section>
+
+  <!-- WHAT IS V-TOURS -->
+  <section class="vt-sec">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">The Concept</span>
+        <h2 class="sec-title">What is V-Tours?</h2>
+        <p class="sec-sub center">V-Tours is a live, interactive virtual experience platform and a digital extension of Sight Seers Caribbean Adventures. A vetted expert guide wears a camera rig and streams in real time. You watch, speak, point at items on screen, ask questions, and even purchase physical goods from local shops, all without leaving home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 EXPERIENCE CATEGORIES -->
+  <section class="vt-sec vt-sec--alt">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">What You Can Experience</span>
+        <h2 class="sec-title">5 Experience Categories</h2>
+      </div>
+      <div class="vt-grid-5 reveal">
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-landmark"></i></div>
+          <h3>Culture and Landmarks</h3>
+          <p>Guided live tours through historic sites, UNESCO landmarks, and culturally significant locations across the Caribbean.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-shopping-bag"></i></div>
+          <h3>Personal Shopping</h3>
+          <p>Live shopping tours through local boutiques, artisan markets, and fashion districts with full in-session purchasing.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-utensils"></i></div>
+          <h3>Food and Drink</h3>
+          <p>Virtual cooking classes, street food market tours, rum tastings, and live mixology masterclasses with full interaction.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-palette"></i></div>
+          <h3>Learning and Creativity</h3>
+          <p>Skill-building live sessions from creative experts covering color grading, music mixing, photography, and visual arts.</p>
+        </div>
+        <div class="vt-cat-card">
+          <div class="vt-cat-icon"><i class="fas fa-mountain"></i></div>
+          <h3>Nature and Outdoors</h3>
+          <p>Immersive live tours of rainforests, waterfalls, marine environments, hiking trails, and wildlife encounters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="vt-sec">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">The Experience Flow</span>
+        <h2 class="sec-title">How V-Tours Works</h2>
+      </div>
+      <div class="vt-steps reveal">
+        <div class="vt-step">
+          <h4>Browse and Book</h4>
+          <p>Explore a curated catalogue across 5 categories and 7+ Caribbean destinations. Filter by guide, language, price, and availability.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Enter the Live Session</h4>
+          <p>One click launches the V-Tours interface. No app download required. The guide is already live and streaming in real time.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Interact in Real Time</h4>
+          <p>Point at items on screen to direct the guide. Ask questions. The guide responds instantly with live two-way audio and video.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Shop in Session</h4>
+          <p>Guides tag authentic local goods in real time. Add to cart, checkout instantly, and have items shipped directly to your door.</p>
+        </div>
+        <div class="vt-step">
+          <h4>Capture and Share</h4>
+          <p>Take screenshots at any moment, creating personal memories from the guide's perspective. Share instantly to social media.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 
   <!-- DEVICE TIERS -->
   <section class="vt-sec vt-sec--dark">
@@ -13004,6 +13016,21 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
       <a href="mailto:info@sightseerscaribbean.com?subject=V-Tours%20Beta%20Interest&body=Hi%20Sight%20Seers%2C%0A%0AI%E2%80%99m%20interested%20in%20joining%20the%20V-Tours%20beta.%0A%0APlease%20add%20me%20to%20the%20waitlist.%0A%0AThank%20you!" class="vt-cta-btn"><i class="fas fa-paper-plane"></i> Join the Beta Waitlist</a>
     </div>
   </section>
+
+
+<script>
+function vtSwitchTab(which){
+  document.querySelectorAll('.vt-dash-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.vt-dash-panel').forEach(function(p){p.classList.remove('active')});
+  if(which==='explorer'){
+    document.querySelectorAll('.vt-dash-tab')[0].classList.add('active');
+    document.getElementById('vt-panel-explorer').classList.add('active');
+  } else {
+    document.querySelectorAll('.vt-dash-tab')[1].classList.add('active');
+    document.getElementById('vt-panel-guide').classList.add('active');
+  }
+}
+</script>
 
 </div>
 
