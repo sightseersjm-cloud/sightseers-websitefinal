@@ -12541,7 +12541,6 @@ body.theme-night .vt-empty-state h4{color:#fff}
 /* ======== IMMERSIVE 360 STREAM ======== */
 .vt-session-video{min-height:260px!important;overflow:hidden;position:relative;cursor:grab}
 .vt-session-video:active{cursor:grabbing}
-.vt-modal .vt-session-video{min-height:480px!important}
 
 .vt-360-scene{position:absolute;inset:0;overflow:hidden}
 .vt-360-pano{position:absolute;width:300%;height:100%;top:0;left:0;animation:vtPanSlow 30s linear infinite;will-change:transform}
@@ -12646,11 +12645,6 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-drag-hint i{animation:vtDragSwipe 2s ease-in-out infinite}
 @keyframes vtDragSwipe{0%,100%{transform:translateX(0)}50%{transform:translateX(12px)}}
 
-/* Expanded modal fixes */
-.vt-modal .vt-dash-frame{height:100%!important}
-.vt-modal .vt-dash-body{height:calc(100% - 42px)!important;overflow:auto}
-.vt-modal .vt-dash-main{height:100%;overflow-y:auto}
-.vt-modal .vt-session-video{min-height:480px!important}
 .vt-modal .vt-hotspot-dot{width:44px;height:44px;font-size:18px}
 
 /* Craft market scene */
@@ -12699,12 +12693,16 @@ body.theme-night .vt-empty-state h4{color:#fff}
 
 .vt-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:calc(100vw - 48px);max-width:1400px;height:calc(100vh - 48px);max-height:920px;z-index:10001;border-radius:20px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);opacity:0;pointer-events:none;transition:all .5s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;background:#f0f2f5}
 .vt-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
-#vt-modal-content{width:100%;height:100%;overflow:hidden}
+#vt-modal-content{flex:1;width:100%;overflow:hidden;display:flex;flex-direction:column}
+#vt-modal-content>.vt-dash-frame{flex:1;height:auto!important}
+#vt-modal-content .vt-dash-showcase{height:100%;display:flex;flex-direction:column}
 
-.vt-modal .vt-dash-frame{border-radius:0!important;border:none!important;box-shadow:none!important;height:100%;display:flex;flex-direction:column}
-.vt-modal .vt-dash-body{flex:1;overflow:auto}
-.vt-modal .vt-dash-main{overflow-y:auto;padding-bottom:40px}
-.vt-modal .vt-session-video{min-height:320px}
+.vt-modal .vt-dash-frame{border-radius:0!important;border:none!important;box-shadow:none!important;display:flex;flex-direction:column;height:100%}
+.vt-modal .vt-dash-topbar{flex-shrink:0}
+.vt-modal .vt-dash-body{flex:1;overflow:auto;display:flex;min-height:0}
+.vt-modal .vt-dash-sidebar{flex-shrink:0;overflow-y:auto}
+.vt-modal .vt-dash-main{flex:1;overflow-y:auto;padding-bottom:40px;min-height:0}
+.vt-modal .vt-session-video{min-height:420px}
 .vt-modal .vt-live-grid{grid-template-columns:repeat(3,1fr)}
 .vt-modal .vt-expand-btn i::before{content:"\f066"}
 
