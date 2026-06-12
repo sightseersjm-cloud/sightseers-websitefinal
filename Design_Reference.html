@@ -14381,12 +14381,15 @@ function vtBuyHotspot(){
 
 /* ═══════ APPLE-STYLE EXPAND ═══════ */
 var vtExpandedFrame=null;
+var vtExpandedPlaceholder=null;
 function vtExpandDash(which){
   if(vtExpandedFrame){vtCollapseDash();return}
   var frame=document.getElementById(which==='explorer'?'vt-explorer-frame':'vt-guide-frame');
   if(!frame)return;
   vtExpandedFrame=frame;
-  /* Create overlay if needed */
+  vtExpandedPlaceholder=document.createComment('vt-fs-placeholder');
+  frame.parentNode.insertBefore(vtExpandedPlaceholder,frame);
+  document.body.appendChild(frame);
   var ov=document.getElementById('vt-fs-overlay');
   if(!ov){ov=document.createElement('div');ov.id='vt-fs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseDash;document.body.appendChild(ov)}
   var cl=document.getElementById('vt-fs-close');
@@ -14400,10 +14403,15 @@ function vtExpandDash(which){
 function vtCollapseDash(){
   if(!vtExpandedFrame)return;
   vtExpandedFrame.classList.remove('vt-fullscreen');
+  if(vtExpandedPlaceholder&&vtExpandedPlaceholder.parentNode){
+    vtExpandedPlaceholder.parentNode.insertBefore(vtExpandedFrame,vtExpandedPlaceholder);
+    vtExpandedPlaceholder.remove();
+  }
   var ov=document.getElementById('vt-fs-overlay');if(ov)ov.classList.remove('open');
   var cl=document.getElementById('vt-fs-close');if(cl)cl.classList.remove('open');
   document.body.style.overflow='';
   vtExpandedFrame=null;
+  vtExpandedPlaceholder=null;
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(vtSessionExpanded)vtCollapseSession();else if(vtExpandedFrame)vtCollapseDash()}});
 
