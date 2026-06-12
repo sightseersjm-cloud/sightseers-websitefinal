@@ -12645,7 +12645,7 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-drag-hint i{animation:vtDragSwipe 2s ease-in-out infinite}
 @keyframes vtDragSwipe{0%,100%{transform:translateX(0)}50%{transform:translateX(12px)}}
 
-.vt-modal .vt-hotspot-dot{width:44px;height:44px;font-size:18px}
+.vt-dash-frame.vt-fullscreen .vt-hotspot-dot{width:44px;height:44px;font-size:18px}
 
 /* Craft market scene */
 .vt-360-market{position:absolute;inset:0;background:linear-gradient(180deg,#2c1810 0%,#4a2818 20%,#6b3a22 40%,#8b5230 60%,#a0694a 80%,#c4915e 100%)}
@@ -12688,28 +12688,28 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-expand-btn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:13px;color:rgba(255,255,255,.7)}
 .vt-expand-btn:hover{background:rgba(255,255,255,.2);color:#fff;transform:scale(1.1)}
 
-.vt-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10000;opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.25,.46,.45,.94)}
-.vt-modal-overlay.open{opacity:1;pointer-events:auto}
+.vt-dash-frame.vt-fullscreen{position:fixed!important;inset:16px!important;z-index:10001!important;border-radius:16px!important;box-shadow:0 40px 120px rgba(0,0,0,.5)!important;display:flex!important;flex-direction:column!important;animation:vtFullIn .4s cubic-bezier(.16,1,.3,1) forwards}
+.vt-dash-frame.vt-fullscreen .vt-dash-topbar{flex-shrink:0}
+.vt-dash-frame.vt-fullscreen .vt-dash-body{flex:1!important;overflow:auto!important;display:flex!important;min-height:0!important}
+.vt-dash-frame.vt-fullscreen .vt-dash-sidebar{flex-shrink:0;overflow-y:auto}
+.vt-dash-frame.vt-fullscreen .vt-dash-main{flex:1!important;overflow-y:auto!important;padding-bottom:40px;min-height:0!important}
+.vt-dash-frame.vt-fullscreen .vt-session-video{min-height:420px!important}
+.vt-dash-frame.vt-fullscreen .vt-live-grid{grid-template-columns:repeat(3,1fr)}
+.vt-dash-frame.vt-fullscreen .vt-expand-btn i::before{content:"\f066"}
+@keyframes vtFullIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 
-.vt-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:calc(100vw - 48px);max-width:1400px;height:calc(100vh - 48px);max-height:920px;z-index:10001;border-radius:20px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);opacity:0;pointer-events:none;transition:all .5s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;background:#f0f2f5}
-.vt-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
-#vt-modal-content{flex:1;width:100%;overflow:hidden;display:flex;flex-direction:column}
-#vt-modal-content>.vt-dash-frame{flex:1;height:auto!important}
-#vt-modal-content .vt-dash-showcase{height:100%;display:flex;flex-direction:column}
+.vt-fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10000;opacity:0;pointer-events:none;transition:opacity .35s}
+.vt-fs-overlay.open{opacity:1;pointer-events:auto}
 
-.vt-modal .vt-dash-frame{border-radius:0!important;border:none!important;box-shadow:none!important;display:flex;flex-direction:column;height:100%}
-.vt-modal .vt-dash-topbar{flex-shrink:0}
-.vt-modal .vt-dash-body{flex:1;overflow:auto;display:flex;min-height:0}
-.vt-modal .vt-dash-sidebar{flex-shrink:0;overflow-y:auto}
-.vt-modal .vt-dash-main{flex:1;overflow-y:auto;padding-bottom:40px;min-height:0}
-.vt-modal .vt-session-video{min-height:420px}
-.vt-modal .vt-live-grid{grid-template-columns:repeat(3,1fr)}
-.vt-modal .vt-expand-btn i::before{content:"\f066"}
+.vt-fs-close{position:fixed;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10003;color:#fff;font-size:16px;transition:all .25s}
+.vt-fs-close.open{display:flex}
+.vt-fs-close:hover{background:rgba(255,255,255,.2);transform:scale(1.1)}
 
-.vt-modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10002;transition:all .25s;color:#fff;font-size:14px}
-.vt-modal-close:hover{background:rgba(255,255,255,.2);transform:scale(1.1)}
+body.theme-night .vt-dash-frame.vt-fullscreen{background:#0d1b2a!important}
 
-body.theme-night .vt-modal{background:#0d1b2a}
+@media(max-width:768px){
+  .vt-dash-frame.vt-fullscreen{inset:0!important;border-radius:0!important}
+}
 
 /* ======== CREATE ACCOUNT SECTION ======== */
 .vt-signup-wrap{max-width:560px;margin:0 auto}
@@ -12758,9 +12758,7 @@ body.theme-night .vt-signup-field input,body.theme-night .vt-signup-field textar
 body.theme-night .vt-signup-tag{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
 
 @media(max-width:768px){
-  .vt-modal{width:100vw;height:100vh;max-width:100vw;max-height:100vh;border-radius:0;top:0;left:0;transform:translateY(20px);transform-origin:center}
-  .vt-modal.open{transform:translateY(0)}
-  .vt-modal .vt-live-grid{grid-template-columns:1fr}
+  .vt-dash-frame.vt-fullscreen .vt-live-grid{grid-template-columns:1fr}
   .vt-signup-row{grid-template-columns:1fr}
 }
 
@@ -13476,8 +13474,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
   </section>
 
 
-<div class="vt-modal-overlay" id="vt-modal-overlay" onclick="vtCollapseDash()"></div>
-<div class="vt-modal" id="vt-modal"><div class="vt-modal-close" onclick="vtCollapseDash()"><i class="fas fa-times"></i></div><div id="vt-modal-content"></div></div>
+
 
 <script>
 /* ── Tab switching ── */
@@ -13744,33 +13741,32 @@ function vtBuyHotspot(){
 })();
 
 /* ═══════ APPLE-STYLE EXPAND ═══════ */
-var vtExpandedFrame=null;var vtExpandedParent=null;var vtExpandedNext=null;
+var vtExpandedFrame=null;
 function vtExpandDash(which){
-  var modal=document.getElementById('vt-modal');
-  if(modal.classList.contains('open')){vtCollapseDash();return}
+  if(vtExpandedFrame){vtCollapseDash();return}
   var frame=document.getElementById(which==='explorer'?'vt-explorer-frame':'vt-guide-frame');
   if(!frame)return;
   vtExpandedFrame=frame;
-  vtExpandedParent=frame.parentNode;
-  vtExpandedNext=frame.nextSibling;
-  var content=document.getElementById('vt-modal-content');
-  content.appendChild(frame);
-  document.getElementById('vt-modal-overlay').classList.add('open');
-  modal.classList.add('open');
+  /* Create overlay if needed */
+  var ov=document.getElementById('vt-fs-overlay');
+  if(!ov){ov=document.createElement('div');ov.id='vt-fs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseDash;document.body.appendChild(ov)}
+  var cl=document.getElementById('vt-fs-close');
+  if(!cl){cl=document.createElement('div');cl.id='vt-fs-close';cl.className='vt-fs-close';cl.innerHTML='<i class="fas fa-times"></i>';cl.onclick=vtCollapseDash;document.body.appendChild(cl)}
+  ov.classList.add('open');
+  cl.classList.add('open');
+  frame.classList.add('vt-fullscreen');
   document.body.style.overflow='hidden';
   if(!vtStreamActive)vtStartStream();
 }
 function vtCollapseDash(){
-  document.getElementById('vt-modal-overlay').classList.remove('open');
-  document.getElementById('vt-modal').classList.remove('open');
+  if(!vtExpandedFrame)return;
+  vtExpandedFrame.classList.remove('vt-fullscreen');
+  var ov=document.getElementById('vt-fs-overlay');if(ov)ov.classList.remove('open');
+  var cl=document.getElementById('vt-fs-close');if(cl)cl.classList.remove('open');
   document.body.style.overflow='';
-  if(vtExpandedFrame&&vtExpandedParent){
-    if(vtExpandedNext){vtExpandedParent.insertBefore(vtExpandedFrame,vtExpandedNext)}
-    else{vtExpandedParent.appendChild(vtExpandedFrame)}
-  }
-  vtExpandedFrame=null;vtExpandedParent=null;vtExpandedNext=null;
+  vtExpandedFrame=null;
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')vtCollapseDash()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vtExpandedFrame)vtCollapseDash()});
 
 /* ═══════ SIGNUP ═══════ */
 function vtSignupToggle(type){
