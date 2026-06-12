@@ -12547,8 +12547,8 @@ body.theme-night .vt-empty-state h4{color:#fff}
 
 
 /* ======== IMMERSIVE 360 STREAM ======== */
-.vt-session-video{min-height:260px!important;overflow:hidden;position:relative;cursor:grab}
-.vt-session-video:active{cursor:grabbing}
+.vt-session-video{min-height:260px!important;overflow:hidden;position:relative}
+
 
 .vt-360-scene{position:absolute;inset:0;overflow:hidden}
 .vt-360-pano{position:absolute;width:300%;height:100%;top:0;left:0;animation:vtPanSlow 30s linear infinite;will-change:transform}
@@ -12617,7 +12617,7 @@ body.theme-night .vt-empty-state h4{color:#fff}
 /* Hotspot markers */
 .vt-hotspot{position:absolute;z-index:10;cursor:pointer;transition:transform .3s}
 .vt-hotspot:hover{transform:scale(1.15)}
-.vt-hotspot-dot{width:36px;height:36px;border-radius:50%;background:rgba(239,135,49,.85);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;box-shadow:0 4px 16px rgba(239,135,49,.5);animation:vtHotPulse 2s ease infinite;position:relative}
+.vt-hotspot-dot{width:30px;height:30px;border-radius:50%;background:rgba(239,135,49,.8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;box-shadow:0 4px 16px rgba(239,135,49,.5);animation:vtHotPulse 2s ease infinite;position:relative}
 .vt-hotspot-dot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(239,135,49,.4);animation:vtHotRing 2s ease infinite}
 @keyframes vtHotPulse{0%,100%{box-shadow:0 4px 16px rgba(239,135,49,.5)}50%{box-shadow:0 4px 28px rgba(239,135,49,.8)}}
 @keyframes vtHotRing{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
@@ -12637,13 +12637,13 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-hotspot-popup-close:hover{color:var(--navy)}
 
 /* Scene switch buttons */
-.vt-scene-switcher{position:absolute;top:12px;left:12px;z-index:15;display:flex;gap:6px}
-.vt-scene-btn{padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .25s;text-transform:uppercase;letter-spacing:.5px}
+.vt-scene-switcher{position:absolute;top:10px;left:10px;z-index:15;display:flex;gap:4px}
+.vt-scene-btn{padding:5px 10px;border-radius:14px;font-size:9px;font-weight:700;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s;text-transform:uppercase;letter-spacing:.3px}
 .vt-scene-btn:hover{background:rgba(255,255,255,.15);color:#fff}
 .vt-scene-btn.active{background:var(--orange);color:#fff;border-color:var(--orange)}
 
 /* Live indicator */
-.vt-live-indicator{position:absolute;top:12px;right:12px;z-index:15;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px}
+.vt-live-indicator{position:absolute;top:12px;right:12px;z-index:15;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;pointer-events:none}
 .vt-live-indicator-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:vtRecPulse 1.5s ease infinite}
 .vt-live-indicator-time{color:rgba(255,255,255,.6);font-variant-numeric:tabular-nums}
 
@@ -12850,7 +12850,7 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 
 .vt-session-video{position:relative;background:linear-gradient(160deg,#0b3d5e 0%,#145a7a 40%,#1a8a6e 100%);display:flex;align-items:center;justify-content:center;padding:20px}
 .vt-session-video-label{color:rgba(255,255,255,.3);font-size:14px;text-align:center;line-height:1.6}
-.vt-session-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:linear-gradient(transparent,rgba(0,0,0,.5));display:flex;align-items:center;justify-content:space-between}
+.vt-session-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:linear-gradient(transparent,rgba(0,0,0,.5));display:flex;align-items:center;justify-content:space-between;pointer-events:none;z-index:12}
 .vt-session-location{font-size:10px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
 .vt-session-viewers{font-size:10px;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:4px}
 .vt-session-actions{display:flex;gap:8px;padding:10px 16px;background:linear-gradient(135deg,rgba(0,0,0,.2),rgba(0,0,0,.3));justify-content:center}
@@ -12936,9 +12936,22 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
 /* ======== YOUTUBE 360 EMBED ======== */
 .vt-yt-scene{display:flex;align-items:stretch;justify-content:center;background:#000}
-.vt-yt-iframe{position:absolute;inset:0;width:100%;height:100%;border:none;z-index:1}
+.vt-yt-iframe{position:absolute;top:-60px;left:-2px;width:calc(100% + 4px);height:calc(100% + 120px);border:none;z-index:1}
 .vt-yt-hotspot-layer{position:absolute;inset:0;z-index:10;pointer-events:none}
 .vt-yt-hotspot-layer .vt-hotspot{pointer-events:auto}
+
+
+/* ======== SESSION EXPAND ======== */
+.vt-session-expand{position:absolute;bottom:10px;right:10px;z-index:15;width:32px;height:32px;border-radius:8px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.7);font-size:13px;transition:all .25s;border:1px solid rgba(255,255,255,.1)}
+.vt-session-expand:hover{background:rgba(255,255,255,.2);color:#fff;transform:scale(1.1)}
+.vt-session.vt-session-fs{position:fixed!important;inset:16px!important;z-index:10001!important;border-radius:16px!important;box-shadow:0 40px 120px rgba(0,0,0,.6)!important;display:flex!important;flex-direction:column!important;animation:vtFullIn .4s cubic-bezier(.16,1,.3,1) forwards}
+.vt-session.vt-session-fs .vt-session-bar{flex-shrink:0}
+.vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important}
+.vt-session.vt-session-fs .vt-session-video{min-height:0!important;flex:1!important}
+.vt-session.vt-session-fs .vt-session-side{max-height:none}
+.vt-session.vt-session-fs .vt-session-actions{flex-shrink:0}
+.vt-session.vt-session-fs .vt-session-expand i::before{content:"\f066"}
+@media(max-width:768px){.vt-session.vt-session-fs{inset:0!important;border-radius:0!important}}
 
 /* ======== SESSION CART DRAWER ======== */
 .vt-cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
@@ -13123,7 +13136,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
                         <!-- BLUE LAGOON - YouTube 360° Live Tour -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
-                          <iframe id="vt-yt-player" class="vt-yt-iframe" src="https://www.youtube.com/embed/jqq_ZdD5Zwg?autoplay=1&mute=1&loop=1&playlist=jqq_ZdD5Zwg&controls=0&showinfo=0&modestbranding=1&rel=0&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <iframe id="vt-yt-player" class="vt-yt-iframe" src="https://www.youtube.com/embed/jqq_ZdD5Zwg?autoplay=1&mute=1&loop=1&playlist=jqq_ZdD5Zwg&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
                           <div class="vt-yt-hotspot-layer">
                             <div class="vt-hotspot" style="top:22%;left:15%" onclick="vtShowHotspot(event,'hs1')">
                               <div class="vt-hotspot-dot"><i class="fas fa-leaf"></i></div>
@@ -13178,14 +13191,15 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                           <button class="vt-hotspot-popup-buy" onclick="vtBuyHotspot()"><i class="fas fa-shopping-cart" style="margin-right:6px"></i>Buy Now</button>
                         </div>
 
-                        <!-- Drag Hint -->
-                        <div class="vt-drag-hint show" id="vt-drag-hint"><i class="fas fa-arrows-alt-h"></i> Drag to look around in 360&deg;</div>
+                        
 
-                        <!-- Overlay -->
+                        <!-- Minimal Overlay -->
                         <div class="vt-session-video-overlay">
                           <div class="vt-session-location" id="vt-session-loc">Port Antonio &bull; Portland &bull; Jamaica</div>
                           <div class="vt-session-viewers"><i class="fas fa-eye"></i> <span id="vt-viewer-count">247</span> watching</div>
                         </div>
+                        <!-- Session Expand Button -->
+                        <div class="vt-session-expand" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
                       </div>
                       <div class="vt-session-actions">
                         <div class="vt-session-action" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop Now<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" onclick="vtOpenCart()"><i class="fas fa-shopping-cart"></i>Cart</div>
@@ -13948,7 +13962,7 @@ function vtCollapseDash(){
   document.body.style.overflow='';
   vtExpandedFrame=null;
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vtExpandedFrame)vtCollapseDash()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(vtSessionExpanded)vtCollapseSession();else if(vtExpandedFrame)vtCollapseDash()}});
 
 /* ═══════ SIGNUP ═══════ */
 function vtSignupToggle(type){
@@ -13975,6 +13989,31 @@ function vtCreateAccount(e,type){
     vtToast('<i class="fas fa-check-circle"></i> '+(type==='explorer'?'Welcome aboard! You will be notified at launch.':'Guide application received! Review within 48 hours.'));
     setTimeout(function(){btn.innerHTML=orig;btn.classList.remove('success');btn.style.pointerEvents=''},4000);
   },1800);
+}
+
+
+/* ═══════ SESSION FULLSCREEN ═══════ */
+var vtSessionExpanded=false;
+function vtExpandSession(){
+  var session=document.getElementById('vt-active-session');if(!session)return;
+  if(vtSessionExpanded){vtCollapseSession();return}
+  vtSessionExpanded=true;
+  var ov=document.getElementById('vt-fs-overlay');
+  if(!ov){ov=document.createElement('div');ov.id='vt-fs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseSession;document.body.appendChild(ov)}
+  var cl=document.getElementById('vt-fs-close');
+  if(!cl){cl=document.createElement('div');cl.id='vt-fs-close';cl.className='vt-fs-close';cl.innerHTML='<i class="fas fa-times"></i>';cl.onclick=vtCollapseSession;document.body.appendChild(cl)}
+  ov.classList.add('open');cl.classList.add('open');
+  session.classList.add('vt-session-fs');
+  document.body.style.overflow='hidden';
+}
+function vtCollapseSession(){
+  if(!vtSessionExpanded)return;
+  vtSessionExpanded=false;
+  var session=document.getElementById('vt-active-session');
+  if(session)session.classList.remove('vt-session-fs');
+  var ov=document.getElementById('vt-fs-overlay');if(ov)ov.classList.remove('open');
+  var cl=document.getElementById('vt-fs-close');if(cl)cl.classList.remove('open');
+  document.body.style.overflow='';
 }
 
 /* ═══════ AUTO-START STREAM ON PAGE LOAD ═══════ */
