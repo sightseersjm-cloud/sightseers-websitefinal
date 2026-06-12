@@ -9021,9 +9021,9 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           <a href="#" onclick="nav('discoverjamaica')">Discover Jamaica</a>
           <a href="#" onclick="nav('blog')" id="n-blog">Blog</a>
           <a href="#" onclick="nav('partners')" id="n-partners">Partners</a>
-          <a href="#" onclick="nav('vtours')" id="n-vtours">V-Tours</a>
         </div>
       </li>
+      <li class="nav-item"><a href="#" onclick="nav('vtours')" id="n-vtours">V-Tours</a></li>
       <li class="nav-item"><a href="#" onclick="nav('contact')" id="n-contact">Travel Form</a></li>
       <li class="nav-item"><a href="#" onclick="nav('booking')" class="btn-book">Start Planning</a></li>
     </ul>
@@ -16663,7 +16663,7 @@ function nav(id,opts={}){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   const el=document.getElementById('p-'+id);if(el)el.classList.add('on');
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='vtours'||id==='partners')?'n-about':'n-'+id)));
+  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   if(!opts.skipScroll){ smoothScrollToY(0,900); }
   if(id==='tours'){
