@@ -14388,12 +14388,16 @@ function vtUpdateCartBadge(){
 function vtOpenCart(){
   vtEnsureCart();
   vtRenderCart();
+  var fs=document.querySelector('.vt-session-fs')||document.querySelector('.vt-fullscreen');
+  if(fs)fs.style.zIndex='100006';
   document.getElementById('vt-cart-drawer').classList.add('open');
   document.getElementById('vt-cart-overlay').classList.add('open');
 }
 function vtCloseCart(){
   var d=document.getElementById('vt-cart-drawer');if(d)d.classList.remove('open');
   var o=document.getElementById('vt-cart-overlay');if(o)o.classList.remove('open');
+  var fs=document.querySelector('.vt-session-fs')||document.querySelector('.vt-fullscreen');
+  if(fs)fs.style.zIndex='';
 }
 function vtRenderCart(){
   var container=document.getElementById('vt-cart-items');if(!container)return;
