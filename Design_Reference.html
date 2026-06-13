@@ -19751,8 +19751,9 @@ if(document.readyState==='loading'){
       src.onended=function(){ctx.close()};
     }catch(e){}
   }
-  document.addEventListener('click',playOceanWave,{once:true});
-  document.addEventListener('touchstart',playOceanWave,{once:true});
+  ['click','touchstart','scroll','mousemove','keydown'].forEach(function(evt){
+    document.addEventListener(evt,playOceanWave,{once:true,passive:true});
+  });
 })();
 </script>
 
