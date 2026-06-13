@@ -14789,7 +14789,7 @@ function vtToggleCaptions(el){
 (function(){
   try{
     var ver=localStorage.getItem('vt-lang-v');
-    if(ver!=='2'){localStorage.removeItem('vt-lang');localStorage.setItem('vt-lang-v','2')}
+    if(ver!=='3'){localStorage.removeItem('vt-lang');localStorage.setItem('vt-lang-v','3')}
     var saved=localStorage.getItem('vt-lang');
     if(saved&&vtLangData[saved]){
       vtCurrentLang=saved;
