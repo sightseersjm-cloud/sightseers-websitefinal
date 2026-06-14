@@ -13592,19 +13592,19 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
                         <!-- Scene Switcher -->
                         <div class="vt-scene-switcher">
-                          <div class="vt-scene-btn active" onclick="vtSwitchScene('kayak')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
-                          <div class="vt-scene-btn" onclick="vtSwitchScene('market')"><i class="fas fa-store" style="margin-right:4px"></i> Craft Market</div>
+                          <div class="vt-scene-btn active" data-tip="Switch to Blue Lagoon beach scene" data-tip-pos="bottom" onclick="vtSwitchScene('kayak')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
+                          <div class="vt-scene-btn" data-tip="Switch to local craft market scene" data-tip-pos="bottom" onclick="vtSwitchScene('market')"><i class="fas fa-store" style="margin-right:4px"></i> Craft Market</div>
                         </div>
 
 
                         <!-- Weather Sync -->
-                        <div class="vt-weather-widget"><span class="vt-weather-icon">&#9728;&#65039;</span><div class="vt-weather-info">29&deg;C Sunny<small>Port Antonio &middot; Live</small></div></div>
+                        <div class="vt-weather-widget" data-tip="Live weather at this destination" data-tip-pos="bottom"><span class="vt-weather-icon">&#9728;&#65039;</span><div class="vt-weather-info">29&deg;C Sunny<small>Port Antonio &middot; Live</small></div></div>
 
                         <!-- Spatial Audio Zone -->
-                        <div class="vt-audio-zone"><div class="vt-audio-zone-bars"><span></span><span></span><span></span><span></span></div><div class="vt-audio-zone-label">Ocean Waves<small>Spatial Audio</small></div></div>
+                        <div class="vt-audio-zone" data-tip="Ambient sound from this location"><div class="vt-audio-zone-bars"><span></span><span></span><span></span><span></span></div><div class="vt-audio-zone-label">Ocean Waves<small>Spatial Audio</small></div></div>
 
                         <!-- Haptic Toggle -->
-                        <div class="vt-haptic-toggle" onclick="vtToggleHaptic(this)"><i class="fas fa-hand-point-up"></i> Haptic ON</div>
+                        <div class="vt-haptic-toggle" data-tip="Feel vibrations during the tour" onclick="vtToggleHaptic(this)"><i class="fas fa-hand-point-up"></i> Haptic ON</div>
 
                         <!-- AI Identify Card -->
                         <div class="vt-identify-card" id="vt-identify-card">
@@ -13637,7 +13637,7 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                           </div>
                         </div>
                         <!-- Live Indicator -->
-                        <div class="vt-live-indicator"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-session-expand" onclick="vtExpandSession()" title="Expand Session"><i class="fas fa-expand"></i></div>
+                        <div class="vt-live-indicator" data-tip="You're watching a live session" data-tip-pos="bottom"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-session-expand" data-tip="Fullscreen mode" data-tip-pos="left" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
 
                         <!-- BLUE LAGOON - YouTube 360° Live Tour -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
@@ -13694,15 +13694,15 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
                         <!-- Minimal Overlay -->
                         <div class="vt-session-video-overlay">
                           <div class="vt-session-location" id="vt-session-loc">Port Antonio &bull; Portland &bull; Jamaica</div>
-                          <div class="vt-session-viewers"><i class="fas fa-eye"></i> <span id="vt-viewer-count">247</span> watching</div>
+                          <div class="vt-session-viewers" data-tip="People watching this session right now"><i class="fas fa-eye"></i> <span id="vt-viewer-count">247</span> watching</div>
                         </div>
 
                       </div>
                       <div class="vt-session-actions">
-                        <div class="vt-session-action" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop Now<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" onclick="vtOpenCart()"><i class="fas fa-shopping-cart"></i>Cart</div>
-                        <div class="vt-session-action" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Capture Photo</div>
-                        <div class="vt-session-action" id="vt-point-ask-btn" onclick="vtPointAndIdentify()"><i class="fas fa-hand-pointer"></i>Point and Ask</div>
-                        <div class="vt-session-action" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite Friend</div>
+                        <div class="vt-session-action" data-tip="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop Now<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" data-tip="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-shopping-cart"></i>Cart</div>
+                        <div class="vt-session-action" data-tip="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Capture Photo</div>
+                        <div class="vt-session-action" data-tip="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtPointAndIdentify()"><i class="fas fa-hand-pointer"></i>Point and Ask</div>
+                        <div class="vt-session-action" data-tip="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action" data-tip="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite Friend</div>
                       </div>
                     </div>
                     <div class="vt-session-side">
@@ -19884,6 +19884,18 @@ if(document.readyState==='loading'){
 
 </script>
 <style id="vt-2040-features">
+/* ═══════ SESSION HOVER TOOLTIPS ═══════ */
+[data-tip]{position:relative}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(4px);background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:7px 14px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap;pointer-events:none;opacity:0;transition:all .25s cubic-bezier(.25,.46,.45,.94);z-index:100;letter-spacing:.2px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+[data-tip]::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(0,0,0,.85);pointer-events:none;opacity:0;transition:all .25s cubic-bezier(.25,.46,.45,.94);z-index:100}
+[data-tip]:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}
+[data-tip]:hover::before{opacity:1}
+[data-tip-pos="bottom"]::after{bottom:auto;top:calc(100% + 10px);transform:translateX(-50%) translateY(-4px)}
+[data-tip-pos="bottom"]::before{bottom:auto;top:calc(100% + 4px);border-top-color:transparent;border-bottom-color:rgba(0,0,0,.85)}
+[data-tip-pos="bottom"]:hover::after{transform:translateX(-50%) translateY(0)}
+[data-tip-pos="left"]::after{bottom:auto;top:50%;left:auto;right:calc(100% + 10px);transform:translateY(-50%) translateX(4px)}
+[data-tip-pos="left"]::before{bottom:auto;top:50%;left:auto;right:calc(100% + 4px);transform:translateY(-50%);border-top-color:transparent;border-left-color:rgba(0,0,0,.85)}
+[data-tip-pos="left"]:hover::after{transform:translateY(-50%) translateX(0)}
 /* ═══════ 2040 NEXT-GEN FEATURES ═══════ */
 .vt-ai-clone-card{background:linear-gradient(135deg,rgba(239,135,49,.08),rgba(239,135,49,.02));border:1px solid rgba(239,135,49,.15);border-radius:20px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
 .vt-ai-clone-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(239,135,49,.12),transparent 70%);border-radius:50%}
