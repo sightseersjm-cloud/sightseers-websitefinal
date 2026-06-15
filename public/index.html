@@ -12488,10 +12488,6 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 .vt-session-action.clicked{animation:vtActionPulse .5s ease}
 @keyframes vtActionPulse{0%{transform:scale(1)}50%{transform:scale(.92);opacity:.7}100%{transform:scale(1);opacity:1}}
 
-.vt-session-shop-item{overflow:hidden}
-.vt-session-shop-item strong,.vt-session-shop-item small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-.vt-session-shop-add{cursor:pointer;transition:all .25s}
-.vt-session-shop-add:hover{background:var(--orange);color:#fff;transform:scale(1.08)}
 .vt-session-shop-add.added{background:#22c55e!important;color:#fff!important}
 .vt-session-bar-btn{cursor:pointer;transition:all .25s}
 .vt-session-bar-btn:hover{opacity:.85;transform:scale(1.04)}
@@ -12514,8 +12510,8 @@ body.theme-night .vt-chat-input{background:rgba(255,255,255,.05);border-color:rg
 
 .vt-session-video-label{transition:opacity .3s}
 .vt-video-playing .vt-session-video-label{opacity:.15}
-.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot{opacity:0;transition:opacity .35s ease}
-.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot{opacity:1}
+.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass{opacity:0;transition:opacity .35s ease}
+.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot,.vt-session-video:hover .vt-360-compass{opacity:1}
 .vt-video-playing{background:linear-gradient(135deg,#0b4d3a,#1a8a6e,#0b4d3a)!important;background-size:300% 300%!important;animation:vtVideoShimmer 4s ease infinite!important}
 @keyframes vtVideoShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .vt-video-playing .vt-session-video-overlay{opacity:1!important}
@@ -12552,8 +12548,18 @@ body.theme-night .vt-empty-state h4{color:#fff}
 
 
 .vt-360-scene{position:absolute;inset:0;overflow:hidden}
+.vt-360-scene:not(.vt-yt-scene){cursor:grab}
+.vt-360-scene.vt-360-dragging{cursor:grabbing!important}
+.vt-360-scene.vt-360-manual *{animation-play-state:paused!important}
 .vt-360-pano{position:absolute;width:300%;height:100%;top:0;left:0;animation:vtPanSlow 30s linear infinite;will-change:transform}
 .vt-360-pano.paused{animation-play-state:paused}
+.vt-360-compass{position:absolute;bottom:44px;left:12px;z-index:15;display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:rgba(255,255,255,.8);font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;transition:opacity .35s ease}
+.vt-360-compass-ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.25);position:relative;flex-shrink:0}
+.vt-360-compass-needle{position:absolute;top:3px;left:50%;width:2px;height:8px;margin-left:-1px;background:var(--orange);border-radius:1px;transform-origin:center 8px;transition:transform .15s ease-out}
+.vt-360-drag-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;border-radius:14px;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:12px;pointer-events:none;opacity:0;transition:opacity .5s}
+.vt-360-drag-hint.show{opacity:1}
+.vt-360-drag-hint i{font-size:20px;color:var(--orange);animation:vtDragHintPulse 2s ease-in-out infinite}
+@keyframes vtDragHintPulse{0%,100%{transform:translateX(0) scale(1)}25%{transform:translateX(8px) scale(1.05)}75%{transform:translateX(-8px) scale(1.05)}}
 
 /* Kayak / Blue Lagoon scene layers */
 .vt-360-sky{position:absolute;inset:0;background:linear-gradient(180deg,#0a3d5c 0%,#1a7a9e 30%,#25a3c8 50%,#7ecce5 70%,#b8e6f5 100%)}
@@ -12927,7 +12933,7 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 .vt-session-action:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 24px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.1) inset;background:linear-gradient(145deg,rgba(239,135,49,.2),rgba(239,135,49,.08));border-color:rgba(239,135,49,.25);color:#fff}
 .vt-session-action:hover i{color:#fff;filter:drop-shadow(0 2px 8px rgba(255,255,255,.3));transform:scale(1.1)}
 .vt-session-action:active{transform:translateY(0) scale(.98);box-shadow:0 2px 6px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.04) inset,0 -1px 4px rgba(0,0,0,.3) inset}
-.vt-session-side{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06);background:rgba(13,27,42,.6);overflow-y:auto;overflow-x:hidden;min-width:0}
+.vt-session-side{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06);background:rgba(13,27,42,.6);overflow-y:auto;min-width:280px}
 .vt-session-chat{flex:1;padding:12px;overflow:hidden;max-height:280px;display:flex;flex-direction:column}
 .vt-session-chat-title{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:6px}
 .vt-session-chat-title span{white-space:nowrap;flex-shrink:0}
@@ -13006,6 +13012,60 @@ body.theme-night .vt-hotspot-popup{background:rgba(13,27,42,.92);border-color:rg
 body.theme-night .vt-hotspot-popup h4{color:#fff}
 body.theme-night .vt-hotspot-popup p{color:rgba(255,255,255,.5)}
 body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
+
+/* ======== V-TOURS LIGHT / DAY MODE ======== */
+body:not(.theme-night) .vt-session{background:#fff;border-color:rgba(0,0,0,.1);box-shadow:0 4px 24px rgba(0,0,0,.08)}
+body:not(.theme-night) .vt-session-bar{background:linear-gradient(135deg,#1a5276,#1a7a9e)}
+body:not(.theme-night) .vt-session-side{background:#f5f7fa;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-session-chat{color:#1a1a2e}
+body:not(.theme-night) .vt-session-chat-title{color:rgba(0,0,0,.45)}
+body:not(.theme-night) .vt-session-chat-title span{color:rgba(0,0,0,.35)}
+body:not(.theme-night) .vt-session-chat-text{color:rgba(0,0,0,.7)}
+body:not(.theme-night) .vt-session-chat-avatar{background:rgba(0,0,0,.07);color:rgba(0,0,0,.5)}
+body:not(.theme-night) .vt-session-chat-avatar.guide{background:rgba(239,135,49,.12);color:var(--orange)}
+body:not(.theme-night) .vt-chat-input-wrap{background:#eef0f4;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-chat-input{background:#fff;border-color:rgba(0,0,0,.12);color:#1a1a2e}
+body:not(.theme-night) .vt-session-shop{border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-session-shop-title{color:rgba(0,0,0,.4)}
+body:not(.theme-night) .vt-session-shop-item{border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-session-shop-item-name{color:rgba(0,0,0,.75)}
+body:not(.theme-night) .vt-session-shop-item-price{color:rgba(0,0,0,.45)}
+body:not(.theme-night) .vt-session-action{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.65);box-shadow:0 2px 8px rgba(0,0,0,.06),0 1px 0 rgba(255,255,255,.8) inset}
+body:not(.theme-night) .vt-session-action::before{background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,transparent 50%)}
+body:not(.theme-night) .vt-session-action:hover{background:linear-gradient(145deg,rgba(239,135,49,.12),rgba(239,135,49,.04));border-color:rgba(239,135,49,.2);color:#1a1a2e}
+body:not(.theme-night) .vt-session-bar-btn.leave{background:rgba(239,68,68,.9)}
+body:not(.theme-night) .vt-dash-frame{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 4px 24px rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-dash-sidebar{background:#f5f7fa;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-dash-sidebar-label{color:rgba(0,0,0,.35)!important}
+body:not(.theme-night) .vt-dash-sidebar a{color:rgba(0,0,0,.55)}
+body:not(.theme-night) .vt-dash-sidebar a:hover{background:rgba(0,0,0,.04);color:#1a1a2e}
+body:not(.theme-night) .vt-dash-sidebar a.active{color:var(--orange);background:rgba(239,135,49,.06)}
+body:not(.theme-night) .vt-dash-main{background:#fff}
+body:not(.theme-night) .vt-dash-header h2{color:#1a1a2e}
+body:not(.theme-night) .vt-dash-stat{background:#f8f9fb;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-dash-stat strong{color:#1a1a2e}
+body:not(.theme-night) .vt-dash-stat span{color:rgba(0,0,0,.45)}
+body:not(.theme-night) .vt-dash-stat small{color:rgba(0,0,0,.35)}
+body:not(.theme-night) .vt-live-card{background:#f8f9fb;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-live-card-title{color:#1a1a2e}
+body:not(.theme-night) .vt-live-card-guide{color:rgba(0,0,0,.45)}
+body:not(.theme-night) .vt-live-card-price{color:#1a1a2e}
+body:not(.theme-night) .vt-dash-avatar-info{color:#1a1a2e}
+body:not(.theme-night) .vt-dash-avatar-info span{color:rgba(0,0,0,.4)!important}
+body:not(.theme-night) .vt-empty-state{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-empty-state h4{color:#1a1a2e}
+body:not(.theme-night) .vt-empty-state p{color:rgba(0,0,0,.45)}
+body:not(.theme-night) .vt-empty-state i{color:rgba(0,0,0,.15)}
+body:not(.theme-night) .vt-guide-table th{color:rgba(0,0,0,.35);border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-guide-table td{color:rgba(0,0,0,.5);border-color:rgba(0,0,0,.04)}
+body:not(.theme-night) .vt-guide-table td:first-child{color:#1a1a2e}
+body:not(.theme-night) .vt-earnings-chart{background:#f8f9fb;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-earnings-chart h4{color:#1a1a2e}
+body:not(.theme-night) .vt-splits-card{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-splits-title{color:#1a1a2e}
+body:not(.theme-night) .vt-dash-tab{background:#f5f7fa;color:rgba(0,0,0,.6);border-color:rgba(0,0,0,.08)}
+body:not(.theme-night) .vt-dash-tab.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+body:not(.theme-night) .vt-toast{background:#fff;color:#1a1a2e;box-shadow:0 8px 32px rgba(0,0,0,.12)}
 
 /* ======== YOUTUBE 360 EMBED ======== */
 .vt-yt-scene{display:flex;align-items:stretch;justify-content:center;background:#000}
@@ -13700,7 +13760,9 @@ body.theme-night .vt-hotspot-popup-close{color:rgba(255,255,255,.4)}
 
                         <!-- Hotspot popup moved to body via JS -->
 
-                        
+                        <!-- 360° Navigation -->
+                        <div class="vt-360-compass"><div class="vt-360-compass-ring"><div class="vt-360-compass-needle" id="vt-360-compass-needle"></div></div> 360&deg; VIEW</div>
+                        <div class="vt-360-drag-hint" id="vt-360-drag-hint"><i class="fas fa-arrows-alt-h"></i> Click &amp; drag to look around</div>
 
                         <!-- Minimal Overlay -->
                         <div class="vt-session-video-overlay">
@@ -14923,6 +14985,79 @@ function vtSwitchScene(scene){
   }
   vtToast('<i class="fas fa-sync-alt"></i> Scene: '+(scene==='kayak'?'Blue Lagoon Kayak':'Falmouth Craft Market'));
 }
+
+/* ═══════ 360° PANORAMA DRAG NAVIGATION ═══════ */
+var vt360={dragging:false,scene:null,pano:null,startX:0,offset:0,startOffset:0,velocity:0,lastX:0,lastTime:0,raf:null,timer:null};
+function vtInit360(){
+  document.querySelectorAll('.vt-360-scene:not(.vt-yt-scene)').forEach(function(sc){
+    sc.addEventListener('mousedown',function(e){
+      if(e.target.closest('.vt-hotspot'))return;
+      e.preventDefault();
+      vt360Start(e.clientX,sc);
+    });
+    sc.addEventListener('touchstart',function(e){
+      if(e.target.closest('.vt-hotspot'))return;
+      vt360Start(e.touches[0].clientX,sc);
+    },{passive:true});
+  });
+  document.addEventListener('mousemove',function(e){if(vt360.dragging)vt360Move(e.clientX)});
+  document.addEventListener('touchmove',function(e){if(vt360.dragging)vt360Move(e.touches[0].clientX)},{passive:true});
+  document.addEventListener('mouseup',vt360End);
+  document.addEventListener('touchend',vt360End);
+  setTimeout(function(){var h=document.getElementById('vt-360-drag-hint');if(h){h.classList.add('show');setTimeout(function(){h.classList.remove('show')},3500)}},2500);
+}
+function vt360Start(x,scene){
+  if(vt360.raf){cancelAnimationFrame(vt360.raf);vt360.raf=null}
+  if(vt360.timer){clearTimeout(vt360.timer);vt360.timer=null}
+  vt360.scene=scene;
+  vt360.pano=scene.querySelector('.vt-360-pano');
+  if(!vt360.pano)return;
+  scene.classList.add('vt-360-manual','vt-360-dragging');
+  vt360.startX=x;
+  vt360.startOffset=vt360.offset;
+  vt360.lastX=x;
+  vt360.lastTime=Date.now();
+  vt360.velocity=0;
+  vt360.dragging=true;
+}
+function vt360Move(x){
+  var dx=x-vt360.startX;
+  vt360.offset=vt360.startOffset+dx;
+  var now=Date.now();
+  var dt=now-vt360.lastTime;
+  if(dt>0)vt360.velocity=(x-vt360.lastX)/dt;
+  vt360.lastX=x;
+  vt360.lastTime=now;
+  if(vt360.pano)vt360.pano.style.marginLeft=vt360.offset+'px';
+  var needle=document.getElementById('vt-360-compass-needle');
+  if(needle){var cw=vt360.scene?vt360.scene.offsetWidth:600;needle.style.transform='rotate('+(vt360.offset/cw*-120)+'deg)'}
+}
+function vt360End(){
+  if(!vt360.dragging)return;
+  vt360.dragging=false;
+  if(vt360.scene)vt360.scene.classList.remove('vt-360-dragging');
+  if(Math.abs(vt360.velocity)>0.15){
+    var vel=vt360.velocity*250;
+    (function coast(){
+      vel*=0.95;
+      if(Math.abs(vel)<0.5){vt360.raf=null;return}
+      vt360.offset+=vel*0.016;
+      if(vt360.pano)vt360.pano.style.marginLeft=vt360.offset+'px';
+      var needle=document.getElementById('vt-360-compass-needle');
+      if(needle){var cw=vt360.scene?vt360.scene.offsetWidth:600;needle.style.transform='rotate('+(vt360.offset/cw*-120)+'deg)'}
+      vt360.raf=requestAnimationFrame(coast);
+    })();
+  }
+  vt360.timer=setTimeout(function(){
+    if(!vt360.scene)return;
+    vt360.scene.classList.remove('vt-360-manual');
+    if(vt360.pano)vt360.pano.style.marginLeft='';
+    vt360.offset=0;
+    var needle=document.getElementById('vt-360-compass-needle');
+    if(needle)needle.style.transform='';
+  },10000);
+}
+vtInit360();
 
 /* ═══════ HOTSPOT PURCHASE SYSTEM ═══════ */
 var vtHotspotData={
