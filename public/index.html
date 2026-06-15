@@ -13727,6 +13727,10 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food and Drink</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Kingston Jerk and Ackee Class</div><div class="vt-live-card-guide">Chef Anita Murray, Kingston, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinSession('kingston-jerk')">Join Live</div></div></div>
                   </div>
+                  <div class="vt-live-card" onclick="vtJoinSession('cooking-tour')">
+                    <div class="vt-live-card-img" style="background:linear-gradient(135deg,#c2185b,#ff6f00)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Cooking</div></div>
+                    <div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide">Chef Donna Gayle, Ocho Rios, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinSession('cooking-tour')">Join Live</div></div></div>
+                  </div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Session starts at 3:00 PM. Seat reserved!')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><div class="vt-live-card-badge scheduled">3:00 PM</div><div class="vt-live-card-cat">Personal Shopping</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Bridgetown Market Tour</div><div class="vt-live-card-guide">Sandra Browne, Bridgetown, Barbados</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $28</span><div class="vt-live-card-btn alt" onclick="event.stopPropagation();vtToast('<i class=\'fas fa-check-circle\'></i> Seat booked for 3:00 PM!')">Book Seat</div></div></div>
@@ -13838,16 +13842,10 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                           </div>
                         </div>
 
-                        <!-- CRAFT MARKET SCENE -->
-                        <div class="vt-360-scene" id="vt-scene-market" style="display:none">
-                          <div class="vt-360-pano">
-                            <div class="vt-360-market"></div>
-                            <div class="vt-360-market-stalls"></div>
-                            <div class="vt-360-market-canopies"></div>
-                            <div class="vt-360-market-lights"></div>
-                            <div class="vt-360-market-floor"></div>
-                          </div>
-
+                        <!-- CRAFT MARKET SCENE — YouTube 360° -->
+                        <div class="vt-360-scene vt-yt-scene" id="vt-scene-market" style="display:none">
+                          <iframe class="vt-yt-iframe" src="https://www.youtube.com/embed/g-5ktqtVXzk?autoplay=0&mute=1&loop=1&playlist=g-5ktqtVXzk&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <div class="vt-yt-hotspot-layer">
                           <!-- Market Hotspots -->
                           <div class="vt-hotspot" style="top:40%;left:18%" onmouseenter="vtShowHotspot(event,'hs4')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs4')">
                             <div class="vt-hotspot-dot"><i class="fas fa-shopping-basket"></i></div>
@@ -13864,6 +13862,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                           <div class="vt-hotspot" style="top:45%;left:35%" onmouseenter="vtShowHotspot(event,'hs7')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs7')">
                             <div class="vt-hotspot-dot"><i class="fas fa-gem"></i></div>
                             <div class="vt-hotspot-label">Larimar Stone Necklace<small>USD $65.00</small></div>
+                          </div>
                           </div>
                         </div>
 
@@ -13919,6 +13918,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtJoinSession('blue-lagoon')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Marcus Thompson, Portland</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn">Join</div></div></div></div>
                   <div class="vt-live-card" onclick="vtJoinSession('kingston-jerk')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Kingston Jerk and Ackee Class</div><div class="vt-live-card-guide">Chef Anita Murray, Kingston</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn">Join</div></div></div></div>
+                  <div class="vt-live-card" onclick="vtJoinSession('cooking-tour')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#c2185b,#ff6f00)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Cooking</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide">Chef Donna Gayle, Ocho Rios</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn">Join</div></div></div></div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Starts 3:00 PM. Seat reserved!')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><div class="vt-live-card-badge scheduled">3:00 PM</div><div class="vt-live-card-cat">Shopping</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Bridgetown Market Tour</div><div class="vt-live-card-guide">Sandra Browne, Barbados</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $28</span><div class="vt-live-card-btn alt">Book</div></div></div></div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Starts Tomorrow 8 AM')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#7c3aed,#a855f7)"><div class="vt-live-card-badge scheduled">Tomorrow</div><div class="vt-live-card-cat">Culture</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Devon House Heritage Tour</div><div class="vt-live-card-guide">Keisha Brown, Kingston</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn alt">Book</div></div></div></div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Starts Saturday 7:30 AM')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#059669,#34d399)"><div class="vt-live-card-badge scheduled">Sat</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Rio Grande River Raft Tour</div><div class="vt-live-card-guide">Marcus Thompson, Portland</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $55</span><div class="vt-live-card-btn alt">Book</div></div></div></div>
@@ -14904,7 +14904,8 @@ function vtGuideNav(view,el){
 /* ── Join session ── */
 var vtSessions={
   'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247},
-  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183}
+  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183},
+  'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156}
 };
 function vtJoinSession(id){
   var s=vtSessions[id];if(!s)return;
