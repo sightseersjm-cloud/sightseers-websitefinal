@@ -13761,7 +13761,8 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                 <button class="vt-create-room-btn" onclick="vtToast('<i class=\'fas fa-plus-circle\'></i> Creating your watch room...')"><i class="fas fa-plus"></i> Create New Room</button>
               </div>
 
-                <!-- Active Session -->
+                <!-- Active Session (part of Explore view) -->
+                <div id="vt-exp-session-wrap" class="vt-dash-view active">
                 <div class="vt-live-header"><h3>Your Active Session</h3></div>
                 <div class="vt-session" id="vt-active-session">
                   <div class="vt-session-bar">
@@ -13908,6 +13909,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                   </div>
                 </div>
               </div>
+              </div><!-- /vt-exp-session-wrap -->
 
 
               <!-- VIEW: Browse Tours -->
@@ -14830,6 +14832,11 @@ function vtExpNav(view,el){
   document.querySelectorAll('#vt-exp-main .vt-dash-view').forEach(function(v){v.classList.remove('active')});
   var target=document.getElementById('vt-exp-'+view);
   if(target)target.classList.add('active');
+  var sessionWrap=document.getElementById('vt-exp-session-wrap');
+  if(sessionWrap){
+    if(view==='explore')sessionWrap.classList.add('active');
+    else sessionWrap.classList.remove('active');
+  }
 }
 
 /* ── Delegated sidebar click handlers (bulletproof) ── */
