@@ -12472,9 +12472,9 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 /* ======== V-TOURS DASHBOARD MOCKUPS ======== */
 
 /* ======== INTERACTIVE DASHBOARD ENHANCEMENTS ======== */
-.vt-dash-sidebar a{cursor:pointer;transition:all .25s ease}
+.vt-dash-sidebar a{cursor:pointer!important;transition:all .25s ease;pointer-events:auto!important}
 .vt-dash-sidebar a:hover{background:rgba(239,135,49,.08);color:var(--orange)!important}
-.vt-dash-sidebar a.active{pointer-events:auto}
+.vt-dash-sidebar a.active{pointer-events:auto!important}
 .vt-dash-header-btn{cursor:pointer;transition:all .25s}
 .vt-dash-header-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .vt-dash-header-btn.primary:hover{box-shadow:0 4px 16px rgba(239,135,49,.35)}
@@ -12863,10 +12863,10 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 .vt-dash-body{display:grid;grid-template-columns:200px 1fr;min-height:420px}
 
 
-.vt-dash-sidebar{background:rgba(255,255,255,.02);border-right:1px solid rgba(255,255,255,.04);padding:24px 0}
-.vt-dash-sidebar-section{padding:0 16px;margin-bottom:20px}
+.vt-dash-sidebar{background:rgba(255,255,255,.02);border-right:1px solid rgba(255,255,255,.04);padding:24px 0;position:relative;z-index:5;pointer-events:auto}
+.vt-dash-sidebar-section{padding:0 16px;margin-bottom:20px;pointer-events:auto}
 .vt-dash-sidebar-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.3);font-weight:700;padding:0 12px;margin-bottom:8px}
-.vt-dash-sidebar a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:13px;color:rgba(255,255,255,.5);font-weight:500;text-decoration:none;transition:background .2s,color .2s;position:relative}
+.vt-dash-sidebar a,.vt-dash-sidebar a[data-view]{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:13px;color:rgba(255,255,255,.5);font-weight:500;text-decoration:none;transition:background .2s,color .2s;position:relative;pointer-events:auto!important;cursor:pointer!important;-webkit-tap-highlight-color:rgba(239,135,49,.1);user-select:none;-webkit-user-select:none}
 .vt-dash-sidebar a:hover{background:rgba(6,58,99,.04);color:var(--navy)}
 .vt-dash-sidebar a.active{background:rgba(239,135,49,.08);color:var(--orange);font-weight:600}
 .vt-dash-sidebar a .badge{background:var(--orange);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:1px 7px;margin-left:auto}
@@ -13673,25 +13673,25 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
             <div class="vt-dash-sidebar" id="vt-exp-sidebar">
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Main</div>
-                <a href="#" class="active" onclick="vtExpNav('explore',this);return false"><i class="fas fa-compass"></i> Explore</a>
-                <a href="#" onclick="vtExpNav('browse',this);return false"><i class="fas fa-binoculars"></i> Browse Tours</a>
-                <a href="#" onclick="vtExpNav('bookings',this);return false"><i class="fas fa-calendar-check"></i> My Bookings <span class="badge">3</span></a>
-                <a href="#" onclick="vtExpNav('favorites',this);return false"><i class="fas fa-heart"></i> Favorites</a>
+                <a data-view="explore" class="active"><i class="fas fa-compass"></i> Explore</a>
+                <a data-view="browse"><i class="fas fa-binoculars"></i> Browse Tours</a>
+                <a data-view="bookings"><i class="fas fa-calendar-check"></i> My Bookings <span class="badge">3</span></a>
+                <a data-view="favorites"><i class="fas fa-heart"></i> Favorites</a>
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Smart</div>
-                <a href="#" onclick="vtExpNav('concierge',this);return false"><i class="fas fa-wand-magic-sparkles"></i> AI Concierge</a>
-                <a href="#" onclick="vtExpNav('passport',this);return false"><i class="fas fa-passport"></i> Passport</a>
-                <a href="#" onclick="vtExpNav('social',this);return false"><i class="fas fa-users"></i> Social</a>
-                <a href="#" onclick="vtExpNav('replays',this);return false"><i class="fas fa-play-circle"></i> Replays</a>
-                <a href="#" onclick="vtExpNav('watchrooms',this);return false"><i class="fas fa-users-rectangle"></i> Watch Rooms</a>
+                <a data-view="concierge"><i class="fas fa-wand-magic-sparkles"></i> AI Concierge</a>
+                <a data-view="passport"><i class="fas fa-passport"></i> Passport</a>
+                <a data-view="social"><i class="fas fa-users"></i> Social</a>
+                <a data-view="replays"><i class="fas fa-play-circle"></i> Replays</a>
+                <a data-view="watchrooms"><i class="fas fa-users-rectangle"></i> Watch Rooms</a>
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Account</div>
-                <a href="#" onclick="vtExpNav('history',this);return false"><i class="fas fa-history"></i> History</a>
-                <a href="#" onclick="vtExpNav('profile',this);return false"><i class="fas fa-user"></i> Profile</a>
-                <a href="#" onclick="vtExpNav('settings',this);return false"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" onclick="vtExpNav('xr',this);return false"><i class="fas fa-vr-cardboard"></i> XR Devices</a>
+                <a data-view="history"><i class="fas fa-history"></i> History</a>
+                <a data-view="profile"><i class="fas fa-user"></i> Profile</a>
+                <a data-view="settings"><i class="fas fa-cog"></i> Settings</a>
+                <a data-view="xr"><i class="fas fa-vr-cardboard"></i> XR Devices</a>
               </div>
               <div class="vt-dash-avatar">
                 <div class="vt-dash-avatar-circle">SA</div>
@@ -13705,7 +13705,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                 <div class="vt-dash-header">
                   <h2>Explore / Live Now</h2>
                   <div class="vt-dash-header-actions">
-                    <div class="vt-dash-header-btn" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a:nth-child(3)'))">Browse All</div>
+                    <div class="vt-dash-header-btn" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a[data-view=browse]'))">Browse All</div>
                     <div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-calendar-check\'></i> Tour scheduler coming soon!')">Schedule Tour</div>
                   </div>
                 </div>
@@ -13715,7 +13715,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                   <div class="vt-dash-stat"><strong id="vt-exp-items">7</strong><span>Items Purchased</span><small>via in-session shop</small></div>
                   <div class="vt-dash-stat"><strong>2</strong><span>Upcoming</span><small>Next: Thu 10am</small></div>
                 </div>
-                <div class="vt-live-header"><h3><span class="vt-dash-live-dot"></span>Live Right Now</h3><a href="#" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a:nth-child(3)'));return false">See all 8 live sessions</a></div>
+                <div class="vt-live-header"><h3><span class="vt-dash-live-dot"></span>Live Right Now</h3><a href="javascript:void(0)" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a[data-view=browse]'))">See all 8 live sessions</a></div>
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtJoinSession('blue-lagoon')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature and Outdoors</div></div>
@@ -13734,7 +13734,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Watch Rooms -->
               <div class="vt-dash-view" id="vt-exp-watchrooms">
-                <div class="vt-dash-header"><h2>Group Watch Rooms</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Group Watch Rooms</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:16px">Watch tours together with friends. See reactions, vote on where to go next.</p>
                 <div class="vt-group-room" onclick="vtToast('<i class=\'fas fa-door-open\'></i> Joining Beach Vibes room...')">
                   <div class="vt-group-room-avatar">&#127754;</div>
@@ -13913,7 +13913,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Browse Tours -->
               <div class="vt-dash-view" id="vt-exp-browse">
-                <div class="vt-dash-header"><h2>Browse Tours</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Browse Tours</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtJoinSession('blue-lagoon')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Marcus Thompson, Portland</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn">Join</div></div></div></div>
                   <div class="vt-live-card" onclick="vtJoinSession('kingston-jerk')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Kingston Jerk and Ackee Class</div><div class="vt-live-card-guide">Chef Anita Murray, Kingston</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn">Join</div></div></div></div>
@@ -13926,7 +13926,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Bookings -->
               <div class="vt-dash-view" id="vt-exp-bookings">
-                <div class="vt-dash-header"><h2>My Bookings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>My Bookings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Session starts at 3:00 PM today')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><div class="vt-live-card-badge scheduled">Today 3PM</div><div class="vt-live-card-cat">Shopping</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Bridgetown Market Tour</div><div class="vt-live-card-guide">Sandra Browne, Barbados</div><div class="vt-live-card-foot"><span class="vt-live-card-price">Booked</span><div class="vt-live-card-btn alt">View</div></div></div></div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-clock\'></i> Session starts Thursday 10 AM')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#7c3aed,#a855f7)"><div class="vt-live-card-badge scheduled">Thu 10AM</div><div class="vt-live-card-cat">Culture</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Devon House Heritage Tour</div><div class="vt-live-card-guide">Keisha Brown, Kingston</div><div class="vt-live-card-foot"><span class="vt-live-card-price">Booked</span><div class="vt-live-card-btn alt">View</div></div></div></div>
@@ -13936,7 +13936,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Favorites -->
               <div class="vt-dash-view" id="vt-exp-favorites">
-                <div class="vt-dash-header"><h2>Favorites</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Favorites</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtJoinSession('blue-lagoon')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Marcus Thompson, Portland</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn"><i class="fas fa-heart" style="margin-right:4px"></i>Saved</div></div></div></div>
                   <div class="vt-live-card" onclick="vtJoinSession('kingston-jerk')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Kingston Jerk and Ackee Class</div><div class="vt-live-card-guide">Chef Anita Murray, Kingston</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn"><i class="fas fa-heart" style="margin-right:4px"></i>Saved</div></div></div></div>
@@ -13945,20 +13945,20 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: History -->
               <div class="vt-dash-view" id="vt-exp-history">
-                <div class="vt-dash-header"><h2>Tour History</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Tour History</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-empty-state"><i class="fas fa-history"></i><h4>12 Past Tours</h4><p>Your completed virtual tour sessions will appear here with replay options and purchase history.</p></div>
               </div>
 
               <!-- VIEW: Profile -->
               <div class="vt-dash-view" id="vt-exp-profile">
-                <div class="vt-dash-header"><h2>My Profile</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>My Profile</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-empty-state"><i class="fas fa-user-circle"></i><h4>Sarah Anderson</h4><p>Explorer Member since January 2025. 12 tours completed across 5 Caribbean destinations.</p></div>
               </div>
 
 
               <!-- VIEW: AI Concierge -->
               <div class="vt-dash-view" id="vt-exp-concierge">
-                <div class="vt-dash-header"><h2><i class="fas fa-wand-magic-sparkles" style="color:var(--orange);margin-right:8px"></i>AI Trip Concierge</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-wand-magic-sparkles" style="color:var(--orange);margin-right:8px"></i>AI Trip Concierge</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-concierge">
                   <div class="vt-concierge-chat" id="vt-concierge-chat">
                     <div class="vt-ai-msg bot"><div class="vt-ai-avatar"><i class="fas fa-wand-magic-sparkles"></i></div><div class="vt-ai-bubble">Hi Sarah! I am your V-Tours AI concierge. I can help you find the perfect tour, plan your Caribbean adventure, or answer questions about any destination. What sounds good today?</div></div>
@@ -13970,7 +13970,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Virtual Passport -->
               <div class="vt-dash-view" id="vt-exp-passport">
-                <div class="vt-dash-header"><h2><i class="fas fa-passport" style="color:var(--orange);margin-right:8px"></i>Virtual Passport</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-passport" style="color:var(--orange);margin-right:8px"></i>Virtual Passport</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-passport-tier"><div class="vt-passport-tier-icon gold"><i class="fas fa-award"></i></div><div class="vt-passport-tier-info"><strong>Gold Explorer</strong><span>12 tours completed</span></div><div class="vt-passport-xp"><div class="vt-passport-xp-fill" style="width:72%"></div></div><span class="vt-passport-xp-label">720 / 1,000 XP to Platinum</span></div>
                 <h4 style="color:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:20px 0 12px">Tour Stamps</h4>
                 <div class="vt-passport-stamps">
@@ -13996,7 +13996,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Social Feed -->
               <div class="vt-dash-view" id="vt-exp-social">
-                <div class="vt-dash-header"><h2><i class="fas fa-users" style="color:var(--orange);margin-right:8px"></i>Social</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-users" style="color:var(--orange);margin-right:8px"></i>Social</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-social-online"><div class="vt-social-online-label"><span class="vt-dash-live-dot"></span> Friends Online Now</div>
                   <div class="vt-social-friends">
                     <div class="vt-social-friend" onclick="vtToast('<i class=\'fas fa-eye\'></i> Joining Kevin in Blue Lagoon...')"><div class="vt-social-friend-avatar">KJ</div><div class="vt-social-friend-info"><strong>Kevin J.</strong><span class="live">Watching Blue Lagoon</span></div><div class="vt-social-friend-action">Join</div></div>
@@ -14014,7 +14014,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Tour Replays -->
               <div class="vt-dash-view" id="vt-exp-replays">
-                <div class="vt-dash-header"><h2><i class="fas fa-play-circle" style="color:var(--orange);margin-right:8px"></i>Tour Replays</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-play-circle" style="color:var(--orange);margin-right:8px"></i>Tour Replays</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-live-grid">
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-play\'></i> Loading replay: Blue Lagoon Jun 10...')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Replay</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Jun 10 — 58 min — Marcus T.</div><div class="vt-live-card-foot"><span class="vt-live-card-price"><i class="fas fa-play-circle"></i> Watch</span><div class="vt-live-card-btn">Replay</div></div></div></div>
                   <div class="vt-live-card" onclick="vtToast('<i class=\'fas fa-play\'></i> Loading replay: Jerk Class May 28...')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Replay</div><div class="vt-live-card-cat">Food</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Kingston Jerk and Ackee Class</div><div class="vt-live-card-guide">May 28 — 45 min — Chef Anita M.</div><div class="vt-live-card-foot"><span class="vt-live-card-price"><i class="fas fa-play-circle"></i> Watch</span><div class="vt-live-card-btn">Replay</div></div></div></div>
@@ -14025,7 +14025,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Settings -->
               <div class="vt-dash-view" id="vt-exp-settings">
-                <div class="vt-dash-header"><h2>Settings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Settings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtExpNav('explore',document.querySelector('#vt-exp-sidebar a[data-view=explore]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-empty-state"><i class="fas fa-cog"></i><h4>Account Settings</h4><p>Manage notifications, payment methods, streaming quality, and language preferences.</p></div>
               </div>
 
@@ -14176,31 +14176,31 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
             <div class="vt-dash-sidebar" id="vt-guide-sidebar">
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Management</div>
-                <a href="#" class="active" onclick="vtGuideNav('dashboard',this);return false"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                <a href="#" onclick="vtGuideNav('tours',this);return false"><i class="fas fa-route"></i> My Tours</a>
-                <a href="#" onclick="vtGuideNav('schedule',this);return false"><i class="fas fa-calendar-alt"></i> Schedule</a>
-                <a href="#" onclick="vtGuideNav('shopitems',this);return false"><i class="fas fa-tags"></i> Shop Items</a>
+                <a data-view="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a data-view="tours"><i class="fas fa-route"></i> My Tours</a>
+                <a data-view="schedule"><i class="fas fa-calendar-alt"></i> Schedule</a>
+                <a data-view="shopitems"><i class="fas fa-tags"></i> Shop Items</a>
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Live Tools</div>
-                <a href="#" onclick="vtGuideNav('sentiment',this);return false"><i class="fas fa-smile-beam"></i> Sentiment</a>
-                <a href="#" onclick="vtGuideNav('tips',this);return false"><i class="fas fa-gift"></i> Tips &amp; Gifts</a>
-                <a href="#" onclick="vtGuideNav('multicam',this);return false"><i class="fas fa-video"></i> Multi-Cam</a>
-                <a href="#" onclick="vtGuideNav('aiclone',this);return false"><i class="fas fa-robot"></i> AI Clone</a>
-                <a href="#" onclick="vtGuideNav('mood',this);return false"><i class="fas fa-brain"></i> Mood AI</a>
+                <a data-view="sentiment"><i class="fas fa-smile-beam"></i> Sentiment</a>
+                <a data-view="tips"><i class="fas fa-gift"></i> Tips &amp; Gifts</a>
+                <a data-view="multicam"><i class="fas fa-video"></i> Multi-Cam</a>
+                <a data-view="aiclone"><i class="fas fa-robot"></i> AI Clone</a>
+                <a data-view="mood"><i class="fas fa-brain"></i> Mood AI</a>
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Business</div>
-                <a href="#" onclick="vtGuideNav('earnings',this);return false"><i class="fas fa-wallet"></i> Earnings</a>
-                <a href="#" onclick="vtGuideNav('aieditor',this);return false"><i class="fas fa-magic"></i> AI Editor</a>
-                <a href="#" onclick="vtGuideNav('pricing',this);return false"><i class="fas fa-chart-bar"></i> Pricing</a>
-                <a href="#" onclick="vtGuideNav('reviews',this);return false"><i class="fas fa-star"></i> Reviews <span class="badge">4</span></a>
-                <a href="#" onclick="vtGuideNav('analytics',this);return false"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a data-view="earnings"><i class="fas fa-wallet"></i> Earnings</a>
+                <a data-view="aieditor"><i class="fas fa-magic"></i> AI Editor</a>
+                <a data-view="pricing"><i class="fas fa-chart-bar"></i> Pricing</a>
+                <a data-view="reviews"><i class="fas fa-star"></i> Reviews <span class="badge">4</span></a>
+                <a data-view="analytics"><i class="fas fa-chart-line"></i> Analytics</a>
               </div>
               <div class="vt-dash-sidebar-section">
                 <div class="vt-dash-sidebar-label">Account</div>
-                <a href="#" onclick="vtGuideNav('gprofile',this);return false"><i class="fas fa-user"></i> Profile</a>
-                <a href="#" onclick="vtGuideNav('gsettings',this);return false"><i class="fas fa-cog"></i> Settings</a>
+                <a data-view="gprofile"><i class="fas fa-user"></i> Profile</a>
+                <a data-view="gsettings"><i class="fas fa-cog"></i> Settings</a>
               </div>
               <div class="vt-dash-avatar">
                 <div class="vt-dash-avatar-circle">MT</div>
@@ -14214,7 +14214,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                 <div class="vt-dash-header">
                   <h2><span class="vt-dash-live-dot"></span>Guide Dashboard</h2>
                   <div class="vt-dash-header-actions">
-                    <div class="vt-dash-header-btn" onclick="vtGuideNav('tours',document.querySelector('#vt-guide-sidebar a:nth-child(3)'))">Add Tour</div>
+                    <div class="vt-dash-header-btn" onclick="vtGuideNav('tours',document.querySelector('#vt-guide-sidebar a[data-view=tours]'))">Add Tour</div>
                     <div class="vt-dash-header-btn primary" onclick="vtGoLive()">Go Live Now</div>
                   </div>
                 </div>
@@ -14264,7 +14264,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: My Tours -->
               <div class="vt-dash-view" id="vt-guide-tours">
-                <div class="vt-dash-header"><h2>My Tours</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtOpenCreateTour()">Create Tour</div></div></div>
+                <div class="vt-dash-header"><h2>My Tours</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtOpenCreateTour()">Create Tour</div></div></div>
                 <div style="overflow-x:auto"><table class="vt-guide-table"><thead><tr><th>Tour Name</th><th>Category</th><th>Next Session</th><th>Price</th><th>Bookings</th><th>Status</th></tr></thead><tbody><tr onclick="vtToast('<i class=\'fas fa-broadcast-tower\'></i> Blue Lagoon is streaming live!')"><td>Blue Lagoon Morning Walk</td><td>Nature and Outdoors</td><td>Today 9:00 AM</td><td>USD $42</td><td>247 total</td><td><span class="vt-status live">Live Now</span></td></tr><tr onclick="vtToast('<i class=\'fas fa-edit\'></i> Opening Devon House editor...')"><td>Devon House Heritage Walk</td><td>Culture and Landmarks</td><td>Thu 10:00 AM</td><td>USD $35</td><td>18 booked</td><td><span class="vt-status scheduled">Scheduled</span></td></tr><tr onclick="vtToast('<i class=\'fas fa-edit\'></i> Opening Rio Grande editor...')"><td>Rio Grande River Raft Tour</td><td>Nature and Outdoors</td><td>Sat 7:30 AM</td><td>USD $55</td><td>9 booked</td><td><span class="vt-status scheduled">Scheduled</span></td></tr><tr onclick="vtToast('<i class=\'fas fa-edit\'></i> Opening Portland Waterfalls editor...')"><td>Portland Waterfalls and Pools</td><td>Nature and Outdoors</td><td>Not set</td><td>USD $38</td><td>0 booked</td><td><span class="vt-status draft">Draft</span></td></tr></tbody></table></div>
               </div>
 
@@ -14445,7 +14445,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Schedule -->
               <div class="vt-dash-view" id="vt-guide-schedule">
-                <div class="vt-dash-header"><h2>Schedule</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Schedule</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-schedule" style="max-width:100%">
                   <div class="vt-schedule-item" onclick="vtToast('<i class=\'fas fa-broadcast-tower\'></i> Currently live!')"><div class="vt-schedule-day"><strong>Today</strong></div><div class="vt-schedule-info"><h5>Blue Lagoon Morning Walk</h5><p>9:00 AM, 60 min, 247 viewers</p></div><div class="vt-schedule-tag live">Live</div></div>
                   <div class="vt-schedule-item"><div class="vt-schedule-day"><strong>Thu</strong></div><div class="vt-schedule-info"><h5>Devon House Heritage Walk</h5><p>10:00 AM, 90 min, 18 booked</p></div><div class="vt-schedule-tag group">Group</div></div>
@@ -14456,13 +14456,13 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Shop Items -->
               <div class="vt-dash-view" id="vt-guide-shopitems">
-                <div class="vt-dash-header"><h2>Shop Items</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-plus-circle\'></i> Add new shop item...')">Add Item</div></div></div>
+                <div class="vt-dash-header"><h2>Shop Items</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-plus-circle\'></i> Add new shop item...')">Add Item</div></div></div>
                 <div style="overflow-x:auto"><table class="vt-guide-table"><thead><tr><th>Item</th><th>Price</th><th>Sold</th><th>Revenue</th><th>Status</th></tr></thead><tbody><tr><td>Handwoven Market Basket</td><td>USD $28.00</td><td>34</td><td>$952</td><td><span class="vt-status live">Active</span></td></tr><tr><td>Blue Mahoe Botanical Print</td><td>USD $45.00</td><td>18</td><td>$810</td><td><span class="vt-status live">Active</span></td></tr><tr><td>Jamaican Spice Collection</td><td>USD $22.00</td><td>52</td><td>$1,144</td><td><span class="vt-status live">Active</span></td></tr><tr><td>Portland Parish Art Map</td><td>USD $35.00</td><td>0</td><td>$0</td><td><span class="vt-status draft">Draft</span></td></tr></tbody></table></div>
               </div>
 
               <!-- VIEW: Earnings -->
               <div class="vt-dash-view" id="vt-guide-earnings">
-                <div class="vt-dash-header"><h2>Earnings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Earnings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>$1,840</strong><span>This Month</span><small>+23% vs last</small></div><div class="vt-dash-stat"><strong>$8,828</strong><span>All Time</span><small>Since Jan 2025</small></div><div class="vt-dash-stat"><strong>$2,906</strong><span>Shop Revenue</span><small>104 items sold</small></div><div class="vt-dash-stat"><strong>$307</strong><span>Avg / Session</span><small>Tips + shop</small></div></div>
                 <div class="vt-splits-card">
                   <div class="vt-splits-title"><i class="fas fa-chart-pie"></i> Revenue Split &mdash; This Month</div>
@@ -14478,7 +14478,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Reviews -->
               <div class="vt-dash-view" id="vt-guide-reviews">
-                <div class="vt-dash-header"><h2>Reviews</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Reviews</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>4.9</strong><span>Average Rating</span><small>48 reviews</small></div><div class="vt-dash-stat"><strong>96%</strong><span>Would Recommend</span><small>46 of 48</small></div></div>
                 <div class="vt-empty-state" style="padding:30px"><i class="fas fa-star"></i><h4>Top Reviews</h4><p>Your latest 5-star reviews and guest feedback will appear here.</p></div>
               </div>
@@ -14486,7 +14486,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Live Sentiment -->
               <div class="vt-dash-view" id="vt-guide-sentiment">
-                <div class="vt-dash-header"><h2><i class="fas fa-smile-beam" style="color:var(--orange);margin-right:8px"></i>Live Sentiment</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-smile-beam" style="color:var(--orange);margin-right:8px"></i>Live Sentiment</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats">
                   <div class="vt-dash-stat"><strong style="font-size:32px;line-height:1">&#128522;</strong><span>Current Mood</span><small>Positive 94%</small></div>
                   <div class="vt-dash-stat"><strong>247</strong><span>Active Viewers</span><small>Peak: 312</small></div>
@@ -14500,7 +14500,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Tips & Gifts -->
               <div class="vt-dash-view" id="vt-guide-tips">
-                <div class="vt-dash-header"><h2><i class="fas fa-gift" style="color:var(--orange);margin-right:8px"></i>Tips &amp; Gifts</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-gift" style="color:var(--orange);margin-right:8px"></i>Tips &amp; Gifts</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats">
                   <div class="vt-dash-stat"><strong>$284</strong><span>Today's Tips</span><small>32 gifts</small></div>
                   <div class="vt-dash-stat"><strong>$1,420</strong><span>This Week</span><small>+38% vs last</small></div>
@@ -14519,7 +14519,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Multi-Cam -->
               <div class="vt-dash-view" id="vt-guide-multicam">
-                <div class="vt-dash-header"><h2><i class="fas fa-video" style="color:var(--orange);margin-right:8px"></i>Multi-Cam Setup</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-video" style="color:var(--orange);margin-right:8px"></i>Multi-Cam Setup</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <p style="color:rgba(255,255,255,.5);font-size:12px;margin-bottom:16px">Switch between camera angles during your live session. Viewers see the active camera.</p>
                 <div class="vt-multicam-grid">
                   <div class="vt-multicam-card active" onclick="vtSelectCam(this,1)"><div class="vt-multicam-preview" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-multicam-live">ACTIVE</div><i class="fas fa-mobile-alt" style="font-size:24px;color:rgba(255,255,255,.4)"></i></div><div class="vt-multicam-label"><strong>Handheld</strong><span>iPhone 15 Pro — 4K 60fps</span></div></div>
@@ -14531,7 +14531,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: AI Guide Clone -->
               <div class="vt-dash-view" id="vt-guide-aiclone">
-                <div class="vt-dash-header"><h2>AI Guide Clone</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>AI Guide Clone</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-ai-clone-card">
                   <div class="vt-ai-clone-header">
                     <div class="vt-ai-clone-avatar"><i class="fas fa-robot"></i><div class="vt-ai-pulse"></div></div>
@@ -14575,7 +14575,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Mood-Adaptive AI -->
               <div class="vt-dash-view" id="vt-guide-mood">
-                <div class="vt-dash-header"><h2>Mood-Adaptive AI</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Mood-Adaptive AI</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>&#128522;</strong><span>Current Mood</span><small>Highly engaged</small></div><div class="vt-dash-stat"><strong>94%</strong><span>Engagement</span><small>Above avg</small></div><div class="vt-dash-stat"><strong>12</strong><span>AI Nudges</span><small>This session</small></div><div class="vt-dash-stat"><strong>+23%</strong><span>Retention Lift</span><small>vs. no AI</small></div></div>
                 <div class="vt-mood-card">
                   <div class="vt-mood-header"><strong>&#127754; Excitement Level</strong><span>High</span></div>
@@ -14596,7 +14596,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: AI Editor -->
               <div class="vt-dash-view" id="vt-guide-aieditor">
-                <div class="vt-dash-header"><h2><i class="fas fa-magic" style="color:var(--orange);margin-right:8px"></i>AI Tour Editor</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-magic\'></i> Generating new highlight reel...')">Generate Reel</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-magic" style="color:var(--orange);margin-right:8px"></i>AI Tour Editor</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div><div class="vt-dash-header-btn primary" onclick="vtToast('<i class=\'fas fa-magic\'></i> Generating new highlight reel...')">Generate Reel</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>6</strong><span>Auto Highlights</span><small>AI-generated</small></div><div class="vt-dash-stat"><strong>18</strong><span>Social Posts</span><small>Ready to share</small></div><div class="vt-dash-stat"><strong>4</strong><span>Thumbnails</span><small>Auto-created</small></div></div>
                 <h4 style="color:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:20px 0 12px">AI-Generated Clips</h4>
                 <div class="vt-live-grid">
@@ -14607,7 +14607,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Dynamic Pricing -->
               <div class="vt-dash-view" id="vt-guide-pricing">
-                <div class="vt-dash-header"><h2><i class="fas fa-tags" style="color:var(--orange);margin-right:8px"></i>Dynamic Pricing</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2><i class="fas fa-tags" style="color:var(--orange);margin-right:8px"></i>Dynamic Pricing</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>$42</strong><span>Current Price</span><small>Blue Lagoon</small></div><div class="vt-dash-stat"><strong>HIGH</strong><span>Demand Level</span><small style="color:#22c55e">+28% bookings</small></div><div class="vt-dash-stat"><strong>$48</strong><span>AI Suggested</span><small>Surge pricing</small></div><div class="vt-dash-stat"><strong>$55</strong><span>VIP Price</span><small>Private sessions</small></div></div>
                 <div class="vt-pricing-ctrl">
                   <h4 style="color:#fff;font-size:13px;margin-bottom:16px">Blue Lagoon Morning Walk</h4>
@@ -14621,20 +14621,20 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
               <!-- VIEW: Analytics -->
               <div class="vt-dash-view" id="vt-guide-analytics">
-                <div class="vt-dash-header"><h2>Analytics</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Analytics</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>3,218</strong><span>Total Viewers</span><small>All time</small></div><div class="vt-dash-stat"><strong>42 min</strong><span>Avg Session</span><small>Duration</small></div><div class="vt-dash-stat"><strong>73%</strong><span>Return Rate</span><small>Repeat viewers</small></div><div class="vt-dash-stat"><strong>Jamaica</strong><span>Top Region</span><small>68% of tours</small></div></div>
                 <div class="vt-empty-state" style="padding:30px"><i class="fas fa-chart-line"></i><h4>Detailed Analytics</h4><p>Viewer demographics, peak hours, conversion rates, and engagement metrics will appear here.</p></div>
               </div>
 
               <!-- VIEW: Profile -->
               <div class="vt-dash-view" id="vt-guide-gprofile">
-                <div class="vt-dash-header"><h2>Guide Profile</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Guide Profile</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-empty-state"><i class="fas fa-user-circle"></i><h4>Marcus Thompson</h4><p>Verified Guide since December 2024. Based in Portland, Jamaica. Specializing in Nature and Outdoors experiences. 4.9 rating from 48 reviews.</p></div>
               </div>
 
               <!-- VIEW: Settings -->
               <div class="vt-dash-view" id="vt-guide-gsettings">
-                <div class="vt-dash-header"><h2>Settings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a:nth-child(2)'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
+                <div class="vt-dash-header"><h2>Settings</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-empty-state"><i class="fas fa-cog"></i><h4>Guide Settings</h4><p>Manage payout info, streaming equipment, availability calendar, notification preferences, and shop fulfillment settings.</p></div>
               </div>
 
@@ -14824,6 +14824,7 @@ function vtToast(msg){
 /* ── Explorer sidebar nav ── */
 function vtExpNav(view,el){
   var sb=document.getElementById('vt-exp-sidebar');
+  if(!sb)return;
   sb.querySelectorAll('a').forEach(function(a){a.classList.remove('active')});
   if(el)el.classList.add('active');
   document.querySelectorAll('#vt-exp-main .vt-dash-view').forEach(function(v){v.classList.remove('active')});
@@ -14831,6 +14832,37 @@ function vtExpNav(view,el){
   if(target)target.classList.add('active');
 }
 
+/* ── Delegated sidebar click handlers (bulletproof) ── */
+(function(){
+  function initSidebarNav(sidebarId,prefix,navFn){
+    var sb=document.getElementById(sidebarId);
+    if(!sb)return;
+    sb.addEventListener('click',function(e){
+      var link=e.target.closest('a[data-view]');
+      if(!link)return;
+      e.preventDefault();
+      e.stopPropagation();
+      var view=link.getAttribute('data-view');
+      if(view)navFn(view,link);
+    },true);
+    sb.addEventListener('touchend',function(e){
+      var link=e.target.closest('a[data-view]');
+      if(!link)return;
+      e.preventDefault();
+      var view=link.getAttribute('data-view');
+      if(view)navFn(view,link);
+    },{passive:false,capture:true});
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){
+      initSidebarNav('vt-exp-sidebar','vt-exp-',vtExpNav);
+      initSidebarNav('vt-guide-sidebar','vt-guide-',vtGuideNav);
+    });
+  } else {
+    initSidebarNav('vt-exp-sidebar','vt-exp-',vtExpNav);
+    initSidebarNav('vt-guide-sidebar','vt-guide-',vtGuideNav);
+  }
+})();
 
 /* -- Dashboard light/dark toggle -- */
 function vtToggleDashTheme(which){
@@ -14859,6 +14891,7 @@ vtRestoreDashTheme();
 /* ── Guide sidebar nav ── */
 function vtGuideNav(view,el){
   var sb=document.getElementById('vt-guide-sidebar');
+  if(!sb)return;
   sb.querySelectorAll('a').forEach(function(a){a.classList.remove('active')});
   if(el)el.classList.add('active');
   document.querySelectorAll('#vt-guide-main .vt-dash-view').forEach(function(v){v.classList.remove('active')});
