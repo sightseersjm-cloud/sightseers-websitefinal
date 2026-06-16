@@ -20427,18 +20427,22 @@ function submitBook(){
     if(notesField.value.indexOf(budgetLine)===-1) notesField.value=(notesField.value?notesField.value.trim()+' ':'')+budgetLine;
   }
   var notes=notesField?notesField.value.trim():'';
-  if(!fn||!em||!dest||!type){alert('Please fill in all required fields.');return;}
+  if(!em){
+    var emField=document.getElementById('b_em');
+    if(emField){emField.style.border='2px solid #e94560';emField.focus();emField.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){emField.style.border=''},3000)}
+    return;
+  }
 
   var btn=document.querySelector('.booking-page .btn-primary');
   var origBtn=btn?btn.innerHTML:'';
   if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';btn.style.pointerEvents='none'}
 
   var data={
-    name:fn+(ln?' '+ln:''),
+    name:(fn||'Website Visitor')+(ln?' '+ln:''),
     email:em,
-    phone:ph,
-    tourName:(funnelLabel||pkg||type)+(dest?' — '+dest:''),
-    date:dt,
+    phone:ph||'',
+    tourName:(funnelLabel||pkg||type||'General Enquiry')+(dest?' — '+dest:''),
+    date:dt||'',
     guests:gs||1,
     notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
     type:'tour'
