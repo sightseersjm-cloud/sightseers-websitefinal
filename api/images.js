@@ -35,14 +35,17 @@ module.exports = async function handler(req, res) {
 
       const buffer = Buffer.from(data, 'base64');
       const blob = await put(path, buffer, {
-        access: 'public',
-        contentType: type || 'image/jpeg'
+        access: 'private',
+        contentType: type || 'image/jpeg',
+        addRandomSuffix: false,
+        allowOverwrite: true
       });
 
+      const imgUrl = blob.downloadUrl || blob.url;
       const meta = await db.getCollection('image-meta');
       meta.push({
         id: uid(),
-        url: blob.url,
+        url: imgUrl,
         pathname: blob.pathname,
         originalName: filename,
         size: buffer.length,
@@ -53,7 +56,7 @@ module.exports = async function handler(req, res) {
       });
       await db.setCollection('image-meta', meta);
 
-      return res.status(200).json({ ok: true, url: blob.url, pathname: blob.pathname });
+      return res.status(200).json({ ok: true, url: imgUrl, pathname: blob.pathname });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
