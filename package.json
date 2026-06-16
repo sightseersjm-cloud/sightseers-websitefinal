@@ -6,7 +6,7 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "@vercel/blob": "^0.24.1"
+    "@vercel/blob": "^2.4.0"
   },
   "engines": { "node": ">=18.x" }
 }

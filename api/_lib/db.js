@@ -1,25 +1,24 @@
-const { put, list, del } = require('@vercel/blob');
+const { put, list, del, get } = require('@vercel/blob');
 
 const BASE = 'ss-data/';
 
+// Read a private JSON doc back via the authenticated get() API (works on private stores).
 async function getDoc(name) {
   try {
-    const path = BASE + name + '.json';
-    const { blobs } = await list({ prefix: path });
-    const blob = blobs.find(b => b.pathname === path);
-    if (!blob) return null;
-    const url = (blob.downloadUrl || blob.url) + '?t=' + Date.now();
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    return res.json();
-  } catch { return null; }
+    const result = await get(BASE + name + '.json', { access: 'private', useCache: false });
+    if (!result || !result.stream) return null;
+    return await new Response(result.stream).json();
+  } catch {
+    return null;
+  }
 }
 
 async function setDoc(name, data) {
   await put(BASE + name + '.json', JSON.stringify(data), {
-    access: 'public',
+    access: 'private',
     contentType: 'application/json',
-    addRandomSuffix: false
+    addRandomSuffix: false,
+    allowOverwrite: true
   });
 }
 
@@ -64,7 +63,8 @@ async function removeFromCollection(name, id) {
 async function listImages(prefix) {
   try {
     const { blobs } = await list({ prefix: prefix || 'site-images/' });
-    return blobs.map(b => ({ url: b.url, pathname: b.pathname, size: b.size, uploadedAt: b.uploadedAt }));
+    // downloadUrl is the authenticated URL that works for private blobs
+    return blobs.map(b => ({ url: b.downloadUrl || b.url, pathname: b.pathname, size: b.size, uploadedAt: b.uploadedAt }));
   } catch { return []; }
 }
 
