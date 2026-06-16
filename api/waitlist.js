@@ -1,5 +1,6 @@
 const db = require('./_lib/db');
 const { requireAdmin, getUser, uid } = require('./_lib/auth');
+const { sendEmail } = require('./_lib/email');
 
 const COLLECTION = 'vtours-waitlist';
 
@@ -62,6 +63,22 @@ module.exports = async function handler(req, res) {
         };
 
         await db.addToCollection(COLLECTION, entry);
+        await sendEmail({
+          subject: `New V-Tours Waitlist Signup — ${entry.firstName} ${entry.lastName} (${acctType})`,
+          html: `
+            <h2 style="color:#0d5371">New V-Tours Waitlist Signup — Sight Seers Caribbean</h2>
+            <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
+              <tr><td style="padding:8px;font-weight:bold;width:140px">Name</td><td style="padding:8px">${entry.firstName} ${entry.lastName}</td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px"><a href="mailto:${entry.email}">${entry.email}</a></td></tr>
+              <tr><td style="padding:8px;font-weight:bold">Account Type</td><td style="padding:8px;text-transform:capitalize">${entry.type}</td></tr>
+              ${entry.location ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Location</td><td style="padding:8px">${entry.location}</td></tr>` : ''}
+              ${entry.experience != null ? `<tr><td style="padding:8px;font-weight:bold">Experience</td><td style="padding:8px">${entry.experience} years</td></tr>` : ''}
+              ${entry.interests && entry.interests.length ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Interests</td><td style="padding:8px">${entry.interests.join(', ')}</td></tr>` : ''}
+              ${entry.bio ? `<tr><td style="padding:8px;font-weight:bold;vertical-align:top">Bio</td><td style="padding:8px">${entry.bio}</td></tr>` : ''}
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Signed Up</td><td style="padding:8px">${new Date(entry.createdAt).toLocaleString('en-US',{timeZone:'America/Jamaica'})}</td></tr>
+            </table>
+            <p style="color:#888;font-size:12px;margin-top:20px">This signup was submitted via sightseerscaribbean.com</p>`
+        });
         return res.status(201).json({ ok: true, id: entry.id });
       }
 
