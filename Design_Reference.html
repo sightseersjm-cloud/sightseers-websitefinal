@@ -20228,7 +20228,7 @@ function smoothScrollToElement(el,duration=950,offset=0){
     if(!AC) return;
     var ctx; try{ctx=new AC()}catch(e){return}
     try{if(ctx.state==='suspended')ctx.resume()}catch(e){}
-    var now=ctx.currentTime, DUR=3.4;
+    var now=ctx.currentTime, DUR=5.8;
 
     // Master gain — soft fade in and out, low overall volume
     var master=ctx.createGain();
@@ -20263,7 +20263,7 @@ function smoothScrollToElement(el,duration=950,offset=0){
       o.connect(g); g.connect(master);
       o.start(t); o.stop(t+0.2);
     }
-    var times=[0.7,1.05,1.6,1.95,2.35,2.8], freqs=[2300,2700,3100,2500,2900,3300];
+    var times=[0.7,1.05,1.6,1.95,2.4,2.85,3.3,3.8,4.25,4.7,5.1], freqs=[2300,2700,3100,2500,2900,3300,2600,3000,2400,2800,3200];
     times.forEach(function(off,idx){ chirp(now+off,freqs[idx]); if(idx%2===0) chirp(now+off+0.17,freqs[idx]*1.05); });
 
     setTimeout(function(){try{ctx.close()}catch(e){}},(DUR+0.6)*1000);
