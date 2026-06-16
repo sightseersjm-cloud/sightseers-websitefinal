@@ -206,6 +206,13 @@
   function markContactRead(id) { return api('contact', 'POST', { action: 'mark-read', id: id }); }
   function deleteContactMessage(id) { return api('contact', 'POST', { action: 'delete', id: id }); }
 
+  /* ── V-Tours Waitlist ─────────────── */
+
+  function submitWaitlist(data) { return api('waitlist', 'POST', Object.assign({ action: 'join' }, data)); }
+  function getWaitlist() { return api('waitlist', 'GET'); }
+  function markWaitlistRead(id, status) { return api('waitlist', 'POST', { action: 'mark-read', id: id, status: status }); }
+  function deleteWaitlistEntry(id) { return api('waitlist', 'POST', { action: 'delete', id: id }); }
+
   /* ── Settings sync (legacy compat) ── */
 
   function syncSettings(key, value) {
@@ -347,6 +354,11 @@
     getContactMessages: getContactMessages,
     markContactRead: markContactRead,
     deleteContactMessage: deleteContactMessage,
+
+    submitWaitlist: submitWaitlist,
+    getWaitlist: getWaitlist,
+    markWaitlistRead: markWaitlistRead,
+    deleteWaitlistEntry: deleteWaitlistEntry,
 
     syncSettings: syncSettings,
     syncFromServer: syncFromServer

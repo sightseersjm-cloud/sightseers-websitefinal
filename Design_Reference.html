@@ -1797,15 +1797,71 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .admin-btn.secondary:hover,.auth-submit.secondary:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
 .account-auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;border-radius:28px;overflow:hidden;box-shadow:0 20px 50px rgba(12,29,47,.08);border:1px solid rgba(6,58,99,.09)}
 .account-auth-panel{padding:36px 32px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 65%,#fffaf3 100%)}
-.account-auth-visual{position:relative;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85') center/cover;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:36px}
-.account-auth-visual::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,55,.15) 0%,rgba(6,30,55,.75) 100%)}
+.account-auth-visual{position:relative;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85') center/cover;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:26px;border-radius:22px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
+.account-auth-visual::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,22,44,0) 0%,rgba(6,22,44,.32) 45%,rgba(4,16,33,.86) 100%)}
+.account-auth-badge{position:absolute;top:18px;left:18px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:980px;background:rgba(255,255,255,.16);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:.5px solid rgba(255,255,255,.35);color:#fff;font-size:11px;font-weight:600;letter-spacing:.01em}
+.account-auth-badge i{font-size:10px;color:#ffd479}
 .account-auth-visual-inner{position:relative;z-index:1;color:#fff}
-.account-auth-visual-inner h3{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 10px;line-height:1.2}
-.account-auth-visual-inner p{font-size:14px;opacity:.85;margin:0 0 20px;line-height:1.6}
-.account-auth-visual-perks{display:flex;flex-direction:column;gap:10px}
-.account-auth-visual-perks span{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.9)}
-.account-auth-visual-perks i{color:var(--amber);font-size:14px}
-@media(max-width:768px){.account-auth-grid{grid-template-columns:1fr}.account-auth-visual{min-height:220px}}
+.account-auth-visual-inner h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:27px;font-weight:600;letter-spacing:-.022em;margin:0 0 8px;line-height:1.12}
+.account-auth-visual-inner p{font-size:14px;font-weight:400;opacity:.82;margin:0 0 18px;line-height:1.5;letter-spacing:-.01em;max-width:34ch}
+.account-auth-visual-perks{display:flex;flex-direction:column;gap:9px;padding:15px;border-radius:18px;background:rgba(255,255,255,.1);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:.5px solid rgba(255,255,255,.18)}
+.account-auth-visual-perks span{display:flex;align-items:center;gap:11px;font-size:13.5px;font-weight:500;letter-spacing:-.01em;color:rgba(255,255,255,.96)}
+.account-auth-visual-perks i{flex:none;width:20px;height:20px;border-radius:50%;background:#34c759;color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center}
+@media(max-width:768px){.account-auth-grid{grid-template-columns:1fr}.account-auth-visual{min-height:260px;border-radius:18px}}
+
+/* ── Travel Club: tour save (wishlist) ── */
+.tc-media{position:relative}
+.tc-save{position:absolute;top:12px;right:12px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:rgba(0,0,0,.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:rgba(255,255,255,.92);font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s,color .2s}
+.tc-save:hover{transform:scale(1.1);background:rgba(0,0,0,.5)}
+.tc-save.on{background:#fff;color:#ff3b30}
+.tc-save.on i{animation:tcHeartPop .3s ease}
+@keyframes tcHeartPop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* ── Travel Club: membership tier panel ── */
+.club-tier-panel{background:linear-gradient(135deg,#0d2440,#16456f);border-radius:20px;padding:20px;color:#fff;margin-bottom:16px;box-shadow:0 10px 30px rgba(6,30,55,.22)}
+.club-tier-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.club-tier-badge{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:18px;color:#ffd479;flex:none}
+.club-tier-eyebrow{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.7}
+.club-tier-head strong{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.club-tier-style{margin-left:auto;font-size:11.5px;opacity:.82;text-align:right;line-height:1.5}
+.club-tier-style b{font-weight:600}
+.club-tier-bar{height:8px;border-radius:980px;background:rgba(255,255,255,.16);overflow:hidden}
+.club-tier-bar-fill{height:100%;border-radius:980px;background:linear-gradient(90deg,#34c759,#ffd479);transition:width .6s cubic-bezier(.4,0,.2,1)}
+.club-tier-progress{display:block;font-size:11.5px;opacity:.82;margin-top:8px}
+
+/* ── Travel Club: saved tours ── */
+.club-saved-section{margin-top:18px}
+.club-saved-head{margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.club-saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.dash-saved-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid rgba(6,30,55,.08);border-radius:16px;padding:10px;transition:box-shadow .2s,transform .2s}
+.dash-saved-card:hover{box-shadow:0 8px 24px rgba(6,30,55,.1);transform:translateY(-2px)}
+.dash-saved-card img{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none;background:#e7edf2}
+.dash-saved-body{flex:1;min-width:0}
+.dash-saved-body strong{display:block;font-size:13px;color:#0d1b2a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-saved-body span{font-size:12px;color:#5a6b7b}
+.dash-saved-actions{display:flex;gap:6px;flex:none}
+.dash-saved-actions button{width:32px;height:32px;border-radius:10px;border:none;cursor:pointer;background:#f0f3f7;color:#0d1b2a;font-size:12px;transition:background .2s,color .2s}
+.dash-saved-actions button:hover{background:#0d2440;color:#fff}
+.dash-saved-empty{grid-column:1/-1;text-align:center;padding:28px;color:#5a6b7b;background:#f7f9fb;border-radius:16px;border:1px dashed rgba(6,30,55,.12)}
+.dash-saved-empty i{font-size:26px;color:#b8c4d0;margin-bottom:10px;display:block}
+.dash-saved-empty p{margin:0 0 14px;font-size:13px}
+.dash-saved-empty .auth-submit{display:inline-flex;width:auto}
+
+/* ── Celebration confetti + welcome card ── */
+.vt-confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:100020;overflow:hidden}
+.vt-confetti-piece{position:absolute;top:-24px;width:10px;height:6px;opacity:0;will-change:transform;animation-name:vtConfettiFall;animation-timing-function:cubic-bezier(.3,.6,.4,1);animation-fill-mode:forwards}
+@keyframes vtConfettiFall{0%{opacity:1;transform:translate3d(0,-12vh,0) rotate(0)}100%{opacity:1;transform:translate3d(var(--x,0),112vh,0) rotate(var(--r,540deg))}}
+.vt-celebrate-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100021;pointer-events:none;opacity:0;transition:opacity .35s ease;padding:20px}
+.vt-celebrate-overlay.show{opacity:1}
+.vt-celebrate-card{background:rgba(255,255,255,.9);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(255,255,255,.6);border-radius:28px;padding:34px 46px;text-align:center;box-shadow:0 30px 80px rgba(6,22,44,.32);transform:scale(.84) translateY(8px);transition:transform .45s cubic-bezier(.34,1.56,.64,1);max-width:90vw;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
+.vt-celebrate-overlay.show .vt-celebrate-card{transform:scale(1) translateY(0)}
+.vt-celebrate-emoji{font-size:54px;line-height:1;margin-bottom:12px;animation:vtCelebratePop .6s ease both}
+@keyframes vtCelebratePop{0%{transform:scale(0) rotate(-25deg)}60%{transform:scale(1.3) rotate(12deg)}100%{transform:scale(1) rotate(0)}}
+.vt-celebrate-card h3{font-size:26px;font-weight:700;letter-spacing:-.022em;color:#0d1b2a;margin:0 0 6px}
+.vt-celebrate-card p{font-size:14px;font-weight:400;letter-spacing:-.01em;color:#5a6b7b;margin:0;max-width:38ch}
+body.theme-night .vt-celebrate-card{background:rgba(28,28,30,.86);border-color:rgba(255,255,255,.12)}
+body.theme-night .vt-celebrate-card h3{color:#fff}
+body.theme-night .vt-celebrate-card p{color:rgba(235,235,245,.65)}
 .account-auth-blurb,.account-auth-mini{padding:22px;border-radius:26px;border:1px solid rgba(6,58,99,.09);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(247,251,255,.98));box-shadow:0 16px 34px rgba(12,29,47,.05)}
 .account-auth-blurb h3,.account-auth-mini h3,.perk-card h3{font-size:1.04rem;font-weight:800;color:var(--navy);margin-bottom:10px}
 .account-auth-blurb p,.account-auth-mini p,.perk-card p{font-size:12px;color:var(--grey);line-height:1.78}
@@ -12389,7 +12445,7 @@ body.theme-night .page .tag{
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
 
-        <a class="partner-item" href="#" title="Travwell Society">
+        <a class="partner-item" href="#" onclick="return false" title="Travwell Society">
           <div class="partner-placeholder">Travwell Society</div>
           <span class="partner-category"><i class="fas fa-users"></i> Travel Community</span>
           <div class="partner-name">Travwell Society</div>
@@ -15755,16 +15811,101 @@ function vtSignupToggle(type){
 }
 function vtCreateAccount(e,type){
   e.preventDefault();
-  var btn=e.target.querySelector('.vt-signup-btn');
+  var form=e.target;
+  var btn=form.querySelector('.vt-signup-btn');
   var orig=btn.innerHTML;
-  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating account...';
+  var isGuide=type==='guide';
+
+  // Collect form data
+  var textInputs=form.querySelectorAll('input[type=text]');
+  var emailInput=form.querySelector('input[type=email]');
+  var numInput=form.querySelector('input[type=number]');
+  var bioInput=form.querySelector('textarea');
+  var tags=[];
+  form.querySelectorAll('.vt-signup-tag.selected').forEach(function(t){tags.push(t.textContent.trim())});
+
+  var data={
+    type:type,
+    firstName:textInputs[0]?textInputs[0].value:'',
+    lastName:textInputs[1]?textInputs[1].value:'',
+    email:emailInput?emailInput.value:'',
+    interests:tags,
+    location:isGuide&&textInputs[2]?textInputs[2].value:'',
+    experience:numInput?numInput.value:'',
+    bio:bioInput?bioInput.value:''
+  };
+
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> '+(isGuide?'Submitting...':'Joining...');
   btn.style.pointerEvents='none';
-  setTimeout(function(){
+
+  function onSuccess(already){
     btn.classList.add('success');
-    btn.innerHTML='<i class="fas fa-check-circle"></i> '+(type==='explorer'?'You are on the waitlist!':'Application submitted!');
-    vtToast('<i class="fas fa-check-circle"></i> '+(type==='explorer'?'Welcome aboard! You will be notified at launch.':'Guide application received! Review within 48 hours.'));
-    setTimeout(function(){btn.innerHTML=orig;btn.classList.remove('success');btn.style.pointerEvents=''},4000);
-  },1800);
+    btn.innerHTML='<i class="fas fa-check-circle"></i> Welcome aboard!';
+    var sub=isGuide
+      ? 'Your guide application is in — we will review within 48 hours.'
+      : (already?'You are already on the list — we will notify you at launch.':'You are on the V-Tours waitlist. We will notify you at launch.');
+    vtConfettiCelebrate('Welcome aboard!',sub);
+    try{form.reset();form.querySelectorAll('.vt-signup-tag.selected').forEach(function(t){t.classList.remove('selected')})}catch(_){}
+    setTimeout(function(){btn.innerHTML=orig;btn.classList.remove('success');btn.style.pointerEvents=''},4500);
+  }
+  function onError(err){
+    btn.classList.remove('success');
+    btn.innerHTML=orig;
+    btn.style.pointerEvents='';
+    var em=(err&&err.message)?err.message:'Something went wrong. Please try again.';
+    vtToast('<i class="fas fa-exclamation-circle"></i> '+em);
+  }
+
+  // Submit to backend if the bridge is available; otherwise simulate (offline/demo)
+  if(window.SS&&typeof SS.submitWaitlist==='function'){
+    SS.submitWaitlist(data)
+      .then(function(res){onSuccess(res&&res.already)})
+      .catch(onError);
+  }else{
+    setTimeout(function(){onSuccess(false)},1200);
+  }
+}
+
+/* ═══════ CELEBRATION CONFETTI ═══════ */
+function vtConfettiCelebrate(title,subtitle){
+  // Centered Apple-style welcome card
+  var ov=document.createElement('div');
+  ov.className='vt-celebrate-overlay';
+  ov.innerHTML='<div class="vt-celebrate-card">'+
+    '<div class="vt-celebrate-emoji">🎉</div>'+
+    '<h3>'+(title||'Welcome aboard!')+'</h3>'+
+    '<p>'+(subtitle||'')+'</p>'+
+  '</div>';
+  document.body.appendChild(ov);
+
+  // Confetti burst
+  var layer=document.createElement('div');
+  layer.className='vt-confetti-layer';
+  document.body.appendChild(layer);
+  var colors=['#ff6b35','#34c759','#ffd479','#0d5371','#e94560','#22d3ee','#ffffff'];
+  var N=130;
+  for(var i=0;i<N;i++){
+    var p=document.createElement('span');
+    p.className='vt-confetti-piece';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.setProperty('--x',((Math.random()*2-1)*35)+'vw');
+    p.style.setProperty('--r',(Math.random()*720-360)+'deg');
+    p.style.animationDuration=(Math.random()*1.6+2.2)+'s';
+    p.style.animationDelay=(Math.random()*0.5)+'s';
+    var sz=(Math.random()*7+6);
+    p.style.width=sz+'px';
+    p.style.height=(sz*0.62)+'px';
+    if(Math.random()>0.5)p.style.borderRadius='50%';
+    layer.appendChild(p);
+  }
+
+  requestAnimationFrame(function(){ov.classList.add('show')});
+  setTimeout(function(){ov.classList.remove('show')},3200);
+  setTimeout(function(){
+    if(ov.parentNode)ov.parentNode.removeChild(ov);
+    if(layer.parentNode)layer.parentNode.removeChild(layer);
+  },4200);
 }
 
 
@@ -15957,14 +16098,15 @@ function vtPointAnswer(input){
                 </div>
 
                 <div class="account-auth-visual">
+                  <span class="account-auth-badge"><i class="fas fa-star"></i> Free to join</span>
                   <div class="account-auth-visual-inner">
                     <h3>Your next adventure starts here</h3>
                     <p>Join travelers exploring the Caribbean's best-kept secrets with Sight Seers.</p>
                     <div class="account-auth-visual-perks">
-                      <span><i class="fas fa-check-circle"></i> Save tours and return to planning faster</span>
-                      <span><i class="fas fa-check-circle"></i> Track bookings from your personal dashboard</span>
-                      <span><i class="fas fa-check-circle"></i> Unlock exclusive member-only experiences</span>
-                      <span><i class="fas fa-check-circle"></i> Get personalized trip recommendations</span>
+                      <span><i class="fas fa-check"></i> Earn Travel Points on every booking</span>
+                      <span><i class="fas fa-check"></i> Save tours and return to planning faster</span>
+                      <span><i class="fas fa-check"></i> Track bookings from your personal dashboard</span>
+                      <span><i class="fas fa-check"></i> Unlock exclusive member-only experiences</span>
                     </div>
                   </div>
                 </div>
@@ -15987,9 +16129,10 @@ function vtPointAnswer(input){
                 </div>
 
                 <div class="dashboard-stats">
+                  <div class="dashboard-stat"><strong id="dashPoints">0</strong><span>Travel Points</span></div>
+                  <div class="dashboard-stat"><strong id="dashSavedCount">0</strong><span>Saved Tours</span></div>
                   <div class="dashboard-stat"><strong id="dashCartCount">0</strong><span>Items in Cart</span></div>
                   <div class="dashboard-stat"><strong id="dashMemberSince">2026</strong><span>Member Since</span></div>
-                  <div class="dashboard-stat"><strong id="dashStyle">Adventure</strong><span>Travel Style</span></div>
                 </div>
 
                 <div class="dashboard-grid">
@@ -16001,15 +16144,32 @@ function vtPointAnswer(input){
                   </div>
 
                   <div class="dashboard-side dashboard-side--premium">
+                    <div class="club-tier-panel">
+                      <div class="club-tier-head">
+                        <div class="club-tier-badge"><i id="dashTierIcon" class="fas fa-map"></i></div>
+                        <div>
+                          <span class="club-tier-eyebrow">Membership tier</span>
+                          <strong id="dashTierName">Explorer</strong>
+                        </div>
+                        <span class="club-tier-style">Travel style<br><b id="dashStyle">Adventure</b></span>
+                      </div>
+                      <div class="club-tier-bar"><div class="club-tier-bar-fill" id="dashTierBar" style="width:0%"></div></div>
+                      <span class="club-tier-progress" id="dashTierProgress">Earn points to reach the next tier</span>
+                    </div>
                     <div class="dashboard-panel reveal dashboard-panel--wide">
                       <span class="label-eyebrow"><i class="fas fa-gem"></i> Member flow</span>
                       <div class="dashboard-panel-inline">
-                        <div class="dashboard-panel-item"><i class="fas fa-check-circle"></i><span>Tours, cart, booking and blog writing are now kept in one cleaner row.</span></div>
+                        <div class="dashboard-panel-item"><i class="fas fa-check-circle"></i><span>Earn Travel Points when you save tours and book experiences.</span></div>
                         <div class="dashboard-panel-item"><i class="fas fa-check-circle"></i><span>Your profile details stay ready to carry into booking requests.</span></div>
                         <div class="dashboard-panel-item"><i class="fas fa-check-circle"></i><span>Blog submissions still go to admin approval before they show on the website.</span></div>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div class="club-saved-section">
+                  <div class="club-saved-head"><span class="label-eyebrow"><i class="fas fa-heart"></i> Saved Tours</span></div>
+                  <div class="club-saved-grid" id="dashSavedTours"></div>
                 </div>
               </div>
             </div>
@@ -17831,6 +17991,7 @@ function renderCart(){
   const foot=document.getElementById('cartFoot');
   const count=document.getElementById('cartCount');
   count.textContent=cart.reduce((s,i)=>s+i.qty,0);
+  const dcc=document.getElementById('dashCartCount');if(dcc)dcc.textContent=String(cart.reduce((s,i)=>s+i.qty,0));
   if(!cart.length){items.innerHTML='<div class="cart-empty"><i class="fas fa-shopping-bag"></i>Your cart is empty.<br><small>Add some island essentials!</small></div>';foot.style.display='none';return;}
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
   items.innerHTML=cart.map((item,idx)=>`
@@ -17856,6 +18017,7 @@ function addToCart(){
   const existing=cart.find(i=>i.id===`product-${currentProduct.id}`&&i.metaValue===size);
   if(existing){existing.qty+=qty;}else{cart.push({id:`product-${currentProduct.id}`,name:currentProduct.name,price:currentProduct.price,img:currentProduct.imgs[0],metaLabel:'Size',metaValue:size,qty});}
   renderCart();
+  if(typeof awardPoints==='function')awardPoints(25);
   const btn=document.getElementById('pdAddBtn');
   btn.innerHTML='<i class="fas fa-check"></i>Added to Cart!';
   btn.style.background='#28a745';
@@ -17868,6 +18030,7 @@ function quickAddProduct(id){
   const existing=cart.find(i=>i.id===`product-${p.id}`&&i.metaValue==='Standard');
   if(existing){existing.qty+=1;}else{cart.push({id:`product-${p.id}`,name:p.name,price:p.price,img:p.imgs[0],metaLabel:'Size',metaValue:'Standard',qty:1});}
   renderCart();
+  if(typeof awardPoints==='function')awardPoints(25);
   openCart();
 }
 
@@ -17969,6 +18132,7 @@ function renderTours(filter,gridId){
     <div class="tour-card reveal ${isMba?'mba-card':''}" onclick="openTour(${t.id})">
       <div class="tc-media">
         <img src="${t.img}" alt="${t.title}" loading="lazy">
+        <button class="tc-save${isTourSaved(t.id)?' on':''}" data-save-tour="${t.id}" title="Save to your Travel Club" aria-label="Save tour" onclick="toggleSavedTour(${t.id},event)"><i class="fas fa-heart"></i></button>
         <div class="tc-topbar">
           <span class="tc-tag"><i class="fas fa-star"></i>${t.tag}</span>
           <span class="tc-price-pill">${pricePill}</span>
@@ -19763,6 +19927,8 @@ function updateAccountUI(){
     document.getElementById('dashCartCount').textContent=String(cart.reduce((s,i)=>s+i.qty,0));
     document.getElementById('dashMemberSince').textContent=new Date(user.createdAt||Date.now()).getFullYear();
     document.getElementById('dashStyle').textContent=user.style||'Adventure';
+    if(localStorage.getItem('ss_travel_points')===null) setTravelPoints(100); /* welcome bonus */
+    refreshTravelClub();
     if(blogPanel) blogPanel.classList.add('on');
     if(accountIcon) accountIcon.innerHTML='<i class="fas fa-user-check"></i>';
   }else{
@@ -19772,6 +19938,88 @@ function updateAccountUI(){
     if(blogPanel) blogPanel.classList.remove('on');
     if(accountIcon) accountIcon.innerHTML='<i class="far fa-user"></i>';
   }
+}
+
+/* ── TRAVEL CLUB: Points, Tiers & Saved Tours ───────────── */
+function getTravelPoints(){try{return parseInt(localStorage.getItem('ss_travel_points')||'0',10)||0;}catch(e){return 0;}}
+function setTravelPoints(n){try{localStorage.setItem('ss_travel_points',String(Math.max(0,n|0)));}catch(e){}}
+function awardPoints(n){
+  if(!getCurrentUser())return;
+  setTravelPoints(getTravelPoints()+(n|0));
+  refreshTravelClub();
+}
+function getTravelTier(points){
+  if(points>=750)return {name:'Pioneer',min:750,next:null,icon:'fa-crown'};
+  if(points>=250)return {name:'Voyager',min:250,next:750,icon:'fa-compass'};
+  return {name:'Explorer',min:0,next:250,icon:'fa-map'};
+}
+function getSavedTours(){try{return JSON.parse(localStorage.getItem('ss_saved_tours')||'[]');}catch(e){return [];}}
+function setSavedTours(arr){try{localStorage.setItem('ss_saved_tours',JSON.stringify(arr||[]));}catch(e){}}
+function isTourSaved(id){return getSavedTours().some(function(t){return String(t.id)===String(id);});}
+function toggleSavedTour(id,ev){
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  if(!getCurrentUser()){
+    toast('Sign in to save tours to your Travel Club');
+    if(typeof nav==='function')nav('account');
+    return false;
+  }
+  var saved=getSavedTours();
+  if(saved.some(function(t){return String(t.id)===String(id);})){
+    saved=saved.filter(function(t){return String(t.id)!==String(id);});
+    setSavedTours(saved);
+    toast('Removed from saved tours');
+  }else{
+    var t=(typeof TOURS!=='undefined')?TOURS.find(function(x){return String(x.id)===String(id);}):null;
+    var price=t?(t.price!==null&&t.priceLabel?('From '+t.priceLabel):'Custom Quote'):'';
+    saved.push({id:id,title:t?t.title:'Saved tour',img:t?t.img:'',price:price});
+    setSavedTours(saved);
+    awardPoints(10);
+    toast('Saved to your Travel Club  ·  +10 Travel Points');
+  }
+  document.querySelectorAll('[data-save-tour="'+id+'"]').forEach(function(b){b.classList.toggle('on',isTourSaved(id));});
+  refreshTravelClub();
+  return false;
+}
+function renderSavedTours(){
+  var wrap=document.getElementById('dashSavedTours');if(!wrap)return;
+  var saved=getSavedTours();
+  if(!saved.length){
+    wrap.innerHTML='<div class="dash-saved-empty"><i class="far fa-heart"></i><p>No saved tours yet. Tap the heart on any tour to keep it here.</p><button class="auth-submit secondary" type="button" onclick="nav(\'tours\')"><i class="fas fa-map-marked-alt"></i>Browse Tours</button></div>';
+    return;
+  }
+  wrap.innerHTML=saved.map(function(t){
+    var safeTitle=String(t.title||'Saved tour').replace(/</g,'&lt;');
+    return '<div class="dash-saved-card">'+
+      '<img src="'+(t.img||'')+'" alt="'+safeTitle.replace(/"/g,'&quot;')+'" loading="lazy">'+
+      '<div class="dash-saved-body"><strong>'+safeTitle+'</strong><span>'+(t.price||'')+'</span></div>'+
+      '<div class="dash-saved-actions">'+
+        '<button type="button" title="View tour" onclick="openTour('+JSON.stringify(t.id)+')"><i class="fas fa-arrow-right"></i></button>'+
+        '<button type="button" title="Remove" onclick="toggleSavedTour('+JSON.stringify(t.id)+',event)"><i class="fas fa-xmark"></i></button>'+
+      '</div></div>';
+  }).join('');
+}
+function refreshTravelClub(){
+  if(!getCurrentUser())return;
+  var points=getTravelPoints();
+  var tier=getTravelTier(points);
+  var elPts=document.getElementById('dashPoints');if(elPts)elPts.textContent=points.toLocaleString();
+  var elSaved=document.getElementById('dashSavedCount');if(elSaved)elSaved.textContent=String(getSavedTours().length);
+  var elTier=document.getElementById('dashTierName');if(elTier)elTier.textContent=tier.name;
+  var elIcon=document.getElementById('dashTierIcon');if(elIcon)elIcon.className='fas '+tier.icon;
+  var bar=document.getElementById('dashTierBar');
+  var lbl=document.getElementById('dashTierProgress');
+  if(bar){
+    if(tier.next){
+      var span=tier.next-tier.min;
+      var prog=Math.min(100,Math.max(4,Math.round(((points-tier.min)/span)*100)));
+      bar.style.width=prog+'%';
+      if(lbl)lbl.textContent=(tier.next-points)+' points to '+getTravelTier(tier.next).name;
+    }else{
+      bar.style.width='100%';
+      if(lbl)lbl.textContent='Top tier unlocked — thank you for exploring with us';
+    }
+  }
+  renderSavedTours();
 }
 
 /* ── PAGE NAVIGATION ─────────────── */
@@ -20659,6 +20907,7 @@ function bootSightSeersSite(){
   try{initDestinationTourCards();}catch(e){}
   try{initLamTour();}catch(e){console.warn('LAM tour init skipped', e);}
   try{initSightSeersBot();}catch(e){console.warn('Bot init skipped', e);}
+  try{updateAccountUI();}catch(e){}
   try{initReveal();}catch(e){}
   const home=document.getElementById('p-home');
   if(home && !document.querySelector('.page.on')) home.classList.add('on');
