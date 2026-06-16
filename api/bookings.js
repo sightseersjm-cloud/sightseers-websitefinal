@@ -106,7 +106,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
-    console.error('Bookings error:', err);
-    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    console.error('Bookings error:', err && err.message, err && err.stack);
+    return res.status(500).json({ error: err && err.message ? err.message : 'Something went wrong. Please try again.' });
   }
 };
