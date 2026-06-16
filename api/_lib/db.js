@@ -8,7 +8,8 @@ async function getDoc(name) {
     const { blobs } = await list({ prefix: path });
     const blob = blobs.find(b => b.pathname === path);
     if (!blob) return null;
-    const res = await fetch(blob.url + '?t=' + Date.now());
+    const url = (blob.downloadUrl || blob.url) + '?t=' + Date.now();
+    const res = await fetch(url);
     if (!res.ok) return null;
     return res.json();
   } catch { return null; }
@@ -16,7 +17,7 @@ async function getDoc(name) {
 
 async function setDoc(name, data) {
   await put(BASE + name + '.json', JSON.stringify(data), {
-    access: 'public',
+    access: 'private',
     contentType: 'application/json',
     addRandomSuffix: false
   });
