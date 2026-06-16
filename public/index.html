@@ -18855,38 +18855,31 @@ function openBookingCustom(destination, packageName, type='Start Planning', note
 function submitSearchBar(){
   var dest=document.getElementById('sbDest')&&document.getElementById('sbDest').value||'';
   var dateFrom=document.getElementById('sbDateFrom')&&document.getElementById('sbDateFrom').value||'';
-  var dateTo=document.getElementById('sbDateTo')&&document.getElementById('sbDateTo').value||'';
   var style=document.getElementById('sbStyle')&&document.getElementById('sbStyle').value||'';
   var party=document.getElementById('sbParty')&&document.getElementById('sbParty').value||'';
   var budget=document.getElementById('sbBudget')&&document.getElementById('sbBudget').value||'';
-  var lines=[];
-  lines.push('Destination: '+(dest||'Jamaica'));
-  if(dateFrom){
-    var df=new Date(dateFrom+'T12:00:00');
-    var dateStr=df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    if(dateTo) dateStr+=' to '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    lines.push('Travel Dates: '+dateStr);
-  }
-  if(style) lines.push('Experience Style: '+style);
-  if(party) lines.push('Travel Party: '+party);
-  if(budget) lines.push('Trip Budget: '+budget);
-  var btn=document.querySelector('.sb-btn');
-  var origBtn=btn?btn.innerHTML:'';
-  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';btn.style.pointerEvents='none'}
-  if(window.SS&&typeof SS.createBooking==='function'){
-    SS.createBooking({
-      name:'Website Visitor',email:'noreply@sightseerscaribbean.com',
-      tourName:'Quick Search Enquiry — '+(dest||'Jamaica'),
-      date:dateFrom,guests:party||1,
-      notes:lines.join('\n'),type:'tour'
-    }).then(function(){
-      if(btn){btn.innerHTML='<i class="fas fa-check"></i> Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3000)}
-      toast('Your enquiry was sent — we will be in touch shortly!');
-    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}; toast('Sent! We will follow up shortly.');});
-  }else{
-    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
-    toast('Your enquiry has been noted — we will follow up shortly!');
-  }
+  // Pre-fill the booking form and scroll to it so the visitor enters their email
+  try{
+    if(dest&&document.getElementById('b_dest')) document.getElementById('b_dest').value=dest;
+    if(dateFrom&&document.getElementById('b_dt')) document.getElementById('b_dt').value=dateFrom;
+    if(party&&document.getElementById('b_gs')) document.getElementById('b_gs').value=party;
+    if(budget&&document.getElementById('b_budget')) document.getElementById('b_budget').value=budget;
+    if(style&&document.getElementById('b_type')){
+      var sel=document.getElementById('b_type');
+      for(var i=0;i<sel.options.length;i++){if(sel.options[i].text.toLowerCase().indexOf(style.toLowerCase().split(' ')[0])>-1){sel.selectedIndex=i;break;}}
+    }
+    // Store source for the booking notes
+    if(document.getElementById('b_funnelSource')) document.getElementById('b_funnelSource').value='search-bar';
+    if(document.getElementById('b_funnelLabel')) document.getElementById('b_funnelLabel').value=style||dest||'Search Bar Enquiry';
+  }catch(e){}
+  // Navigate to booking page and scroll to form
+  if(typeof nav==='function') nav('booking');
+  setTimeout(function(){
+    var form=document.getElementById('experience-request');
+    if(form) form.scrollIntoView({behavior:'smooth',block:'start'});
+    var emailField=document.getElementById('b_em');
+    if(emailField){setTimeout(function(){emailField.focus()},400)}
+  },200);
 }
 function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
   const activePage = document.querySelector('.page.on')?.id || '';
