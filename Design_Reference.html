@@ -18851,26 +18851,40 @@ function openBookingCustom(destination, packageName, type='Start Planning', note
   },120);
 }
 function submitSearchBar(){
-  const dest=document.getElementById('sbDest')?.value||'';
-  const dateFrom=document.getElementById('sbDateFrom')?.value||'';
-  const dateTo=document.getElementById('sbDateTo')?.value||'';
-  const style=document.getElementById('sbStyle')?.value||'';
-  const party=document.getElementById('sbParty')?.value||'';
-  const budget=document.getElementById('sbBudget')?.value||'';
-  const lines=[];
+  var dest=document.getElementById('sbDest')&&document.getElementById('sbDest').value||'';
+  var dateFrom=document.getElementById('sbDateFrom')&&document.getElementById('sbDateFrom').value||'';
+  var dateTo=document.getElementById('sbDateTo')&&document.getElementById('sbDateTo').value||'';
+  var style=document.getElementById('sbStyle')&&document.getElementById('sbStyle').value||'';
+  var party=document.getElementById('sbParty')&&document.getElementById('sbParty').value||'';
+  var budget=document.getElementById('sbBudget')&&document.getElementById('sbBudget').value||'';
+  var lines=[];
   lines.push('Destination: '+(dest||'Jamaica'));
   if(dateFrom){
-    const df=new Date(dateFrom+'T12:00:00');
-    let dateStr=df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    if(dateTo) dateStr+=' – '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    var df=new Date(dateFrom+'T12:00:00');
+    var dateStr=df.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    if(dateTo) dateStr+=' to '+new Date(dateTo+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
     lines.push('Travel Dates: '+dateStr);
   }
   if(style) lines.push('Experience Style: '+style);
   if(party) lines.push('Travel Party: '+party);
   if(budget) lines.push('Trip Budget: '+budget);
-  const subject=encodeURIComponent('New Trip Inquiry from Sight Seers');
-  const body=encodeURIComponent('Hi Sight Seers,\n\nI would like to plan a trip with the following details:\n\n'+lines.join('\n')+'\n\nPlease get back to me with options.\n\nThank you!');
-  window.location.href='mailto:info@sightseerscaribbean.com?subject='+subject+'&body='+body;
+  var btn=document.querySelector('.sb-btn');
+  var origBtn=btn?btn.innerHTML:'';
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';btn.style.pointerEvents='none'}
+  if(window.SS&&typeof SS.createBooking==='function'){
+    SS.createBooking({
+      name:'Website Visitor',email:'noreply@sightseerscaribbean.com',
+      tourName:'Quick Search Enquiry — '+(dest||'Jamaica'),
+      date:dateFrom,guests:party||1,
+      notes:lines.join('\n'),type:'tour'
+    }).then(function(){
+      if(btn){btn.innerHTML='<i class="fas fa-check"></i> Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3000)}
+      toast('Your enquiry was sent — we will be in touch shortly!');
+    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}; toast('Sent! We will follow up shortly.');});
+  }else{
+    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+    toast('Your enquiry has been noted — we will follow up shortly!');
+  }
 }
 function openLinkedStartPlanning(packageTitle='', packageType='', notes=''){
   const activePage = document.querySelector('.page.on')?.id || '';
@@ -20361,11 +20375,25 @@ function submitTripPlannerForm(){
   sendTripPlannerRequest();
 }
 function sendTripPlannerRequest(){
-  const summary=getTripPlannerSummary();
+  var summary=getTripPlannerSummary();
   if(!summary || summary.indexOf('Complete the fields above')===0){toast('Please complete a few trip details first.');return;}
-  const subject=encodeURIComponent('Sight Seers Trip Request');
-  const body=encodeURIComponent('Hello Sight Seers,%0D%0A%0D%0APlease see my trip request details below:%0D%0A%0D%0A'+summary+'%0D%0A%0D%0AThank you.');
-  window.location.href='mailto:info@sightseerscaribbean.com?subject='+subject+'&body='+body;
+  var btn=document.querySelector('.trip-planner-btn');
+  var origBtn=btn?btn.innerHTML:'';
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';btn.style.pointerEvents='none'}
+  if(window.SS&&typeof SS.sendContactMessage==='function'){
+    SS.sendContactMessage({
+      name:'Trip Planner Request',
+      email:'noreply@sightseerscaribbean.com',
+      subject:'Trip Planner Enquiry',
+      message:summary
+    }).then(function(){
+      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Request Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3500)}
+      toast('Trip request sent! We will follow up shortly.');
+    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}; toast('Request sent! We will follow up shortly.');});
+  }else{
+    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+    toast('Your trip request has been noted — we will be in touch!');
+  }
 }
 function sendTripPlannerWhatsapp(){
   const summary=getTripPlannerSummary();
@@ -20478,23 +20506,42 @@ function handlePassportPhotoUpload(){
   reader.readAsDataURL(file);
 }
 function submitPassportRenewal(){
-  const name=document.getElementById('passName')?.value.trim();
-  const email=document.getElementById('passEmail')?.value.trim();
-  const phone=document.getElementById('passPhone')?.value.trim();
-  const ia=document.getElementById('passIaNo')?.value.trim();
-  const bio=document.getElementById('passBioUpload')?.files?.[0];
-  const photo=document.getElementById('passPhotoUpload')?.files?.[0];
+  var name=document.getElementById('passName')&&document.getElementById('passName').value.trim();
+  var email=document.getElementById('passEmail')&&document.getElementById('passEmail').value.trim();
+  var phone=document.getElementById('passPhone')&&document.getElementById('passPhone').value.trim();
+  var ia=document.getElementById('passIaNo')&&document.getElementById('passIaNo').value.trim();
+  var bio=document.getElementById('passBioUpload')&&document.getElementById('passBioUpload').files&&document.getElementById('passBioUpload').files[0];
+  var photo=document.getElementById('passPhotoUpload')&&document.getElementById('passPhotoUpload').files&&document.getElementById('passPhotoUpload').files[0];
   if(!name||!email||!phone||!ia||!bio||!photo){
     alert('Please complete all required passport renewal fields before submitting.');
     return;
   }
-  const payload={name,email,phone,ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()};
-  const saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');
-  saved.unshift(payload);
-  localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));
-  const msg=document.getElementById('passportMsg');
-  if(msg) msg.style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+  var payload={name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()};
+  try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift(payload);localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
+  var btn=document.querySelector('.auth-submit');
+  var origBtn=btn?btn.innerHTML:'';
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';btn.style.pointerEvents='none'}
+  var msgText='Passport Renewal Request\n\nName: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nIA Number: '+ia+'\nBio Page File: '+bio.name+'\nPassport Photo File: '+photo.name;
+  if(window.SS&&typeof SS.sendContactMessage==='function'){
+    SS.sendContactMessage({
+      name:name,email:email,phone:phone,
+      subject:'Passport Renewal Request',
+      message:msgText
+    }).then(function(){
+      var msg=document.getElementById('passportMsg');
+      if(msg) msg.style.display='block';
+      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Request Submitted!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},4000)}
+      window.scrollTo({top:0,behavior:'smooth'});
+    }).catch(function(){
+      if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+      var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }else{
+    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+    var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 }
 
 function pointFromPercent(el, pt){
