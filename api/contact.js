@@ -35,7 +35,8 @@ module.exports = async function handler(req, res) {
         };
 
         await db.addToCollection('contact-messages', msg);
-        await sendEmail({
+        // Fire email without awaiting — DB save already succeeded, email is best-effort
+        sendEmail({
           subject: `New Enquiry from ${msg.name}${msg.subject ? ' — ' + msg.subject : ''}`,
           html: `
             <h2 style="color:#0d5371">New Contact Enquiry — Sight Seers Caribbean</h2>
