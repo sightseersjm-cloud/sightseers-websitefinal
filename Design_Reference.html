@@ -20258,7 +20258,7 @@ function smoothScrollToElement(el,duration=950,offset=0){
     cf.start(now); cf.stop(now+DUR);
     lfo1.start(now); lfo1.stop(now+DUR); lfo2.start(now); lfo2.stop(now+DUR);
 
-    // Birds singing a melody — "Three Little Birds" (don't worry, be happy)
+    // Birds singing a melody — the "One Love, one heart" hook (Bob Marley)
     var song=ctx.createGain(); song.gain.value=0.62; song.connect(master);
     function birdNote(t,freq,dur){
       if(t>now+DUR-0.05) return;
@@ -20275,15 +20275,15 @@ function smoothScrollToElement(el,duration=950,offset=0){
       o.connect(soft); soft.connect(g); g.connect(song);
       o.start(t); o.stop(t+dur+0.04);
     }
-    // A major: A4 440, B4 493.88, C#5 554.37, D5 587.33
-    var A4=440,B4=493.88,Cs5=554.37,D5=587.33;
+    // A major: A4 440, B4 493.88, C#5 554.37, E5 659.25, F#5 739.99
+    var A4=440,B4=493.88,Cs5=554.37,E5=659.25,Fs5=739.99;
     var melody=[
-      // "Don't wor-ry, a-bout a thing"
-      [0.8,Cs5],[1.12,Cs5],[1.44,Cs5],[1.76,Cs5],[2.08,D5],[2.4,Cs5],[2.72,B4],
-      // "'Cause ev-'ry lit-tle thing, gon-na be al-right"
-      [3.25,Cs5],[3.57,Cs5],[3.89,Cs5],[4.21,Cs5],[4.53,Cs5],[4.85,D5],[5.17,Cs5],[5.49,B4],[5.85,A4]
+      // "One love, one heart"
+      [0.8,E5],[1.15,E5],[1.65,Fs5],[2.0,E5],
+      // "Let's get to-geth-er and feel all right"
+      [2.65,E5],[2.95,E5],[3.25,E5],[3.55,Fs5],[3.85,E5],[4.15,E5],[4.5,Cs5],[4.85,B4],[5.2,A4]
     ];
-    melody.forEach(function(n){ birdNote(now+n[0],n[1],0.28); });
+    melody.forEach(function(n,i){ birdNote(now+n[0],n[1], i===melody.length-1?0.55:0.28); });
 
     setTimeout(function(){try{ctx.close()}catch(e){}},(DUR+0.6)*1000);
   }
