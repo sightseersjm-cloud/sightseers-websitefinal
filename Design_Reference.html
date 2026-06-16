@@ -20218,6 +20218,64 @@ function smoothScrollToElement(el,duration=950,offset=0){
   const target=(window.pageYOffset || document.documentElement.scrollTop || 0)+rect.top+offset;
   smoothScrollToY(target,duration);
 }
+
+/* ═══════ WELCOME AMBIENCE — gentle ocean + birds (~3s, once) ═══════ */
+(function(){
+  var played=false;
+  function playWelcomeAmbience(){
+    if(played) return; played=true;
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return;
+    var ctx; try{ctx=new AC()}catch(e){return}
+    try{if(ctx.state==='suspended')ctx.resume()}catch(e){}
+    var now=ctx.currentTime, DUR=3.4;
+
+    // Master gain — soft fade in and out, low overall volume
+    var master=ctx.createGain();
+    master.gain.setValueAtTime(0.0001,now);
+    master.gain.exponentialRampToValueAtTime(0.16,now+0.9);
+    master.gain.setValueAtTime(0.16,now+DUR-1.1);
+    master.gain.exponentialRampToValueAtTime(0.0001,now+DUR);
+    master.connect(ctx.destination);
+
+    // Ocean — brown noise through a lowpass with a slow swell
+    var size=2*ctx.sampleRate, buf=ctx.createBuffer(1,size,ctx.sampleRate), d=buf.getChannelData(0), last=0;
+    for(var i=0;i<size;i++){var w=Math.random()*2-1; last=(last+0.02*w)/1.02; d[i]=last*3.5;}
+    var noise=ctx.createBufferSource(); noise.buffer=buf; noise.loop=true;
+    var lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=520; lp.Q.value=0.6;
+    var ocean=ctx.createGain(); ocean.gain.value=0.85;
+    var lfo=ctx.createOscillator(); lfo.frequency.value=0.22;
+    var lfoG=ctx.createGain(); lfoG.gain.value=0.4; lfo.connect(lfoG); lfoG.connect(ocean.gain);
+    noise.connect(lp); lp.connect(ocean); ocean.connect(master);
+    noise.start(now); noise.stop(now+DUR); lfo.start(now); lfo.stop(now+DUR);
+
+    // Birds — short pitch-swept chirps scattered across the clip
+    function chirp(t,freq){
+      if(t>now+DUR-0.2) return;
+      var o=ctx.createOscillator(); o.type='sine';
+      var g=ctx.createGain();
+      o.frequency.setValueAtTime(freq,t);
+      o.frequency.exponentialRampToValueAtTime(freq*1.7,t+0.06);
+      o.frequency.exponentialRampToValueAtTime(freq*0.95,t+0.13);
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(0.22,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.16);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t+0.2);
+    }
+    var times=[0.7,1.05,1.6,1.95,2.35,2.8], freqs=[2300,2700,3100,2500,2900,3300];
+    times.forEach(function(off,idx){ chirp(now+off,freqs[idx]); if(idx%2===0) chirp(now+off+0.17,freqs[idx]*1.05); });
+
+    setTimeout(function(){try{ctx.close()}catch(e){}},(DUR+0.6)*1000);
+  }
+  // Browser autoplay rules require a user gesture — fire on first interaction.
+  function onFirst(){
+    ['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){document.removeEventListener(ev,onFirst,true)});
+    playWelcomeAmbience();
+  }
+  ['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){document.addEventListener(ev,onFirst,{capture:true,passive:true})});
+})();
+
 function nav(id,opts={}){
   closeBlog();
   closeRhythmTour(true);
@@ -20230,7 +20288,8 @@ function nav(id,opts={}){
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   if(!opts.skipScroll){ smoothScrollToY(0,900); }
   if(id==='vtours'){
-    try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}','*')}catch(e){}
+    // Keep the tour video playing but muted — audio must not auto-play
+    try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
     vtShowLangPrompt();
   }
   if(id!=='vtours'){
