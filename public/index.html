@@ -20232,38 +20232,50 @@ function smoothScrollToElement(el,duration=950,offset=0){
     try{if(ctx.state==='suspended')ctx.resume()}catch(e){}
     var now=ctx.currentTime, DUR=5.8;
 
-    // Master gain — soft fade in and out, low overall volume
+    // Master gain — long, gentle fade in and out, low overall volume
     var master=ctx.createGain();
     master.gain.setValueAtTime(0.0001,now);
-    master.gain.exponentialRampToValueAtTime(0.16,now+0.9);
-    master.gain.setValueAtTime(0.16,now+DUR-1.1);
+    master.gain.exponentialRampToValueAtTime(0.15,now+1.4);
+    master.gain.setValueAtTime(0.15,now+DUR-1.6);
     master.gain.exponentialRampToValueAtTime(0.0001,now+DUR);
     master.connect(ctx.destination);
 
-    // Ocean — brown noise through a lowpass with a slow swell
+    // Ocean — soft brown-noise wash, warm and breathing (soothing)
     var size=2*ctx.sampleRate, buf=ctx.createBuffer(1,size,ctx.sampleRate), d=buf.getChannelData(0), last=0;
-    for(var i=0;i<size;i++){var w=Math.random()*2-1; last=(last+0.02*w)/1.02; d[i]=last*3.5;}
+    for(var i=0;i<size;i++){var w=Math.random()*2-1; last=(last+0.016*w)/1.016; d[i]=last*3.1;}
     var noise=ctx.createBufferSource(); noise.buffer=buf; noise.loop=true;
-    var lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=520; lp.Q.value=0.6;
-    var ocean=ctx.createGain(); ocean.gain.value=0.85;
-    var lfo=ctx.createOscillator(); lfo.frequency.value=0.22;
-    var lfoG=ctx.createGain(); lfoG.gain.value=0.4; lfo.connect(lfoG); lfoG.connect(ocean.gain);
-    noise.connect(lp); lp.connect(ocean); ocean.connect(master);
-    noise.start(now); noise.stop(now+DUR); lfo.start(now); lfo.stop(now+DUR);
+    // High-pass clears muddy rumble; low-pass softens hiss into a warm wash
+    var hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=95; hp.Q.value=0.4;
+    var lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=410; lp.Q.value=0.3;
+    // Slowly drift the cutoff so each wave sounds a little different (less repetitive)
+    var cf=ctx.createOscillator(); cf.frequency.value=0.06;
+    var cfG=ctx.createGain(); cfG.gain.value=110; cf.connect(cfG); cfG.connect(lp.frequency);
+    var ocean=ctx.createGain(); ocean.gain.value=0.78;
+    // Two very slow swells summed = a natural, breathing tide (not a pulse)
+    var lfo1=ctx.createOscillator(); lfo1.frequency.value=0.08;
+    var lfo1G=ctx.createGain(); lfo1G.gain.value=0.28; lfo1.connect(lfo1G); lfo1G.connect(ocean.gain);
+    var lfo2=ctx.createOscillator(); lfo2.frequency.value=0.13;
+    var lfo2G=ctx.createGain(); lfo2G.gain.value=0.16; lfo2.connect(lfo2G); lfo2G.connect(ocean.gain);
+    noise.connect(hp); hp.connect(lp); lp.connect(ocean); ocean.connect(master);
+    noise.start(now); noise.stop(now+DUR);
+    cf.start(now); cf.stop(now+DUR);
+    lfo1.start(now); lfo1.stop(now+DUR); lfo2.start(now); lfo2.stop(now+DUR);
 
-    // Birds — short pitch-swept chirps scattered across the clip
+    // Birds — soft, distant chirps that gently blend with the waves
+    var birdBus=ctx.createGain(); birdBus.gain.value=0.55; birdBus.connect(master);
     function chirp(t,freq){
-      if(t>now+DUR-0.2) return;
+      if(t>now+DUR-0.25) return;
       var o=ctx.createOscillator(); o.type='sine';
+      var soft=ctx.createBiquadFilter(); soft.type='lowpass'; soft.frequency.value=4200; soft.Q.value=0.3;
       var g=ctx.createGain();
       o.frequency.setValueAtTime(freq,t);
-      o.frequency.exponentialRampToValueAtTime(freq*1.7,t+0.06);
-      o.frequency.exponentialRampToValueAtTime(freq*0.95,t+0.13);
+      o.frequency.exponentialRampToValueAtTime(freq*1.35,t+0.07);
+      o.frequency.exponentialRampToValueAtTime(freq*0.98,t+0.16);
       g.gain.setValueAtTime(0.0001,t);
-      g.gain.exponentialRampToValueAtTime(0.22,t+0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+0.16);
-      o.connect(g); g.connect(master);
-      o.start(t); o.stop(t+0.2);
+      g.gain.exponentialRampToValueAtTime(0.13,t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+      o.connect(soft); soft.connect(g); g.connect(birdBus);
+      o.start(t); o.stop(t+0.26);
     }
     var times=[0.7,1.05,1.6,1.95,2.4,2.85,3.3,3.8,4.25,4.7,5.1], freqs=[2300,2700,3100,2500,2900,3300,2600,3000,2400,2800,3200];
     times.forEach(function(off,idx){ chirp(now+off,freqs[idx]); if(idx%2===0) chirp(now+off+0.17,freqs[idx]*1.05); });
