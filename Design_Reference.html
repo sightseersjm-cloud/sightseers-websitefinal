@@ -15018,7 +15018,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
     <div class="vt-cta-block reveal">
       <h2>Ready to Explore the Caribbean from Anywhere?</h2>
       <p>V-Tours is launching in private beta. Be among the first to experience the Caribbean like never before.</p>
-      <a href="mailto:info@sightseerscaribbean.com?subject=V-Tours%20Beta%20Interest&body=Hi%20Sight%20Seers%2C%0A%0AI%E2%80%99m%20interested%20in%20joining%20the%20V-Tours%20beta.%0A%0APlease%20add%20me%20to%20the%20waitlist.%0A%0AThank%20you!" class="vt-cta-btn"><i class="fas fa-paper-plane"></i> Join the Beta Waitlist</a>
+      <button class="vt-cta-btn" onclick="var s=document.getElementById('vt-signup');if(s){s.scrollIntoView({behavior:'smooth',block:'start'});}"><i class="fas fa-paper-plane"></i> Join the Beta Waitlist</button>
     </div>
   </section>
 
@@ -20370,26 +20370,31 @@ function clearTripPlannerFields(){
 }
 function submitTripPlannerForm(){
   refreshTripPlannerSummary();
-  const summary=getTripPlannerSummary();
+  var summary=getTripPlannerSummary();
   if(!summary || summary.indexOf('Complete the fields above')===0){toast('Please complete a few trip details first.');return;}
   sendTripPlannerRequest();
 }
 function sendTripPlannerRequest(){
   var summary=getTripPlannerSummary();
   if(!summary || summary.indexOf('Complete the fields above')===0){toast('Please complete a few trip details first.');return;}
-  var btn=document.querySelector('.trip-planner-btn');
+  var visitorEmail=(document.getElementById('tpEmail')&&document.getElementById('tpEmail').value.trim())||'visitor@sightseerscaribbean.com';
+  var visitorName=(document.getElementById('tpFullName')&&document.getElementById('tpFullName').value.trim())||'Trip Planner Request';
+  var visitorPhone=(document.getElementById('tpPhone')&&document.getElementById('tpPhone').value.trim())||'';
+  // Target the "Send by Email" button specifically (inside gform-wrap), not the first .trip-planner-btn
+  var btn=document.querySelector('#tripPlannerSubmitSection .trip-planner-btn')||document.querySelector('.trip-planner-btn');
   var origBtn=btn?btn.innerHTML:'';
   if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';btn.style.pointerEvents='none'}
   if(window.SS&&typeof SS.sendContactMessage==='function'){
     SS.sendContactMessage({
-      name:'Trip Planner Request',
-      email:'noreply@sightseerscaribbean.com',
-      subject:'Trip Planner Enquiry',
+      name:visitorName,
+      email:visitorEmail,
+      phone:visitorPhone,
+      subject:'Travel Form Enquiry',
       message:summary
     }).then(function(){
-      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Request Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3500)}
-      toast('Trip request sent! We will follow up shortly.');
-    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}; toast('Request sent! We will follow up shortly.');});
+      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3500)}
+      toast('Your travel details were sent — we will follow up shortly!');
+    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''};toast('Your request was received — we will be in touch!');});
   }else{
     if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
     toast('Your trip request has been noted — we will be in touch!');
