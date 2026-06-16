@@ -13302,6 +13302,12 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 @keyframes vtSessionOpen{0%{opacity:0;transform:scale(.92);border-radius:28px}100%{opacity:1;transform:scale(1);border-radius:20px}}
 @keyframes vtSessionClose{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
 @media(max-width:768px){.vt-session.vt-session-fs{inset:0!important;border-radius:0!important}.vt-session.vt-session-fs .vt-session-content{grid-template-columns:1fr!important}}
+/* True browser fullscreen — edge to edge, no margin or rounding */
+.vt-session.vt-session-fs:fullscreen{inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important}
+.vt-session.vt-session-fs:-webkit-full-screen{inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important}
+.vt-session.vt-session-fs:-ms-fullscreen{inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important}
+/* Toggle the bar expand button icon to a compress glyph while expanded */
+.vt-session.vt-session-fs .vt-session-expand-btn i::before{content:"\f066"}
 
 /* ======== SESSION CART DRAWER ======== */
 .vt-cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
@@ -15911,24 +15917,42 @@ function vtConfettiCelebrate(title,subtitle){
 
 /* ═══════ SESSION FULLSCREEN (Apple-style) ═══════ */
 var vtSessionExpanded=false;
+function vtSessionFsActive(){return!!(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement)}
+function vtShowSessionOverlay(){
+  var ov=document.getElementById('vt-sfs-overlay');
+  if(!ov){ov=document.createElement('div');ov.id='vt-sfs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseSession;document.body.appendChild(ov)}
+  ov.classList.add('open');
+}
 function vtExpandSession(){
   var session=document.getElementById('vt-active-session');if(!session)return;
   if(vtSessionExpanded){vtCollapseSession();return}
   vtSessionExpanded=true;
   document.body.classList.add('vt-expanding');
-  var ov=document.getElementById('vt-sfs-overlay');
-  if(!ov){ov=document.createElement('div');ov.id='vt-sfs-overlay';ov.className='vt-fs-overlay';ov.onclick=vtCollapseSession;document.body.appendChild(ov)}
-  ov.classList.add('open');
+  // Free ancestor overflow so the CSS fallback (fixed positioning) isn't clipped
   var frame=session.closest('.vt-dash-frame');
   if(frame){frame.style.overflow='visible';frame.style.zIndex='10000'}
   var body=session.closest('.vt-dash-body');if(body)body.style.overflow='visible';
   var main=session.closest('.vt-dash-main');if(main)main.style.overflow='visible';
   session.classList.add('vt-session-fs');
   document.body.style.overflow='hidden';
+  // Prefer real browser fullscreen (edge to edge); fall back to the windowed overlay
+  var req=session.requestFullscreen||session.webkitRequestFullscreen||session.msRequestFullscreen;
+  if(req){
+    try{
+      var p=req.call(session);
+      if(p&&p.catch)p.catch(function(){vtShowSessionOverlay()});
+    }catch(_){vtShowSessionOverlay()}
+  }else{
+    vtShowSessionOverlay();
+  }
 }
 function vtCollapseSession(){
   if(!vtSessionExpanded)return;
   vtSessionExpanded=false;
+  if(vtSessionFsActive()){
+    var exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+    if(exit){try{exit.call(document)}catch(_){}}
+  }
   var session=document.getElementById('vt-active-session');
   if(session){
     session.classList.remove('vt-session-fs');
@@ -15941,6 +15965,9 @@ function vtCollapseSession(){
   var ov=document.getElementById('vt-sfs-overlay');if(ov)ov.classList.remove('open');
   document.body.style.overflow='';
 }
+function vtOnSessionFsChange(){if(!vtSessionFsActive()&&vtSessionExpanded)vtCollapseSession()}
+document.addEventListener('fullscreenchange',vtOnSessionFsChange);
+document.addEventListener('webkitfullscreenchange',vtOnSessionFsChange);
 
 
 /* ═══════ AI CONCIERGE ═══════ */
