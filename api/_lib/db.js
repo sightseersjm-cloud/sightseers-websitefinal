@@ -17,7 +17,7 @@ async function getDoc(name) {
 
 async function setDoc(name, data) {
   await put(BASE + name + '.json', JSON.stringify(data), {
-    access: 'private',
+    access: 'public',
     contentType: 'application/json',
     addRandomSuffix: false
   });
