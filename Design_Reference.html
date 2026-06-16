@@ -20376,24 +20376,60 @@ function sendTripPlannerWhatsapp(){
 document.addEventListener('input',e=>{if(e.target && e.target.closest('.trip-planner-card')) refreshTripPlannerSummary();});
 function submitBook(){
   calculateUpsells();
-  const upsells=[...document.querySelectorAll('.upsell-section input:checked')].map(input=>input.value);
-  const notesField=document.getElementById('b_notes');
+  var upsells=[].slice.call(document.querySelectorAll('.upsell-section input:checked')).map(function(i){return i.value});
+  var notesField=document.getElementById('b_notes');
   if(notesField && upsells.length){
-    const addonLine=`Add-ons selected: ${upsells.join(', ')}.`;
-    if(!notesField.value.includes(addonLine)) notesField.value = `${notesField.value ? notesField.value.trim() + ' ' : ''}${addonLine}`.trim();
+    var addonLine='Add-ons selected: '+upsells.join(', ')+'.';
+    if(notesField.value.indexOf(addonLine)===-1) notesField.value=(notesField.value?notesField.value.trim()+' ':'')+addonLine;
   }
-  const fn=document.getElementById('b_fn').value;
-  const em=document.getElementById('b_em').value;
-  const dest=document.getElementById('b_dest').value;
-  const type=document.getElementById('b_type').value;
-  const budget=document.getElementById('b_budget')?.value||'';
+  var fn=document.getElementById('b_fn').value.trim();
+  var ln=document.getElementById('b_ln').value.trim();
+  var em=document.getElementById('b_em').value.trim();
+  var ph=document.getElementById('b_ph').value.trim();
+  var dest=document.getElementById('b_dest').value;
+  var type=document.getElementById('b_type').value;
+  var pkg=document.getElementById('b_package').value;
+  var dt=document.getElementById('b_dt').value;
+  var gs=document.getElementById('b_gs').value;
+  var budget=document.getElementById('b_budget')?document.getElementById('b_budget').value:'';
+  var funnelSource=document.getElementById('b_funnelSource')?document.getElementById('b_funnelSource').value:'';
+  var funnelLabel=document.getElementById('b_funnelLabel')?document.getElementById('b_funnelLabel').value:'';
   if(budget && notesField){
-    const budgetLine=`Trip Budget: ${budget}.`;
-    if(!notesField.value.includes(budgetLine)) notesField.value=`${notesField.value?notesField.value.trim()+' ':''}${budgetLine}`.trim();
+    var budgetLine='Trip Budget: '+budget+'.';
+    if(notesField.value.indexOf(budgetLine)===-1) notesField.value=(notesField.value?notesField.value.trim()+' ':'')+budgetLine;
   }
+  var notes=notesField?notesField.value.trim():'';
   if(!fn||!em||!dest||!type){alert('Please fill in all required fields.');return;}
-  document.getElementById('bookMsg').style.display='block';
-  window.open('https://forms.gle/BkHmahaTkhyBxWzMA','_blank');
+
+  var btn=document.querySelector('.booking-page .btn-primary');
+  var origBtn=btn?btn.innerHTML:'';
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';btn.style.pointerEvents='none'}
+
+  var data={
+    name:fn+(ln?' '+ln:''),
+    email:em,
+    phone:ph,
+    tourName:(funnelLabel||pkg||type)+(dest?' — '+dest:''),
+    date:dt,
+    guests:gs||1,
+    notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
+    type:'tour'
+  };
+
+  if(window.SS&&typeof SS.createBooking==='function'){
+    SS.createBooking(data).then(function(){
+      document.getElementById('bookMsg').style.display='block';
+      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Request Submitted!';btn.classList.add('success')}
+      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').selectedIndex=0;if(document.getElementById('b_budget'))document.getElementById('b_budget').selectedIndex=0;if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
+      setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
+    }).catch(function(err){
+      alert(err&&err.message?err.message:'Something went wrong. Please try again.');
+      if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+    });
+  }else{
+    document.getElementById('bookMsg').style.display='block';
+    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
+  }
 }
 
 /* ── PASSPORT RENEWAL FORM ───────── */
