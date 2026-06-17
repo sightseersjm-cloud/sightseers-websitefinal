@@ -1,5 +1,5 @@
 const db = require('./_lib/db');
-const { requireAuth, requireAdmin, getUser, uid } = require('./_lib/auth');
+const { requireAuth, requireAdmin, getUser, uid, escapeHtml } = require('./_lib/auth');
 const { sendEmail } = require('./_lib/email');
 
 module.exports = async function handler(req, res) {
@@ -48,20 +48,20 @@ module.exports = async function handler(req, res) {
         await db.addToCollection('bookings', booking);
         const isStay = booking.type === 'stay';
         await sendEmail({
-          subject: `New ${isStay ? 'Stay' : 'Tour'} Booking — ${booking.tourName || booking.stayName || 'Sight Seers'}`,
+          subject: `New ${isStay ? 'Stay' : 'Tour'} Booking — ${escapeHtml(booking.tourName || booking.stayName || 'Sight Seers')}`,
           html: `
             <h2 style="color:#0d5371">New ${isStay ? 'Stay' : 'Tour'} Booking — Sight Seers Caribbean</h2>
             <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
-              <tr><td style="padding:8px;font-weight:bold;width:140px">Name</td><td style="padding:8px">${booking.name}</td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px"><a href="mailto:${booking.email}">${booking.email}</a></td></tr>
-              ${booking.phone ? `<tr><td style="padding:8px;font-weight:bold">Phone</td><td style="padding:8px">${booking.phone}</td></tr>` : ''}
-              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">${isStay ? 'Stay' : 'Tour'}</td><td style="padding:8px">${booking.stayName || booking.tourName || '—'}</td></tr>
+              <tr><td style="padding:8px;font-weight:bold;width:140px">Name</td><td style="padding:8px">${escapeHtml(booking.name)}</td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(booking.email)}</td></tr>
+              ${booking.phone ? `<tr><td style="padding:8px;font-weight:bold">Phone</td><td style="padding:8px">${escapeHtml(booking.phone)}</td></tr>` : ''}
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">${isStay ? 'Stay' : 'Tour'}</td><td style="padding:8px">${escapeHtml(booking.stayName || booking.tourName || '—')}</td></tr>
               ${isStay ? `
-              <tr><td style="padding:8px;font-weight:bold">Check-in</td><td style="padding:8px">${booking.checkIn || '—'}</td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Check-out</td><td style="padding:8px">${booking.checkOut || '—'}</td></tr>
-              ` : `<tr><td style="padding:8px;font-weight:bold">Date</td><td style="padding:8px">${booking.date || '—'}</td></tr>`}
-              <tr><td style="padding:8px;font-weight:bold">Guests</td><td style="padding:8px">${booking.guests}</td></tr>
-              ${booking.notes ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold;vertical-align:top">Notes</td><td style="padding:8px">${booking.notes}</td></tr>` : ''}
+              <tr><td style="padding:8px;font-weight:bold">Check-in</td><td style="padding:8px">${escapeHtml(booking.checkIn || '—')}</td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Check-out</td><td style="padding:8px">${escapeHtml(booking.checkOut || '—')}</td></tr>
+              ` : `<tr><td style="padding:8px;font-weight:bold">Date</td><td style="padding:8px">${escapeHtml(booking.date || '—')}</td></tr>`}
+              <tr><td style="padding:8px;font-weight:bold">Guests</td><td style="padding:8px">${escapeHtml(booking.guests)}</td></tr>
+              ${booking.notes ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold;vertical-align:top">Notes</td><td style="padding:8px">${escapeHtml(booking.notes)}</td></tr>` : ''}
               <tr><td style="padding:8px;font-weight:bold">Status</td><td style="padding:8px;color:#e67e22;font-weight:bold">Pending — action required</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(booking.createdAt).toLocaleString('en-US',{timeZone:'America/Jamaica'})}</td></tr>
             </table>

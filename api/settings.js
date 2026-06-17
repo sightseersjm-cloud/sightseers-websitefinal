@@ -18,7 +18,7 @@ async function readSettings() {
 
 async function writeSettings(data) {
   await put(SETTINGS_PATH, JSON.stringify(data), {
-    access: 'public',
+    access: 'private',
     contentType: 'application/json',
     addRandomSuffix: false
   });
