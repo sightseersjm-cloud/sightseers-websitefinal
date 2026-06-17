@@ -47,8 +47,7 @@ module.exports = async function handler(req, res) {
 
         await db.addToCollection('bookings', booking);
         const isStay = booking.type === 'stay';
-        // Fire email without awaiting — DB save already succeeded, email is best-effort
-        sendEmail({
+        await sendEmail({
           subject: `New ${isStay ? 'Stay' : 'Tour'} Booking — ${booking.tourName || booking.stayName || 'Sight Seers'}`,
           html: `
             <h2 style="color:#0d5371">New ${isStay ? 'Stay' : 'Tour'} Booking — Sight Seers Caribbean</h2>
