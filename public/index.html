@@ -41803,6 +41803,7 @@ body.theme-night .page .tag{
     var input = q('adminPasscode');
     var pass = input ? String(input.value || '').trim() : '';
     var validPass = window.ADMIN_PASSCODE || 'SightSeers2026!';
+    if(pass.length<1){alert('Passcode field is empty — type: SightSeers2026!');return false;}
     if(pass === validPass){
       window.adminUnlocked = true;
       try{ sessionStorage.setItem('ss_admin_unlocked', '1'); }catch(e){}
