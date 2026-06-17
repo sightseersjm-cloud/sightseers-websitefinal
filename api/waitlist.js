@@ -63,8 +63,7 @@ module.exports = async function handler(req, res) {
         };
 
         await db.addToCollection(COLLECTION, entry);
-        // Fire email without awaiting — DB save already succeeded, email is best-effort
-        sendEmail({
+        await sendEmail({
           subject: `New V-Tours Waitlist Signup — ${entry.firstName} ${entry.lastName} (${acctType})`,
           html: `
             <h2 style="color:#0d5371">New V-Tours Waitlist Signup — Sight Seers Caribbean</h2>
