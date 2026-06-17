@@ -1012,6 +1012,11 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .mob-close{position:absolute;top:20px;right:20px;color:#fff;font-size:22px;cursor:pointer}
 .mob-nav a{display:block;color:rgba(255,255,255,.85);font-size:1.2rem;font-weight:700;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1)}
 .mob-nav a:hover{color:var(--orange)}
+.mob-group-toggle{position:relative}
+.mob-group-toggle.open i{transform:rotate(180deg)}
+.mob-group{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.mob-group.open{max-height:600px}
+.mob-group a{padding-left:24px!important;font-size:.9rem!important;font-weight:500!important;color:rgba(255,255,255,.6)!important;border-bottom:1px solid rgba(255,255,255,.05)!important}
 
 /* ======== CART MINI PANEL ======== */
 .cart-panel{position:fixed;top:0;right:-380px;width:380px;height:100vh;background:#fff;z-index:1500;box-shadow:-4px 0 30px rgba(0,0,0,.15);transition:right .35s;display:flex;flex-direction:column}
@@ -9103,36 +9108,49 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <div class="mob-nav" id="mobNav">
   <span class="mob-close" onclick="closeMob()"><i class="fas fa-times"></i></span>
   <a href="#" onclick="nav('home');closeMob()">Home</a>
-  <a href="#" onclick="nav('tours');closeMob()">Tours & Excursions</a>
-  <a href="#" onclick="nav('tours');closeMob()">Custom Packages</a>
-  <a href="#" onclick="nav('school-tours');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">School Tours</a>
-  <a href="#" onclick="nav('senior-tours');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">Senior Tours</a>
-  <a href="#" onclick="nav('greek-life');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">Greek Life Travel</a>
-  <a href="#" onclick="nav('greek-life');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">Custom Group Travel</a>
-  <a href="#" onclick="nav('tours');closeMob()" style="padding-left:28px;font-size:13px;color:var(--grey)">Water Experiences</a>
-  <a href="#" onclick="nav('tours');closeMob()" style="padding-left:28px;font-size:13px;color:var(--grey)">Land Experiences</a>
-  <a href="#" onclick="openToursFilter('mba');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">MBA Experience</a>
-  <a href="#" onclick="openToursFilter('package');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">Start Planning</a><a href="#" onclick="openStayCountryPage('Jamaica','all');closeMob();return false;" style="padding-left:28px;font-size:13px;color:var(--grey)">Villas &amp; Vacation Rentals</a>
-  <a href="#" onclick="openStayCountryPage('Jamaica','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Jamaica</a>
-  <a href="#" onclick="openStayCountryPage('Barbados','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Barbados</a>
-  <a href="#" onclick="openStayCountryPage('Saint Lucia','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Saint Lucia</a>
-  <a href="#" onclick="openStayCountryPage('The Bahamas','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">The Bahamas</a>
-  <a href="#" onclick="openStayCountryPage('Belize','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Belize</a>
-  <a href="#" onclick="openStayCountryPage('Dominican Republic','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Dominican Republic</a>
-  <a href="#" onclick="openStayCountryPage('Curaçao','all');closeMob();return false;" style="padding-left:44px;font-size:12px;color:var(--grey)">Curaçao</a>
+
+  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Tours & Excursions <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <div class="mob-group">
+    <a href="#" onclick="nav('tours');closeMob()">All Tours</a>
+    <a href="#" onclick="nav('tours');closeMob()">Custom Packages</a>
+    <a href="#" onclick="nav('school-tours');closeMob();return false;">School Tours</a>
+    <a href="#" onclick="nav('senior-tours');closeMob();return false;">Senior Tours</a>
+    <a href="#" onclick="nav('greek-life');closeMob();return false;">Greek Life Travel</a>
+    <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
+    <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
+    <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
+    <a href="#" onclick="openToursFilter('mba');closeMob();return false;">MBA Experience</a>
+  </div>
+
+  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Stays & Villas <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <div class="mob-group">
+    <a href="#" onclick="openStayCountryPage('Jamaica','all');closeMob();return false;">Jamaica</a>
+    <a href="#" onclick="openStayCountryPage('Barbados','all');closeMob();return false;">Barbados</a>
+    <a href="#" onclick="openStayCountryPage('Saint Lucia','all');closeMob();return false;">Saint Lucia</a>
+    <a href="#" onclick="openStayCountryPage('The Bahamas','all');closeMob();return false;">The Bahamas</a>
+    <a href="#" onclick="openStayCountryPage('Belize','all');closeMob();return false;">Belize</a>
+    <a href="#" onclick="openStayCountryPage('Dominican Republic','all');closeMob();return false;">Dominican Republic</a>
+    <a href="#" onclick="openStayCountryPage('Curaçao','all');closeMob();return false;">Curaçao</a>
+  </div>
+
   <a href="#" onclick="nav('shop');closeMob()">Shop</a>
   <a href="#" onclick="nav('giftcards');closeMob()">Gift Cards</a>
-  <a href="#" onclick="nav('passport');closeMob()">Jamaican Passport Renewal</a>
-  <a href="#" onclick="nav('about');closeMob()">About Us</a>
-  <a href="#" onclick="openGalleryPage(true);return false;">Guest Gallery</a>
-  <a href="#" onclick="nav('discoverjamaica');closeMob()">Discover Jamaica</a>
-  <a href="#" onclick="nav('blog');closeMob()">Blog</a>
-  <a href="#" onclick="nav('partners');closeMob()">Partners</a>
-  <a href="#" onclick="nav('vtours');closeMob()">V-Tours</a>
+
+  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">More <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <div class="mob-group">
+    <a href="#" onclick="nav('passport');closeMob()">Jamaican Passport Renewal</a>
+    <a href="#" onclick="nav('about');closeMob()">About Us</a>
+    <a href="#" onclick="openGalleryPage(true);closeMob();return false;">Guest Gallery</a>
+    <a href="#" onclick="nav('discoverjamaica');closeMob()">Discover Jamaica</a>
+    <a href="#" onclick="nav('blog');closeMob()">Blog</a>
+    <a href="#" onclick="nav('partners');closeMob()">Partners</a>
+    <a href="#" onclick="nav('vtours');closeMob()">V-Tours</a>
+  </div>
+
+  <a href="#" onclick="nav('contact');closeMob()">Travel Form</a>
   <a href="#" onclick="nav('account');closeMob()">Guest Account</a>
   <a href="#" id="n-admin-mobile" class="admin-hidden-link" onclick="nav('admin');closeMob()">Admin Portal</a>
-  <a href="#" onclick="nav('contact');closeMob()">Travel Form</a>
-  <a href="#" onclick="nav('booking');closeMob()" style="color:var(--orange);margin-top:20px">Start Planning →</a>
+  <a href="#" onclick="nav('booking');closeMob()" style="color:var(--orange);margin-top:20px;font-size:1.1em">Start Planning →</a>
 </div>
 
 <!-- Cart Panel -->
@@ -20410,7 +20428,8 @@ window.addEventListener('scroll',()=>{document.getElementById('navbar').classLis
 
 /* ── MOBILE NAV ──────────────────── */
 function openMob(){document.getElementById('mobNav').classList.add('open');}
-function closeMob(){document.getElementById('mobNav').classList.remove('open');}
+function closeMob(){document.getElementById('mobNav').classList.remove('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});}
+function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.contains('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});if(!isOpen){g.classList.add('open');el.classList.add('open');}}
 
 /* ── BOOKING FORM ────────────────── */
 function getTripPlannerSummary(){
