@@ -26417,6 +26417,8 @@ body.theme-night .page .tag{
       const input=document.getElementById('dynamicSectionImage');
       if(input) input.value=e.target?.result||'';
       updateDynamicSectionImagePreview();
+      clearTimeout(window.__ssAutoSaveTimer);
+      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
     };
     reader.readAsDataURL(file);
   }
@@ -27728,6 +27730,8 @@ body.theme-night .page .tag{
       const input=document.getElementById('djAdminImage');
       if(input) input.value=e.target?.result||'';
       updateParishImagePreview();
+      clearTimeout(window.__ssAutoSaveTimer);
+      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
     };
     reader.readAsDataURL(file);
   }
@@ -34049,6 +34053,8 @@ function openYachtBooking(title, category, note){
       map[fieldId]=value;
       setCustomImageMap(map);
       updateExtraAdminImagePreview(fieldId);
+      clearTimeout(window.__ssAutoSaveTimer);
+      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
     };
     reader.readAsDataURL(file);
   }
@@ -35642,7 +35648,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     }
 
-    setStatus('ok', 'Image loaded. Click Save Changes to keep it.');
+    setStatus('ok', 'Image uploaded and saving...');
+    clearTimeout(window.__ssAutoSaveTimer);
+    window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
   }
 
   async function readFile(file){
@@ -35688,7 +35696,9 @@ document.addEventListener('DOMContentLoaded', function(){
         input.value = value;
         dispatchValueEvents(input);
         updatePreviewById(targetId);
-        setStatus('ok', 'Image loaded. Click Save Changes to keep it.');
+        setStatus('ok', 'Image uploaded and saving...');
+        clearTimeout(window.__ssAutoSaveTimer);
+        window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
       }catch(err){
         setStatus('error', (err && err.message) || 'Image upload failed.');
       }
@@ -35815,7 +35825,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     }
 
-    setStatus('ok','Image loaded. Click Save Changes to keep it.');
+    setStatus('ok','Image uploaded and saving...');
+    clearTimeout(window.__ssAutoSaveTimer);
+    window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
   }
 
   function readFileAsDataURL(file){
@@ -36588,7 +36600,9 @@ body.theme-night .page .tag{
         const field = findLinkedValueField(input);
         if(!field) throw new Error('Image slot detected, but no linked field was found.');
         applyUploadToField(field, result, input);
-        setStatus('ok', 'Replacement image loaded. Click Save Changes to keep it.');
+        setStatus('ok', 'Image uploaded and saving...');
+        clearTimeout(window.__ssAutoSaveTimer);
+        window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
       } catch(err){
         setStatus('error', (err && err.message) || 'Image upload failed.');
       }
