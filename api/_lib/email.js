@@ -1,11 +1,11 @@
-const TO   = process.env.NOTIFY_EMAIL   || 'sightseersjm@gmail.com';
-const FROM = process.env.NOTIFY_FROM    || 'Sight Seers Caribbean <onboarding@resend.dev>';
+const TO   = 'sightseersjm@gmail.com';
+const FROM = 'Sight Seers Caribbean <onboarding@resend.dev>';
 const KEY  = process.env.RESEND_API_KEY || '';
 
 async function sendEmail({ subject, html }) {
-  if (!KEY) return; // silent no-op until API key is configured
+  if (!KEY) { console.log('EMAIL SKIP: no RESEND_API_KEY'); return; }
   try {
-    await fetch('https://api.resend.com/emails', {
+    const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + KEY,
@@ -13,8 +13,10 @@ async function sendEmail({ subject, html }) {
       },
       body: JSON.stringify({ from: FROM, to: [TO], subject, html })
     });
+    const data = await resp.json();
+    console.log('EMAIL RESULT:', resp.status, JSON.stringify(data));
   } catch (e) {
-    console.error('Email send failed:', e.message);
+    console.error('EMAIL ERROR:', e.message);
   }
 }
 
