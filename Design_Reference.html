@@ -16861,10 +16861,36 @@ function vtPointAnswer(input){
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Sight Seers Caribbean Adventures. All rights reserved. Sight Seers Caribbean Adventures may act as an intermediary for select third-party travel and excursion providers.</span>
+    <span id="adminTapZone" style="cursor:default;-webkit-tap-highlight-color:transparent">© 2026 Sight Seers Caribbean Adventures. All rights reserved. Sight Seers Caribbean Adventures may act as an intermediary for select third-party travel and excursion providers.</span>
     <div class="fb-links"><a href="#" onclick="nav('privacy-policy');return false;">Privacy Policy</a><a href="#" onclick="nav('terms-of-service');return false;">Terms of Service</a><a href="#" onclick="nav('refund-policy');return false;">Refund &amp; Cancellation Policy</a><a href="#" onclick="nav('contact');return false;">Contact</a></div>
   </div>
 </footer>
+
+<!-- Hidden Admin Portal -->
+<div id="adminGateOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;justify-content:center;align-items:center">
+  <div style="background:#fff;border-radius:20px;padding:36px 28px;max-width:380px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <span onclick="document.getElementById('adminGateOverlay').style.display='none'" style="position:absolute;top:14px;right:18px;font-size:22px;cursor:pointer;color:#888">&times;</span>
+    <h3 style="margin:0 0 6px;color:var(--navy);font-size:1.3rem">Admin Portal</h3>
+    <p style="margin:0 0 20px;color:#888;font-size:13px">Sign in or create an admin account</p>
+    <div id="adminGateTabs" style="display:flex;gap:0;margin-bottom:18px;border-radius:10px;overflow:hidden;border:1px solid rgba(6,58,99,.12)">
+      <button onclick="showAdminTab('signin')" id="adminTabSignin" style="flex:1;padding:10px;border:none;font-weight:700;font-size:13px;cursor:pointer;background:var(--navy);color:#fff">Sign In</button>
+      <button onclick="showAdminTab('signup')" id="adminTabSignup" style="flex:1;padding:10px;border:none;font-weight:700;font-size:13px;cursor:pointer;background:#f5f5f5;color:#666">Create Account</button>
+    </div>
+    <form id="adminSigninForm" onsubmit="adminSignIn(event)">
+      <input type="email" id="adm-si-email" placeholder="Email" required style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">
+      <input type="password" id="adm-si-pass" placeholder="Password" required minlength="6" style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:14px;box-sizing:border-box">
+      <button type="submit" style="width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer">Sign In</button>
+    </form>
+    <form id="adminSignupForm" onsubmit="adminSignUp(event)" style="display:none">
+      <input type="text" id="adm-su-name" placeholder="Full Name" required style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">
+      <input type="email" id="adm-su-email" placeholder="Email" required style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">
+      <input type="password" id="adm-su-pass" placeholder="Password (min 6 chars)" required minlength="6" style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">
+      <input type="text" id="adm-su-code" placeholder="Admin Code" required style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:14px;box-sizing:border-box">
+      <button type="submit" style="width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer">Create Admin Account</button>
+    </form>
+    <p id="adminGateMsg" style="margin:12px 0 0;font-size:13px;text-align:center;color:#c0392b;display:none"></p>
+  </div>
+</div>
 
 <div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></div>
 
@@ -20447,6 +20473,63 @@ window.addEventListener('scroll',()=>{document.getElementById('navbar').classLis
 function openMob(){document.getElementById('mobNav').classList.add('open');}
 function closeMob(){document.getElementById('mobNav').classList.remove('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});}
 function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.contains('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});if(!isOpen){g.classList.add('open');el.classList.add('open');}}
+
+/* ═══════ HIDDEN ADMIN — 5 taps on copyright ═══════ */
+(function(){
+  var taps=0,timer=null;
+  var zone=document.getElementById('adminTapZone');
+  if(!zone) return;
+  zone.addEventListener('click',function(){
+    taps++;
+    clearTimeout(timer);
+    timer=setTimeout(function(){taps=0},2000);
+    if(taps>=5){taps=0;document.getElementById('adminGateOverlay').style.display='flex';}
+  });
+})();
+function showAdminTab(tab){
+  document.getElementById('adminSigninForm').style.display=tab==='signin'?'block':'none';
+  document.getElementById('adminSignupForm').style.display=tab==='signup'?'block':'none';
+  document.getElementById('adminTabSignin').style.background=tab==='signin'?'var(--navy)':'#f5f5f5';
+  document.getElementById('adminTabSignin').style.color=tab==='signin'?'#fff':'#666';
+  document.getElementById('adminTabSignup').style.background=tab==='signup'?'var(--navy)':'#f5f5f5';
+  document.getElementById('adminTabSignup').style.color=tab==='signup'?'#fff':'#666';
+  document.getElementById('adminGateMsg').style.display='none';
+}
+function adminMsg(txt,ok){var m=document.getElementById('adminGateMsg');m.textContent=txt;m.style.color=ok?'#27ae60':'#c0392b';m.style.display='block';}
+async function adminSignIn(e){
+  e.preventDefault();
+  var email=document.getElementById('adm-si-email').value;
+  var pass=document.getElementById('adm-si-pass').value;
+  try{
+    var r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signin',email:email,password:pass})});
+    var d=await r.json();
+    if(!d.ok) return adminMsg(d.error||'Sign in failed');
+    if(d.user.role!=='admin') return adminMsg('This account is not an admin');
+    localStorage.setItem('ss-token',d.token);
+    localStorage.setItem('ss-user',JSON.stringify(d.user));
+    document.getElementById('adminGateOverlay').style.display='none';
+    adminMsg('Signed in!',true);
+    nav('admin');
+  }catch(err){adminMsg('Connection error');}
+}
+async function adminSignUp(e){
+  e.preventDefault();
+  var name=document.getElementById('adm-su-name').value;
+  var email=document.getElementById('adm-su-email').value;
+  var pass=document.getElementById('adm-su-pass').value;
+  var code=document.getElementById('adm-su-code').value;
+  try{
+    var r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signup',name:name,email:email,password:pass,adminCode:code})});
+    var d=await r.json();
+    if(!d.ok) return adminMsg(d.error||'Signup failed');
+    if(d.user.role!=='admin') return adminMsg('Invalid admin code — account created as guest');
+    localStorage.setItem('ss-token',d.token);
+    localStorage.setItem('ss-user',JSON.stringify(d.user));
+    document.getElementById('adminGateOverlay').style.display='none';
+    adminMsg('Admin account created!',true);
+    nav('admin');
+  }catch(err){adminMsg('Connection error');}
+}
 
 /* ── BOOKING FORM ────────────────── */
 function getTripPlannerSummary(){
