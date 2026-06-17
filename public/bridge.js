@@ -238,13 +238,23 @@
     localStorage.setItem = function (key, value) {
       original(key, value);
       if (key.startsWith('ss_') && SS_SYNC_KEYS.indexOf(key) !== -1) {
-        try {
-          fetch('/api/settings', {
-            method: 'POST',
-            headers: authHeaders(),
-            body: JSON.stringify({ key: key, value: JSON.parse(value) })
+        var parsed;
+        try { parsed = JSON.parse(value); } catch (e) { return; }
+        fetch('/api/settings', {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify({ key: key, value: parsed })
+        }).then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (d) {
+            document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {
+              detail: { key: key, ok: r.ok, status: r.status, error: d && d.error }
+            }));
           });
-        } catch (e) {}
+        }).catch(function () {
+          document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {
+            detail: { key: key, ok: false, status: 0, error: 'network' }
+          }));
+        });
       }
     };
   }

@@ -19904,11 +19904,95 @@ function updateAdminSigninBanner(){
     banner.innerHTML='<i class="fas fa-circle-check"></i><div><strong>Signed in as admin'+email+'.</strong> Image uploads and edits publish to the live site for everyone.</div>';
   }else{
     banner.className='admin-signin-banner warn';
-    banner.innerHTML='<i class="fas fa-triangle-exclamation"></i><div><strong>Preview mode &mdash; changes are not published yet.</strong> Sign in with your admin account so image uploads and edits save to the live website.</div><button type="button" class="admin-signin-btn" onclick="nav(\'account\');return false;">Sign in</button>';
+    banner.innerHTML=''
+      +'<div class="admin-signin-warn-head"><i class="fas fa-triangle-exclamation"></i> <strong>Preview mode &mdash; your changes are NOT on the live website yet.</strong></div>'
+      +'<div class="admin-signin-warn-sub">Sign in with your admin account to publish edits and image uploads to the live site for everyone.</div>'
+      +'<div class="admin-signin-inline">'
+      +'<input type="email" id="adminSigninEmail" placeholder="Admin email" autocomplete="username">'
+      +'<input type="password" id="adminSigninPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\'){event.preventDefault();adminSignInAndUnlock();}">'
+      +'<button type="button" class="admin-signin-btn" onclick="adminSignInAndUnlock()">Sign in &amp; publish</button>'
+      +'</div>'
+      +'<div class="inline-status" id="adminSigninStatus"></div>';
   }
 }
 window.updateAdminSigninBanner=updateAdminSigninBanner;
 document.addEventListener('ss-account-updated',function(){ if(typeof adminUnlocked!=='undefined' && adminUnlocked) updateAdminSigninBanner(); });
+
+/* Keep the admin from jumping to the top of the page when a save/upload re-renders sections. */
+window.ssCaptureScroll=function(){ try{ window.__ssAnchorY=window.scrollY||window.pageYOffset||0; }catch(e){} };
+window.ssReArmScroll=function(ms){
+  var y=window.__ssAnchorY;
+  if(y==null||y<40) return;
+  window.__ssAnchorUntil=Date.now()+(ms||1200);
+  if(window.__ssAnchorRAF) return;
+  window.__ssAnchorRAF=true;
+  (function tick(){
+    var cur=window.scrollY||window.pageYOffset||0;
+    if(cur<y-60){ try{window.scrollTo(0,y);}catch(e){} }
+    if(Date.now()<window.__ssAnchorUntil){ requestAnimationFrame(tick); }
+    else { window.__ssAnchorRAF=false; }
+  })();
+};
+
+/* Sign in with a real admin account (gets the token the server needs to publish edits). */
+function adminSignInAndUnlock(){
+  var emailEl=document.getElementById('adminSigninEmail');
+  var passEl=document.getElementById('adminSigninPassword');
+  var status=document.getElementById('adminSigninStatus');
+  if(!emailEl||!passEl) return;
+  var email=(emailEl.value||'').trim().toLowerCase();
+  var password=passEl.value||'';
+  function setMsg(t,k){ if(status){ status.textContent=t; status.className='inline-status'+(k?' '+k:''); } }
+  if(!email||!password){ setMsg('Enter your admin email and password.','err'); return; }
+  if(!(window.SS&&window.SS.signin)){ setMsg('Sign-in service is unavailable. Refresh the page and try again.','err'); return; }
+  setMsg('Signing in…','');
+  window.SS.signin(email,password).then(function(res){
+    if(!res||!res.user||res.user.role!=='admin'){
+      setMsg('That account is not an admin account.','err');
+      try{ window.SS.signout&&window.SS.signout(); }catch(e){}
+      return;
+    }
+    try{ if(typeof setCurrentUser==='function') setCurrentUser(res.user); }catch(e){}
+    adminUnlocked=true;
+    try{ sessionStorage.setItem('ss_admin_unlocked','1'); }catch(e){}
+    if(passEl) passEl.value='';
+    updateAdminPortalState();
+    if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
+    setMsg('Signed in. Your edits and image uploads now publish to the live website.','ok');
+  }).catch(function(err){
+    setMsg((err&&err.message)?('Sign in failed: '+err.message):'Sign in failed. Check your email and password.','err');
+  });
+}
+window.adminSignInAndUnlock=adminSignInAndUnlock;
+
+/* When the server returns saved settings, actually re-apply them so changes show (incl. other devices). */
+document.addEventListener('ss-settings-synced',function(){
+  try{ if(typeof applySiteSettings==='function') applySiteSettings(); }catch(e){}
+  try{ if(typeof applyPageEditorSettings==='function') applyPageEditorSettings(); }catch(e){}
+  try{ if(typeof renderStays==='function') renderStays(); }catch(e){}
+  try{ if(typeof renderStayCountryPage==='function') renderStayCountryPage(); }catch(e){}
+  try{ if(typeof window.ssReapplyDynamicSections==='function') window.ssReapplyDynamicSections(); }catch(e){}
+});
+
+/* Tell the admin whether a save actually reached the live website. */
+document.addEventListener('ss-settings-sync-result',function(ev){
+  var d=(ev&&ev.detail)||{};
+  if(typeof adminUnlocked==='undefined'||!adminUnlocked) return;
+  var status=document.getElementById('adminSaveStatus');
+  if(!status) return;
+  if(d.ok){
+    status.textContent='Published to the live website — your changes are now live for everyone.';
+    status.className='inline-status ok';
+  }else if(d.status===401||d.status===403){
+    status.textContent='Saved on THIS browser only. Sign in with your admin account (banner above) to publish to the live website.';
+    status.className='inline-status err';
+    try{ if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner(); }catch(e){}
+  }else{
+    status.textContent='Saved locally, but the live website could not be reached. It will retry the next time you save.';
+    status.className='inline-status err';
+  }
+});
+
 function unlockAdminPortal(){
   const input=document.getElementById('adminPasscode');
   const status=document.getElementById('adminUnlockStatus');
@@ -19941,6 +20025,7 @@ function parseGalleryTextarea(value=''){
 
 function saveAdminPortal(){
   if(!adminUnlocked) return;
+  try{ if(window.ssCaptureScroll) window.ssCaptureScroll(); if(window.ssReArmScroll) window.ssReArmScroll(1600); }catch(e){}
   siteSettings={
     brandName:document.getElementById('adminBrandName')?.value?.trim()||DEFAULT_SITE_SETTINGS.brandName,
     tagline:document.getElementById('adminTagline')?.value?.trim()||DEFAULT_SITE_SETTINGS.tagline,
@@ -35832,6 +35917,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function applyUploadedValue(fileInput, value, targetId){
+    try{ if(window.ssCaptureScroll) window.ssCaptureScroll(); if(window.ssReArmScroll) window.ssReArmScroll(2400); }catch(e){}
     const field=findLinkedValueField(fileInput, targetId);
     if(field){
       field.value=value;
@@ -41252,6 +41338,14 @@ body.theme-night .page .tag{
 .admin-signin-banner.warn i{color:var(--orange)}
 .admin-signin-btn{flex-shrink:0;border:none;background:var(--orange);color:#fff;padding:9px 18px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
 .admin-signin-btn:hover{filter:brightness(1.05)}
+.admin-signin-banner.warn{display:block}
+.admin-signin-warn-head{display:flex;align-items:center;gap:8px;font-size:13px}
+.admin-signin-warn-head i{color:var(--orange)}
+.admin-signin-warn-sub{margin:6px 0 10px;opacity:.85}
+.admin-signin-inline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.admin-signin-inline input{flex:1 1 180px;min-width:0;padding:9px 12px;border:1px solid rgba(6,58,99,.18);border-radius:10px;font-size:13px;background:#fff}
+.admin-signin-inline .admin-signin-btn{flex:0 0 auto}
+.admin-signin-banner.warn .inline-status{margin-top:8px;padding:0;background:none;border:none}
 .admin-hub-stats{display:flex;gap:8px;flex-wrap:wrap}
 .admin-stat-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(6,58,99,.06);font-size:10px;color:var(--navy);letter-spacing:.3px;white-space:nowrap}
 .admin-stat-pill i{color:var(--orange);font-size:11px}
