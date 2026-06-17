@@ -678,6 +678,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .sc-badge,.sc-sale{position:absolute;top:16px;left:16px;color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;padding:8px 13px;text-transform:uppercase;border-radius:999px;z-index:1}
 .sc-badge{background:linear-gradient(135deg,var(--orange),#f59f47)}
 .sc-sale{background:linear-gradient(135deg,var(--navy),#0d5371)}
+.sc-oos{background:linear-gradient(135deg,#888,#aaa)}
 .sc-actions{position:absolute;left:16px;right:16px;bottom:16px;display:flex;gap:10px;transition:transform .3s,opacity .3s;transform:translateY(14px);opacity:0;z-index:1}
 .shop-card:hover .sc-actions{transform:translateY(0);opacity:1}
 .sc-action-btn{flex:1;padding:13px;border-radius:999px;background:rgba(255,255,255,.95);color:var(--navy);border:none;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -17717,7 +17718,7 @@ const PRODUCTS=[
   {id:1,name:'Sight Seers Adventure Hat',cat:'Apparel',type:'apparel',price:28,oldPrice:35,img:'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500&q=80',imgs:['https://images.unsplash.com/photo-1521369909029-2afed882baee?w=700&q=80','https://images.unsplash.com/photo-1572307480813-ceb0e59d8325?w=700&q=80','https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=700&q=80'],badge:'Sale',reviews:'(24 reviews)',desc:'The iconic Sight Seers Adventure Hat — crafted for island explorers. Lightweight, breathable, and UV-protective fabric keeps you cool on every excursion. Adjustable strap for the perfect fit.',meta:'SKU: SSH-001 · Category: Apparel · Tags: Hat, Adventure, Travel'},
   {id:2,name:'Caribbean Explorer Tee',cat:'Apparel',type:'apparel',price:32,oldPrice:null,img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80',imgs:['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=80','https://images.unsplash.com/photo-1562157873-818bc0726f68?w=700&q=80'],badge:'New',reviews:'(16 reviews)',desc:'Premium cotton tee with the iconic Sight Seers Caribbean Adventures logo. Comfortable, durable, and styled for the island explorer in you.',meta:'SKU: SST-002 · Category: Apparel · Tags: T-Shirt, Caribbean, Explorer'},
   {id:3,name:'Adventure Dry Bag 20L',cat:'gear',type:'gear',price:55,oldPrice:70,img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80',imgs:['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=80','https://images.unsplash.com/photo-1596942517892-e4b1a8d00e0f?w=700&q=80'],badge:'Sale',reviews:'(38 reviews)',desc:'Keep your gear dry on every water adventure. This 20L roll-top dry bag is waterproof, durable, and floats. Essential for kayaking, snorkeling, and beach trips.',meta:'SKU: SDB-003 · Category: Gear · Tags: Waterproof, Dry Bag, Kayaking'},
-  {id:4,name:'Caribbean Snorkel Set',cat:'gear',type:'gear',price:48,oldPrice:null,img:'https://images.unsplash.com/photo-1559829604-53b7ebdfe491?w=500&q=80',imgs:['https://images.unsplash.com/photo-1559829604-53b7ebdfe491?w=700&q=80'],badge:'Popular',reviews:'(52 reviews)',desc:'Professional-grade snorkel set includes tempered glass mask, dry-top snorkel, and adjustable fins. Crystal-clear underwater visibility for every reef adventure.',meta:'SKU: SSN-004 · Category: Gear · Tags: Snorkel, Diving, Beach'},
+  {id:4,name:'DiVLMT Snorkel Set',cat:'gear',type:'gear',price:48,oldPrice:null,img:'https://images.unsplash.com/photo-1559829604-53b7ebdfe491?w=500&q=80',imgs:['https://images.unsplash.com/photo-1559829604-53b7ebdfe491?w=700&q=80'],badge:'Out of Stock',reviews:'(52 reviews)',desc:'All-in-one snorkeling set by DiVLMT. Anti-fog tempered glass dual-lens mask with food-grade silicone for a leak-proof, comfortable fit. Dry-top snorkel with flexible silicone tube and removable mouthpiece for easy breathing. Adjustable open-heel fins with quick-release buckles (S/M: US 4.5–8.5, L/XL: US 9–11). Includes reusable mesh carry bag and earplugs. Perfect for beginners and experienced snorkelers.',meta:'SKU: SSN-004 · Category: Gear · Brand: DiVLMT · Color: Green · Material: Plastic, Tempered Glass, Silicone · Tags: Snorkel, Diving, Fins, Mask',outOfStock:true},
   {id:5,name:'Island Vibes Bracelet',cat:'accessories',type:'accessories',price:18,oldPrice:null,img:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80',imgs:['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=700&q=80'],badge:null,reviews:'(29 reviews)',desc:'Hand-crafted bracelet inspired by the Caribbean\'s vibrant colors. Adjustable cord with a compass charm. The perfect travel keepsake or gift for a fellow adventurer.',meta:'SKU: SIB-005 · Category: Accessories · Tags: Bracelet, Caribbean, Gift'},
   {id:6,name:'Travel Neck Pouch',cat:'accessories',type:'accessories',price:22,oldPrice:28,img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80',imgs:['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=80'],badge:'Sale',reviews:'(41 reviews)',desc:'RFID-blocking travel neck pouch keeps your passport, cash, and cards secure under your clothing. Lightweight, slim, and water-resistant.',meta:'SKU: SNP-006 · Category: Accessories · Tags: Travel, Security, RFID'},
   {id:7,name:'Caribbean Adventure Tote',cat:'accessories',type:'accessories',price:38,oldPrice:null,img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80',imgs:['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=700&q=80'],badge:'New',reviews:'(11 reviews)',desc:'Spacious canvas tote with the Sight Seers logo. Perfect for beach days, market visits, and island exploring. Machine washable.',meta:'SKU: SAT-007 · Category: Accessories · Tags: Tote, Canvas, Beach'},
@@ -18433,10 +18434,10 @@ function renderShop(filter,gridId){
   <div class="shop-card" onclick="openProduct(${p.id})">
     <div class="sc-img">
       <img src="${p.img}" alt="${p.name}" loading="lazy">
-      ${p.badge?`<span class="${p.badge==='Sale'?'sc-sale':'sc-badge'}">${p.badge}</span>`:''}
+      ${p.badge?`<span class="${p.badge==='Sale'?'sc-sale':p.badge==='Out of Stock'?'sc-badge sc-oos':'sc-badge'}">${p.badge}</span>`:''}
       <div class="sc-actions">
         <button class="sc-action-btn" onclick="event.stopPropagation();openProduct(${p.id})"><i class="fas fa-eye"></i>Quick View</button>
-        <button class="sc-action-btn wish" onclick="event.stopPropagation();quickAddProduct(${p.id})"><i class="fas fa-shopping-bag"></i></button>
+        ${p.outOfStock?'':`<button class="sc-action-btn wish" onclick="event.stopPropagation();quickAddProduct(${p.id})"><i class="fas fa-shopping-bag"></i></button>`}
       </div>
     </div>
     <div class="sc-body">
@@ -18473,8 +18474,15 @@ function openProduct(id){
   document.getElementById('pdMeta').innerHTML=p.meta.split(' · ').map(m=>`<span><strong>${m.split(': ')[0]}:</strong> ${m.split(': ')[1]}</span><br>`).join('');
   document.getElementById('tab-desc').innerHTML='<p>'+p.desc+'</p>';
   document.getElementById('pdQty').value=1;
-  document.getElementById('pdAddBtn').innerHTML='<i class="fas fa-shopping-bag"></i>Add to Cart';
-  document.getElementById('pdAddBtn').style.background='';
+  if(p.outOfStock){
+    document.getElementById('pdAddBtn').innerHTML='<i class="fas fa-ban"></i>Out of Stock';
+    document.getElementById('pdAddBtn').style.background='#aaa';
+    document.getElementById('pdAddBtn').style.pointerEvents='none';
+  }else{
+    document.getElementById('pdAddBtn').innerHTML='<i class="fas fa-shopping-bag"></i>Add to Cart';
+    document.getElementById('pdAddBtn').style.background='';
+    document.getElementById('pdAddBtn').style.pointerEvents='';
+  }
   const thumbs=document.getElementById('pdThumbs');
   thumbs.innerHTML=p.imgs.map((img,i)=>`<img class="pd-thumb${i===0?' active':''}" src="${img}" alt="" onclick="selectThumb(this,'${img}')">`).join('');
   window.scrollTo({top:0,behavior:'smooth'});
