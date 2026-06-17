@@ -1,4 +1,4 @@
-const TO   = process.env.NOTIFY_EMAIL   || 'info.dabconsulting@gmail.com';
+const TO   = process.env.NOTIFY_EMAIL   || 'sightseersjm@gmail.com';
 const FROM = process.env.NOTIFY_FROM    || 'Sight Seers Caribbean <onboarding@resend.dev>';
 const KEY  = process.env.RESEND_API_KEY || '';
 
