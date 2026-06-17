@@ -20485,7 +20485,17 @@ function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.c
     taps++;
     clearTimeout(timer);
     timer=setTimeout(function(){taps=0},2000);
-    if(taps>=5){taps=0;document.getElementById('adminGateOverlay').style.display='flex';}
+    if(taps>=5){
+      taps=0;
+      window.adminUnlocked=true;
+      try{sessionStorage.setItem('ss_admin_unlocked','1')}catch(e){}
+      nav('admin');
+      setTimeout(function(){
+        var wrp=document.getElementById('adminFormWrap');
+        if(wrp) wrp.classList.add('on');
+        document.querySelectorAll('.admin-protected-content').forEach(function(b){b.classList.add('on')});
+      },300);
+    }
   });
 })();
 function showAdminTab(tab){
