@@ -42,13 +42,13 @@ module.exports = async function handler(req, res) {
 
       const buffer = Buffer.from(data, 'base64');
       const blob = await put(path, buffer, {
-        access: 'private',
+        access: 'public',
         contentType: type || 'image/jpeg',
         addRandomSuffix: false,
         allowOverwrite: true
       });
 
-      const imgUrl = blob.downloadUrl || blob.url;
+      const imgUrl = blob.url || blob.downloadUrl;
       const meta = await db.getCollection('image-meta');
       meta.push({
         id: uid(),

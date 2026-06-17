@@ -19887,7 +19887,30 @@ function updateAdminPortalState(){
     status.textContent='';
     status.className='inline-status';
   }
+  if(adminUnlocked) updateAdminSigninBanner();
 }
+function updateAdminSigninBanner(){
+  const wrap=document.getElementById('adminFormWrap');
+  if(!wrap) return;
+  let banner=document.getElementById('adminSigninBanner');
+  if(!banner){
+    banner=document.createElement('div');
+    banner.id='adminSigninBanner';
+    wrap.insertBefore(banner, wrap.firstChild);
+  }
+  const signedInAdmin=!!(window.SS && window.SS.isAdmin && window.SS.isAdmin());
+  if(signedInAdmin){
+    let email='';
+    try{ const u=window.SS.currentUser&&window.SS.currentUser(); email=u&&u.email?' ('+u.email+')':''; }catch(e){}
+    banner.className='admin-signin-banner ok';
+    banner.innerHTML='<i class="fas fa-circle-check"></i><div><strong>Signed in as admin'+email+'.</strong> Image uploads and edits publish to the live site for everyone.</div>';
+  }else{
+    banner.className='admin-signin-banner warn';
+    banner.innerHTML='<i class="fas fa-triangle-exclamation"></i><div><strong>Preview mode &mdash; changes are not published yet.</strong> Sign in with your admin account so image uploads and edits save to the live website.</div><button type="button" class="admin-signin-btn" onclick="nav(\'account\');return false;">Sign in</button>';
+  }
+}
+window.updateAdminSigninBanner=updateAdminSigninBanner;
+document.addEventListener('ss-account-updated',function(){ if(typeof adminUnlocked!=='undefined' && adminUnlocked) updateAdminSigninBanner(); });
 function unlockAdminPortal(){
   const input=document.getElementById('adminPasscode');
   const status=document.getElementById('adminUnlockStatus');
@@ -26409,18 +26432,22 @@ body.theme-night .page .tag{
     const value=input.value.trim();
     holder.innerHTML=value?`<img src="${attr(value)}" alt="Custom section preview">`:'<div class="admin-image-empty">No image selected yet.</div>';
   }
-  function handleDynamicSectionImageUpload(event){
+  async function handleDynamicSectionImageUpload(event){
     const file=event?.target?.files?.[0];
     if(!file) return;
-    const reader=new FileReader();
-    reader.onload=function(e){
-      const input=document.getElementById('dynamicSectionImage');
-      if(input) input.value=e.target?.result||'';
-      updateDynamicSectionImagePreview();
+    let value='', published=false;
+    if(typeof window.ssProcessAndUploadFile==='function'){
+      const r=await window.ssProcessAndUploadFile(file); value=r.value; published=r.published;
+    }else{
+      value=await new Promise(res=>{const fr=new FileReader();fr.onload=e=>res(e.target?.result||'');fr.onerror=()=>res('');fr.readAsDataURL(file);});
+    }
+    const input=document.getElementById('dynamicSectionImage');
+    if(input) input.value=value;
+    updateDynamicSectionImagePreview();
+    if(published){
       clearTimeout(window.__ssAutoSaveTimer);
-      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
-    };
-    reader.readAsDataURL(file);
+      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},400);
+    }
   }
   function updateDynamicSectionTypeHelp(){
     const type=formValue('dynamicSectionType')||'packages';
@@ -27722,18 +27749,22 @@ body.theme-night .page .tag{
     const value=input.value.trim();
     holder.innerHTML=value?`<img src="${attr(value)}" alt="Parish image preview">`:'<div class="admin-image-empty">No parish image selected yet.</div>';
   }
-  function handleParishImageUpload(event){
+  async function handleParishImageUpload(event){
     const file=event?.target?.files?.[0];
     if(!file) return;
-    const reader=new FileReader();
-    reader.onload=function(e){
-      const input=document.getElementById('djAdminImage');
-      if(input) input.value=e.target?.result||'';
-      updateParishImagePreview();
+    let value='', published=false;
+    if(typeof window.ssProcessAndUploadFile==='function'){
+      const r=await window.ssProcessAndUploadFile(file); value=r.value; published=r.published;
+    }else{
+      value=await new Promise(res=>{const fr=new FileReader();fr.onload=e=>res(e.target?.result||'');fr.onerror=()=>res('');fr.readAsDataURL(file);});
+    }
+    const input=document.getElementById('djAdminImage');
+    if(input) input.value=value;
+    updateParishImagePreview();
+    if(published){
       clearTimeout(window.__ssAutoSaveTimer);
-      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
-    };
-    reader.readAsDataURL(file);
+      window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},400);
+    }
   }
   function resetParishForm(){
     ['djAdminParishName','djAdminCapital','djAdminDestination','djAdminBadge','djAdminImage','djAdminSummary','djAdminHiddenGem','djAdminKIN','djAdminMBJ','djAdminOCJ'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';});
@@ -35824,11 +35855,57 @@ document.addEventListener('DOMContentLoaded', function(){
         if(binding.mode==='bg') target.style.backgroundImage='url("'+String(value).replace(/"/g,'\"')+'")';
       }
     }
-
-    setStatus('ok','Image uploaded and saving...');
-    clearTimeout(window.__ssAutoSaveTimer);
-    window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();},600);
   }
+
+  function triggerAutoSave(delay){
+    clearTimeout(window.__ssAutoSaveTimer);
+    window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();}, delay||500);
+  }
+
+  function getAdminToken(){
+    try{ if(window.SS && typeof window.SS.getToken==='function'){ var t=window.SS.getToken(); if(t) return t; } }catch(e){}
+    try{ return localStorage.getItem('ss_auth_token')||''; }catch(e){ return ''; }
+  }
+
+  async function uploadToServer(dataUrl, originalName){
+    const m=/^data:([^;]+);base64,(.*)$/.exec(String(dataUrl||''));
+    if(!m) throw new Error('Could not read the processed image.');
+    const type=m[1]||'image/webp';
+    const base64=m[2]||'';
+    const ext=(type.split('/')[1]||'webp').replace(/[^a-z0-9]/gi,'').toLowerCase();
+    const token=getAdminToken();
+    if(!token){ const e=new Error('NO_ADMIN_TOKEN'); e.code='NO_ADMIN_TOKEN'; throw e; }
+    const base=String(originalName||'image').replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]/gi,'').slice(0,40)||'image';
+    const res=await fetch('/api/images',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({filename:base+'.'+ext,data:base64,type:type,folder:'site-images'})
+    });
+    let out={}; try{ out=await res.json(); }catch(e){}
+    if(res.status===401||res.status===403){ const e=new Error('NO_ADMIN_TOKEN'); e.code='NO_ADMIN_TOKEN'; throw e; }
+    if(!res.ok) throw new Error((out && out.error) || ('Upload failed ('+res.status+')'));
+    if(!out || !out.url) throw new Error('Upload did not return an image URL.');
+    return out.url;
+  }
+  window.ssUploadImageToServer=uploadToServer;
+
+  function readFileAsDataURLEarly(file){
+    return new Promise(function(resolve){ const r=new FileReader(); r.onload=function(e){ resolve(String((e&&e.target&&e.target.result)||'')); }; r.onerror=function(){ resolve(''); }; r.readAsDataURL(file); });
+  }
+
+  // Shared helper: compress a File, upload to the server, return {value, published}.
+  // Falls back to a local data URL (preview only) if the server upload fails.
+  window.ssProcessAndUploadFile=async function(file){
+    if(!file) return {value:'', published:false};
+    let dataUrl='';
+    try{ dataUrl=await compressImage(file); }catch(e){ dataUrl=await readFileAsDataURLEarly(file); }
+    try{
+      const url=await uploadToServer(dataUrl, file.name);
+      return {value:url, published:true};
+    }catch(err){
+      return {value:dataUrl, published:false, error:err};
+    }
+  };
 
   function readFileAsDataURL(file){
     return new Promise(function(resolve,reject){
@@ -35876,9 +35953,27 @@ document.addEventListener('DOMContentLoaded', function(){
   async function processUpload(fileInput, targetId){
     const file=fileInput && fileInput.files && fileInput.files[0];
     if(!file) throw new Error('No image was selected.');
-    const value=await compressImage(file);
-    applyUploadedValue(fileInput, value, targetId);
-    return value;
+    setStatus('ok','Processing image...');
+    const dataUrl=await compressImage(file);
+    let finalValue=dataUrl;
+    let published=false;
+    try{
+      setStatus('ok','Uploading image to the live site...');
+      finalValue=await uploadToServer(dataUrl, file.name);
+      published=true;
+    }catch(err){
+      if(err && err.code==='NO_ADMIN_TOKEN'){
+        setStatus('error','Preview only. Sign in with your admin account (email + password) so this image publishes to the live site.');
+      }else{
+        setStatus('error','Could not publish to the live site: '+((err&&err.message)||'error')+'. Showing local preview only.');
+      }
+    }
+    applyUploadedValue(fileInput, finalValue, targetId);
+    if(published){
+      setStatus('ok','Image published to the live site. Saving...');
+      triggerAutoSave(300);
+    }
+    return finalValue;
   }
 
   window.handleAdminImageUpload=async function(event,targetId){
@@ -35909,11 +36004,15 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!(input instanceof HTMLInputElement) || input.type!=='file' || !input.closest('#p-admin')) return;
     if(input.dataset.uploadHandled==='1') return;
     const inline=input.getAttribute('onchange') || '';
-    if(/handleAdminImageUpload|handleExtraAdminImageUpload/.test(inline)) return;
+    if(/handleAdminImageUpload|handleExtraAdminImageUpload|handleDynamicSectionImageUpload|handleParishImageUpload/.test(inline)) return;
+    if(input.dataset.ssUploadInFlight==='1') return;
+    input.dataset.ssUploadInFlight='1';
     try{
       await processUpload(input);
     }catch(err){
       setStatus('error', (err && err.message) || 'Image upload failed.');
+    }finally{
+      setTimeout(function(){ input.dataset.ssUploadInFlight=''; }, 1500);
     }
   }, true);
 
@@ -36581,13 +36680,9 @@ body.theme-night .page .tag{
   }
 
   function applyStoredUploads(){
-    const store = uploadStore();
-    Object.keys(store).forEach(function(fieldId){
-      const field = document.getElementById(fieldId);
-      if(field){
-        applyUploadToField(field, store[fieldId]);
-      }
-    });
+    // Legacy base64 uploads were browser-only and would overwrite the
+    // server image URLs we now save. Clear the old store and do nothing.
+    try{ localStorage.removeItem(PATCH_KEY); }catch(e){}
   }
 
   function processFileInput(input){
@@ -36612,6 +36707,13 @@ body.theme-night .page .tag{
   }
 
   function bindAdminUploads(root){
+    // Upload handling is now centralized in the server-upload patch
+    // (ss-admin-image-compression-fix-v4), which compresses each image,
+    // uploads it to /api/images and stores the public URL. Binding the old
+    // base64 handler here would overwrite that URL with browser-only data,
+    // so this is intentionally a no-op kept for backward compatibility.
+    return;
+    /* eslint-disable no-unreachable */
     (root || document).querySelectorAll('#p-admin input[type="file"]').forEach(function(input){
       if(input.dataset.ssV5Bound === '1') return;
       input.dataset.ssV5Bound = '1';
@@ -41142,6 +41244,16 @@ body.theme-night .page .tag{
 .admin-master-toolbar .admin-inline-btn{border:none;background:rgba(6,58,99,.08);color:var(--navy);padding:9px 12px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 .admin-master-toolbar .admin-inline-btn:hover{background:var(--navy);color:#fff}
 .admin-master-note{margin-top:10px;font-size:11px;color:var(--grey);line-height:1.7}
+.admin-signin-banner{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;margin:0 0 16px;font-size:12.5px;line-height:1.55}
+.admin-signin-banner i{font-size:18px;flex-shrink:0}
+.admin-signin-banner div{flex:1}
+.admin-signin-banner strong{font-weight:800}
+.admin-signin-banner.ok{background:#f4fbf6;border:1px solid rgba(112,194,87,.32);color:#2f6b35}
+.admin-signin-banner.ok i{color:#5aa84f}
+.admin-signin-banner.warn{background:#fff8ef;border:1px solid rgba(239,135,49,.32);color:#9a5a16}
+.admin-signin-banner.warn i{color:var(--orange)}
+.admin-signin-btn{flex-shrink:0;border:none;background:var(--orange);color:#fff;padding:9px 18px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
+.admin-signin-btn:hover{filter:brightness(1.05)}
 .admin-hub-stats{display:flex;gap:8px;flex-wrap:wrap}
 .admin-stat-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(6,58,99,.06);font-size:10px;color:var(--navy);letter-spacing:.3px;white-space:nowrap}
 .admin-stat-pill i{color:var(--orange);font-size:11px}
@@ -41839,6 +41951,7 @@ body.theme-night .page .tag{
       if(unlocked) el.classList.add('on');
       else el.classList.remove('on');
     });
+    if(unlocked && typeof window.updateAdminSigninBanner==='function'){ try{ window.updateAdminSigninBanner(); }catch(e){} }
   }
 
   function saveStable(){
