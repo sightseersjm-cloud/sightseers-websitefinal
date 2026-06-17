@@ -28,8 +28,15 @@ module.exports = async function handler(req, res) {
     const { filename, data, type, folder } = req.body;
     if (!filename || !data) return res.status(400).json({ error: 'Filename and data required' });
 
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+    const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+    const MAX_SIZE = 10 * 1024 * 1024;
+
     try {
-      const ext = filename.split('.').pop() || 'jpg';
+      const ext = (filename.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!ALLOWED_EXTS.includes(ext)) return res.status(400).json({ error: 'File type not allowed' });
+      if (type && !ALLOWED_TYPES.includes(type)) return res.status(400).json({ error: 'MIME type not allowed' });
+      if (data.length > MAX_SIZE * 1.37) return res.status(400).json({ error: 'File too large (max 10MB)' });
       const safeName = uid() + '.' + ext;
       const path = (folder || 'site-images') + '/' + safeName;
 
@@ -58,7 +65,8 @@ module.exports = async function handler(req, res) {
 
       return res.status(200).json({ ok: true, url: imgUrl, pathname: blob.pathname });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      console.error('Image upload error:', err.message);
+      return res.status(500).json({ error: 'Upload failed. Please try again.' });
     }
   }
 

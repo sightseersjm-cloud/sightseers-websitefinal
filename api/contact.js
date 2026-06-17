@@ -1,5 +1,5 @@
 const db = require('./_lib/db');
-const { requireAdmin, getUser, uid } = require('./_lib/auth');
+const { requireAdmin, getUser, uid, escapeHtml } = require('./_lib/auth');
 const { sendEmail } = require('./_lib/email');
 
 module.exports = async function handler(req, res) {
@@ -36,15 +36,15 @@ module.exports = async function handler(req, res) {
 
         await db.addToCollection('contact-messages', msg);
         await sendEmail({
-          subject: `New Enquiry from ${msg.name}${msg.subject ? ' — ' + msg.subject : ''}`,
+          subject: `New Enquiry from ${escapeHtml(msg.name)}${msg.subject ? ' — ' + escapeHtml(msg.subject) : ''}`,
           html: `
             <h2 style="color:#0d5371">New Contact Enquiry — Sight Seers Caribbean</h2>
             <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
-              <tr><td style="padding:8px;font-weight:bold;width:130px">Name</td><td style="padding:8px">${msg.name}</td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px"><a href="mailto:${msg.email}">${msg.email}</a></td></tr>
-              ${msg.phone ? `<tr><td style="padding:8px;font-weight:bold">Phone</td><td style="padding:8px">${msg.phone}</td></tr>` : ''}
-              ${msg.subject ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Subject</td><td style="padding:8px">${msg.subject}</td></tr>` : ''}
-              <tr><td style="padding:8px;font-weight:bold;vertical-align:top">Message</td><td style="padding:8px;white-space:pre-wrap">${msg.message}</td></tr>
+              <tr><td style="padding:8px;font-weight:bold;width:130px">Name</td><td style="padding:8px">${escapeHtml(msg.name)}</td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(msg.email)}</td></tr>
+              ${msg.phone ? `<tr><td style="padding:8px;font-weight:bold">Phone</td><td style="padding:8px">${escapeHtml(msg.phone)}</td></tr>` : ''}
+              ${msg.subject ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Subject</td><td style="padding:8px">${escapeHtml(msg.subject)}</td></tr>` : ''}
+              <tr><td style="padding:8px;font-weight:bold;vertical-align:top">Message</td><td style="padding:8px;white-space:pre-wrap">${escapeHtml(msg.message)}</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(msg.createdAt).toLocaleString('en-US',{timeZone:'America/Jamaica'})}</td></tr>
             </table>
             <p style="color:#888;font-size:12px;margin-top:20px">This message was submitted via sightseerscaribbean.com</p>`
