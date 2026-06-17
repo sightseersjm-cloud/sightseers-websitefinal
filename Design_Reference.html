@@ -19827,7 +19827,7 @@ function unlockAdminPortal(){
   const status=document.getElementById('adminUnlockStatus');
   if(!input||!status) return;
   const isAdminUser=window.SS&&window.SS.isAdmin&&window.SS.isAdmin();
-  if(input.value===ADMIN_PASSCODE||isAdminUser){
+  if(input.value.trim()===ADMIN_PASSCODE||isAdminUser){
     adminUnlocked=true;
     sessionStorage.setItem('ss_admin_unlocked','1');
     updateAdminPortalState();
@@ -41799,7 +41799,7 @@ body.theme-night .page .tag{
 
   function unlockStable(){
     var input = q('adminPasscode');
-    var pass = input ? String(input.value || '') : '';
+    var pass = input ? String(input.value || '').trim() : '';
     var validPass = window.ADMIN_PASSCODE || 'SightSeers2026!';
     if(pass === validPass){
       window.adminUnlocked = true;
