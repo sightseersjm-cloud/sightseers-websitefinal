@@ -65,6 +65,17 @@
     });
   }
 
+  // Exchange the admin passcode for a real server token so the passcode alone
+  // is enough to publish edits/uploads to the live site (no separate account needed).
+  function passcodeLogin(passcode) {
+    return api('auth', 'POST', { action: 'passcode', passcode: passcode }).then(function (res) {
+      setToken(res.token);
+      try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
+      document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
+      return res;
+    });
+  }
+
   function signout() {
     setToken(null);
     try {
@@ -292,6 +303,7 @@
 
     signup: signup,
     signin: signin,
+    passcodeLogin: passcodeLogin,
     signout: signout,
     me: me,
     updateProfile: updateProfile,

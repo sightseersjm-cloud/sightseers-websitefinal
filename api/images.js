@@ -12,7 +12,8 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'POST') {
     const user = getUser(req);
-    if (!user || user.role !== 'admin') {
+    // Content editors (passcode login) and full admins can manage images.
+    if (!user || (user.role !== 'admin' && user.role !== 'editor')) {
       return res.status(403).json({ error: 'Admin access required' });
     }
 
