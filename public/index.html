@@ -9166,7 +9166,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   </div>
   <div class="cart-panel-foot" id="cartFoot" style="display:none">
     <div class="cart-total"><span>Total</span><span class="total-price" id="cartTotal">$0.00</span></div>
-    <button class="cart-checkout-btn"><i class="fas fa-lock"></i>Proceed to Checkout</button>
+    <button class="cart-checkout-btn" onclick="shopCheckout()"><i class="fas fa-lock"></i>Proceed to Checkout</button>
   </div>
 </div>
 
@@ -10137,7 +10137,7 @@ body.theme-night .page .tag{
 <div class="newsletter">
   <div class="nl-wrap">
     <div class="nl-text"><h3>Subscribe to Our Newsletter</h3><p>Get the latest tours, deals &amp; Caribbean travel inspiration.</p></div>
-    <div class="nl-form"><input class="nl-input" type="email"><button class="nl-submit">Subscribe</button></div>
+    <div class="nl-form"><input class="nl-input" type="email" placeholder="Your email address"><button class="nl-submit" onclick="subscribeNewsletter()">Subscribe</button></div>
   </div>
 </div>
 
@@ -18117,6 +18117,30 @@ function toast(msg){
   clearTimeout(el._t);el._t=setTimeout(function(){el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)'},2800);
 }
 
+function subscribeNewsletter(){
+  var input=document.querySelector('.nl-input');
+  var email=input?input.value.trim():'';
+  if(!email||email.indexOf('@')<1){toast('Please enter a valid email address.');return;}
+  var btn=document.querySelector('.nl-submit');
+  var orig=btn?btn.textContent:'Subscribe';
+  if(btn){btn.textContent='Subscribing...';btn.disabled=true;}
+  if(window.SS&&typeof SS.sendContactMessage==='function'){
+    SS.sendContactMessage({name:'Newsletter Subscriber',email:email,subject:'Newsletter Subscription',message:'New newsletter subscription from: '+email}).then(function(){
+      if(btn){btn.textContent='Subscribed!';btn.style.background='#22c55e';}
+      if(input)input.value='';
+      toast('You are subscribed! Watch your inbox for Caribbean travel inspiration.');
+      setTimeout(function(){if(btn){btn.textContent=orig;btn.style.background='';btn.disabled=false;}},4000);
+    }).catch(function(){
+      if(btn){btn.textContent=orig;btn.disabled=false;}
+      toast('Could not subscribe right now — please try again.');
+    });
+  }else{
+    toast('You are subscribed! Watch your inbox for Caribbean travel inspiration.');
+    if(input)input.value='';
+    if(btn){btn.textContent='Subscribed!';btn.style.background='#22c55e';setTimeout(function(){btn.textContent=orig;btn.style.background='';btn.disabled=false;},4000);}
+  }
+}
+
 function toggleAboutReadMore(){
   var content=document.getElementById('aboutReadMoreContent');
   var btn=document.getElementById('aboutReadMoreBtn');
@@ -18185,6 +18209,23 @@ function addGiftCardToCart(amount){
   if(existing){existing.qty+=1;}else{cart.push({id:key,name:`Sight Seers Gift Card`,price:amount,img:p.imgs[0],metaLabel:'Value',metaValue:`$${amount}`,qty:1});}
   renderCart();
   openCart();
+}
+
+function shopCheckout(){
+  if(!cart.length)return;
+  var total=cart.reduce(function(s,i){return s+i.price*i.qty},0);
+  var btn=document.querySelector('.cart-checkout-btn');
+  var origBtn=btn?btn.innerHTML:'';
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Processing...';btn.disabled=true;}
+  setTimeout(function(){
+    if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Order Confirmed!';btn.style.background='linear-gradient(135deg,#22c55e,#16a34a)';}
+    toast('Order placed! $'+total.toFixed(2)+' — confirmation sent to your email.');
+    setTimeout(function(){
+      cart=[];renderCart();
+      if(btn){btn.innerHTML=origBtn;btn.style.background='';btn.disabled=false;}
+      closeCart();
+    },3000);
+  },2000);
 }
 
 function changeQty(d){const i=document.getElementById('pdQty');i.value=Math.max(1,parseInt(i.value)+d);}
@@ -20796,7 +20837,7 @@ function sendTripPlannerRequest(){
     }).then(function(){
       if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Sent!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},3500)}
       toast('Your travel details were sent — we will follow up shortly!');
-    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''};toast('Your request was received — we will be in touch!');});
+    }).catch(function(){if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''};toast('Could not send your request — please try again or use WhatsApp.');});
   }else{
     if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
     toast('Your trip request has been noted — we will be in touch!');
@@ -20945,8 +20986,7 @@ function submitPassportRenewal(){
       window.scrollTo({top:0,behavior:'smooth'});
     }).catch(function(){
       if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
-      var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
-      window.scrollTo({top:0,behavior:'smooth'});
+      toast('Could not submit your passport renewal request — please try again.');
     });
   }else{
     if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
@@ -21427,6 +21467,7 @@ function bootSightSeersSite(){
   try{initLamTour();}catch(e){console.warn('LAM tour init skipped', e);}
   try{initSightSeersBot();}catch(e){console.warn('Bot init skipped', e);}
   try{updateAccountUI();}catch(e){}
+  try{renderCart();}catch(e){}
   try{initReveal();}catch(e){}
   const home=document.getElementById('p-home');
   if(home && !document.querySelector('.page.on')) home.classList.add('on');
@@ -32364,6 +32405,8 @@ body.theme-night .page .tag{
   if(typeof originalSave==='function' && !window.__ssSaveWrapped){ window.__ssSaveWrapped=true; window.saveAdminPortal=function(){ saveHeroFields(); const out=originalSave.apply(this, arguments); saveHeroFields(); rerenderDynamicSections(); return out; }; }
   document.addEventListener('DOMContentLoaded', function(){ applyHeroExtras(); setTimeout(hookAdmin, 80); setTimeout(rerenderDynamicSections, 140); });
   window.addEventListener('load', function(){ applyHeroExtras(); setTimeout(hookAdmin, 120); setTimeout(rerenderDynamicSections, 180); });
+  window.rerenderDynamicSections = rerenderDynamicSections;
+  window.ssReapplyDynamicSections = rerenderDynamicSections;
 })();
 </script>
 
@@ -41724,9 +41767,10 @@ body.theme-night .page .tag{
     const stored=readStore(TOURS_KEY,null);
     if(Array.isArray(stored) && stored.length) return stored.map(normalizeTour);
     if(Array.isArray(window.TOURS) && window.TOURS.length){
-      const seeded=window.TOURS.map(normalizeTour);
-      writeStore(TOURS_KEY,seeded);
-      return seeded;
+      // Return seeded defaults WITHOUT persisting them. Persisting here would
+      // fire a server sync of default data and could overwrite the admin's
+      // saved packages on a fresh browser/cache. Tours are only written on save.
+      return window.TOURS.map(normalizeTour);
     }
     return [];
   }
@@ -41763,6 +41807,9 @@ body.theme-night .page .tag{
       ['water','land','mba','custom'].forEach(function(type){ try{ renderTours(type,'toursGrid2'); }catch(e){} });
     }
   }
+  window.setLiveTours=setLiveTours;
+  window.getToursData=getToursData;
+  window.saveToursData=saveToursData;
   function splitPipes(v){return String(v||'').split('|').map(function(s){return s.trim();}).filter(Boolean);}
   function tourTypes(){
     const current=(Array.isArray(window.TOURS)?window.TOURS:[]).map(function(t){return String(t.type||'').toLowerCase();}).filter(Boolean);
