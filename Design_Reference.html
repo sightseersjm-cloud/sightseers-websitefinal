@@ -42054,9 +42054,6 @@ body.theme-night .page .tag{
     el.className = 'inline-status' + (kind ? ' ' + kind : '');
     el.textContent = msg || '';
   }
-  function insideAdmin(el){
-    return !!(el && el.closest && el.closest('#p-admin'));
-  }
   function insideAdminWrap(el){
     return !!(el && el.closest && el.closest('#adminFormWrap'));
   }
@@ -42088,6 +42085,41 @@ body.theme-night .page .tag{
     }catch(err){}
   }
 
+  function getAdminToken(){
+    try{ return localStorage.getItem('ss_auth_token') || ''; }catch(e){ return ''; }
+  }
+
+  function publishToServer(key, value){
+    var token = getAdminToken();
+    if(!token) return Promise.resolve({ok:false, status:401, error:'not signed in'});
+    return fetch('/api/settings', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({key:key, value:value})
+    }).then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){
+        return {ok:r.ok, status:r.status, error:d.error||''};
+      });
+    }).catch(function(){
+      return {ok:false, status:0, error:'network'};
+    });
+  }
+
+  function publishAll(settingsMap){
+    var keys = Object.keys(settingsMap);
+    if(!keys.length) return Promise.resolve({ok:true});
+    var token = getAdminToken();
+    if(!token) return Promise.resolve({ok:false, status:401, error:'Sign in with your admin account to publish changes to the live website.'});
+    var promises = keys.map(function(key){
+      return publishToServer(key, settingsMap[key]);
+    });
+    return Promise.all(promises).then(function(results){
+      var failed = results.filter(function(r){return !r.ok;});
+      if(!failed.length) return {ok:true};
+      return {ok:false, status:failed[0].status, error:failed[0].error};
+    });
+  }
+
   function applyUnlockedState(unlocked){
     var wrap = q('adminFormWrap');
     if(wrap){
@@ -42106,6 +42138,7 @@ body.theme-night .page .tag{
       status('Enter the admin passcode before saving.','err');
       return false;
     }
+    try{ if(window.ssCaptureScroll) window.ssCaptureScroll(); }catch(e){}
     try{
       var d = window.DEFAULT_SITE_SETTINGS || {};
       var site = Object.assign({}, d, window.siteSettings || {}, {
@@ -42134,29 +42167,39 @@ body.theme-night .page .tag{
         specialTitle:safeVal('adminSpecialTitle', d.specialTitle),
         specialBody:safeVal('adminSpecialBody', d.specialBody)
       });
-      localStorage.setItem('ss_site_settings', JSON.stringify(site));
 
+      var peKey = window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings';
       var pe = {};
       var bindings = window.PAGE_EDITOR_BINDINGS || {};
       Object.keys(bindings).forEach(function(id){
         var el = q(id);
         if(el) pe[id] = String(el.value || '').trim();
       });
-      localStorage.setItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings', JSON.stringify(pe));
 
+      var gallery = null;
       if(typeof window.parseGalleryTextarea === 'function'){
-        localStorage.setItem('ss_customer_gallery', JSON.stringify(window.parseGalleryTextarea((q('adminGalleryData') || {}).value || '')));
+        gallery = window.parseGalleryTextarea((q('adminGalleryData') || {}).value || '');
       }
+
+      var stayKey = window.STAY_ADMIN_STORAGE_KEY || 'ss_stay_page_settings';
+      var stays = null;
       if(typeof window.parseStayListingsTextarea === 'function'){
         var sd = window.DEFAULT_STAY_PAGE_SETTINGS || {};
-        localStorage.setItem(window.STAY_ADMIN_STORAGE_KEY || 'ss_stay_page_settings', JSON.stringify({
+        stays = {
           hubLead:safeVal('adminStaysHubLead', sd.hubLead),
           countryHeroTitle:safeVal('adminStayCountryPrefix', sd.countryHeroTitle),
           countryLeadTemplate:safeVal('adminStayCountryLeadTemplate', sd.countryLeadTemplate),
           countryDescriptions:safeVal('adminStayCountryDescriptions', ''),
           listings:window.parseStayListingsTextarea((q('adminStayListingsData') || {}).value || '')
-        }));
+        };
       }
+
+      var _origSet = localStorage.setItem.__ssOriginal || localStorage.setItem.bind(localStorage);
+      _origSet.call(localStorage, 'ss_site_settings', JSON.stringify(site));
+      _origSet.call(localStorage, peKey, JSON.stringify(pe));
+      if(gallery !== null) _origSet.call(localStorage, 'ss_customer_gallery', JSON.stringify(gallery));
+      if(stays !== null) _origSet.call(localStorage, stayKey, JSON.stringify(stays));
+
       if(typeof window.getToursData === 'function' && typeof window.saveToursData === 'function'){
         window.saveToursData(window.getToursData());
       }
@@ -42178,11 +42221,38 @@ body.theme-night .page .tag{
       if(typeof window.rerenderDynamicSections === 'function') window.rerenderDynamicSections();
       if(typeof window.refreshAdminMaster === 'function') window.refreshAdminMaster();
 
-      status('Saved. The admin portal is now running on one stable save flow.','ok');
+      try{ if(window.ssReArmScroll) window.ssReArmScroll(1600); }catch(e){}
+
+      var serverPayload = {};
+      serverPayload['ss_site_settings'] = site;
+      serverPayload[peKey] = pe;
+      if(gallery !== null) serverPayload['ss_customer_gallery'] = gallery;
+      if(stays !== null) serverPayload[stayKey] = stays;
+      try{
+        var toursData = typeof window.getToursData === 'function' ? window.getToursData() : null;
+        if(toursData) serverPayload['ss_master_tours_manager_v1'] = toursData;
+      }catch(e){}
+      try{
+        var dynRaw = localStorage.getItem('ss_dynamic_sections_v1');
+        if(dynRaw) serverPayload['ss_dynamic_sections_v1'] = JSON.parse(dynRaw);
+      }catch(e){}
+
+      status('Saving and publishing to live website…','ok');
+      publishAll(serverPayload).then(function(result){
+        if(result.ok){
+          status('Published — your changes are now live for everyone.','ok');
+        }else if(result.status === 401 || result.status === 403){
+          status('Saved locally only. Sign in with your admin account (above) to publish to the live site.','err');
+          if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
+        }else{
+          status('Saved locally. Could not reach the server — try again in a moment.','err');
+        }
+      });
+
       return true;
     }catch(err){
       console.error('Stable save failed', err);
-      status('Save failed because of a script error.','err');
+      status('Save failed: ' + (err.message || 'script error'),'err');
       return false;
     }
   }
@@ -42191,28 +42261,30 @@ body.theme-night .page .tag{
     var input = q('adminPasscode');
     var pass = input ? String(input.value || '').trim() : '';
     var validPass = window.ADMIN_PASSCODE || 'SightSeers2026!';
-    if(pass.length<1){alert('Passcode field is empty — type: SightSeers2026!');return false;}
+    if(pass.length < 1){ status('Enter the admin passcode to unlock.','err',true); return false; }
     if(pass === validPass){
       window.adminUnlocked = true;
       try{ sessionStorage.setItem('ss_admin_unlocked', '1'); }catch(e){}
       applyUnlockedState(true);
       if(input) input.value = '';
-      status('Portal unlocked. Overlapping admin behavior has been stabilized.','ok', true);
+      var hasToken = !!getAdminToken();
+      if(hasToken){
+        status('Portal unlocked. You are signed in — edits will publish to the live website.','ok',true);
+      }else{
+        status('Portal unlocked. Sign in with your admin account (banner above) to publish edits to the live site.','err',true);
+      }
       return true;
     }
     window.adminUnlocked = false;
     try{ sessionStorage.removeItem('ss_admin_unlocked'); }catch(e){}
     applyUnlockedState(false);
     if(input) input.value = '';
-    status('That passcode did not match the admin key.','err', true);
+    status('That passcode did not match.','err',true);
     return false;
   }
 
   function resetStable(){
     try{
-      if(typeof window.resetAdminPortal === 'function' && !window.resetAdminPortal.__ssOriginalResetBlocked){
-        // no-op; replaced below
-      }
       localStorage.removeItem('ss_site_settings');
       localStorage.removeItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings');
       localStorage.removeItem('ss_customer_gallery');
@@ -42224,23 +42296,14 @@ body.theme-night .page .tag{
       location.reload();
     }catch(err){
       console.error('Stable reset failed', err);
-      status('Reset failed because of a script error.','err');
+      status('Reset failed: ' + (err.message || 'script error'),'err');
     }
-  }
-
-  function cloneWrapToDropListeners(){
-    var wrap = q('adminFormWrap');
-    if(!wrap || wrap.dataset.ssStableClone === '1') return;
-    var clone = wrap.cloneNode(true);
-    clone.dataset.ssStableClone = '1';
-    wrap.parentNode.replaceChild(clone, wrap);
   }
 
   function bindTypingShield(){
     var wrap = q('adminFormWrap');
     if(!wrap || wrap.dataset.ssStableTypingBound === '1') return;
     wrap.dataset.ssStableTypingBound = '1';
-
     ['keydown','keyup','keypress','beforeinput','input','change','focusin'].forEach(function(type){
       wrap.addEventListener(type, function(e){
         var t = e.target;
@@ -42253,11 +42316,6 @@ body.theme-night .page .tag{
         }
       }, true);
     });
-
-    wrap.addEventListener('input', function(e){
-      if(!isTextLike(e.target)) return;
-      status('Typing is stable now. Click Save Changes after editing.','ok');
-    }, true);
   }
 
   function suppressDocumentLevelAdminNoise(){
@@ -42287,25 +42345,15 @@ body.theme-night .page .tag{
     }
   }
 
-  function addRepairBadge(){
-    var wrap = q('adminFormWrap');
-    var editor = q('adminStructuredEditor');
-    if(!wrap || !editor || q('adminRepairNoticeFinal')) return;
-    var box = document.createElement('div');
-    box.id = 'adminRepairNoticeFinal';
-    box.className = 'admin-super-hub';
-    box.innerHTML = '<div class="admin-super-hub-head"><div><h3>Clean Admin Portal</h3><p>This version removes overlapping admin behavior so typing, unlocking, saving, and resets all run through one stable flow.</p></div></div>';
-    wrap.insertBefore(box, editor);
-  }
-
   ready(function(){
-    cloneWrapToDropListeners();
     repairButtonsAndState();
     bindTypingShield();
     suppressDocumentLevelAdminNoise();
-    addRepairBadge();
     setTimeout(function(){
       repairButtonsAndState();
       bindTypingShield();
-      addRepairBadge();
+    }, 600);
+  });
+})();
+</script>
  
