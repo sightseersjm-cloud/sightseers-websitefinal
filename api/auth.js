@@ -94,6 +94,26 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, token, user: safe });
   }
 
+  // Exchange the admin passcode (checked against the server's ADMIN_PASSCODE env var)
+  // for an admin token. Lets the passcode alone publish edits to the live site.
+  if (action === 'passcode') {
+    const { passcode } = req.body;
+    if (!checkRate('passcode:' + clientIp)) {
+      return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+    }
+    if (!ADMIN_CODE) {
+      return res.status(500).json({ error: 'Admin passcode is not configured on the server (set ADMIN_PASSCODE in Vercel).' });
+    }
+    if (!passcode || String(passcode) !== ADMIN_CODE) {
+      return res.status(401).json({ error: 'Incorrect admin passcode' });
+    }
+    // 'editor' can publish site content + images, but cannot read customer PII
+    // (bookings, contact messages) or manage user accounts — those need a real admin login.
+    const editorUser = { id: 'admin-passcode', email: 'editor@sightseerscaribbean.com', name: 'Site Editor', role: 'editor' };
+    const token = createToken(editorUser);
+    return res.status(200).json({ ok: true, token, user: editorUser });
+  }
+
   if (action === 'me') {
     const caller = requireAuth(req, res);
     if (!caller) return;

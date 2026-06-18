@@ -39,7 +39,8 @@ module.exports = async function handler(req, res) {
     if (!key) return res.status(400).json({ error: 'Key required' });
 
     const adminKeys = ['ss_site_settings', 'ss_page_editor_settings', 'ss_stay_page_settings', 'ss_customer_gallery', 'ss_master_tours_manager_v1', 'ss_dynamic_sections_v1', 'ss_blog_requests_v1'];
-    if (adminKeys.includes(key) && (!user || user.role !== 'admin')) {
+    // Content editors (passcode login) and full admins can write site content.
+    if (adminKeys.includes(key) && (!user || (user.role !== 'admin' && user.role !== 'editor'))) {
       return res.status(403).json({ error: 'Admin access required for this setting' });
     }
 

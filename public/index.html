@@ -19939,17 +19939,21 @@ function updateAdminSigninBanner(){
     banner.id='adminSigninBanner';
     wrap.insertBefore(banner, wrap.firstChild);
   }
-  const signedInAdmin=!!(window.SS && window.SS.isAdmin && window.SS.isAdmin());
-  if(signedInAdmin){
-    let email='';
-    try{ const u=window.SS.currentUser&&window.SS.currentUser(); email=u&&u.email?' ('+u.email+')':''; }catch(e){}
+  let canPublish=false, role='';
+  try{
+    const tok=(window.SS&&window.SS.getToken&&window.SS.getToken())||localStorage.getItem('ss_auth_token')||'';
+    const u=(window.SS&&window.SS.currentUser&&window.SS.currentUser())||null;
+    role=u&&u.role||'';
+    canPublish=!!tok && (role==='admin'||role==='editor');
+  }catch(e){}
+  if(canPublish){
     banner.className='admin-signin-banner ok';
-    banner.innerHTML='<i class="fas fa-circle-check"></i><div><strong>Signed in as admin'+email+'.</strong> Image uploads and edits publish to the live site for everyone.</div>';
+    banner.innerHTML='<i class="fas fa-circle-check"></i><div><strong>Connected to the live website.</strong> Your text edits and image uploads publish to the live site for everyone.</div>';
   }else{
     banner.className='admin-signin-banner warn';
     banner.innerHTML=''
       +'<div class="admin-signin-warn-head"><i class="fas fa-triangle-exclamation"></i> <strong>Preview mode &mdash; your changes are NOT on the live website yet.</strong></div>'
-      +'<div class="admin-signin-warn-sub">Sign in with your admin account to publish edits and image uploads to the live site for everyone.</div>'
+      +'<div class="admin-signin-warn-sub">Re-enter the admin passcode above to reconnect, or sign in with an admin account, so edits and image uploads publish to the live site.</div>'
       +'<div class="admin-signin-inline">'
       +'<input type="email" id="adminSigninEmail" placeholder="Admin email" autocomplete="username">'
       +'<input type="password" id="adminSigninPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\'){event.preventDefault();adminSignInAndUnlock();}">'
@@ -42269,11 +42273,26 @@ body.theme-night .page .tag{
       try{ sessionStorage.setItem('ss_admin_unlocked', '1'); }catch(e){}
       applyUnlockedState(true);
       if(input) input.value = '';
-      var hasToken = !!getAdminToken();
-      if(hasToken){
-        status('Portal unlocked. You are signed in — edits will publish to the live website.','ok',true);
+      // Exchange the passcode for a server token so edits/uploads publish to the live site
+      // without needing a separate account login.
+      if(getAdminToken()){
+        status('Portal unlocked. Connected — your edits will publish to the live website.','ok',true);
+        if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
+      }else if(window.SS && typeof window.SS.passcodeLogin === 'function'){
+        status('Portal unlocked. Connecting to the live website…','ok',true);
+        window.SS.passcodeLogin(pass).then(function(){
+          status('Portal unlocked and connected — your edits and image uploads now publish to the live website.','ok',true);
+          if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
+        }).catch(function(err){
+          var m = (err && err.data && err.data.error) || (err && err.message) || '';
+          if(/not configured/i.test(m)){
+            status('Portal unlocked, but publishing is not set up on the server yet (ADMIN_PASSCODE env var missing in Vercel). Edits save on this device only.','err',true);
+          }else{
+            status('Portal unlocked. Could not connect to the live website to publish — edits save on this device only for now.','err',true);
+          }
+        });
       }else{
-        status('Portal unlocked. Sign in with your admin account (banner above) to publish edits to the live site.','err',true);
+        status('Portal unlocked. Edits save on this device only (publishing service unavailable).','err',true);
       }
       return true;
     }
