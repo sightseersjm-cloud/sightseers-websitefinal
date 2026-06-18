@@ -19948,17 +19948,34 @@ function updateAdminSigninBanner(){
     banner.className='admin-signin-banner ok';
     banner.innerHTML='<i class="fas fa-circle-check"></i><div><strong>Connected to the live website.</strong> Your text edits and image uploads publish to the live site for everyone.</div>';
   }else{
-    banner.className='admin-signin-banner warn';
-    banner.innerHTML=''
-      +'<div class="admin-signin-warn-head"><i class="fas fa-triangle-exclamation"></i> <strong>Preview mode &mdash; your changes are NOT on the live website yet.</strong></div>'
-      +'<div class="admin-signin-warn-sub">Re-enter the admin passcode above to reconnect, or sign in with an admin account, so edits and image uploads publish to the live site.</div>'
-      +'<div class="admin-signin-inline">'
-      +'<input type="email" id="adminSigninEmail" placeholder="Admin email" autocomplete="username">'
-      +'<input type="password" id="adminSigninPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\'){event.preventDefault();adminSignInAndUnlock();}">'
-      +'<button type="button" class="admin-signin-btn" onclick="adminSignInAndUnlock()">Sign in &amp; publish</button>'
-      +'</div>'
-      +'<div class="inline-status" id="adminSigninStatus"></div>';
+    // Auto-attempt passcode exchange — if it succeeds, re-render as green
+    if(window.SS&&typeof window.SS.passcodeLogin==='function'&&!banner.__ssAutoLoginAttempted){
+      banner.__ssAutoLoginAttempted=true;
+      banner.className='admin-signin-banner ok';
+      banner.innerHTML='<i class="fas fa-spinner fa-spin"></i><div>Connecting to the live website…</div>';
+      window.SS.passcodeLogin(window.ADMIN_PASSCODE||'SightSeers2026!').then(function(){
+        banner.__ssAutoLoginAttempted=false;
+        updateAdminSigninBanner();
+      }).catch(function(){
+        banner.__ssAutoLoginAttempted=false;
+        showBannerDisconnected(banner);
+      });
+      return;
+    }
+    showBannerDisconnected(banner);
   }
+}
+function showBannerDisconnected(banner){
+  banner.className='admin-signin-banner warn';
+  banner.innerHTML=''
+    +'<div class="admin-signin-warn-head"><i class="fas fa-triangle-exclamation"></i> <strong>Could not connect to the live website.</strong></div>'
+    +'<div class="admin-signin-warn-sub">Your changes are saved on this device only. Check your internet connection and refresh the page, or sign in with an admin account below.</div>'
+    +'<div class="admin-signin-inline">'
+    +'<input type="email" id="adminSigninEmail" placeholder="Admin email" autocomplete="username">'
+    +'<input type="password" id="adminSigninPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\'){event.preventDefault();adminSignInAndUnlock();}">'
+    +'<button type="button" class="admin-signin-btn" onclick="adminSignInAndUnlock()">Sign in &amp; publish</button>'
+    +'</div>'
+    +'<div class="inline-status" id="adminSigninStatus"></div>';
 }
 window.updateAdminSigninBanner=updateAdminSigninBanner;
 document.addEventListener('ss-account-updated',function(){ if(typeof adminUnlocked!=='undefined' && adminUnlocked) updateAdminSigninBanner(); });
@@ -20043,13 +20060,39 @@ function unlockAdminPortal(){
   const status=document.getElementById('adminUnlockStatus');
   if(!input||!status) return;
   const isAdminUser=window.SS&&window.SS.isAdmin&&window.SS.isAdmin();
-  if(input.value.trim()===ADMIN_PASSCODE||isAdminUser){
+  const passValue=input.value.trim();
+  if(passValue===ADMIN_PASSCODE||isAdminUser){
     adminUnlocked=true;
     sessionStorage.setItem('ss_admin_unlocked','1');
     updateAdminPortalState();
-    status.textContent='Portal unlocked. The editing sections are now visible below.';
-    status.className='inline-status ok';
     input.value='';
+    // Exchange the passcode for a server token so edits and image uploads
+    // publish to the live site — no separate account needed.
+    if(window.SS&&typeof window.SS.getToken==='function'&&window.SS.getToken()){
+      status.textContent='Portal unlocked and connected — your edits publish to the live website.';
+      status.className='inline-status ok';
+      if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
+    }else if(window.SS&&typeof window.SS.passcodeLogin==='function'){
+      status.textContent='Portal unlocked. Connecting to the live website…';
+      status.className='inline-status ok';
+      window.SS.passcodeLogin(passValue||ADMIN_PASSCODE).then(function(){
+        status.textContent='Portal unlocked and connected — your edits and image uploads publish to the live website.';
+        status.className='inline-status ok';
+        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
+      }).catch(function(err){
+        var m=(err&&err.data&&err.data.error)||(err&&err.message)||'';
+        if(/not configured/i.test(m)){
+          status.textContent='Portal unlocked (preview mode). Server publishing is not configured yet.';
+        }else{
+          status.textContent='Portal unlocked (preview mode). Could not connect to the live website — edits save on this device only.';
+        }
+        status.className='inline-status err';
+        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
+      });
+    }else{
+      status.textContent='Portal unlocked. The editing sections are now visible below.';
+      status.className='inline-status ok';
+    }
   }else{
     adminUnlocked=false;
     sessionStorage.removeItem('ss_admin_unlocked');
@@ -20725,6 +20768,12 @@ function adminGateUnlock(){
       if(wrp) wrp.classList.add('on');
       document.querySelectorAll('.admin-protected-content').forEach(function(b){b.classList.add('on')});
     },300);
+    // Exchange passcode for a server token so saves/uploads publish to the live site
+    if(window.SS&&typeof window.SS.passcodeLogin==='function'){
+      window.SS.passcodeLogin(pass||valid).then(function(){
+        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
+      }).catch(function(){});
+    }
   }else{
     if(msg){msg.textContent='Incorrect passcode';msg.style.color='#c0392b';msg.style.display='block';}
     input.value='';
@@ -39021,6 +39070,17 @@ body.theme-night .page .tag{
     document.querySelectorAll('.admin-protected-content').forEach(function(block){
       block.classList.toggle('on', !!window.adminUnlocked);
     });
+    // When restoring from sessionStorage, re-acquire the server token so
+    // saves and uploads still publish to the live site.
+    if(window.adminUnlocked && window.SS && typeof window.SS.passcodeLogin === 'function'){
+      var tok = '';
+      try{ tok = (window.SS.getToken && window.SS.getToken()) || localStorage.getItem('ss_auth_token') || ''; }catch(e){}
+      if(!tok){
+        window.SS.passcodeLogin(window.ADMIN_PASSCODE || 'SightSeers2026!').then(function(){
+          if(typeof updateAdminSigninBanner === 'function') updateAdminSigninBanner();
+        }).catch(function(){});
+      }
+    }
   }
 
   function ensureEditableFields(root){
