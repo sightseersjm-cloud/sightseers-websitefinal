@@ -14,7 +14,9 @@
     'ss_page_editor_settings',
     'ss_customer_gallery',
     'ss_stay_page_settings',
-    'ss_tours_data'
+    'ss_master_tours_manager_v1',
+    'ss_dynamic_sections_v1',
+    'ss_blog_requests_v1'
   ];
 
   function getToken() {
