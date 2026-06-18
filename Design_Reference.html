@@ -74,7 +74,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 
 /* ======== HERO ======== */
 .hero{position:relative;height:min(100vh,980px);min-height:780px;overflow:hidden}
-.slide{position:absolute;inset:0;background-size:cover;background-position:center center;opacity:0;transform:scale(1.045);transition:opacity 1.15s ease,transform 7s ease;pointer-events:none}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center center;opacity:0;transform:scale(1.06);transition:opacity 1.4s var(--ease-out-expo),transform 9s var(--ease-out-quint);pointer-events:none;will-change:opacity,transform}
 .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
 .slide::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,20,40,.82) 0%,rgba(10,20,40,.48) 46%,rgba(10,20,40,.14) 100%);pointer-events:none}
 .hero-content{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:100%;max-width:1280px;padding:0 44px;color:#fff}
@@ -91,19 +91,22 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .hero .slide:first-child .hero-small{font-size:10px;letter-spacing:5px}
 .hero .slide:first-child .hero-title{font-size:clamp(2.6rem,5.4vw,5.2rem)}
 .hero .slide:first-child .hero-sub{font-size:13px;max-width:500px}
-.slide.hero-animate .hero-reveal > *{animation:heroTextRise .98s cubic-bezier(.22,1,.36,1) forwards}
-.slide.hero-animate .hero-reveal--delay2 > *{animation-delay:.16s}
-.slide.hero-animate .hero-reveal--delay3 > *{animation-delay:.34s}
-.slide.hero-animate .hero-reveal--delay4 > *{animation-delay:.54s}
-.btn-primary{display:inline-flex;align-items:center;gap:9px;padding:14px 32px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;transition:all .25s;border:2px solid transparent;box-shadow:0 16px 34px rgba(239,135,49,.22)}
-.btn-primary:hover{background:transparent;color:#fff;border-color:#fff;box-shadow:none}
-.btn-secondary{display:inline-flex;align-items:center;gap:9px;padding:14px 32px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;transition:all .25s}
-.btn-secondary:hover{background:#fff;color:var(--navy);border-color:#fff}
+.slide.hero-animate .hero-reveal > *{animation:heroTextRise 1.1s var(--spring-snappy) forwards}
+.slide.hero-animate .hero-reveal--delay2 > *{animation-delay:.14s}
+.slide.hero-animate .hero-reveal--delay3 > *{animation-delay:.30s}
+.slide.hero-animate .hero-reveal--delay4 > *{animation-delay:.48s}
+.btn-primary{display:inline-flex;align-items:center;gap:9px;padding:14px 32px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;transition:transform .5s var(--spring-bouncy),background .3s ease,border-color .3s ease,box-shadow .4s ease,color .3s ease;border:2px solid transparent;box-shadow:0 16px 34px rgba(239,135,49,.22)}
+.btn-primary:hover{transform:translateY(-2px) scale(1.03);background:transparent;color:#fff;border-color:#fff;box-shadow:0 8px 20px rgba(239,135,49,.15)}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{display:inline-flex;align-items:center;gap:9px;padding:14px 32px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;transition:transform .5s var(--spring-bouncy),background .3s ease,border-color .3s ease,color .3s ease}
+.btn-secondary:hover{transform:translateY(-2px) scale(1.03);background:#fff;color:var(--navy);border-color:#fff}
+.btn-secondary:active{transform:scale(.97)}
 .hero-dots{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
 .hdot{width:28px;height:3px;background:rgba(255,255,255,.35);cursor:pointer;transition:all .3s}
 .hdot.on{background:var(--orange);width:44px}
-.harrow{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .25s;backdrop-filter:blur(4px)}
-.harrow:hover{background:var(--orange);border-color:var(--orange)}
+.harrow{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:transform .5s var(--spring-bouncy),background .3s ease,border-color .3s ease;backdrop-filter:blur(4px)}
+.harrow:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-50%) scale(1.12)}
+.harrow:active{transform:translateY(-50%) scale(.92)}
 .ha-prev{left:30px}
 .ha-next{right:30px}
 
@@ -1048,17 +1051,80 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 /* ======== ANIMATIONS ======== */
 @keyframes heroTextRise{0%{opacity:0;transform:translateY(115%)}100%{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+
+/* ── Emil Kowalski spring-physics timing ── */
+:root{
+  --spring-snappy:cubic-bezier(.22,1,.36,1);
+  --spring-bouncy:cubic-bezier(.34,1.56,.64,1);
+  --spring-smooth:cubic-bezier(.16,1,.3,1);
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --ease-out-quint:cubic-bezier(.23,1,.32,1);
+}
+
+/* ── Reveal system — upgraded with stagger support ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .85s var(--spring-smooth),transform .85s var(--spring-smooth)}
 .reveal.vis{opacity:1;transform:none}
+.reveal[data-delay="1"]{transition-delay:.08s}
+.reveal[data-delay="2"]{transition-delay:.16s}
+.reveal[data-delay="3"]{transition-delay:.24s}
+.reveal[data-delay="4"]{transition-delay:.32s}
+
+/* ── Reveal variants ── */
+.reveal-scale{opacity:0;transform:scale(.96) translateY(18px);transition:opacity .9s var(--spring-smooth),transform .9s var(--spring-smooth)}
+.reveal-scale.vis{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .85s var(--spring-smooth),transform .85s var(--spring-smooth)}
+.reveal-left.vis{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .85s var(--spring-smooth),transform .85s var(--spring-smooth)}
+.reveal-right.vis{opacity:1;transform:none}
+
+/* ── Section depth masks — soft gradient fades between sections ── */
+.sec-mask-top{position:relative}
+.sec-mask-top::before{content:'';position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,0) 100%);z-index:2;pointer-events:none}
+.sec-mask-bottom{position:relative}
+.sec-mask-bottom::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(0deg,#fff 0%,rgba(255,255,255,0) 100%);z-index:2;pointer-events:none}
+.sec-mask-dark-top::before{content:'';position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(180deg,rgba(6,58,99,.06) 0%,rgba(6,58,99,0) 100%);z-index:2;pointer-events:none}
+
+/* ── Floating depth layers ── */
+@keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes floatMed{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.depth-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.18;pointer-events:none;z-index:0;animation:floatSlow 8s ease-in-out infinite}
+.depth-orb--orange{background:var(--orange);width:280px;height:280px}
+.depth-orb--green{background:var(--green);width:220px;height:220px;animation-delay:-3s}
+.depth-orb--navy{background:var(--navy);width:200px;height:200px;animation-delay:-5s;opacity:.08}
+
+/* ── Micro-interactions — Emil Kowalski hover polish ── */
+.tour-card,.dest-card,.experience-card,.yacht-card,.transfer-card,.dt-tour-card,.team-card,.shop-card,.testi-stat{
+  transition:transform .5s var(--spring-snappy),box-shadow .5s var(--spring-snappy),border-color .35s ease;
+}
+.tour-card:hover,.dest-card:hover,.experience-card:hover,.shop-card:hover{
+  transform:translateY(-6px) scale(1.015);box-shadow:0 24px 56px rgba(6,58,99,.12),0 0 0 1px rgba(6,58,99,.04);
+}
+
+/* ── Smooth page transitions ── */
+.page{opacity:0;transform:translateY(14px) scale(.998);transition:opacity .55s var(--spring-smooth),transform .55s var(--spring-smooth)}
+.page.on{opacity:1;transform:none}
+
+/* ── Section shimmer line ── */
+.sec-shimmer{height:1px;border:none;margin:0;background:linear-gradient(90deg,rgba(6,58,99,0) 0%,rgba(6,58,99,.10) 30%,rgba(239,135,49,.18) 50%,rgba(6,58,99,.10) 70%,rgba(6,58,99,0) 100%);background-size:200% 100%;animation:shimmer 6s linear infinite}
+
+/* ── Floating admin save button ── */
+.admin-fab-save{position:fixed;bottom:28px;right:28px;z-index:9999;display:none;align-items:center;gap:10px;padding:16px 28px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;letter-spacing:.02em;cursor:pointer;box-shadow:0 12px 40px rgba(239,135,49,.35),0 0 0 1px rgba(239,135,49,.1);transition:transform .4s var(--spring-bouncy),box-shadow .3s ease,opacity .3s ease;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.admin-fab-save:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 18px 50px rgba(239,135,49,.45)}
+.admin-fab-save:active{transform:scale(.97)}
+.admin-fab-save.show{display:inline-flex}
+.admin-fab-save i{font-size:15px}
+.admin-fab-save .fab-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:fabPulse 1.8s ease-in-out infinite}
+@keyframes fabPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 
 /* ======== TEAM ======== */
 .team-sec{padding:90px 0;background:#fff}
 .team-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
 .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:46px}
-.team-card{background:#fff;border:1px solid var(--border);overflow:hidden;transition:all .28s}
-.team-card:hover{transform:translateY(-4px);box-shadow:0 10px 34px rgba(0,0,0,.1)}
+.team-card{background:#fff;border:1px solid var(--border);overflow:hidden;transition:transform .5s var(--spring-snappy),box-shadow .5s var(--spring-snappy),border-color .35s ease}
+.team-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 20px 48px rgba(0,0,0,.1);border-color:rgba(239,135,49,.15)}
 .team-img-wrap{position:relative;height:320px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%)}
-.team-img-wrap img{width:100%;height:100%;object-fit:contain;object-position:center top;padding:10px;transition:transform .55s}
+.team-img-wrap img{width:100%;height:100%;object-fit:contain;object-position:center top;padding:10px;transition:transform .7s var(--spring-snappy)}
 .team-card:hover .team-img-wrap img{transform:scale(1.06)}
 .team-tag{position:absolute;left:18px;bottom:18px;background:rgba(26,45,75,.88);color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 12px}
 .team-body{padding:22px}
@@ -4310,13 +4376,8 @@ body.theme-night .mba-getaway-kicker{color:#7ed8c7!important}
 #jm3dPopupLayer .jm3d-pin-card, #jm3dPopupLayer .pin-card{max-width:240px}
 
 /* ======== Smooth page and experience transitions ======== */
-.page{opacity:0;transform:translateY(10px);transition:opacity .42s ease, transform .42s ease}
-.page.on{opacity:1;transform:translateY(0)}
-.dt-right{opacity:0;transform:translateY(8px);transition:opacity .35s ease, transform .35s ease}
+.dt-right{opacity:0;transform:translateY(8px);transition:opacity .45s var(--spring-smooth), transform .45s var(--spring-smooth)}
 .dt-right.active{display:block;opacity:1;transform:translateY(0)}
-.dest-card,.experience-card,.tour-card,.dt-tour-card,.transfer-card,.yacht-card{
-  transition:transform .28s ease, box-shadow .28s ease, opacity .28s ease;
-}
 .no-flash-transition, .page-transitioning *{
   animation:none !important;
 }
@@ -4336,10 +4397,10 @@ body.theme-night .mba-getaway-kicker{color:#7ed8c7!important}
   overflow:hidden;
   background:#fff;
   box-shadow:0 18px 40px rgba(6,58,99,.08);
-  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  transition:transform .5s var(--spring-snappy), box-shadow .5s var(--spring-snappy), border-color .35s ease;
 }
 .yacht-card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-6px) scale(1.015);
   box-shadow:0 26px 52px rgba(6,58,99,.12);
   border-color:rgba(239,135,49,.22);
 }
@@ -4352,7 +4413,7 @@ body.theme-night .mba-getaway-kicker{color:#7ed8c7!important}
   width:100%;
   height:100%;
   object-fit:cover;
-  transition:transform .45s ease;
+  transition:transform .8s var(--spring-snappy);
 }
 .yacht-card:hover .yacht-card-media img{transform:scale(1.06)}
 .yacht-card-media::after{
@@ -9976,7 +10037,8 @@ body.theme-night .page .tag{
 <!-- TOURS FILTER -->
 
 <!-- SPECIAL DIFFERENCE -->
-<section class="special-sec">
+<hr class="sec-shimmer">
+<section class="special-sec" style="position:relative;overflow:hidden">
   <div class="special-wrap">
     <div class="special-card reveal">
       <div class="special-intro">
@@ -9995,7 +10057,10 @@ body.theme-night .page .tag{
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="testi-sec">
+<hr class="sec-shimmer">
+<section class="testi-sec" style="position:relative;overflow:hidden">
+  <div class="depth-orb depth-orb--orange" style="top:-80px;right:-100px"></div>
+  <div class="depth-orb depth-orb--green" style="bottom:-60px;left:-80px"></div>
   <div class="testi-wrap">
     <div class="testi-layout">
       <div class="reveal">
@@ -10025,7 +10090,9 @@ body.theme-night .page .tag{
 </section>
 
 <!-- PROMO CARDS -->
-<section class="promo-sec popular-sec">
+<hr class="sec-shimmer">
+<section class="promo-sec popular-sec" style="position:relative;overflow:hidden">
+  <div class="depth-orb depth-orb--navy" style="top:40px;left:-120px"></div>
   <div class="promo-wrap popular-wrap">
     <div class="sec-head center reveal popular-head">
       <span class="sec-pre">Wanna Get Away in Style?</span>
@@ -10092,7 +10159,8 @@ body.theme-night .page .tag{
 </section>
 
 <!-- FEATURED BLOG -->
-<section class="featured-blog-sec" style="padding:60px 24px;background:linear-gradient(135deg,#f8fbfd 0%,#eef5fa 100%)">
+<hr class="sec-shimmer">
+<section class="featured-blog-sec" style="padding:60px 24px;background:linear-gradient(135deg,#f8fbfd 0%,#eef5fa 100%);position:relative;overflow:hidden">
   <div style="max-width:1080px;margin:0 auto">
     <div class="sec-head center reveal">
       <span class="sec-pre">From the Blog</span>
@@ -10116,7 +10184,9 @@ body.theme-night .page .tag{
 </section>
 
 <!-- COMMUNITY -->
-<section class="community-sec">
+<hr class="sec-shimmer">
+<section class="community-sec" style="position:relative;overflow:hidden">
+  <div class="depth-orb depth-orb--green" style="top:-60px;right:-100px"></div>
   <div class="community-wrap">
     <div class="community-panel reveal">
       <div class="community-grid">
@@ -23728,7 +23798,7 @@ body.theme-night .trust-divider{background:rgba(255,255,255,.1)}
 .dt-tour-card{transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s cubic-bezier(.25,.46,.45,.94)}
 .dt-tour-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 20px 48px rgba(0,0,0,.12)}
 
-.reveal{transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94)}
+.reveal{transition:opacity .85s var(--spring-smooth),transform .85s var(--spring-smooth)}
 
 /* ======== ENHANCED TESTIMONIALS ======== */
 .testi-sec{background:linear-gradient(180deg,#f7fbff 0%,#ffffff 40%,#fff9f1 100%)}
@@ -42475,6 +42545,109 @@ body.theme-night .page .tag{
       bindTypingShield();
     }, 600);
   });
+})();
+</script>
+
+<!-- Floating admin save button -->
+<button class="admin-fab-save" id="adminFabSave" onclick="if(typeof saveAdminPortal==='function') saveAdminPortal()">
+  <i class="fas fa-floppy-disk"></i>
+  <span>Save &amp; Publish</span>
+  <span class="fab-dot"></span>
+</button>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── Floating save button: show whenever admin has unsaved changes ── */
+  var fab = document.getElementById('adminFabSave');
+  var dirty = false;
+  function markDirty(){
+    if(!window.adminUnlocked || !fab) return;
+    dirty = true;
+    fab.classList.add('show');
+  }
+  function markClean(){
+    dirty = false;
+    if(fab) fab.classList.remove('show');
+  }
+
+  // Listen for any input/change inside the admin panel
+  document.addEventListener('input', function(e){
+    if(e.target && e.target.closest && e.target.closest('#p-admin')) markDirty();
+  }, true);
+  document.addEventListener('change', function(e){
+    if(e.target && e.target.closest && e.target.closest('#p-admin')) markDirty();
+  }, true);
+
+  // Show fab after image uploads
+  var origTrigger = window.triggerAutoSave;
+  if(typeof origTrigger === 'function'){
+    window.triggerAutoSave = function(delay){
+      markDirty();
+      return origTrigger.apply(this, arguments);
+    };
+  }
+
+  // After a successful save, hide the fab
+  var origSave = null;
+  function patchSave(){
+    if(window.saveAdminPortal && !window.saveAdminPortal.__fabPatched){
+      origSave = window.saveAdminPortal;
+      window.saveAdminPortal = function(){
+        var result = origSave.apply(this, arguments);
+        setTimeout(markClean, 800);
+        return result;
+      };
+      window.saveAdminPortal.__fabPatched = true;
+    }
+  }
+  setTimeout(patchSave, 200);
+  setTimeout(patchSave, 1500);
+
+  // Also show on unlock
+  document.addEventListener('ss-account-updated', function(){ if(dirty) markDirty(); });
+
+  /* ── Upgraded reveal system: IntersectionObserver with stagger ── */
+  function initRevealObserver(){
+    if(!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('vis');
+          obs.unobserve(entry.target);
+          // Stagger children that have .reveal-child
+          var children = entry.target.querySelectorAll('.reveal-child');
+          children.forEach(function(child, i){
+            child.style.transitionDelay = (i * 0.07) + 's';
+            setTimeout(function(){ child.classList.add('vis'); }, 10);
+          });
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal,.reveal-scale,.reveal-left,.reveal-right').forEach(function(el){
+      if(!el.classList.contains('vis')) obs.observe(el);
+    });
+  }
+
+  // Run on DOMContentLoaded and after each nav()
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initRevealObserver, 100); });
+  } else {
+    setTimeout(initRevealObserver, 100);
+  }
+
+  // Re-init reveals after SPA page navigation
+  var origNav = window.nav;
+  if(typeof origNav === 'function' && !origNav.__revealPatched){
+    window.nav = function(){
+      var result = origNav.apply(this, arguments);
+      setTimeout(initRevealObserver, 120);
+      return result;
+    };
+    window.nav.__revealPatched = true;
+  }
 })();
 </script>
  
