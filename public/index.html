@@ -20748,8 +20748,12 @@ async function adminSignIn(e){
     var d=await r.json();
     if(!d.ok) return adminMsg(d.error||'Sign in failed');
     if(d.user.role!=='admin') return adminMsg('This account is not an admin');
+    // Store under the keys bridge.js reads so saves authenticate and publish to the live site.
+    localStorage.setItem('ss_auth_token',d.token);
+    localStorage.setItem('ss_current_user',JSON.stringify(d.user));
     localStorage.setItem('ss-token',d.token);
     localStorage.setItem('ss-user',JSON.stringify(d.user));
+    try{ if(typeof setCurrentUser==='function') setCurrentUser(d.user); }catch(e){}
     document.getElementById('adminGateOverlay').style.display='none';
     adminMsg('Signed in!',true);
     nav('admin');
@@ -20766,8 +20770,12 @@ async function adminSignUp(e){
     var d=await r.json();
     if(!d.ok) return adminMsg(d.error||'Signup failed');
     if(d.user.role!=='admin') return adminMsg('Invalid admin code — account created as guest');
+    // Store under the keys bridge.js reads so saves authenticate and publish to the live site.
+    localStorage.setItem('ss_auth_token',d.token);
+    localStorage.setItem('ss_current_user',JSON.stringify(d.user));
     localStorage.setItem('ss-token',d.token);
     localStorage.setItem('ss-user',JSON.stringify(d.user));
+    try{ if(typeof setCurrentUser==='function') setCurrentUser(d.user); }catch(e){}
     document.getElementById('adminGateOverlay').style.display='none';
     adminMsg('Admin account created!',true);
     nav('admin');
