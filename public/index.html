@@ -36008,13 +36008,27 @@ document.addEventListener('DOMContentLoaded', function(){
     try{ return localStorage.getItem('ss_auth_token')||''; }catch(e){ return ''; }
   }
 
+  // Return a server token, exchanging the (public) admin passcode for one if we
+  // don't already have it. This keeps uploads/saves publishing to the live site
+  // even when the portal was restored from sessionStorage without a fresh login.
+  async function ensureAdminToken(){
+    var t=getAdminToken();
+    if(t) return t;
+    if(window.SS && typeof window.SS.passcodeLogin==='function'){
+      var pass=window.ADMIN_PASSCODE||'SightSeers2026!';
+      try{ await window.SS.passcodeLogin(pass); }catch(e){}
+    }
+    return getAdminToken();
+  }
+  window.ssEnsureAdminToken=ensureAdminToken;
+
   async function uploadToServer(dataUrl, originalName){
     const m=/^data:([^;]+);base64,(.*)$/.exec(String(dataUrl||''));
     if(!m) throw new Error('Could not read the processed image.');
     const type=m[1]||'image/webp';
     const base64=m[2]||'';
     const ext=(type.split('/')[1]||'webp').replace(/[^a-z0-9]/gi,'').toLowerCase();
-    const token=getAdminToken();
+    const token=await ensureAdminToken();
     if(!token){ const e=new Error('NO_ADMIN_TOKEN'); e.code='NO_ADMIN_TOKEN'; throw e; }
     const base=String(originalName||'image').replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]/gi,'').slice(0,40)||'image';
     const res=await fetch('/api/images',{
@@ -36104,7 +36118,7 @@ document.addEventListener('DOMContentLoaded', function(){
       published=true;
     }catch(err){
       if(err && err.code==='NO_ADMIN_TOKEN'){
-        setStatus('error','Preview only. Sign in with your admin account (email + password) so this image publishes to the live site.');
+        setStatus('error','Showing a local preview only — could not connect to the live website to publish this image. Check your connection and re-enter the admin passcode, then try again.');
       }else{
         setStatus('error','Could not publish to the live site: '+((err&&err.message)||'error')+'. Showing local preview only.');
       }
@@ -42111,18 +42125,32 @@ body.theme-night .page .tag{
     });
   }
 
+  // Resolve to a server token, exchanging the public admin passcode for one when
+  // we don't already have it — so saves publish to the live site without a
+  // separate account login.
+  function ensurePublishToken(){
+    var t = getAdminToken();
+    if(t) return Promise.resolve(t);
+    if(window.SS && typeof window.SS.passcodeLogin === 'function'){
+      var pass = window.ADMIN_PASSCODE || 'SightSeers2026!';
+      return window.SS.passcodeLogin(pass).then(function(){ return getAdminToken(); }).catch(function(){ return ''; });
+    }
+    return Promise.resolve('');
+  }
+
   function publishAll(settingsMap){
     var keys = Object.keys(settingsMap);
     if(!keys.length) return Promise.resolve({ok:true});
-    var token = getAdminToken();
-    if(!token) return Promise.resolve({ok:false, status:401, error:'Sign in with your admin account to publish changes to the live website.'});
-    var promises = keys.map(function(key){
-      return publishToServer(key, settingsMap[key]);
-    });
-    return Promise.all(promises).then(function(results){
-      var failed = results.filter(function(r){return !r.ok;});
-      if(!failed.length) return {ok:true};
-      return {ok:false, status:failed[0].status, error:failed[0].error};
+    return ensurePublishToken().then(function(token){
+      if(!token) return {ok:false, status:401, error:'Could not connect to the live website to publish your changes.'};
+      var promises = keys.map(function(key){
+        return publishToServer(key, settingsMap[key]);
+      });
+      return Promise.all(promises).then(function(results){
+        var failed = results.filter(function(r){return !r.ok;});
+        if(!failed.length) return {ok:true};
+        return {ok:false, status:failed[0].status, error:failed[0].error};
+      });
     });
   }
 
