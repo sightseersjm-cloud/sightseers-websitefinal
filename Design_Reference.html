@@ -1870,10 +1870,10 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .admin-btn.secondary:hover,.auth-submit.secondary:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
 .account-auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;border-radius:28px;overflow:hidden;box-shadow:0 20px 50px rgba(12,29,47,.08);border:1px solid rgba(6,58,99,.09)}
 .account-auth-panel{padding:36px 32px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 65%,#fffaf3 100%)}
-.account-auth-visual{position:relative;isolation:isolate;background:radial-gradient(135% 95% at 6% 0%,rgba(239,135,49,.34) 0%,rgba(239,135,49,0) 46%),radial-gradient(130% 100% at 100% 102%,rgba(112,194,87,.30) 0%,rgba(112,194,87,0) 52%),linear-gradient(157deg,#0b5081 0%,#063a63 47%,#04243f 100%);min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
+.account-auth-visual{position:relative;isolation:isolate;background:radial-gradient(135% 95% at 6% 0%,rgba(239,135,49,.34) 0%,rgba(239,135,49,0) 46%),radial-gradient(130% 100% at 100% 102%,rgba(112,194,87,.30) 0%,rgba(112,194,87,0) 52%),linear-gradient(157deg,#0b5081 0%,#063a63 47%,#04243f 100%);min-height:400px;display:flex;flex-direction:column;justify-content:center;padding:30px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
 .account-auth-visual::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(75% 45% at 50% -8%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 70%);pointer-events:none}
 .account-auth-visual::after{content:'';position:absolute;inset:0;z-index:-1;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.05);pointer-events:none}
-.account-auth-badge{position:absolute;top:22px;left:22px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:980px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:.5px solid rgba(255,255,255,.34);color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.account-auth-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:980px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:.5px solid rgba(255,255,255,.34);color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:16px}
 .account-auth-badge i{font-size:10px;color:#ffce6b}
 .account-auth-visual-inner{position:relative;z-index:1;color:#fff}
 .account-auth-visual-inner h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:29px;font-weight:600;letter-spacing:-.026em;margin:0 0 10px;line-height:1.08}
@@ -29527,8 +29527,8 @@ body.theme-night .page .tag{
     });
     var mobNav=document.getElementById('mobNav');
     if(mobNav){
-      mobNav.querySelectorAll('a').forEach(function(link){
-        link.addEventListener('click', function(){ mobNav.classList.remove('open'); });
+      mobNav.querySelectorAll('a:not(.mob-group-toggle)').forEach(function(link){
+        link.addEventListener('click', function(){ mobNav.classList.remove('open');document.body.style.overflow=''; });
       });
     }
     document.querySelectorAll('.discover-jm-filter-row,.stays-country-filters,.stays-type-filters,.tour-filters').forEach(function(row){
@@ -30138,7 +30138,7 @@ body.theme-night .page .tag{
       else openMobileNav();
     };
 
-    nav.querySelectorAll('a').forEach(function(a){
+    nav.querySelectorAll('a:not(.mob-group-toggle)').forEach(function(a){
       a.addEventListener('click', function(){
         setTimeout(closeMobileNav, 50);
       });
