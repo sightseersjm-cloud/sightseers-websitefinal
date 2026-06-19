@@ -29617,6 +29617,129 @@ table{width:100%;max-width:100%}
   .tour-item-shell{margin-top:-14px!important}
 }
 
+/* ======== DEVICE-FRIENDLY RESPONSIVE PATCH ======== */
+@supports(padding:env(safe-area-inset-bottom)){
+  body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  .navbar{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  .footer{padding-bottom:env(safe-area-inset-bottom)}
+  .mob-nav{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+  .wa-btn{bottom:calc(16px + env(safe-area-inset-bottom));right:calc(16px + env(safe-area-inset-right))}
+  .scroll-top{bottom:calc(72px + env(safe-area-inset-bottom));right:calc(16px + env(safe-area-inset-right))}
+  .cart-panel{padding-bottom:env(safe-area-inset-bottom)}
+  .vt-cart-drawer{padding-bottom:env(safe-area-inset-bottom)}
+}
+@media (max-width:1024px){
+  .vt-dash-body{grid-template-columns:1fr!important}
+  .vt-dash-sidebar{border-right:none!important;border-bottom:1px solid rgba(255,255,255,.06);padding:12px 0!important;display:flex!important;flex-direction:row!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch;gap:0}
+  .vt-dash-sidebar-section{display:flex!important;gap:4px!important;padding:0 8px!important;margin-bottom:0!important;flex-shrink:0}
+  .vt-dash-sidebar-label{display:none!important}
+  .vt-dash-sidebar a,.vt-dash-sidebar a[data-view]{padding:8px 14px!important;font-size:11px!important;white-space:nowrap!important;border-radius:8px!important}
+  .vt-dash-sidebar a i{font-size:13px!important;width:auto!important}
+  .vt-dash-sidebar a .badge{margin-left:6px!important}
+  .vt-dash-avatar{display:none!important}
+  .vt-dash-main{padding:16px!important}
+  .vt-dash-header{flex-direction:column!important;align-items:flex-start!important;gap:10px!important}
+  .vt-dash-header-actions{width:100%!important;display:flex!important;overflow-x:auto!important}
+  .vt-dash-stats{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}
+  .vt-live-grid{grid-template-columns:1fr!important}
+  .vt-session-content{grid-template-columns:1fr!important}
+  .vt-session-side{border-left:none!important;border-top:1px solid rgba(255,255,255,.06)!important;max-height:320px!important}
+  .vt-session-video{min-height:220px!important}
+  .vt-guide-table{font-size:12px!important}
+  .vt-guide-table th,.vt-guide-table td{padding:10px 12px!important}
+  .vt-schedule-item{flex-direction:column!important;align-items:flex-start!important;gap:8px!important}
+  .vt-earnings-chart{overflow-x:auto!important}
+  .vt-hotspot-popup{max-width:calc(100vw - 32px)!important}
+  .vt-signup-wrap{max-width:100%!important;padding:0 16px!important}
+  .vt-signup-row{grid-template-columns:1fr!important}
+  .vt-signup-toggle{flex-direction:column!important;gap:4px!important}
+  .vt-hero-sub{font-size:15px!important}
+  .vt-hero-stats{flex-wrap:wrap!important;justify-content:center!important}
+}
+@media (max-width:768px){
+  .policy-table{min-width:auto!important}
+  .policy-table-wrap{overflow-x:visible!important}
+  .policy-table th,.policy-table td{padding:10px 12px!important;font-size:12px!important}
+  .policy-table thead{display:none!important}
+  .policy-table tbody tr{display:grid!important;grid-template-columns:1fr!important;gap:0!important;border:1px solid var(--border)!important;border-radius:12px!important;margin-bottom:10px!important;padding:12px!important;background:#fff}
+  .policy-table tbody td{display:block!important;border:none!important;padding:4px 0!important}
+  .policy-table tbody td::before{content:attr(data-label);display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--navy);margin-bottom:2px}
+  .policy-contact-card{grid-template-columns:1fr!important;text-align:center}
+  .wa-btn{bottom:16px!important;right:16px!important;width:48px!important;height:48px!important}
+  .scroll-top{bottom:72px!important;right:16px!important;width:40px!important;height:40px!important}
+  .vt-toast{left:16px!important;right:16px!important;bottom:16px!important;width:auto!important;text-align:center}
+  .calendar-frame,.booking-calendar-frame{height:520px!important}
+  .calendar-shell{gap:0!important}
+  .account-wrap{padding:0 16px!important}
+  .account-layout{gap:20px!important}
+  .account-card,.account-section-card{padding:20px!important;border-radius:20px!important}
+  .account-auth-visual{display:none!important}
+  .vt-browse-grid{grid-template-columns:1fr!important}
+  .vt-browse-card{flex-direction:column!important}
+  .vt-browse-card-media{width:100%!important;height:180px!important}
+  .vt-hero{padding:80px 16px 50px!important}
+  .vt-hero h1{font-size:clamp(1.8rem,8vw,2.8rem)!important}
+  .vt-hero-sub{font-size:14px!important;max-width:100%!important}
+  .vt-hero-cta{flex-direction:column!important;width:100%!important}
+  .vt-hero-cta>*{width:100%!important;justify-content:center!important}
+  .vt-sec{padding:40px 0!important}
+  .vt-sec .inner,.vt-wrap{padding:0 16px!important}
+  .vt-grid-5{grid-template-columns:repeat(2,1fr)!important;gap:14px!important}
+  .vt-cat-card{padding:20px 14px!important}
+  .vt-steps{grid-template-columns:1fr!important}
+  .vt-step{padding:24px 18px!important}
+  .vt-rev-cards{grid-template-columns:1fr!important}
+  .vt-cta-block{margin:0 16px!important;padding:40px 18px!important;border-radius:20px!important}
+  .vt-devices{gap:16px!important}
+  .vt-device{padding:18px!important;border-radius:16px!important}
+  .vt-pricing-cards{grid-template-columns:1fr!important}
+  .vt-faq-grid{grid-template-columns:1fr!important}
+}
+@media (max-width:480px){
+  .vt-dash-stats{grid-template-columns:1fr!important}
+  .vt-dash-stat strong{font-size:20px!important}
+  .vt-grid-5{grid-template-columns:1fr!important}
+  .vt-cat-card-icon{width:44px!important;height:44px!important;font-size:18px!important}
+  .vt-hero-stat strong{font-size:20px!important}
+  .vt-hero-stats{gap:16px!important}
+  .transfers-hero-card{border-radius:20px!important}
+  .transfers-copy{padding:18px!important}
+  .transfer-card{border-radius:20px!important}
+  .transfer-card-media{height:180px!important}
+  .transfer-note-card{padding:18px!important;border-radius:20px!important}
+  .calendar-frame,.booking-calendar-frame{height:440px!important}
+  .policy-trigger{padding:16px 14px!important;font-size:14px!important;gap:12px!important}
+  .policy-icon{width:32px!important;height:32px!important;min-width:32px!important}
+  .policy-inner{padding:0 14px 18px!important}
+}
+@media (max-width:380px){
+  .logo-image{height:60px!important}
+  .nav-wrap{padding:8px 12px!important;min-height:60px!important}
+  .hero-title{font-size:clamp(1.7rem,10vw,2.4rem)!important}
+  .hero-content{padding:96px 14px 28px!important}
+  .sec-title{font-size:clamp(1.3rem,7vw,1.8rem)!important}
+  .vt-dash-sidebar a,.vt-dash-sidebar a[data-view]{padding:6px 10px!important;font-size:10px!important}
+  .btn-primary,.btn-secondary,.btn-outline{font-size:12px!important;padding:12px 16px!important}
+}
+@media (hover:none) and (pointer:coarse){
+  .tour-card:hover,.stay-card:hover,.transfer-card:hover,.shop-card:hover,.blog-card:hover,.review-card:hover,.partner-item:hover{transform:none!important}
+  .dropdown,.dropdown-nested{display:none!important}
+  .nav-item>a{padding:8px 10px!important}
+  button,a,.btn-primary,.btn-secondary,.btn-outline,[role="button"]{min-height:44px;min-width:44px}
+  input,select,textarea{min-height:44px}
+}
+@media (orientation:landscape) and (max-height:500px){
+  .hero{height:auto!important;min-height:auto!important;padding:80px 16px 24px!important}
+  .hero-content{padding-top:80px!important}
+  .page-hero{height:180px!important}
+  .mob-nav{padding-top:16px!important}
+  .vt-session-video{min-height:180px!important}
+}
+@media (max-width:768px){
+  body.theme-night .policy-table tbody tr{background:#082d48!important;border-color:rgba(255,255,255,.08)!important}
+  body.theme-night .policy-table tbody td::before{color:#a8c4d8!important}
+}
+
 /* ======== TRANSFERS PAGE ======== */
 .transfers-sec{padding:92px 0;background:linear-gradient(180deg,#f7fbff 0%,#ffffff 55%,#fff9f1 100%)}
 .transfers-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
