@@ -270,6 +270,7 @@
         });
       }
     };
+    localStorage.setItem.__ssOriginal = original;
   }
 
   /* ── Token refresh check ──────────── */

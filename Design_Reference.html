@@ -42419,13 +42419,16 @@ body.theme-night .page .tag{
     if(!keys.length) return Promise.resolve({ok:true});
     return ensurePublishToken().then(function(token){
       if(!token) return {ok:false, status:401, error:'Could not connect to the live website to publish your changes.'};
-      var promises = keys.map(function(key){
-        return publishToServer(key, settingsMap[key]);
-      });
-      return Promise.all(promises).then(function(results){
-        var failed = results.filter(function(r){return !r.ok;});
-        if(!failed.length) return {ok:true};
-        return {ok:false, status:failed[0].status, error:failed[0].error};
+      return fetch('/api/settings', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body:JSON.stringify({batch:settingsMap})
+      }).then(function(r){
+        return r.json().catch(function(){return {};}).then(function(d){
+          return {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+        });
+      }).catch(function(){
+        return {ok:false, status:0, error:'network'};
       });
     });
   }
@@ -42510,8 +42513,9 @@ body.theme-night .page .tag{
       if(gallery !== null) _origSet.call(localStorage, 'ss_customer_gallery', JSON.stringify(gallery));
       if(stays !== null) _origSet.call(localStorage, stayKey, JSON.stringify(stays));
 
-      if(typeof window.getToursData === 'function' && typeof window.saveToursData === 'function'){
-        window.saveToursData(window.getToursData());
+      if(typeof window.getToursData === 'function'){
+        var _td = window.getToursData();
+        if(_td) _origSet.call(localStorage, 'ss_master_tours_manager_v1', JSON.stringify(_td));
       }
 
       if(typeof window.loadSiteSettings === 'function') window.siteSettings = window.loadSiteSettings();
