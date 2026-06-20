@@ -117,6 +117,11 @@ module.exports = async function handler(req, res) {
   if (action === 'me') {
     const caller = requireAuth(req, res);
     if (!caller) return;
+    // Passcode-login editors have a synthetic id with no DB record — return
+    // the token payload directly so checkAuth() doesn't wipe the session.
+    if (caller.id === 'admin-passcode') {
+      return res.status(200).json({ ok: true, user: { id: caller.id, email: caller.email, name: caller.name, role: caller.role } });
+    }
     const users = await db.getCollection('users');
     const user = users.find(u => u.id === caller.id);
     if (!user) return res.status(404).json({ error: 'Account not found' });
