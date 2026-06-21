@@ -2077,6 +2077,118 @@ body.account-clean .account-sec{padding-bottom:110px}
 
 .account-dashboard .auth-submit.secondary{padding:12px 18px}
 #p-account .auth-card{overflow:visible;min-height:100%}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN DASHBOARD — Redesigned Portal
+   ══════════════════════════════════════════════════════ */
+.adm-lock-overlay{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:30px;position:relative;overflow:hidden}
+.adm-lock-bg{position:absolute;inset:0;background:linear-gradient(135deg,#063a63 0%,#0a1f3d 40%,#071628 100%);z-index:0}
+.adm-lock-bg::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.15),transparent 70%);filter:blur(60px)}
+.adm-lock-bg::after{content:'';position:absolute;bottom:-30%;left:-15%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(112,194,87,.10),transparent 65%);filter:blur(80px)}
+.adm-lock-card{position:relative;z-index:1;width:100%;max-width:420px;padding:48px 40px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:28px;backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.3)}
+.adm-lock-icon{width:68px;height:68px;margin:0 auto 24px;border-radius:20px;background:linear-gradient(135deg,var(--orange),#f59f47);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;box-shadow:0 12px 30px rgba(239,135,49,.35)}
+.adm-lock-card h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:-.02em;margin:0 0 10px}
+.adm-lock-card>p{font-size:14px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 32px;max-width:340px;margin-left:auto;margin-right:auto}
+.adm-lock-field{display:flex;gap:10px;margin-bottom:16px}
+.adm-lock-input{flex:1;display:flex;align-items:center;gap:12px;padding:0 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:16px;transition:border-color .2s,background .2s}
+.adm-lock-input:focus-within{border-color:rgba(239,135,49,.5);background:rgba(255,255,255,.12)}
+.adm-lock-input i{color:rgba(255,255,255,.35);font-size:14px;flex-shrink:0}
+.adm-lock-input input{flex:1;border:none;background:none;padding:16px 0;font:500 15px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;color:#fff;outline:none}
+.adm-lock-input input::placeholder{color:rgba(255,255,255,.3)}
+.adm-lock-btn{flex-shrink:0;width:52px;height:52px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
+.adm-lock-btn:hover{transform:scale(1.05);box-shadow:0 8px 24px rgba(239,135,49,.4)}
+.adm-lock-btn:active{transform:scale(.95)}
+.adm-lock-overlay .inline-status{color:rgba(255,255,255,.65)}
+.adm-lock-overlay .inline-status.ok{color:#5ee6a0}
+.adm-lock-overlay .inline-status.err{color:#ff6b6b}
+.adm-lock-note{margin-top:28px;font-size:12px;color:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;gap:8px}
+.adm-lock-note i{font-size:11px}
+#adminFormWrap.on~.adm-lock-overlay{display:none!important}
+#adminFormWrap.on~#adminInfoCard{display:none!important}
+#p-admin{background:#f0f2f5}
+#adminFormWrap.on{display:flex!important;flex-direction:column;min-height:100vh}
+.adm-dash{display:flex;flex:1;min-height:0}
+.adm-sidebar{width:260px;flex-shrink:0;position:sticky;top:0;height:100vh;background:linear-gradient(180deg,#0a1628 0%,#0d1f3a 100%);display:flex;flex-direction:column;overflow:hidden;z-index:100;border-right:1px solid rgba(255,255,255,.06)}
+.adm-sb-head{display:flex;align-items:center;justify-content:space-between;padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.adm-sb-brand{display:flex;align-items:center;gap:10px;color:#fff;font-size:15px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;letter-spacing:-.02em}
+.adm-sb-brand i{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--orange),#f59f47);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 12px rgba(239,135,49,.3)}
+.adm-sb-brand small{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-left:2px}
+.adm-sb-close{display:none;background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;padding:6px}
+.adm-sb-nav{flex:1;overflow-y:auto;padding:14px 10px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.adm-sb-nav::-webkit-scrollbar{width:4px}
+.adm-sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.adm-sb-cat{margin-bottom:6px}
+.adm-sb-cat-label{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-sb-cat-label i{font-size:11px;color:rgba(239,135,49,.55);width:16px;text-align:center}
+.adm-sb-link{display:block;padding:8px 10px 8px 34px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);border-radius:8px;cursor:pointer;transition:all .15s;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-sb-link:hover{color:#fff;background:rgba(255,255,255,.07)}
+.adm-sb-link.active{color:#fff;background:rgba(239,135,49,.18);font-weight:600}
+.adm-sb-foot{padding:12px 10px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:2px}
+.adm-sb-action{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;background:none;border:none;color:rgba(255,255,255,.45);font-size:12.5px;font-weight:600;cursor:pointer;border-radius:8px;transition:all .15s;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-sb-action:hover{color:#fff;background:rgba(255,255,255,.07)}
+.adm-sb-action.warn:hover{color:#ff6b6b;background:rgba(255,100,100,.08)}
+.adm-sb-action i{width:16px;text-align:center;font-size:13px}
+.adm-main{flex:1;min-width:0;display:flex;flex-direction:column;background:#f0f2f5}
+.adm-topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 28px;background:rgba(255,255,255,.88);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(0,0,0,.06)}
+.adm-topbar-l{display:flex;align-items:center;gap:14px}
+.adm-topbar-l h1{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:700;color:#1a1a2e;letter-spacing:-.02em;margin:0}
+.adm-menu-toggle{display:none;background:none;border:none;font-size:18px;color:#555;cursor:pointer;padding:6px}
+.adm-topbar-r{display:flex;align-items:center;gap:14px}
+.adm-topbar-r .inline-status{margin:0;font-size:12px}
+.adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-pub-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(239,135,49,.35)}
+.adm-pub-btn:active{transform:scale(.97)}
+.adm-pub-btn i{font-size:14px}
+.adm-body{flex:1;padding:24px 28px 80px}
+.adm-jump-select{display:block;width:100%;max-width:340px;padding:11px 16px;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fff;font:500 13px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;color:#555;margin-bottom:20px;cursor:pointer;outline:none}
+.adm-jump-select:focus{border-color:rgba(239,135,49,.4);box-shadow:0 0 0 3px rgba(239,135,49,.08)}
+#p-admin .admin-sections{display:grid;gap:14px}
+#p-admin .admin-group{border:1px solid rgba(0,0,0,.07);border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+#p-admin .admin-group[open]{box-shadow:0 4px 16px rgba(0,0,0,.06);border-color:rgba(0,0,0,.10)}
+#p-admin .admin-group summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;cursor:pointer;transition:background .15s}
+#p-admin .admin-group summary:hover{background:rgba(0,0,0,.015)}
+#p-admin .admin-group summary::-webkit-details-marker{display:none}
+#p-admin .admin-group summary span{display:block}
+#p-admin .admin-group summary strong{display:block;font-size:14px;font-weight:700;letter-spacing:-.01em;text-transform:none;color:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif}
+#p-admin .admin-group summary small{display:block;margin-top:5px;font-size:12.5px;line-height:1.5;color:#777;font-weight:500}
+#p-admin .admin-group summary i{color:var(--orange);transition:transform .25s;font-size:13px}
+#p-admin .admin-group[open] summary i{transform:rotate(180deg)}
+#p-admin .admin-group-body{padding:2px 22px 24px}
+#p-admin .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#p-admin .field-col label{font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:#555;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+#p-admin .field-col input,#p-admin .field-col textarea,#p-admin .field-col select{padding:13px 15px;border:1px solid rgba(0,0,0,.09);border-radius:12px;background:#fafbfc;font:500 13.5px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;color:#1a1a2e;transition:border-color .2s,box-shadow .2s}
+#p-admin .field-col input:focus,#p-admin .field-col textarea:focus,#p-admin .field-col select:focus{border-color:rgba(239,135,49,.45);background:#fff;box-shadow:0 0 0 3px rgba(239,135,49,.08);transform:none}
+#p-admin .field-col input::placeholder,#p-admin .field-col textarea::placeholder{color:#aaa}
+#p-admin .field-col textarea{min-height:110px;line-height:1.7;resize:vertical}
+#p-admin .admin-upload-box{margin-top:8px;padding:14px;border:1px dashed rgba(0,0,0,.12);border-radius:14px;background:rgba(0,0,0,.015)}
+#p-admin .admin-upload-row input[type="file"]{padding:8px 10px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:#fff;font:500 12px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+#p-admin .admin-image-preview img{border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+#p-admin .admin-size-hint{font-size:11.5px;color:#888}
+#p-admin .admin-size-hint strong{color:#555}
+#adminFormWrap>.admin-signin-banner{margin:12px 28px 0;border-radius:12px}
+#p-admin .admin-fab-save{display:none!important}
+@media(max-width:900px){
+.adm-sidebar{position:fixed;left:0;top:0;height:100vh;width:280px;transform:translateX(-100%);transition:transform .3s ease;z-index:200;box-shadow:none}
+.adm-sidebar.open{transform:translateX(0);box-shadow:24px 0 60px rgba(0,0,0,.3)}
+.adm-sb-close{display:block}
+.adm-menu-toggle{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px}
+.adm-menu-toggle:hover{background:rgba(0,0,0,.05)}
+.adm-body{padding:20px 16px 80px}
+.adm-topbar{padding:10px 16px}
+.adm-pub-btn span{display:none}
+.adm-pub-btn{padding:10px 14px;border-radius:10px}
+#p-admin .form-grid{grid-template-columns:1fr}
+#adminFormWrap>.admin-signin-banner{margin:10px 16px 0}
+.adm-jump-select{max-width:100%}
+}
+@media(max-width:480px){
+.adm-lock-card{padding:36px 24px;border-radius:22px}
+.adm-lock-card h2{font-size:22px}
+.adm-lock-card>p{font-size:13px}
+.adm-lock-field{flex-direction:column}
+.adm-lock-btn{width:100%;height:48px;border-radius:14px}
+}
+
 #p-account .dashboard-shell{position:relative;z-index:2}
 #p-account .dashboard-flow-note{margin-top:4px}
 #p-account .dashboard-head{margin-bottom:10px}
@@ -16404,102 +16516,43 @@ function vtPointAnswer(input){
 </div>
 
 <div class="page" id="p-admin">
-  <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1600&q=85')"><div class="ph-inner"><h1 class="ph-title">Admin Portal</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><span>Admin Portal</span></div></div></div>
-  <section class="admin-sec">
-    <div class="admin-wrap">
-      <div class="admin-grid">
-        <div class="admin-card reveal">
-          <div class="admin-badge"><i class="fas fa-sliders-h"></i>Site Editor</div>
-
-          <div id="adminLockPanel">
-            <div class="field-col full">
-              <label>Admin Passcode</label>
-              <div class="admin-lock-row">
-                <input type="password" id="adminPasscode">
-                <button class="admin-btn" onclick="unlockAdminPortal()"><i class="fas fa-unlock"></i>Unlock</button>
-              </div>
-              
-              <div class="inline-status" id="adminUnlockStatus"></div>
-            </div>
-          </div>
-
-          <div class="admin-form-wrap admin-protected-content" id="adminFormWrap">
-            <div class="admin-toolbar">
-              <div class="field-col full">
-                <label>Jump to Admin Section</label>
-                <select id="adminSectionJump" onchange="jumpAdminSection(this.value)">
-                  <option value="">Select a page section</option>
-                </select>
-                
-              </div>
-            </div>
-            <div id="adminStructuredEditor" class="admin-sections"></div>
-            <div class="admin-actions">
-              <button class="admin-btn" onclick="saveAdminPortal()"><i class="fas fa-floppy-disk"></i>Save Changes</button>
-              <button class="admin-btn secondary" onclick="resetAdminPortal()"><i class="fas fa-rotate-left"></i>Reset to Default</button>
-              <button class="admin-btn secondary" onclick="nav('home');return false;"><i class="fas fa-eye"></i>Preview Home</button>
-            </div>
-            <div class="inline-status" id="adminSaveStatus"></div>
-          </div>
-
-        </div>
-
-        <div class="admin-card reveal admin-protected-content" id="adminInfoCard" style="transition-delay:.1s">
-          <div class="admin-badge"><i class="fas fa-compass"></i>What this portal controls</div>
-          <div class="admin-preview-list admin-preview-structured">
-
-            <div class="admin-preview-category">
-              <div class="admin-preview-cat-head" onclick="this.parentElement.classList.toggle('collapsed')"><i class="fas fa-pen-nib"></i><span>Content &amp; Brand</span><small>8 sections</small><i class="fas fa-chevron-down admin-cat-arrow"></i></div>
-              <div class="admin-preview-cat-body">
-                <div class="admin-preview-item" onclick="jumpAdminSection('global')"><h4>Global Brand &amp; Contact</h4><p>Business name, tagline, phone numbers, email and footer description.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('home')"><h4>Home Page</h4><p>Hero slides, feature cards, about section, Jamaica map, gallery data and motion controls.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('about')"><h4>About Page</h4><p>Story heading, intro copy and the main about image.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('contact')"><h4>Contact Page</h4><p>Page heading, form copy, trip planner intro, submit label and booking note.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('blog')"><h4>Blog Page</h4><p>All blog card images, titles and excerpt text.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('partners')"><h4>Partners Page</h4><p>Partner logos, names, descriptions, links and info band cards.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('account')"><h4>Guest Account Page</h4><p>Account page banner title and hero image.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('adminportal')"><h4>Admin Portal Page</h4><p>Portal banner title and hero image.</p></div>
-              </div>
-            </div>
-
-            <div class="admin-preview-category">
-              <div class="admin-preview-cat-head" onclick="this.parentElement.classList.toggle('collapsed')"><i class="fas fa-suitcase-rolling"></i><span>Packages &amp; Listings</span><small>12 sections</small><i class="fas fa-chevron-down admin-cat-arrow"></i></div>
-              <div class="admin-preview-cat-body">
-                <div class="admin-preview-item" onclick="jumpAdminSection('tours')"><h4>Tours Page</h4><p>Tours and MBA experiences heading and intro copy.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('shop')"><h4>Shop Page</h4><p>Shop overview heading, intro and premium feature block.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('giftcards')"><h4>Gift Cards Page</h4><p>Banner, feature panels, preview card, floating note and spotlight chips.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('discoverjamaica')"><h4>Discover Jamaica Page</h4><p>Parish guide heading, intro and source note.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('destinations')"><h4>Destinations &amp; Landmarks</h4><p>Page heading, intro and landmark detail image.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('booking')"><h4>Booking Page</h4><p>Reservation banner, section title and intro copy.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('passport')"><h4>Passport Renewal</h4><p>Passport banner, form title and intro.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('stays')"><h4>Villas &amp; Vacation Rentals</h4><p>Stays hub banner, country page templates and all listings data.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('customSchoolTours')"><h4>School Tours Package</h4><p>Full school tours section with image, badges, features and all copy.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('customSeniorTours')"><h4>Senior Tours Package</h4><p>Full senior tours section with image, badges, features and all copy.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('transfersPlus')"><h4>Transfers Page</h4><p>Transfer hero, subtitle and package cards with image uploads.</p></div>
-                <div class="admin-preview-item" onclick="jumpAdminSection('yachtPlus')"><h4>Yacht Charters Page</h4><p>Yacht hero, subtitle and charter package cards.</p></div>
-              </div>
-            </div>
-
-            <div class="admin-preview-category">
-              <div class="admin-preview-cat-head" onclick="this.parentElement.classList.toggle('collapsed')"><i class="fas fa-image"></i><span>Images &amp; Media</span><small>2 sections</small><i class="fas fa-chevron-down admin-cat-arrow"></i></div>
-              <div class="admin-preview-cat-body">
-                <div class="admin-preview-item" onclick="jumpAdminSection('gallery')"><h4>Gallery &amp; Memory Album</h4><p>Per-country hero images, photo URLs, labels and the visual album editor.</p></div>
-                <div class="admin-preview-item"><h4>Image Uploads</h4><p>Hero backgrounds, about image, Jamaica island art and section images are available throughout each page section above.</p></div>
-              </div>
-            </div>
-
-            <div class="admin-preview-category">
-              <div class="admin-preview-cat-head" onclick="this.parentElement.classList.toggle('collapsed')"><i class="fas fa-sliders-h"></i><span>Layout &amp; Design</span><small>1 section</small><i class="fas fa-chevron-down admin-cat-arrow"></i></div>
-              <div class="admin-preview-cat-body">
-                <div class="admin-preview-item" onclick="jumpAdminSection('customBuilder')"><h4>Flexible Add-On Builder</h4><p>Add extra website sections or promotional packages without touching code.</p></div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="admin-form-wrap admin-protected-content" id="adminFormWrap">
+<div class="adm-dash">
+<aside class="adm-sidebar" id="adminSidebar">
+<div class="adm-sb-head"><div class="adm-sb-brand"><i class="fas fa-compass"></i><span>SightSeers</span><small>Admin</small></div><button class="adm-sb-close" onclick="document.getElementById('adminSidebar').classList.remove('open')"><i class="fas fa-xmark"></i></button></div>
+<nav class="adm-sb-nav" id="adminSidebarNav"></nav>
+<div class="adm-sb-foot">
+<button onclick="nav('home');return false;" class="adm-sb-action"><i class="fas fa-eye"></i>Preview Site</button>
+<button onclick="resetAdminPortal()" class="adm-sb-action warn"><i class="fas fa-rotate-left"></i>Reset All</button>
+</div>
+</aside>
+<main class="adm-main">
+<header class="adm-topbar">
+<div class="adm-topbar-l"><button class="adm-menu-toggle" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h1>Content Manager</h1></div>
+<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
+</header>
+<div class="adm-body">
+<select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
+<div id="adminStructuredEditor" class="admin-sections"></div>
+</div>
+</main>
+</div>
+</div>
+<div class="admin-protected-content" id="adminInfoCard" style="display:none!important"></div>
+<div id="adminLockPanel" class="adm-lock-overlay">
+<div class="adm-lock-bg"></div>
+<div class="adm-lock-card">
+<div class="adm-lock-icon"><i class="fas fa-shield-halved"></i></div>
+<h2>Admin Portal</h2>
+<p>Enter your passcode to manage the website — content, images, packages, blog and more.</p>
+<div class="adm-lock-field">
+<div class="adm-lock-input"><i class="fas fa-key"></i><input type="password" id="adminPasscode" placeholder="Enter admin passcode" onkeydown="if(event.key==='Enter'){event.preventDefault();unlockAdminPortal();}"></div>
+<button class="adm-lock-btn" onclick="unlockAdminPortal()"><i class="fas fa-arrow-right"></i></button>
+</div>
+<div class="inline-status" id="adminUnlockStatus"></div>
+<div class="adm-lock-note"><i class="fas fa-info-circle"></i> Access via the 5-click footer shortcut</div>
+</div>
+</div>
 </div>
 
 <div class="page" id="p-refund-policy">
@@ -17608,10 +17661,37 @@ function buildStructuredAdminEditor(){
   if(!mount) return;
   mount.innerHTML=ADMIN_SECTION_SCHEMA.map(section=>`<details class="admin-group" id="admin-group-${section.key}" ${section.open?'open':''}><summary><span><strong>${escapeHTML(section.label)}</strong><small>${escapeHTML(section.intro||'')}</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div class="form-grid">${section.fields.map(renderAdminStructuredField).join('')}</div></div></details>`).join('');
   const jump=document.getElementById('adminSectionJump');
-  if(jump){jump.innerHTML='<option value="">Select a page section</option>'+ADMIN_SECTION_SCHEMA.map(section=>`<option value="${section.key}">${escapeHTML(section.label)}</option>`).join('');}
+  if(jump){jump.innerHTML='<option value="">Jump to section…</option>'+ADMIN_SECTION_SCHEMA.map(section=>`<option value="${section.key}">${escapeHTML(section.label)}</option>`).join('');}
+  if(typeof buildAdminSidebarNav==='function') buildAdminSidebarNav();
+}
+function buildAdminSidebarNav(){
+  var nav=document.getElementById('adminSidebarNav');
+  if(!nav) return;
+  var cats=[
+    {label:'Content & Brand',icon:'fa-pen-nib',keys:['global','home','about','contact','blog','partners','account','adminportal']},
+    {label:'Packages & Listings',icon:'fa-suitcase-rolling',keys:['tours','shop','giftcards','discoverjamaica','destinations','booking','passport','stays','customSchoolTours','customSeniorTours','transfersPlus','yachtPlus']},
+    {label:'Images & Media',icon:'fa-image',keys:['gallery']},
+    {label:'Layout & Design',icon:'fa-sliders-h',keys:['customBuilder']}
+  ];
+  var map={};
+  (window.ADMIN_SECTION_SCHEMA||ADMIN_SECTION_SCHEMA||[]).forEach(function(s){map[s.key]=s;});
+  var h='';
+  cats.forEach(function(cat){
+    var items=cat.keys.filter(function(k){return map[k];});
+    if(!items.length) return;
+    h+='<div class="adm-sb-cat"><div class="adm-sb-cat-label"><i class="fas '+cat.icon+'"></i>'+escapeHTML(cat.label)+'</div>';
+    items.forEach(function(k){
+      h+='<a class="adm-sb-link" data-section="'+k+'" onclick="jumpAdminSection(\''+k+'\');if(window.innerWidth<901)document.getElementById(\'adminSidebar\').classList.remove(\'open\')">'+escapeHTML(map[k].label)+'</a>';
+    });
+    h+='</div>';
+  });
+  nav.innerHTML=h;
 }
 function jumpAdminSection(key=''){
   if(!key) return;
+  document.querySelectorAll('.adm-sb-link').forEach(function(el){
+    el.classList.toggle('active',el.getAttribute('data-section')===key);
+  });
   const group=document.getElementById('admin-group-'+key);
   if(!group) return;
   group.open=true;
