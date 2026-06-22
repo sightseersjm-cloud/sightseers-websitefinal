@@ -2134,11 +2134,17 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-topbar-l h1{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:700;color:#1a1a2e;letter-spacing:-.02em;margin:0}
 .adm-menu-toggle{display:none;background:none;border:none;font-size:18px;color:#555;cursor:pointer;padding:6px}
 .adm-topbar-r{display:flex;align-items:center;gap:14px}
-.adm-topbar-r .inline-status{margin:0;font-size:12px}
-.adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-topbar-r .inline-status{margin:0;font-size:12px;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;transition:max-width .4s ease,opacity .4s ease,padding .4s ease;padding:0}
+.adm-topbar-r .inline-status.show{max-width:500px;opacity:1;padding:7px 16px;border-radius:10px;font-weight:600;letter-spacing:-.01em}
+.adm-topbar-r .inline-status.show.ok{background:rgba(34,197,94,.1);color:#16a34a}
+.adm-topbar-r .inline-status.show.err{background:rgba(239,68,68,.1);color:#dc2626}
+.adm-topbar-r .inline-status.show.saving{background:rgba(59,130,246,.1);color:#2563eb}
+.adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
 .adm-pub-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(239,135,49,.35)}
 .adm-pub-btn:active{transform:scale(.97)}
 .adm-pub-btn i{font-size:14px}
+.adm-pub-btn.saved{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 14px rgba(34,197,94,.3)}
+.adm-pub-btn.saving{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 4px 14px rgba(59,130,246,.3);pointer-events:none;opacity:.85}
 .adm-body{flex:1;padding:24px 28px 80px}
 .adm-jump-select{display:block;width:100%;max-width:340px;padding:11px 16px;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fff;font:500 13px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;color:#555;margin-bottom:20px;cursor:pointer;outline:none}
 .adm-jump-select:focus{border-color:rgba(239,135,49,.4);box-shadow:0 0 0 3px rgba(239,135,49,.08)}
@@ -2177,6 +2183,7 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-topbar{padding:10px 16px}
 .adm-pub-btn span{display:none}
 .adm-pub-btn{padding:10px 14px;border-radius:10px}
+.adm-topbar-r .inline-status.show{font-size:11px;padding:6px 12px}
 #p-admin .form-grid{grid-template-columns:1fr}
 #adminFormWrap>.admin-signin-banner{margin:10px 16px 0}
 .adm-jump-select{max-width:100%}
@@ -13367,33 +13374,33 @@ body.theme-night .vt-dash-tab:hover{background:#1a6488;color:#fff}
 body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff}
 
 /* ======== V-TOURS APPLE LIGHT MODE (Day) ======== */
-/* Session */
-body:not(.theme-night) .vt-session{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-body:not(.theme-night) .vt-session-bar{background:var(--navy)}
-body:not(.theme-night) .vt-session-side{background:#f2f2f7;border-color:rgba(0,0,0,.06)}
+/* Session — always dark themed (immersive app mockup) */
+body:not(.theme-night) .vt-session{background:linear-gradient(135deg,rgba(13,27,42,.95),rgba(20,45,68,.92));border-color:rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+body:not(.theme-night) .vt-session-bar{background:linear-gradient(135deg,#1a3a5c,#0d5371)}
+body:not(.theme-night) .vt-session-side{background:rgba(13,27,42,.6);border-color:rgba(255,255,255,.06)}
 body:not(.theme-night) .vt-session-chat{background:transparent}
-body:not(.theme-night) .vt-session-chat-title{color:rgba(60,60,67,.6)}
-body:not(.theme-night) .vt-session-chat-title span{color:rgba(60,60,67,.3)}
-body:not(.theme-night) .vt-session-chat-text{color:#1c1c1e}
-body:not(.theme-night) .vt-session-chat-msg{border-bottom:1px solid rgba(60,60,67,.06)}
-body:not(.theme-night) .vt-session-chat-avatar{background:#e5e5ea;color:rgba(60,60,67,.5)}
-body:not(.theme-night) .vt-session-chat-avatar.guide{background:rgba(239,135,49,.12);color:var(--orange)}
-body:not(.theme-night) .vt-chat-input-wrap{background:#fff;border-color:rgba(60,60,67,.12)}
-body:not(.theme-night) .vt-chat-input{background:#f2f2f7;border-color:rgba(60,60,67,.08);color:#1c1c1e}
+body:not(.theme-night) .vt-session-chat-title{color:rgba(255,255,255,.4)}
+body:not(.theme-night) .vt-session-chat-title span{color:rgba(255,255,255,.4)}
+body:not(.theme-night) .vt-session-chat-text{color:rgba(255,255,255,.65)}
+body:not(.theme-night) .vt-session-chat-msg{border-bottom:none}
+body:not(.theme-night) .vt-session-chat-avatar{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+body:not(.theme-night) .vt-session-chat-avatar.guide{background:rgba(239,135,49,.15);color:var(--orange)}
+body:not(.theme-night) .vt-chat-input-wrap{background:rgba(13,27,42,.8);border-color:rgba(255,255,255,.08)}
+body:not(.theme-night) .vt-chat-input{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff}
 body:not(.theme-night) .vt-chat-send{box-shadow:0 1px 3px rgba(239,135,49,.2)}
-body:not(.theme-night) .vt-session-shop{background:#f2f2f7;border-color:rgba(60,60,67,.06)}
-body:not(.theme-night) .vt-session-shop-title{color:rgba(60,60,67,.5)}
-body:not(.theme-night) .vt-session-shop-item{border-color:rgba(60,60,67,.06)}
-body:not(.theme-night) .vt-session-shop-item-name{color:#1c1c1e}
-body:not(.theme-night) .vt-session-shop-item-price{color:rgba(60,60,67,.5)}
+body:not(.theme-night) .vt-session-shop{background:rgba(13,27,42,.6);border-color:rgba(255,255,255,.06)}
+body:not(.theme-night) .vt-session-shop-title{color:rgba(255,255,255,.4)}
+body:not(.theme-night) .vt-session-shop-item{border-color:rgba(255,255,255,.04)}
+body:not(.theme-night) .vt-session-shop-item-name{color:rgba(255,255,255,.7)}
+body:not(.theme-night) .vt-session-shop-item-price{color:rgba(255,255,255,.5)}
 /* Action buttons */
-body:not(.theme-night) .vt-session-actions{background:#f2f2f7}
-body:not(.theme-night) .vt-session-action{background:#fff;border:1px solid rgba(60,60,67,.06);color:rgba(60,60,67,.6);box-shadow:0 1px 2px rgba(0,0,0,.04)}
-body:not(.theme-night) .vt-session-action::before{background:none}
-body:not(.theme-night) .vt-session-action:hover{background:rgba(239,135,49,.06);border-color:rgba(239,135,49,.15);color:var(--orange);transform:translateY(-2px);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-body:not(.theme-night) .vt-session-action:hover i{color:var(--orange)}
+body:not(.theme-night) .vt-session-actions{background:linear-gradient(135deg,rgba(0,0,0,.25),rgba(0,0,0,.35))}
+body:not(.theme-night) .vt-session-action{background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);box-shadow:0 4px 12px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.06) inset,0 -2px 6px rgba(0,0,0,.2) inset}
+body:not(.theme-night) .vt-session-action::before{background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 50%)}
+body:not(.theme-night) .vt-session-action:hover{background:linear-gradient(145deg,rgba(239,135,49,.25),rgba(239,135,49,.1));border-color:rgba(239,135,49,.3);color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.1) inset}
+body:not(.theme-night) .vt-session-action:hover i{color:#fff}
 body:not(.theme-night) .vt-session-action i{color:var(--orange)}
-body:not(.theme-night) .vt-session-bar-btn.leave{background:#ff3b30;color:#fff}
+body:not(.theme-night) .vt-session-bar-btn.leave{background:rgba(239,68,68,.85);color:#fff}
 /* Dashboard frame */
 body:not(.theme-night) .vt-dash-frame{background:#fff;border-color:rgba(60,60,67,.08);box-shadow:0 1px 4px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.03)}
 body:not(.theme-night) .vt-dash-frame.vt-fullscreen{background:#f2f2f7!important}
@@ -16529,7 +16536,7 @@ function vtPointAnswer(input){
 <main class="adm-main">
 <header class="adm-topbar">
 <div class="adm-topbar-l"><button class="adm-menu-toggle" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h1>Content Manager</h1></div>
-<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
+<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
 </header>
 <div class="adm-body">
 <select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
@@ -20206,18 +20213,22 @@ document.addEventListener('ss-settings-synced',function(){
 document.addEventListener('ss-settings-sync-result',function(ev){
   var d=(ev&&ev.detail)||{};
   if(typeof adminUnlocked==='undefined'||!adminUnlocked) return;
-  var status=document.getElementById('adminSaveStatus');
-  if(!status) return;
+  var el=document.getElementById('adminSaveStatus');
+  if(!el) return;
+  var btn=document.getElementById('adminPubBtn');
   if(d.ok){
-    status.textContent='Published to the live website — your changes are now live for everyone.';
-    status.className='inline-status ok';
+    el.textContent='Published to the live website — your changes are now live for everyone.';
+    el.className='inline-status ok show';
+    if(btn){btn.classList.remove('saving');btn.classList.add('saved');}
   }else if(d.status===401||d.status===403){
-    status.textContent='Saved on THIS browser only. Sign in with your admin account (banner above) to publish to the live website.';
-    status.className='inline-status err';
+    el.textContent='Saved on THIS browser only. Sign in with your admin account (banner above) to publish to the live website.';
+    el.className='inline-status err show';
+    if(btn) btn.classList.remove('saving','saved');
     try{ if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner(); }catch(e){}
   }else{
-    status.textContent='Saved locally, but the live website could not be reached. It will retry the next time you save.';
-    status.className='inline-status err';
+    el.textContent='Saved locally, but the live website could not be reached. It will retry the next time you save.';
+    el.className='inline-status err show';
+    if(btn) btn.classList.remove('saving','saved');
   }
 });
 
@@ -36099,7 +36110,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function setStatus(kind, message){
     const el = document.getElementById(STATUS_ID);
     if(!el) return;
-    el.className = 'inline-status ' + (kind === 'error' ? 'err' : 'ok');
+    el.className = 'inline-status ' + (kind === 'error' ? 'err' : 'ok') + (message ? ' show' : '');
     el.textContent = message;
   }
 
@@ -36288,7 +36299,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function setStatus(kind,message){
     const el=document.getElementById(STATUS_ID);
     if(!el) return;
-    el.className='inline-status ' + (kind==='error' ? 'err' : 'ok');
+    el.className='inline-status ' + (kind==='error' ? 'err' : 'ok') + (message ? ' show' : '');
     el.textContent=message;
   }
 
@@ -36347,6 +36358,7 @@ document.addEventListener('DOMContentLoaded', function(){
     clearTimeout(window.__ssAutoSaveTimer);
     window.__ssAutoSaveTimer=setTimeout(function(){if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();}, delay||500);
   }
+  window.triggerAutoSave=triggerAutoSave;
 
   function getAdminToken(){
     try{ if(window.SS && typeof window.SS.getToken==='function'){ var t=window.SS.getToken(); if(t) return t; } }catch(e){}
@@ -36470,8 +36482,11 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     applyUploadedValue(fileInput, finalValue, targetId);
     if(published){
-      setStatus('ok','Image published to the live site. Saving...');
-      triggerAutoSave(300);
+      setStatus('ok','Image published to the live site. Saving settings...');
+      triggerAutoSave(100);
+      setTimeout(function(){
+        if(typeof window.saveAdminPortal==='function' && window.adminUnlocked) window.saveAdminPortal();
+      }, 600);
     }
     return finalValue;
   }
@@ -42399,7 +42414,7 @@ body.theme-night .page .tag{
   window.__ssAdminPortalCleanFinalRepair = true;
   function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn, {once:true}); else fn(); }
   function q(id){ return document.getElementById(id); }
-  function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:''); el.textContent=msg||''; }
+  function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:'')+(msg?' show':''); el.textContent=msg||''; }
   function isTextLike(el){ if(!el||!el.closest||!el.closest('#adminFormWrap')) return false; if(el.tagName==='TEXTAREA'||el.tagName==='SELECT') return true; if(el.tagName!=='INPUT') return false; return ['text','search','url','tel','email','password','number'].indexOf(String(el.type||'text').toLowerCase())!==-1; }
   function previewField(field){ if(!field||!field.id||!window.PAGE_EDITOR_BINDINGS||!window.PAGE_EDITOR_BINDINGS[field.id]) return; var binding=window.PAGE_EDITOR_BINDINGS[field.id]; var target=document.querySelector(binding.selector); if(!target) return; var value=String(field.value||''); if(binding.mode==='text') target.textContent=value; else if(binding.mode==='bg') target.style.backgroundImage=value?'url("'+value.replace(/"/g,'&quot;')+'")':''; else if(binding.mode==='src') { target.setAttribute('src', value); if(target.tagName==='IMG') target.style.display=''; } else if(binding.mode==='href') target.setAttribute('href', value); }
   function safeVal(id,fallback){ var el=q(id); var val=el?String(el.value||'').trim():''; return val||(fallback||''); }
@@ -42429,8 +42444,24 @@ body.theme-night .page .tag{
     if(unlockTarget && !window.adminUnlocked) el = q('adminUnlockStatus');
     else el = q('adminSaveStatus') || q('adminUnlockStatus');
     if(!el) return;
-    el.className = 'inline-status' + (kind ? ' ' + kind : '');
+    var cls = 'inline-status';
+    if(kind) cls += ' ' + kind;
+    if(msg) cls += ' show';
+    el.className = cls;
     el.textContent = msg || '';
+    var btn = q('adminPubBtn');
+    if(btn){
+      btn.classList.remove('saved','saving');
+      if(kind === 'ok' && /publish|live/i.test(msg)) btn.classList.add('saved');
+      else if(/saving|publishing/i.test(msg)) btn.classList.add('saving');
+    }
+    clearTimeout(window.__ssStatusFadeTimer);
+    if(msg && kind === 'ok' && !/typing|stable|unlock/i.test(msg)){
+      window.__ssStatusFadeTimer = setTimeout(function(){
+        el.classList.remove('show');
+        if(btn) btn.classList.remove('saved','saving');
+      }, 5000);
+    }
   }
   function insideAdminWrap(el){
     return !!(el && el.closest && el.closest('#adminFormWrap'));
@@ -42507,7 +42538,9 @@ body.theme-night .page .tag{
         body:JSON.stringify({batch:settingsMap})
       }).then(function(r){
         return r.json().catch(function(){return {};}).then(function(d){
-          return {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+          var result = {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+          try{ document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {detail:{key:'batch', ok:r.ok, status:r.status, error:(d&&d.error)||''}})); }catch(e){}
+          return result;
         });
       }).catch(function(){
         return {ok:false, status:0, error:'network'};
@@ -42633,8 +42666,10 @@ body.theme-night .page .tag{
         if(dynRaw) serverPayload['ss_dynamic_sections_v1'] = JSON.parse(dynRaw);
       }catch(e){}
 
-      status('Saving and publishing to live website…','ok');
+      window.__ssSaveInFlight = true;
+      status('Publishing to live website…','saving');
       publishAll(serverPayload).then(function(result){
+        window.__ssSaveInFlight = false;
         if(result.ok){
           status('Published — your changes are now live for everyone.','ok');
         }else if(result.status === 401 || result.status === 403){
@@ -42643,7 +42678,7 @@ body.theme-night .page .tag{
         }else{
           status('Saved locally. Could not reach the server — try again in a moment.','err');
         }
-      });
+      }).catch(function(){ window.__ssSaveInFlight = false; status('Save failed — check your connection and try again.','err'); });
 
       return true;
     }catch(err){
@@ -42809,14 +42844,14 @@ body.theme-night .page .tag{
     };
   }
 
-  // After a successful save, hide the fab
+  // After a successful save, hide the fab — wait for the actual publish result
   var origSave = null;
   function patchSave(){
     if(window.saveAdminPortal && !window.saveAdminPortal.__fabPatched){
       origSave = window.saveAdminPortal;
       window.saveAdminPortal = function(){
+        window.__ssSaveInFlight = true;
         var result = origSave.apply(this, arguments);
-        setTimeout(markClean, 800);
         return result;
       };
       window.saveAdminPortal.__fabPatched = true;
@@ -42824,9 +42859,21 @@ body.theme-night .page .tag{
   }
   setTimeout(patchSave, 200);
   setTimeout(patchSave, 1500);
+  document.addEventListener('ss-settings-sync-result', function(ev){
+    var d = (ev && ev.detail) || {};
+    if(d.ok){ markClean(); window.__ssSaveInFlight = false; }
+  });
 
   // Also show on unlock
   document.addEventListener('ss-account-updated', function(){ if(dirty) markDirty(); });
+
+  // Warn if the user tries to close/refresh while a save is in progress
+  window.addEventListener('beforeunload', function(e){
+    if(dirty || window.__ssSaveInFlight){
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   /* ── Upgraded reveal system: IntersectionObserver with stagger ── */
   function initRevealObserver(){
