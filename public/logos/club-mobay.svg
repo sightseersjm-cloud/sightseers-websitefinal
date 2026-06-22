@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <rect width="400" height="200" fill="white"/>
+  <line x1="60" y1="52" x2="340" y2="52" stroke="#c41e2a" stroke-width="2.5"/>
+  <line x1="60" y1="148" x2="340" y2="148" stroke="#c41e2a" stroke-width="2.5"/>
+  <text x="200" y="82" text-anchor="middle" font-family="'Brush Script MT','Segoe Script','Apple Chancery',cursive" font-size="48" fill="#c41e2a" font-style="italic">Club</text>
+  <text x="200" y="132" text-anchor="middle" font-family="'Times New Roman','Georgia',serif" font-size="62" fill="#1a1a1a" font-weight="400" letter-spacing="12">MOBAY</text>
+</svg>
