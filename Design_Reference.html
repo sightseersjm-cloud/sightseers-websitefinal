@@ -633,6 +633,8 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .partner-item:hover::before{transform:rotate(-2deg) translateY(10px);opacity:1}
 .partner-logo{max-height:72px;max-width:190px;object-fit:contain;position:relative;z-index:1;transition:transform .35s,filter .35s,opacity .35s;filter:drop-shadow(0 10px 18px rgba(26,45,75,.08));opacity:1}
 .partner-item:hover .partner-logo{filter:drop-shadow(0 16px 30px rgba(245,121,59,.22));transform:scale(1.08)}
+.partner-dual-logos{display:flex;align-items:center;justify-content:center;gap:14px;position:relative;z-index:1}
+.partner-dual-logos .partner-logo{max-height:56px;max-width:140px}
 .partner-placeholder{width:184px;height:96px;border-radius:22px;background:linear-gradient(135deg,#fff7f1 0%,#ffffff 100%);box-shadow:inset 0 0 0 1px rgba(245,121,59,.18),0 12px 28px rgba(26,45,75,.08);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--navy);letter-spacing:1.2px;text-transform:uppercase;text-align:center;padding:0 18px;position:relative;z-index:1;transition:transform .35s,box-shadow .35s}
 .partner-item:hover .partner-placeholder{transform:scale(1.04);box-shadow:inset 0 0 0 1px rgba(245,121,59,.22),0 16px 30px rgba(26,45,75,.1)}
 .partner-category{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#f7fbff;border:1px solid rgba(6,58,99,.08);font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--navy);position:relative;z-index:1}
@@ -12705,6 +12707,7 @@ body.theme-night .page .tag{
         </a>
 
         <a class="partner-item" href="#" onclick="return false" title="Travwell Society">
+          <img class="partner-logo" src="" alt="Travwell Society" style="display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="partner-placeholder">Travwell Society</div>
           <span class="partner-category"><i class="fas fa-users"></i> Travel Community</span>
           <div class="partner-name">Travwell Society</div>
@@ -12713,6 +12716,10 @@ body.theme-night .page .tag{
         </a>
 
         <a class="partner-item" href="https://wisynco.com/" target="_blank" rel="noopener" title="Wisynco Group — Legend Lager">
+          <div class="partner-dual-logos">
+            <img class="partner-logo partner-logo-a" src="" alt="Wisynco Group" style="display:none" onerror="this.style.display='none'">
+            <img class="partner-logo partner-logo-b" src="" alt="Legend Lager" style="display:none" onerror="this.style.display='none'">
+          </div>
           <div class="partner-placeholder">Wisynco Group</div>
           <span class="partner-category"><i class="fas fa-beer"></i> Beverage Partner</span>
           <div class="partner-name">Wisynco Group — Legend Lager</div>
@@ -17306,6 +17313,19 @@ const PAGE_EDITOR_BINDINGS={
   adminPartner6Name:{selector:'#p-partners .partner-item:nth-child(6) .partner-name',mode:'text'},
   adminPartner6Note:{selector:'#p-partners .partner-item:nth-child(6) .partner-note',mode:'text'},
   adminPartner6Link:{selector:'#p-partners .partner-item:nth-child(6)',mode:'href'},
+  adminPartner7Logo:{selector:'#p-partners .partner-item:nth-child(7) .partner-logo',mode:'src'},
+  adminPartner7Name:{selector:'#p-partners .partner-item:nth-child(7) .partner-name',mode:'text'},
+  adminPartner7Note:{selector:'#p-partners .partner-item:nth-child(7) .partner-note',mode:'text'},
+  adminPartner7Link:{selector:'#p-partners .partner-item:nth-child(7)',mode:'href'},
+  adminPartner8Logo:{selector:'#p-partners .partner-item:nth-child(8) .partner-logo',mode:'src'},
+  adminPartner8Name:{selector:'#p-partners .partner-item:nth-child(8) .partner-name',mode:'text'},
+  adminPartner8Note:{selector:'#p-partners .partner-item:nth-child(8) .partner-note',mode:'text'},
+  adminPartner8Link:{selector:'#p-partners .partner-item:nth-child(8)',mode:'href'},
+  adminPartner9LogoA:{selector:'#p-partners .partner-item:nth-child(9) .partner-logo-a',mode:'src'},
+  adminPartner9LogoB:{selector:'#p-partners .partner-item:nth-child(9) .partner-logo-b',mode:'src'},
+  adminPartner9Name:{selector:'#p-partners .partner-item:nth-child(9) .partner-name',mode:'text'},
+  adminPartner9Note:{selector:'#p-partners .partner-item:nth-child(9) .partner-note',mode:'text'},
+  adminPartner9Link:{selector:'#p-partners .partner-item:nth-child(9)',mode:'href'},
   adminPartnerBand1Title:{selector:'#p-partners .partner-band-card:nth-child(1) strong',mode:'text'},
   adminPartnerBand1Body:{selector:'#p-partners .partner-band-card:nth-child(1) span',mode:'text'},
   adminPartnerBand2Title:{selector:'#p-partners .partner-band-card:nth-child(2) strong',mode:'text'},
@@ -17549,6 +17569,22 @@ const ADMIN_SECTION_SCHEMA=[
     {id:'adminPartner6Name',label:'Partner 6 Name',type:'text'},
     {id:'adminPartner6Note',label:'Partner 6 Note',type:'textarea',full:true},
     {id:'adminPartner6Link',label:'Partner 6 Link',type:'text',full:true},
+    {id:'_partner7_divider',label:'Partner 7 — Viator',type:'divider'},
+    {id:'adminPartner7Logo',label:'Partner 7 Logo',type:'image',full:true,size:'800 × 400 px transparent PNG preferred'},
+    {id:'adminPartner7Name',label:'Partner 7 Name',type:'text'},
+    {id:'adminPartner7Note',label:'Partner 7 Note',type:'textarea',full:true},
+    {id:'adminPartner7Link',label:'Partner 7 Link',type:'text',full:true},
+    {id:'_partner8_divider',label:'Partner 8 — Travwell Society',type:'divider'},
+    {id:'adminPartner8Logo',label:'Partner 8 Logo',type:'image',full:true,size:'800 × 400 px transparent PNG preferred'},
+    {id:'adminPartner8Name',label:'Partner 8 Name',type:'text'},
+    {id:'adminPartner8Note',label:'Partner 8 Note',type:'textarea',full:true},
+    {id:'adminPartner8Link',label:'Partner 8 Link',type:'text',full:true},
+    {id:'_partner9_divider',label:'Partner 9 — Wisynco Group',type:'divider'},
+    {id:'adminPartner9LogoA',label:'Wisynco Logo (Primary)',type:'image',full:true,size:'800 × 400 px transparent PNG preferred'},
+    {id:'adminPartner9LogoB',label:'Wisynco Logo (Secondary — Legend Lager)',type:'image',full:true,size:'800 × 400 px transparent PNG preferred'},
+    {id:'adminPartner9Name',label:'Partner 9 Name',type:'text'},
+    {id:'adminPartner9Note',label:'Partner 9 Note',type:'textarea',full:true},
+    {id:'adminPartner9Link',label:'Partner 9 Link',type:'text',full:true},
     {id:'adminPartnerBand1Title',label:'Partner Band Card 1 Title',type:'text'},
     {id:'adminPartnerBand1Body',label:'Partner Band Card 1 Text',type:'textarea',full:true},
     {id:'adminPartnerBand2Title',label:'Partner Band Card 2 Title',type:'text'},
@@ -17787,7 +17823,8 @@ function applyPageEditorSettings(){
     else if(binding.mode==='src' && value) {
       if(el.tagName==='IMG'){
         el.setAttribute('src', value);
-        const ph=el.parentElement && el.parentElement.querySelector('.partner-placeholder');
+        const item=el.closest('.partner-item');
+        const ph=item && item.querySelector('.partner-placeholder');
         if(ph) ph.style.display='none';
         el.style.display='';
       }
