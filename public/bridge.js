@@ -236,9 +236,10 @@
     fetch('/api/settings', { cache: 'no-store', headers: authHeaders() })
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        var origSet = (localStorage.setItem.__ssOriginal) || localStorage.setItem.bind(localStorage);
         SS_SYNC_KEYS.forEach(function (key) {
           if (data[key]) {
-            try { localStorage.setItem(key, JSON.stringify(data[key])); } catch (e) {}
+            try { origSet.call(localStorage, key, JSON.stringify(data[key])); } catch (e) {}
           }
         });
         document.dispatchEvent(new CustomEvent('ss-settings-synced', { detail: data }));

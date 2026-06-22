@@ -42511,7 +42511,9 @@ body.theme-night .page .tag{
         body:JSON.stringify({batch:settingsMap})
       }).then(function(r){
         return r.json().catch(function(){return {};}).then(function(d){
-          return {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+          var result = {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+          try{ document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {detail:{key:'batch', ok:r.ok, status:r.status, error:(d&&d.error)||''}})); }catch(e){}
+          return result;
         });
       }).catch(function(){
         return {ok:false, status:0, error:'network'};
@@ -42637,8 +42639,10 @@ body.theme-night .page .tag{
         if(dynRaw) serverPayload['ss_dynamic_sections_v1'] = JSON.parse(dynRaw);
       }catch(e){}
 
+      window.__ssSaveInFlight = true;
       status('Saving and publishing to live website…','ok');
       publishAll(serverPayload).then(function(result){
+        window.__ssSaveInFlight = false;
         if(result.ok){
           status('Published — your changes are now live for everyone.','ok');
         }else if(result.status === 401 || result.status === 403){
@@ -42647,7 +42651,7 @@ body.theme-night .page .tag{
         }else{
           status('Saved locally. Could not reach the server — try again in a moment.','err');
         }
-      });
+      }).catch(function(){ window.__ssSaveInFlight = false; });
 
       return true;
     }catch(err){
@@ -42813,14 +42817,14 @@ body.theme-night .page .tag{
     };
   }
 
-  // After a successful save, hide the fab
+  // After a successful save, hide the fab — wait for the actual publish result
   var origSave = null;
   function patchSave(){
     if(window.saveAdminPortal && !window.saveAdminPortal.__fabPatched){
       origSave = window.saveAdminPortal;
       window.saveAdminPortal = function(){
+        window.__ssSaveInFlight = true;
         var result = origSave.apply(this, arguments);
-        setTimeout(markClean, 800);
         return result;
       };
       window.saveAdminPortal.__fabPatched = true;
@@ -42828,9 +42832,21 @@ body.theme-night .page .tag{
   }
   setTimeout(patchSave, 200);
   setTimeout(patchSave, 1500);
+  document.addEventListener('ss-settings-sync-result', function(ev){
+    var d = (ev && ev.detail) || {};
+    if(d.ok){ markClean(); window.__ssSaveInFlight = false; }
+  });
 
   // Also show on unlock
   document.addEventListener('ss-account-updated', function(){ if(dirty) markDirty(); });
+
+  // Warn if the user tries to close/refresh while a save is in progress
+  window.addEventListener('beforeunload', function(e){
+    if(dirty || window.__ssSaveInFlight){
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   /* ── Upgraded reveal system: IntersectionObserver with stagger ── */
   function initRevealObserver(){
