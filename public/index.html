@@ -2136,11 +2136,17 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-topbar-l h1{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:700;color:#1a1a2e;letter-spacing:-.02em;margin:0}
 .adm-menu-toggle{display:none;background:none;border:none;font-size:18px;color:#555;cursor:pointer;padding:6px}
 .adm-topbar-r{display:flex;align-items:center;gap:14px}
-.adm-topbar-r .inline-status{margin:0;font-size:12px}
-.adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-topbar-r .inline-status{margin:0;font-size:12px;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;transition:max-width .4s ease,opacity .4s ease,padding .4s ease;padding:0}
+.adm-topbar-r .inline-status.show{max-width:500px;opacity:1;padding:7px 16px;border-radius:10px;font-weight:600;letter-spacing:-.01em}
+.adm-topbar-r .inline-status.show.ok{background:rgba(34,197,94,.1);color:#16a34a}
+.adm-topbar-r .inline-status.show.err{background:rgba(239,68,68,.1);color:#dc2626}
+.adm-topbar-r .inline-status.show.saving{background:rgba(59,130,246,.1);color:#2563eb}
+.adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
 .adm-pub-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(239,135,49,.35)}
 .adm-pub-btn:active{transform:scale(.97)}
 .adm-pub-btn i{font-size:14px}
+.adm-pub-btn.saved{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 14px rgba(34,197,94,.3)}
+.adm-pub-btn.saving{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 4px 14px rgba(59,130,246,.3);pointer-events:none;opacity:.85}
 .adm-body{flex:1;padding:24px 28px 80px}
 .adm-jump-select{display:block;width:100%;max-width:340px;padding:11px 16px;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fff;font:500 13px -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;color:#555;margin-bottom:20px;cursor:pointer;outline:none}
 .adm-jump-select:focus{border-color:rgba(239,135,49,.4);box-shadow:0 0 0 3px rgba(239,135,49,.08)}
@@ -2179,6 +2185,7 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-topbar{padding:10px 16px}
 .adm-pub-btn span{display:none}
 .adm-pub-btn{padding:10px 14px;border-radius:10px}
+.adm-topbar-r .inline-status.show{font-size:11px;padding:6px 12px}
 #p-admin .form-grid{grid-template-columns:1fr}
 #adminFormWrap>.admin-signin-banner{margin:10px 16px 0}
 .adm-jump-select{max-width:100%}
@@ -16531,7 +16538,7 @@ function vtPointAnswer(input){
 <main class="adm-main">
 <header class="adm-topbar">
 <div class="adm-topbar-l"><button class="adm-menu-toggle" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h1>Content Manager</h1></div>
-<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
+<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
 </header>
 <div class="adm-body">
 <select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
@@ -42435,8 +42442,24 @@ body.theme-night .page .tag{
     if(unlockTarget && !window.adminUnlocked) el = q('adminUnlockStatus');
     else el = q('adminSaveStatus') || q('adminUnlockStatus');
     if(!el) return;
-    el.className = 'inline-status' + (kind ? ' ' + kind : '');
+    var cls = 'inline-status';
+    if(kind) cls += ' ' + kind;
+    if(msg) cls += ' show';
+    el.className = cls;
     el.textContent = msg || '';
+    var btn = q('adminPubBtn');
+    if(btn){
+      btn.classList.remove('saved','saving');
+      if(kind === 'ok' && /publish|live/i.test(msg)) btn.classList.add('saved');
+      else if(/saving|publishing/i.test(msg)) btn.classList.add('saving');
+    }
+    clearTimeout(window.__ssStatusFadeTimer);
+    if(msg && kind === 'ok' && !/typing|stable|unlock/i.test(msg)){
+      window.__ssStatusFadeTimer = setTimeout(function(){
+        el.classList.remove('show');
+        if(btn) btn.classList.remove('saved','saving');
+      }, 5000);
+    }
   }
   function insideAdminWrap(el){
     return !!(el && el.closest && el.closest('#adminFormWrap'));
@@ -42642,7 +42665,7 @@ body.theme-night .page .tag{
       }catch(e){}
 
       window.__ssSaveInFlight = true;
-      status('Saving and publishing to live website…','ok');
+      status('Publishing to live website…','saving');
       publishAll(serverPayload).then(function(result){
         window.__ssSaveInFlight = false;
         if(result.ok){
@@ -42653,7 +42676,7 @@ body.theme-night .page .tag{
         }else{
           status('Saved locally. Could not reach the server — try again in a moment.','err');
         }
-      }).catch(function(){ window.__ssSaveInFlight = false; });
+      }).catch(function(){ window.__ssSaveInFlight = false; status('Save failed — check your connection and try again.','err'); });
 
       return true;
     }catch(err){
