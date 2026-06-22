@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <rect width="400" height="200" fill="white"/>
+  <text x="190" y="120" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',sans-serif" font-size="100" fill="#1a1a1a" font-weight="900" font-style="italic" letter-spacing="-4">vip</text>
+  <circle cx="248" cy="62" r="6" fill="#c41e2a"/>
+  <circle cx="228" cy="50" r="4" fill="#c41e2a"/>
+  <circle cx="268" cy="50" r="4" fill="#c41e2a"/>
+  <circle cx="215" cy="44" r="3" fill="#c41e2a"/>
+  <circle cx="281" cy="44" r="3" fill="#c41e2a"/>
+  <line x1="60" y1="130" x2="340" y2="130" stroke="#c41e2a" stroke-width="2"/>
+  <text x="260" y="155" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="22" fill="#1a1a1a" font-weight="400" letter-spacing="4">ATTRACTIONS</text>
+</svg>
