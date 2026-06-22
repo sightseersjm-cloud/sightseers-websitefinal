@@ -12662,6 +12662,7 @@ body.theme-night .page .tag{
         </a>
 
         <a class="partner-item" href="https://booking.vipattractions.com/affiliate/2749" target="_blank" rel="noopener" title="Club Mobay">
+          <img class="partner-logo" src="" alt="Club Mobay" style="display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="partner-placeholder">Club Mobay</div>
           <span class="partner-category"><i class="fas fa-plane-arrival"></i> Airport Lounge</span>
           <div class="partner-name">Club Mobay</div>
@@ -12679,6 +12680,7 @@ body.theme-night .page .tag{
         </a>
 
         <a class="partner-item" href="https://booking.vipattractions.com/affiliate/2749" target="_blank" rel="noopener" title="Club Kingston">
+          <img class="partner-logo" src="" alt="Club Kingston" style="display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="partner-placeholder">Club Kingston</div>
           <span class="partner-category"><i class="fas fa-plane-departure"></i> Departure Lounge</span>
           <div class="partner-name">Club Kingston</div>
@@ -17224,6 +17226,26 @@ const PAGE_EDITOR_BINDINGS={
   adminAboutStoryTitle:{selector:'#p-about .about-sec .sec-title',mode:'text'},
   adminAboutStoryBody:{selector:'#p-about .about-sec .sec-sub',mode:'text'},
   adminAboutStoryImage:{selector:'#p-about .about-sec .about-img-main',mode:'src'},
+  adminTeam1Image:{selector:'#p-about .team-gloss-card:nth-child(1) .team-gloss-media img',mode:'src'},
+  adminTeam1Tag:{selector:'#p-about .team-gloss-card:nth-child(1) .team-gloss-tag',mode:'text'},
+  adminTeam1Role:{selector:'#p-about .team-gloss-card:nth-child(1) .team-gloss-role',mode:'text'},
+  adminTeam1Title:{selector:'#p-about .team-gloss-card:nth-child(1) h3',mode:'text'},
+  adminTeam1Desc:{selector:'#p-about .team-gloss-card:nth-child(1) .team-gloss-body p',mode:'text'},
+  adminTeam2Image:{selector:'#p-about .team-gloss-card:nth-child(2) .team-gloss-media img',mode:'src'},
+  adminTeam2Tag:{selector:'#p-about .team-gloss-card:nth-child(2) .team-gloss-tag',mode:'text'},
+  adminTeam2Role:{selector:'#p-about .team-gloss-card:nth-child(2) .team-gloss-role',mode:'text'},
+  adminTeam2Title:{selector:'#p-about .team-gloss-card:nth-child(2) h3',mode:'text'},
+  adminTeam2Desc:{selector:'#p-about .team-gloss-card:nth-child(2) .team-gloss-body p',mode:'text'},
+  adminTeam3Image:{selector:'#p-about .team-gloss-card:nth-child(3) .team-gloss-media img',mode:'src'},
+  adminTeam3Tag:{selector:'#p-about .team-gloss-card:nth-child(3) .team-gloss-tag',mode:'text'},
+  adminTeam3Role:{selector:'#p-about .team-gloss-card:nth-child(3) .team-gloss-role',mode:'text'},
+  adminTeam3Title:{selector:'#p-about .team-gloss-card:nth-child(3) h3',mode:'text'},
+  adminTeam3Desc:{selector:'#p-about .team-gloss-card:nth-child(3) .team-gloss-body p',mode:'text'},
+  adminTeam4Image:{selector:'#p-about .team-gloss-card:nth-child(4) .team-gloss-media img',mode:'src'},
+  adminTeam4Tag:{selector:'#p-about .team-gloss-card:nth-child(4) .team-gloss-tag',mode:'text'},
+  adminTeam4Role:{selector:'#p-about .team-gloss-card:nth-child(4) .team-gloss-role',mode:'text'},
+  adminTeam4Title:{selector:'#p-about .team-gloss-card:nth-child(4) h3',mode:'text'},
+  adminTeam4Desc:{selector:'#p-about .team-gloss-card:nth-child(4) .team-gloss-body p',mode:'text'},
   adminBookingHeroTitle:{selector:'#p-booking .ph-title',mode:'text'},
   adminBookingHeroImage:{selector:'#p-booking .page-hero',mode:'bg'},
   adminBookingTitle:{selector:'#p-booking .booking-page .sec-title',mode:'text'},
@@ -17433,6 +17455,30 @@ const ADMIN_SECTION_SCHEMA=[
     {id:'adminAboutStoryTitle',label:'About Story Heading',type:'text',full:true},
     {id:'adminAboutStoryBody',label:'About Story Intro',type:'textarea',full:true},
     {id:'adminAboutStoryImage',label:'About Story Image',type:'image',full:true,size:'1200 × 1400 px portrait'},
+    {id:'_team_divider',label:'Team Member 1 — Guest Concierge',type:'divider'},
+    {id:'adminTeam1Image',label:'Team 1 Photo',type:'image',full:true,size:'900 × 900 px square'},
+    {id:'adminTeam1Tag',label:'Team 1 Tag',type:'text'},
+    {id:'adminTeam1Role',label:'Team 1 Role',type:'text'},
+    {id:'adminTeam1Title',label:'Team 1 Heading',type:'text',full:true},
+    {id:'adminTeam1Desc',label:'Team 1 Description',type:'textarea',full:true},
+    {id:'_team2_divider',label:'Team Member 2 — Destination Curation',type:'divider'},
+    {id:'adminTeam2Image',label:'Team 2 Photo',type:'image',full:true,size:'900 × 900 px square'},
+    {id:'adminTeam2Tag',label:'Team 2 Tag',type:'text'},
+    {id:'adminTeam2Role',label:'Team 2 Role',type:'text'},
+    {id:'adminTeam2Title',label:'Team 2 Heading',type:'text',full:true},
+    {id:'adminTeam2Desc',label:'Team 2 Description',type:'textarea',full:true},
+    {id:'_team3_divider',label:'Team Member 3 — MBA Experiences',type:'divider'},
+    {id:'adminTeam3Image',label:'Team 3 Photo',type:'image',full:true,size:'900 × 900 px square'},
+    {id:'adminTeam3Tag',label:'Team 3 Tag',type:'text'},
+    {id:'adminTeam3Role',label:'Team 3 Role',type:'text'},
+    {id:'adminTeam3Title',label:'Team 3 Heading',type:'text',full:true},
+    {id:'adminTeam3Desc',label:'Team 3 Description',type:'textarea',full:true},
+    {id:'_team4_divider',label:'Team Member 4 — Guest Support',type:'divider'},
+    {id:'adminTeam4Image',label:'Team 4 Photo',type:'image',full:true,size:'900 × 900 px square'},
+    {id:'adminTeam4Tag',label:'Team 4 Tag',type:'text'},
+    {id:'adminTeam4Role',label:'Team 4 Role',type:'text'},
+    {id:'adminTeam4Title',label:'Team 4 Heading',type:'text',full:true},
+    {id:'adminTeam4Desc',label:'Team 4 Description',type:'textarea',full:true},
   ]},
   {key:'booking',label:'Booking Page',intro:'Reservation page banner, intro text and booking form lead copy.',fields:[
     {id:'adminBookingHeroTitle',label:'Booking Banner Title',type:'text',full:true},
@@ -17659,6 +17705,7 @@ function syncAdminMotionIntensity(fieldId, value){
 function renderAdminStructuredField(field){
   const full=field.full?' full':'';
   const help=field.help?``:'';
+  if(field.type==='divider') return `<div class="field-col full" style="border-top:2px solid rgba(6,58,99,.12);padding-top:18px;margin-top:10px"><strong style="font-size:14px;color:var(--navy,#063a63);letter-spacing:.02em">${escapeHTML(field.label)}</strong></div>`;
   if(field.type==='landmark-controls') return renderAdminJamaicaPinEditor(field.id)+help;
   if(field.type==='motion-controls') return renderAdminMotionEditor(field.id)+help;
   if(field.type==='textarea') return `<div class="field-col${full}"><label>${escapeHTML(field.label)}</label><textarea id="${field.id}" ></textarea>${help}</div>`;
