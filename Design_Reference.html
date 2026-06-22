@@ -17800,8 +17800,13 @@ function capturePageEditorDefaults(){
   return defaults;
 }
 function loadPageEditorSettings(){
-  try{return {...pageEditorDefaults,...JSON.parse(localStorage.getItem(PAGE_EDITOR_STORAGE_KEY)||'{}')};}
-  catch(e){return {...pageEditorDefaults};}
+  try{
+    var saved=JSON.parse(localStorage.getItem(PAGE_EDITOR_STORAGE_KEY)||'{}');
+    var merged={};
+    Object.keys(pageEditorDefaults).forEach(function(k){ merged[k]=pageEditorDefaults[k]; });
+    Object.keys(saved).forEach(function(k){ if(saved[k]) merged[k]=saved[k]; });
+    return merged;
+  }catch(e){return Object.assign({},pageEditorDefaults);}
 }
 function applyPageEditorSettings(){
   if(!Object.keys(pageEditorDefaults).length) pageEditorDefaults=capturePageEditorDefaults();
@@ -17809,7 +17814,7 @@ function applyPageEditorSettings(){
   Object.entries(PAGE_EDITOR_BINDINGS).forEach(([id,binding])=>{
     const el=document.querySelector(binding.selector);
     if(!el) return;
-    const value=(pageEditorSettings[id] ?? pageEditorDefaults[id] ?? '').trim();
+    const value=(pageEditorSettings[id] || pageEditorDefaults[id] || '').trim();
     if(binding.mode==='bg' && value) el.style.backgroundImage=`url('${value.replace(/'/g,"%27")}')`;
     else if(binding.mode==='src' && value) {
       if(el.tagName==='IMG'){
@@ -20152,7 +20157,7 @@ function populateAdminForms(){
   set('adminSpecialBody',siteSettings.specialBody);
   if(!Object.keys(pageEditorDefaults).length) pageEditorDefaults=capturePageEditorDefaults();
   pageEditorSettings=loadPageEditorSettings();
-  Object.keys(PAGE_EDITOR_BINDINGS).forEach(id=>set(id,pageEditorSettings[id] ?? pageEditorDefaults[id] ?? ''));
+  Object.keys(PAGE_EDITOR_BINDINGS).forEach(id=>set(id,pageEditorSettings[id] || pageEditorDefaults[id] || ''));
   set('adminStaysHubLead', stayPageSettings.hubLead || DEFAULT_STAY_PAGE_SETTINGS.hubLead);
   set('adminStayCountryLeadTemplate', stayPageSettings.countryLeadTemplate || DEFAULT_STAY_PAGE_SETTINGS.countryLeadTemplate);
   set('adminStayCountryDescriptions', stayPageSettings.countryDescriptions || '');
@@ -36423,7 +36428,13 @@ document.addEventListener('DOMContentLoaded', function(){
       const binding=window.PAGE_EDITOR_BINDINGS[field.id];
       const target=document.querySelector(binding.selector);
       if(target){
-        if(binding.mode==='src') target.src=value;
+        if(binding.mode==='src'){
+          target.src=value;
+          if(target.tagName==='IMG') target.style.display='';
+          var phItem=target.closest('.partner-item');
+          var ph=phItem&&phItem.querySelector('.partner-placeholder');
+          if(ph) ph.style.display='none';
+        }
         if(binding.mode==='bg') target.style.backgroundImage='url("'+String(value).replace(/"/g,'\"')+'")';
       }
     }
@@ -42493,7 +42504,7 @@ body.theme-night .page .tag{
   function q(id){ return document.getElementById(id); }
   function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:'')+(msg?' show':''); el.textContent=msg||''; }
   function isTextLike(el){ if(!el||!el.closest||!el.closest('#adminFormWrap')) return false; if(el.tagName==='TEXTAREA'||el.tagName==='SELECT') return true; if(el.tagName!=='INPUT') return false; return ['text','search','url','tel','email','password','number'].indexOf(String(el.type||'text').toLowerCase())!==-1; }
-  function previewField(field){ if(!field||!field.id||!window.PAGE_EDITOR_BINDINGS||!window.PAGE_EDITOR_BINDINGS[field.id]) return; var binding=window.PAGE_EDITOR_BINDINGS[field.id]; var target=document.querySelector(binding.selector); if(!target) return; var value=String(field.value||''); if(binding.mode==='text') target.textContent=value; else if(binding.mode==='bg') target.style.backgroundImage=value?'url("'+value.replace(/"/g,'&quot;')+'")':''; else if(binding.mode==='src') { target.setAttribute('src', value); if(target.tagName==='IMG') target.style.display=''; } else if(binding.mode==='href') target.setAttribute('href', value); }
+  function previewField(field){ if(!field||!field.id||!window.PAGE_EDITOR_BINDINGS||!window.PAGE_EDITOR_BINDINGS[field.id]) return; var binding=window.PAGE_EDITOR_BINDINGS[field.id]; var target=document.querySelector(binding.selector); if(!target) return; var value=String(field.value||''); if(binding.mode==='text') target.textContent=value; else if(binding.mode==='bg') target.style.backgroundImage=value?'url("'+value.replace(/"/g,'&quot;')+'")':''; else if(binding.mode==='src') { target.setAttribute('src', value); if(target.tagName==='IMG') target.style.display=''; var phi2=target.closest('.partner-item'); var phd2=phi2&&phi2.querySelector('.partner-placeholder'); if(phd2&&value) phd2.style.display='none'; } else if(binding.mode==='href') target.setAttribute('href', value); }
   function safeVal(id,fallback){ var el=q(id); var val=el?String(el.value||'').trim():''; return val||(fallback||''); }
   function saveClean(){ if(!window.adminUnlocked){ status('Enter the admin passcode before saving.','err'); return; } try{ var d=window.DEFAULT_SITE_SETTINGS||{}; var site=Object.assign({}, d, window.siteSettings||{}, {brandName:safeVal('adminBrandName',d.brandName),tagline:safeVal('adminTagline',d.tagline),phone1:safeVal('adminPhone1',d.phone1),phone2:safeVal('adminPhone2',d.phone2),email:safeVal('adminEmail',d.email),heroEyebrow:safeVal('adminHeroEyebrow',d.heroEyebrow),heroTitle:safeVal('adminHeroTitle',d.heroTitle),heroEm:safeVal('adminHeroEm',d.heroEm),heroSub:safeVal('adminHeroSub',d.heroSub),aboutTitle:safeVal('adminAboutTitle',d.aboutTitle),aboutBody:safeVal('adminAboutBody',d.aboutBody),customerTitle:safeVal('adminCustomerTitle',d.customerTitle),customerSub:safeVal('adminCustomerSub',d.customerSub),heroImg1:safeVal('adminHeroImg1',d.heroImg1),heroImg2:safeVal('adminHeroImg2',d.heroImg2),heroImg3:safeVal('adminHeroImg3',d.heroImg3),aboutImage:safeVal('adminAboutImage',d.aboutImage),jamaicaImage:safeVal('adminJamaicaImage',d.jamaicaImage),jamaicaPins:safeVal('adminJamaicaPins',''),jamaicaPopupMode:q('adminJamaicaPopupMode')&&q('adminJamaicaPopupMode').value==='always'?'always':'click',tropicalMotionIntensity:safeVal('adminTropicalMotionIntensity','100'),specialKicker:safeVal('adminSpecialKicker',d.specialKicker),specialTitle:safeVal('adminSpecialTitle',d.specialTitle),specialBody:safeVal('adminSpecialBody',d.specialBody)}); localStorage.setItem('ss_site_settings', JSON.stringify(site)); var prevPe2={}; try{ prevPe2=JSON.parse(localStorage.getItem(window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings')||'{}'); }catch(e){} var pe={}; var bindings=window.PAGE_EDITOR_BINDINGS||{}; Object.keys(bindings).forEach(function(id){ var el=q(id); var val=el?String(el.value||'').trim():''; pe[id]=val||prevPe2[id]||''; }); localStorage.setItem(window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings', JSON.stringify(pe)); if(typeof window.parseGalleryTextarea==='function') localStorage.setItem('ss_customer_gallery', JSON.stringify(window.parseGalleryTextarea((q('adminGalleryData')||{}).value||''))); if(typeof window.parseStayListingsTextarea==='function'){ var sd=window.DEFAULT_STAY_PAGE_SETTINGS||{}; localStorage.setItem(window.STAY_ADMIN_STORAGE_KEY||'ss_stay_page_settings', JSON.stringify({hubLead:safeVal('adminStaysHubLead',sd.hubLead),countryHeroTitle:safeVal('adminStayCountryPrefix',sd.countryHeroTitle),countryLeadTemplate:safeVal('adminStayCountryLeadTemplate',sd.countryLeadTemplate),countryDescriptions:safeVal('adminStayCountryDescriptions',''),listings:window.parseStayListingsTextarea((q('adminStayListingsData')||{}).value||'')})); } if(typeof window.loadSiteSettings==='function') window.siteSettings=window.loadSiteSettings(); if(typeof window.loadCustomerGallery==='function') window.customerGalleryData=window.loadCustomerGallery(); if(typeof window.loadPageEditorSettings==='function') window.pageEditorSettings=window.loadPageEditorSettings(); if(typeof window.loadStayPageSettings==='function') window.stayPageSettings=window.loadStayPageSettings(); if(typeof window.applySiteSettings==='function') window.applySiteSettings(); if(typeof window.applyPageEditorSettings==='function') window.applyPageEditorSettings(); if(typeof window.renderStays==='function') window.renderStays(); if(typeof window.renderStayCountryPage==='function') window.renderStayCountryPage(); if(typeof window.renderAdminPackageManager==='function') window.renderAdminPackageManager(); if(typeof window.renderAdminBlogRequests==='function') window.renderAdminBlogRequests(); status('Saved. The admin portal is now using the repaired save flow.','ok'); }catch(err){ console.error('Clean save failed',err); status('Save failed because of a script error.','err'); } }
   function unlockClean(){ var input=q('adminPasscode'); var pass=input?input.value:''; if(pass===window.ADMIN_PASSCODE){ window.adminUnlocked=true; try{sessionStorage.setItem('ss_admin_unlocked','1');}catch(e){} var wrap=q('adminFormWrap'); if(wrap) wrap.classList.add('on'); document.querySelectorAll('.admin-protected-content').forEach(function(el){ el.classList.add('on'); }); if(input) input.value=''; status('Portal unlocked. Typing and save flow repaired.','ok'); } else { window.adminUnlocked=false; try{sessionStorage.removeItem('ss_admin_unlocked');}catch(e){} if(input) input.value=''; status('That passcode did not match the admin key.','err'); } }
@@ -42566,7 +42577,7 @@ body.theme-night .page .tag{
       var value = String(field.value || '');
       if(binding.mode === 'text') target.textContent = value;
       else if(binding.mode === 'bg') target.style.backgroundImage = value ? 'url("' + value.replace(/"/g,'&quot;') + '")' : '';
-      else if(binding.mode === 'src'){ target.setAttribute('src', value); if(target.tagName === 'IMG') target.style.display = ''; }
+      else if(binding.mode === 'src'){ target.setAttribute('src', value); if(target.tagName === 'IMG') target.style.display = ''; var phi=target.closest('.partner-item'); var phd=phi&&phi.querySelector('.partner-placeholder'); if(phd&&value) phd.style.display='none'; }
       else if(binding.mode === 'href') target.setAttribute('href', value);
     }catch(err){}
   }
@@ -42673,7 +42684,6 @@ body.theme-night .page .tag{
         specialBody:safeVal('adminSpecialBody', d.specialBody)
       });
 
-      var peKey = window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings';
       var peKey = window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings';
       var prevPe = {};
       try{ prevPe = JSON.parse(localStorage.getItem(peKey) || '{}'); }catch(e){}

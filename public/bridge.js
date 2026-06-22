@@ -239,7 +239,17 @@
         var origSet = (localStorage.setItem.__ssOriginal) || localStorage.setItem.bind(localStorage);
         SS_SYNC_KEYS.forEach(function (key) {
           if (data[key]) {
-            try { origSet.call(localStorage, key, JSON.stringify(data[key])); } catch (e) {}
+            var incoming = data[key];
+            if (key === 'ss_page_editor_settings' && typeof incoming === 'object') {
+              var existing = {};
+              try { existing = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+              Object.keys(incoming).forEach(function(k) {
+                if (incoming[k]) existing[k] = incoming[k];
+              });
+              try { origSet.call(localStorage, key, JSON.stringify(existing)); } catch (e) {}
+            } else {
+              try { origSet.call(localStorage, key, JSON.stringify(incoming)); } catch (e) {}
+            }
           }
         });
         document.dispatchEvent(new CustomEvent('ss-settings-synced', { detail: data }));
