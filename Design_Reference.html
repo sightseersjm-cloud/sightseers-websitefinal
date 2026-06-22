@@ -20213,18 +20213,22 @@ document.addEventListener('ss-settings-synced',function(){
 document.addEventListener('ss-settings-sync-result',function(ev){
   var d=(ev&&ev.detail)||{};
   if(typeof adminUnlocked==='undefined'||!adminUnlocked) return;
-  var status=document.getElementById('adminSaveStatus');
-  if(!status) return;
+  var el=document.getElementById('adminSaveStatus');
+  if(!el) return;
+  var btn=document.getElementById('adminPubBtn');
   if(d.ok){
-    status.textContent='Published to the live website — your changes are now live for everyone.';
-    status.className='inline-status ok';
+    el.textContent='Published to the live website — your changes are now live for everyone.';
+    el.className='inline-status ok show';
+    if(btn){btn.classList.remove('saving');btn.classList.add('saved');}
   }else if(d.status===401||d.status===403){
-    status.textContent='Saved on THIS browser only. Sign in with your admin account (banner above) to publish to the live website.';
-    status.className='inline-status err';
+    el.textContent='Saved on THIS browser only. Sign in with your admin account (banner above) to publish to the live website.';
+    el.className='inline-status err show';
+    if(btn) btn.classList.remove('saving','saved');
     try{ if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner(); }catch(e){}
   }else{
-    status.textContent='Saved locally, but the live website could not be reached. It will retry the next time you save.';
-    status.className='inline-status err';
+    el.textContent='Saved locally, but the live website could not be reached. It will retry the next time you save.';
+    el.className='inline-status err show';
+    if(btn) btn.classList.remove('saving','saved');
   }
 });
 
@@ -36106,7 +36110,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function setStatus(kind, message){
     const el = document.getElementById(STATUS_ID);
     if(!el) return;
-    el.className = 'inline-status ' + (kind === 'error' ? 'err' : 'ok');
+    el.className = 'inline-status ' + (kind === 'error' ? 'err' : 'ok') + (message ? ' show' : '');
     el.textContent = message;
   }
 
@@ -36295,7 +36299,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function setStatus(kind,message){
     const el=document.getElementById(STATUS_ID);
     if(!el) return;
-    el.className='inline-status ' + (kind==='error' ? 'err' : 'ok');
+    el.className='inline-status ' + (kind==='error' ? 'err' : 'ok') + (message ? ' show' : '');
     el.textContent=message;
   }
 
@@ -42410,7 +42414,7 @@ body.theme-night .page .tag{
   window.__ssAdminPortalCleanFinalRepair = true;
   function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn, {once:true}); else fn(); }
   function q(id){ return document.getElementById(id); }
-  function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:''); el.textContent=msg||''; }
+  function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:'')+(msg?' show':''); el.textContent=msg||''; }
   function isTextLike(el){ if(!el||!el.closest||!el.closest('#adminFormWrap')) return false; if(el.tagName==='TEXTAREA'||el.tagName==='SELECT') return true; if(el.tagName!=='INPUT') return false; return ['text','search','url','tel','email','password','number'].indexOf(String(el.type||'text').toLowerCase())!==-1; }
   function previewField(field){ if(!field||!field.id||!window.PAGE_EDITOR_BINDINGS||!window.PAGE_EDITOR_BINDINGS[field.id]) return; var binding=window.PAGE_EDITOR_BINDINGS[field.id]; var target=document.querySelector(binding.selector); if(!target) return; var value=String(field.value||''); if(binding.mode==='text') target.textContent=value; else if(binding.mode==='bg') target.style.backgroundImage=value?'url("'+value.replace(/"/g,'&quot;')+'")':''; else if(binding.mode==='src') { target.setAttribute('src', value); if(target.tagName==='IMG') target.style.display=''; } else if(binding.mode==='href') target.setAttribute('href', value); }
   function safeVal(id,fallback){ var el=q(id); var val=el?String(el.value||'').trim():''; return val||(fallback||''); }
