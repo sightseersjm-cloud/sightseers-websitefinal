@@ -42791,10 +42791,36 @@ body.theme-night .page .tag{
     }
   }
 
+  var IDLE_TIMEOUT = 5 * 60 * 1000;
+  var idleTimer = null;
+  function resetIdleTimer(){
+    clearTimeout(idleTimer);
+    if(!window.adminUnlocked) return;
+    idleTimer = setTimeout(lockFromIdle, IDLE_TIMEOUT);
+  }
+  function lockFromIdle(){
+    if(!window.adminUnlocked) return;
+    if(window.__ssSaveInFlight){
+      idleTimer = setTimeout(lockFromIdle, 10000);
+      return;
+    }
+    window.adminUnlocked = false;
+    try{ sessionStorage.removeItem('ss_admin_unlocked'); }catch(e){}
+    applyUnlockedState(false);
+    status('Session locked due to inactivity. Enter the passcode to continue.','err',true);
+  }
+  function startIdleWatch(){
+    ['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(function(evt){
+      document.addEventListener(evt, resetIdleTimer, {passive:true,capture:true});
+    });
+    resetIdleTimer();
+  }
+
   ready(function(){
     repairButtonsAndState();
     bindTypingShield();
     suppressDocumentLevelAdminNoise();
+    startIdleWatch();
     setTimeout(function(){
       repairButtonsAndState();
       bindTypingShield();
