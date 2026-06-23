@@ -17113,18 +17113,6 @@ function vtPointAnswer(input){
   </div>
 </footer>
 
-<!-- Hidden Admin Portal -->
-<div id="adminGateOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;justify-content:center;align-items:center" onclick="if(event.target===this)this.style.display='none'">
-  <div style="background:#fff;border-radius:20px;padding:36px 28px;max-width:340px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)">
-    <span onclick="document.getElementById('adminGateOverlay').style.display='none'" style="position:absolute;top:14px;right:18px;font-size:22px;cursor:pointer;color:#888">&times;</span>
-    <div style="text-align:center;margin-bottom:18px"><i class="fas fa-lock" style="font-size:28px;color:var(--navy)"></i></div>
-    <h3 style="margin:0 0 6px;color:var(--navy);font-size:1.3rem;text-align:center">Admin Access</h3>
-    <p style="margin:0 0 20px;color:#888;font-size:13px;text-align:center">Enter passcode to continue</p>
-    <input type="password" id="adm-gate-pass" placeholder="Passcode" style="width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:12px;font-size:15px;margin-bottom:14px;box-sizing:border-box;text-align:center;letter-spacing:2px" onkeydown="if(event.key==='Enter'){event.preventDefault();adminGateUnlock()}">
-    <button onclick="adminGateUnlock()" style="width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer"><i class="fas fa-unlock" style="margin-right:8px"></i>Unlock</button>
-    <p id="adminGateMsg" style="margin:12px 0 0;font-size:13px;text-align:center;color:#c0392b;display:none"></p>
-  </div>
-</div>
 
 <div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></div>
 
@@ -21028,93 +21016,10 @@ function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.c
     timer=setTimeout(function(){taps=0},2000);
     if(taps>=5){
       taps=0;
-      document.getElementById('adminGateOverlay').style.display='flex';
-      setTimeout(function(){var f=document.getElementById('adm-gate-pass');if(f)f.focus();},200);
+      nav('admin');
     }
   });
 })();
-function adminGateUnlock(){
-  var input=document.getElementById('adm-gate-pass');
-  var msg=document.getElementById('adminGateMsg');
-  if(!input) return;
-  var pass=input.value.trim();
-  var valid=window.ADMIN_PASSCODE||'SightSeers2026!';
-  if(pass===valid){
-    window.adminUnlocked=true;
-    try{sessionStorage.setItem('ss_admin_unlocked','1')}catch(e){}
-    document.getElementById('adminGateOverlay').style.display='none';
-    input.value='';
-    if(msg){msg.style.display='none';}
-    nav('admin');
-    setTimeout(function(){
-      var wrp=document.getElementById('adminFormWrap');
-      if(wrp) wrp.classList.add('on');
-      document.querySelectorAll('.admin-protected-content').forEach(function(b){b.classList.add('on')});
-    },300);
-    // Exchange passcode for a server token so saves/uploads publish to the live site
-    if(window.SS&&typeof window.SS.passcodeLogin==='function'){
-      window.SS.passcodeLogin(pass||valid).then(function(){
-        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
-      }).catch(function(){});
-    }
-  }else{
-    if(msg){msg.textContent='Incorrect passcode';msg.style.color='#c0392b';msg.style.display='block';}
-    input.value='';
-    input.focus();
-  }
-}
-function showAdminTab(tab){
-  document.getElementById('adminSigninForm').style.display=tab==='signin'?'block':'none';
-  document.getElementById('adminSignupForm').style.display=tab==='signup'?'block':'none';
-  document.getElementById('adminTabSignin').style.background=tab==='signin'?'var(--navy)':'#f5f5f5';
-  document.getElementById('adminTabSignin').style.color=tab==='signin'?'#fff':'#666';
-  document.getElementById('adminTabSignup').style.background=tab==='signup'?'var(--navy)':'#f5f5f5';
-  document.getElementById('adminTabSignup').style.color=tab==='signup'?'#fff':'#666';
-  document.getElementById('adminGateMsg').style.display='none';
-}
-function adminMsg(txt,ok){var m=document.getElementById('adminGateMsg');m.textContent=txt;m.style.color=ok?'#27ae60':'#c0392b';m.style.display='block';}
-async function adminSignIn(e){
-  e.preventDefault();
-  var email=document.getElementById('adm-si-email').value;
-  var pass=document.getElementById('adm-si-pass').value;
-  try{
-    var r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signin',email:email,password:pass})});
-    var d=await r.json();
-    if(!d.ok) return adminMsg(d.error||'Sign in failed');
-    if(d.user.role!=='admin') return adminMsg('This account is not an admin');
-    // Store under the keys bridge.js reads so saves authenticate and publish to the live site.
-    localStorage.setItem('ss_auth_token',d.token);
-    localStorage.setItem('ss_current_user',JSON.stringify(d.user));
-    localStorage.setItem('ss-token',d.token);
-    localStorage.setItem('ss-user',JSON.stringify(d.user));
-    try{ if(typeof setCurrentUser==='function') setCurrentUser(d.user); }catch(e){}
-    document.getElementById('adminGateOverlay').style.display='none';
-    adminMsg('Signed in!',true);
-    nav('admin');
-  }catch(err){adminMsg('Connection error');}
-}
-async function adminSignUp(e){
-  e.preventDefault();
-  var name=document.getElementById('adm-su-name').value;
-  var email=document.getElementById('adm-su-email').value;
-  var pass=document.getElementById('adm-su-pass').value;
-  var code=document.getElementById('adm-su-code').value;
-  try{
-    var r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signup',name:name,email:email,password:pass,adminCode:code})});
-    var d=await r.json();
-    if(!d.ok) return adminMsg(d.error||'Signup failed');
-    if(d.user.role!=='admin') return adminMsg('Invalid admin code — account created as guest');
-    // Store under the keys bridge.js reads so saves authenticate and publish to the live site.
-    localStorage.setItem('ss_auth_token',d.token);
-    localStorage.setItem('ss_current_user',JSON.stringify(d.user));
-    localStorage.setItem('ss-token',d.token);
-    localStorage.setItem('ss-user',JSON.stringify(d.user));
-    try{ if(typeof setCurrentUser==='function') setCurrentUser(d.user); }catch(e){}
-    document.getElementById('adminGateOverlay').style.display='none';
-    adminMsg('Admin account created!',true);
-    nav('admin');
-  }catch(err){adminMsg('Connection error');}
-}
 
 /* ── BOOKING FORM ────────────────── */
 function getTripPlannerSummary(){
