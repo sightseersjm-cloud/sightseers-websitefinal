@@ -42999,8 +42999,10 @@ body.theme-night .page .tag{
 
 <!-- ═══════ COMPREHENSIVE FIX: FOOTER + MOBILE RESPONSIVE + CHECKOUT ═══════ -->
 <style id="ss-comprehensive-fix-2026">
-/* ── Footer visible on all pages ── */
-.footer{padding-top:48px!important}
+/* ── Sticky footer: always flush to bottom of viewport ── */
+body{display:flex!important;flex-direction:column!important;min-height:100vh!important}
+.page.on{flex-shrink:0}
+.page.on~.footer,.footer{margin-top:auto!important;padding-top:48px!important}
 .newsletter+.footer{padding-top:0!important}
 
 /* ── Mobile responsive fixes ── */
