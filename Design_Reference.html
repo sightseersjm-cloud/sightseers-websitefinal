@@ -20523,7 +20523,11 @@ function logoutGuest(){
   setCurrentUser(null);
 }
 function updateAccountUI(){
-  const user=getCurrentUser();
+  let user=getCurrentUser();
+  if(user && window.SS && !window.SS.getToken()){
+    setCurrentUser(null);
+    user=null;
+  }
   const guestView=document.getElementById('accountGuestView');
   const dashboard=document.getElementById('accountDashboard');
   const accountIcon=document.getElementById('n-account');
@@ -21713,6 +21717,7 @@ if(document.readyState==='loading'){
 }else{
   bootSightSeersSite();
 }
+document.addEventListener('ss-account-updated', function(){ try{updateAccountUI();}catch(e){} });
 
 </script>
 <style id="vt-2040-features">
@@ -42999,11 +43004,10 @@ body.theme-night .page .tag{
 
 <!-- ═══════ COMPREHENSIVE FIX: FOOTER + MOBILE RESPONSIVE + CHECKOUT ═══════ -->
 <style id="ss-comprehensive-fix-2026">
-/* ── Sticky footer: always flush to bottom of viewport ── */
-body{display:flex!important;flex-direction:column!important;min-height:100vh!important}
-.page.on{flex-shrink:0}
-.page.on~.footer,.footer{margin-top:auto!important;padding-top:48px!important}
-.newsletter+.footer{padding-top:0!important}
+/* ── Footer flush after content, no blank gap ── */
+html{background:#082d48!important}
+.page.on~.footer,.footer{margin-top:0!important;padding-top:0!important}
+.newsletter+.footer{padding-top:0!important;margin-top:-1px!important}
 
 /* ── Mobile responsive fixes ── */
 @media(max-width:768px){
