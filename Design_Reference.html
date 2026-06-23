@@ -9995,7 +9995,7 @@ body.theme-night .page .tag{
 <div class="jm3d-stage-outer reveal" style="width:100%;margin:0;padding:0">
     <div class="jm3d-stage" id="jm3dStage">
       <div class="jm3d-island-wrap">
-        <img class="jm3d-island-img" src="jamaica-island.png" alt="Jamaica 3D Floating Island" id="jm3dIslandImg">
+        <img class="jm3d-island-img" src="https://images.unsplash.com/photo-1502933691298-84fc14542831?w=1200&q=85" alt="Jamaica 3D Floating Island" id="jm3dIslandImg">
         <div class="jm3d-pins" id="jm3dPins"></div>
         <div id="jm3dPopupLayer"></div>
       </div>
@@ -20928,16 +20928,26 @@ function nav(id,opts={}){
 function fixFooterGap(){
   const footer=document.querySelector('.footer');
   if(!footer)return;
-  document.querySelectorAll('.page:not(.on)').forEach(p=>{p.style.display='none';});
-  footer.style.marginTop='0';
-  footer.style.paddingTop='0';
+  document.querySelectorAll('.page:not(.on)').forEach(p=>{
+    p.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;border:0!important;';
+  });
+  const tourDetail=document.getElementById('tourDetailSection');
+  if(tourDetail) tourDetail.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;';
+  const newsletter=document.querySelector('.newsletter');
+  if(newsletter) newsletter.style.marginBottom='0';
+  footer.style.cssText='margin-top:0!important;margin-bottom:0!important;padding-top:0!important;';
   const active=document.querySelector('.page.on');
   if(active){
-    active.style.paddingBottom='0';
-    active.style.marginBottom='0';
-    const lastChild=active.querySelector(':scope > section:not([style*="display:none"]):last-of-type, :scope > section:not([style*="display: none"]):last-of-type');
-    if(lastChild){lastChild.style.marginBottom='0';}
+    active.style.cssText='margin-bottom:0!important;padding-bottom:0!important;';
+    active.querySelectorAll(':scope > section, :scope > div').forEach(child=>{
+      const style=window.getComputedStyle(child);
+      if(style.display!=='none') child.style.marginBottom='0';
+    });
   }
+}
+if(!window.footerGapObserver){
+  window.footerGapObserver=new MutationObserver(()=>{clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,100);});
+  window.footerGapObserver.observe(document.body,{childList:true,subtree:true,attributes:true});
 }
 
 function initPolicyAccordions(){
