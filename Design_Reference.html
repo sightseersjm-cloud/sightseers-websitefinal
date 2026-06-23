@@ -20532,7 +20532,8 @@ function logoutGuest(){
 }
 function updateAccountUI(){
   let user=getCurrentUser();
-  if(user && window.SS && !window.SS.getToken()){
+  const hasToken=!!localStorage.getItem('ss_auth_token');
+  if(user && !hasToken){
     setCurrentUser(null);
     user=null;
   }
@@ -21751,6 +21752,11 @@ if(document.readyState==='loading'){
   bootSightSeersSite();
 }
 document.addEventListener('ss-account-updated', function(){ try{updateAccountUI();}catch(e){} });
+document.addEventListener('DOMContentLoaded', function(){
+  const hasToken=!!localStorage.getItem('ss_auth_token');
+  if(!hasToken) localStorage.removeItem('ss_current_user');
+  try{updateAccountUI();}catch(e){}
+});
 
 </script>
 <style id="vt-2040-features">
