@@ -19973,7 +19973,15 @@ function applySiteSettings(){
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
   if(heroSlides[2] && siteSettings.heroImg3) heroSlides[2].style.backgroundImage=`url('${siteSettings.heroImg3.replace(/'/g,"%27")}')`;
   const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
-  const jamaicaImg=document.querySelector('.jm3d-island-img'); if(jamaicaImg && siteSettings.jamaicaImage) jamaicaImg.src=siteSettings.jamaicaImage;
+  const jamaicaImg=document.querySelector('.jm3d-island-img');
+  if(jamaicaImg){
+    const defaultJamaicaImg='https://images.unsplash.com/photo-1502933691298-84fc14542831?w=1200&q=85';
+    if(siteSettings.jamaicaImage && (siteSettings.jamaicaImage.toLowerCase().includes('jamaica') || siteSettings.jamaicaImage.toLowerCase().includes('caribbean'))){
+      jamaicaImg.src=siteSettings.jamaicaImage;
+    } else {
+      jamaicaImg.src=defaultJamaicaImg;
+    }
+  }
   document.documentElement.style.setProperty('--jm-motion-scale', String((Number(siteSettings.tropicalMotionIntensity||100))/100));
   if(window.renderJamaicaPins) window.renderJamaicaPins();
   renderCustomerGallery();
