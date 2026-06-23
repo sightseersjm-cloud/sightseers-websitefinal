@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sight Seers Caribbean Adventures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="dns-prefetch" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -270,8 +275,8 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .about-sec{padding:90px 0;background:var(--lightgrey)}
 .about-wrap{max-width:1200px;margin:0 auto;padding:0 30px;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
 .about-copy{position:relative;z-index:2}
-.about-readmore-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(6,20,38,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .3s ease}
-.about-readmore-overlay.open{display:flex;align-items:center;justify-content:center;opacity:1}
+.about-readmore-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(6,20,38,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.about-readmore-overlay.open{display:flex;align-items:center;justify-content:center}
 .about-readmore-panel{position:relative;width:min(92vw,740px);max-height:82vh;overflow-y:auto;background:#fff;border-radius:28px;padding:44px 38px 36px;box-shadow:0 32px 80px rgba(6,20,38,.28);-webkit-overflow-scrolling:touch}
 .about-readmore-panel .sec-sub{color:#555;font-size:15px;line-height:1.85}
 .about-readmore-close{position:sticky;top:0;float:right;width:38px;height:38px;border-radius:50%;border:none;background:rgba(6,58,99,.07);color:var(--navy);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;margin:-8px -8px 8px 12px;transition:background .2s}
@@ -18412,8 +18417,9 @@ function subscribeNewsletter(){
 function toggleAboutReadMore(){
   var overlay=document.getElementById('aboutReadMoreOverlay');
   if(!overlay)return;
+  if(overlay.parentElement!==document.body)document.body.appendChild(overlay);
   var isOpen=overlay.classList.contains('open');
-  if(isOpen){overlay.classList.remove('open');document.body.style.overflow='';overlay.querySelector('.about-readmore-panel').scrollTop=0;}
+  if(isOpen){overlay.classList.remove('open');document.body.style.overflow='';}
   else{overlay.classList.add('open');document.body.style.overflow='hidden';}
 }
 
