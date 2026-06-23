@@ -20922,8 +20922,22 @@ function nav(id,opts={}){
     document.getElementById('productDetailSection').style.display='none';
     renderShop('all','shopGrid');
   }
-  setTimeout(()=>{initReveal();initPolicyAccordions();},80);
+  setTimeout(()=>{initReveal();initPolicyAccordions();fixFooterGap();},80);
   return false;
+}
+function fixFooterGap(){
+  const footer=document.querySelector('.footer');
+  if(!footer)return;
+  document.querySelectorAll('.page:not(.on)').forEach(p=>{p.style.display='none';});
+  footer.style.marginTop='0';
+  footer.style.paddingTop='0';
+  const active=document.querySelector('.page.on');
+  if(active){
+    active.style.paddingBottom='0';
+    active.style.marginBottom='0';
+    const lastChild=active.querySelector(':scope > section:not([style*="display:none"]):last-of-type, :scope > section:not([style*="display: none"]):last-of-type');
+    if(lastChild){lastChild.style.marginBottom='0';}
+  }
 }
 
 function initPolicyAccordions(){
@@ -21708,6 +21722,7 @@ function bootSightSeersSite(){
   try{updateAccountUI();}catch(e){}
   try{renderCart();}catch(e){}
   try{initReveal();}catch(e){}
+  try{fixFooterGap();}catch(e){}
   const home=document.getElementById('p-home');
   if(home && !document.querySelector('.page.on')) home.classList.add('on');
 }
@@ -43006,6 +43021,8 @@ body.theme-night .page .tag{
 <style id="ss-comprehensive-fix-2026">
 /* ── Footer flush after content, no blank gap ── */
 html{background:#082d48!important}
+.page:not(.on){display:none!important;height:0!important;overflow:hidden!important;padding:0!important;margin:0!important;border:none!important;visibility:hidden!important}
+#tourDetailSection{display:none!important}
 .page.on~.footer,.footer{margin-top:0!important;padding-top:0!important}
 .newsletter+.footer{padding-top:0!important;margin-top:-1px!important}
 
