@@ -240,11 +240,11 @@
         SS_SYNC_KEYS.forEach(function (key) {
           if (data[key]) {
             var incoming = data[key];
-            if (key === 'ss_page_editor_settings' && typeof incoming === 'object') {
+            if ((key === 'ss_page_editor_settings' || key === 'ss_site_settings') && typeof incoming === 'object' && !Array.isArray(incoming)) {
               var existing = {};
               try { existing = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
               Object.keys(incoming).forEach(function(k) {
-                if (incoming[k]) existing[k] = incoming[k];
+                if (incoming[k] !== undefined && incoming[k] !== null && incoming[k] !== '') existing[k] = incoming[k];
               });
               try { origSet.call(localStorage, key, JSON.stringify(existing)); } catch (e) {}
             } else {
