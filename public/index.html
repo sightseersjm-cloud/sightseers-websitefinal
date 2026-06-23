@@ -9456,7 +9456,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 /* Clouds */
 .jm3d-skybox{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 :root{--jm-motion-scale:1}
-.jm3d-shimmer{position:absolute;inset:-10% -20%;background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.14) 28%,rgba(255,255,255,0) 48%);mix-blend-mode:screen;animation:jmShimmer calc(14s / var(--jm-motion-scale)) linear infinite;opacity:.8}
+.jm3d-shimmer{position:absolute;inset:-10% -20%;background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.14) 28%,rgba(255,255,255,0) 48%);mix-blend-mode:screen;animation:jmShimmer calc(14s / var(--jm-motion-scale)) linear infinite;opacity:.8;border-radius:50%;-webkit-transform:translateZ(0)}
 .jm3d-atmo-mist{position:absolute;left:-10%;right:-10%;bottom:8%;height:26%;background:radial-gradient(circle at 25% 50%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 52%),radial-gradient(circle at 68% 45%,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 48%),linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.12));filter:blur(14px);animation:jmMistDrift calc(18s / var(--jm-motion-scale)) ease-in-out infinite alternate}
 .jm3d-palm-shadow{position:absolute;bottom:-4%;width:220px;height:320px;opacity:.22;filter:blur(.2px) drop-shadow(0 16px 20px rgba(0,0,0,.16));transform-origin:bottom center}
 .jm3d-palm-shadow--l{left:-18px;animation:jmPalmSwayLeft calc(8s / var(--jm-motion-scale)) ease-in-out infinite}
@@ -9529,7 +9529,7 @@ filter:blur(1px)}
   100%{left:110%;transform:scaleX(1) translateY(0)}
 }
 /* Island Stage */
-.jm3d-stage-outer{position:relative;perspective:1400px;perspective-origin:50% 42%;overflow:hidden}
+.jm3d-stage-outer{position:relative;perspective:1400px;perspective-origin:50% 42%;overflow:visible;-webkit-transform:translateZ(0)}
 .jm3d-stage{position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.22,.61,.36,1);will-change:transform}
 .jm3d-stage.tilt-w{transform:rotateY(8deg) rotateX(-3deg) scale(1.02)}
 .jm3d-stage.tilt-e{transform:rotateY(-8deg) rotateX(-3deg) scale(1.02)}
@@ -9589,7 +9589,7 @@ filter:blur(1px)}
 /* ======== JM3D OVERRIDES ======== */
 .jm3d-stage{max-width:1320px;margin:0 auto}
 .jm3d-island-wrap{position:relative;width:min(96%,1300px);margin:0 auto;animation:islandFloat3d 6.5s ease-in-out infinite}
-.jm3d-island-img{filter:drop-shadow(0 0 26px rgba(255,255,255,.92)) drop-shadow(0 26px 58px rgba(0,0,0,.24))}
+.jm3d-island-img{filter:drop-shadow(0 26px 58px rgba(0,0,0,.24));-webkit-transform:translateZ(0)}
 .jm3d-pin-label,.jm3d-popup-tag-pill{display:none!important}
 @media(max-width:768px){
   .jm3d-island-wrap{width:min(98%,820px)}
