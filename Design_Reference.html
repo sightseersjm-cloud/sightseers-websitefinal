@@ -270,8 +270,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .about-sec{padding:90px 0;background:var(--lightgrey)}
 .about-wrap{max-width:1200px;margin:0 auto;padding:0 30px;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
 .about-copy{position:relative;z-index:2}
-.about-readmore{max-height:0;overflow:hidden;opacity:0;transition:max-height .45s ease,opacity .3s ease,margin-top .3s ease;margin-top:0}
-.about-readmore.open{opacity:1;margin-top:6px}
+.about-readmore{display:grid;grid-template-rows:0fr;overflow:hidden;opacity:0;transition:grid-template-rows .5s ease,opacity .4s ease,margin-top .3s ease;margin-top:0}
+.about-readmore.open{grid-template-rows:1fr;opacity:1;margin-top:6px}
+.about-readmore-inner{overflow:hidden}
 .about-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .about-right{position:relative}
 .about-img-main{width:100%;height:460px;object-fit:cover}
@@ -18397,8 +18398,8 @@ function toggleAboutReadMore(){
   var btn=document.getElementById('aboutReadMoreBtn');
   if(!content)return;
   var isOpen=content.classList.contains('open');
-  if(isOpen){content.classList.remove('open');content.style.maxHeight='0';if(btn){btn.setAttribute('aria-expanded','false');var s=btn.querySelector('span');if(s)s.textContent='Read More';var i=btn.querySelector('i');if(i){i.classList.remove('fa-chevron-up');i.classList.add('fa-chevron-down')}}}
-  else{content.classList.add('open');content.style.maxHeight=content.scrollHeight+'px';if(btn){btn.setAttribute('aria-expanded','true');var s=btn.querySelector('span');if(s)s.textContent='Read Less';var i=btn.querySelector('i');if(i){i.classList.remove('fa-chevron-down');i.classList.add('fa-chevron-up')}}}
+  if(isOpen){content.classList.remove('open');content.setAttribute('aria-hidden','true');if(btn){btn.setAttribute('aria-expanded','false');var s=btn.querySelector('span');if(s)s.textContent='Read More';var i=btn.querySelector('i');if(i){i.classList.remove('fa-chevron-up');i.classList.add('fa-chevron-down')}}}
+  else{content.classList.add('open');content.setAttribute('aria-hidden','false');if(btn){btn.setAttribute('aria-expanded','true');var s=btn.querySelector('span');if(s)s.textContent='Read Less';var i=btn.querySelector('i');if(i){i.classList.remove('fa-chevron-down');i.classList.add('fa-chevron-up')}}}
 }
 
 function openCart(){document.getElementById('cartPanel').classList.add('open');document.getElementById('cartOverlay').classList.add('on')}
