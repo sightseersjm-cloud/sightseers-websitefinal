@@ -1906,6 +1906,10 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 #p-account .account-auth-panel .field-col input::placeholder{color:#abb0b8}
 #p-account .account-auth-panel .auth-submit{border-radius:14px;letter-spacing:.01em;text-transform:none;font-size:14px;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
 #p-account .auth-note{border-radius:14px;font-size:13.5px;line-height:1.5}
+.auth-toggle-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:13px;color:#6e7480}
+.auth-toggle-link{background:none;border:none;color:var(--orange);font-weight:700;font-size:13px;cursor:pointer;padding:0;font-family:inherit;transition:color .2s}
+.auth-toggle-link:hover{color:var(--navy);text-decoration:underline}
+.auth-extra-fields{transition:all .3s ease}
 
 /* ── Travel Club: tour save (wishlist) ── */
 .tc-media{position:relative}
@@ -16381,43 +16385,28 @@ function vtPointAnswer(input){
                 <h2>Your travel profile, refined.</h2>
                 <p>Create an account to save your details, return to planning faster, and move between tours, cart review, booking requests, and approved writer submissions in one polished space.</p>
               </div>
-              <div class="account-top-actions">
-                <button class="auth-submit secondary" type="button" onclick="switchAuthTab('signup')"><i class="fas fa-user-plus"></i>Create Account</button>
-                <button class="auth-submit secondary" type="button" onclick="switchAuthTab('signin')"><i class="fas fa-right-to-bracket"></i>Sign In</button>
-              </div>
             </div>
 
             <div id="accountGuestView">
-              <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-signup" onclick="switchAuthTab('signup')">Create Account</button>
-                <button class="auth-tab" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
-              </div>
               <div class="account-auth-grid">
                 <div class="account-auth-panel">
-                  <div class="auth-panel on" id="auth-signup">
+                  <div class="auth-panel on" id="auth-unified">
                     <div class="form-grid">
-                      <div class="field-col"><label>Full Name</label><input type="text" id="signupName"></div>
-                      <div class="field-col"><label>Email Address</label><input type="email" id="signupEmail"></div>
-                      <div class="field-col"><label>Password</label><input type="password" id="signupPassword"></div>
-                      <div class="field-col"><label>Phone Number</label><input type="text" id="signupPhone"></div>
-                      <div class="field-col full"><label>Travel Style</label><select id="signupStyle"><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group">Group Charter</option></select></div>
+                      <div class="field-col full auth-extra-fields" id="authExtraFields" style="display:none"><label>Full Name</label><input type="text" id="signupName"></div>
+                      <div class="field-col full"><label>Email Address</label><input type="email" id="unifiedEmail"></div>
+                      <div class="field-col full"><label>Password</label><input type="password" id="unifiedPassword"></div>
+                      <div class="field-col auth-extra-fields" style="display:none"><label>Phone Number</label><input type="text" id="signupPhone"></div>
+                      <div class="field-col full auth-extra-fields" style="display:none"><label>Travel Style</label><select id="signupStyle"><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group">Group Charter</option></select></div>
                     </div>
                     <div class="admin-actions" style="margin-top:22px">
-                      <button class="auth-submit" onclick="signupGuest()"><i class="fas fa-user-plus"></i>Create Guest Account</button>
+                      <button class="auth-submit" id="authMainBtn" onclick="handleUnifiedAuth()"><i class="fas fa-right-to-bracket"></i>Sign In</button>
                     </div>
                     <div class="inline-status" id="authStatus"></div>
-                  </div>
-
-                  <div class="auth-panel" id="auth-signin">
-                    <div class="auth-note"><strong>Return to your profile.</strong> Sign in to reopen your account dashboard, review your cart, and continue your booking or blog request flow.</div>
-                    <div class="form-grid">
-                      <div class="field-col full"><label>Email Address</label><input type="email" id="signinEmail"></div>
-                      <div class="field-col full"><label>Password</label><input type="password" id="signinPassword"></div>
+                    <input type="hidden" id="signupEmail"><input type="hidden" id="signupPassword"><input type="hidden" id="signinEmail"><input type="hidden" id="signinPassword">
+                    <div class="auth-toggle-row">
+                      <span id="authToggleText">Don't have an account?</span>
+                      <button type="button" class="auth-toggle-link" id="authToggleBtn" onclick="toggleAuthMode()">Create Account</button>
                     </div>
-                    <div class="admin-actions" style="margin-top:22px">
-                      <button class="auth-submit" onclick="signinGuest()"><i class="fas fa-right-to-bracket"></i>Sign In</button>
-                    </div>
-                    <div class="inline-status" id="signinStatus"></div>
                   </div>
                 </div>
 
@@ -20478,13 +20467,40 @@ function setCurrentUser(user){
   updateAccountUI();
   document.dispatchEvent(new CustomEvent('ss-account-updated',{detail:{user:user||null}}));
 }
+var _authMode='signin';
+function toggleAuthMode(){
+  _authMode=_authMode==='signin'?'signup':'signin';
+  var extras=document.querySelectorAll('.auth-extra-fields');
+  var btn=document.getElementById('authMainBtn');
+  var toggleText=document.getElementById('authToggleText');
+  var toggleBtn=document.getElementById('authToggleBtn');
+  if(_authMode==='signup'){
+    extras.forEach(function(el){el.style.display='';});
+    if(btn)btn.innerHTML='<i class="fas fa-user-plus"></i>Create Account';
+    if(toggleText)toggleText.textContent='Already have an account?';
+    if(toggleBtn)toggleBtn.textContent='Sign In';
+  }else{
+    extras.forEach(function(el){el.style.display='none';});
+    if(btn)btn.innerHTML='<i class="fas fa-right-to-bracket"></i>Sign In';
+    if(toggleText)toggleText.textContent="Don't have an account?";
+    if(toggleBtn)toggleBtn.textContent='Create Account';
+  }
+  setStatus('authStatus','','');
+}
+function handleUnifiedAuth(){
+  if(_authMode==='signup'){
+    document.getElementById('signupEmail').value=document.getElementById('unifiedEmail').value;
+    document.getElementById('signupPassword').value=document.getElementById('unifiedPassword').value;
+    signupGuest();
+  }else{
+    document.getElementById('signinEmail').value=document.getElementById('unifiedEmail').value;
+    document.getElementById('signinPassword').value=document.getElementById('unifiedPassword').value;
+    signinGuest();
+  }
+}
 function switchAuthTab(tab){
-  document.querySelectorAll('.auth-tab').forEach(btn=>btn.classList.remove('active'));
-  document.querySelectorAll('.auth-panel').forEach(panel=>panel.classList.remove('on'));
-  const target=document.getElementById('auth-'+tab);
-  const tabBtn=document.getElementById('tab-'+tab);
-  if(target) target.classList.add('on');
-  if(tabBtn) tabBtn.classList.add('active');
+  if(tab==='signup'&&_authMode!=='signup')toggleAuthMode();
+  else if(tab==='signin'&&_authMode!=='signin')toggleAuthMode();
 }
 function setStatus(id,msg,type=''){
   const el=document.getElementById(id); if(!el) return;
@@ -20519,21 +20535,21 @@ function signupGuest(){
 function signinGuest(){
   const email=document.getElementById('signinEmail')?.value.trim().toLowerCase();
   const password=document.getElementById('signinPassword')?.value;
-  if(!email||!password){return setStatus('signinStatus','Please enter your email and password.','err');}
-  setStatus('signinStatus','Signing in...','');
+  if(!email||!password){return setStatus('authStatus','Please enter your email and password.','err');}
+  setStatus('authStatus','Signing in...','');
   if(window.SS&&window.SS.signin){
     window.SS.signin(email,password).then(function(res){
       setCurrentUser(res.user);
-      setStatus('signinStatus','Signed in successfully.','ok');
+      setStatus('authStatus','Signed in successfully.','ok');
     }).catch(function(err){
-      setStatus('signinStatus',err.message||'Invalid email or password.','err');
+      setStatus('authStatus',err.message||'Invalid email or password.','err');
     });
   }else{
     const user=getUsers().find(u=>u.email===email&&u.password===password);
-    if(!user){return setStatus('signinStatus','We could not find a matching account with those details.','err');}
+    if(!user){return setStatus('authStatus','We could not find a matching account with those details.','err');}
     localStorage.setItem('ss_auth_token','guest_'+Date.now());
     setCurrentUser(user);
-    setStatus('signinStatus','Signed in successfully.','ok');
+    setStatus('authStatus','Signed in successfully.','ok');
   }
 }
 function logoutGuest(){
