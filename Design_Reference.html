@@ -20999,8 +20999,13 @@ function fixFooterGap(){
   }
 }
 if(!window.footerGapObserver){
-  window.footerGapObserver=new MutationObserver(function(){clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,100);});
-  window.footerGapObserver.observe(document.body,{childList:true,subtree:true,attributes:true});
+  var _fgContainer=document.getElementById('main')||document.body;
+  window.footerGapObserver=new MutationObserver(function(mutations){
+    var dominated=mutations.some(function(m){return m.type==='attributes'&&m.attributeName==='class';});
+    if(!dominated&&mutations.every(function(m){return m.type==='attributes';}))return;
+    clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,150);
+  });
+  window.footerGapObserver.observe(_fgContainer,{childList:true,subtree:false,attributes:true,attributeFilter:['class','style']});
 }
 
 function initPolicyAccordions(){
@@ -43106,6 +43111,11 @@ html{background:#082d48!important}
   .ss-promo-cta{font-size:9px;padding:4px 10px}
   .ss-promo-close{right:6px;font-size:16px}
 }
+@media(max-width:480px){
+  .ss-promo-inner{padding:8px 36px 8px 12px}
+  .ss-promo-text{font-size:10px;letter-spacing:.2px;text-align:center}
+  .ss-promo-close{right:4px;font-size:14px}
+}
 
 .tours-sec,.curated-wrap,.curated-tours-grid{margin-bottom:0!important;padding-bottom:0!important}
 .curated-tours-sec,#tourListSection,section.curated-tours-sec,section#tourListSection{height:auto!important;min-height:auto!important;max-height:none!important;padding-top:48px!important;padding-bottom:8px!important}
@@ -43218,13 +43228,29 @@ html{background:#082d48!important}
 .checkout-coming-soon i{font-size:16px;flex-shrink:0}
 .checkout-locked .checkout-method{cursor:default}
 .checkout-locked .checkout-method:hover{border-color:rgba(6,58,99,.1);background:#fff}
+@media(max-width:768px){
+  .checkout-overlay{padding:24px 10px}
+  .checkout-shell{width:min(100vw,520px);border-radius:22px}
+  .checkout-head{padding:24px 22px 18px}
+  .checkout-head h2{font-size:1.15rem}
+  .checkout-body{padding:20px 22px 24px}
+  .checkout-method{padding:14px 15px;gap:10px}
+  .checkout-method-name{font-size:13px}
+  .checkout-pay-btn{padding:16px;font-size:13px}
+  .checkout-coming-soon{font-size:11.5px;padding:12px 14px}
+}
 @media(max-width:480px){
   .checkout-shell{border-radius:20px}
-  .checkout-head{padding:22px 20px 18px}
-  .checkout-body{padding:18px 20px 22px}
-  .checkout-method{padding:14px 14px}
+  .checkout-head{padding:20px 16px 16px}
+  .checkout-head h2{font-size:1.05rem}
+  .checkout-body{padding:16px 16px 20px}
+  .checkout-method{padding:12px 12px;gap:8px}
   .checkout-method-icon{width:40px;height:28px;font-size:15px}
+  .checkout-method-name{font-size:12px}
+  .checkout-method-desc{font-size:10px}
   .checkout-input-row{flex-direction:column;gap:8px}
+  .checkout-pay-btn{padding:14px;font-size:12px}
+  .checkout-coming-soon{font-size:11px;flex-direction:column;text-align:center;gap:6px}
 }
 </style>
 <script>
@@ -43238,28 +43264,19 @@ html{background:#082d48!important}
     el.style.setProperty('min-height','auto','important');
     el.style.setProperty('max-height','none','important');
   }
-  forceTourSectionHeight();
   document.addEventListener('DOMContentLoaded',function(){
     forceTourSectionHeight();
-    setTimeout(forceTourSectionHeight,200);
     setTimeout(forceTourSectionHeight,500);
-    setTimeout(forceTourSectionHeight,1000);
-    setTimeout(forceTourSectionHeight,2000);
   });
   window.addEventListener('load',function(){
     forceTourSectionHeight();
-    setTimeout(forceTourSectionHeight,200);
     setTimeout(forceTourSectionHeight,800);
-    setTimeout(forceTourSectionHeight,1500);
   });
   var origNav=window.nav;
   if(typeof origNav==='function'&&!origNav.__ssTourHeightPatched){
     window.nav=function(){
       var r=origNav.apply(this,arguments);
-      forceTourSectionHeight();
       setTimeout(forceTourSectionHeight,150);
-      setTimeout(forceTourSectionHeight,500);
-      setTimeout(forceTourSectionHeight,1200);
       return r;
     };
     window.nav.__ssTourHeightPatched=true;
