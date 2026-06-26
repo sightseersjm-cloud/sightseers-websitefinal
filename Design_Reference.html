@@ -20963,6 +20963,13 @@ function fixFooterGap(){
   footer.style.cssText='margin-top:0!important;margin-bottom:0!important;padding-top:0!important;';
   var active=document.querySelector('.page.on');
   if(active){
+    active.style.setProperty('display','block','important');
+    active.style.setProperty('visibility','visible','important');
+    active.style.setProperty('opacity','1','important');
+    active.style.setProperty('height','auto','important');
+    active.style.setProperty('overflow','visible','important');
+    active.style.setProperty('padding','','');
+    active.style.setProperty('border','','');
     active.style.setProperty('margin-bottom','0','important');
     active.style.setProperty('padding-bottom','0','important');
     active.querySelectorAll(':scope > section, :scope > div').forEach(function(child){
