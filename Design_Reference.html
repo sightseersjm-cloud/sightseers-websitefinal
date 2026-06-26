@@ -20938,24 +20938,33 @@ function fixFooterGap(){
   const footer=document.querySelector('.footer');
   if(!footer)return;
   document.querySelectorAll('.page:not(.on)').forEach(p=>{
-    p.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;border:0!important;';
+    p.style.cssText='display:none!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;visibility:hidden!important;';
   });
-  const tourDetail=document.getElementById('tourDetailSection');
-  if(tourDetail) tourDetail.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;';
-  const newsletter=document.querySelector('.newsletter');
+  var tourDetail=document.getElementById('tourDetailSection');
+  if(tourDetail) tourDetail.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;';
+  var tourList=document.getElementById('tourListSection');
+  if(tourList){
+    delete tourList.dataset.ssOrigHeight;delete tourList.dataset.ssOrigMinHeight;
+    delete tourList.dataset.ssOrig_height;delete tourList.dataset.ssOrig_minHeight;
+    tourList.style.setProperty('height','auto','important');
+    tourList.style.setProperty('min-height','auto','important');
+    tourList.style.setProperty('max-height','none','important');
+  }
+  var newsletter=document.querySelector('.newsletter');
   if(newsletter) newsletter.style.marginBottom='0';
   footer.style.cssText='margin-top:0!important;margin-bottom:0!important;padding-top:0!important;';
-  const active=document.querySelector('.page.on');
+  var active=document.querySelector('.page.on');
   if(active){
-    active.style.cssText='margin-bottom:0!important;padding-bottom:0!important;';
-    active.querySelectorAll(':scope > section, :scope > div').forEach(child=>{
-      const style=window.getComputedStyle(child);
-      if(style.display!=='none') child.style.marginBottom='0';
+    active.style.setProperty('margin-bottom','0','important');
+    active.style.setProperty('padding-bottom','0','important');
+    active.querySelectorAll(':scope > section, :scope > div').forEach(function(child){
+      var s=window.getComputedStyle(child);
+      if(s.display!=='none') child.style.marginBottom='0';
     });
   }
 }
 if(!window.footerGapObserver){
-  window.footerGapObserver=new MutationObserver(()=>{clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,100);});
+  window.footerGapObserver=new MutationObserver(function(){clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,100);});
   window.footerGapObserver.observe(document.body,{childList:true,subtree:true,attributes:true});
 }
 
@@ -43048,7 +43057,8 @@ html{background:#082d48!important}
 .page:not(.on){display:none!important;height:0!important;overflow:hidden!important;padding:0!important;margin:0!important;border:none!important;visibility:hidden!important}
 #tourDetailSection{display:none!important;height:0!important;padding:0!important;margin:0!important}
 .tours-sec,.curated-wrap,.curated-tours-grid{margin-bottom:0!important;padding-bottom:0!important}
-.curated-tours-sec{height:auto!important;min-height:auto!important;padding-top:48px!important;padding-bottom:8px!important}
+.curated-tours-sec,#tourListSection,section.curated-tours-sec,section#tourListSection{height:auto!important;min-height:auto!important;max-height:none!important;padding-top:48px!important;padding-bottom:8px!important}
+#tourListSection[style]{height:auto!important;min-height:auto!important}
 .curated-shell{padding:18px!important}
 .curated-topbar{margin-bottom:12px!important}
 .curated-country-row{margin-bottom:16px!important;padding:4px 0 0!important}
@@ -43162,6 +43172,46 @@ html{background:#082d48!important}
   .checkout-input-row{flex-direction:column;gap:8px}
 }
 </style>
+<script>
+(function(){
+  function forceTourSectionHeight(){
+    var el=document.getElementById('tourListSection');
+    if(!el)return;
+    delete el.dataset['ssOrig_height'];
+    delete el.dataset['ssOrig_minHeight'];
+    el.style.setProperty('height','auto','important');
+    el.style.setProperty('min-height','auto','important');
+    el.style.setProperty('max-height','none','important');
+  }
+  forceTourSectionHeight();
+  document.addEventListener('DOMContentLoaded',function(){
+    forceTourSectionHeight();
+    setTimeout(forceTourSectionHeight,200);
+    setTimeout(forceTourSectionHeight,500);
+    setTimeout(forceTourSectionHeight,1000);
+    setTimeout(forceTourSectionHeight,2000);
+  });
+  window.addEventListener('load',function(){
+    forceTourSectionHeight();
+    setTimeout(forceTourSectionHeight,200);
+    setTimeout(forceTourSectionHeight,800);
+    setTimeout(forceTourSectionHeight,1500);
+  });
+  var origNav=window.nav;
+  if(typeof origNav==='function'&&!origNav.__ssTourHeightPatched){
+    window.nav=function(){
+      var r=origNav.apply(this,arguments);
+      forceTourSectionHeight();
+      setTimeout(forceTourSectionHeight,150);
+      setTimeout(forceTourSectionHeight,500);
+      setTimeout(forceTourSectionHeight,1200);
+      return r;
+    };
+    window.nav.__ssTourHeightPatched=true;
+    if(origNav.__ssLayoutScaleWrapped) window.nav.__ssLayoutScaleWrapped=true;
+  }
+})();
+</script>
 
 <!-- Checkout overlay -->
 <div class="checkout-overlay" id="checkoutOverlay" onclick="if(event.target===this)closeCheckout()">
