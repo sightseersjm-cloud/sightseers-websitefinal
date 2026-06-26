@@ -1,9 +1,10 @@
-const TO   = 'sightseersjm@gmail.com';
+const BUSINESS_EMAIL = 'sightseersjm@gmail.com';
 const FROM = 'Sight Seers Caribbean <onboarding@resend.dev>';
 const KEY  = process.env.RESEND_API_KEY || '';
 
-async function sendEmail({ subject, html }) {
+async function sendEmail({ to, subject, html }) {
   if (!KEY) { console.log('EMAIL SKIP: no RESEND_API_KEY'); return; }
+  const recipient = to || BUSINESS_EMAIL;
   try {
     const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -11,7 +12,7 @@ async function sendEmail({ subject, html }) {
         'Authorization': 'Bearer ' + KEY,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ from: FROM, to: [TO], subject, html })
+      body: JSON.stringify({ from: FROM, to: Array.isArray(recipient) ? recipient : [recipient], subject, html })
     });
     const data = await resp.json();
     console.log('EMAIL RESULT:', resp.status, JSON.stringify(data));
@@ -20,4 +21,4 @@ async function sendEmail({ subject, html }) {
   }
 }
 
-module.exports = { sendEmail };
+module.exports = { sendEmail, BUSINESS_EMAIL };

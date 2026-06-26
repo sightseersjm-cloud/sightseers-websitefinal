@@ -9383,6 +9383,15 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <!-- HERO -->
 <section class="hero" id="hero">
 
+<!-- PROMOTIONAL BANNER -->
+<div class="ss-promo-banner" id="ssPromoBanner">
+  <div class="ss-promo-inner">
+    <span class="ss-promo-text">Legend Escape Weekend <span class="ss-promo-sep">—</span> Sponsored by Wisynco</span>
+    <a href="#" class="ss-promo-cta" onclick="openLinkedStartPlanning();return false;">Learn More</a>
+  </div>
+  <button class="ss-promo-close" onclick="document.getElementById('ssPromoBanner').style.display='none'" aria-label="Close banner">&times;</button>
+</div>
+
 <div class="slide active hero-animate" style="background-image:url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1800&amp;q=85')">
 <div class="hero-content">
 <div class="hero-reveal hero-reveal--delay1"><span class="hero-small hero-small--down" id="heroSlide1Eyebrow">Curated Caribbean Living</span></div>
@@ -9995,7 +10004,7 @@ body.theme-night .page .tag{
 <div class="jm3d-stage-outer reveal" style="width:100%;margin:0;padding:0">
     <div class="jm3d-stage" id="jm3dStage">
       <div class="jm3d-island-wrap">
-        <img class="jm3d-island-img" src="jamaica-island.png" alt="Jamaica 3D Floating Island" id="jm3dIslandImg">
+        <img class="jm3d-island-img" src="https://images.unsplash.com/photo-1502933691298-84fc14542831?w=1200&q=85" alt="Jamaica 3D Floating Island" id="jm3dIslandImg">
         <div class="jm3d-pins" id="jm3dPins"></div>
         <div id="jm3dPopupLayer"></div>
       </div>
@@ -19973,7 +19982,15 @@ function applySiteSettings(){
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
   if(heroSlides[2] && siteSettings.heroImg3) heroSlides[2].style.backgroundImage=`url('${siteSettings.heroImg3.replace(/'/g,"%27")}')`;
   const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
-  const jamaicaImg=document.querySelector('.jm3d-island-img'); if(jamaicaImg && siteSettings.jamaicaImage) jamaicaImg.src=siteSettings.jamaicaImage;
+  const jamaicaImg=document.querySelector('.jm3d-island-img');
+  if(jamaicaImg){
+    const defaultJamaicaImg='https://images.unsplash.com/photo-1502933691298-84fc14542831?w=1200&q=85';
+    if(siteSettings.jamaicaImage && (siteSettings.jamaicaImage.toLowerCase().includes('jamaica') || siteSettings.jamaicaImage.toLowerCase().includes('caribbean'))){
+      jamaicaImg.src=siteSettings.jamaicaImage;
+    } else {
+      jamaicaImg.src=defaultJamaicaImg;
+    }
+  }
   document.documentElement.style.setProperty('--jm-motion-scale', String((Number(siteSettings.tropicalMotionIntensity||100))/100));
   if(window.renderJamaicaPins) window.renderJamaicaPins();
   renderCustomerGallery();
@@ -20523,7 +20540,12 @@ function logoutGuest(){
   setCurrentUser(null);
 }
 function updateAccountUI(){
-  const user=getCurrentUser();
+  let user=getCurrentUser();
+  const hasToken=!!localStorage.getItem('ss_auth_token');
+  if(user && !hasToken){
+    setCurrentUser(null);
+    user=null;
+  }
   const guestView=document.getElementById('accountGuestView');
   const dashboard=document.getElementById('accountDashboard');
   const accountIcon=document.getElementById('n-account');
@@ -20918,8 +20940,41 @@ function nav(id,opts={}){
     document.getElementById('productDetailSection').style.display='none';
     renderShop('all','shopGrid');
   }
-  setTimeout(()=>{initReveal();initPolicyAccordions();},80);
+  setTimeout(()=>{initReveal();initPolicyAccordions();fixFooterGap();},80);
   return false;
+}
+function fixFooterGap(){
+  const footer=document.querySelector('.footer');
+  if(!footer)return;
+  document.querySelectorAll('.page:not(.on)').forEach(p=>{
+    p.style.cssText='display:none!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;visibility:hidden!important;';
+  });
+  var tourDetail=document.getElementById('tourDetailSection');
+  if(tourDetail) tourDetail.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;';
+  var tourList=document.getElementById('tourListSection');
+  if(tourList){
+    delete tourList.dataset.ssOrigHeight;delete tourList.dataset.ssOrigMinHeight;
+    delete tourList.dataset.ssOrig_height;delete tourList.dataset.ssOrig_minHeight;
+    tourList.style.setProperty('height','auto','important');
+    tourList.style.setProperty('min-height','auto','important');
+    tourList.style.setProperty('max-height','none','important');
+  }
+  var newsletter=document.querySelector('.newsletter');
+  if(newsletter) newsletter.style.marginBottom='0';
+  footer.style.cssText='margin-top:0!important;margin-bottom:0!important;padding-top:0!important;';
+  var active=document.querySelector('.page.on');
+  if(active){
+    active.style.setProperty('margin-bottom','0','important');
+    active.style.setProperty('padding-bottom','0','important');
+    active.querySelectorAll(':scope > section, :scope > div').forEach(function(child){
+      var s=window.getComputedStyle(child);
+      if(s.display!=='none') child.style.marginBottom='0';
+    });
+  }
+}
+if(!window.footerGapObserver){
+  window.footerGapObserver=new MutationObserver(function(){clearTimeout(window.footerGapTimeout);window.footerGapTimeout=setTimeout(fixFooterGap,100);});
+  window.footerGapObserver.observe(document.body,{childList:true,subtree:true,attributes:true});
 }
 
 function initPolicyAccordions(){
@@ -21704,6 +21759,7 @@ function bootSightSeersSite(){
   try{updateAccountUI();}catch(e){}
   try{renderCart();}catch(e){}
   try{initReveal();}catch(e){}
+  try{fixFooterGap();}catch(e){}
   const home=document.getElementById('p-home');
   if(home && !document.querySelector('.page.on')) home.classList.add('on');
 }
@@ -21713,6 +21769,12 @@ if(document.readyState==='loading'){
 }else{
   bootSightSeersSite();
 }
+document.addEventListener('ss-account-updated', function(){ try{updateAccountUI();}catch(e){} });
+document.addEventListener('DOMContentLoaded', function(){
+  const hasToken=!!localStorage.getItem('ss_auth_token');
+  if(!hasToken) localStorage.removeItem('ss_current_user');
+  try{updateAccountUI();}catch(e){}
+});
 
 </script>
 <style id="vt-2040-features">
@@ -42999,11 +43061,42 @@ body.theme-night .page .tag{
 
 <!-- ═══════ COMPREHENSIVE FIX: FOOTER + MOBILE RESPONSIVE + CHECKOUT ═══════ -->
 <style id="ss-comprehensive-fix-2026">
-/* ── Sticky footer: always flush to bottom of viewport ── */
-body{display:flex!important;flex-direction:column!important;min-height:100vh!important}
-.page.on{flex-shrink:0}
-.page.on~.footer,.footer{margin-top:auto!important;padding-top:48px!important}
-.newsletter+.footer{padding-top:0!important}
+/* ── Footer flush after content, no blank gap ── */
+html{background:#082d48!important}
+.page:not(.on){display:none!important;height:0!important;overflow:hidden!important;padding:0!important;margin:0!important;border:none!important;visibility:hidden!important}
+#tourDetailSection{display:none!important;height:0!important;padding:0!important;margin:0!important}
+/* ── Promotional Banner ── */
+.ss-promo-banner{position:absolute;top:0;left:0;right:0;z-index:12;background:linear-gradient(135deg,rgba(6,42,72,.92),rgba(8,45,72,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(239,135,49,.25);padding:0;display:flex;align-items:center;justify-content:center}
+.ss-promo-inner{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap;justify-content:center}
+.ss-promo-tag{background:var(--orange);color:#fff;font-size:9px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;padding:4px 10px;border-radius:4px;white-space:nowrap}
+.ss-promo-text{color:#fff;font-size:13px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+.ss-promo-sep{opacity:.5;margin:0 2px}
+.ss-promo-cta{color:var(--orange);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;text-decoration:none;border:1px solid rgba(239,135,49,.4);padding:5px 14px;border-radius:999px;transition:all .2s;white-space:nowrap}
+.ss-promo-cta:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.ss-promo-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;transition:color .2s}
+.ss-promo-close:hover{color:#fff}
+@media(max-width:768px){
+  .ss-promo-inner{gap:8px;padding:8px 14px}
+  .ss-promo-text{font-size:11px}
+  .ss-promo-tag{font-size:8px;padding:3px 8px}
+  .ss-promo-cta{font-size:9px;padding:4px 10px}
+  .ss-promo-close{right:6px;font-size:16px}
+}
+
+.tours-sec,.curated-wrap,.curated-tours-grid{margin-bottom:0!important;padding-bottom:0!important}
+.curated-tours-sec,#tourListSection,section.curated-tours-sec,section#tourListSection{height:auto!important;min-height:auto!important;max-height:none!important;padding-top:48px!important;padding-bottom:8px!important}
+#tourListSection[style]{height:auto!important;min-height:auto!important}
+.curated-shell{padding:18px!important}
+.curated-topbar{margin-bottom:12px!important}
+.curated-country-row{margin-bottom:16px!important;padding:4px 0 0!important}
+.curated-type-filters .tf-btn,.curated-type-btn{font-size:11px!important;padding:8px 16px!important;letter-spacing:1.2px!important;line-height:1.2!important}
+.curated-type-filters{gap:8px!important;justify-content:center!important}
+.curated-country-chip{font-size:11px!important;padding:8px 14px!important}
+.curated-tours-sec .sec-head{margin-bottom:16px!important}
+.curated-tours-sec .curated-shell>div:first-child{padding:14px 20px!important;margin-bottom:18px!important}
+.curated-tours-grid{gap:18px!important}
+.page.on~.footer,.footer{margin-top:0!important;padding-top:0!important}
+.newsletter+.footer{padding-top:0!important;margin-top:-1px!important}
 
 /* ── Mobile responsive fixes ── */
 @media(max-width:768px){
@@ -43106,6 +43199,46 @@ body{display:flex!important;flex-direction:column!important;min-height:100vh!imp
   .checkout-input-row{flex-direction:column;gap:8px}
 }
 </style>
+<script>
+(function(){
+  function forceTourSectionHeight(){
+    var el=document.getElementById('tourListSection');
+    if(!el)return;
+    delete el.dataset['ssOrig_height'];
+    delete el.dataset['ssOrig_minHeight'];
+    el.style.setProperty('height','auto','important');
+    el.style.setProperty('min-height','auto','important');
+    el.style.setProperty('max-height','none','important');
+  }
+  forceTourSectionHeight();
+  document.addEventListener('DOMContentLoaded',function(){
+    forceTourSectionHeight();
+    setTimeout(forceTourSectionHeight,200);
+    setTimeout(forceTourSectionHeight,500);
+    setTimeout(forceTourSectionHeight,1000);
+    setTimeout(forceTourSectionHeight,2000);
+  });
+  window.addEventListener('load',function(){
+    forceTourSectionHeight();
+    setTimeout(forceTourSectionHeight,200);
+    setTimeout(forceTourSectionHeight,800);
+    setTimeout(forceTourSectionHeight,1500);
+  });
+  var origNav=window.nav;
+  if(typeof origNav==='function'&&!origNav.__ssTourHeightPatched){
+    window.nav=function(){
+      var r=origNav.apply(this,arguments);
+      forceTourSectionHeight();
+      setTimeout(forceTourSectionHeight,150);
+      setTimeout(forceTourSectionHeight,500);
+      setTimeout(forceTourSectionHeight,1200);
+      return r;
+    };
+    window.nav.__ssTourHeightPatched=true;
+    if(origNav.__ssLayoutScaleWrapped) window.nav.__ssLayoutScaleWrapped=true;
+  }
+})();
+</script>
 
 <!-- Checkout overlay -->
 <div class="checkout-overlay" id="checkoutOverlay" onclick="if(event.target===this)closeCheckout()">

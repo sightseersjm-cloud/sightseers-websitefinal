@@ -295,13 +295,12 @@
         document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
       }
     }).catch(function () {
-      // Don't wipe editor tokens on transient errors — only clear if
-      // there's genuinely no valid session (not a network hiccup).
       var stored = null;
       try { stored = JSON.parse(localStorage.getItem(USER_KEY)); } catch (e) {}
       if (stored && stored.role === 'editor') return;
       setToken(null);
       try { localStorage.removeItem(USER_KEY); } catch (e) {}
+      document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: null } }));
     });
   }
 
