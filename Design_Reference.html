@@ -15531,13 +15531,43 @@ function vtAutoChat(){
 /* ── Session action buttons ── */
 function vtSessionAction(el,type){
   el.classList.add('clicked');setTimeout(function(){el.classList.remove('clicked')},500);
-  var msgs={
-    'shop':'<i class="fas fa-shopping-bag"></i> Click the orange hotspots on the stream to purchase items!',
-    'capture':'<i class="fas fa-camera"></i> Screenshot captured and saved to your gallery!',
-    'point':'<i class="fas fa-hand-pointer"></i> Point mode active! Click anywhere on the stream to direct the guide.',
-    'invite':'<i class="fas fa-user-plus"></i> Share link copied! Send it to a friend to join your session.'
-  };
-  vtToast(msgs[type]||'Action triggered');
+  if(type==='shop'){
+    var shop=document.querySelector('.vt-session-shop');
+    if(shop){shop.scrollIntoView({behavior:'smooth',block:'nearest'});shop.style.background='rgba(0,122,255,.06)';setTimeout(function(){shop.style.background=''},1500);}
+    vtToast('<i class="fas fa-bag-shopping"></i> Browse items below or tap hotspots on the stream');
+  }else if(type==='capture'){
+    var video=document.getElementById('vt-session-video');
+    if(video){
+      video.style.transition='filter .15s';video.style.filter='brightness(2)';
+      setTimeout(function(){video.style.filter=''},150);
+      try{
+        var c=document.createElement('canvas');c.width=video.offsetWidth;c.height=video.offsetHeight;
+        var ctx=c.getContext('2d');ctx.fillStyle='#145a7a';ctx.fillRect(0,0,c.width,c.height);
+        ctx.fillStyle='#fff';ctx.font='bold 16px -apple-system,sans-serif';ctx.textAlign='center';
+        ctx.fillText('V-Tours Screenshot',c.width/2,c.height/2-10);
+        ctx.font='12px -apple-system,sans-serif';ctx.fillStyle='rgba(255,255,255,.6)';
+        ctx.fillText(new Date().toLocaleString(),c.width/2,c.height/2+14);
+        var link=document.createElement('a');link.download='vtours-capture-'+Date.now()+'.png';
+        link.href=c.toDataURL('image/png');link.click();
+      }catch(e){}
+    }
+    vtToast('<i class="fas fa-camera"></i> Screenshot captured and downloading');
+  }else if(type==='invite'){
+    var shareUrl=window.location.origin+'/#vtours';
+    var shareText='Join my V-Tours live session on Sight Seers Caribbean!';
+    if(navigator.share){
+      navigator.share({title:'V-Tours Live Session',text:shareText,url:shareUrl}).catch(function(){});
+    }else{
+      navigator.clipboard.writeText(shareUrl).then(function(){
+        vtToast('<i class="fas fa-link"></i> Session link copied to clipboard');
+      }).catch(function(){
+        vtToast('<i class="fas fa-link"></i> Share this link: '+shareUrl);
+      });
+    }
+    return;
+  }else{
+    vtToast('Action triggered');
+  }
 }
 
 /* ── Live chat send ── */
