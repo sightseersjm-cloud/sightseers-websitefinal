@@ -12853,11 +12853,12 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 #vt-chat-messages{flex:1;overflow-y:auto;min-height:0}
 #vt-chat-messages::-webkit-scrollbar{width:3px}
 #vt-chat-messages::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
-.vt-chat-input-wrap{display:flex;gap:8px;padding:8px 12px;border-top:1px solid rgba(255,255,255,.06);background:rgba(13,27,42,.8);flex-shrink:0}
-.vt-chat-input{flex:1;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 16px;font-size:12px;outline:none;font-family:inherit;transition:border-color .2s;background:rgba(255,255,255,.05);color:#fff}
-.vt-chat-input:focus{border-color:var(--orange)}
-.vt-chat-send{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s;flex-shrink:0}
-.vt-chat-send:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(239,135,49,.4)}
+.vt-chat-input-wrap{display:flex;gap:8px;padding:10px 14px;border-top:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-shrink:0}
+.vt-chat-input{flex:1;border:1px solid rgba(0,0,0,.08);border-radius:22px;padding:9px 16px;font-size:13px;outline:none;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;transition:border-color .2s;background:rgba(0,0,0,.03);color:#1d1d1f}
+.vt-chat-input::placeholder{color:#86868b}
+.vt-chat-input:focus{border-color:#007aff;box-shadow:0 0 0 3px rgba(0,122,255,.12)}
+.vt-chat-send{width:34px;height:34px;border-radius:50%;background:#007aff;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0}
+.vt-chat-send:hover{transform:scale(1.08);background:#0066d6}
 body.theme-night .vt-chat-input-wrap{background:#072f4d;border-color:rgba(255,255,255,.06)}
 body.theme-night .vt-chat-input{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff}
 
@@ -12910,7 +12911,7 @@ body.theme-night .vt-empty-state h4{color:#fff}
 .vt-360-scene.vt-360-manual *{animation-play-state:paused!important}
 .vt-360-pano{position:absolute;width:300%;height:100%;top:0;left:0;animation:vtPanSlow 30s linear infinite;will-change:transform}
 .vt-360-pano.paused{animation-play-state:paused}
-.vt-360-compass{position:absolute;bottom:44px;left:12px;z-index:15;display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:rgba(255,255,255,.8);font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;transition:opacity .35s ease}
+.vt-360-compass{position:absolute;bottom:44px;left:12px;z-index:15;display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:20px;background:rgba(255,255,255,.72);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);color:#1d1d1f;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;transition:opacity .35s ease;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .vt-360-compass-ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.25);position:relative;flex-shrink:0}
 .vt-360-compass-needle{position:absolute;top:3px;left:50%;width:2px;height:8px;margin-left:-1px;background:var(--orange);border-radius:1px;transform-origin:center 8px;transition:transform .15s ease-out}
 .vt-360-drag-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;border-radius:14px;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:12px;pointer-events:none;opacity:0;transition:opacity .5s}
@@ -13002,12 +13003,12 @@ body.theme-night .vt-empty-state h4{color:#fff}
 
 /* Scene switch buttons */
 .vt-scene-switcher{position:absolute;top:10px;left:10px;z-index:15;display:flex;gap:4px}
-.vt-scene-btn{padding:5px 10px;border-radius:14px;font-size:9px;font-weight:700;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s;text-transform:uppercase;letter-spacing:.3px}
-.vt-scene-btn:hover{background:rgba(255,255,255,.15);color:#fff}
-.vt-scene-btn.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+.vt-scene-btn{padding:6px 12px;border-radius:20px;font-size:10px;font-weight:600;color:#3a3a3c;background:rgba(255,255,255,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:none;box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer;transition:all .25s;letter-spacing:.01em}
+.vt-scene-btn:hover{background:rgba(255,255,255,.9);color:#1d1d1f}
+.vt-scene-btn.active{background:#007aff;color:#fff;box-shadow:0 2px 8px rgba(0,122,255,.25)}
 
 /* Live indicator */
-.vt-live-indicator{position:absolute;top:12px;right:96px;z-index:15;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:5px 12px;border-radius:14px;font-size:9px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.8px;pointer-events:none}
+.vt-live-indicator{position:absolute;top:12px;right:96px;z-index:15;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.75);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;color:#1d1d1f;text-transform:uppercase;letter-spacing:.6px;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .vt-live-indicator-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:vtRecPulse 1.5s ease infinite}
 .vt-live-indicator-time{color:rgba(255,255,255,.6);font-variant-numeric:tabular-nums}
 
@@ -13098,8 +13099,8 @@ body.vt-expanding .page,body.vt-expanding .reveal,body.vt-expanding .vt-sec,body
 .vt-lang-prompt-skip:hover{background:rgba(0,0,0,.08);color:#1d1d1f}
 @media(max-width:560px){.vt-lang-prompt-grid{grid-template-columns:repeat(3,1fr)}}
 /* Audio language in session */
-.vt-session-lang{display:flex;align-items:center;gap:6px;padding:3px 10px;border-radius:6px;background:rgba(255,255,255,.08);font-size:10px;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;transition:all .25s;border:1px solid rgba(255,255,255,.06)}
-.vt-session-lang:hover{background:rgba(255,255,255,.14);color:#fff}
+.vt-session-lang{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:10px;background:rgba(0,0,0,.04);font-size:11px;font-weight:600;color:#3a3a3c;cursor:pointer;transition:all .25s;border:none}
+.vt-session-lang:hover{background:rgba(0,0,0,.08);color:#1d1d1f}
 .vt-session-lang .vt-lang-flag{font-size:13px}
 .vt-session-lang{position:relative}
 .vt-session-lang .vt-lang-dropdown{top:auto;bottom:calc(100% + 8px);right:0;left:auto}
@@ -13297,46 +13298,48 @@ body:not(.theme-night) .vt-browse-section-head{color:#1c1c1e;border-color:rgba(6
 body:not(.theme-night) .vt-browse-count{color:rgba(60,60,67,.35)}
 body:not(.theme-night) .vt-browse-scroll::-webkit-scrollbar-thumb{background:rgba(60,60,67,.12)}
 
-/* Active session mockup */
-.vt-session{background:linear-gradient(135deg,rgba(13,27,42,.95),rgba(20,45,68,.92));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:18px;overflow:hidden;margin-bottom:20px;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.vt-session-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:linear-gradient(135deg,#1a3a5c,#0d5371);border-radius:12px 12px 0 0;position:relative;z-index:10}
-.vt-session-bar-left{display:flex;align-items:center;gap:8px;color:#fff;font-size:12px;font-weight:600}
+/* Active session mockup — Apple / frosted glass */
+.vt-session{background:rgba(255,255,255,.82);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:22px;overflow:hidden;margin-bottom:20px;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 24px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04)}
+.vt-session-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(255,255,255,.72);backdrop-filter:blur(30px) saturate(1.6);-webkit-backdrop-filter:blur(30px) saturate(1.6);border-bottom:1px solid rgba(0,0,0,.06);border-radius:22px 22px 0 0;position:relative;z-index:10}
+.vt-session-bar-left{display:flex;align-items:center;gap:8px;color:#1d1d1f;font-size:13px;font-weight:600;letter-spacing:-.01em}
 .vt-session-bar-right{display:flex;align-items:center;gap:8px}
-.vt-session-bar-btn{padding:5px 12px;border-radius:8px;font-size:10px;font-weight:700;border:none;cursor:pointer;color:#fff;text-transform:uppercase;letter-spacing:.5px}
-.vt-session-bar-btn.leave{background:rgba(239,68,68,.85);border-radius:8px}
-.vt-session-expand-btn{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08)}
-.vt-session-expand-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.vt-session-bar-btn{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;border:none;cursor:pointer;color:#fff;letter-spacing:.01em;transition:all .2s}
+.vt-session-bar-btn.leave{background:#ff3b30;border-radius:20px;font-weight:600}
+.vt-session-bar-btn.leave:hover{background:#e0342a}
+.vt-session-expand-btn{width:32px;height:32px;border-radius:10px;background:rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;color:rgba(0,0,0,.45);border:none}
+.vt-session-expand-btn:hover{background:rgba(0,0,0,.08);color:#1d1d1f}
 .vt-session.vt-session-expanded{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;border-radius:0;margin:0}
 .vt-session.vt-session-expanded .vt-session-expand-btn i::before{content:"\\f066"}
 .vt-session-content{display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:200px}
 
 .vt-session-video{position:relative;background:linear-gradient(160deg,#0b3d5e 0%,#145a7a 40%,#1a8a6e 100%);display:flex;align-items:center;justify-content:center;padding:20px}
 .vt-session-video-label{color:rgba(255,255,255,.3);font-size:14px;text-align:center;line-height:1.6}
-.vt-session-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:linear-gradient(transparent,rgba(0,0,0,.5));display:flex;align-items:center;justify-content:space-between;pointer-events:none;z-index:12}
-.vt-session-location{font-size:10px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
-.vt-session-viewers{font-size:10px;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:4px}
-.vt-session-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 12px;background:linear-gradient(135deg,rgba(0,0,0,.25),rgba(0,0,0,.35))}
-.vt-session-action{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:12px;background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;transition:all .3s cubic-bezier(.25,.46,.45,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);min-width:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.06) inset,0 -2px 6px rgba(0,0,0,.2) inset;position:relative}
-.vt-session-action::before{content:'';position:absolute;inset:0;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 50%);pointer-events:none}
-.vt-session-action i{font-size:16px;color:var(--orange);filter:drop-shadow(0 1px 2px rgba(239,135,49,.25));transition:all .3s}
-.vt-session-action:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.1) inset;background:linear-gradient(145deg,rgba(239,135,49,.25),rgba(239,135,49,.1));border-color:rgba(239,135,49,.3);color:#fff}
-.vt-session-action:hover i{color:#fff;filter:drop-shadow(0 1px 4px rgba(255,255,255,.25));transform:scale(1.08)}
-.vt-session-action:active{transform:translateY(0) scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.25)}
-.vt-session-side{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06);background:rgba(13,27,42,.6);overflow-y:auto;min-width:280px}
-.vt-session-chat{flex:1;padding:12px;overflow:hidden;max-height:280px;display:flex;flex-direction:column}
-.vt-session-chat-title{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:6px}
-.vt-session-chat-title span{white-space:nowrap;flex-shrink:0}
-.vt-session-chat-msg{display:flex;gap:8px;margin-bottom:8px}
-.vt-session-chat-avatar{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.6);font-weight:700;flex-shrink:0}
-.vt-session-chat-avatar.guide{background:rgba(239,135,49,.15);color:var(--orange)}
-.vt-session-chat-text{font-size:12px;color:rgba(255,255,255,.65);line-height:1.5;word-wrap:break-word;overflow-wrap:break-word}
-.vt-session-shop{border-top:1px solid rgba(255,255,255,.06);padding:10px 12px}
-.vt-session-shop-title{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px}
-.vt-session-shop-item{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:8px}
+.vt-session-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:linear-gradient(transparent,rgba(0,0,0,.4));display:flex;align-items:center;justify-content:space-between;pointer-events:none;z-index:12}
+.vt-session-location{font-size:11px;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif}
+.vt-session-viewers{font-size:11px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:5px}
+.vt-session-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;background:rgba(245,245,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,.04)}
+.vt-session-action{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px;border-radius:16px;background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.06);color:#3a3a3c;font-size:8px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:all .25s cubic-bezier(.25,.46,.45,.94);min-width:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.02);position:relative;text-transform:none}
+.vt-session-action::before{content:none}
+.vt-session-action i{font-size:18px;color:#007aff;filter:none;transition:all .25s}
+.vt-session-action:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08);background:#fff;border-color:rgba(0,122,255,.15);color:#1d1d1f}
+.vt-session-action:hover i{color:#007aff;transform:scale(1.05)}
+.vt-session-action:active{transform:scale(.96);box-shadow:0 1px 2px rgba(0,0,0,.04);background:rgba(0,122,255,.06)}
+.vt-session-side{display:flex;flex-direction:column;border-left:1px solid rgba(0,0,0,.06);background:rgba(249,249,251,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);overflow-y:auto;min-width:280px}
+.vt-session-chat{flex:1;padding:14px;overflow:hidden;max-height:280px;display:flex;flex-direction:column}
+.vt-session-chat-title{font-size:11px;color:#86868b;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:6px}
+.vt-session-chat-title span{white-space:nowrap;flex-shrink:0;color:#86868b}
+.vt-session-chat-msg{display:flex;gap:10px;margin-bottom:10px}
+.vt-session-chat-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#e8e8ed,#d1d1d6);display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a3a3c;font-weight:700;flex-shrink:0}
+.vt-session-chat-avatar.guide{background:linear-gradient(135deg,#ff9f0a,#ff6723);color:#fff}
+.vt-session-chat-text{font-size:13px;color:#1d1d1f;line-height:1.5;word-wrap:break-word;overflow-wrap:break-word}
+.vt-session-shop{border-top:1px solid rgba(0,0,0,.06);padding:12px 14px;background:rgba(255,255,255,.6)}
+.vt-session-shop-title{font-size:11px;color:#86868b;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px}
+.vt-session-shop-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04);gap:8px}
 .vt-session-shop-item>div:first-child{min-width:0;flex:1}
-.vt-session-shop-item-name{font-size:11px;color:rgba(255,255,255,.7);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vt-session-shop-item-price{font-size:11px;color:rgba(255,255,255,.5)}
-.vt-session-shop-add{font-size:9px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;padding:5px 12px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--orange),#e8842d);flex-shrink:0;white-space:nowrap;box-shadow:0 2px 8px rgba(239,135,49,.3);transition:all .25s}
+.vt-session-shop-item-name{font-size:13px;color:#1d1d1f;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt-session-shop-item-price{font-size:12px;color:#86868b}
+.vt-session-shop-add{font-size:11px;font-weight:600;color:#fff;letter-spacing:.01em;cursor:pointer;padding:6px 16px;border:none;border-radius:20px;background:#007aff;flex-shrink:0;white-space:nowrap;box-shadow:none;transition:all .2s}
+.vt-session-shop-add:hover{background:#0066d6;transform:scale(1.03)}
 
 /* Guide portal table */
 .vt-guide-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
@@ -13412,33 +13415,7 @@ body.theme-night .vt-dash-tab:hover{background:#1a6488;color:#fff}
 body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff}
 
 /* ======== V-TOURS APPLE LIGHT MODE (Day) ======== */
-/* Session — always dark themed (immersive app mockup) */
-body:not(.theme-night) .vt-session{background:linear-gradient(135deg,rgba(13,27,42,.95),rgba(20,45,68,.92));border-color:rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-body:not(.theme-night) .vt-session-bar{background:linear-gradient(135deg,#1a3a5c,#0d5371)}
-body:not(.theme-night) .vt-session-side{background:rgba(13,27,42,.6);border-color:rgba(255,255,255,.06)}
-body:not(.theme-night) .vt-session-chat{background:transparent}
-body:not(.theme-night) .vt-session-chat-title{color:rgba(255,255,255,.4)}
-body:not(.theme-night) .vt-session-chat-title span{color:rgba(255,255,255,.4)}
-body:not(.theme-night) .vt-session-chat-text{color:rgba(255,255,255,.65)}
-body:not(.theme-night) .vt-session-chat-msg{border-bottom:none}
-body:not(.theme-night) .vt-session-chat-avatar{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
-body:not(.theme-night) .vt-session-chat-avatar.guide{background:rgba(239,135,49,.15);color:var(--orange)}
-body:not(.theme-night) .vt-chat-input-wrap{background:rgba(13,27,42,.8);border-color:rgba(255,255,255,.08)}
-body:not(.theme-night) .vt-chat-input{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff}
-body:not(.theme-night) .vt-chat-send{box-shadow:0 1px 3px rgba(239,135,49,.2)}
-body:not(.theme-night) .vt-session-shop{background:rgba(13,27,42,.6);border-color:rgba(255,255,255,.06)}
-body:not(.theme-night) .vt-session-shop-title{color:rgba(255,255,255,.4)}
-body:not(.theme-night) .vt-session-shop-item{border-color:rgba(255,255,255,.04)}
-body:not(.theme-night) .vt-session-shop-item-name{color:rgba(255,255,255,.7)}
-body:not(.theme-night) .vt-session-shop-item-price{color:rgba(255,255,255,.5)}
-/* Action buttons */
-body:not(.theme-night) .vt-session-actions{background:linear-gradient(135deg,rgba(0,0,0,.25),rgba(0,0,0,.35))}
-body:not(.theme-night) .vt-session-action{background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);box-shadow:0 4px 12px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.06) inset,0 -2px 6px rgba(0,0,0,.2) inset}
-body:not(.theme-night) .vt-session-action::before{background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 50%)}
-body:not(.theme-night) .vt-session-action:hover{background:linear-gradient(145deg,rgba(239,135,49,.25),rgba(239,135,49,.1));border-color:rgba(239,135,49,.3);color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.1) inset}
-body:not(.theme-night) .vt-session-action:hover i{color:#fff}
-body:not(.theme-night) .vt-session-action i{color:var(--orange)}
-body:not(.theme-night) .vt-session-bar-btn.leave{background:rgba(239,68,68,.85);color:#fff}
+/* Session uses Apple frosted glass look by default now */
 /* Dashboard frame */
 body:not(.theme-night) .vt-dash-frame{background:#fff;border-color:rgba(60,60,67,.08);box-shadow:0 1px 4px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.03)}
 body:not(.theme-night) .vt-dash-frame.vt-fullscreen{background:#f2f2f7!important}
@@ -14355,10 +14332,10 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
                       </div>
                       <div class="vt-session-actions">
-                        <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop Now<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-shopping-cart"></i>Cart</div>
-                        <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Capture Photo</div>
-                        <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-hand-pointer"></i>Point and Ask</div>
-                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-xmark" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio Off</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>Enter VR</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite Friend</div>
+                        <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-bag-shopping"></i>Shop<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-cart-shopping"></i>Cart</div>
+                        <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Photo</div>
+                        <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-wand-magic-sparkles"></i>Identify</div>
+                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-speaker" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-captions" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-person-circle-plus"></i>Invite</div>
                       </div>
                     </div>
                     <div class="vt-session-side">
@@ -21937,7 +21914,7 @@ document.addEventListener('DOMContentLoaded', function(){
 .vt-xr-howto-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.1));color:#818cf8;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .vt-xr-howto-text strong{display:block;font-size:12px;color:#fff;font-weight:600;margin-bottom:2px}
 .vt-xr-howto-text span{font-size:10px;color:rgba(255,255,255,.4);line-height:1.4}
-.vt-xr-enter-btn{position:absolute;top:12px;right:48px;z-index:16;height:30px;border-radius:8px;background:linear-gradient(135deg,rgba(99,102,241,.7),rgba(139,92,246,.6));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:12px;transition:all .3s cubic-bezier(.25,.46,.45,.94);border:1px solid rgba(255,255,255,.15);padding:0 10px;gap:6px}
+.vt-xr-enter-btn{position:absolute;top:12px;right:48px;z-index:16;height:32px;border-radius:16px;background:rgba(255,255,255,.72);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#5856d6;font-size:13px;transition:all .25s;border:none;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:0 12px;gap:6px}
 .vt-xr-enter-btn:hover{background:linear-gradient(135deg,rgba(99,102,241,.9),rgba(139,92,246,.8));transform:scale(1.05);box-shadow:0 4px 20px rgba(99,102,241,.4)}
 .vt-xr-enter-btn:active{transform:scale(.95)}
 .vt-xr-mode-menu{position:absolute;top:calc(100% + 8px);right:0;width:220px;background:linear-gradient(160deg,rgba(20,30,55,.97),rgba(13,22,40,.98));backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:6px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset;opacity:0;transform:translateY(-6px) scale(.94);pointer-events:none;transition:all .2s cubic-bezier(.25,.46,.45,.94);z-index:20}
@@ -22004,10 +21981,10 @@ document.addEventListener('DOMContentLoaded', function(){
 .vt-ai-clone-btn.secondary{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08)}
 .vt-ai-clone-btn.secondary:hover{background:rgba(255,255,255,.1)}
 
-.vt-weather-widget{position:absolute;bottom:36px;right:140px;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:12px;padding:6px 12px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);z-index:8;cursor:default}
+.vt-weather-widget{position:absolute;bottom:36px;right:140px;background:rgba(255,255,255,.72);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border-radius:16px;padding:7px 14px;display:flex;align-items:center;gap:8px;border:none;box-shadow:0 1px 4px rgba(0,0,0,.08);z-index:8;cursor:default;color:#1d1d1f}
 .vt-weather-icon{font-size:22px}
-.vt-weather-info{font-size:11px;color:#fff;font-weight:600;line-height:1.4}
-.vt-weather-info small{display:block;font-size:9px;color:rgba(255,255,255,.5);font-weight:400}
+.vt-weather-info{font-size:12px;color:#1d1d1f;font-weight:600;line-height:1.4}
+.vt-weather-info small{display:block;font-size:9px;color:#86868b;font-weight:400}
 
 .vt-audio-zone{position:absolute;bottom:36px;left:12px;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:12px;padding:6px 12px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);z-index:8}
 .vt-audio-zone-bars{display:flex;align-items:flex-end;gap:2px;height:14px}
@@ -22100,7 +22077,7 @@ document.addEventListener('DOMContentLoaded', function(){
 .vt-mood-suggestion div{font-size:11px;color:rgba(255,255,255,.7);line-height:1.5}
 .vt-mood-suggestion strong{display:block;color:var(--orange);font-size:12px;margin-bottom:2px}
 
-.vt-haptic-toggle{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:10px;border:1px solid rgba(255,255,255,.1);position:absolute;bottom:36px;right:12px;z-index:8;cursor:pointer;font-size:10px;color:rgba(255,255,255,.7);font-weight:600}
+.vt-haptic-toggle{display:flex;align-items:center;gap:8px;padding:7px 14px;background:rgba(255,255,255,.72);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border-radius:16px;border:none;box-shadow:0 1px 4px rgba(0,0,0,.08);position:absolute;bottom:36px;right:12px;z-index:8;cursor:pointer;font-size:11px;color:#1d1d1f;font-weight:600}
 .vt-haptic-toggle i{color:var(--orange);font-size:12px}
 
 .vt-dash-light .vt-ai-clone-card{background:linear-gradient(135deg,rgba(239,135,49,.06),rgba(239,135,49,.02));border-color:rgba(239,135,49,.1)}
