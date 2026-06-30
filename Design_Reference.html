@@ -14868,7 +14868,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <div class="vt-trivia-card"><div class="vt-trivia-card-hdr"><div class="vt-trivia-icon"><i class="fas fa-lightbulb"></i></div><span class="vt-trivia-label">Did you know?</span><button class="vt-trivia-close-btn" onclick="vtTriviaOn=false;clearInterval(vtTriviaClock);this.closest('.vt-trivia-card').classList.remove('show');document.getElementById('vt-trivia-btn')&&document.getElementById('vt-trivia-btn').classList.remove('vt-active')"><i class="fas fa-times"></i></button></div><h4>Portland Parish</h4><p>Portland receives up to 300 inches of rainfall per year — more than any other Jamaican parish — keeping it the island's deepest, lushest green.</p><div class="vt-trivia-foot"><button class="vt-trivia-next-btn" onclick="vtCycleTrivia()"><i class="fas fa-forward"></i>Next</button><div class="vt-trivia-dots"><div class="vt-trivia-dot active"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div></div></div></div>
 
                         <!-- Translation language panel -->
-                        <div class="vt-translate-panel"><div class="vt-translate-panel-title">Select Caption Language</div><div class="vt-lang-grid"><div class="vt-lang-btn active" data-lang="EN" onclick="vtSelectLang('EN',this)">🇬🇧 English</div><div class="vt-lang-btn" data-lang="ES" onclick="vtSelectLang('ES',this)">🇪🇸 Español</div><div class="vt-lang-btn" data-lang="FR" onclick="vtSelectLang('FR',this)">🇫🇷 Français</div><div class="vt-lang-btn" data-lang="DE" onclick="vtSelectLang('DE',this)">🇩🇪 Deutsch</div><div class="vt-lang-btn" data-lang="ZH" onclick="vtSelectLang('ZH',this)">🇨🇳 中文</div><div class="vt-lang-btn" data-lang="PT" onclick="vtSelectLang('PT',this)">🇧🇷 Português</div><div class="vt-lang-btn" data-lang="JA" onclick="vtSelectLang('JA',this)">🇯🇵 日本語</div><div class="vt-lang-btn" data-lang="KO" onclick="vtSelectLang('KO',this)">🇰🇷 한국어</div></div></div>
+                        <div class="vt-translate-panel"><div class="vt-translate-panel-title">Select Caption Language</div><div class="vt-lang-grid"><div class="vt-lang-btn active" data-lang="EN" onclick="vtCaptionLang('EN',this)">🇬🇧 English</div><div class="vt-lang-btn" data-lang="ES" onclick="vtCaptionLang('ES',this)">🇪🇸 Español</div><div class="vt-lang-btn" data-lang="FR" onclick="vtCaptionLang('FR',this)">🇫🇷 Français</div><div class="vt-lang-btn" data-lang="DE" onclick="vtCaptionLang('DE',this)">🇩🇪 Deutsch</div><div class="vt-lang-btn" data-lang="ZH" onclick="vtCaptionLang('ZH',this)">🇨🇳 中文</div><div class="vt-lang-btn" data-lang="PT" onclick="vtCaptionLang('PT',this)">🇧🇷 Português</div><div class="vt-lang-btn" data-lang="JA" onclick="vtCaptionLang('JA',this)">🇯🇵 日本語</div><div class="vt-lang-btn" data-lang="KO" onclick="vtCaptionLang('KO',this)">🇰🇷 한국어</div></div></div>
 
                         <!-- Emoji reactions picker -->
                         <div class="vt-reactions-panel"><button class="vt-reaction-btn" onclick="vtSendReaction('❤️')">❤️</button><button class="vt-reaction-btn" onclick="vtSendReaction('🔥')">🔥</button><button class="vt-reaction-btn" onclick="vtSendReaction('😍')">😍</button><button class="vt-reaction-btn" onclick="vtSendReaction('🌊')">🌊</button><button class="vt-reaction-btn" onclick="vtSendReaction('🌴')">🌴</button><button class="vt-reaction-btn" onclick="vtSendReaction('👏')">👏</button><button class="vt-reaction-btn" onclick="vtSendReaction('✨')">✨</button><button class="vt-reaction-btn" onclick="vtSendReaction('🎉')">🎉</button></div>
@@ -17147,16 +17147,17 @@ function vtShowTranslate(btn){
   if(p.classList.contains('show')){p.classList.remove('show');if(btn)btn.classList.remove('vt-active');}
   else{vtCloseAllPanels('.vt-translate-panel');p.classList.add('show');if(btn)btn.classList.add('vt-active');}
 }
-function vtSelectLang(lang,el){
+function vtCaptionLang(lang,el){
   vtLang=lang;vtLangActive=true;
-  document.querySelectorAll('.vt-lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang)});
+  document.querySelectorAll('.vt-translate-panel .vt-lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang)});
   vtLangIdx=0;vtStartLiveCaptions();
   var p=document.querySelector('.vt-translate-panel');if(p)p.classList.remove('show');
+  document.querySelectorAll('[onclick*="vtShowTranslate"]').forEach(function(b){b.classList.remove('vt-active')});
   vtToast('<i class="fas fa-language"></i> Live captions: '+lang+' activated');
 }
 function vtStartLiveCaptions(){
   clearInterval(vtLangTimer);vtShowCaption();
-  vtLangTimer=setInterval(function(){if(!vtLangActive||!vtStreamActive)return;vtLangIdx++;vtShowCaption();},7000);
+  vtLangTimer=setInterval(function(){if(!vtLangActive)return;vtLangIdx++;vtShowCaption();},7000);
 }
 function vtShowCaption(){
   var bar=document.querySelector('.vt-caption-bar');if(!bar)return;
