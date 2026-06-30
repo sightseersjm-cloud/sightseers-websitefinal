@@ -13584,6 +13584,150 @@ body:not(.theme-night) .vt-status.live{background:rgba(34,197,94,.08);color:#16a
 body:not(.theme-night) .vt-status.scheduled{background:rgba(59,130,246,.08);color:#2563eb}
 body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#6b7280}
 
+/* ══════════════════════════════════════════════════════════════
+   V-TOURS ADVANCED FEATURES — Apple Design System
+══════════════════════════════════════════════════════════════ */
+
+/* FEATURE 1 — AI NARRATOR PILL */
+.vt-narrator-pill{position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(-18px);background:rgba(28,28,30,.9);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);border-radius:24px;padding:9px 18px;display:flex;align-items:center;gap:8px;color:#fff;font-size:11px;font-weight:600;font-family:-apple-system,'SF Pro Text',sans-serif;z-index:52;opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.25,.46,.45,.94);border:1px solid rgba(255,255,255,.1);max-width:260px}
+.vt-narrator-pill.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.vt-narrator-pill i{color:#5ac8fa;font-size:13px;flex-shrink:0;animation:vtMicPulse 1.6s ease infinite}
+.vt-np-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}
+.vt-narrator-wave{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.vt-narrator-wave span{display:inline-block;width:3px;background:#5ac8fa;border-radius:2px;animation:vtWave 1s ease infinite}
+.vt-narrator-wave span:nth-child(1){animation-delay:0s}.vt-narrator-wave span:nth-child(2){animation-delay:.15s}.vt-narrator-wave span:nth-child(3){animation-delay:.3s}.vt-narrator-wave span:nth-child(4){animation-delay:.45s}
+@keyframes vtMicPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes vtWave{0%,100%{height:4px}50%{height:14px}}
+
+/* FEATURE 7 — TRANSLATION PANEL */
+.vt-translate-panel{position:absolute;top:54px;right:14px;background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:20px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 40px rgba(0,0,0,.14);padding:16px;width:252px;z-index:82;transform:scale(.9) translateY(-12px);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1)}
+.vt-translate-panel.show{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+.vt-translate-panel-title{font-size:10px;color:#86868b;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:12px}
+.vt-lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.vt-lang-btn{padding:9px 8px;border-radius:12px;border:1px solid rgba(0,0,0,.06);background:rgba(245,245,247,.9);font-size:11px;font-weight:600;color:#1d1d1f;cursor:pointer;text-align:center;transition:all .2s;display:flex;align-items:center;gap:5px}
+.vt-lang-btn:hover{background:rgba(0,122,255,.08);border-color:rgba(0,122,255,.2);color:#007aff}
+.vt-lang-btn.active{background:#007aff;color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(0,122,255,.28)}
+.vt-caption-overlay{position:absolute;bottom:52px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;z-index:40;padding:0 18px}
+.vt-caption-bar{background:rgba(0,0,0,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:12px;padding:10px 22px;color:#fff;font-size:14px;font-family:-apple-system,'SF Pro Text',sans-serif;text-align:center;max-width:94%;line-height:1.5;opacity:0;transform:translateY(8px);transition:all .38s cubic-bezier(.25,.46,.45,.94)}
+.vt-caption-bar.show{opacity:1;transform:translateY(0)}
+.vt-caption-lang-badge{display:inline-block;font-size:9px;font-weight:700;background:#007aff;color:#fff;padding:2px 8px;border-radius:6px;margin-right:8px;vertical-align:middle;letter-spacing:.5px}
+
+/* FEATURE 8 — EMOJI REACTIONS */
+.vt-reactions-panel{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:32px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 40px rgba(0,0,0,.14);padding:12px 18px;display:flex;gap:4px;z-index:82;opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1)}
+.vt-reactions-panel.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.vt-reaction-btn{font-size:26px;cursor:pointer;border:none;background:transparent;padding:5px 7px;border-radius:14px;transition:transform .22s cubic-bezier(.34,1.56,.64,1);line-height:1}
+.vt-reaction-btn:hover{transform:scale(1.4)}
+.vt-reaction-btn:active{transform:scale(.9)}
+.vt-reaction-float{position:absolute;pointer-events:none;animation:vtReactFloat 2.8s ease-out forwards;z-index:100;font-size:26px;line-height:1}
+@keyframes vtReactFloat{0%{opacity:1;transform:translateY(0) scale(1)}40%{opacity:1;transform:translateY(-80px) scale(1.2)}100%{opacity:0;transform:translateY(-200px) scale(.7)}}
+.vt-viewer-vote{position:absolute;bottom:136px;left:0;right:0;display:flex;justify-content:center;z-index:48;pointer-events:none;opacity:0;transition:opacity .4s;padding:0 14px}
+.vt-viewer-vote.show{opacity:1;pointer-events:auto}
+.vt-vote-card{background:rgba(255,255,255,.94);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:22px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 40px rgba(0,0,0,.12);padding:18px 20px;max-width:300px;width:100%;position:relative}
+.vt-vote-card h4{font-size:14px;font-weight:700;color:#1d1d1f;margin:0 0 14px;font-family:-apple-system,'SF Pro Display',sans-serif;padding-right:28px}
+.vt-vote-options{display:flex;flex-direction:column;gap:8px}
+.vt-vote-option{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;border:1.5px solid rgba(0,0,0,.06);background:rgba(245,245,247,.9);cursor:pointer;transition:all .2s;font-size:13px;color:#1d1d1f;font-weight:500}
+.vt-vote-option:hover{background:rgba(0,122,255,.07);border-color:rgba(0,122,255,.2)}
+.vt-vote-option.voted{background:rgba(0,122,255,.1);border-color:#007aff;color:#007aff;font-weight:600}
+.vt-vote-close{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#86868b;border:none}
+.vt-vote-close:hover{background:rgba(0,0,0,.1)}
+
+/* FEATURE 4 — HIGHLIGHTS / REPLAY PANEL */
+.vt-highlights-overlay{position:fixed;inset:0;z-index:10004;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .32s}
+.vt-highlights-overlay.show{opacity:1;pointer-events:auto}
+.vt-highlights-panel{background:rgba(255,255,255,.97);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:28px 28px 0 0;padding:20px 20px 32px;width:100%;max-width:640px;max-height:72vh;overflow-y:auto;transform:translateY(100%);transition:transform .44s cubic-bezier(.25,.46,.45,.94);position:relative}
+.vt-highlights-overlay.show .vt-highlights-panel{transform:translateY(0)}
+.vt-highlights-handle{width:40px;height:5px;background:rgba(0,0,0,.1);border-radius:3px;margin:0 auto 20px}
+.vt-highlights-title{font-size:20px;font-weight:700;color:#1d1d1f;margin:0 0 18px;font-family:-apple-system,'SF Pro Display',sans-serif;display:flex;align-items:center;gap:8px}
+.vt-highlights-title i{color:#007aff}
+.vt-highlights-empty{text-align:center;padding:48px 20px;color:#86868b;font-size:14px;line-height:1.6}
+.vt-highlights-empty i{font-size:40px;color:#d1d1d6;display:block;margin-bottom:14px}
+.vt-highlight-reel{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.vt-highlight-item{border-radius:16px;overflow:hidden;background:#1d1d1f;aspect-ratio:16/9;position:relative;cursor:pointer;transition:transform .24s cubic-bezier(.25,.46,.45,.94)}
+.vt-highlight-item:hover{transform:scale(1.04)}
+.vt-highlight-item img{width:100%;height:100%;display:block;object-fit:cover}
+.vt-highlight-item-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.78));padding:10px 10px 8px;font-size:10px;color:rgba(255,255,255,.9);font-weight:600;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-highlight-item-dl{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:11px;color:#1d1d1f;cursor:pointer;opacity:0;transition:opacity .2s;border:none}
+.vt-highlight-item:hover .vt-highlight-item-dl{opacity:1}
+.vt-highlights-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#1d1d1f;border:none}
+.vt-highlights-close:hover{background:rgba(0,0,0,.1)}
+
+/* FEATURE 6 — SPLIT VIEW */
+.vt-split-row{display:grid;grid-template-columns:1fr 1fr;position:absolute;inset:0;z-index:3;border-radius:inherit}
+.vt-split-pane{position:relative;overflow:hidden;background:#000;height:100%}
+.vt-split-pane iframe{width:100%;height:calc(100% + 120px);margin-top:-60px;border:none}
+.vt-split-label-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);color:#fff;font-size:9px;font-weight:700;padding:4px 10px;border-radius:8px;text-transform:uppercase;letter-spacing:1px;z-index:10}
+.vt-split-divider{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);z-index:20;transform:translateX(-50%);pointer-events:none}
+
+/* FEATURE 5 — AR TRIVIA CARDS */
+.vt-trivia-card{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:20px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 40px rgba(0,0,0,.12);padding:16px;max-width:230px;z-index:62;transform:scale(.9) translateY(-12px);opacity:0;pointer-events:none;transition:all .44s cubic-bezier(.34,1.56,.64,1)}
+.vt-trivia-card.show{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+.vt-trivia-card-hdr{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.vt-trivia-icon{width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,#ff9f0a,#ff6723);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0}
+.vt-trivia-label{font-size:10px;font-weight:700;color:#ff9f0a;text-transform:uppercase;letter-spacing:.5px}
+.vt-trivia-close-btn{margin-left:auto;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;font-size:9px;color:#86868b;cursor:pointer;border:none}
+.vt-trivia-card h4{font-size:13px;font-weight:700;color:#1d1d1f;margin:0 0 7px;font-family:-apple-system,'SF Pro Text',sans-serif;line-height:1.3}
+.vt-trivia-card p{font-size:12px;color:#3a3a3c;line-height:1.55;margin:0;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-trivia-foot{margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.vt-trivia-next-btn{font-size:12px;font-weight:600;color:#007aff;cursor:pointer;border:none;background:transparent;padding:0;display:flex;align-items:center;gap:4px}
+.vt-trivia-dots{display:flex;gap:4px;align-items:center}
+.vt-trivia-dot{width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,.12);transition:all .3s}
+.vt-trivia-dot.active{background:#ff9f0a;width:12px;border-radius:4px}
+
+/* FEATURE 10 — SAVE / OFFLINE PANEL */
+.vt-save-panel{position:absolute;bottom:88px;right:14px;background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);border-radius:20px;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 40px rgba(0,0,0,.14);padding:16px;width:232px;z-index:82;transform:scale(.9) translateY(14px);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1)}
+.vt-save-panel.show{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+.vt-save-panel-title{font-size:13px;font-weight:700;color:#1d1d1f;margin-bottom:12px;display:flex;align-items:center;gap:7px;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-save-panel-title i{color:#007aff;font-size:15px}
+.vt-save-opt{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;border:1px solid rgba(0,0,0,.06);background:rgba(245,245,247,.9);margin-bottom:8px;cursor:pointer;transition:all .22s}
+.vt-save-opt:last-of-type{margin-bottom:0}
+.vt-save-opt:hover{background:#007aff;border-color:transparent}
+.vt-save-opt:hover i,.vt-save-opt:hover .vt-so-main,.vt-save-opt:hover .vt-so-sub{color:#fff!important}
+.vt-save-opt i{color:#007aff;font-size:16px;width:20px;text-align:center;flex-shrink:0;transition:color .22s}
+.vt-so-main{display:block;font-size:12px;font-weight:600;color:#1d1d1f;transition:color .22s}
+.vt-so-sub{display:block;font-size:10px;color:#86868b;transition:color .22s}
+.vt-save-progress{margin-top:10px;height:4px;border-radius:3px;background:rgba(0,0,0,.06);overflow:hidden;display:none}
+.vt-save-progress.show{display:block}
+.vt-save-progress-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#007aff,#5ac8fa);width:0%;transition:width .22s}
+
+/* FEATURE 3 — SPATIAL AUDIO BADGE */
+.vt-spatial-badge{position:absolute;bottom:18px;right:18px;background:rgba(0,122,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(0,122,255,.2);border-radius:12px;padding:6px 12px;font-size:10px;font-weight:700;color:#007aff;display:flex;align-items:center;gap:6px;z-index:36;opacity:0;transition:opacity .44s;pointer-events:none;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-spatial-badge.show{opacity:1}
+.vt-spatial-badge i{animation:vtSpatialBeat 2s ease infinite}
+@keyframes vtSpatialBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.15);opacity:.7}}
+
+/* FEATURE 9 — MOOD BADGE */
+.vt-mood-badge{position:absolute;top:12px;right:54px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:10px;font-weight:700;padding:5px 11px;border-radius:10px;display:flex;align-items:center;gap:5px;z-index:33;font-family:-apple-system,'SF Pro Text',sans-serif;letter-spacing:.2px;border:1px solid rgba(255,255,255,.08)}
+
+/* MOOD SCENE GRADIENTS */
+.vt-mood-sunrise .vt-session-video{background:linear-gradient(160deg,#ff6b35 0%,#f7931e 45%,#ffcd3c 100%)!important}
+.vt-mood-golden .vt-session-video{background:linear-gradient(160deg,#ffd060 0%,#ff9f0a 55%,#ff6723 100%)!important}
+.vt-mood-midday .vt-session-video{background:linear-gradient(160deg,#1e90ff 0%,#00c6fb 50%,#1a8a6e 100%)!important}
+.vt-mood-afternoon .vt-session-video{background:linear-gradient(160deg,#0b3d5e 0%,#145a7a 40%,#1a8a6e 100%)!important}
+.vt-mood-sunset .vt-session-video{background:linear-gradient(160deg,#ee0979 0%,#ff6a00 50%,#ffa500 100%)!important}
+.vt-mood-night .vt-session-video{background:linear-gradient(160deg,#0f0c29 0%,#302b63 55%,#24243e 100%)!important}
+
+/* ACTION BUTTON ACTIVE / NEW STATE */
+.vt-session-action.vt-active{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.25)!important;color:#1d1d1f!important}
+.vt-session-action.vt-active i{color:#007aff!important}
+
+/* CONFETTI CANVAS */
+#vt-confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:19999;display:block}
+
+/* DARK MODE OVERRIDES FOR NEW PANELS */
+body.theme-night .vt-translate-panel,body.theme-night .vt-save-panel,body.theme-night .vt-trivia-card,body.theme-night .vt-vote-card,body.theme-night .vt-reactions-panel,body.theme-night .vt-highlights-panel{background:rgba(28,28,30,.97);border-color:rgba(255,255,255,.08)}
+body.theme-night .vt-translate-panel-title{color:rgba(255,255,255,.4)}
+body.theme-night .vt-lang-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.8)}
+body.theme-night .vt-lang-btn:hover{background:rgba(0,122,255,.2);color:#5ac8fa;border-color:rgba(0,122,255,.3)}
+body.theme-night .vt-save-panel-title,body.theme-night .vt-trivia-card h4,body.theme-night .vt-vote-card h4,body.theme-night .vt-highlights-title{color:#fff}
+body.theme-night .vt-save-opt{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08)}
+body.theme-night .vt-so-main{color:rgba(255,255,255,.85)}
+body.theme-night .vt-so-sub,body.theme-night .vt-trivia-card p{color:rgba(255,255,255,.4)}
+body.theme-night .vt-vote-option{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.8)}
+body.theme-night .vt-vote-option:hover{background:rgba(0,122,255,.2);border-color:rgba(0,122,255,.3)}
+body.theme-night .vt-vote-close{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
+body.theme-night .vt-highlights-close{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+body.theme-night .vt-highlight-item-label{color:rgba(255,255,255,.9)}
+
 /* ======== YOUTUBE 360 EMBED ======== */
 .vt-yt-scene{display:flex;align-items:stretch;justify-content:center;background:#000}
 .vt-yt-iframe{position:absolute;top:-60px;left:-2px;width:calc(100% + 4px);height:calc(100% + 120px);border:none;z-index:1}
@@ -14357,6 +14501,33 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                         <div class="vt-360-compass"><div class="vt-360-compass-ring"><div class="vt-360-compass-needle" id="vt-360-compass-needle"></div></div> 360&deg; VIEW</div>
                         <div class="vt-360-drag-hint" id="vt-360-drag-hint"><i class="fas fa-arrows-alt-h"></i> Click &amp; drag to look around</div>
 
+                        <!-- AI Narrator pill -->
+                        <div class="vt-narrator-pill" id="vt-narrator-pill"><i class="fas fa-microphone-lines"></i><span class="vt-np-text">Initialising narration…</span><div class="vt-narrator-wave"><span></span><span></span><span></span><span></span></div></div>
+
+                        <!-- Mood badge (destination time) -->
+                        <div class="vt-mood-badge"><i class="fas fa-clock"></i>Detecting time…</div>
+
+                        <!-- AR Trivia card -->
+                        <div class="vt-trivia-card"><div class="vt-trivia-card-hdr"><div class="vt-trivia-icon"><i class="fas fa-lightbulb"></i></div><span class="vt-trivia-label">Did you know?</span><button class="vt-trivia-close-btn" onclick="vtTriviaOn=false;clearInterval(vtTriviaClock);this.closest('.vt-trivia-card').classList.remove('show');document.getElementById('vt-trivia-btn')&&document.getElementById('vt-trivia-btn').classList.remove('vt-active')"><i class="fas fa-times"></i></button></div><h4>Portland Parish</h4><p>Portland receives up to 300 inches of rainfall per year — more than any other Jamaican parish — keeping it the island's deepest, lushest green.</p><div class="vt-trivia-foot"><button class="vt-trivia-next-btn" onclick="vtCycleTrivia()"><i class="fas fa-forward"></i>Next</button><div class="vt-trivia-dots"><div class="vt-trivia-dot active"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div><div class="vt-trivia-dot"></div></div></div></div>
+
+                        <!-- Translation language panel -->
+                        <div class="vt-translate-panel"><div class="vt-translate-panel-title">Select Caption Language</div><div class="vt-lang-grid"><div class="vt-lang-btn active" data-lang="EN" onclick="vtSelectLang('EN',this)">🇬🇧 English</div><div class="vt-lang-btn" data-lang="ES" onclick="vtSelectLang('ES',this)">🇪🇸 Español</div><div class="vt-lang-btn" data-lang="FR" onclick="vtSelectLang('FR',this)">🇫🇷 Français</div><div class="vt-lang-btn" data-lang="DE" onclick="vtSelectLang('DE',this)">🇩🇪 Deutsch</div><div class="vt-lang-btn" data-lang="ZH" onclick="vtSelectLang('ZH',this)">🇨🇳 中文</div><div class="vt-lang-btn" data-lang="PT" onclick="vtSelectLang('PT',this)">🇧🇷 Português</div><div class="vt-lang-btn" data-lang="JA" onclick="vtSelectLang('JA',this)">🇯🇵 日本語</div><div class="vt-lang-btn" data-lang="KO" onclick="vtSelectLang('KO',this)">🇰🇷 한국어</div></div></div>
+
+                        <!-- Emoji reactions picker -->
+                        <div class="vt-reactions-panel"><button class="vt-reaction-btn" onclick="vtSendReaction('❤️')">❤️</button><button class="vt-reaction-btn" onclick="vtSendReaction('🔥')">🔥</button><button class="vt-reaction-btn" onclick="vtSendReaction('😍')">😍</button><button class="vt-reaction-btn" onclick="vtSendReaction('🌊')">🌊</button><button class="vt-reaction-btn" onclick="vtSendReaction('🌴')">🌴</button><button class="vt-reaction-btn" onclick="vtSendReaction('👏')">👏</button><button class="vt-reaction-btn" onclick="vtSendReaction('✨')">✨</button><button class="vt-reaction-btn" onclick="vtSendReaction('🎉')">🎉</button></div>
+
+                        <!-- Live caption bar -->
+                        <div class="vt-caption-overlay"><div class="vt-caption-bar"></div></div>
+
+                        <!-- Crowd vote card -->
+                        <div class="vt-viewer-vote"><div class="vt-vote-card"><button class="vt-vote-close" onclick="vtHideVote()"><i class="fas fa-times"></i></button><h4>🗳️ Where should the guide go next?</h4><div class="vt-vote-options"><div class="vt-vote-option" onclick="vtCastVote(this,'The waterfall trail')"><i class="fas fa-water" style="color:#007aff"></i>The waterfall trail</div><div class="vt-vote-option" onclick="vtCastVote(this,'Local craft market')"><i class="fas fa-store" style="color:#ff9f0a"></i>Local craft market</div><div class="vt-vote-option" onclick="vtCastVote(this,'Beachside sunset view')"><i class="fas fa-sun" style="color:#ff6723"></i>Beachside sunset view</div></div></div></div>
+
+                        <!-- Save / Offline panel -->
+                        <div class="vt-save-panel"><div class="vt-save-panel-title"><i class="fas fa-arrow-down-to-line"></i>Save This Tour</div><div class="vt-save-opt" onclick="vtDownloadPack()"><i class="fas fa-images"></i><div><span class="vt-so-main">Download Highlights</span><span class="vt-so-sub">Save captured moments</span></div></div><div class="vt-save-opt" onclick="vtAddToHomeScreen()"><i class="fas fa-mobile-screen"></i><div><span class="vt-so-main">Add to Home Screen</span><span class="vt-so-sub">Quick access any time</span></div></div><div class="vt-save-opt" onclick="vtShareLink()"><i class="fas fa-share-nodes"></i><div><span class="vt-so-main">Share Tour Link</span><span class="vt-so-sub">Invite friends to join</span></div></div><div class="vt-save-progress"><div class="vt-save-progress-bar"></div></div></div>
+
+                        <!-- Spatial audio badge -->
+                        <div class="vt-spatial-badge"><i class="fas fa-wave-square"></i>Spatial Audio Active</div>
+
                         <!-- Minimal Overlay -->
                         <div class="vt-session-video-overlay">
                           <div class="vt-session-location" id="vt-session-loc">Port Antonio &bull; Portland &bull; Jamaica</div>
@@ -14369,6 +14540,13 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                         <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Photo</div>
                         <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-wand-magic-sparkles"></i>Identify</div>
                         <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-high" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite</div>
+                        <div class="vt-session-action" title="AI Voice Narrator with spatial audio" id="vt-narrator-btn" onclick="vtToggleNarrator(this)"><i class="fas fa-microphone-lines"></i>Narrate</div>
+                        <div class="vt-session-action" title="Live caption translation in 8 languages" onclick="vtShowTranslate(this)"><i class="fas fa-language"></i>Translate</div>
+                        <div class="vt-session-action" title="Send emoji reactions to the stream" onclick="vtShowReactions(this)"><i class="fas fa-face-grin-stars"></i>React</div>
+                        <div class="vt-session-action" title="View your captured highlights" onclick="vtShowHighlights()"><i class="fas fa-film"></i>Reel</div>
+                        <div class="vt-session-action" title="Side-by-side dual scene view" id="vt-split-btn" onclick="vtToggleSplitView(this)"><i class="fas fa-table-columns"></i>Split</div>
+                        <div class="vt-session-action" title="AR trivia facts about this location" id="vt-trivia-btn" onclick="vtToggleTrivia(this)"><i class="fas fa-lightbulb"></i>Trivia</div>
+                        <div class="vt-session-action" title="Save highlights and share" onclick="vtShowSavePanel(this)"><i class="fas fa-arrow-down-to-line"></i>Save</div>
                       </div>
                     </div>
                     <div class="vt-session-side">
@@ -15695,6 +15873,7 @@ function vtCheckout(){
     btn.innerHTML='<i class="fas fa-check-circle" style="margin-right:6px"></i>Order Confirmed!';
     btn.style.background='linear-gradient(135deg,#22c55e,#16a34a)';
     vtToast('<i class="fas fa-check-circle"></i> Order placed! USD $'+total.toFixed(2)+'. Confirmation sent to your email.');
+    vtLaunchConfetti(4000);
     setTimeout(function(){
       vtCart=[];vtUpdateCartBadge();vtRenderCart();
       btn.innerHTML='<i class="fas fa-lock" style="margin-right:6px"></i>Checkout';btn.style.background='';btn.disabled=true;
@@ -15708,6 +15887,7 @@ function vtGoLive(){
   var el=document.getElementById('vt-guide-sessions');
   if(el)el.textContent=parseInt(el.textContent)+1;
   vtToast('<i class="fas fa-broadcast-tower"></i> You are now live! Viewers joining...');
+  vtLaunchConfetti(3000);
 }
 
 /* ═══════ 360° SCENE SWITCHING ═══════ */
@@ -16402,6 +16582,341 @@ function vtPointAnswer(input){
     resp.innerHTML=vtPointAnswers[Math.floor(Math.random()*vtPointAnswers.length)];
   },1000);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 1 — AI SCENE NARRATOR (SpeechSynthesis + Spatial Audio)
+═══════════════════════════════════════════════════════════════ */
+var vtNarratorActive=false,vtNarratorIdx=0,vtNarratorTimer=null;
+var vtNarratorLines=['Welcome to Port Antonio, Jamaica — one of the most pristine corners of the Caribbean. This region is famous for its lush rainforests, crystal rivers, and untouched coastline that has inspired artists for centuries.',
+'You are now looking at the Blue Lagoon, a natural wonder where fresh spring water from underground caverns meets the warm Caribbean sea. The unique mineral mix creates this breathtaking turquoise colour.',
+'The Blue Mahoe tree, Jamaica\'s national tree, grows exclusively in these island forests. Its heartwood shifts from olive to deep violet when cut, making it one of the world\'s most exotic timbers.',
+'Portland Parish has been a hidden gem for artists and adventurers for centuries. Ian Fleming, creator of James Bond, lived just down the coast in Oracabessa and drew inspiration from these very shores.',
+'The sound in the background is the Rio Grande River, the longest river in Jamaica. It was here in the nineteen forties that bamboo rafting was invented, a tradition still practised by local families today.',
+'Local fishermen launch their boats at four in the morning every day. Their fresh catch — snapper, parrotfish, and lobster — goes directly to nearby restaurants by eight o\'clock each morning.',
+'Portland receives some of Jamaica\'s highest rainfall each year, keeping it a deep lush green throughout all seasons. Portland is known as the Garden Parish for this very reason.',
+'The jerk seasoning you may smell from nearby cooking stalls was created by the Maroons — free Africans who escaped slavery in the sixteen hundreds and lived in the Blue Mountains above us.'];
+function vtToggleNarrator(btn){
+  vtNarratorActive=!vtNarratorActive;
+  var pill=document.getElementById('vt-narrator-pill');
+  if(vtNarratorActive){
+    btn.classList.add('vt-active');if(pill)pill.classList.add('show');
+    vtStartNarration();vtInitSpatialAudio();
+    vtToast('<i class="fas fa-microphone-lines"></i> AI Narrator on — spatial audio active');
+  }else{
+    btn.classList.remove('vt-active');if(pill)pill.classList.remove('show');
+    vtStopNarration();vtToast('<i class="fas fa-microphone-slash"></i> Narrator off');
+  }
+}
+function vtStartNarration(){
+  if(!window.speechSynthesis)return;
+  vtSpeakNext();
+  vtNarratorTimer=setInterval(function(){if(vtNarratorActive&&!window.speechSynthesis.speaking)vtSpeakNext()},20000);
+}
+function vtSpeakNext(){
+  if(!vtNarratorActive||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var text=vtNarratorLines[vtNarratorIdx%vtNarratorLines.length];
+  var pill=document.getElementById('vt-narrator-pill');
+  if(pill){var np=pill.querySelector('.vt-np-text');if(np)np.textContent=text.substring(0,46)+'…';}
+  var u=new SpeechSynthesisUtterance(text);u.rate=0.9;u.pitch=1.04;u.volume=0.85;
+  var voices=window.speechSynthesis.getVoices();
+  var pref=voices.find(function(v){return/samantha|karen|google.*english/i.test(v.name)&&/en/i.test(v.lang)})||voices.find(function(v){return/en[-_]US/i.test(v.lang)})||voices.find(function(v){return/en/i.test(v.lang)});
+  if(pref)u.voice=pref;
+  window.speechSynthesis.speak(u);vtNarratorIdx++;
+}
+function vtStopNarration(){if(window.speechSynthesis)window.speechSynthesis.cancel();clearInterval(vtNarratorTimer);vtNarratorTimer=null;}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 3 — SPATIAL AUDIO (stereo panning via Web Audio API)
+═══════════════════════════════════════════════════════════════ */
+var vtAudioCtx=null,vtPanner=null,vtSpatialOn=false;
+function vtInitSpatialAudio(){
+  if(vtSpatialOn||(!window.AudioContext&&!window.webkitAudioContext))return;
+  try{
+    vtAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    vtPanner=vtAudioCtx.createStereoPanner();
+    vtPanner.connect(vtAudioCtx.destination);
+    vtSpatialOn=true;
+    var badge=document.querySelector('.vt-spatial-badge');if(badge)badge.classList.add('show');
+    document.addEventListener('mousemove',vtSpatialTrack);
+    if(window.DeviceOrientationEvent)window.addEventListener('deviceorientation',function(e){if(vtPanner&&e.gamma)vtPanner.pan.setTargetAtTime(Math.max(-1,Math.min(1,e.gamma/45)),vtAudioCtx.currentTime,.08)},{passive:true});
+  }catch(e){}
+}
+function vtSpatialTrack(e){
+  if(!vtPanner||!vtSpatialOn)return;
+  var vid=document.getElementById('vt-session-video');if(!vid)return;
+  var r=vid.getBoundingClientRect();
+  if(e.clientX<r.left||e.clientX>r.right)return;
+  vtPanner.pan.setTargetAtTime(((e.clientX-r.left)/r.width-.5)*2,vtAudioCtx.currentTime,.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 4 — SESSION REPLAY & HIGHLIGHTS
+═══════════════════════════════════════════════════════════════ */
+var vtHighlights=[];
+function vtCaptureToHighlights(){
+  var vid=document.getElementById('vt-session-video');if(!vid)return null;
+  try{
+    var w=Math.min(vid.offsetWidth,560),h=Math.min(vid.offsetHeight,315);
+    var c=document.createElement('canvas');c.width=w;c.height=h;
+    var ctx=c.getContext('2d');
+    var sess=document.getElementById('vt-active-session');
+    var gr=ctx.createLinearGradient(0,0,w,h);
+    if(sess&&sess.classList.contains('vt-mood-sunset')){gr.addColorStop(0,'#ee0979');gr.addColorStop(.5,'#ff6a00');gr.addColorStop(1,'#ffa500')}
+    else if(sess&&sess.classList.contains('vt-mood-golden')){gr.addColorStop(0,'#ffd060');gr.addColorStop(.5,'#ff9f0a');gr.addColorStop(1,'#ff6723')}
+    else if(sess&&sess.classList.contains('vt-mood-night')){gr.addColorStop(0,'#0f0c29');gr.addColorStop(.5,'#302b63');gr.addColorStop(1,'#24243e')}
+    else{gr.addColorStop(0,'#0b3d5e');gr.addColorStop(.4,'#145a7a');gr.addColorStop(1,'#1a8a6e')}
+    ctx.fillStyle=gr;ctx.fillRect(0,0,w,h);
+    for(var i=0;i<6;i++){ctx.fillStyle='rgba(255,255,255,.04)';ctx.fillRect(Math.random()*w,Math.random()*h,80+Math.random()*60,1);}
+    var locEl=document.getElementById('vt-session-loc');
+    var loc=locEl?locEl.textContent:'Port Antonio · Jamaica';
+    ctx.font='bold 14px -apple-system,sans-serif';ctx.fillStyle='rgba(255,255,255,.9)';ctx.textAlign='center';ctx.fillText('V-Tours · '+loc,w/2,h/2-10);
+    ctx.font='11px -apple-system,sans-serif';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText(new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w/2,h/2+14);
+    var dataUrl=c.toDataURL('image/png');
+    vtHighlights.push({dataUrl:dataUrl,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),loc:loc});
+    return dataUrl;
+  }catch(e){return null}
+}
+function vtShowHighlights(){
+  var ov=document.getElementById('vt-highlights-overlay');
+  if(!ov){
+    ov=document.createElement('div');ov.id='vt-highlights-overlay';ov.className='vt-highlights-overlay';
+    ov.onclick=function(e){if(e.target===ov)vtCloseHighlights()};
+    ov.innerHTML='<div class="vt-highlights-panel"><div class="vt-highlights-handle"></div><button class="vt-highlights-close" onclick="vtCloseHighlights()"><i class="fas fa-times"></i></button><div class="vt-highlights-title"><i class="fas fa-film"></i>Your Tour Reel</div><div id="vt-hl-body"></div></div>';
+    document.body.appendChild(ov);
+  }
+  var body=document.getElementById('vt-hl-body');
+  if(vtHighlights.length===0){body.innerHTML='<div class="vt-highlights-empty"><i class="fas fa-camera-retro"></i>No captures yet.<br>Tap <strong>Photo</strong> during the session to grab moments!</div>';}
+  else{body.innerHTML='<div class="vt-highlight-reel">'+vtHighlights.map(function(h,i){return'<div class="vt-highlight-item"><img src="'+h.dataUrl+'" alt="'+h.time+'"><div class="vt-highlight-item-label"><i class="fas fa-map-pin" style="margin-right:3px;font-size:9px"></i>'+h.time+'</div><button class="vt-highlight-item-dl" onclick="vtDlHighlight('+i+')"><i class="fas fa-arrow-down"></i></button></div>';}).join('')+'</div>';}
+  ov.classList.add('show');
+}
+function vtCloseHighlights(){var ov=document.getElementById('vt-highlights-overlay');if(ov)ov.classList.remove('show');}
+function vtDlHighlight(i){var h=vtHighlights[i];if(!h)return;var a=document.createElement('a');a.download='vtours-moment-'+(i+1)+'.png';a.href=h.dataUrl;a.click();}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 5 — AR OVERLAY TRIVIA CARDS
+═══════════════════════════════════════════════════════════════ */
+var vtTriviaOn=false,vtTriviaIdx=0,vtTriviaClock=null;
+var vtFacts=[
+  {h:'Portland Parish',f:'Portland receives up to 300 inches of rainfall per year — more than any other Jamaican parish — keeping it the island\'s deepest, lushest green.'},
+  {h:'Blue Lagoon Depth',f:'The Blue Lagoon reaches 55 metres deep. Fresh spring water at the bottom keeps it 10°C cooler than the surrounding Caribbean sea.'},
+  {h:'Bamboo Rafting',f:'Rio Grande bamboo rafting was invented by movie star Errol Flynn in the 1940s. Each raft takes 3 days to build by hand and lasts about 6 months.'},
+  {h:'Blue Mahoe Tree',f:'Jamaica\'s national tree produces wood that shifts from olive-green to violet as it dries. It grows nowhere else naturally in the world.'},
+  {h:'Reggae Roots',f:'Portland borders St. Thomas — where Kumina drumming gave birth to Nyahbinghi rhythms that directly inspired reggae music and spread globally.'},
+  {h:'Sea Grape Trees',f:'The sea grape trees lining this beach produce edible purple fruits each late summer. Taíno people used their large round leaves as plates for over 2,000 years.'},
+  {h:'Streamertail Bird',f:'Jamaica has 2 hummingbird species found nowhere else on Earth: the Red-billed Streamertail (national bird) and the Black-billed Streamertail.'},
+  {h:'Jerk Seasoning',f:'Jerk spicing was created by the Maroons — free Africans who escaped slavery in the 1660s and hid in Portland\'s Blue Mountains, slow-smoking meat over pimento wood.'}
+];
+function vtToggleTrivia(btn){
+  vtTriviaOn=!vtTriviaOn;
+  var card=document.querySelector('.vt-trivia-card');
+  if(vtTriviaOn){
+    btn.classList.add('vt-active');vtShowNextTrivia();if(card)card.classList.add('show');
+    vtTriviaClock=setInterval(function(){if(vtTriviaOn)vtCycleTrivia()},13000);
+    vtToast('<i class="fas fa-lightbulb"></i> AR Trivia on — live facts about this location');
+  }else{
+    btn.classList.remove('vt-active');if(card)card.classList.remove('show');
+    clearInterval(vtTriviaClock);vtToast('<i class="fas fa-lightbulb"></i> Trivia off');
+  }
+}
+function vtShowNextTrivia(){
+  var card=document.querySelector('.vt-trivia-card');if(!card)return;
+  var f=vtFacts[vtTriviaIdx%vtFacts.length];
+  card.querySelector('h4').textContent=f.h;card.querySelector('p').textContent=f.f;
+  var dots=card.querySelectorAll('.vt-trivia-dot');
+  dots.forEach(function(d,i){d.classList.toggle('active',i===vtTriviaIdx%dots.length)});
+}
+function vtCycleTrivia(){
+  vtTriviaIdx++;
+  var card=document.querySelector('.vt-trivia-card');
+  if(card){card.style.opacity='0';card.style.transform='scale(.9) translateY(-10px)';
+    setTimeout(function(){vtShowNextTrivia();card.style.opacity='';card.style.transform=''},220);}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 6 — MULTI-GUIDE SPLIT VIEW
+═══════════════════════════════════════════════════════════════ */
+var vtSplitOn=false;
+function vtToggleSplitView(btn){
+  vtSplitOn=!vtSplitOn;
+  var vid=document.getElementById('vt-session-video');
+  if(vtSplitOn){
+    btn.classList.add('vt-active');
+    var row=document.createElement('div');row.className='vt-split-row';row.id='vt-split-row';
+    var s1='https://www.youtube.com/embed/jqq_ZdD5Zwg?autoplay=1&mute=1&loop=1&playlist=jqq_ZdD5Zwg&controls=0&modestbranding=1&rel=0&playsinline=1';
+    var s2='https://www.youtube.com/embed/g-5ktqtVXzk?autoplay=1&mute=1&loop=1&playlist=g-5ktqtVXzk&controls=0&modestbranding=1&rel=0&playsinline=1';
+    row.innerHTML='<div class="vt-split-pane"><div class="vt-split-label-tag">Blue Lagoon · Portland</div><iframe src="'+s1+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-pane"><div class="vt-split-label-tag" style="left:auto;right:10px">Craft Market · Kingston</div><iframe src="'+s2+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-divider"></div>';
+    vid.appendChild(row);
+    vtToast('<i class="fas fa-table-columns"></i> Split View — Blue Lagoon + Craft Market');
+  }else{
+    btn.classList.remove('vt-active');
+    var row=document.getElementById('vt-split-row');if(row)row.remove();
+    vtToast('<i class="fas fa-compress-arrows-alt"></i> Single view restored');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 7 — LIVE TRANSLATION CAPTIONS (8 languages)
+═══════════════════════════════════════════════════════════════ */
+var vtLangActive=false,vtLang='EN',vtLangTimer=null,vtLangIdx=0;
+var vtCaptions={
+  EN:['Welcome to Portland, Jamaica — home of the famous Blue Lagoon','The water is a magical mix of freshwater spring and warm Caribbean sea','Guide Marcus has been leading tours here for over 12 years','Look right — that is a Blue Mahoe seedling, Jamaica\'s national tree','The Blue Lagoon reaches 55 metres deep with spring-fed fresh water below'],
+  ES:['Bienvenidos a Portland, Jamaica — hogar de la famosa Laguna Azul','El agua es una mezcla mágica de manantial dulce y el mar Caribeño','El guía Marcus lleva más de 12 años liderando tours aquí','Miren a la derecha — eso es un Blue Mahoe, el árbol nacional de Jamaica','La Laguna Azul llega a 55 metros de profundidad con agua de manantial'],
+  FR:['Bienvenue à Portland, Jamaïque — foyer de la célèbre Lagune Bleue','L\'eau est un mélange magique de source douce et de mer des Caraïbes','Le guide Marcus guide des excursions ici depuis plus de 12 ans','Regardez à droite — c\'est un Blue Mahoe, l\'arbre national de la Jamaïque','La Lagune Bleue atteint 55 mètres avec de l\'eau de source en dessous'],
+  DE:['Willkommen in Portland, Jamaika — Heimat der berühmten Blauen Lagune','Das Wasser ist eine magische Mischung aus Quellwasser und Karibikwasser','Unser Guide Marcus führt seit über 12 Jahren Touren hier durch','Schauen Sie nach rechts — das ist ein Blue Mahoe, Jamaikas Nationalbaum','Die Blaue Lagune ist 55 Meter tief mit Quellwasser darunter'],
+  ZH:['欢迎来到牙买加波特兰 — 著名蓝色泻湖的故乡','这里的水是淡水泉水与加勒比海的神奇混合','我们的导游Marcus在这里已带领旅游超过12年','请看右边 — 那是蓝木槿幼苗，牙买加的国树','蓝色泻湖深达55米，底部有淡水泉'],
+  PT:['Bem-vindos a Portland, Jamaica — lar da famosa Lagoa Azul','A água é uma mistura mágica de nascente de água doce e mar do Caribe','Nosso guia Marcus lidera passeios aqui há mais de 12 anos','Olhe para a direita — aquele é um Blue Mahoe, árvore nacional da Jamaica','A Lagoa Azul atinge 55 metros com água de nascente abaixo'],
+  JA:['ジャマイカのポートランドへようこそ — 有名なブルーラグーンの故郷','ここの水は淡水の泉とカリブ海の不思議な混合です','ガイドのMarcusはここで12年以上ツアーを案内しています','右を見てください — あれはジャマイカの国木、ブルーマホエの苗木です','ブルーラグーンは深さ55メートルで底に淡水の泉があります'],
+  KO:['자메이카 포틀랜드에 오신 것을 환영합니다 — 블루 라군의 고향','이곳의 물은 담수 샘물과 카리브해의 마법 같은 혼합입니다','가이드 Marcus는 12년 이상 이곳에서 투어를 안내했습니다','오른쪽을 보세요 — 자메이카 국목인 블루 마호에 묘목입니다','블루 라군은 깊이가 55미터이며 바닥에 담수 샘이 있습니다']
+};
+function vtShowTranslate(btn){
+  var p=document.querySelector('.vt-translate-panel');if(!p)return;
+  if(p.classList.contains('show')){p.classList.remove('show');if(btn)btn.classList.remove('vt-active');}
+  else{p.classList.add('show');if(btn)btn.classList.add('vt-active');}
+}
+function vtSelectLang(lang,el){
+  vtLang=lang;vtLangActive=true;
+  document.querySelectorAll('.vt-lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang)});
+  vtLangIdx=0;vtStartLiveCaptions();
+  var p=document.querySelector('.vt-translate-panel');if(p)p.classList.remove('show');
+  vtToast('<i class="fas fa-language"></i> Live captions: '+lang+' activated');
+}
+function vtStartLiveCaptions(){
+  clearInterval(vtLangTimer);vtShowCaption();
+  vtLangTimer=setInterval(function(){if(!vtLangActive||!vtStreamActive)return;vtLangIdx++;vtShowCaption();},7000);
+}
+function vtShowCaption(){
+  var bar=document.querySelector('.vt-caption-bar');if(!bar)return;
+  var set=vtCaptions[vtLang]||vtCaptions.EN;
+  bar.innerHTML='<span class="vt-caption-lang-badge">'+vtLang+'</span>'+set[vtLangIdx%set.length];
+  bar.classList.add('show');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 8 — GROUP TOUR SOCIAL LAYER (Reactions + Crowd Vote)
+═══════════════════════════════════════════════════════════════ */
+var vtVoteDone=false;
+function vtShowReactions(btn){
+  var p=document.querySelector('.vt-reactions-panel');if(!p)return;
+  if(p.classList.contains('show')){p.classList.remove('show');if(btn)btn.classList.remove('vt-active');}
+  else{p.classList.add('show');if(btn)btn.classList.add('vt-active');setTimeout(function(){p.classList.remove('show');if(btn)btn.classList.remove('vt-active')},5000);}
+}
+function vtSendReaction(emoji){
+  var vid=document.getElementById('vt-session-video');if(!vid)return;
+  var f=document.createElement('span');f.className='vt-reaction-float';
+  f.style.left=(12+Math.random()*76)+'%';f.style.bottom='85px';f.textContent=emoji;
+  vid.appendChild(f);setTimeout(function(){f.remove()},2900);
+  var p=document.querySelector('.vt-reactions-panel');if(p)p.classList.remove('show');
+  document.querySelectorAll('[onclick*="vtShowReactions"]').forEach(function(b){b.classList.remove('vt-active')});
+}
+function vtHideVote(){var v=document.querySelector('.vt-viewer-vote');if(v)v.classList.remove('show');}
+function vtCastVote(el,choice){
+  if(vtVoteDone)return;vtVoteDone=true;
+  document.querySelectorAll('.vt-vote-option').forEach(function(o){o.classList.remove('voted')});
+  el.classList.add('voted');
+  vtToast('<i class="fas fa-check-circle"></i> Voted: '+choice+' — guide will respond!');
+  setTimeout(vtHideVote,1800);
+}
+var vtEmojiPool=['❤️','🔥','😍','🌊','🌴','👏','✨','🎉','😮','🇯🇲'];
+setInterval(function(){
+  if(!vtStreamActive)return;
+  var vid=document.getElementById('vt-session-video');if(!vid)return;
+  if(Math.random()<.28){
+    var f=document.createElement('span');f.className='vt-reaction-float';
+    f.style.left=(10+Math.random()*80)+'%';f.style.bottom='85px';
+    f.textContent=vtEmojiPool[Math.floor(Math.random()*vtEmojiPool.length)];
+    vid.appendChild(f);setTimeout(function(){f.remove()},2900);
+  }
+},4200);
+setTimeout(function(){if(vtStreamActive){var v=document.querySelector('.vt-viewer-vote');if(v)v.classList.add('show');setTimeout(vtHideVote,30000);}},50000);
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 9 — MOOD-ADAPTIVE UI THEMING (Jamaica timezone)
+═══════════════════════════════════════════════════════════════ */
+function vtApplyMoodTheme(){
+  var h=(new Date().getUTCHours()-5+24)%24;
+  var mood,label;
+  if(h>=5&&h<7){mood='vt-mood-sunrise';label='🌅 Sunrise'}
+  else if(h>=7&&h<10){mood='vt-mood-golden';label='✨ Golden Hour'}
+  else if(h>=10&&h<16){mood='vt-mood-midday';label='☀️ Midday'}
+  else if(h>=16&&h<18){mood='vt-mood-afternoon';label='🌤 Afternoon'}
+  else if(h>=18&&h<20){mood='vt-mood-sunset';label='🌇 Sunset'}
+  else{mood='vt-mood-night';label='🌙 Night'}
+  var sess=document.getElementById('vt-active-session');
+  if(sess){['vt-mood-sunrise','vt-mood-golden','vt-mood-midday','vt-mood-afternoon','vt-mood-sunset','vt-mood-night'].forEach(function(m){sess.classList.remove(m)});sess.classList.add(mood);}
+  var badge=document.querySelector('.vt-mood-badge');
+  if(badge)badge.innerHTML='<i class="fas fa-clock"></i>'+label+' · Jamaica';
+}
+vtApplyMoodTheme();setInterval(vtApplyMoodTheme,300000);
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 10 — OFFLINE TOUR PACKETS / SAVE PANEL
+═══════════════════════════════════════════════════════════════ */
+function vtShowSavePanel(btn){
+  var p=document.querySelector('.vt-save-panel');if(!p)return;
+  if(p.classList.contains('show')){p.classList.remove('show');if(btn)btn.classList.remove('vt-active');}
+  else{p.classList.add('show');if(btn)btn.classList.add('vt-active');}
+}
+function vtDownloadPack(){
+  if(vtHighlights.length===0){vtToast('<i class="fas fa-camera"></i> Capture some moments first using the Photo button!');return;}
+  var prog=document.querySelector('.vt-save-progress');
+  if(prog){prog.classList.add('show');var bar=prog.querySelector('.vt-save-progress-bar');if(bar){var w=0;var t=setInterval(function(){w=Math.min(w+7,100);bar.style.width=w+'%';if(w>=100){clearInterval(t);setTimeout(function(){prog.classList.remove('show');bar.style.width='0%';vtToast('<i class="fas fa-circle-check"></i> Tour highlights downloaded!');var sp=document.querySelector('.vt-save-panel');if(sp)sp.classList.remove('show');},500);}},110);}}
+  vtHighlights.forEach(function(h,i){setTimeout(function(){var a=document.createElement('a');a.download='vtours-moment-'+(i+1)+'.png';a.href=h.dataUrl;a.click();},i*300);});
+}
+function vtAddToHomeScreen(){
+  vtToast('<i class="fas fa-mobile-screen"></i> Tap your browser\'s Share → Add to Home Screen');
+  var sp=document.querySelector('.vt-save-panel');if(sp)sp.classList.remove('show');
+}
+function vtShareLink(){
+  var url=window.location.origin+'/#vtours';
+  if(navigator.share){navigator.share({title:'V-Tours by Sight Seers Caribbean',text:'Join me on this incredible virtual tour!',url:url}).catch(function(){});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(url).then(function(){vtToast('<i class="fas fa-link"></i> Tour link copied!');});}
+  var sp=document.querySelector('.vt-save-panel');if(sp)sp.classList.remove('show');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONFETTI ENGINE — fires on tour purchase / order confirmation
+═══════════════════════════════════════════════════════════════ */
+function vtLaunchConfetti(duration){
+  duration=duration||3800;
+  var canvas=document.getElementById('vt-confetti-canvas');
+  if(!canvas){canvas=document.createElement('canvas');canvas.id='vt-confetti-canvas';document.body.appendChild(canvas);}
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  var ctx=canvas.getContext('2d');
+  var colors=['#ff9f0a','#007aff','#34c759','#ff3b30','#5ac8fa','#ffcd3c','#1c1c1e','#ff6723','#fff','#00b86b'];
+  var particles=Array.from({length:160},function(){
+    return{x:Math.random()*canvas.width,y:canvas.height*Math.random()-.5*canvas.height,r:Math.random()*7+3,d:Math.random()*120,color:colors[Math.floor(Math.random()*colors.length)],tilt:Math.floor(Math.random()*10)-10,tiltAngle:0,tiltInc:Math.random()*.07+.04,vx:(Math.random()-.5)*3,vy:Math.random()*4+2.5};
+  });
+  var angle=0,end=Date.now()+duration;
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);angle+=.01;
+    particles.forEach(function(p){
+      p.tiltAngle+=p.tiltInc;p.y+=p.vy;p.x+=p.vx+Math.cos(angle+p.d)*.9;p.tilt=Math.sin(p.tiltAngle)*12;
+      if(p.y>canvas.height)p.y=-12;
+      ctx.save();ctx.beginPath();ctx.fillStyle=p.color;ctx.translate(p.x,p.y);ctx.rotate(p.tiltAngle);
+      ctx.rect(-p.r/2,-p.r*2,p.r,p.r*2);ctx.fill();ctx.restore();
+    });
+    if(Date.now()<end)requestAnimationFrame(frame);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   OVERRIDE: Photo capture → saves to highlights reel
+═══════════════════════════════════════════════════════════════ */
+var _vtSABase=vtSessionAction;
+vtSessionAction=function(el,type){
+  if(type==='capture'){
+    el.classList.add('clicked');setTimeout(function(){el.classList.remove('clicked')},500);
+    var vid=document.getElementById('vt-session-video');
+    if(vid){vid.style.transition='filter .1s';vid.style.filter='brightness(2.2)';setTimeout(function(){vid.style.filter=''},120);}
+    if(vtCaptureToHighlights())vtToast('<i class="fas fa-camera"></i> Moment captured! Tap Reel to view');
+    else vtToast('<i class="fas fa-camera"></i> Snapshot saved!');
+    return;
+  }
+  _vtSABase(el,type);
+};
 
 /* ═══════ STREAM STARTS ONLY WHEN USER JOINS A SESSION ═══════ */
 </script>
