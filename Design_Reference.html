@@ -13130,7 +13130,7 @@ body.vt-expanding .page,body.vt-expanding .reveal,body.vt-expanding .vt-sec,body
 .vt-dash-frame.vt-fullscreen .vt-expand-btn i::before{content:"\f066"}
 @keyframes vtFullIn{from{opacity:0}to{opacity:1}}
 
-.vt-fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10000;opacity:0;pointer-events:none;transition:opacity .35s}
+.vt-fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);z-index:10000;opacity:0;pointer-events:none;transition:opacity .3s}
 .vt-fs-overlay.open{opacity:1;pointer-events:auto}
 
 .vt-fs-close{position:fixed;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10003;color:#fff;font-size:16px;transition:all .25s}
@@ -13561,22 +13561,24 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
 
 /* ======== SESSION EXPAND ======== */
-.vt-session-expand{position:absolute;top:12px;right:12px;z-index:16;width:30px;height:30px;border-radius:8px;background:rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.75);font-size:12px;transition:all .3s cubic-bezier(.25,.46,.45,.94);border:1px solid rgba(255,255,255,.12)}
-.vt-session-expand:hover{background:rgba(255,255,255,.2);color:#fff;transform:scale(1.08);box-shadow:0 4px 16px rgba(0,0,0,.3)}
-.vt-session-expand:active{background:rgba(255,255,255,.3);transform:scale(.95)}
-.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:20px!important;box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:linear-gradient(135deg,rgba(13,27,42,.98),rgba(20,45,68,.97))!important}
+.vt-session-expand{position:absolute;top:12px;right:12px;z-index:16;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1d1d1f;font-size:13px;transition:all .25s;border:none;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.vt-session-expand:hover{background:rgba(255,255,255,.92);transform:scale(1.06);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.vt-session-expand:active{background:rgba(0,122,255,.1);transform:scale(.95)}
+.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.25),0 0 0 .5px rgba(0,0,0,.08)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:rgba(255,255,255,.95)!important;backdrop-filter:blur(40px) saturate(1.8)!important;-webkit-backdrop-filter:blur(40px) saturate(1.8)!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
 .vt-session.vt-session-fs .vt-session-bar{flex-shrink:0}
-.vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important;display:grid!important;grid-template-columns:1fr 320px!important}
+.vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important;display:grid!important;grid-template-columns:1fr 340px!important}
 .vt-session.vt-session-fs .vt-session-chat{max-height:none!important;flex:1!important}
 .vt-session.vt-session-fs .vt-session-content>div:first-child{display:flex!important;flex-direction:column!important;min-height:0!important;overflow:hidden}
 .vt-session.vt-session-fs .vt-session-video{min-height:0!important;flex:1!important}
 .vt-session.vt-session-fs .vt-session-side{max-height:none;overflow-y:auto}
 .vt-session.vt-session-fs .vt-session-actions{flex-shrink:0}
 .vt-session.vt-session-fs .vt-session-expand i::before{content:"\f066"}
+.vt-session.vt-session-fs .vt-session-expand-btn i::before{content:"\f066"}
 .vt-session.vt-session-fs .vt-live-indicator{right:96px}
 .vt-session.vt-session-fs .vt-xr-enter-btn{right:48px}
 .vt-session.vt-session-fs .vt-weather-widget{bottom:36px;right:140px}
 .vt-session.vt-session-fs .vt-session-expand{right:12px}
+.vt-session.vt-session-fs .vt-session-video .vt-session-expand,.vt-session.vt-session-fs .vt-session-video .vt-live-indicator,.vt-session.vt-session-fs .vt-session-video .vt-scene-switcher,.vt-session.vt-session-fs .vt-session-video .vt-weather-widget,.vt-session.vt-session-fs .vt-session-video .vt-360-compass{opacity:1}
 @keyframes vtSessionOpen{0%{opacity:0;transform:scale(.92);border-radius:28px}100%{opacity:1;transform:scale(1);border-radius:20px}}
 @keyframes vtSessionClose{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
 @media(max-width:768px){.vt-session.vt-session-fs{inset:0!important;border-radius:0!important}.vt-session.vt-session-fs .vt-session-content{grid-template-columns:1fr!important}}
@@ -14335,7 +14337,7 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
                         <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-bag-shopping"></i>Shop<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-cart-shopping"></i>Cart</div>
                         <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Photo</div>
                         <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-wand-magic-sparkles"></i>Identify</div>
-                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-speaker" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-captions" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-person-circle-plus"></i>Invite</div>
+                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-high" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-person-circle-plus"></i>Invite</div>
                       </div>
                     </div>
                     <div class="vt-session-side">
