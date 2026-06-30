@@ -1909,7 +1909,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .auth-toggle-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:13px;color:#6e7480}
 .auth-toggle-link{background:none;border:none;color:var(--orange);font-weight:700;font-size:13px;cursor:pointer;padding:0;font-family:inherit;transition:color .2s}
 .auth-toggle-link:hover{color:var(--navy);text-decoration:underline}
-.auth-extra-fields{transition:all .3s ease}
+.auth-extra-fields{transition:all .3s ease;display:block}
 
 /* ── Travel Club: tour save (wishlist) ── */
 .tc-media{position:relative}
@@ -13235,7 +13235,7 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 .vt-dash-avatar-info{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
 .vt-dash-avatar-info span{display:block;font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
 
-.vt-dash-main{padding:24px;overflow-x:auto;background:#0d1b2a}
+.vt-dash-main{padding:24px;overflow-x:auto;background:#f5f5f7}
 .vt-dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .vt-dash-header h2{font-size:20px;font-weight:700;color:#fff;margin:0}
 .vt-dash-header-actions{display:flex;gap:8px}
@@ -13415,6 +13415,37 @@ body.theme-night .vt-dash-tab:hover{background:#1a6488;color:#fff}
 body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff}
 
 /* ======== V-TOURS APPLE LIGHT MODE (Day) ======== */
+/* Day mode — light main content area */
+body:not(.theme-night) .vt-dash-main{background:#f5f5f7;color:#1d1d1f}
+body:not(.theme-night) .vt-dash-header h2{color:#1d1d1f}
+body:not(.theme-night) .vt-dash-stat{background:#fff;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-dash-stat strong{color:#1d1d1f}
+body:not(.theme-night) .vt-dash-stat span{color:#86868b}
+body:not(.theme-night) .vt-dash-stat small{color:#aeaeb2}
+body:not(.theme-night) .vt-live-header h3{color:#1d1d1f}
+body:not(.theme-night) .vt-live-card{background:#fff;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-live-card-title{color:#1d1d1f}
+body:not(.theme-night) .vt-live-card-guide{color:#86868b}
+body:not(.theme-night) .vt-live-card-price{color:#1d1d1f}
+body:not(.theme-night) .vt-live-card-body{background:rgba(0,0,0,.01)}
+body:not(.theme-night) .vt-live-card-meta{color:#aeaeb2}
+body:not(.theme-night) .vt-browse-section-head{color:#1d1d1f;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-earnings-chart{background:#fff;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-earnings-chart h4{color:#1d1d1f}
+body:not(.theme-night) .vt-earnings-chart .vt-chart-sub{color:#86868b}
+body:not(.theme-night) .vt-chart-bar span{color:#86868b}
+body:not(.theme-night) .vt-chart-note{color:#aeaeb2}
+body:not(.theme-night) .vt-schedule h4{color:#1d1d1f}
+body:not(.theme-night) .vt-schedule-day strong{color:#1d1d1f}
+body:not(.theme-night) .vt-schedule-day span{color:#86868b}
+body:not(.theme-night) .vt-schedule-info h5{color:#1d1d1f}
+body:not(.theme-night) .vt-schedule-info p{color:#86868b}
+body:not(.theme-night) .vt-schedule-item{border-color:rgba(0,0,0,.05)}
+body:not(.theme-night) .vt-guide-table th{color:#86868b;border-color:rgba(0,0,0,.06)}
+body:not(.theme-night) .vt-guide-table td{color:#86868b;border-color:rgba(0,0,0,.04)}
+body:not(.theme-night) .vt-guide-table td:first-child{color:#1d1d1f}
+body:not(.theme-night) .vt-dash-header-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06);color:#1d1d1f}
+body:not(.theme-night) .vt-dash-header-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
 /* Session uses Apple frosted glass look by default now */
 /* Dashboard frame */
 body:not(.theme-night) .vt-dash-frame{background:#fff;border-color:rgba(60,60,67,.08);box-shadow:0 1px 4px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.03)}
@@ -14334,10 +14365,10 @@ body:not(.theme-night) .vt-status.draft{background:rgba(156,163,175,.08);color:#
 
                       </div>
                       <div class="vt-session-actions">
-                        <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-bag-shopping"></i>Shop<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-cart-shopping"></i>Cart</div>
+                        <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-cart-shopping"></i>Cart</div>
                         <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Photo</div>
                         <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-wand-magic-sparkles"></i>Identify</div>
-                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-high" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-person-circle-plus"></i>Invite</div>
+                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-high" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite</div>
                       </div>
                     </div>
                     <div class="vt-session-side">
@@ -15536,7 +15567,7 @@ function vtSessionAction(el,type){
   if(type==='shop'){
     var shop=document.querySelector('.vt-session-shop');
     if(shop){shop.scrollIntoView({behavior:'smooth',block:'nearest'});shop.style.background='rgba(0,122,255,.06)';setTimeout(function(){shop.style.background=''},1500);}
-    vtToast('<i class="fas fa-bag-shopping"></i> Browse items below or tap hotspots on the stream');
+    vtToast('<i class="fas fa-shopping-bag"></i> Browse items below or tap hotspots on the stream');
   }else if(type==='capture'){
     var video=document.getElementById('vt-session-video');
     if(video){
@@ -15577,7 +15608,7 @@ var vtBotReplies=['Amazing view!','How much is that?','I want to visit Jamaica s
 function vtSendChat(){
   var inp=document.getElementById('vt-chat-input');var msg=inp.value.trim();if(!msg)return;
   var box=document.getElementById('vt-chat-messages');
-  var allM=box.querySelectorAll('.vt-session-chat-msg');if(allM.length>15)allM[0].remove();box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar" style="background:var(--orange)">Y</div><div class="vt-session-chat-text">'+msg.replace(/</g,'&lt;')+'</div></div>';
+  var allM=box.querySelectorAll('.vt-session-chat-msg');if(allM.length>15)allM[0].remove();box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar" style="background:var(--orange)">Y</div><div class="vt-session-chat-text">'+msg.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})+'</div></div>';
   inp.value='';box.scrollTop=box.scrollHeight;
   setTimeout(function(){
     var reply=vtBotReplies[Math.floor(Math.random()*vtBotReplies.length)];
