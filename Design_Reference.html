@@ -16090,13 +16090,44 @@ function vtGuideNav(view,el){
 
 /* ── Join session ── */
 var vtSessions={
-  'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247},
-  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183},
-  'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156},
-  'bigship-dj':{title:'Big Ship Records DJ Mixing Session',guide:'Stephen McGregor',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:312}
+  'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247,price:42,playbackId:''},
+  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183,price:38,playbackId:''},
+  'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156,price:35,playbackId:''},
+  'bigship-dj':{title:'Big Ship Records DJ Mixing Session',guide:'Stephen McGregor',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:312,price:40,playbackId:''}
 };
 function vtJoinSession(id){
   var s=vtSessions[id];if(!s)return;
+  // If a live Mux stream is active (guide went live), use real playbackId
+  if(vtLive&&vtLive.playbackId) s.playbackId=vtLive.playbackId;
+
+  // Stripe checkout — redirect to payment
+  vtToast('<i class="fas fa-spinner fa-spin"></i> Opening secure checkout…');
+  fetch('/api/stripe-checkout',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      tourName:s.title,
+      priceUsd:s.price,
+      playbackId:s.playbackId||'',
+      streamId:vtLive&&vtLive.streamId?vtLive.streamId:''
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.ok&&d.url){
+      window.location.href=d.url;
+    } else {
+      // Fallback: open session directly (dev/demo mode)
+      vtJoinSessionDirect(id,s);
+      vtToast('<i class="fas fa-info-circle"></i> Demo mode: Stripe not configured yet.');
+    }
+  })
+  .catch(function(){
+    vtJoinSessionDirect(id,s);
+  });
+}
+
+function vtJoinSessionDirect(id,s){
   var el;
   el=document.getElementById('vt-session-title');if(el)el.textContent=s.title;
   el=document.getElementById('vt-session-guide');if(el)el.textContent=s.guide;
@@ -16331,11 +16362,129 @@ function vtCheckout(){
 }
 
 /* ── Go Live (guide) ── */
+var vtLive={streamId:null,playbackId:null,hlsUrl:null,statusTimer:null,isLive:false};
+
 function vtGoLive(){
-  var el=document.getElementById('vt-guide-sessions');
-  if(el)el.textContent=parseInt(el.textContent)+1;
-  vtToast('<i class="fas fa-broadcast-tower"></i> You are now live! Viewers joining...');
-  vtLaunchConfetti(3000);
+  document.getElementById('vt-golive-modal').style.display='flex';
+}
+
+function vtGoLiveClose(){
+  document.getElementById('vt-golive-modal').style.display='none';
+}
+
+function vtGoLiveStart(){
+  var btn=document.getElementById('vt-golive-start-btn');
+  var title=document.getElementById('vt-golive-title').value||'Sight Seers Live Tour';
+  var price=document.getElementById('vt-golive-price').value||'42';
+  btn.disabled=true; btn.textContent='Creating stream…';
+  document.getElementById('vt-golive-status').textContent='Connecting to Mux…';
+
+  fetch('/api/mux-stream',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'create',title:title,price:price})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!data.ok){
+      document.getElementById('vt-golive-status').textContent='Error: '+(data.error||'Unknown');
+      btn.disabled=false; btn.textContent='Go Live'; return;
+    }
+    vtLive.streamId=data.streamId;
+    vtLive.playbackId=data.playbackId;
+    vtLive.hlsUrl=data.hlsUrl;
+
+    // Show RTMP credentials
+    document.getElementById('vt-golive-rtmp-url').value=data.rtmpUrl;
+    document.getElementById('vt-golive-stream-key').value=data.streamKey;
+    document.getElementById('vt-golive-rtmp-section').style.display='block';
+    document.getElementById('vt-golive-hls-url').value=data.hlsUrl;
+    document.getElementById('vt-golive-hls-section').style.display='block';
+
+    btn.style.display='none';
+    document.getElementById('vt-golive-end-btn').style.display='inline-block';
+    document.getElementById('vt-golive-status').textContent='Waiting for your stream… Open your streaming app and paste the RTMP URL and Stream Key below.';
+
+    // Poll for active status
+    vtLive.statusTimer=setInterval(function(){
+      fetch('/api/mux-stream?streamId='+vtLive.streamId)
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.status==='active'&&!vtLive.isLive){
+          vtLive.isLive=true;
+          clearInterval(vtLive.statusTimer);
+          document.getElementById('vt-golive-status').textContent='🔴 You are LIVE! Viewers can now join.';
+          document.getElementById('vt-golive-status').style.color='#ef4444';
+          // Update WebXR room with real HLS URL
+          if(window.vtXR&&window.vtXR.currentScene){
+            VT_CONFIG.mux.scenes[vtXR.currentScene].playbackId=vtLive.playbackId;
+            vtXRLoadMux(vtXR.currentScene);
+          }
+          var el=document.getElementById('vt-guide-sessions');
+          if(el)el.textContent=parseInt(el.textContent)+1;
+          vtToast('<i class="fas fa-broadcast-tower"></i> You are now LIVE!');
+          vtLaunchConfetti(3000);
+        }
+      }).catch(function(){});
+    },5000);
+  })
+  .catch(function(e){
+    document.getElementById('vt-golive-status').textContent='Network error: '+e.message;
+    btn.disabled=false; btn.textContent='Go Live';
+  });
+}
+
+function vtGoLiveEnd(){
+  if(!vtLive.streamId) return;
+  clearInterval(vtLive.statusTimer);
+  fetch('/api/mux-stream',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'end',streamId:vtLive.streamId})
+  }).then(function(){
+    vtLive.isLive=false;
+    vtLive.streamId=null;
+    document.getElementById('vt-golive-status').textContent='Stream ended.';
+    document.getElementById('vt-golive-status').style.color='';
+    document.getElementById('vt-golive-end-btn').style.display='none';
+    document.getElementById('vt-golive-start-btn').style.display='inline-block';
+    document.getElementById('vt-golive-start-btn').disabled=false;
+    document.getElementById('vt-golive-start-btn').textContent='Go Live';
+    document.getElementById('vt-golive-rtmp-section').style.display='none';
+    document.getElementById('vt-golive-hls-section').style.display='none';
+    vtToast('<i class="fas fa-stop-circle"></i> Stream ended.');
+  }).catch(function(){});
+}
+
+function vtGoLiveCopyRtmp(){
+  var el=document.getElementById('vt-golive-rtmp-url');
+  el.select(); document.execCommand('copy');
+  vtToast('RTMP URL copied!');
+}
+function vtGoLiveCopyKey(){
+  var el=document.getElementById('vt-golive-stream-key');
+  el.select(); document.execCommand('copy');
+  vtToast('Stream key copied!');
+}
+function vtGoLiveCopyHls(){
+  var el=document.getElementById('vt-golive-hls-url');
+  el.select(); document.execCommand('copy');
+  vtToast('HLS URL copied!');
+}
+
+function vtJoinLive(tourName, priceUsd, playbackId, streamId){
+  vtToast('<i class="fas fa-spinner fa-spin"></i> Opening checkout…');
+  fetch('/api/stripe-checkout',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({tourName:tourName,priceUsd:priceUsd,playbackId:playbackId,streamId:streamId})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.ok&&d.url){window.location.href=d.url;}
+    else vtToast('Checkout error: '+(d.error||'Unknown'));
+  })
+  .catch(function(e){vtToast('Network error: '+e.message);});
 }
 
 /* ═══════ 360° SCENE SWITCHING ═══════ */
@@ -44702,6 +44851,75 @@ html{background:#082d48!important}
 ═══════════════════════════════════════════════════════════════ -->
 
 <!-- WebXR Room Overlay -->
+<!-- ══ GO LIVE MODAL ══ -->
+<div id="vt-golive-modal" style="display:none;position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:32px;width:min(540px,96vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.3)">
+    <button onclick="vtGoLiveClose()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#728197">&times;</button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+      <div style="width:40px;height:40px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:50%;display:flex;align-items:center;justify-content:center">
+        <i class="fas fa-broadcast-tower" style="color:#fff;font-size:16px"></i>
+      </div>
+      <div>
+        <h3 style="margin:0;color:#1a1a2e;font-size:18px">Go Live</h3>
+        <p style="margin:0;color:#728197;font-size:13px">Start your live virtual tour</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px">Tour Title</label>
+      <input id="vt-golive-title" type="text" placeholder="e.g. Blue Lagoon Morning Walk" value="Blue Lagoon Morning Walk"
+        style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:8px;font-size:14px;color:#1a1a2e;outline:none">
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px">Price (USD per viewer)</label>
+      <div style="position:relative">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#728197;font-size:15px">$</span>
+        <input id="vt-golive-price" type="number" min="1" max="999" value="42"
+          style="width:100%;box-sizing:border-box;padding:10px 14px 10px 28px;border:1.5px solid #dde8df;border-radius:8px;font-size:14px;color:#1a1a2e;outline:none">
+      </div>
+    </div>
+
+    <div id="vt-golive-status" style="font-size:13px;color:#728197;margin-bottom:16px;min-height:18px"></div>
+
+    <!-- RTMP credentials (shown after stream created) -->
+    <div id="vt-golive-rtmp-section" style="display:none;margin-bottom:16px;background:#f8fafc;border-radius:10px;padding:16px">
+      <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#1a1a2e"><i class="fas fa-wifi" style="color:#ef8731;margin-right:6px"></i>Stream to your app (OBS / Streamlabs / DJI GO)</p>
+      <label style="font-size:12px;color:#728197;display:block;margin-bottom:4px">RTMP Server URL</label>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="vt-golive-rtmp-url" type="text" readonly style="flex:1;padding:8px 12px;border:1.5px solid #dde8df;border-radius:8px;font-size:12px;background:#fff;color:#1a1a2e">
+        <button onclick="vtGoLiveCopyRtmp()" style="padding:8px 14px;background:#063a63;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px">Copy</button>
+      </div>
+      <label style="font-size:12px;color:#728197;display:block;margin-bottom:4px">Stream Key <span style="color:#ef4444">(keep private!)</span></label>
+      <div style="display:flex;gap:8px">
+        <input id="vt-golive-stream-key" type="password" readonly style="flex:1;padding:8px 12px;border:1.5px solid #dde8df;border-radius:8px;font-size:12px;background:#fff;color:#1a1a2e">
+        <button onclick="vtGoLiveCopyKey()" style="padding:8px 14px;background:#063a63;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px">Copy</button>
+      </div>
+    </div>
+
+    <!-- HLS viewer URL (shown after stream created) -->
+    <div id="vt-golive-hls-section" style="display:none;margin-bottom:16px;background:#f0fdf4;border-radius:10px;padding:16px">
+      <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#1a1a2e"><i class="fas fa-play-circle" style="color:#22c55e;margin-right:6px"></i>Viewer Playback URL</p>
+      <div style="display:flex;gap:8px">
+        <input id="vt-golive-hls-url" type="text" readonly style="flex:1;padding:8px 12px;border:1.5px solid #d1fae5;border-radius:8px;font-size:12px;background:#fff;color:#1a1a2e">
+        <button onclick="vtGoLiveCopyHls()" style="padding:8px 14px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px">Copy</button>
+      </div>
+      <p style="margin:8px 0 0;font-size:11px;color:#16a34a">Share this link — or viewers join through the Sight Seers app automatically.</p>
+    </div>
+
+    <div style="display:flex;gap:12px">
+      <button id="vt-golive-start-btn" onclick="vtGoLiveStart()"
+        style="flex:1;padding:14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <i class="fas fa-broadcast-tower"></i> Go Live
+      </button>
+      <button id="vt-golive-end-btn" onclick="vtGoLiveEnd()"
+        style="display:none;flex:1;padding:14px;background:#1a1a2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">
+        <i class="fas fa-stop-circle"></i> End Stream
+      </button>
+    </div>
+    <p style="text-align:center;margin:14px 0 0;font-size:12px;color:#99a3b0">Powered by Mux low-latency live streaming &bull; Stripe payments</p>
+  </div>
+</div>
+
 <div id="vt-webxr-room" style="display:none;position:fixed;inset:0;z-index:10010;background:#050d1a">
   <canvas id="vt-webxr-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
   <div id="vt-webxr-hud" style="position:absolute;inset:0;pointer-events:none;z-index:2">
