@@ -3,7 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Sight Seers Caribbean Adventures</title>
+<title>Sight Seers Caribbean | Virtual Tours & 360° Immersive Experiences Jamaica</title>
+<meta name="description" content="Explore Jamaica and the Caribbean through immersive 360° virtual tours. Preview beaches, excursions, villas and cultural experiences before you book with Sight Seers Caribbean.">
+<meta name="keywords" content="Jamaica virtual tour, 360 tour Caribbean, immersive travel experience, Jamaica excursions, virtual tourism Jamaica">
+<link rel="canonical" href="https://www.sightseerscaribbean.com/">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<meta property="og:title" content="Sight Seers Caribbean | Virtual Tours & 360° Immersive Experiences">
+<meta property="og:description" content="Explore Jamaica and the Caribbean through immersive 360° virtual tours before you book. See beaches, villas, excursions and cultural experiences up close.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sightseerscaribbean.com/">
+<meta property="og:image" content="https://www.sightseerscaribbean.com/jamaica-island.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sight Seers Caribbean | Virtual Tours & 360° Experiences">
+<meta name="twitter:description" content="Explore Jamaica and the Caribbean in 360° before you book.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Sight Seers Caribbean","url":"https://www.sightseerscaribbean.com","description":"Sight Seers Caribbean offers immersive 360° virtual tours and curated travel experiences across Jamaica and the Caribbean.","areaServed":{"@type":"Place","name":"Jamaica, Caribbean"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Virtual Tours & Caribbean Experiences","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Blue Lagoon Virtual Tour","description":"Explore the stunning Blue Lagoon in Portland, Jamaica through an immersive 360° virtual tour.","touristType":"Couples, Groups, Adventure Travelers"}},{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Sunset Yacht Experience Virtual Tour","description":"Preview the iconic Sight Seers sunset yacht charter with a 360° immersive walkthrough.","touristType":"Couples, Groups, Celebration Travel"}},{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Kingston Cultural Food Tour Virtual Preview","description":"Explore Kingston's vibrant jerk and ackee food scene virtually before booking.","touristType":"Food Enthusiasts, Cultural Travelers"}}]}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
@@ -9296,7 +9309,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           <a href="#" onclick="nav('partners')" id="n-partners">Partners</a>
         </div>
       </li>
-      <li class="nav-item"><a href="#" onclick="nav('vtours')" id="n-vtours">V-Tours</a></li>
+      <li class="nav-item"><a href="#" onclick="nav('vtours')" id="n-vtours">360° V-Tours</a></li>
       <li class="nav-item"><a href="#" onclick="nav('contact')" id="n-contact">Travel Form</a></li>
       <li class="nav-item"><a href="#" onclick="nav('booking')" class="btn-book">Start Planning</a></li>
     </ul>
@@ -14636,13 +14649,89 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
     </div>
   </div>
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<style>
+.vt-360-section{background:var(--navy);padding:60px 0 80px}
+.vt-360-section .vt-wrap{max-width:1100px;margin:0 auto;padding:0 30px}
+.vt-360-viewer-wrap{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.35);margin-top:40px}
+.vt-360-tabs{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.vt-360-tab{padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s}
+.vt-360-tab.active,.vt-360-tab:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+.vt-360-cta-bar{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;align-items:center}
+.vt-360-cta-bar a,.vt-360-cta-bar button{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .3s}
+.vt-360-cta-primary{background:var(--orange);color:#fff}
+.vt-360-cta-primary:hover{background:#d4741e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(239,135,49,.4)}
+.vt-360-cta-secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)!important}
+.vt-360-cta-secondary:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.vt-360-label{font-size:12px;color:rgba(255,255,255,.45);margin-left:auto}
+.vt-360-notice{display:inline-flex;align-items:center;gap:8px;background:rgba(239,135,49,.12);border:1px solid rgba(239,135,49,.25);border-radius:12px;padding:10px 18px;font-size:12px;color:rgba(255,255,255,.7);margin-top:16px}
+#vt-pannellum-viewer{width:100%;height:480px;background:#0d3a5c}
+@media(max-width:768px){#vt-pannellum-viewer{height:300px}}
+</style>
+
+<section style="position:relative;min-height:480px;background:linear-gradient(135deg,#063a63 0,#0d5371 40%,#1a7a9e 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 30px 80px">
+  <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08) 0,transparent 50%),radial-gradient(circle at 70% 80%,rgba(239,135,49,.1) 0,transparent 40%)"></div>
+  <div style="position:relative;z-index:2;max-width:780px;margin:0 auto">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:8px 20px;font-size:12px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:2px;margin-bottom:28px"><i class="fas fa-vr-cardboard" style="color:var(--orange)"></i> Immersive 360&deg; Virtual Tours</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,64px);color:#fff;line-height:1.1;margin-bottom:20px;letter-spacing:-1px">Explore <span style="color:var(--orange)">Jamaica</span> Before You Book</h1>
+    <p style="font-size:18px;color:rgba(255,255,255,.75);line-height:1.7;max-width:620px;margin:0 auto 36px">Step inside 360&deg; virtual tours of Jamaica's most breathtaking beaches, waterfalls, excursions, and cultural experiences. Preview every adventure before you commit.</p>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+      <a href="#virtual-tours" style="display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;padding:16px 36px;border-radius:999px;text-decoration:none;transition:all .3s"><i class="fas fa-play-circle"></i> Launch 360&deg; Tour</a>
+      <a href="#" onclick="return nav('booking'),false" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);color:#fff;font-size:14px;font-weight:700;padding:16px 36px;border-radius:999px;border:1px solid rgba(255,255,255,.25);text-decoration:none;transition:all .3s"><i class="fas fa-calendar-check"></i> Start Planning</a>
+    </div>
+    <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:48px">
+      <div style="text-align:center"><strong style="display:block;font-family:'Playfair Display',serif;font-size:32px;color:#fff">50+</strong><span style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Virtual Experiences</span></div>
+      <div style="text-align:center"><strong style="display:block;font-family:'Playfair Display',serif;font-size:32px;color:#fff">360&deg;</strong><span style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Immersive Views</span></div>
+      <div style="text-align:center"><strong style="display:block;font-family:'Playfair Display',serif;font-size:32px;color:#fff">VR</strong><span style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Headset Ready</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="vt-360-section" id="virtual-tours" aria-label="360 Virtual Tour Viewer">
+  <div class="vt-wrap">
+    <div class="sec-head center reveal" style="color:#fff">
+      <span class="sec-pre" style="color:var(--orange)">360&deg; Virtual Tours</span>
+      <h2 class="sec-title" style="color:#fff">Preview Before You Book</h2>
+      <p class="sec-sub center" style="color:rgba(255,255,255,.7)">Immerse yourself in Jamaica's most stunning destinations. Use your mouse or touch to look around, click hotspots to explore, and book when you're ready.</p>
+    </div>
+    <div class="vt-360-tabs reveal">
+      <div class="vt-360-tab active" onclick="vtLoad360('blue-lagoon',this)"><i class="fas fa-water"></i> Blue Lagoon</div>
+      <div class="vt-360-tab" onclick="vtLoad360('sunset-yacht',this)"><i class="fas fa-ship"></i> Sunset Yacht</div>
+      <div class="vt-360-tab" onclick="vtLoad360('kingston-food',this)"><i class="fas fa-utensils"></i> Kingston Food Tour</div>
+      <div class="vt-360-tab" onclick="vtLoad360('dunn-falls',this)"><i class="fas fa-mountain"></i> Dunn's River Falls</div>
+    </div>
+    <div class="vt-360-viewer-wrap reveal">
+      <div id="vt-pannellum-viewer" role="application" aria-label="Interactive 360 degree virtual tour viewer"></div>
+    </div>
+    <div class="vt-360-cta-bar reveal">
+      <a href="#" onclick="return nav('booking'),false" class="vt-360-cta-primary"><i class="fas fa-calendar-check"></i> Book This Experience</a>
+      <a href="#" onclick="return nav('contact'),false" class="vt-360-cta-secondary"><i class="fas fa-paper-plane"></i> Request Itinerary</a>
+      <span class="vt-360-label"><i class="fas fa-vr-cardboard"></i> VR headset supported on mobile</span>
+    </div>
+    <div class="vt-360-notice reveal"><i class="fas fa-info-circle" style="color:var(--orange)"></i> Demo previews shown. High-resolution panoramas available upon booking confirmation.</div>
+  </div>
+</section>
+<script>
+var vtCurrentViewer=null,vtTourData={"blue-lagoon":{title:"Blue Lagoon, Portland",pitch:-5,yaw:120,hfov:110,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-8,yaw:45,type:"info",text:"Crystal clear thermal waters - avg 21°C"},{pitch:-2,yaw:180,type:"info",text:"Lush jungle canopy overhead"},{pitch:-12,yaw:-60,type:"info",text:"Private rafting launch point"}]}]},"sunset-yacht":{title:"Sunset Yacht Experience",pitch:-3,yaw:0,hfov:100,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-5,yaw:90,type:"info",text:"Open bar and cocktail station"},{pitch:5,yaw:-45,type:"info",text:"360° panoramic ocean views"},{pitch:-10,yaw:160,type:"info",text:"Dining area for 12 guests"}]}]},"kingston-food":{title:"Kingston Cultural Food Tour",pitch:-4,yaw:60,hfov:105,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-6,yaw:30,type:"info",text:"Authentic jerk pits - slow cooked over pimento wood"},{pitch:2,yaw:150,type:"info",text:"Local ackee and saltfish cooking demo"},{pitch:-8,yaw:-80,type:"info",text:"Market stall with seasonal tropical fruits"}]}]},"dunn-falls":{title:"Dunn's River Falls, Ocho Rios",pitch:-8,yaw:90,hfov:110,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-15,yaw:45,type:"info",text:"700-ft terraced waterfall"},{pitch:0,yaw:-30,type:"info",text:"Guided climb route - 1 hour experience"},{pitch:-10,yaw:180,type:"info",text:"Cool Caribbean Sea pool at base"}]}]}};
+function vtLoad360(id,tabEl){
+  if(tabEl){document.querySelectorAll(".vt-360-tab").forEach(function(t){t.classList.remove("active")});tabEl.classList.add("active")}
+  var tour=vtTourData[id];if(!tour)return;
+  if(vtCurrentViewer){try{vtCurrentViewer.destroy()}catch(e){}}
+  var scene=tour.scenes[0];
+  vtCurrentViewer=pannellum.viewer("vt-pannellum-viewer",{type:"equirectangular",panorama:scene.panorama,title:tour.title,autoLoad:true,showControls:true,compass:false,pitch:tour.pitch,yaw:tour.yaw,hfov:tour.hfov,hotSpots:scene.hotSpots,showFullscreenCtrl:true,keyboardZoom:true,mouseZoom:true,draggable:true});
+}
+window.addEventListener("DOMContentLoaded",function(){vtLoad360("blue-lagoon",null)});
+</script>
+
   <!-- DASHBOARD SHOWCASE (TABBED) -->
   <section class="vt-sec vt-sec--alt">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
         <span class="sec-pre">V-Tours</span>
-        <h2 class="sec-title">Coming this Summer 2026</h2>
-        <p class="sec-sub center">Explore both sides of the platform below. Click any element to interact, or expand to full screen for the complete experience.</p>
+        <h2 class="sec-title">Explore Jamaica in 360°</h2>
+        <p class="sec-sub center">Preview tours, villas, and Caribbean experiences before you book. Interact with the live explorer dashboard below, or dive into a 360° virtual tour.</p>
       </div>
       <div class="vt-dash-tabs reveal">
         <div class="vt-dash-tab active" onclick="vtSwitchTab('explorer')"><i class="fas fa-compass"></i> Explorer Dashboard</div>
