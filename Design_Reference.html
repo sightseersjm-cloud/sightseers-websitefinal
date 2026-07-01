@@ -12915,15 +12915,17 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 
 .vt-session-video-label{transition:opacity .3s}
 .vt-video-playing .vt-session-video-label{opacity:.15}
-.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass,.vt-session-video .vt-session-video-overlay{opacity:0!important;transition:opacity .35s ease}
-.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot,.vt-session-video:hover .vt-360-compass,.vt-session-video:hover .vt-session-video-overlay{opacity:1!important}
+/* Hide everything by default */
+.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass,.vt-session-video .vt-session-video-overlay{opacity:0!important;transition:opacity .3s ease;pointer-events:none}
+/* On hover: show only scene tabs + fullscreen button */
+.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-session-expand{opacity:1!important;pointer-events:auto}
 .vt-yt-pan-wrap{position:absolute;top:-15%;left:-15%;width:130%;height:130%;z-index:1;overflow:hidden}
 .vt-yt-pan-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;transform-origin:center center;transition:none;pointer-events:none}
 .vt-yt-pan-overlay{position:absolute;inset:0;z-index:2;cursor:grab}
 .vt-yt-pan-overlay:active{cursor:grabbing}
 .vt-video-playing{background:linear-gradient(135deg,#0b4d3a,#1a8a6e,#0b4d3a)!important;background-size:300% 300%!important;animation:vtVideoShimmer 4s ease infinite!important}
 @keyframes vtVideoShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.vt-video-playing .vt-session-video-overlay{opacity:1!important}
+.vt-video-playing .vt-session-video-overlay{opacity:0!important}
 .vt-video-playing::after{content:'';position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.3);animation:vtRecPulse 1.5s ease infinite}
 @keyframes vtRecPulse{0%,100%{opacity:1}50%{opacity:.4}}
 
@@ -44553,6 +44555,9 @@ html{background:#082d48!important}
   setTimeout(function(){
     setupPan('kayak');
     setupPan('market');
+    /* double-click anywhere on the video to fullscreen */
+    var vid=document.getElementById('vt-session-video');
+    if(vid)vid.addEventListener('dblclick',function(){if(typeof vtExpandSession==='function')vtExpandSession();});
   },400);
 })();
 </script>
