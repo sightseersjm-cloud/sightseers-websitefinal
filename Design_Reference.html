@@ -9255,6 +9255,10 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   ]
 }
 </script>
+<!-- Three.js WebXR -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.min.js"></script>
+<!-- HLS.js for Mux live streams -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js"></script>
 </head>
 <body>
 
@@ -44691,4 +44695,427 @@ html{background:#082d48!important}
   },400);
 })();
 </script>
- 
+
+<!-- ═══════════════════════════════════════════════════════════════
+     WEBXR VIRTUAL CARIBBEAN ROOM
+     Supports: Meta Quest 2/3/Pro · Apple Vision Pro · Desktop · Mobile
+═══════════════════════════════════════════════════════════════ -->
+
+<!-- WebXR Room Overlay -->
+<div id="vt-webxr-room" style="display:none;position:fixed;inset:0;z-index:10010;background:#050d1a">
+  <canvas id="vt-webxr-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+  <div id="vt-webxr-hud" style="position:absolute;inset:0;pointer-events:none;z-index:2">
+
+    <!-- Top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(rgba(5,13,26,1),transparent);pointer-events:auto">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="background:#ef8731;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;letter-spacing:-0.5px">VT</div>
+        <div style="color:#fff;font-size:14px;font-weight:600">Sight Seers Caribbean <span style="color:rgba(255,255,255,.4);font-weight:400">· Live</span></div>
+        <div id="vt-xr-live-badge" style="display:flex;align-items:center;gap:6px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:20px;padding:3px 10px">
+          <div style="width:6px;height:6px;background:#ef4444;border-radius:50%;animation:vtPulse 1.5s infinite"></div>
+          <span style="color:#ef4444;font-size:10px;font-weight:700;letter-spacing:.5px">LIVE</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="vt-webxr-vr-btn" onclick="vtXRToggleVR()" style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.35);color:#a78bfa;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s">
+          <i class="fas fa-vr-cardboard"></i><span id="vt-webxr-vr-label">Enter VR</span>
+        </button>
+        <button onclick="vtXRClose()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .2s">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats row top-left -->
+    <div style="position:absolute;top:76px;left:20px;display:flex;flex-direction:column;gap:8px">
+      <div style="background:rgba(0,0,0,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 14px;color:#fff;min-width:90px">
+        <div style="color:rgba(255,255,255,.45);font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Watching</div>
+        <div id="vt-xr-viewers" style="font-size:20px;font-weight:700">247</div>
+      </div>
+      <div style="background:rgba(0,0,0,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 14px;color:#fff;min-width:90px">
+        <div style="color:rgba(255,255,255,.45);font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Session</div>
+        <div style="font-size:20px;font-weight:700;color:#ef8731">$42</div>
+      </div>
+    </div>
+
+    <!-- Chat panel top-right -->
+    <div style="position:absolute;top:76px;right:20px;width:240px;background:rgba(0,0,0,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden">
+      <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);font-size:11px;font-weight:700;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">
+        <i class="fas fa-comments" style="color:#ef8731"></i> Live Chat
+      </div>
+      <div id="vt-xr-chat-msgs" style="padding:8px 10px;max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:10px;color:rgba(255,255,255,.55);line-height:1.4"><span style="color:#ef8731;font-weight:700">Sarah A.</span> This is incredible! 🌊</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.55);line-height:1.4"><span style="color:#ef8731;font-weight:700">Mike R.</span> Can we see the waterfall?</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.55);line-height:1.4"><span style="color:#ef8731;font-weight:700">Yasmin K.</span> The water is so clear 😍</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.55);line-height:1.4"><span style="color:#ef8731;font-weight:700">Tom W.</span> Want to buy that necklace!</div>
+      </div>
+      <div style="padding:8px;border-top:1px solid rgba(255,255,255,.06);pointer-events:auto;display:flex;gap:6px">
+        <input id="vt-xr-chat-input" type="text" placeholder="Say something..." style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 10px;color:#fff;font-size:10px;font-family:inherit;outline:none" onkeydown="if(event.key==='Enter')vtXRSendChat()">
+        <button onclick="vtXRSendChat()" style="background:#ef8731;border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:10px;font-family:inherit;flex-shrink:0">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scene tabs bottom center -->
+    <div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto">
+      <div class="vt-webxr-tab active" data-scene="blue-lagoon" onclick="vtXRSwitchScene('blue-lagoon')" style="background:rgba(239,135,49,.18);border:1px solid #ef8731;color:#ef8731;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all .2s">
+        <i class="fas fa-water" style="margin-right:5px"></i>Blue Lagoon
+      </div>
+      <div class="vt-webxr-tab" data-scene="craft-market" onclick="vtXRSwitchScene('craft-market')" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all .2s">
+        <i class="fas fa-store" style="margin-right:5px"></i>Craft Market
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none">
+      <span id="vt-webxr-status" style="color:rgba(255,255,255,.3);font-size:10px">Initializing stream...</span>
+    </div>
+
+  </div><!-- /hud -->
+</div><!-- /vt-webxr-room -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SIGHT SEERS — WEBXR + MUX LIVE STREAM SYSTEM
+   Supports: Meta Quest 2/3/Pro · Apple Vision Pro · Desktop · Mobile
+
+   ┌─── SETUP INSTRUCTIONS ─────────────────────────────────────┐
+   │ 1. Log in to your Mux dashboard (dashboard.mux.com)         │
+   │ 2. Create a Live Stream → copy the PLAYBACK ID              │
+   │ 3. Paste Playback IDs into VT_MUX_SCENES below              │
+   │ 4. Add your Supabase + Stripe keys below                    │
+   └────────────────────────────────────────────────────────────┘
+═══════════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+/* ─── YOUR CONFIGURATION ──────────────────────────────────────── */
+var VT_CONFIG = {
+  mux: {
+    scenes: {
+      'blue-lagoon': {
+        playbackId: 'DS00Spx1CV902MCtPj5WknGlR102V5HFkDe', /* ← Replace with your Mux Playback ID */
+        title: 'Blue Lagoon Live',
+        price: 42
+      },
+      'craft-market': {
+        playbackId: 'DS00Spx1CV902MCtPj5WknGlR102V5HFkDe', /* ← Replace with your Mux Playback ID */
+        title: 'Craft Market Live',
+        price: 38
+      }
+    }
+  },
+  supabase: {
+    url: 'YOUR_SUPABASE_URL',          /* ← e.g. https://xxxx.supabase.co */
+    anonKey: 'YOUR_SUPABASE_ANON_KEY'  /* ← from Supabase Settings > API */
+  },
+  stripe: {
+    publishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY' /* ← pk_live_... or pk_test_... */
+  }
+};
+/* ──────────────────────────────────────────────────────────────── */
+
+/* ─── STATE ──────────────────────────────────────────────────── */
+var vtXR = {
+  renderer: null, scene: null, camera: null,
+  initialized: false, currentScene: 'blue-lagoon',
+  video: null, videoTexture: null, hls: null,
+  xrSession: null, particles: null,
+  look: { active: false, prevX: 0, prevY: 0, yaw: 0, pitch: 0 }
+};
+
+/* ─── PUBLIC: ENTER XR (called by XR mode menu buttons) ──────── */
+window.vtEnterXR = function(mode) {
+  var menu = document.getElementById('vt-xr-mode-menu');
+  if (menu) menu.style.display = 'none';
+  var room = document.getElementById('vt-webxr-room');
+  if (room) room.style.display = 'block';
+
+  if (!vtXR.initialized) vtXRInit();
+  else vtXRResume();
+
+  if (!navigator.xr) return;
+  var xrMode = (mode === 'immersive-ar') ? 'immersive-ar' : 'immersive-vr';
+  navigator.xr.isSessionSupported(xrMode).then(function(ok){
+    if (!ok) { vtXRStatus('No '+xrMode+' support on this device'); return; }
+    var opts = { optionalFeatures: ['local-floor','bounded-floor','hand-tracking','layers'] };
+    if (mode === 'immersive-ar') opts.domOverlay = { root: document.getElementById('vt-webxr-hud') };
+    navigator.xr.requestSession(xrMode, opts).then(function(session){
+      vtXR.xrSession = session;
+      vtXR.renderer.xr.setSession(session);
+      var lbl = document.getElementById('vt-webxr-vr-label');
+      if (lbl) lbl.textContent = 'Exit VR';
+      session.addEventListener('end', function(){
+        vtXR.xrSession = null;
+        if (lbl) lbl.textContent = 'Enter VR';
+      });
+    }).catch(function(e){ vtXRStatus('Could not start XR: '+e.message); });
+  });
+};
+
+/* ─── PUBLIC: TOGGLE VR BUTTON ───────────────────────────────── */
+window.vtXRToggleVR = function(){
+  if (vtXR.xrSession) { vtXR.xrSession.end(); return; }
+  vtEnterXR('immersive-vr');
+};
+
+/* ─── PUBLIC: CLOSE ROOM ─────────────────────────────────────── */
+window.vtXRClose = function(){
+  if (vtXR.xrSession) vtXR.xrSession.end();
+  var room = document.getElementById('vt-webxr-room');
+  if (room) room.style.display = 'none';
+  if (vtXR.renderer) vtXR.renderer.setAnimationLoop(null);
+  if (vtXR.video) vtXR.video.pause();
+};
+
+/* ─── PUBLIC: SWITCH SCENE ───────────────────────────────────── */
+window.vtXRSwitchScene = function(key){
+  vtXR.currentScene = key;
+  vtXRLoadMux(key);
+  document.querySelectorAll('.vt-webxr-tab').forEach(function(t){
+    var active = t.dataset.scene === key;
+    t.style.background    = active ? 'rgba(239,135,49,.18)' : 'rgba(255,255,255,.06)';
+    t.style.borderColor   = active ? '#ef8731' : 'rgba(255,255,255,.15)';
+    t.style.color         = active ? '#ef8731' : 'rgba(255,255,255,.7)';
+  });
+};
+
+/* ─── PUBLIC: CHAT SEND ──────────────────────────────────────── */
+window.vtXRSendChat = function(){
+  var inp = document.getElementById('vt-xr-chat-input');
+  var msgs = document.getElementById('vt-xr-chat-msgs');
+  if (!inp || !msgs || !inp.value.trim()) return;
+  var div = document.createElement('div');
+  div.style.cssText = 'font-size:10px;color:rgba(255,255,255,.55);line-height:1.4';
+  div.innerHTML = '<span style="color:#ef8731;font-weight:700">You</span> '+inp.value;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  inp.value = '';
+};
+
+/* ─── OVERRIDE: XR MENU TOGGLE ───────────────────────────────── */
+window.vtToggleXRMenu = function(){
+  var menu = document.getElementById('vt-xr-mode-menu');
+  if (!menu) return;
+  var open = menu.style.display === 'block';
+  menu.style.display = open ? 'none' : 'block';
+  if (!open) {
+    var st = document.getElementById('vt-xr-mode-status');
+    if (!st) return;
+    if (!navigator.xr) {
+      st.innerHTML = '<i class="fas fa-circle" style="color:#ef4444"></i> WebXR unavailable';
+      return;
+    }
+    navigator.xr.isSessionSupported('immersive-vr').then(function(vr){
+      navigator.xr.isSessionSupported('immersive-ar').then(function(ar){
+        if (vr) st.innerHTML = '<i class="fas fa-circle" style="color:#22c55e"></i> VR device ready';
+        else if (ar) st.innerHTML = '<i class="fas fa-circle" style="color:#f59e0b"></i> AR device ready';
+        else st.innerHTML = '<i class="fas fa-circle" style="color:#ef4444"></i> No XR device detected';
+      });
+    });
+  }
+};
+document.addEventListener('click', function(e){
+  var btn = document.getElementById('vt-xr-enter-btn');
+  var menu = document.getElementById('vt-xr-mode-menu');
+  if (menu && btn && !btn.contains(e.target)) menu.style.display = 'none';
+});
+
+/* ─── INIT THREE.JS SCENE ────────────────────────────────────── */
+function vtXRInit(){
+  if (typeof THREE === 'undefined'){ vtXRStatus('Three.js unavailable'); return; }
+  var canvas = document.getElementById('vt-webxr-canvas');
+  if (!canvas) return;
+
+  /* RENDERER */
+  vtXR.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  vtXR.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  vtXR.renderer.setSize(window.innerWidth, window.innerHeight);
+  vtXR.renderer.xr.enabled = true;
+  vtXR.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  vtXR.renderer.toneMappingExposure = 0.85;
+
+  /* SCENE */
+  vtXR.scene = new THREE.Scene();
+  vtXR.scene.background = new THREE.Color(0x050d1a);
+  vtXR.scene.fog = new THREE.Fog(0x050d1a, 30, 120);
+
+  /* CAMERA */
+  vtXR.camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.01, 500);
+  vtXR.camera.position.set(0, 1.6, 5);
+
+  /* LIGHTING */
+  vtXR.scene.add(new THREE.AmbientLight(0x1a3a5c, 2));
+  var ol = new THREE.PointLight(0xef8731, 3, 20); ol.position.set(0,4,-4); vtXR.scene.add(ol);
+  var bl = new THREE.PointLight(0x063a63, 2, 25); bl.position.set(-6,2,3); vtXR.scene.add(bl);
+
+  /* BUILD ENVIRONMENT */
+  vtXRBuildStars();
+  vtXRBuildFloor();
+  vtXRBuildScreen();
+  vtXRBuildParticles();
+
+  /* INPUT */
+  vtXRSetupInput(canvas);
+  window.addEventListener('resize', vtXRResize);
+
+  /* START LOOP */
+  vtXR.renderer.setAnimationLoop(vtXRLoop);
+  vtXR.initialized = true;
+  vtXRStatus('Drag to look around · Click "Enter VR" for Meta Quest or Vision Pro');
+}
+
+function vtXRBuildStars(){
+  var geo = new THREE.BufferGeometry();
+  var n = 4000, pos = new Float32Array(n*3);
+  for(var i=0;i<n*3;i++) pos[i]=(Math.random()-.5)*300;
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  vtXR.scene.add(new THREE.Points(geo, new THREE.PointsMaterial({color:0xffffff,size:.2,transparent:true,opacity:.7})));
+}
+
+function vtXRBuildFloor(){
+  /* Dark ocean floor */
+  var f = new THREE.Mesh(
+    new THREE.CircleGeometry(50,64),
+    new THREE.MeshStandardMaterial({color:0x071828,roughness:.9,metalness:.05})
+  );
+  f.rotation.x = -Math.PI/2; vtXR.scene.add(f);
+
+  /* Horizon glow ring */
+  var r = new THREE.Mesh(
+    new THREE.RingGeometry(47,50,64),
+    new THREE.MeshBasicMaterial({color:0xef8731,side:THREE.DoubleSide,transparent:true,opacity:.1})
+  );
+  r.rotation.x = -Math.PI/2; r.position.y=.02; vtXR.scene.add(r);
+}
+
+function vtXRBuildScreen(){
+  /* Video element */
+  var vid = document.createElement('video');
+  vid.id = 'vt-xr-video';
+  vid.crossOrigin = 'anonymous';
+  vid.loop = vid.muted = vid.playsInline = vid.autoplay = true;
+  vid.style.display = 'none';
+  document.body.appendChild(vid);
+  vtXR.video = vid;
+
+  /* VideoTexture */
+  var tex = new THREE.VideoTexture(vid);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  vtXR.videoTexture = tex;
+
+  /* Curved cinema screen */
+  var sGeo = new THREE.CylinderGeometry(10, 10, 5.6, 80, 1, true, -Math.PI*.32, Math.PI*.64);
+  var sMat = new THREE.MeshBasicMaterial({map:tex, side:THREE.BackSide});
+  var screen = new THREE.Mesh(sGeo, sMat);
+  screen.position.set(0, 2.4, -7);
+  vtXR.scene.add(screen);
+
+  /* Orange frame glow */
+  var gGeo = new THREE.PlaneGeometry(13, 7.5);
+  var gMat = new THREE.MeshBasicMaterial({color:0x063a63,transparent:true,opacity:.35,side:THREE.DoubleSide});
+  var glow = new THREE.Mesh(gGeo, gMat);
+  glow.position.set(0, 2.4, -6.9);
+  vtXR.scene.add(glow);
+
+  /* Load stream */
+  vtXRLoadMux(vtXR.currentScene);
+}
+
+function vtXRBuildParticles(){
+  var geo = new THREE.BufferGeometry();
+  var n=300, pos=new Float32Array(n*3);
+  for(var i=0;i<n;i++){
+    pos[i*3]=(Math.random()-.5)*30;
+    pos[i*3+1]=Math.random()*5;
+    pos[i*3+2]=(Math.random()-.5)*30;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  vtXR.particles = new THREE.Points(geo, new THREE.PointsMaterial({color:0xffd700,size:.04,transparent:true,opacity:.5}));
+  vtXR.scene.add(vtXR.particles);
+}
+
+/* ─── MUX HLS LOADER ─────────────────────────────────────────── */
+function vtXRLoadMux(sceneKey){
+  var cfg = VT_CONFIG.mux.scenes[sceneKey];
+  if (!cfg || !cfg.playbackId) return;
+  var url = 'https://stream.mux.com/' + cfg.playbackId + '.m3u8';
+  vtXRLoadHLS(url);
+  var priceEl = document.querySelector('#vt-webxr-hud [style*="$42"], #vt-webxr-hud [style*="$38"]');
+  /* update price display */
+}
+
+function vtXRLoadHLS(url){
+  var vid = vtXR.video;
+  if (!vid) return;
+  if (vtXR.hls) { vtXR.hls.destroy(); vtXR.hls = null; }
+
+  if (typeof Hls !== 'undefined' && Hls.isSupported()){
+    vtXR.hls = new Hls({ enableWorker: false, lowLatencyMode: true });
+    vtXR.hls.loadSource(url);
+    vtXR.hls.attachMedia(vid);
+    vtXR.hls.on(Hls.Events.MANIFEST_PARSED, function(){ vid.play().catch(function(){}); });
+    vtXR.hls.on(Hls.Events.ERROR, function(e,d){
+      if(d.fatal) vtXRStatus('Stream unavailable — guide may not be live yet');
+    });
+  } else if (vid.canPlayType('application/vnd.apple.mpegurl')){
+    /* Safari / Vision Pro native HLS */
+    vid.src = url;
+    vid.addEventListener('loadedmetadata', function(){ vid.play().catch(function(){}); }, {once:true});
+  }
+}
+
+/* ─── INPUT: mouse / touch look ─────────────────────────────── */
+function vtXRSetupInput(canvas){
+  var L = vtXR.look;
+  canvas.addEventListener('mousedown', function(e){ L.active=true; L.prevX=e.clientX; L.prevY=e.clientY; });
+  window.addEventListener('mouseup',   function(){ L.active=false; });
+  window.addEventListener('mousemove', function(e){
+    if(!L.active || vtXR.xrSession) return;
+    L.yaw   -= (e.clientX-L.prevX)*0.003;
+    L.pitch -= (e.clientY-L.prevY)*0.003;
+    L.pitch  = Math.max(-1.2, Math.min(1.2, L.pitch));
+    L.prevX=e.clientX; L.prevY=e.clientY;
+  });
+  canvas.addEventListener('touchstart', function(e){ L.prevX=e.touches[0].clientX; L.prevY=e.touches[0].clientY; },{passive:true});
+  canvas.addEventListener('touchmove', function(e){
+    if(vtXR.xrSession) return;
+    L.yaw   -= (e.touches[0].clientX-L.prevX)*0.003;
+    L.pitch -= (e.touches[0].clientY-L.prevY)*0.003;
+    L.pitch  = Math.max(-1.2, Math.min(1.2, L.pitch));
+    L.prevX=e.touches[0].clientX; L.prevY=e.touches[0].clientY;
+  },{passive:true});
+}
+
+/* ─── RENDER LOOP ────────────────────────────────────────────── */
+function vtXRLoop(){
+  if(!vtXR.xrSession){
+    vtXR.camera.rotation.order='YXZ';
+    vtXR.camera.rotation.y = vtXR.look.yaw;
+    vtXR.camera.rotation.x = vtXR.look.pitch;
+  }
+  if(vtXR.particles) vtXR.particles.rotation.y += .0004;
+  vtXR.renderer.render(vtXR.scene, vtXR.camera);
+}
+
+function vtXRResize(){
+  if(!vtXR.renderer) return;
+  vtXR.camera.aspect = window.innerWidth/window.innerHeight;
+  vtXR.camera.updateProjectionMatrix();
+  vtXR.renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function vtXRResume(){
+  if(vtXR.renderer) vtXR.renderer.setAnimationLoop(vtXRLoop);
+  if(vtXR.video) vtXR.video.play().catch(function(){});
+}
+
+function vtXRStatus(msg){
+  var el = document.getElementById('vt-webxr-status');
+  if(el) el.textContent = msg;
+}
+
+})();
+</script>
