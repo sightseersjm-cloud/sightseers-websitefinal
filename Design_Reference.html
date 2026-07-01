@@ -14746,64 +14746,8 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
     </div>
   </section>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
-<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-<style>
-.vt-360-section{background:var(--navy);padding:60px 0 80px}
-.vt-360-section .vt-wrap{max-width:1100px;margin:0 auto;padding:0 30px}
-.vt-360-viewer-wrap{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.35);margin-top:40px}
-.vt-360-tabs{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-.vt-360-tab{padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s}
-.vt-360-tab.active,.vt-360-tab:hover{background:var(--orange);border-color:var(--orange);color:#fff}
-.vt-360-cta-bar{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;align-items:center}
-.vt-360-cta-bar a,.vt-360-cta-bar button{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .3s}
-.vt-360-cta-primary{background:var(--orange);color:#fff}
-.vt-360-cta-primary:hover{background:#d4741e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(239,135,49,.4)}
-.vt-360-cta-secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)!important}
-.vt-360-cta-secondary:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
-.vt-360-label{font-size:12px;color:rgba(255,255,255,.45);margin-left:auto}
-.vt-360-notice{display:inline-flex;align-items:center;gap:8px;background:rgba(239,135,49,.12);border:1px solid rgba(239,135,49,.25);border-radius:12px;padding:10px 18px;font-size:12px;color:rgba(255,255,255,.7);margin-top:16px}
-#vt-pannellum-viewer{width:100%;height:480px;background:#0d3a5c}
-@media(max-width:768px){#vt-pannellum-viewer{height:300px}}
-</style>
 
-<section class="vt-360-section" id="virtual-tours" aria-label="360 Virtual Tour Viewer">
-  <div class="vt-wrap">
-    <div class="sec-head center reveal" style="color:#fff">
-      <span class="sec-pre" style="color:var(--orange)">360&deg; Virtual Tours</span>
-      <h2 class="sec-title" style="color:#fff">Preview Before You Book</h2>
-      <p class="sec-sub center" style="color:rgba(255,255,255,.7)">Immerse yourself in Jamaica's most stunning destinations. Use your mouse or touch to look around, click hotspots to explore, and book when you're ready.</p>
-    </div>
-    <div class="vt-360-tabs reveal">
-      <div class="vt-360-tab active" onclick="vtLoad360('blue-lagoon',this)"><i class="fas fa-water"></i> Blue Lagoon</div>
-      <div class="vt-360-tab" onclick="vtLoad360('sunset-yacht',this)"><i class="fas fa-ship"></i> Sunset Yacht</div>
-      <div class="vt-360-tab" onclick="vtLoad360('kingston-food',this)"><i class="fas fa-utensils"></i> Kingston Food Tour</div>
-      <div class="vt-360-tab" onclick="vtLoad360('dunn-falls',this)"><i class="fas fa-mountain"></i> Dunn's River Falls</div>
-    </div>
-    <div class="vt-360-viewer-wrap reveal">
-      <div id="vt-pannellum-viewer" role="application" aria-label="Interactive 360 degree virtual tour viewer"></div>
-    </div>
-    <div class="vt-360-cta-bar reveal">
-      <a href="#" onclick="return nav('booking'),false" class="vt-360-cta-primary"><i class="fas fa-calendar-check"></i> Book This Experience</a>
-      <a href="#" onclick="return nav('contact'),false" class="vt-360-cta-secondary"><i class="fas fa-paper-plane"></i> Request Itinerary</a>
-      <span class="vt-360-label"><i class="fas fa-vr-cardboard"></i> VR headset supported on mobile</span>
-    </div>
-    <div class="vt-360-notice reveal"><i class="fas fa-info-circle" style="color:var(--orange)"></i> Demo previews shown. High-resolution panoramas available upon booking confirmation.</div>
-  </div>
-</section>
-<script>
-var vtCurrentViewer=null,vtTourData={"blue-lagoon":{title:"Blue Lagoon, Portland",pitch:-5,yaw:120,hfov:110,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-8,yaw:45,type:"info",text:"Crystal clear thermal waters - avg 21°C"},{pitch:-2,yaw:180,type:"info",text:"Lush jungle canopy overhead"},{pitch:-12,yaw:-60,type:"info",text:"Private rafting launch point"}]}]},"sunset-yacht":{title:"Sunset Yacht Experience",pitch:-3,yaw:0,hfov:100,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-5,yaw:90,type:"info",text:"Open bar and cocktail station"},{pitch:5,yaw:-45,type:"info",text:"360° panoramic ocean views"},{pitch:-10,yaw:160,type:"info",text:"Dining area for 12 guests"}]}]},"kingston-food":{title:"Kingston Cultural Food Tour",pitch:-4,yaw:60,hfov:105,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-6,yaw:30,type:"info",text:"Authentic jerk pits - slow cooked over pimento wood"},{pitch:2,yaw:150,type:"info",text:"Local ackee and saltfish cooking demo"},{pitch:-8,yaw:-80,type:"info",text:"Market stall with seasonal tropical fruits"}]}]},"dunn-falls":{title:"Dunn's River Falls, Ocho Rios",pitch:-8,yaw:90,hfov:110,scenes:[{id:"main",panorama:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=4000&h=2000&fit=crop",hotSpots:[{pitch:-15,yaw:45,type:"info",text:"700-ft terraced waterfall"},{pitch:0,yaw:-30,type:"info",text:"Guided climb route - 1 hour experience"},{pitch:-10,yaw:180,type:"info",text:"Cool Caribbean Sea pool at base"}]}]}};
-function vtLoad360(id,tabEl){
-  if(tabEl){document.querySelectorAll(".vt-360-tab").forEach(function(t){t.classList.remove("active")});tabEl.classList.add("active")}
-  var tour=vtTourData[id];if(!tour)return;
-  if(vtCurrentViewer){try{vtCurrentViewer.destroy()}catch(e){}}
-  var scene=tour.scenes[0];
-  vtCurrentViewer=pannellum.viewer("vt-pannellum-viewer",{type:"equirectangular",panorama:scene.panorama,title:tour.title,autoLoad:true,showControls:true,compass:false,pitch:tour.pitch,yaw:tour.yaw,hfov:tour.hfov,hotSpots:scene.hotSpots,showFullscreenCtrl:true,keyboardZoom:true,mouseZoom:true,draggable:true});
-}
-window.addEventListener("DOMContentLoaded",function(){vtLoad360("blue-lagoon",null)});
-</script>
-
-  <!-- DASHBOARD SHOWCASE (TABBED) -->
+    <!-- DASHBOARD SHOWCASE (TABBED) -->
   <section class="vt-sec vt-sec--alt">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
