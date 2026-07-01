@@ -8,7 +8,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#virtual-tours</loc>
+    <loc>https://www.sightseerscaribbean.com/#vtours</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -24,10 +24,22 @@
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#villas</loc>
+    <loc>https://www.sightseerscaribbean.com/#stays</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/#yacht-charters</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/#transfers</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://www.sightseerscaribbean.com/#about</loc>
