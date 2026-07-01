@@ -8,6 +8,7 @@
 <meta name="keywords" content="Jamaica virtual tour, 360 tour Caribbean, immersive travel experience, Jamaica excursions, virtual tourism Jamaica">
 <link rel="canonical" href="https://www.sightseerscaribbean.com/">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" crossorigin="anonymous"></script>
 <meta property="og:title" content="Sight Seers Caribbean | Virtual Tours & 360° Immersive Experiences">
 <meta property="og:description" content="Explore Jamaica and the Caribbean through immersive 360° virtual tours before you book. See beaches, villas, excursions and cultural experiences up close.">
 <meta property="og:type" content="website">
@@ -12914,8 +12915,12 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 
 .vt-session-video-label{transition:opacity .3s}
 .vt-video-playing .vt-session-video-label{opacity:.15}
-.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass{opacity:0!important;transition:opacity .35s ease}
-.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot,.vt-session-video:hover .vt-360-compass{opacity:1}
+.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass,.vt-session-video .vt-session-video-overlay{opacity:0!important;transition:opacity .35s ease}
+.vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot,.vt-session-video:hover .vt-360-compass,.vt-session-video:hover .vt-session-video-overlay{opacity:1!important}
+.vt-360-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;cursor:grab;display:block}
+.vt-360-canvas:active{cursor:grabbing}
+.vt-360-load{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgba(255,255,255,.85);font-size:13px;font-weight:600;z-index:5;pointer-events:none;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;background:rgba(0,0,0,.45);padding:20px 28px;border-radius:12px;backdrop-filter:blur(6px)}
+.vt-360-load i{font-size:26px}
 .vt-video-playing{background:linear-gradient(135deg,#0b4d3a,#1a8a6e,#0b4d3a)!important;background-size:300% 300%!important;animation:vtVideoShimmer 4s ease infinite!important}
 @keyframes vtVideoShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .vt-video-playing .vt-session-video-overlay{opacity:1!important}
@@ -14863,9 +14868,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <!-- Live Indicator -->
                         <div class="vt-live-indicator" title="You're watching a live session"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-xr-enter-btn" id="vt-xr-enter-btn" title="Enter XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i><div class="vt-xr-mode-menu" id="vt-xr-mode-menu"><div class="vt-xr-mode-menu-title">Select XR Mode</div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-vr')"><i class="fas fa-vr-cardboard"></i><div><strong>Immersive VR</strong><span>Full 360&deg; virtual tour</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-ar')"><i class="fas fa-glasses"></i><div><strong>AR Passthrough</strong><span>Overlay tour on your room</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('glasses')"><i class="fas fa-sun"></i><div><strong>Glasses HUD</strong><span>Ray-Ban Meta heads-up view</span></div></div><div class="vt-xr-mode-divider"></div><div class="vt-xr-mode-status" id="vt-xr-mode-status"><i class="fas fa-circle"></i> Checking device...</div></div></div><div class="vt-session-expand" title="Fullscreen" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
 
-                        <!-- BLUE LAGOON - YouTube 360° Live Tour -->
+                        <!-- BLUE LAGOON - 360° Sphere Video -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
-                          <iframe id="vt-yt-player" class="vt-yt-iframe" src="https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <canvas class="vt-360-canvas" id="vt-canvas-kayak"></canvas>
+                          <div class="vt-360-load" id="vt-load-kayak"><i class="fas fa-circle-notch fa-spin"></i><span>Loading 360&deg; view&hellip;</span></div>
                           <div class="vt-yt-hotspot-layer">
                             <div class="vt-hotspot" style="top:22%;left:15%" onmouseenter="vtShowHotspot(event,'hs1')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs1')">
                               <div class="vt-hotspot-dot"><i class="fas fa-leaf"></i></div>
@@ -14882,9 +14888,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                           </div>
                         </div>
 
-                        <!-- CRAFT MARKET SCENE — YouTube 360° -->
+                        <!-- CRAFT MARKET SCENE — 360° Sphere Video -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-market" style="display:none">
-                          <iframe class="vt-yt-iframe" src="https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <canvas class="vt-360-canvas" id="vt-canvas-market"></canvas>
+                          <div class="vt-360-load" id="vt-load-market"><i class="fas fa-circle-notch fa-spin"></i><span>Loading 360&deg; view&hellip;</span></div>
                           <div class="vt-yt-hotspot-layer">
                           <!-- Market Hotspots -->
                           <div class="vt-hotspot" style="top:40%;left:18%" onmouseenter="vtShowHotspot(event,'hs4')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs4')">
@@ -44454,6 +44461,159 @@ html{background:#082d48!important}
   window.processCheckoutPayment=function(){
     if(typeof toast==='function')toast('Payment processing is coming soon. Stay tuned!');
   };
+})();
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   THREE.JS 360° SPHERE VIDEO PLAYER
+   Drag/touch to look around. Auto-rotates when idle.
+   Swap VIDEO_SOURCES URLs for your own 360° equirectangular MP4s.
+═══════════════════════════════════════════════════════════════ */
+(function(){
+  var VIDEO_SOURCES={
+    kayak:'https://cdn.aframe.io/360-video-boilerplate/video/city.mp4',
+    market:'https://cdn.aframe.io/360-video-boilerplate/video/city.mp4'
+  };
+
+  function waitThree(cb,n){
+    n=n||0;
+    if(window.THREE){cb();return;}
+    if(n>60){console.warn('Three.js not available');return;}
+    setTimeout(function(){waitThree(cb,n+1);},150);
+  }
+
+  function setup(sceneId){
+    var sceneEl=document.getElementById('vt-scene-'+sceneId);
+    var canvas=document.getElementById('vt-canvas-'+sceneId);
+    var loadEl=document.getElementById('vt-load-'+sceneId);
+    if(!sceneEl||!canvas)return;
+
+    /* --- video element --- */
+    var vid=document.createElement('video');
+    vid.src=VIDEO_SOURCES[sceneId];
+    vid.crossOrigin='anonymous';
+    vid.loop=true; vid.muted=true; vid.playsInline=true;
+    vid.preload='auto';
+    vid.style.display='none';
+    document.body.appendChild(vid);
+
+    /* --- Three.js --- */
+    var pw=sceneEl.offsetWidth||800, ph=sceneEl.offsetHeight||450;
+    var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+    renderer.setSize(pw,ph);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(75,pw/ph,1,1100);
+    camera.position.set(0,0,0);
+
+    var texture=new THREE.VideoTexture(vid);
+    texture.minFilter=THREE.LinearFilter;
+    texture.magFilter=THREE.LinearFilter;
+
+    var geo=new THREE.SphereGeometry(500,64,40);
+    geo.scale(-1,1,1);
+    var mat=new THREE.MeshBasicMaterial({map:texture});
+    scene.add(new THREE.Mesh(geo,mat));
+
+    /* --- camera state --- */
+    var lon=0,lat=0;
+    var isDown=false,sx=0,sy=0,sl=0,sb=0;
+    var autoRotate=true,autoTimer;
+
+    function pauseAuto(){
+      autoRotate=false;
+      clearTimeout(autoTimer);
+      autoTimer=setTimeout(function(){autoRotate=true;},6000);
+    }
+
+    /* mouse */
+    canvas.addEventListener('mousedown',function(e){
+      isDown=true; sx=e.clientX; sy=e.clientY; sl=lon; sb=lat;
+      canvas.style.cursor='grabbing'; pauseAuto(); e.preventDefault();
+    });
+    document.addEventListener('mousemove',function(e){
+      if(!isDown)return;
+      lon=sl+(sx-e.clientX)*0.25;
+      lat=sb+(e.clientY-sy)*0.15;
+    });
+    document.addEventListener('mouseup',function(){
+      if(!isDown)return; isDown=false; canvas.style.cursor='grab';
+    });
+
+    /* touch */
+    canvas.addEventListener('touchstart',function(e){
+      if(e.touches.length!==1)return;
+      isDown=true; sx=e.touches[0].clientX; sy=e.touches[0].clientY; sl=lon; sb=lat;
+      pauseAuto(); e.preventDefault();
+    },{passive:false});
+    document.addEventListener('touchmove',function(e){
+      if(!isDown||e.touches.length!==1)return;
+      lon=sl+(sx-e.touches[0].clientX)*0.25;
+      lat=sb+(e.touches[0].clientY-sy)*0.15;
+    },{passive:true});
+    document.addEventListener('touchend',function(){isDown=false;});
+
+    /* gyroscope */
+    if(window.DeviceOrientationEvent){
+      window.addEventListener('deviceorientation',function(e){
+        if(!e.alpha||isDown)return;
+        lon=-e.alpha; lat=(e.beta||0)-90;
+      });
+    }
+
+    /* resize */
+    var ro=new ResizeObserver(function(){
+      var w=sceneEl.offsetWidth,h=sceneEl.offsetHeight;
+      if(w>0&&h>0){renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+    });
+    ro.observe(sceneEl);
+
+    /* video ready */
+    vid.addEventListener('canplay',function(){if(loadEl)loadEl.style.display='none';});
+    vid.addEventListener('error',function(){
+      if(loadEl){loadEl.innerHTML='<i class="fas fa-vr-cardboard"></i><span>360&deg; video ready<br><small>Add your MP4 source</small></span>';loadEl.style.display='flex';}
+    });
+    vid.load();
+
+    /* render loop */
+    var rafId=null,active=false;
+    function animate(){
+      rafId=requestAnimationFrame(animate);
+      if(autoRotate)lon+=0.025;
+      lat=Math.max(-85,Math.min(85,lat));
+      var phi=(90-lat)*Math.PI/180;
+      var theta=lon*Math.PI/180;
+      camera.lookAt(
+        Math.sin(phi)*Math.cos(theta),
+        Math.cos(phi),
+        Math.sin(phi)*Math.sin(theta)
+      );
+      renderer.render(scene,camera);
+      var needle=document.getElementById('vt-360-compass-needle');
+      if(needle)needle.style.transform='rotate('+lon+'deg)';
+    }
+
+    function tick(){
+      var vis=sceneEl.offsetParent!==null&&sceneEl.style.display!=='none';
+      if(vis&&!active){
+        active=true; vid.play().catch(function(){});
+        if(!rafId)animate();
+      } else if(!vis&&active){
+        active=false; vid.pause();
+        if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+      }
+    }
+    setInterval(tick,400);
+    tick();
+  }
+
+  waitThree(function(){
+    setTimeout(function(){
+      setup('kayak');
+      setup('market');
+    },200);
+  });
 })();
 </script>
  
