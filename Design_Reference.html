@@ -13361,6 +13361,37 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 .vt-session-bar-btn.leave:hover{background:#e0342a}
 .vt-session-expand-btn{width:32px;height:32px;border-radius:10px;background:rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;color:rgba(0,0,0,.45);border:none}
 .vt-session-expand-btn:hover{background:rgba(0,0,0,.08);color:#1d1d1f}
+.vt-cinema-btn{width:32px;height:32px;border-radius:10px;background:rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;color:rgba(0,0,0,.45);border:none;margin-right:4px}
+.vt-cinema-btn:hover{background:var(--orange);color:#fff}
+/* ── CINEMA MODE ── */
+.vt-session-cinema-wrap{display:none;position:fixed;inset:0;z-index:10005;background:#000;flex-direction:column;animation:vtCinemaOpen .3s cubic-bezier(.16,1,.3,1)}
+.vt-session-cinema-wrap.open{display:flex}
+@keyframes vtCinemaOpen{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.vt-cinema-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;position:absolute;top:0;left:0;right:0;z-index:2;background:linear-gradient(rgba(0,0,0,.55),transparent);pointer-events:none}
+.vt-cinema-topbar>*{pointer-events:auto}
+.vt-cinema-title{color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;opacity:.9}
+.vt-cinema-title .vt-dash-live-dot{width:8px;height:8px;background:#ef4444;border-radius:50%;animation:vtRecPulse 1.5s ease infinite}
+.vt-cinema-close{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .2s}
+.vt-cinema-close:hover{background:rgba(255,255,255,.28)}
+.vt-cinema-video{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.vt-cinema-video .vt-yt-pan-wrap{position:absolute;top:-15%;left:-15%;width:130%;height:130%}
+.vt-cinema-video .vt-yt-pan-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:none}
+.vt-cinema-video .vt-yt-pan-overlay{position:absolute;inset:0;z-index:2;cursor:grab}
+.vt-cinema-video .vt-yt-pan-overlay:active{cursor:grabbing}
+.vt-cinema-chat{position:absolute;bottom:24px;right:24px;width:300px;height:320px;background:rgba(15,15,20,.75);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:18px;display:flex;flex-direction:column;overflow:hidden;z-index:3;transition:opacity .3s}
+.vt-cinema-chat-hdr{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;justify-content:space-between}
+.vt-cinema-chat-msgs{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.vt-cinema-chat-msgs::-webkit-scrollbar{width:3px}
+.vt-cinema-chat-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+.vt-cinema-msg{font-size:12px;color:rgba(255,255,255,.85);line-height:1.5;display:flex;gap:8px}
+.vt-cinema-msg-av{width:22px;height:22px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px}
+.vt-cinema-chat-input{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.vt-cinema-chat-input input{flex:1;background:rgba(255,255,255,.08);border:none;border-radius:20px;padding:8px 14px;color:#fff;font-size:12px;outline:none}
+.vt-cinema-chat-input input::placeholder{color:rgba(255,255,255,.35)}
+.vt-cinema-send{width:30px;height:30px;border-radius:50%;background:var(--orange);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.vt-cinema-scene-tabs{position:absolute;top:60px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
+.vt-cinema-tab{padding:8px 20px;border-radius:999px;background:rgba(255,255,255,.15);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.vt-cinema-tab.active,.vt-cinema-tab:hover{background:var(--orange);border-color:var(--orange)}
 .vt-session.vt-session-expanded{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;border-radius:0;margin:0}
 .vt-session.vt-session-expanded .vt-session-expand-btn i::before{content:"\\f066"}
 .vt-session-content{display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:200px}
@@ -14815,7 +14846,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                 <div class="vt-session" id="vt-active-session">
                   <div class="vt-session-bar">
                     <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span id="vt-session-title">Blue Lagoon Morning Walk</span> &mdash; <span id="vt-session-guide">Marcus Thompson</span></div>
-                    <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span><i class="fas fa-check vt-lang-check"></i></div></div></div><div class="vt-session-expand-btn" onclick="vtExpandSession()" title="Expand session"><i class="fas fa-expand"></i></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
+                    <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span><i class="fas fa-check vt-lang-check"></i></div></div></div><div class="vt-session-expand-btn" onclick="vtExpandSession()" title="Expand session"><i class="fas fa-expand"></i></div><div class="vt-cinema-btn" onclick="vtCinemaMode()" title="Cinema Mode"><i class="fas fa-film"></i></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
                   </div>
                   <div class="vt-session-content">
                     <div>
@@ -16924,6 +16955,91 @@ function vtCollapseSession(){
 function vtOnSessionFsChange(){if(!vtSessionFsActive()&&vtSessionExpanded)vtCollapseSession()}
 document.addEventListener('fullscreenchange',vtOnSessionFsChange);
 document.addEventListener('webkitfullscreenchange',vtOnSessionFsChange);
+
+/* ═══════ CINEMA MODE ═══════ */
+var vtCinemaOpen=false;
+function vtCinemaMode(){
+  if(vtCinemaOpen){vtCinemaClose();return;}
+  vtCinemaOpen=true;
+  /* Build the overlay once */
+  var wrap=document.getElementById('vt-cinema-wrap');
+  if(!wrap){
+    /* Determine active scene */
+    var sceneKayak=document.getElementById('vt-scene-kayak');
+    var sceneMarket=document.getElementById('vt-scene-market');
+    var activeId=(!sceneMarket||sceneMarket.style.display==='none')?'kayak':'market';
+    var activeLabel=activeId==='kayak'?'Blue Lagoon':'Craft Market';
+    var otherLabel=activeId==='kayak'?'Craft Market':'Blue Lagoon';
+    var otherId=activeId==='kayak'?'market':'kayak';
+    /* Current video src */
+    var srcEl=document.getElementById('vt-iframe-'+activeId);
+    var src=srcEl?srcEl.src.replace('controls=0','controls=0'):'';
+    var srcOther=document.getElementById('vt-iframe-'+otherId);
+    var srcO=srcOther?srcOther.src:'';
+
+    wrap=document.createElement('div');
+    wrap.id='vt-cinema-wrap';
+    wrap.className='vt-session-cinema-wrap';
+    wrap.innerHTML=
+      '<div class="vt-cinema-topbar">'+
+        '<div class="vt-cinema-title"><span class="vt-dash-live-dot"></span><span id="vt-cinema-label">'+activeLabel+' &bull; Jamaica</span></div>'+
+        '<button class="vt-cinema-close" onclick="vtCinemaClose()"><i class="fas fa-times"></i></button>'+
+      '</div>'+
+      '<div class="vt-cinema-video" id="vt-cinema-video">'+
+        '<div class="vt-yt-pan-wrap" id="vt-cinema-pan">'+
+          '<iframe id="vt-iframe-cinema" class="vt-yt-pan-iframe" src="'+src+'" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>'+
+          '<div class="vt-yt-pan-overlay" id="vt-overlay-cinema"></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="vt-cinema-scene-tabs">'+
+        '<div class="vt-cinema-tab active" id="vt-ctab-'+activeId+'" onclick="vtCinemaSwitch(\''+activeId+'\',\''+src+'\',\''+activeLabel+'\')">'+activeLabel+'</div>'+
+        '<div class="vt-cinema-tab" id="vt-ctab-'+otherId+'" onclick="vtCinemaSwitch(\''+otherId+'\',\''+srcO+'\',\''+otherLabel+'\')">'+otherLabel+'</div>'+
+      '</div>'+
+      '<div class="vt-cinema-chat">'+
+        '<div class="vt-cinema-chat-hdr"><span>Live Chat</span><span id="vt-cinema-viewers" style="color:rgba(255,255,255,.4)">247 watching</span></div>'+
+        '<div class="vt-cinema-chat-msgs" id="vt-cinema-msgs">'+
+          '<div class="vt-cinema-msg"><div class="vt-cinema-msg-av">S</div><div><strong style="color:#fff;font-size:11px">Sarah</strong><br>What is that blue plant? Beautiful!</div></div>'+
+          '<div class="vt-cinema-msg"><div class="vt-cinema-msg-av" style="background:#063a63">M</div><div><strong style="color:#fff;font-size:11px">Marcus</strong><br>That is Blue Mahoe, Jamaica\'s national tree!</div></div>'+
+          '<div class="vt-cinema-msg"><div class="vt-cinema-msg-av" style="background:#1a7a9e">J</div><div><strong style="color:#fff;font-size:11px">James</strong><br>Can I buy that woven basket behind you?</div></div>'+
+          '<div class="vt-cinema-msg"><div class="vt-cinema-msg-av" style="background:#0b4d3a">R</div><div><strong style="color:#fff;font-size:11px">Riya</strong><br>This feels like I am really there!</div></div>'+
+        '</div>'+
+        '<div class="vt-cinema-chat-input"><input type="text" placeholder="Say something..." id="vt-cinema-input" onkeydown="if(event.key===\'Enter\')vtCinemaSend()"><button class="vt-cinema-send" onclick="vtCinemaSend()"><i class="fas fa-paper-plane"></i></button></div>'+
+      '</div>';
+    document.body.appendChild(wrap);
+    /* Wire drag-pan for cinema overlay */
+    setupPan('cinema');
+  }
+  wrap.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function vtCinemaClose(){
+  vtCinemaOpen=false;
+  var wrap=document.getElementById('vt-cinema-wrap');
+  if(wrap)wrap.classList.remove('open');
+  document.body.style.overflow='';
+}
+function vtCinemaSwitch(id,src,label){
+  var iframe=document.getElementById('vt-iframe-cinema');
+  if(iframe)iframe.src=src;
+  var lbl=document.getElementById('vt-cinema-label');
+  if(lbl)lbl.textContent=label+' • Jamaica';
+  document.querySelectorAll('.vt-cinema-tab').forEach(function(t){t.classList.remove('active');});
+  var tab=document.getElementById('vt-ctab-'+id);
+  if(tab)tab.classList.add('active');
+}
+function vtCinemaSend(){
+  var inp=document.getElementById('vt-cinema-input');
+  if(!inp||!inp.value.trim())return;
+  var msgs=document.getElementById('vt-cinema-msgs');
+  if(msgs){
+    var d=document.createElement('div');d.className='vt-cinema-msg';
+    d.innerHTML='<div class="vt-cinema-msg-av" style="background:var(--orange)">Y</div><div><strong style="color:#fff;font-size:11px">You</strong><br>'+inp.value.trim()+'</div>';
+    msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+  }
+  inp.value='';
+}
+/* Escape key closes cinema */
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vtCinemaOpen)vtCinemaClose();});
 
 
 /* ═══════ AI CONCIERGE ═══════ */
@@ -44478,7 +44594,7 @@ html{background:#082d48!important}
 (function(){
   var MAX_X=12, MAX_Y=8;
 
-  function setupPan(sceneId){
+  window.setupPan=function setupPan(sceneId){
     var overlay=document.getElementById('vt-overlay-'+sceneId);
     var iframe=document.getElementById('vt-iframe-'+sceneId);
     if(!overlay||!iframe)return;
