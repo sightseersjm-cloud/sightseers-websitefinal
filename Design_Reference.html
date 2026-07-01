@@ -12914,7 +12914,7 @@ body.theme-night .vt-cat-card p,body.theme-night .vt-step p,body.theme-night .vt
 
 .vt-session-video-label{transition:opacity .3s}
 .vt-video-playing .vt-session-video-label{opacity:.15}
-.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass{opacity:0;transition:opacity .35s ease}
+.vt-session-video .vt-scene-switcher,.vt-session-video .vt-weather-widget,.vt-session-video .vt-audio-zone,.vt-session-video .vt-haptic-toggle,.vt-session-video .vt-live-indicator,.vt-session-video .vt-xr-enter-btn,.vt-session-video .vt-session-expand,.vt-session-video .vt-session-video-label,.vt-session-video .vt-session-viewers,.vt-session-video .vt-hotspot,.vt-session-video .vt-360-compass{opacity:0!important;transition:opacity .35s ease}
 .vt-session-video:hover .vt-scene-switcher,.vt-session-video:hover .vt-weather-widget,.vt-session-video:hover .vt-audio-zone,.vt-session-video:hover .vt-haptic-toggle,.vt-session-video:hover .vt-live-indicator,.vt-session-video:hover .vt-xr-enter-btn,.vt-session-video:hover .vt-session-expand,.vt-session-video:hover .vt-session-video-label,.vt-session-video:hover .vt-session-viewers,.vt-session-video:hover .vt-hotspot,.vt-session-video:hover .vt-360-compass{opacity:1}
 .vt-video-playing{background:linear-gradient(135deg,#0b4d3a,#1a8a6e,#0b4d3a)!important;background-size:300% 300%!important;animation:vtVideoShimmer 4s ease infinite!important}
 @keyframes vtVideoShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -14431,8 +14431,8 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 .vt-dash-light{background:#fff!important;border-color:rgba(60,60,67,.08)!important;box-shadow:0 1px 4px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.03)!important}
 .vt-dash-light .vt-dash-sidebar{background:#f2f2f7!important;border-right-color:rgba(60,60,67,.06)!important}
-.vt-dash-light .vt-dash-sidebar-label{color:rgba(60,60,67,.3)!important}
-.vt-dash-light .vt-dash-sidebar a{color:rgba(60,60,67,.6)!important}
+.vt-dash-light .vt-dash-sidebar-label{color:var(--grey)!important}
+.vt-dash-light .vt-dash-sidebar a{color:var(--dark)!important}
 .vt-dash-light .vt-dash-sidebar a:hover{background:rgba(0,0,0,.04)!important;color:#1c1c1e!important}
 .vt-dash-light .vt-dash-sidebar a.active{background:rgba(239,135,49,.1)!important;color:var(--orange)!important}
 .vt-dash-light .vt-dash-sidebar a .badge{background:var(--orange)!important;color:#fff!important}
@@ -14684,67 +14684,6 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
     </div>
   </div>
 
-  <!-- V-TOURS HERO -->
-  <section class="vt-hero" aria-label="V-Tours — Live Virtual Caribbean Tours">
-    <div class="vt-hero-inner">
-      <div class="vt-hero-badge"><i class="fas fa-vr-cardboard"></i> Live &middot; Interactive &middot; Caribbean</div>
-      <h1>Experience the Caribbean<br><span>from Anywhere in the World</span></h1>
-      <p class="vt-hero-sub">Join live-guided virtual tours of Jamaica, Barbados, Saint Lucia and beyond. Connect with real local guides, explore 360&deg; locations, and plan your Caribbean adventure &mdash; all in real time.</p>
-      <div class="vt-hero-cta" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:40px">
-        <a href="#virtual-tours" style="display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;padding:16px 36px;border-radius:999px;text-decoration:none;transition:all .3s"><i class="fas fa-play-circle"></i> Launch 360&deg; Tour</a>
-        <button class="vt-cta-btn" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'})"><i class="fas fa-paper-plane"></i> Join the Waitlist</button>
-      </div>
-      <div class="vt-hero-stats">
-        <div class="vt-hero-stat"><strong>50+</strong><span>Virtual Experiences</span></div>
-        <div class="vt-hero-stat"><strong>360&deg;</strong><span>Immersive Views</span></div>
-        <div class="vt-hero-stat"><strong>Live</strong><span>Expert Guides</span></div>
-        <div class="vt-hero-stat"><strong>VR</strong><span>Headset Ready</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TOUR CATEGORIES BY TRAVELER INTENT -->
-  <section class="vt-sec">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">Explore by Experience</span>
-        <h2 class="sec-title">Find Your Perfect Caribbean Journey</h2>
-        <p class="sec-sub center">Whether you&rsquo;re planning a romantic getaway, family adventure, or corporate retreat &mdash; V-Tours brings the Caribbean to you.</p>
-      </div>
-      <div class="vt-grid-5 reveal">
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-heart"></i></div>
-          <h3>Romance &amp; Honeymoon</h3>
-          <p>Private virtual sunset cruises, secluded beach tours, and couples&rsquo; experiences across Jamaica and Saint Lucia.</p>
-          <a href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--orange)">Book Now &rarr;</a>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-users"></i></div>
-          <h3>Group Adventures</h3>
-          <p>Live group sessions for 2&ndash;20 guests. Share the experience with friends, family, or colleagues in real time.</p>
-          <a href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--orange)">Book Now &rarr;</a>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-anchor"></i></div>
-          <h3>Yacht Charter Tours</h3>
-          <p>Explore Caribbean marinas, reefs, and coastlines virtually. Preview yacht charter routes before you sail.</p>
-          <a href="#" onclick="nav('yacht-charters');return false;" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--orange)">Book Now &rarr;</a>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-compass"></i></div>
-          <h3>Island Excursions</h3>
-          <p>Live guided tours of waterfalls, markets, historic sites, and nature reserves &mdash; from Kingston to Bridgetown.</p>
-          <a href="#" onclick="nav('tours');return false;" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--orange)">Book Now &rarr;</a>
-        </div>
-        <div class="vt-cat-card">
-          <div class="vt-cat-icon"><i class="fas fa-ring"></i></div>
-          <h3>Weddings &amp; Events</h3>
-          <p>Scout Caribbean wedding venues virtually. Share live sessions with guests who can&rsquo;t travel in person.</p>
-          <a href="#" onclick="nav('contact');return false;" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--orange)">Request Itinerary &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </section>
 
 
     <!-- DASHBOARD SHOWCASE (TABBED) -->
@@ -14926,7 +14865,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
                         <!-- BLUE LAGOON - YouTube 360° Live Tour -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
-                          <iframe id="vt-yt-player" class="vt-yt-iframe" src="https://www.youtube.com/embed/jqq_ZdD5Zwg?autoplay=1&mute=1&loop=1&playlist=jqq_ZdD5Zwg&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <iframe id="vt-yt-player" class="vt-yt-iframe" src="https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
                           <div class="vt-yt-hotspot-layer">
                             <div class="vt-hotspot" style="top:22%;left:15%" onmouseenter="vtShowHotspot(event,'hs1')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs1')">
                               <div class="vt-hotspot-dot"><i class="fas fa-leaf"></i></div>
@@ -14945,7 +14884,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
                         <!-- CRAFT MARKET SCENE — YouTube 360° -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-market" style="display:none">
-                          <iframe class="vt-yt-iframe" src="https://www.youtube.com/embed/g-5ktqtVXzk?autoplay=1&mute=1&loop=1&playlist=g-5ktqtVXzk&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                          <iframe class="vt-yt-iframe" src="https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
                           <div class="vt-yt-hotspot-layer">
                           <!-- Market Hotspots -->
                           <div class="vt-hotspot" style="top:40%;left:18%" onmouseenter="vtShowHotspot(event,'hs4')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs4')">
@@ -17226,8 +17165,8 @@ function vtToggleSplitView(btn){
   if(vtSplitOn){
     btn.classList.add('vt-active');
     var row=document.createElement('div');row.className='vt-split-row';row.id='vt-split-row';
-    var s1='https://www.youtube.com/embed/jqq_ZdD5Zwg?autoplay=1&mute=1&loop=1&playlist=jqq_ZdD5Zwg&controls=0&modestbranding=1&rel=0&playsinline=1';
-    var s2='https://www.youtube.com/embed/g-5ktqtVXzk?autoplay=1&mute=1&loop=1&playlist=g-5ktqtVXzk&controls=0&modestbranding=1&rel=0&playsinline=1';
+    var s1='https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&modestbranding=1&rel=0&playsinline=1';
+    var s2='https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&modestbranding=1&rel=0&playsinline=1';
     row.innerHTML='<div class="vt-split-pane"><div class="vt-split-label-tag">Blue Lagoon · Portland</div><iframe src="'+s1+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-pane"><div class="vt-split-label-tag" style="left:auto;right:10px">Craft Market · Kingston</div><iframe src="'+s2+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-divider"></div>';
     vid.appendChild(row);
     vtToast('<i class="fas fa-table-columns"></i> Split View — Blue Lagoon + Craft Market');
