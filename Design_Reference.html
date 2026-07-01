@@ -44556,8 +44556,14 @@ html{background:#082d48!important}
     setupPan('kayak');
     setupPan('market');
     /* double-click anywhere on the video to fullscreen */
+    function dblFS(){if(typeof vtExpandSession==='function')vtExpandSession();}
     var vid=document.getElementById('vt-session-video');
-    if(vid)vid.addEventListener('dblclick',function(){if(typeof vtExpandSession==='function')vtExpandSession();});
+    if(vid)vid.addEventListener('dblclick',dblFS);
+    /* also attach directly to pan overlays so it fires even if mousedown preventDefault blocks bubbling */
+    ['kayak','market'].forEach(function(id){
+      var ov=document.getElementById('vt-overlay-'+id);
+      if(ov)ov.addEventListener('dblclick',dblFS);
+    });
   },400);
 })();
 </script>
