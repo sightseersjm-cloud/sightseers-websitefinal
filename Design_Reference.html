@@ -9259,6 +9259,8 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.min.js"></script>
 <!-- HLS.js for Mux live streams -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js"></script>
+<!-- Supabase real-time chat -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -14864,6 +14866,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                     <div>
                       <div class="vt-session-video" id="vt-session-video">
 
+                        <!-- Shared Mux Live Player (shown when guide is live; replaces YouTube scenes) -->
+                        <video id="vt-main-live-vid" playsinline autoplay muted
+                          style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:5;background:#000"></video>
+
                         <!-- Scene Switcher -->
                         <div class="vt-scene-switcher">
                           <div class="vt-scene-btn active" title="Switch to Blue Lagoon beach scene" onclick="vtSwitchScene('kayak')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
@@ -16168,11 +16174,155 @@ function vtStartTimer(){
 
 /* ── Start/stop stream ── */
 var vtStreamActive=false;
+/* ── Shared live video player ── */
+var vtMainHls=null;
+var vtSupabaseClient=null;
+var vtSupabaseChan=null;
+
+function vtActivateLivePlayer(hlsUrl, playbackId){
+  var vid=document.getElementById('vt-main-live-vid');
+  if(!vid) return;
+
+  // Destroy previous HLS instance
+  if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
+
+  // Show live video, hide YouTube scenes
+  vid.style.display='block';
+  document.querySelectorAll('.vt-360-scene').forEach(function(s){s.style.display='none';});
+
+  if(window.Hls && Hls.isSupported()){
+    vtMainHls=new Hls({lowLatencyMode:true,backBufferLength:30});
+    vtMainHls.loadSource(hlsUrl);
+    vtMainHls.attachMedia(vid);
+    vtMainHls.on(Hls.Events.MANIFEST_PARSED,function(){vid.play().catch(function(){});});
+  } else if(vid.canPlayType('application/vnd.apple.mpegurl')){
+    vid.src=hlsUrl;
+    vid.play().catch(function(){});
+  }
+
+  // Also sync the WebXR room video to the same stream
+  if(window.vtXR && vtXR.video){
+    vtXRLoadHLS(hlsUrl);
+  }
+
+  // Connect Supabase real-time chat for this stream
+  if(playbackId) vtConnectSupabaseChat(playbackId);
+}
+
+function vtDeactivateLivePlayer(){
+  var vid=document.getElementById('vt-main-live-vid');
+  if(vid){vid.pause();vid.src='';vid.style.display='none';}
+  if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
+  // Restore YouTube scenes
+  document.querySelectorAll('.vt-360-scene').forEach(function(s,i){
+    s.style.display=(i===0)?'block':'none';
+  });
+  vtDisconnectSupabaseChat();
+}
+
+/* ── Supabase real-time chat ── */
+function vtConnectSupabaseChat(roomId){
+  var cfg=VT_CONFIG&&VT_CONFIG.supabase;
+  if(!cfg||!cfg.url||cfg.url==='YOUR_SUPABASE_URL') return;
+  if(!window.supabase) return;
+
+  if(!vtSupabaseClient){
+    vtSupabaseClient=window.supabase.createClient(cfg.url,cfg.anonKey);
+  }
+  if(vtSupabaseChan) vtSupabaseChan.unsubscribe();
+
+  vtSupabaseChan=vtSupabaseClient.channel('live-chat:'+roomId,{
+    config:{broadcast:{self:true}}
+  });
+  vtSupabaseChan
+    .on('broadcast',{event:'msg'},function(payload){
+      var d=payload.payload||{};
+      vtAppendChatMsg(d.avatar||'?', d.name||'Viewer', d.text||'', d.isGuide||false);
+    })
+    .subscribe();
+}
+
+function vtDisconnectSupabaseChat(){
+  if(vtSupabaseChan){vtSupabaseChan.unsubscribe();vtSupabaseChan=null;}
+}
+
+function vtSendSupabaseChat(text, name, isGuide){
+  if(!vtSupabaseChan) return false;
+  vtSupabaseChan.send({type:'broadcast',event:'msg',payload:{
+    avatar:(name||'V')[0].toUpperCase(),
+    name:name||'Viewer',
+    text:text,
+    isGuide:!!isGuide
+  }});
+  return true;
+}
+
+function vtAppendChatMsg(avatar, name, text, isGuide){
+  // Append to WebXR room chat
+  var xrList=document.getElementById('vt-webxr-chat-list');
+  if(xrList){
+    var d=document.createElement('div');
+    d.style.cssText='padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px';
+    d.innerHTML='<strong style="color:'+(isGuide?'#ef8731':'#7eb8d4')+'">'+(isGuide?'&#127908; ':'')+(name||'Viewer')+'</strong>: <span style="color:rgba(255,255,255,.8)">'+vtEscape(text)+'</span>';
+    xrList.appendChild(d);
+    xrList.scrollTop=xrList.scrollHeight;
+    if(xrList.children.length>40) xrList.children[0].remove();
+  }
+  // Append to session chat panel
+  var chatEl=document.getElementById('vt-chat-messages');
+  if(chatEl){
+    var m=document.createElement('div');
+    m.className='vt-session-chat-msg'+(isGuide?' guide':'');
+    m.innerHTML='<div class="vt-chat-avatar">'+(isGuide?'<i class="fas fa-microphone"></i>':avatar)+'</div><div class="vt-chat-content"><strong>'+vtEscape(name)+'</strong><span>'+vtEscape(text)+'</span></div>';
+    chatEl.appendChild(m);
+    chatEl.scrollTop=chatEl.scrollHeight;
+    if(chatEl.children.length>30) chatEl.children[0].remove();
+  }
+}
+
+function vtEscape(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Check URL params on load (post-Stripe redirect) ── */
+function vtCheckUrlParams(){
+  var p=new URLSearchParams(window.location.search);
+  var pid=p.get('playbackId');
+  var paid=p.get('paid');
+  if(pid&&paid==='1'){
+    var hlsUrl='https://stream.mux.com/'+pid+'.m3u8';
+    // Auto-join first available session
+    setTimeout(function(){
+      var s=vtSessions['blue-lagoon'];
+      if(s){
+        s.playbackId=pid;
+        var el;
+        el=document.getElementById('vt-session-title');if(el)el.textContent=s.title;
+        el=document.getElementById('vt-session-guide');if(el)el.textContent=s.guide;
+        el=document.getElementById('vt-session-loc');if(el)el.innerHTML=s.loc;
+        el=document.getElementById('vt-viewer-count');if(el)el.textContent=s.viewers;
+        el=document.getElementById('vt-chat-viewers');if(el)el.textContent=s.viewers+' watching';
+        var sess=document.getElementById('vt-active-session');
+        if(sess)sess.scrollIntoView({behavior:'smooth',block:'center'});
+        vtStreamActive=true;vtAnimateViewers();vtStartTimer();vtAutoChat();
+        vtActivateLivePlayer(hlsUrl, pid);
+        vtToast('<i class="fas fa-check-circle"></i> Payment confirmed! Joining live session…');
+      }
+    },800);
+    // Clean URL without reload
+    window.history.replaceState({},'',window.location.pathname);
+  }
+}
+
 function vtStartStream(){
   vtStreamActive=true;vtAnimateViewers();vtStartTimer();
   var hint=document.getElementById('vt-drag-hint');
   if(hint){hint.classList.add('show');setTimeout(function(){hint.classList.remove('show')},4000)}
   vtAutoChat();
+  // If a live stream is already active, connect the player
+  if(vtLive&&vtLive.hlsUrl){
+    vtActivateLivePlayer(vtLive.hlsUrl, vtLive.playbackId);
+  }
 }
 function vtLeaveSession(){
   vtStreamActive=false;
@@ -16264,15 +16414,24 @@ function vtSessionAction(el,type){
 var vtBotReplies=['Amazing view!','How much is that?','I want to visit Jamaica so badly','This is incredible technology','Can the guide show us the beach?','Wow, the water is so blue!','Adding that to my wishlist','Best virtual tour ever','Is that a hummingbird?','The colors are breathtaking','Just bought the basket!','Guide, can you go closer?','This is the future of travel'];
 function vtSendChat(){
   var inp=document.getElementById('vt-chat-input');var msg=inp.value.trim();if(!msg)return;
-  var box=document.getElementById('vt-chat-messages');
-  var allM=box.querySelectorAll('.vt-session-chat-msg');if(allM.length>15)allM[0].remove();box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar" style="background:var(--orange)">Y</div><div class="vt-session-chat-text">'+msg.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})+'</div></div>';
-  inp.value='';box.scrollTop=box.scrollHeight;
-  setTimeout(function(){
-    var reply=vtBotReplies[Math.floor(Math.random()*vtBotReplies.length)];
-    var avatars=['K','L','D','A','T','N'];var av=avatars[Math.floor(Math.random()*avatars.length)];
-    box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar">'+av+'</div><div class="vt-session-chat-text">'+reply+'</div></div>';
-    box.scrollTop=box.scrollHeight;
-  },800+Math.random()*1200);
+  inp.value='';
+  // Try Supabase broadcast first; fall back to local
+  var sent=vtSendSupabaseChat(msg,'You',false);
+  if(!sent){
+    // Local-only append
+    var box=document.getElementById('vt-chat-messages');
+    if(box){
+      var allM=box.querySelectorAll('.vt-session-chat-msg');if(allM.length>15)allM[0].remove();
+      box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar" style="background:var(--orange)">Y</div><div class="vt-session-chat-text">'+vtEscape(msg)+'</div></div>';
+      box.scrollTop=box.scrollHeight;
+      setTimeout(function(){
+        var reply=vtBotReplies[Math.floor(Math.random()*vtBotReplies.length)];
+        var avatars=['K','L','D','A','T','N'];var av=avatars[Math.floor(Math.random()*avatars.length)];
+        box.innerHTML+='<div class="vt-session-chat-msg"><div class="vt-session-chat-avatar">'+av+'</div><div class="vt-session-chat-text">'+reply+'</div></div>';
+        box.scrollTop=box.scrollHeight;
+      },800+Math.random()*1200);
+    }
+  }
 }
 
 /* ── Add to cart ── */
@@ -16415,10 +16574,11 @@ function vtGoLiveStart(){
           clearInterval(vtLive.statusTimer);
           document.getElementById('vt-golive-status').textContent='🔴 You are LIVE! Viewers can now join.';
           document.getElementById('vt-golive-status').style.color='#ef4444';
+          // Push live stream to all viewer screens
+          vtActivateLivePlayer(vtLive.hlsUrl, vtLive.playbackId);
           // Update WebXR room with real HLS URL
           if(window.vtXR&&window.vtXR.currentScene){
             VT_CONFIG.mux.scenes[vtXR.currentScene].playbackId=vtLive.playbackId;
-            vtXRLoadMux(vtXR.currentScene);
           }
           var el=document.getElementById('vt-guide-sessions');
           if(el)el.textContent=parseInt(el.textContent)+1;
@@ -16444,6 +16604,8 @@ function vtGoLiveEnd(){
   }).then(function(){
     vtLive.isLive=false;
     vtLive.streamId=null;
+    vtLive.hlsUrl=null;
+    vtDeactivateLivePlayer();
     document.getElementById('vt-golive-status').textContent='Stream ended.';
     document.getElementById('vt-golive-status').style.color='';
     document.getElementById('vt-golive-end-btn').style.display='none';
@@ -16575,6 +16737,9 @@ function vt360End(){
   },10000);
 }
 vtInit360();
+// Check for post-Stripe redirect with playbackId
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',vtCheckUrlParams);}
+else{vtCheckUrlParams();}
 
 /* ═══════ HOTSPOT PURCHASE SYSTEM ═══════ */
 var vtHotspotData={
@@ -45053,6 +45218,11 @@ window.vtEnterXR = function(mode) {
   if (!vtXR.initialized) vtXRInit();
   else vtXRResume();
 
+  // If a live stream is active, sync it into the XR room immediately
+  if (window.vtLive && vtLive.hlsUrl) {
+    vtXRLoadHLS(vtLive.hlsUrl);
+  }
+
   if (!navigator.xr) return;
   var xrMode = (mode === 'immersive-ar') ? 'immersive-ar' : 'immersive-vr';
   navigator.xr.isSessionSupported(xrMode).then(function(ok){
@@ -45102,14 +45272,14 @@ window.vtXRSwitchScene = function(key){
 /* ─── PUBLIC: CHAT SEND ──────────────────────────────────────── */
 window.vtXRSendChat = function(){
   var inp = document.getElementById('vt-xr-chat-input');
-  var msgs = document.getElementById('vt-xr-chat-msgs');
-  if (!inp || !msgs || !inp.value.trim()) return;
-  var div = document.createElement('div');
-  div.style.cssText = 'font-size:10px;color:rgba(255,255,255,.55);line-height:1.4';
-  div.innerHTML = '<span style="color:#ef8731;font-weight:700">You</span> '+inp.value;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+  if (!inp || !inp.value.trim()) return;
+  var text = inp.value.trim();
   inp.value = '';
+  // Try Supabase broadcast; fall back to local append
+  var sent = vtSendSupabaseChat(text, 'You', false);
+  if (!sent) {
+    vtAppendChatMsg('Y', 'You', text, false);
+  }
 };
 
 /* ─── OVERRIDE: XR MENU TOGGLE ───────────────────────────────── */
