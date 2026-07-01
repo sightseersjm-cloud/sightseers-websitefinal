@@ -14871,7 +14871,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <!-- BLUE LAGOON / ZIPLINE — YouTube pan-drag -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
                           <div class="vt-yt-pan-wrap" id="vt-pan-kayak">
-                            <iframe id="vt-iframe-kayak" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                            <iframe id="vt-iframe-kayak" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd2160&hd=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
                             <div class="vt-yt-pan-overlay" id="vt-overlay-kayak"></div>
                           </div>
                           <div class="vt-yt-hotspot-layer">
@@ -14893,7 +14893,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <!-- CRAFT MARKET SCENE — YouTube pan-drag -->
                         <div class="vt-360-scene vt-yt-scene" id="vt-scene-market" style="display:none">
                           <div class="vt-yt-pan-wrap" id="vt-pan-market">
-                            <iframe id="vt-iframe-market" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
+                            <iframe id="vt-iframe-market" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd2160&hd=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
                             <div class="vt-yt-pan-overlay" id="vt-overlay-market"></div>
                           </div>
                           <div class="vt-yt-hotspot-layer">
@@ -17176,8 +17176,8 @@ function vtToggleSplitView(btn){
   if(vtSplitOn){
     btn.classList.add('vt-active');
     var row=document.createElement('div');row.className='vt-split-row';row.id='vt-split-row';
-    var s1='https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&modestbranding=1&rel=0&playsinline=1';
-    var s2='https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&modestbranding=1&rel=0&playsinline=1';
+    var s1='https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&modestbranding=1&rel=0&playsinline=1&vq=hd2160&hd=1';
+    var s2='https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&modestbranding=1&rel=0&playsinline=1&vq=hd2160&hd=1';
     row.innerHTML='<div class="vt-split-pane"><div class="vt-split-label-tag">Blue Lagoon · Portland</div><iframe src="'+s1+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-pane"><div class="vt-split-label-tag" style="left:auto;right:10px">Craft Market · Kingston</div><iframe src="'+s2+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-divider"></div>';
     vid.appendChild(row);
     vtToast('<i class="fas fa-table-columns"></i> Split View — Blue Lagoon + Craft Market');
