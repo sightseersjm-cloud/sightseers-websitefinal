@@ -14870,6 +14870,13 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vision .vt-guide-table tbody tr:hover{background:rgba(255,255,255,.07)!important}
 /* mood badge sits BELOW the scene switcher — no more collision */
 .vt-vision #vt-active-session .vt-mood-badge{top:52px!important;left:12px!important;right:auto!important}
+/* functional controls always visible (hover-reveal breaks touch devices) */
+.vt-vision .vt-session-video .vt-scene-switcher,
+.vt-vision .vt-session-video .vt-xr-enter-btn,
+.vt-vision .vt-session-video .vt-session-expand,
+.vt-vision .vt-session-video .vt-live-indicator,
+.vt-vision .vt-session-video .vt-session-video-overlay{opacity:1!important;pointer-events:auto!important}
+.vt-vision .vt-session-video .vt-session-video-overlay{pointer-events:none!important}
 /* chat: clean text on glass — no gray slabs */
 .vt-vision #vt-active-session .vt-session-chat-text{background:transparent!important;padding:2px 0!important;color:rgba(255,255,255,.92)!important}
 .vt-vision #vt-active-session .vt-session-chat-title{color:rgba(255,255,255,.6)!important}
@@ -17538,8 +17545,8 @@ function vtShowHotspot(e,id){
   }
   var btn=popup.querySelector('.vt-hotspot-popup-buy');
   if(id==='hs3'){btn.style.display='none'}else{btn.style.display='';btn.innerHTML='<i class="fas fa-shopping-cart" style="margin-right:6px"></i>Add to Cart';btn.classList.remove('bought')}
-  var hs=e.target.closest('.vt-hotspot');
-  var rect=hs.getBoundingClientRect();
+  var hs=e.target.closest('.vt-hotspot,.vt-pnlm-hs');
+  var rect=hs?hs.getBoundingClientRect():{top:(e.clientY||300)-20,right:(e.clientX||500)+14,left:(e.clientX||500)-14};
   var popW=250,popH=id==='hs3'?360:260;
   var top=Math.max(10,Math.min(rect.top-20,window.innerHeight-popH-10));
   var left=rect.right+12;
@@ -33045,10 +33052,10 @@ body.theme-night .page .tag{
   const defaultPackageCopy=JSON.parse(JSON.stringify(window.DESTINATION_PACKAGE_COPY||{}));
 
   function safeParse(value,fallback){
-    try{return JSON.parse(value);}catch(e){return fallback;}
+    try{const v=JSON.parse(value);return (v&&typeof v==='object')?v:fallback;}catch(e){return fallback;}
   }
   function loadPackageData(){
-    return safeParse(localStorage.getItem(PACKAGE_STORAGE_KEY), JSON.parse(JSON.stringify(defaultPackageData)));
+    return safeParse(localStorage.getItem(PACKAGE_STORAGE_KEY), JSON.parse(JSON.stringify(defaultPackageData)))||{};
   }
   function savePackageData(data){
     localStorage.setItem(PACKAGE_STORAGE_KEY, JSON.stringify(data));
@@ -33099,7 +33106,7 @@ body.theme-night .page .tag{
   }
 
   function getPackageData(){
-    const loaded=loadPackageData();
+    const loaded=loadPackageData()||{};
     const merged={};
     Object.keys(defaultPackageData).forEach(dest=>{
       merged[dest]=(loaded[dest]||defaultPackageData[dest]||[]).map(pkg=>normalizePackage(pkg,dest));
@@ -44679,7 +44686,7 @@ body.theme-night .page .tag{
       <button type="button" class="admin-super-card" data-admin-cluster="media"><i class="fas fa-image"></i><strong>Images & Media</strong><span>Gallery album, hero backgrounds, section images and all image upload areas.</span></button>\
       <button type="button" class="admin-super-card" data-admin-cluster="design"><i class="fas fa-sliders-h"></i><strong>Layout & Design</strong><span>Flexible add-on builder, custom sections and visual editing tools.</span></button>\
     </div>';
-    wrap.insertBefore(hub, editor);
+    try{(editor.parentNode||wrap).insertBefore(hub, editor.parentNode?editor:wrap.firstChild);}catch(e){wrap.appendChild(hub);}
   }
   function organizeAdminSections(){
     const editor=document.getElementById('adminStructuredEditor');
