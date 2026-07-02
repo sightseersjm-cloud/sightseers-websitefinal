@@ -1,6 +1,6 @@
-const db = require('./_lib/db');
-const { requireAuth, requireAdmin, getUser, uid, escapeHtml } = require('./_lib/auth');
-const { sendEmail } = require('./_lib/email');
+const db = require('../_lib/db');
+const { requireAuth, requireAdmin, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { sendEmail } = require('../_lib/email');
 
 module.exports = async function handler(req, res) {
   try {

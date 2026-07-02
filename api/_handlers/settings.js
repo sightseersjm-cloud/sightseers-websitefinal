@@ -1,5 +1,5 @@
 const { put, get } = require('@vercel/blob');
-const { getUser } = require('./_lib/auth');
+const { getUser } = require('../_lib/auth');
 
 const SETTINGS_PATH = 'ss-admin/settings.json';
 

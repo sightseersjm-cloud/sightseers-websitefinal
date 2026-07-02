@@ -7,7 +7,7 @@
  * → { ok: true, hlsUrl }  |  { error: '...' }
  */
 
-const db = require('./_lib/db');
+const db = require('../_lib/db');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,6 +1,6 @@
 const { put } = require('@vercel/blob');
-const db = require('./_lib/db');
-const { requireAdmin, getUser, uid } = require('./_lib/auth');
+const db = require('../_lib/db');
+const { requireAdmin, getUser, uid } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();

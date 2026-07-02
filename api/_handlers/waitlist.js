@@ -1,6 +1,6 @@
-const db = require('./_lib/db');
-const { requireAdmin, getUser, uid, escapeHtml } = require('./_lib/auth');
-const { sendEmail } = require('./_lib/email');
+const db = require('../_lib/db');
+const { requireAdmin, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { sendEmail } = require('../_lib/email');
 
 const COLLECTION = 'vtours-waitlist';
 

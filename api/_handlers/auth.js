@@ -1,6 +1,6 @@
-const db = require('./_lib/db');
-const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, uid, ADMIN_CODE } = require('./_lib/auth');
-const { sendEmail, BUSINESS_EMAIL } = require('./_lib/email');
+const db = require('../_lib/db');
+const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, uid, ADMIN_CODE } = require('../_lib/auth');
+const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 
 const loginAttempts = new Map();
 const RATE_WINDOW = 15 * 60 * 1000;
