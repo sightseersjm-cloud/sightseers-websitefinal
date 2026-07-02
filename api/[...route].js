@@ -21,6 +21,7 @@ const handlers = {
   'gallery':         require('./_handlers/gallery'),
   'guide-auth':      require('./_handlers/guide-auth'),
   'images':          require('./_handlers/images'),
+  'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
   'sections':        require('./_handlers/sections'),
   'settings':        require('./_handlers/settings'),

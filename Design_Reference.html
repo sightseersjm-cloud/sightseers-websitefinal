@@ -15127,6 +15127,118 @@ function vtClose3D(){
   var stage=document.getElementById('vt-3d-stage');
   if(stage)stage.innerHTML='<div class="vt-3d-loading"><i class="fas fa-cube fa-2x"></i>Loading 3D viewer…</div>';
 }
+
+/* ═══════ SUB-SECOND LIVE TIER (LiveKit WebRTC) ═══════
+   Dark until /api/live-token?probe=1 reports configured:true
+   (set LIVEKIT_* env vars — see docs/WEBRTC-PLAN.md). When live, the
+   player races a WebRTC join against a 4s timeout and falls back to
+   the existing Mux HLS path on any failure. DataChannel events drive
+   the shop UI: scan3d → 3D modal, vote → crowd vote, sold → confetti,
+   scene → scene switch. */
+var vtRTC={configured:null,room:null,fallback:null,sdkLoading:false};
+
+function vtRTCProbe(){
+  if(vtRTC.configured!==null)return;
+  try{
+    fetch('/api/live-token?probe=1').then(function(r){return r.json()})
+      .then(function(d){vtRTC.configured=!!(d&&d.configured)})
+      .catch(function(){vtRTC.configured=false});
+  }catch(e){vtRTC.configured=false}
+}
+vtRTCProbe();
+
+function vtRTCLoadSDK(cb){
+  if(window.LivekitClient)return cb();
+  if(vtRTC.sdkLoading)return;
+  vtRTC.sdkLoading=true;
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js';
+  s.onload=function(){vtRTC.sdkLoading=false;if(window.LivekitClient)cb()};
+  s.onerror=function(){vtRTC.sdkLoading=false};
+  document.head.appendChild(s);
+}
+
+function vtRTCHandleData(payload){
+  var msg;
+  try{msg=JSON.parse(new TextDecoder().decode(payload))}catch(e){return}
+  if(!msg||!msg.t)return;
+  try{
+    if(msg.t==='scan3d'&&msg.item&&msg.item.glb){
+      vtOpen3D(msg.item.name||'Guide 3D Scan',msg.item.glb,msg.item.priceUSD||0);
+    }else if(msg.t==='vote'&&msg.q){
+      var card=document.querySelector('.vt-viewer-vote');
+      if(card){
+        var h=card.querySelector('h4');if(h)h.textContent='🗳️ '+msg.q;
+        var opts=card.querySelector('.vt-vote-options');
+        if(opts&&Array.isArray(msg.options)){
+          opts.innerHTML='';
+          msg.options.forEach(function(o){
+            var d=document.createElement('div');
+            d.className='vt-vote-option';
+            d.innerHTML='<i class="fas fa-circle-dot" style="color:var(--orange)"></i>'+o;
+            d.onclick=function(){vtCastVote(d,o)};
+            opts.appendChild(d);
+          });
+        }
+        card.classList.add('show');
+        setTimeout(function(){card.classList.remove('show')},30000);
+      }
+    }else if(msg.t==='sold'){
+      if(typeof vtLaunchConfetti==='function')vtLaunchConfetti(2600);
+      vtToast('<i class="fas fa-hand-holding-dollar"></i> Sold live: '+(msg.item||'item')+' — artisan paid on camera');
+    }else if(msg.t==='scene'&&msg.id&&typeof vtSwitchScene==='function'){
+      vtSwitchScene(msg.id);
+    }
+  }catch(e){}
+}
+
+function vtRTCTryJoin(roomName,hlsUrl,playbackId){
+  if(!vtRTC.configured||!roomName||vtRTC.room)return;
+  vtRTC.fallback={hlsUrl:hlsUrl,playbackId:playbackId};
+  var settled=false;
+  var giveUp=setTimeout(function(){settled=true},4000);
+
+  fetch('/api/live-token?room='+encodeURIComponent(roomName)+'&identity='+encodeURIComponent('viewer-'+Math.random().toString(36).slice(2,8)))
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(settled||!d||!d.ok)return;
+      vtRTCLoadSDK(function(){
+        if(settled)return;
+        var LK=window.LivekitClient;
+        var room=new LK.Room({adaptiveStream:true,dynacast:true});
+        room.on(LK.RoomEvent.TrackSubscribed,function(track){
+          if(track.kind==='video'){
+            var vid=document.getElementById('vt-main-live-vid');
+            if(vid){
+              if(window.vtMainHls){try{vtMainHls.destroy()}catch(e){}window.vtMainHls=null}
+              track.attach(vid);
+              vid.style.display='block';
+              vtToast('<i class="fas fa-bolt"></i> Ultra-low-latency stream connected');
+            }
+          }else if(track.kind==='audio'){
+            var el=track.attach();el.style.display='none';document.body.appendChild(el);
+          }
+        });
+        room.on(LK.RoomEvent.DataReceived,function(payload){vtRTCHandleData(payload)});
+        room.on(LK.RoomEvent.Disconnected,function(){
+          vtRTC.room=null;
+          var fb=vtRTC.fallback;
+          if(fb&&fb.hlsUrl&&typeof vtActivateLivePlayer==='function'){
+            vtActivateLivePlayer(fb.hlsUrl,fb.playbackId);
+          }
+        });
+        room.connect(d.url,d.token).then(function(){
+          if(settled){room.disconnect();return}
+          clearTimeout(giveUp);
+          vtRTC.room=room;
+        }).catch(function(){});
+      });
+    }).catch(function(){});
+}
+
+function vtRTCLeave(){
+  if(vtRTC.room){try{vtRTC.room.disconnect()}catch(e){}vtRTC.room=null}
+}
 </script>
 <script>
 var vtPanoViewer=null,vtPanoScenes={
@@ -16409,6 +16521,11 @@ function vtActivateLivePlayer(hlsUrl, playbackId){
 
   // Connect Supabase real-time chat for this stream
   if(playbackId) vtConnectSupabaseChat(playbackId);
+
+  // Race the sub-second WebRTC tier; HLS above stays as the fallback
+  if(typeof vtRTCTryJoin==='function'&&playbackId){
+    try{vtRTCTryJoin(playbackId,hlsUrl,playbackId)}catch(e){}
+  }
 }
 
 function vtToggleVideoAudio(btn){
@@ -16436,6 +16553,7 @@ function vtToggleVideoAudio(btn){
 }
 
 function vtDeactivateLivePlayer(){
+  if(typeof vtRTCLeave==='function'){try{vtRTC.fallback=null;vtRTCLeave()}catch(e){}}
   var vid=document.getElementById('vt-main-live-vid');
   if(vid){vid.pause();vid.src='';vid.style.display='none';}
   if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
