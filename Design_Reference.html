@@ -14178,12 +14178,12 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 /* Cart drawer glossy */
 #vt-cart-drawer{
-  background:rgba(255,255,255,.97)!important;
-  backdrop-filter:blur(60px) saturate(2.2)!important;
-  border-color:rgba(93,197,88,.12)!important;
-  box-shadow:-8px 0 60px rgba(0,0,0,.12)!important;
+  background:rgba(13,26,42,.96)!important;
+  backdrop-filter:blur(60px) saturate(1.6)!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:-8px 0 60px rgba(0,0,0,.45)!important;
 }
-.vt-cart-footer{background:rgba(248,255,250,.98)!important;border-top-color:rgba(93,197,88,.1)!important}
+.vt-cart-footer{background:rgba(9,19,32,.96)!important;border-top-color:rgba(255,255,255,.1)!important}
 .vt-cart-checkout{
   background:linear-gradient(135deg,#34c759,#28a745)!important;
   box-shadow:0 2px 12px rgba(52,199,89,.3),0 -1px 0 rgba(100,220,140,.3) inset!important;
@@ -14928,6 +14928,19 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vision .vt-dash-main select,.vt-vision .vt-dash-main input[type=text],.vt-vision .vt-dash-main input[type=number]{background:rgba(255,255,255,.1)!important;color:#fff!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px}
 /* passport achievement chips */
 .vt-vision .vt-passport-badges *{color:rgba(255,255,255,.8)}
+/* charts + revenue split labels */
+.vt-vision .vt-chart-bar span{color:rgba(255,255,255,.75)!important}
+.vt-vision .vt-chart-note{color:rgba(255,255,255,.45)!important}
+.vt-vision .vt-chart-sub{color:rgba(255,255,255,.55)!important}
+.vt-vision [class*="splits"] span,.vt-vision [class*="splits"] div{color:rgba(255,255,255,.78)}
+.vt-vision [class*="legend"] span,.vt-vision [class*="legend"] div{color:rgba(255,255,255,.78)}
+/* absolute catch-all: no black text inside the glass frames */
+.vt-vision .vt-dash-main [style*="color:#1"],.vt-vision .vt-dash-main [style*="color:#2"],.vt-vision .vt-dash-main [style*="color:#3"],.vt-vision .vt-dash-main [style*="color: #1"]{color:rgba(255,255,255,.85)!important}
+@media(max-width:768px){
+  .vt-vision .vt-session-bar{flex-wrap:wrap;gap:6px;row-gap:8px}
+  .vt-vision .vt-session-bar-left{max-width:100%;flex-basis:100%}
+  .vt-vision .vt-session-bar-right{flex-wrap:wrap}
+}
 .vt-vision .vt-dash-stat{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.15)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important}
 .vt-vision .vt-dash-stat strong{color:#fff!important}
 .vt-vision .vt-dash-stat span{color:rgba(255,255,255,.65)!important}
