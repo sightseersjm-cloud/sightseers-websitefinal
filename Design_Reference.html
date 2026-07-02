@@ -14780,648 +14780,6 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     SIGHT SEERS 360° SPATIAL TOUR PORTAL
-     Gallery · Panoramic Viewer · Hotspots · Detail Panel ·
-     Action Dock · Trip Board · Quote / Concierge / Group Modals
-═══════════════════════════════════════════════════════════════════ -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
-<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-<style>
-/* ── Spatial Portal Base ───────────────────────────────── */
-.sp-section{padding:72px 0}.sp-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
-/* ── Filter Bar ─────────────────────────────────────────── */
-.sp-filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:40px;padding:18px 22px;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:20px;border:1px solid rgba(0,0,0,.07);box-shadow:0 4px 24px rgba(0,0,0,.05)}
-.sp-filter-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--navy);white-space:nowrap;margin-right:4px}
-.sp-filter-chip{padding:8px 18px;border-radius:999px;font-size:12px;font-weight:700;border:1.5px solid rgba(0,0,0,.1);background:#fff;color:var(--navy);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Raleway',sans-serif}
-.sp-filter-chip:hover,.sp-filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy);transform:translateY(-1px)}
-/* ── Tour Gallery Grid ──────────────────────────────────── */
-.sp-tour-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
-.sp-tour-card{background:#fff;border-radius:24px;overflow:hidden;border:1px solid rgba(0,0,0,.07);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:transform .35s cubic-bezier(.25,.46,.45,.94),box-shadow .35s;cursor:pointer}
-.sp-tour-card:hover{transform:translateY(-8px);box-shadow:0 24px 64px rgba(0,0,0,.12)}
-.sp-tour-thumb{position:relative;height:210px;overflow:hidden}
-.sp-tour-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.sp-tour-card:hover .sp-tour-thumb img{transform:scale(1.06)}
-.sp-tour-badge{position:absolute;top:14px;left:14px;background:var(--orange);color:#fff;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:5px 12px;border-radius:999px}
-.sp-tour-vr{position:absolute;top:14px;right:14px;background:rgba(6,20,38,.7);backdrop-filter:blur(8px);color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:999px;display:flex;align-items:center;gap:5px}
-.sp-tour-body{padding:20px}
-.sp-tour-meta{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.sp-tour-loc{font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px}
-.sp-tour-dot{width:3px;height:3px;border-radius:50%;background:#ccc}
-.sp-tour-dur{font-size:11px;color:#8a9ab0;font-weight:600}
-.sp-tour-title{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.3}
-.sp-tour-desc{font-size:13px;color:#617087;line-height:1.6;margin-bottom:14px}
-.sp-tour-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.sp-tour-tag{padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-.sp-tag-g{background:rgba(6,58,99,.08);color:var(--navy)}
-.sp-tag-t{background:rgba(239,135,49,.1);color:var(--orange)}
-.sp-tag-c{background:rgba(52,199,89,.1);color:#16a34a}
-.sp-tour-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(0,0,0,.06)}
-.sp-tour-price{font-size:12px;color:#8a9ab0}
-.sp-tour-price strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);line-height:1.1}
-.sp-tour-acts{display:flex;gap:7px}
-.sp-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .25s;white-space:nowrap;font-family:'Raleway',sans-serif}
-.sp-btn-navy{background:var(--navy);color:#fff}.sp-btn-navy:hover{background:#0a4d80;transform:translateY(-1px)}
-.sp-btn-orange{background:var(--orange);color:#fff}.sp-btn-orange:hover{background:#d4741e;transform:translateY(-1px)}
-.sp-btn-ghost{background:transparent;color:var(--navy);border:1.5px solid rgba(6,58,99,.2)}.sp-btn-ghost:hover{background:rgba(6,58,99,.06)}
-.sp-btn-ghost-w{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.25)}.sp-btn-ghost-w:hover{background:rgba(255,255,255,.2)}
-.sp-btn-sm{padding:8px 14px;font-size:11px}
-/* ── Panoramic Viewer ───────────────────────────────────── */
-.sp-viewer-wrap{position:relative;background:#061f38}
-#sp-pannellum{width:100%;height:82vh;min-height:500px;max-height:900px;display:block}
-/* Scene bar */
-.sp-scene-bar{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:8px;padding:8px 14px;background:rgba(6,20,38,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.13);border-radius:999px;flex-wrap:nowrap;overflow-x:auto;max-width:calc(100vw - 40px)}
-.sp-scene-bar::-webkit-scrollbar{height:0}
-.sp-scene-btn{padding:8px 18px;border-radius:999px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .22s;color:rgba(255,255,255,.65);background:transparent;white-space:nowrap;font-family:'Raleway',sans-serif}
-.sp-scene-btn.active,.sp-scene-btn:hover{background:var(--orange);color:#fff}
-.sp-scene-btn i{margin-right:5px;font-size:11px}
-/* Live badge */
-.sp-live-badge{position:absolute;top:20px;left:20px;z-index:20;display:flex;align-items:center;gap:7px;background:rgba(6,20,38,.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 14px;font-size:11px;font-weight:700;color:#fff}
-.sp-live-dot{width:8px;height:8px;border-radius:50%;background:#34c759;box-shadow:0 0 0 3px rgba(52,199,89,.25);animation:sp-pulse 2s infinite}
-@keyframes sp-pulse{0%,100%{box-shadow:0 0 0 3px rgba(52,199,89,.25)}50%{box-shadow:0 0 0 7px rgba(52,199,89,.07)}}
-/* Glass detail panel */
-.sp-detail-panel{position:absolute;top:20px;right:20px;width:300px;background:rgba(8,24,44,.82);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:22px;color:#fff;z-index:20;transform:translateX(340px);transition:transform .42s cubic-bezier(.25,.46,.45,.94);max-height:calc(82vh - 110px);overflow-y:auto;overflow-x:hidden}
-.sp-detail-panel.open{transform:translateX(0)}
-.sp-detail-panel::-webkit-scrollbar{width:3px}
-.sp-detail-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
-.sp-dp-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:background .2s}
-.sp-dp-close:hover{background:rgba(255,255,255,.22)}
-.sp-dp-cat{display:inline-block;padding:4px 12px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;background:var(--orange);color:#fff;margin-bottom:12px}
-.sp-dp-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;line-height:1.25;margin-bottom:4px}
-.sp-dp-loc{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px;display:flex;align-items:center;gap:5px}
-.sp-dp-meta{display:flex;gap:0;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.1)}
-.sp-dp-meta-item{flex:1;text-align:center;padding:0 4px}
-.sp-dp-meta-item strong{display:block;font-size:14px;font-weight:800}
-.sp-dp-meta-item span{font-size:9px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:2px}
-.sp-dp-desc{font-size:13px;line-height:1.65;color:rgba(255,255,255,.78);margin-bottom:16px}
-.sp-dp-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.4);margin-bottom:8px;margin-top:14px}
-.sp-dp-includes{list-style:none;margin-bottom:4px}
-.sp-dp-includes li{font-size:12px;color:rgba(255,255,255,.72);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:7px}
-.sp-dp-includes li i{color:#34c759;font-size:10px;flex-shrink:0}
-.sp-dp-addon{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;font-size:12px;margin-bottom:6px}
-.sp-dp-addon-name{color:rgba(255,255,255,.82);font-weight:600}
-.sp-dp-addon-add{background:rgba(239,135,49,.2);border:none;color:var(--orange);border-radius:7px;padding:4px 10px;font-size:10px;font-weight:800;cursor:pointer;font-family:'Raleway',sans-serif;transition:background .2s}
-.sp-dp-addon-add:hover{background:rgba(239,135,49,.35)}
-.sp-dp-price{font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin:16px 0 14px}
-.sp-dp-price span{font-size:12px;font-family:'Raleway',sans-serif;color:rgba(255,255,255,.45)}
-.sp-dp-ctas{display:flex;flex-direction:column;gap:8px}
-/* Action dock */
-.sp-dock{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:4px;padding:10px 14px;background:rgba(6,20,38,.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.13);border-radius:999px;align-items:center}
-.sp-dock-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 16px;border-radius:14px;border:none;background:transparent;color:rgba(255,255,255,.65);cursor:pointer;transition:all .2s;font-family:'Raleway',sans-serif;min-width:54px}
-.sp-dock-btn i{font-size:17px}
-.sp-dock-btn span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
-.sp-dock-btn:hover,.sp-dock-btn.dock-active{background:rgba(255,255,255,.1);color:#fff}
-.sp-dock-btn.dock-orange{color:var(--orange)}.sp-dock-btn.dock-orange:hover{background:rgba(239,135,49,.15)}
-.sp-dock-div{width:1px;height:34px;background:rgba(255,255,255,.1);margin:0 4px}
-.sp-fs-btn{position:absolute;bottom:24px;right:20px;z-index:20;width:42px;height:42px;border-radius:12px;background:rgba(6,20,38,.75);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.13);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .2s}
-.sp-fs-btn:hover{background:rgba(255,255,255,.14)}
-/* Hotspot popup */
-.sp-hs-popup{position:absolute;background:rgba(6,20,38,.92);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:15px;color:#fff;max-width:230px;z-index:30;pointer-events:all;box-shadow:0 14px 44px rgba(0,0,0,.45);display:none}
-.sp-hs-popup.show{display:block}
-.sp-hs-type{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);margin-bottom:4px}
-.sp-hs-title{font-weight:800;font-size:14px;margin-bottom:4px}
-.sp-hs-desc{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:10px}
-.sp-hs-cta{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--orange);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:11px;font-weight:800;cursor:pointer;width:100%;font-family:'Raleway',sans-serif;transition:background .2s}
-.sp-hs-cta:hover{background:#d4741e}
-/* Trip Board */
-.sp-trip-board{position:fixed;top:0;right:-440px;width:420px;height:100vh;background:#fff;border-left:1px solid rgba(0,0,0,.08);z-index:9000;transition:right .4s cubic-bezier(.25,.46,.45,.94);overflow-y:auto;box-shadow:-20px 0 60px rgba(0,0,0,.1)}
-.sp-trip-board.open{right:0}
-.sp-trip-head{padding:22px 24px;border-bottom:1px solid rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
-.sp-trip-head-title{font-size:17px;font-weight:800;color:var(--navy)}
-.sp-trip-head-close{width:34px;height:34px;border-radius:50%;background:#f5f5f7;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:#555;transition:background .2s}
-.sp-trip-head-close:hover{background:#e5e5ea}
-.sp-trip-body{padding:18px}
-.sp-trip-empty{text-align:center;padding:52px 20px;color:#8a9ab0}
-.sp-trip-empty i{font-size:38px;display:block;margin-bottom:12px;opacity:.35}
-.sp-trip-empty p{font-size:13px;line-height:1.6}
-.sp-trip-item{background:#f5f7fa;border-radius:16px;padding:13px;margin-bottom:10px;display:flex;gap:11px;align-items:flex-start}
-.sp-trip-item-img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex-shrink:0}
-.sp-trip-item-info{flex:1;min-width:0}
-.sp-trip-item-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sp-trip-item-loc{font-size:11px;color:#8a9ab0;margin-bottom:4px}
-.sp-trip-item-price{font-size:12px;font-weight:700;color:var(--orange)}
-.sp-trip-item-rm{width:26px;height:26px;border-radius:50%;background:rgba(255,59,48,.1);border:none;color:#ff3b30;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:background .2s}
-.sp-trip-item-rm:hover{background:rgba(255,59,48,.2)}
-.sp-trip-foot{padding:18px 24px;border-top:1px solid rgba(0,0,0,.07);position:sticky;bottom:0;background:#fff}
-.sp-trip-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.sp-trip-total-lbl{font-size:12px;color:#8a9ab0;font-weight:600}
-.sp-trip-total-amt{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy)}
-.sp-trip-fab{position:fixed;bottom:90px;right:20px;z-index:8998;width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 8px 28px rgba(6,58,99,.3);transition:transform .2s}
-.sp-trip-fab:hover{transform:scale(1.08)}
-.sp-trip-fab-count{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--orange);font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;display:none}
-/* Modals */
-.sp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
-.sp-modal-overlay.open{opacity:1;pointer-events:all}
-.sp-modal-box{background:#fff;border-radius:28px;padding:34px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(18px);transition:transform .3s;position:relative}
-.sp-modal-overlay.open .sp-modal-box{transform:translateY(0)}
-.sp-modal-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;background:#f5f5f7;border:none;cursor:pointer;font-size:13px;color:#555;display:flex;align-items:center;justify-content:center}
-.sp-modal-close:hover{background:#e5e5ea}
-.sp-modal-title{font-family:'Playfair Display',serif;font-size:23px;color:var(--navy);margin-bottom:5px}
-.sp-modal-sub{font-size:13px;color:#8a9ab0;margin-bottom:22px;line-height:1.5}
-.sp-fg{margin-bottom:15px}
-.sp-fl{display:block;font-size:11px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
-.sp-fi{width:100%;padding:12px 15px;border:1.5px solid rgba(0,0,0,.1);border-radius:13px;font-size:14px;font-family:'Raleway',sans-serif;color:var(--navy);outline:none;transition:border-color .2s;background:#fff;box-sizing:border-box}
-.sp-fi:focus{border-color:var(--navy)}
-.sp-fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.sp-fta{resize:vertical;min-height:90px}
-.sp-selected-tours{background:#f5f7fa;border-radius:13px;padding:13px;margin-bottom:16px}
-.sp-sel-item{font-size:13px;color:var(--navy);padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:7px;align-items:center}
-.sp-sel-item i{color:var(--orange);font-size:11px}
-.sp-conc-prompts{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
-.sp-conc-prompt{padding:9px 15px;border-radius:999px;font-size:12px;font-weight:600;background:#f5f5f7;border:none;cursor:pointer;transition:all .2s;color:var(--navy);font-family:'Raleway',sans-serif}
-.sp-conc-prompt:hover{background:var(--navy);color:#fff}
-.sp-gvote{background:#f5f7fa;border-radius:16px;padding:15px;margin-bottom:12px}
-.sp-gvote-q{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px}
-.sp-gvote-opts{display:flex;flex-direction:column;gap:6px}
-.sp-vote-opt{padding:10px 14px;border-radius:11px;border:1.5px solid rgba(0,0,0,.1);font-size:13px;cursor:pointer;transition:all .2s;background:#fff;text-align:left;font-family:'Raleway',sans-serif;color:var(--navy)}
-.sp-vote-opt:hover,.sp-vote-opt.selected{border-color:var(--orange);background:rgba(239,135,49,.06)}
-/* Toast */
-.sp-toast{position:fixed;bottom:104px;left:50%;transform:translateX(-50%) translateY(16px);z-index:20000;background:rgba(6,20,38,.93);color:#fff;padding:13px 24px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;max-width:calc(100vw - 40px);text-align:center;font-family:'Raleway',sans-serif}
-.sp-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* ── Responsive ────────────────────────────────────────── */
-@media(max-width:1024px){.sp-detail-panel{width:260px}}
-@media(max-width:768px){
-  #sp-pannellum{height:64vh;min-height:360px}
-  .sp-detail-panel{top:auto;bottom:88px;right:10px;left:10px;width:auto;max-height:52vh}
-  .sp-scene-bar{top:12px;padding:5px 10px}
-  .sp-scene-btn{padding:7px 12px;font-size:11px}
-  .sp-dock{gap:2px;padding:8px 10px}
-  .sp-dock-btn{padding:8px 10px;min-width:48px}
-  .sp-dock-btn span{display:none}
-  .sp-dock-div{height:26px}
-  .sp-tour-grid{grid-template-columns:1fr}
-  .sp-trip-board{width:100%;right:-110%}
-  .sp-filter-bar{overflow-x:auto;flex-wrap:nowrap}
-  .sp-filter-bar::-webkit-scrollbar{height:0}
-  .sp-live-badge{display:none}
-  .sp-fr{grid-template-columns:1fr}
-}
-@media(max-width:480px){
-  .sp-dock-btn{min-width:42px;padding:7px 8px}
-  .sp-dock-btn i{font-size:15px}
-}
-</style>
-
-<!-- ── 360° Tour Gallery ─────────────────────────────────── -->
-<section class="sp-section" id="sp-gallery" aria-label="360° Tour Gallery">
-  <div class="sp-wrap">
-    <div class="sec-head center reveal">
-      <span class="sec-pre">Spatial Tour Portal</span>
-      <h2 class="sec-title">Step Inside Before You Book</h2>
-      <p class="sec-sub center">Browse immersive 360° tours of Jamaica and the Caribbean. Enter any scene, explore interactive hotspots, and build your perfect group trip.</p>
-    </div>
-    <div class="sp-filter-bar reveal" role="group" aria-label="Filter tours by vibe">
-      <span class="sp-filter-label">Filter:</span>
-      <button class="sp-filter-chip active" onclick="spFilterVibe(this,'all')">All Tours</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'adventure')"><i class="fas fa-mountain"></i> Adventure</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'luxury')"><i class="fas fa-gem"></i> Luxury</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'culture')"><i class="fas fa-landmark"></i> Culture</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'beach')"><i class="fas fa-umbrella-beach"></i> Beach</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'yacht')"><i class="fas fa-anchor"></i> Yacht</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'group')"><i class="fas fa-users"></i> Groups</button>
-      <button class="sp-filter-chip" onclick="spFilterVibe(this,'vip')"><i class="fas fa-star"></i> VIP</button>
-    </div>
-    <div class="sp-tour-grid" id="sp-tour-grid" aria-live="polite"></div>
-  </div>
-</section>
-
-<!-- ── 360° Panoramic Viewer ────────────────────────────── -->
-<section class="sp-viewer-wrap" id="virtual-tours" aria-label="Interactive 360° tour viewer">
-  <div class="sp-live-badge" id="sp-live-badge"><span class="sp-live-dot"></span><span id="sp-live-name">Blue Lagoon · Portland</span></div>
-  <div class="sp-scene-bar" id="sp-scene-bar" role="tablist" aria-label="Select a tour scene"></div>
-  <div id="sp-pannellum" role="application" aria-label="360 degree panoramic view — click and drag to look around"></div>
-  <!-- Detail panel -->
-  <div class="sp-detail-panel" id="sp-detail-panel" aria-label="Tour details">
-    <button class="sp-dp-close" onclick="spToggleDetail(false)" aria-label="Close detail panel"><i class="fas fa-times"></i></button>
-    <div class="sp-dp-cat" id="sp-dp-cat">Adventure</div>
-    <div class="sp-dp-title" id="sp-dp-title">Tour Name</div>
-    <div class="sp-dp-loc" id="sp-dp-loc"><i class="fas fa-map-pin"></i> Location</div>
-    <div class="sp-dp-meta">
-      <div class="sp-dp-meta-item"><strong id="sp-dp-dur">—</strong><span>Duration</span></div>
-      <div class="sp-dp-meta-item"><strong id="sp-dp-grp">2–20</strong><span>Guests</span></div>
-      <div class="sp-dp-meta-item"><strong id="sp-dp-trnsp">Yes</strong><span>Transport</span></div>
-    </div>
-    <p class="sp-dp-desc" id="sp-dp-desc"></p>
-    <div class="sp-dp-lbl">What's Included</div>
-    <ul class="sp-dp-includes" id="sp-dp-inc"></ul>
-    <div class="sp-dp-lbl">Add-Ons</div>
-    <div id="sp-dp-addons"></div>
-    <div class="sp-dp-price"><span>From </span><span id="sp-dp-price">$65</span><span>/person</span></div>
-    <div class="sp-dp-ctas">
-      <button class="sp-btn sp-btn-orange" onclick="spAddCurrent()" style="width:100%;justify-content:center"><i class="fas fa-plus-circle"></i> Add to My Trip</button>
-      <button class="sp-btn sp-btn-navy" onclick="spOpenQuote()" style="width:100%;justify-content:center"><i class="fas fa-paper-plane"></i> Request Quote</button>
-      <button class="sp-btn sp-btn-ghost-w" onclick="spOpenConcierge()" style="width:100%;justify-content:center"><i class="fas fa-comment-dots"></i> Ask Concierge</button>
-    </div>
-  </div>
-  <!-- Action dock -->
-  <div class="sp-dock" role="toolbar" aria-label="Tour actions">
-    <button class="sp-dock-btn" onclick="spDockExplore()" title="Browse all tours"><i class="fas fa-compass"></i><span>Explore</span></button>
-    <button class="sp-dock-btn dock-orange" id="spDockInfo" onclick="spToggleDetail()" title="Tour details"><i class="fas fa-info-circle"></i><span>Info</span></button>
-    <button class="sp-dock-btn" onclick="spAddCurrent()" id="spDockAdd" title="Add to trip"><i class="fas fa-plus-circle"></i><span>Add</span></button>
-    <div class="sp-dock-div"></div>
-    <button class="sp-dock-btn" onclick="spOpenGroup()" title="Invite group"><i class="fas fa-user-plus"></i><span>Invite</span></button>
-    <button class="sp-dock-btn" onclick="spOpenQuote()" title="Request quote"><i class="fas fa-paper-plane"></i><span>Quote</span></button>
-    <button class="sp-dock-btn" id="spDockSave" onclick="spSaveCurrent()" title="Save tour"><i class="far fa-heart"></i><span>Save</span></button>
-  </div>
-  <button class="sp-fs-btn" onclick="spToggleFs()" id="sp-fs-btn" aria-label="Toggle fullscreen"><i class="fas fa-expand"></i></button>
-  <div class="sp-hs-popup" id="sp-hs-popup">
-    <div class="sp-hs-type" id="sp-hs-type">Add-On</div>
-    <div class="sp-hs-title" id="sp-hs-title">Title</div>
-    <div class="sp-hs-desc" id="sp-hs-desc">Description</div>
-    <button class="sp-hs-cta" id="sp-hs-cta" onclick="spHotspotCTA()"><i class="fas fa-plus-circle"></i> <span id="sp-hs-cta-lbl">Add to Trip</span></button>
-  </div>
-</section>
-
-<!-- ── Trip Board ──────────────────────────────────────── -->
-<div class="sp-trip-board" id="sp-trip-board" aria-label="Your trip board" role="complementary">
-  <div class="sp-trip-head">
-    <div class="sp-trip-head-title"><i class="fas fa-suitcase" style="color:var(--orange);margin-right:8px"></i>My Trip Board</div>
-    <button class="sp-trip-head-close" onclick="spToggleTripBoard(false)" aria-label="Close trip board"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="sp-trip-body" id="sp-trip-body">
-    <div class="sp-trip-empty" id="sp-trip-empty"><i class="fas fa-map-marked-alt"></i><p>No tours added yet.<br>Enter a scene and tap <strong>Add</strong> to build your trip.</p></div>
-    <div id="sp-trip-list"></div>
-  </div>
-  <div class="sp-trip-foot">
-    <div class="sp-trip-total"><span class="sp-trip-total-lbl">Estimated total</span><span class="sp-trip-total-amt" id="sp-trip-total">$0</span></div>
-    <button class="sp-btn sp-btn-orange" onclick="spOpenQuote()" style="width:100%;justify-content:center;padding:14px;margin-bottom:8px"><i class="fas fa-paper-plane"></i> Request Full Quote</button>
-    <button class="sp-btn sp-btn-ghost" onclick="spOpenGroup()" style="width:100%;justify-content:center;padding:12px"><i class="fas fa-user-plus"></i> Invite Group Members</button>
-  </div>
-</div>
-<button class="sp-trip-fab" id="sp-trip-fab" onclick="spToggleTripBoard(true)" aria-label="Open trip board" title="My Trip Board">
-  <i class="fas fa-suitcase"></i>
-  <span class="sp-trip-fab-count" id="sp-trip-count">0</span>
-</button>
-
-<!-- ── Quote Modal ─────────────────────────────────────── -->
-<div class="sp-modal-overlay" id="sp-quote-modal" onclick="if(event.target===this)spCloseQuote()" role="dialog" aria-modal="true" aria-label="Request a quote">
-  <div class="sp-modal-box">
-    <button class="sp-modal-close" onclick="spCloseQuote()" aria-label="Close"><i class="fas fa-times"></i></button>
-    <div class="sp-modal-title"><i class="fas fa-paper-plane" style="color:var(--orange);margin-right:10px"></i>Request a Quote</div>
-    <div class="sp-modal-sub">Tell us about your group and we'll craft a personalised Caribbean itinerary.</div>
-    <div class="sp-selected-tours" id="sp-qt-tours"></div>
-    <form id="sp-quote-form" onsubmit="spSubmitQuote(event)" novalidate>
-      <div class="sp-fr"><div class="sp-fg"><label class="sp-fl">First Name</label><input class="sp-fi" type="text" placeholder="Sarah" required></div><div class="sp-fg"><label class="sp-fl">Last Name</label><input class="sp-fi" type="text" placeholder="Williams" required></div></div>
-      <div class="sp-fg"><label class="sp-fl">Email Address</label><input class="sp-fi" type="email" placeholder="sarah@email.com" required></div>
-      <div class="sp-fg"><label class="sp-fl">WhatsApp / Phone</label><input class="sp-fi" type="tel" placeholder="+1 876 xxx xxxx"></div>
-      <div class="sp-fr"><div class="sp-fg"><label class="sp-fl">Group Size</label><input class="sp-fi" type="number" placeholder="12" min="1" max="300" required></div><div class="sp-fg"><label class="sp-fl">Travel Date</label><input class="sp-fi" type="date"></div></div>
-      <div class="sp-fg"><label class="sp-fl">Tell us about your trip</label><textarea class="sp-fi sp-fta" placeholder="E.g. Birthday group of 15, 3 days Montego Bay, looking for beach + yacht + ATV..." rows="4"></textarea></div>
-      <button type="submit" class="sp-btn sp-btn-orange" style="width:100%;justify-content:center;padding:14px;font-size:14px"><i class="fas fa-paper-plane"></i> Send Quote Request</button>
-    </form>
-  </div>
-</div>
-
-<!-- ── Concierge Modal ─────────────────────────────────── -->
-<div class="sp-modal-overlay" id="sp-concierge-modal" onclick="if(event.target===this)spCloseConcierge()" role="dialog" aria-modal="true" aria-label="Ask concierge">
-  <div class="sp-modal-box">
-    <button class="sp-modal-close" onclick="spCloseConcierge()" aria-label="Close"><i class="fas fa-times"></i></button>
-    <div class="sp-modal-title"><i class="fas fa-comment-dots" style="color:var(--orange);margin-right:10px"></i>Ask Concierge</div>
-    <div class="sp-modal-sub">Get help planning your Caribbean trip — or connect with a human travel planner.</div>
-    <div class="sp-conc-prompts">
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Is this good for 12 people?</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Can we add private transport?</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Best for a birthday group?</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Build a 3-day Jamaica itinerary</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Yacht charter vs ATV — which is better?</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">What should we wear/bring?</button>
-      <button class="sp-conc-prompt" onclick="spSetPrompt(this)">Request a quote for this tour</button>
-    </div>
-    <form id="sp-conc-form" onsubmit="spSubmitConcierge(event)">
-      <div class="sp-fg"><label class="sp-fl">Your Question</label><textarea class="sp-fi sp-fta" id="sp-conc-msg" placeholder="Ask about tours, group packages, pricing, logistics..." rows="3" required></textarea></div>
-      <div class="sp-fr"><div class="sp-fg"><label class="sp-fl">Name</label><input class="sp-fi" type="text" placeholder="Sarah" required></div><div class="sp-fg"><label class="sp-fl">Email</label><input class="sp-fi" type="email" placeholder="sarah@email.com" required></div></div>
-      <button type="submit" class="sp-btn sp-btn-navy" style="width:100%;justify-content:center;padding:14px;font-size:14px"><i class="fas fa-comment-dots"></i> Send to Concierge</button>
-    </form>
-  </div>
-</div>
-
-<!-- ── Group Planning Modal ────────────────────────────── -->
-<div class="sp-modal-overlay" id="sp-group-modal" onclick="if(event.target===this)spCloseGroup()" role="dialog" aria-modal="true" aria-label="Group planning">
-  <div class="sp-modal-box">
-    <button class="sp-modal-close" onclick="spCloseGroup()" aria-label="Close"><i class="fas fa-times"></i></button>
-    <div class="sp-modal-title"><i class="fas fa-users" style="color:var(--orange);margin-right:10px"></i>Group Planning</div>
-    <div class="sp-modal-sub">Share your trip board and let your group vote on experiences and dates.</div>
-    <div class="sp-gvote">
-      <div class="sp-gvote-q"><i class="fas fa-vote-yea" style="color:var(--orange);margin-right:8px"></i>Which tours should we do?</div>
-      <div class="sp-gvote-opts" id="sp-vote-tours"></div>
-    </div>
-    <div class="sp-gvote">
-      <div class="sp-gvote-q"><i class="fas fa-calendar-alt" style="color:var(--orange);margin-right:8px"></i>Best travel date?</div>
-      <div class="sp-gvote-opts">
-        <button class="sp-vote-opt" onclick="this.classList.toggle('selected')">This weekend</button>
-        <button class="sp-vote-opt" onclick="this.classList.toggle('selected')">Next month</button>
-        <button class="sp-vote-opt" onclick="this.classList.toggle('selected')">In 3 months</button>
-        <button class="sp-vote-opt" onclick="this.classList.toggle('selected')">Flexible — I'll match the group</button>
-      </div>
-    </div>
-    <div class="sp-fg"><label class="sp-fl">Share Trip Link</label><div style="display:flex;gap:8px"><input class="sp-fi" id="sp-share-link" value="https://sightseerscaribbean.com/#vtours" readonly style="flex:1"><button class="sp-btn sp-btn-navy sp-btn-sm" onclick="spCopyLink()" aria-label="Copy link"><i class="fas fa-copy"></i></button></div></div>
-    <div class="sp-fg"><label class="sp-fl">Invite by Email</label><textarea class="sp-fi" rows="2" placeholder="Add emails separated by commas..."></textarea></div>
-    <button class="sp-btn sp-btn-orange" style="width:100%;justify-content:center;padding:14px" onclick="spToast('<i class=\'fas fa-share-alt\'></i> Group invite sent!')"><i class="fas fa-share-alt"></i> Send Group Invite</button>
-  </div>
-</div>
-
-<div class="sp-toast" id="sp-toast" role="status" aria-live="polite"></div>
-
-<script>
-/* ═══════════════════════════════════════════════════════════
-   SIGHT SEERS 360° SPATIAL TOUR PORTAL — JS
-═══════════════════════════════════════════════════════════ */
-var spViewer=null,spCurrentId='blue-lagoon',spActiveTour=null,spTripItems=[],spSavedIds=[];
-
-/* ── Tour Data ──────────────────────────────────────────── */
-var spTours=[
-  {id:'blue-lagoon',title:'Blue Lagoon',location:'Portland, Jamaica',category:'Beaches',vibes:['beach','luxury'],badge:'Most Popular',dur:'3 hrs',grp:'2–20',transport:'Included',price:65,
-  desc:"Crystal-clear thermal waters meet lush Portland jungle in one of Jamaica's most iconic natural wonders.",
-  included:['Professional local guide','Hotel transfers','Snorkel equipment','Tropical refreshments'],
-  addons:[{n:'Private Raft',p:'+$45/person'},{n:'Underwater Photography',p:'+$65'},{n:'Sunset Extension',p:'+$30/person'}],
-  pano:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-  pitch:-5,yaw:120,hfov:110,
-  hs:[{p:-8,y:45,title:'Thermal Spring',desc:'Natural thermal spring — crystal clear, avg 21°C year-round.',type:'Tour Detail',cta:'Explore This Spot'},
-      {p:-2,y:180,title:'Jungle Nature Walk',desc:'Guided trail through Portland\'s lush rainforest canopy.',type:'Add-On',cta:'Add Nature Walk'},
-      {p:-12,y:-60,title:'Bamboo Rafting',desc:'Traditional bamboo raft rides along the scenic Rio Grande.',type:'Add-On',cta:'Add Rafting +$45'}]},
-  {id:'sunset-yacht',title:'Sunset Yacht Charter',location:'Montego Bay, Jamaica',category:'Yacht Charter',vibes:['yacht','luxury','group'],badge:'VIP Experience',dur:'4 hrs',grp:'6–30',transport:'Included',price:120,
-  desc:"Sail Jamaica's turquoise waters at golden hour with an open bar, DJ, and panoramic ocean views.",
-  included:['Luxury yacht & crew','Open bar (spirits, cocktails, beer)','DJ / sound system','Hotel transfers'],
-  addons:[{n:'Catering Package',p:'+$35/person'},{n:'DJ Upgrade',p:'+$150'},{n:'Snorkel Stop',p:'+$20/person'},{n:'Photographer',p:'+$200'}],
-  pano:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
-  pitch:-3,yaw:0,hfov:100,
-  hs:[{p:-5,y:90,title:'Open Bar',desc:'Premium spirits, cocktails, and tropical punch — fully included.',type:'Included',cta:'View Full Menu'},
-      {p:5,y:-45,title:'Upper Deck — Sunset Photos',desc:'Best golden-hour photo spot. Add a photographer to capture the moment.',type:'Photo Moment',cta:'Add Photographer +$200'},
-      {p:-10,y:160,title:'Dining Area',desc:'Fresh Caribbean catering for up to 30 guests — add catering package.',type:'Add-On',cta:'Add Catering +$35'}]},
-  {id:'kingston-food',title:'Kingston Food & Culture',location:'Kingston, Jamaica',category:'Cultural',vibes:['culture','group'],badge:'Local Favourite',dur:'5 hrs',grp:'4–15',transport:'Included',price:75,
-  desc:"Taste jerk, ackee & saltfish, and fresh tropical fruits while exploring Kingston's vibrant cultural heartbeat.",
-  included:['Expert food guide','Tastings at 5+ stops','Local market visit','Hotel transfers','Cultural commentary'],
-  addons:[{n:'Bob Marley Museum',p:'+$25/person'},{n:'Cooking Class',p:'+$45/person'},{n:'Rum Tasting',p:'+$30/person'}],
-  pano:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=400&fit=crop',
-  pitch:-4,yaw:60,hfov:105,
-  hs:[{p:-6,y:30,title:'Jerk Centre',desc:'Authentic jerk slow-cooked over pimento wood — the real Kingston experience.',type:'Cultural Fact',cta:'Ask Guide'},
-      {p:2,y:150,title:'Cooking Demo',desc:'Learn to prepare Jamaica\'s national dish ackee & saltfish with a local chef.',type:'Add-On',cta:'Add Cooking Class'},
-      {p:-8,y:-80,title:'Tropical Fruit Market',desc:'Seasonal mangoes, soursop, star apple, and more from local vendors.',type:'Tour Detail',cta:'Add to Trip'}]},
-  {id:'dunn-falls',title:"Dunn's River Falls",location:'Ocho Rios, Jamaica',category:'Adventure',vibes:['adventure','group'],badge:"Jamaica's Icon",dur:'4 hrs',grp:'2–30',transport:'Included',price:85,
-  desc:"Climb the legendary 600-ft terraced waterfall with a certified guide and cool off in natural pools.",
-  included:['Certified guide','Waterfall entry','Water shoes','Hotel transfers','Locker storage'],
-  addons:[{n:'Beach Lunch',p:'+$30/person'},{n:'Ziplining Combo',p:'+$55/person'},{n:'ATV Add-On',p:'+$70/person'},{n:'Content Package',p:'+$90'}],
-  pano:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&h=400&fit=crop',
-  pitch:-8,yaw:90,hfov:110,
-  hs:[{p:-15,y:45,title:"600-ft Waterfall Climb",desc:'Climb 600 feet of natural terraced rock steps through cascading water with your guide.',type:'Tour Detail',cta:'Book Now'},
-      {p:0,y:-30,title:'Guided Climb Route',desc:'Certified guides lead you safely — all fitness levels welcome. 1-hour experience.',type:'Safety Note',cta:'Learn More'},
-      {p:-10,y:180,title:'Caribbean Sea Pool',desc:'Cool off in the natural pool where the falls meet the Caribbean Sea.',type:'Photo Moment',cta:'Add Content Package'}]},
-  {id:'negril-beach',title:'Seven Mile Beach',location:'Negril, Jamaica',category:'Beaches',vibes:['beach','relaxation','group'],badge:'Paradise Beach',dur:'Full Day',grp:'2–50',transport:'Included',price:55,
-  desc:"Relax on one of the Caribbean's most beautiful beaches with crystal-clear calm waters and white sand.",
-  included:['Beach access','Sun loungers & umbrellas','Hotel transfers','Beachside welcome drink'],
-  addons:[{n:'Jet Ski (30 min)',p:'+$65/person'},{n:'Glass Bottom Boat',p:'+$40/person'},{n:"Rick's Café",p:'+$35/person'},{n:'Sunset Cruise',p:'+$80/person'}],
-  pano:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
-  pitch:-5,yaw:0,hfov:120,
-  hs:[{p:-10,y:60,title:'Seven Mile Shoreline',desc:"One of the Caribbean's most stunning beaches — calm, clear, and wide.",type:'Tour Detail',cta:'Add to Trip'},
-      {p:-5,y:-90,title:'Jet Ski & Water Sports',desc:'Jet ski, glass bottom boats, and snorkel tours available from the beach.',type:'Add-On',cta:'Add Jet Ski +$65'},
-      {p:0,y:180,title:"Rick's Café — Cliff Diving",desc:"Famous cliff jumping spot and the best sunset view in Jamaica.",type:'Photo Moment',cta:"Add Rick's Café +$35"}]},
-  {id:'atv-adventure',title:'ATV Mountain Adventure',location:'Ocho Rios, Jamaica',category:'Adventure',vibes:['adventure','group'],badge:'Best for Groups',dur:'3 hrs',grp:'4–20',transport:'Included',price:95,
-  desc:"Ride Jamaica's rugged interior jungle on all-terrain vehicles, crossing rivers and hitting scenic mountain views.",
-  included:['ATV & full safety gear','Trained guide','Trail & safety briefing','Hotel transfers','Fruit stop'],
-  addons:[{n:'Content Creator Package',p:'+$90'},{n:"Dunn's River Combo",p:'+$55/person'},{n:'River Tubing',p:'+$40/person'}],
-  pano:'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&h=400&fit=crop',
-  pitch:-5,yaw:45,hfov:110,
-  hs:[{p:-8,y:30,title:'Mountain Trail — 12 Miles',desc:"Ride through Jamaica's rugged interior — jungle, river crossings, and scenic peaks.",type:'Tour Detail',cta:'Book Now'},
-      {p:2,y:150,title:'River Crossing',desc:'One of the best moments — splash through natural river crossings at full speed.',type:'Group Package',cta:'Add for Group'},
-      {p:-5,y:-60,title:'Scenic Overlook — Photo Stop',desc:'Best group photo spot with panoramic Jamaica views. Add the content package.',type:'Photo Moment',cta:'Add Content Package'}]},
-  {id:'vip-lounge',title:'VIP Lounge & Transfer',location:'Sangster Airport, MBJ',category:'VIP',vibes:['vip','luxury'],badge:'VIP Arrival',dur:'2 hrs',grp:'1–20',transport:'Included',price:110,
-  desc:"Arrive in style with VIP lounge access, fast-track immigration, and a private luxury vehicle to your hotel.",
-  included:['VIP lounge access','Fast-track immigration','Private vehicle','Meet & greet agent','Luggage assistance'],
-  addons:[{n:'Champagne Welcome',p:'+$25/person'},{n:'Group Coordinator (6+)',p:'+$75'},{n:'Multi-Stop Transfer',p:'+$45'}],
-  pano:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=400&fit=crop',
-  pitch:0,yaw:0,hfov:100,
-  hs:[{p:-3,y:60,title:'VIP Arrival Lounge',desc:'Relax in the private VIP lounge while your transfer is arranged — complimentary refreshments.',type:'VIP Upgrade',cta:'Add VIP Access'},
-      {p:3,y:-45,title:'Fast-Track Immigration',desc:'Skip the queue with priority processing — no long lines on arrival.',type:'Tour Detail',cta:'Request Fast Track'},
-      {p:-5,y:160,title:'Private Vehicle Meet Point',desc:'Luxury SUV waiting curbside to take you directly to your resort.',type:'Transport',cta:'Add Private Transfer'}]},
-  {id:'river-rafting',title:'Rio Grande River Rafting',location:'Portland, Jamaica',category:'Adventure',vibes:['adventure','relaxation','group'],badge:'Classic Jamaica',dur:'2.5 hrs',grp:'2–30',transport:'Included',price:80,
-  desc:"Float Jamaica's legendary Rio Grande on traditional bamboo rafts, guided by expert local raftsmen through lush jungle scenery.",
-  included:['Bamboo raft & guide','Tropical fruit & drink stop','Hotel transfers','River commentary'],
-  addons:[{n:'Blue Lagoon Combo',p:'+$45/person'},{n:'Private Raft (couples)',p:'+$30'},{n:'Picnic Package',p:'+$35/person'}],
-  pano:'https://images.unsplash.com/photo-1502472584811-0a2f2feb8968?w=4000&h=2000&fit=crop',
-  thumb:'https://images.unsplash.com/photo-1502472584811-0a2f2feb8968?w=600&h=400&fit=crop',
-  pitch:-5,yaw:90,hfov:110,
-  hs:[{p:-8,y:45,title:'Bamboo Raft Launch',desc:'Traditional bamboo rafts poled by certified local guides through the Rio Grande.',type:'Tour Detail',cta:'Book Now'},
-      {p:2,y:-60,title:'Tropical Fruit Stop',desc:'Riverside vendor stop for fresh coconut water, mangoes, and seasonal fruit.',type:'Cultural Fact',cta:'Add Picnic Package'},
-      {p:-5,y:180,title:'Wildlife & Rainforest',desc:"Spot herons, kingfishers, and Jamaica's native birds along the river.",type:'Photo Moment',cta:'Ask Guide'}]}
-];
-
-/* ── Gallery ─────────────────────────────────────────────── */
-function spFilterVibe(btn,v){
-  document.querySelectorAll('.sp-filter-chip').forEach(function(b){b.classList.remove('active')});
-  btn.classList.add('active');
-  spRenderGallery(v);
-}
-function spRenderGallery(v){
-  var g=document.getElementById('sp-tour-grid');if(!g)return;
-  var list=v==='all'?spTours:spTours.filter(function(t){return t.vibes.indexOf(v)>-1});
-  g.innerHTML=list.map(function(t){
-    var saved=spSavedIds.indexOf(t.id)>-1;
-    return '<div class="sp-tour-card" data-id="'+t.id+'">'+
-      '<div class="sp-tour-thumb"><img src="'+t.thumb+'" alt="'+t.title+' 360° virtual tour" loading="lazy">'+
-      (t.badge?'<div class="sp-tour-badge">'+t.badge+'</div>':'')+
-      '<div class="sp-tour-vr"><i class="fas fa-vr-cardboard"></i> 360°</div></div>'+
-      '<div class="sp-tour-body"><div class="sp-tour-meta"><span class="sp-tour-loc">'+t.location+'</span><span class="sp-tour-dot"></span><span class="sp-tour-dur"><i class="far fa-clock" style="margin-right:3px"></i>'+t.dur+'</span></div>'+
-      '<div class="sp-tour-title">'+t.title+'</div><div class="sp-tour-desc">'+t.desc+'</div>'+
-      '<div class="sp-tour-tags"><span class="sp-tour-tag sp-tag-g"><i class="fas fa-users" style="margin-right:3px"></i>'+t.grp+' guests</span>'+
-      (t.transport==='Included'?'<span class="sp-tour-tag sp-tag-t"><i class="fas fa-shuttle-van" style="margin-right:3px"></i>Transport</span>':'')+
-      '<span class="sp-tour-tag sp-tag-c">'+t.category+'</span></div>'+
-      '<div class="sp-tour-footer"><div class="sp-tour-price">From<strong>$'+t.price+'</strong></div>'+
-      '<div class="sp-tour-acts">'+
-        '<button class="sp-btn sp-btn-ghost sp-btn-sm" onclick="spSaveById(\''+t.id+'\')" id="sp-save-'+t.id+'" aria-label="Save tour"><i class="'+(saved?'fas':'far')+' fa-heart"></i></button>'+
-        '<button class="sp-btn sp-btn-ghost sp-btn-sm" onclick="spAddById(\''+t.id+'\')" aria-label="Add to trip"><i class="fas fa-plus"></i> Add</button>'+
-        '<button class="sp-btn sp-btn-navy sp-btn-sm" onclick="spOpenTour(\''+t.id+'\')" aria-label="Enter 360° tour"><i class="fas fa-vr-cardboard"></i> Enter</button>'+
-      '</div></div></div></div>';
-  }).join('');
-}
-
-/* ── Viewer ──────────────────────────────────────────────── */
-function spBuildSceneBar(){
-  var b=document.getElementById('sp-scene-bar');if(!b)return;
-  var icons={Beaches:'fas fa-umbrella-beach','Yacht Charter':'fas fa-anchor',Cultural:'fas fa-landmark',Adventure:'fas fa-mountain',VIP:'fas fa-star'};
-  b.innerHTML=spTours.map(function(t){
-    return '<button class="sp-scene-btn'+(t.id===spCurrentId?' active':'')+'" role="tab" aria-selected="'+(t.id===spCurrentId?'true':'false')+'" onclick="spOpenTour(\''+t.id+'\',this)">'+
-      '<i class="'+(icons[t.category]||'fas fa-map-marker-alt')+'"></i> '+t.title+'</button>';
-  }).join('');
-}
-function spOpenTour(id,btn){
-  var t=spTours.find(function(x){return x.id===id});if(!t)return;
-  spCurrentId=id;spActiveTour=t;
-  document.querySelectorAll('.sp-scene-btn').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false')});
-  if(btn){btn.classList.add('active');btn.setAttribute('aria-selected','true');}
-  else{var ab=document.querySelector('.sp-scene-btn[onclick*="\''+id+'\'"]');if(ab){ab.classList.add('active');ab.setAttribute('aria-selected','true');}}
-  var ln=document.getElementById('sp-live-name');if(ln)ln.textContent=t.title+' · '+t.location;
-  spPopulatePanel(t);
-  var v=document.getElementById('virtual-tours');if(v)v.scrollIntoView({behavior:'smooth',block:'start'});
-  if(spViewer){try{spViewer.destroy();}catch(e){}}
-  var popup=document.getElementById('sp-hs-popup');if(popup)popup.classList.remove('show');
-  spViewer=pannellum.viewer('sp-pannellum',{
-    type:'equirectangular',panorama:t.pano,title:t.title,autoLoad:true,showControls:false,
-    compass:false,pitch:t.pitch||0,yaw:t.yaw||0,hfov:t.hfov||100,
-    showFullscreenCtrl:false,keyboardZoom:true,mouseZoom:true,draggable:true,
-    hotSpots:t.hs.map(function(h,i){return{pitch:h.p,yaw:h.y,type:'info',text:h.title,
-      createTooltipFunc:function(el){spBuildHotspot(el,h,i);}};})
-  });
-}
-function spBuildHotspot(el,h){
-  var dot=document.createElement('div');
-  dot.style.cssText='width:30px;height:30px;border-radius:50%;background:rgba(239,135,49,.9);border:2px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 5px rgba(239,135,49,.2),0 4px 14px rgba(0,0,0,.35);transition:transform .2s';
-  dot.innerHTML='<i class="fas fa-info" style="color:#fff;font-size:10px;pointer-events:none"></i>';
-  dot.setAttribute('aria-label',h.title+' — '+h.type);
-  dot.addEventListener('mouseenter',function(){dot.style.transform='scale(1.15)';});
-  dot.addEventListener('mouseleave',function(){dot.style.transform='scale(1)';});
-  dot.addEventListener('click',function(e){e.stopPropagation();spShowHsPopup(h,el);});
-  el.appendChild(dot);
-}
-var spHsActive=null;
-function spShowHsPopup(h,anchor){
-  var pp=document.getElementById('sp-hs-popup');if(!pp)return;
-  document.getElementById('sp-hs-type').textContent=h.type;
-  document.getElementById('sp-hs-title').textContent=h.title;
-  document.getElementById('sp-hs-desc').textContent=h.desc;
-  document.getElementById('sp-hs-cta-lbl').textContent=h.cta||'Add to Trip';
-  spHsActive=h;
-  var vw=document.getElementById('virtual-tours');
-  var vr=vw?vw.getBoundingClientRect():{left:0,top:0,width:window.innerWidth,height:window.innerHeight};
-  var ar=anchor.getBoundingClientRect();
-  var left=Math.max(10,Math.min(ar.left-vr.left-100,vr.width-250));
-  var top=Math.max(10,ar.top-vr.top-160);
-  pp.style.left=left+'px';pp.style.top=top+'px';
-  pp.classList.add('show');
-}
-function spHotspotCTA(){
-  if(spHsActive&&(spHsActive.type==='Add-On'||spHsActive.type==='VIP Upgrade'||spHsActive.type==='Group Package'||spHsActive.type==='Transport')){
-    spToast('<i class="fas fa-plus-circle"></i> '+spHsActive.title+' noted in your quote');
-  } else {
-    spAddCurrent();
-  }
-  document.getElementById('sp-hs-popup').classList.remove('show');
-}
-
-/* ── Detail Panel ────────────────────────────────────────── */
-function spPopulatePanel(t){
-  function s(id,v){var el=document.getElementById(id);if(el)el.textContent=v||'';}
-  s('sp-dp-cat',t.category);s('sp-dp-title',t.title);s('sp-dp-dur',t.dur);s('sp-dp-grp',t.grp);
-  s('sp-dp-trnsp',t.transport==='Included'?'Yes':'No');s('sp-dp-desc',t.desc);s('sp-dp-price','$'+t.price);
-  var loc=document.getElementById('sp-dp-loc');if(loc)loc.innerHTML='<i class="fas fa-map-pin"></i> '+t.location;
-  var inc=document.getElementById('sp-dp-inc');
-  if(inc)inc.innerHTML=t.included.map(function(i){return'<li><i class="fas fa-check-circle"></i>'+i+'</li>';}).join('');
-  var add=document.getElementById('sp-dp-addons');
-  if(add)add.innerHTML=t.addons.map(function(a){
-    return'<div class="sp-dp-addon"><span class="sp-dp-addon-name">'+a.n+'</span><span style="display:flex;gap:7px;align-items:center"><span style="color:var(--orange);font-weight:700;font-size:11px">'+a.p+'</span><button class="sp-dp-addon-add" onclick="spToast(\'<i class=\\\'fas fa-plus-circle\\\'></i> '+a.n+' '+a.p+' noted\')">Add</button></span></div>';
-  }).join('');
-}
-function spToggleDetail(open){
-  var panel=document.getElementById('sp-detail-panel');if(!panel)return;
-  var newOpen=(open===undefined)?!panel.classList.contains('open'):!!open;
-  panel.classList.toggle('open',newOpen);
-  var btn=document.getElementById('spDockInfo');
-  if(btn)btn.classList.toggle('dock-active',newOpen);
-}
-
-/* ── Trip Board ──────────────────────────────────────────── */
-function spAddCurrent(){if(spActiveTour)spAddById(spActiveTour.id);}
-function spAddById(id){
-  var t=spTours.find(function(x){return x.id===id});if(!t)return;
-  if(spTripItems.find(function(i){return i.id===id})){spToast('Already in your trip board');return;}
-  spTripItems.push(t);spUpdateBoard();
-  spToast('<i class="fas fa-check-circle"></i> '+t.title+' added to trip');
-  var a=document.getElementById('spDockAdd');if(a){a.style.color='#34c759';setTimeout(function(){a.style.color='';},1400);}
-}
-function spUpdateBoard(){
-  var n=spTripItems.length;
-  var cnt=document.getElementById('sp-trip-count');
-  if(cnt){cnt.textContent=n;cnt.style.display=n>0?'flex':'none';}
-  var emp=document.getElementById('sp-trip-empty');if(emp)emp.style.display=n===0?'block':'none';
-  var lst=document.getElementById('sp-trip-list');
-  if(lst)lst.innerHTML=spTripItems.map(function(t){
-    return'<div class="sp-trip-item">'+
-      '<img class="sp-trip-item-img" src="'+t.thumb+'" alt="'+t.title+'" loading="lazy">'+
-      '<div class="sp-trip-item-info"><div class="sp-trip-item-title">'+t.title+'</div>'+
-      '<div class="sp-trip-item-loc"><i class="fas fa-map-pin" style="margin-right:4px;font-size:9px"></i>'+t.location+'</div>'+
-      '<div class="sp-trip-item-price">From $'+t.price+'/person</div></div>'+
-      '<button class="sp-trip-item-rm" onclick="spRemove(\''+t.id+'\')" aria-label="Remove '+t.title+'"><i class="fas fa-times"></i></button>'+
-    '</div>';
-  }).join('');
-  var tot=spTripItems.reduce(function(s,t){return s+t.price;},0);
-  var te=document.getElementById('sp-trip-total');if(te)te.textContent='$'+tot+'+';
-}
-function spRemove(id){spTripItems=spTripItems.filter(function(t){return t.id!==id});spUpdateBoard();spToast('Removed from trip board');}
-function spToggleTripBoard(open){var b=document.getElementById('sp-trip-board');if(b)b.classList.toggle('open',open);}
-
-/* ── Save ────────────────────────────────────────────────── */
-function spSaveCurrent(){if(spCurrentId)spSaveById(spCurrentId);}
-function spSaveById(id){
-  var idx=spSavedIds.indexOf(id);var saved;
-  if(idx>-1){spSavedIds.splice(idx,1);saved=false;spToast('Removed from saved');}
-  else{spSavedIds.push(id);saved=true;spToast('<i class="fas fa-heart"></i> Saved!');}
-  var b=document.getElementById('sp-save-'+id);if(b)b.innerHTML='<i class="'+(saved?'fas':'far')+' fa-heart"></i>';
-  var ds=document.getElementById('spDockSave');if(ds)ds.querySelector('i').className=spSavedIds.indexOf(spCurrentId)>-1?'fas fa-heart':'far fa-heart';
-}
-
-/* ── Modals ──────────────────────────────────────────────── */
-function spOpenQuote(){
-  var el=document.getElementById('sp-qt-tours');
-  if(el){var items=spTripItems.length>0?spTripItems:[spActiveTour].filter(Boolean);
-    el.innerHTML=items.map(function(t){return'<div class="sp-sel-item"><i class="fas fa-check-circle"></i>'+t.title+' — '+t.location+'</div>';}).join('')||'<div class="sp-sel-item" style="color:#8a9ab0">No tours selected yet</div>';}
-  document.getElementById('sp-quote-modal').classList.add('open');document.body.style.overflow='hidden';
-}
-function spCloseQuote(){document.getElementById('sp-quote-modal').classList.remove('open');document.body.style.overflow='';}
-function spSubmitQuote(e){e.preventDefault();spCloseQuote();spToast('<i class="fas fa-check-circle"></i> Quote request sent! We\'ll respond within 24 hours.');}
-function spOpenConcierge(){document.getElementById('sp-concierge-modal').classList.add('open');document.body.style.overflow='hidden';}
-function spCloseConcierge(){document.getElementById('sp-concierge-modal').classList.remove('open');document.body.style.overflow='';}
-function spSetPrompt(btn){var f=document.getElementById('sp-conc-msg');if(f)f.value=btn.textContent;}
-function spSubmitConcierge(e){e.preventDefault();spCloseConcierge();spToast('<i class="fas fa-comment-dots"></i> Message sent! We\'ll reply shortly.');}
-function spOpenGroup(){
-  var vt=document.getElementById('sp-vote-tours');
-  if(vt)vt.innerHTML=spTours.slice(0,6).map(function(t){return'<button class="sp-vote-opt" onclick="this.classList.toggle(\'selected\')">'+t.title+' — '+t.location+'</button>';}).join('');
-  document.getElementById('sp-group-modal').classList.add('open');document.body.style.overflow='hidden';
-}
-function spCloseGroup(){document.getElementById('sp-group-modal').classList.remove('open');document.body.style.overflow='';}
-function spCopyLink(){var l=document.getElementById('sp-share-link');if(l){navigator.clipboard?navigator.clipboard.writeText(l.value):null;spToast('<i class="fas fa-link"></i> Trip link copied!');}}
-
-/* ── Fullscreen ──────────────────────────────────────────── */
-function spToggleFs(){
-  var el=document.getElementById('virtual-tours'),btn=document.getElementById('sp-fs-btn');
-  if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);if(btn)btn.innerHTML='<i class="fas fa-compress"></i>';}
-  else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);if(btn)btn.innerHTML='<i class="fas fa-expand"></i>';}
-}
-
-/* ── Helpers ─────────────────────────────────────────────── */
-function spDockExplore(){var g=document.getElementById('sp-gallery');if(g)g.scrollIntoView({behavior:'smooth'});}
-var spToastTimer;
-function spToast(msg){
-  var el=document.getElementById('sp-toast');if(!el)return;
-  el.innerHTML=msg;el.classList.add('show');
-  clearTimeout(spToastTimer);spToastTimer=setTimeout(function(){el.classList.remove('show');},3200);
-}
-
-/* ── Close hotspot popup on outside click ────────────────── */
-document.addEventListener('click',function(e){
-  var pp=document.getElementById('sp-hs-popup');
-  if(pp&&pp.classList.contains('show')&&!pp.contains(e.target)&&!e.target.closest('.pnlm-hotspot-base')){pp.classList.remove('show');}
-});
-
-/* ── Keyboard close modals ───────────────────────────────── */
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){spCloseQuote();spCloseConcierge();spCloseGroup();spToggleTripBoard(false);spToggleDetail(false);}
-});
-
-/* ── Init ─────────────────────────────────────────────────── */
-(function(){
-  spRenderGallery('all');
-  spBuildSceneBar();
-  spActiveTour=spTours[0];
-  spOpenTour('blue-lagoon');
-  spUpdateBoard();
-})();
-</script>
-
     <!-- DASHBOARD SHOWCASE (TABBED) -->
   <section class="vt-sec vt-sec--alt">
     <div class="vt-wrap">
@@ -15544,7 +14902,7 @@ document.addEventListener('keydown',function(e){
                 <div class="vt-session" id="vt-active-session">
                   <div class="vt-session-bar">
                     <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span id="vt-session-title">Blue Lagoon Morning Walk</span> &mdash; <span id="vt-session-guide">Marcus Thompson</span></div>
-                    <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span><i class="fas fa-check vt-lang-check"></i></div></div></div><div class="vt-session-expand-btn" onclick="vtExpandSession()" title="Expand session"><i class="fas fa-expand"></i></div><div class="vt-cinema-btn" onclick="vtCinemaMode()" title="Cinema Mode"><i class="fas fa-film"></i></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
+                    <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span><i class="fas fa-check vt-lang-check"></i></div></div></div><div class="vt-session-bar-btn" onclick="vtSessionAction(this,'invite')" title="Share this session"><i class="fas fa-user-plus" style="margin-right:5px;font-size:10px"></i>Invite</div><div class="vt-session-bar-btn" onclick="vtOpenCart()" title="Your cart" style="position:relative"><i class="fas fa-cart-shopping" style="margin-right:5px;font-size:10px"></i>Cart<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-expand-btn" onclick="vtExpandSession()" title="Expand session"><i class="fas fa-expand"></i></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
                   </div>
                   <div class="vt-session-content">
                     <div>
@@ -15556,8 +14914,8 @@ document.addEventListener('keydown',function(e){
 
                         <!-- Scene Switcher -->
                         <div class="vt-scene-switcher">
-                          <div class="vt-scene-btn active" title="Switch to Blue Lagoon beach scene" onclick="vtSwitchScene('kayak')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
-                          <div class="vt-scene-btn" title="Switch to local craft market scene" onclick="vtSwitchScene('market')"><i class="fas fa-store" style="margin-right:4px"></i> Craft Market</div>
+                          <div class="vt-scene-btn active" id="vt-scene-btn-lagoon" title="Switch to Blue Lagoon dock scene" onclick="vtSwitchScene('lagoon')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
+                          <div class="vt-scene-btn" id="vt-scene-btn-market" title="Switch to local market stall scene" onclick="vtSwitchScene('market')"><i class="fas fa-store" style="margin-right:4px"></i> Market Stall</div>
                         </div>
 
 
@@ -15600,62 +14958,16 @@ document.addEventListener('keydown',function(e){
                             <div class="vt-auction-watchers"><i class="fas fa-eye" style="margin-right:4px"></i> 34 people watching this auction</div>
                           </div>
                         </div>
-                        <!-- Audio unmute button -->
-                        <div class="vt-unmute-btn" id="vt-unmute-btn" onclick="vtToggleVideoAudio(this)" title="Toggle audio">
+                        <!-- Audio unmute button (live streams only) -->
+                        <div class="vt-unmute-btn" id="vt-unmute-btn" onclick="vtToggleVideoAudio(this)" title="Toggle audio" style="display:none">
                           <i class="fas fa-volume-xmark"></i> Tap for Audio
                         </div>
 
                         <!-- Live Indicator -->
                         <div class="vt-live-indicator" title="You're watching a live session"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-xr-enter-btn" id="vt-xr-enter-btn" title="Enter XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i><div class="vt-xr-mode-menu" id="vt-xr-mode-menu"><div class="vt-xr-mode-menu-title">Select XR Mode</div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-vr')"><i class="fas fa-vr-cardboard"></i><div><strong>Immersive VR</strong><span>Full 360&deg; virtual tour</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-ar')"><i class="fas fa-glasses"></i><div><strong>AR Passthrough</strong><span>Overlay tour on your room</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('glasses')"><i class="fas fa-sun"></i><div><strong>Glasses HUD</strong><span>Ray-Ban Meta heads-up view</span></div></div><div class="vt-xr-mode-divider"></div><div class="vt-xr-mode-status" id="vt-xr-mode-status"><i class="fas fa-circle"></i> Checking device...</div></div></div><div class="vt-session-expand" title="Fullscreen" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
 
-                        <!-- BLUE LAGOON / ZIPLINE — YouTube pan-drag -->
-                        <div class="vt-360-scene vt-yt-scene" id="vt-scene-kayak">
-                          <div class="vt-yt-pan-wrap" id="vt-pan-kayak">
-                            <iframe id="vt-iframe-kayak" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd2160&hd=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
-                            <div class="vt-yt-pan-overlay" id="vt-overlay-kayak"></div>
-                          </div>
-                          <div class="vt-yt-hotspot-layer">
-                            <div class="vt-hotspot" style="top:22%;left:15%" onmouseenter="vtShowHotspot(event,'hs1')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs1')">
-                              <div class="vt-hotspot-dot"><i class="fas fa-leaf"></i></div>
-                              <div class="vt-hotspot-label">Blue Mahoe Seedling<small>USD $35.00</small></div>
-                            </div>
-                            <div class="vt-hotspot" style="top:60%;left:78%" onmouseenter="vtShowHotspot(event,'hs2')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs2')">
-                              <div class="vt-hotspot-dot" onclick="event.stopPropagation();document.getElementById('vt-auction-overlay').classList.add('show')"><i class="fas fa-tshirt"></i></div>
-                              <div class="vt-hotspot-label">Portland Parish Tee<small>USD $28.00</small></div>
-                            </div>
-                            <div class="vt-hotspot" style="top:35%;left:50%" onmouseenter="vtShowHotspot(event,'hs3')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs3')">
-                              <div class="vt-hotspot-dot"><i class="fas fa-camera"></i></div>
-                              <div class="vt-hotspot-label">Photo Print - This Moment<small>USD $15.00</small></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- CRAFT MARKET SCENE — YouTube pan-drag -->
-                        <div class="vt-360-scene vt-yt-scene" id="vt-scene-market" style="display:none">
-                          <div class="vt-yt-pan-wrap" id="vt-pan-market">
-                            <iframe id="vt-iframe-market" class="vt-yt-pan-iframe" src="https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&vq=hd2160&hd=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope" allowfullscreen></iframe>
-                            <div class="vt-yt-pan-overlay" id="vt-overlay-market"></div>
-                          </div>
-                          <div class="vt-yt-hotspot-layer">
-                          <!-- Market Hotspots -->
-                          <div class="vt-hotspot" style="top:40%;left:18%" onmouseenter="vtShowHotspot(event,'hs4')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs4')">
-                            <div class="vt-hotspot-dot"><i class="fas fa-shopping-basket"></i></div>
-                            <div class="vt-hotspot-label">Handwoven Market Basket<small>USD $28.00</small></div>
-                          </div>
-                          <div class="vt-hotspot" style="top:30%;left:50%" onmouseenter="vtShowHotspot(event,'hs5')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs5')">
-                            <div class="vt-hotspot-dot"><i class="fas fa-paint-brush"></i></div>
-                            <div class="vt-hotspot-label">Hand-Painted Canvas Art<small>USD $85.00</small></div>
-                          </div>
-                          <div class="vt-hotspot" style="top:55%;left:72%" onmouseenter="vtShowHotspot(event,'hs6')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs6')">
-                            <div class="vt-hotspot-dot"><i class="fas fa-pepper-hot"></i></div>
-                            <div class="vt-hotspot-label">Jamaican Spice Collection<small>USD $22.00</small></div>
-                          </div>
-                          <div class="vt-hotspot" style="top:45%;left:35%" onmouseenter="vtShowHotspot(event,'hs7')" onmouseleave="vtHideHotspot()" onclick="vtToggleHotspot(event,'hs7')">
-                            <div class="vt-hotspot-dot"><i class="fas fa-gem"></i></div>
-                            <div class="vt-hotspot-label">Larimar Stone Necklace<small>USD $65.00</small></div>
-                          </div>
-                          </div>
-                        </div>
+                        <!-- 360° PANORAMIC SCENES — Pannellum (real equirectangular panoramas) -->
+                        <div class="vt-pano-host" id="vt-pano-host" role="application" aria-label="Interactive 360 degree panoramic scene — click and drag to look around"></div>
 
                         <!-- Hotspot popup moved to body via JS -->
 
@@ -15697,19 +15009,6 @@ document.addEventListener('keydown',function(e){
                         </div>
 
                       </div>
-                      <div class="vt-session-actions">
-                        <div class="vt-session-action" title="Browse items from this tour" onclick="vtSessionAction(this,'shop')" style="position:relative"><i class="fas fa-shopping-bag"></i>Shop<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-action" title="View your shopping cart" onclick="vtOpenCart()"><i class="fas fa-cart-shopping"></i>Cart</div>
-                        <div class="vt-session-action" title="Take a snapshot of this moment" onclick="vtSessionAction(this,'capture')"><i class="fas fa-camera"></i>Photo</div>
-                        <div class="vt-session-action" title="AI identifies what you point at" id="vt-point-ask-btn" onclick="vtTogglePointAsk(this)"><i class="fas fa-wand-magic-sparkles"></i>Identify</div>
-                        <div class="vt-session-action" title="Toggle ambient audio" id="vt-audio-toggle-btn" onclick="vtToggleSessionAudio(this)"><i class="fas fa-volume-high" id="vt-audio-toggle-icon"></i><span id="vt-audio-toggle-label">Audio</span></div><div class="vt-session-action" title="Toggle live captions" onclick="vtToggleCaptions(this)"><i class="fas fa-closed-captioning" id="vt-cc-icon"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-action vt-xr-action" title="Switch to immersive XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i>VR Mode</div><div class="vt-session-action" title="Share this tour with a friend" onclick="vtSessionAction(this,'invite')"><i class="fas fa-user-plus"></i>Invite</div>
-                        <div class="vt-session-action" title="AI Voice Narrator with spatial audio" id="vt-narrator-btn" onclick="vtToggleNarrator(this)"><i class="fas fa-microphone-lines"></i>Narrate</div>
-                        <div class="vt-session-action" title="Live caption translation in 8 languages" onclick="vtShowTranslate(this)"><i class="fas fa-language"></i>Translate</div>
-                        <div class="vt-session-action" title="Send emoji reactions to the stream" onclick="vtShowReactions(this)"><i class="fas fa-face-grin-stars"></i>React</div>
-                        <div class="vt-session-action" title="View your captured highlights" onclick="vtShowHighlights()"><i class="fas fa-film"></i>Reel</div>
-                        <div class="vt-session-action" title="Side-by-side dual scene view" id="vt-split-btn" onclick="vtToggleSplitView(this)"><i class="fas fa-table-columns"></i>Split</div>
-                        <div class="vt-session-action" title="AR trivia facts about this location" id="vt-trivia-btn" onclick="vtToggleTrivia(this)"><i class="fas fa-lightbulb"></i>Trivia</div>
-                        <div class="vt-session-action" title="Save highlights and share" onclick="vtShowSavePanel(this)"><i class="fas fa-arrow-down-to-line"></i>Save</div>
-                      </div>
                     </div>
                     <div class="vt-session-side">
                       <div class="vt-session-chat" id="vt-chat-box">
@@ -15735,6 +15034,112 @@ document.addEventListener('keydown',function(e){
                   </div>
                 </div>
               </div><!-- /vt-exp-session-wrap -->
+
+<!-- ═══════ 360° PANORAMIC ENGINE — Pannellum (self-hosted) ═══════
+     Panoramas: BabylonJS playground sample assets (Apache-2.0)
+     equirectangular.jpg (harbor, EDSR 4x upscale) · 360photo.jpg (market stall) -->
+<link rel="stylesheet" href="/vendor/pannellum/pannellum.css">
+<script src="/vendor/pannellum/pannellum.js"></script>
+<style>
+.vt-pano-host{position:absolute;inset:0;z-index:1;background:#0d3a5c}
+.vt-pano-host .pnlm-container{width:100%!important;height:100%!important;background:#0d3a5c}
+.vt-pano-host .pnlm-load-box{background:rgba(6,20,38,.85);border-radius:14px}
+.vt-pano-host .pnlm-about-msg{display:none!important}
+.vt-pnlm-hs{cursor:pointer}
+.vt-pnlm-hs .vt-hotspot-label{opacity:0}
+.vt-pnlm-hs:hover .vt-hotspot-label{opacity:1;bottom:calc(100% + 12px)}
+.vt-pnlm-hs .vt-hotspot-dot:hover{transform:scale(1.12)}
+#vt-active-session .vt-session-video{min-height:430px!important}
+#vt-active-session .vt-session-content>div:first-child{display:flex;flex-direction:column}
+#vt-active-session .vt-session-content>div:first-child .vt-session-video{flex:1}
+.vt-session-bar .vt-session-bar-btn .vt-cart-badge{top:-5px;right:-5px}
+.vt-session-bar-right .vt-session-bar-btn:not(.leave){background:rgba(0,0,0,.05);color:#3a4a5c}
+.vt-session-bar-right .vt-session-bar-btn:not(.leave):hover{background:rgba(0,0,0,.1)}
+@media(max-width:768px){#vt-active-session .vt-session-video{min-height:300px!important}}
+</style>
+<script>
+var vtPanoViewer=null,vtPanoScenes={
+  lagoon:{
+    title:'Blue Lagoon', panorama:'/panos/blue-lagoon.jpg',
+    yaw:15,pitch:-4,hfov:100,
+    loc:'Port Antonio &bull; Portland &bull; Jamaica',
+    ambient:'Ocean Waves',
+    hotSpots:[
+      {pitch:6,yaw:-118,hs:'hs1',icon:'fa-leaf',action:'identify'},
+      {pitch:-14,yaw:62,hs:'hs2',icon:'fa-tshirt',action:'auction'},
+      {pitch:-4,yaw:-12,hs:'hs3',icon:'fa-camera',action:'popup'}
+    ]
+  },
+  market:{
+    title:'Market Stall', panorama:'/panos/market-stall.jpg',
+    yaw:118,pitch:-16,hfov:105,
+    loc:'Falmouth &bull; Trelawny &bull; Jamaica',
+    ambient:'Street Ambience',
+    hotSpots:[
+      {pitch:-24,yaw:-142,hs:'hs4',icon:'fa-shopping-basket',action:'popup'},
+      {pitch:8,yaw:168,hs:'hs5',icon:'fa-paint-brush',action:'popup'},
+      {pitch:-20,yaw:118,hs:'hs6',icon:'fa-pepper-hot',action:'popup'},
+      {pitch:-13,yaw:-58,hs:'hs7',icon:'fa-gem',action:'popup'}
+    ]
+  }
+};
+function vtBuildPanoHotspot(el,args){
+  el.classList.add('vt-pnlm-hs');
+  var d=vtHotspotData[args.hs]||{name:'',price:''};
+  el.innerHTML='<div class="vt-hotspot-dot"><i class="fas '+args.icon+'"></i></div>'+
+    '<div class="vt-hotspot-label">'+d.name+'<small>'+d.price+'</small></div>';
+  el.addEventListener('mouseenter',function(e){if(typeof vtShowHotspot==='function')vtShowHotspot(e,args.hs)});
+  el.addEventListener('mouseleave',function(){if(typeof vtHideHotspot==='function')vtHideHotspot()});
+  el.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(args.action==='identify'){var c=document.getElementById('vt-identify-card');if(c)c.classList.add('show');}
+    else if(args.action==='auction'){var a=document.getElementById('vt-auction-overlay');if(a)a.classList.add('show');}
+    else if(typeof vtToggleHotspot==='function'){vtToggleHotspot(e,args.hs);}
+  });
+}
+function vtPanoSceneCfg(id){
+  var s=vtPanoScenes[id];
+  return {
+    type:'equirectangular',panorama:s.panorama,yaw:s.yaw,pitch:s.pitch,hfov:s.hfov,
+    minHfov:55,maxHfov:110,autoLoad:true,
+    hotSpots:s.hotSpots.map(function(h){return{pitch:h.pitch,yaw:h.yaw,cssClass:'vt-pnlm-hs',createTooltipFunc:vtBuildPanoHotspot,createTooltipArgs:h}})
+  };
+}
+function vtInitPanoViewer(){
+  if(vtPanoViewer||typeof pannellum==='undefined')return;
+  var host=document.getElementById('vt-pano-host');if(!host)return;
+  vtPanoViewer=pannellum.viewer('vt-pano-host',{
+    default:{firstScene:'lagoon',sceneFadeDuration:900,autoRotate:-1.5,autoRotateInactivityDelay:6000,showControls:false,compass:false,keyboardZoom:true,mouseZoom:true,draggable:true},
+    scenes:{lagoon:vtPanoSceneCfg('lagoon'),market:vtPanoSceneCfg('market')}
+  });
+  /* compass needle follows real view direction */
+  setInterval(function(){
+    var needle=document.getElementById('vt-360-compass-needle');
+    if(needle&&vtPanoViewer){try{needle.style.transform='rotate('+vtPanoViewer.getYaw()+'deg)'}catch(e){}}
+  },150);
+  /* keep the canvas sized through expand / fullscreen / layout shifts */
+  if(window.ResizeObserver){
+    var pending=false;
+    new ResizeObserver(function(){
+      if(pending)return;pending=true;
+      requestAnimationFrame(function(){pending=false;try{vtPanoViewer.resize()}catch(e){}});
+    }).observe(host);
+  }
+  document.addEventListener('fullscreenchange',function(){setTimeout(function(){try{vtPanoViewer.resize()}catch(e){}},120)});
+}
+(function(){
+  var host=document.getElementById('vt-pano-host');
+  if(!host)return;
+  if(window.IntersectionObserver){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){if(en.isIntersecting){vtInitPanoViewer();io.disconnect();}});
+    },{threshold:.05});
+    io.observe(host);
+  }else if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',vtInitPanoViewer);
+  }else{vtInitPanoViewer();}
+})();
+</script>
 
 
               <!-- VIEW: Browse Tours -->
@@ -16875,9 +16280,9 @@ function vtActivateLivePlayer(hlsUrl, playbackId){
   // Destroy previous HLS instance
   if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
 
-  // Show live video, hide YouTube scenes
+  // Show live video over the panorama; reveal the unmute control
   vid.style.display='block';
-  document.querySelectorAll('.vt-360-scene').forEach(function(s){s.style.display='none';});
+  var um=document.getElementById('vt-unmute-btn');if(um)um.style.display='flex';
 
   if(window.Hls && Hls.isSupported()){
     vtMainHls=new Hls({lowLatencyMode:true,backBufferLength:30});
@@ -16926,10 +16331,8 @@ function vtDeactivateLivePlayer(){
   var vid=document.getElementById('vt-main-live-vid');
   if(vid){vid.pause();vid.src='';vid.style.display='none';}
   if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
-  // Restore YouTube scenes
-  document.querySelectorAll('.vt-360-scene').forEach(function(s,i){
-    s.style.display=(i===0)?'block':'none';
-  });
+  // Hide the unmute control; the panorama beneath is revealed again
+  var um=document.getElementById('vt-unmute-btn');if(um)um.style.display='none';
   vtDisconnectSupabaseChat();
 }
 
@@ -17493,19 +16896,19 @@ function vtJoinLive(tourName, priceUsd, playbackId, streamId){
 }
 
 /* ═══════ 360° SCENE SWITCHING ═══════ */
+var vtActivePanoScene='lagoon';
 function vtSwitchScene(scene){
+  if(!vtPanoScenes[scene])scene='lagoon';
+  vtActivePanoScene=scene;
   document.querySelectorAll('.vt-scene-btn').forEach(function(b){b.classList.remove('active')});
-  document.querySelectorAll('.vt-360-scene').forEach(function(s){s.style.display='none'});
-  if(scene==='kayak'){
-    document.querySelectorAll('.vt-scene-btn')[0].classList.add('active');
-    document.getElementById('vt-scene-kayak').style.display='block';
-    var loc=document.getElementById('vt-session-loc');if(loc)loc.innerHTML='Port Antonio &bull; Portland &bull; Jamaica';
-  } else {
-    document.querySelectorAll('.vt-scene-btn')[1].classList.add('active');
-    document.getElementById('vt-scene-market').style.display='block';
-    var loc=document.getElementById('vt-session-loc');if(loc)loc.innerHTML='Falmouth &bull; Trelawny &bull; Jamaica';
-  }
-  vtToast('<i class="fas fa-sync-alt"></i> Scene: '+(scene==='kayak'?'Blue Lagoon Kayak':'Falmouth Craft Market'));
+  var btn=document.getElementById('vt-scene-btn-'+scene);if(btn)btn.classList.add('active');
+  var s=vtPanoScenes[scene];
+  var loc=document.getElementById('vt-session-loc');if(loc)loc.innerHTML=s.loc;
+  var amb=document.querySelector('.vt-audio-zone-label');if(amb)amb.innerHTML=s.ambient+'<small>Spatial Audio</small>';
+  if(typeof vtInitPanoViewer==='function')vtInitPanoViewer();
+  if(vtPanoViewer){try{vtPanoViewer.loadScene(scene)}catch(e){}}
+  if(typeof vtApplyMoodTheme==='function')vtApplyMoodTheme();
+  vtToast('<i class="fas fa-sync-alt"></i> Scene: '+s.title);
 }
 
 /* ═══════ 360° PANORAMA DRAG NAVIGATION ═══════ */
@@ -18576,20 +17979,18 @@ setTimeout(function(){if(vtStreamActive){var v=document.querySelector('.vt-viewe
    FEATURE 9 — MOOD-ADAPTIVE UI THEMING (Jamaica timezone)
 ═══════════════════════════════════════════════════════════════ */
 function vtApplyMoodTheme(){
-  var h=(new Date().getUTCHours()-5+24)%24;
-  var mood,label;
-  if(h>=5&&h<7){mood='vt-mood-sunrise';label='🌅 Sunrise'}
-  else if(h>=7&&h<10){mood='vt-mood-golden';label='✨ Golden Hour'}
-  else if(h>=10&&h<16){mood='vt-mood-midday';label='☀️ Midday'}
-  else if(h>=16&&h<18){mood='vt-mood-afternoon';label='🌤 Afternoon'}
-  else if(h>=18&&h<20){mood='vt-mood-sunset';label='🌇 Sunset'}
-  else{mood='vt-mood-night';label='🌙 Night'}
+  /* Mood follows the ACTIVE SCENE (matches what's on screen), not the wall clock */
+  var sceneMoods={
+    lagoon:{mood:'vt-mood-golden',label:'🌅 Morning'},
+    market:{mood:'vt-mood-midday',label:'☀️ Midday'}
+  };
+  var cur=sceneMoods[typeof vtActivePanoScene!=='undefined'?vtActivePanoScene:'lagoon']||sceneMoods.lagoon;
   var sess=document.getElementById('vt-active-session');
-  if(sess){['vt-mood-sunrise','vt-mood-golden','vt-mood-midday','vt-mood-afternoon','vt-mood-sunset','vt-mood-night'].forEach(function(m){sess.classList.remove(m)});sess.classList.add(mood);}
+  if(sess){['vt-mood-sunrise','vt-mood-golden','vt-mood-midday','vt-mood-afternoon','vt-mood-sunset','vt-mood-night'].forEach(function(m){sess.classList.remove(m)});sess.classList.add(cur.mood);}
   var badge=document.querySelector('.vt-mood-badge');
-  if(badge)badge.innerHTML='<i class="fas fa-clock"></i>'+label+' · Jamaica';
+  if(badge)badge.innerHTML='<i class="fas fa-sun"></i>'+cur.label+' · Jamaica';
 }
-vtApplyMoodTheme();setInterval(vtApplyMoodTheme,300000);
+vtApplyMoodTheme();
 
 /* ═══════════════════════════════════════════════════════════════
    FEATURE 10 — OFFLINE TOUR PACKETS / SAVE PANEL
