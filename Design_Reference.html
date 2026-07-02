@@ -13924,10 +13924,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 /* ── RIGHT SIDEBAR ── */
 #vt-active-session .vt-session-side{
-  background:rgba(255,255,255,.78)!important;
-  backdrop-filter:blur(40px) saturate(1.8)!important;
-  -webkit-backdrop-filter:blur(40px) saturate(1.8)!important;
-  border-left:1px solid rgba(0,0,0,.04)!important;
+  background:#fff!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-left:1px solid rgba(0,0,0,.06)!important;
 }
 
 /* Chat */
@@ -13969,7 +13969,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 /* Shop section */
 #vt-active-session .vt-session-shop{
-  background:rgba(255,255,255,.92)!important;border-top:1px solid rgba(0,0,0,.04)!important;
+  background:#fff!important;border-top:1px solid rgba(0,0,0,.06)!important;
 }
 #vt-active-session .vt-session-shop-title{
   color:rgba(60,60,67,.4)!important;letter-spacing:2px!important;font-size:10px!important;
@@ -14224,6 +14224,47 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-session.vt-session-fs:-ms-fullscreen{inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important}
 /* Toggle the bar expand button icon to a compress glyph while expanded */
 .vt-session.vt-session-fs .vt-session-expand-btn i::before{content:"\f066"}
+
+/* ── Fix: high-specificity action hide for both expanded states ── */
+#vt-active-session.vt-session-fs .vt-session-actions,
+#vt-active-session.vt-session-expanded .vt-session-actions{display:none!important}
+
+/* ── Fix: vt-session-expanded full layout (video fills height) ── */
+.vt-session.vt-session-expanded{
+  position:fixed!important;inset:0!important;z-index:9999!important;
+  border-radius:0!important;margin:0!important;
+  display:flex!important;flex-direction:column!important;overflow:hidden!important;
+  background:rgba(255,255,255,.98)!important;
+}
+.vt-session.vt-session-expanded .vt-session-bar{flex-shrink:0}
+.vt-session.vt-session-expanded .vt-session-content{
+  flex:1!important;min-height:0!important;display:grid!important;
+  grid-template-columns:1fr 340px!important;overflow:hidden!important;
+}
+.vt-session.vt-session-expanded .vt-session-content>div:first-child{
+  display:flex!important;flex-direction:column!important;min-height:0!important;overflow:hidden!important;
+}
+.vt-session.vt-session-expanded .vt-session-video{
+  flex:1!important;min-height:0!important;
+}
+.vt-session.vt-session-expanded .vt-session-chat{max-height:none!important;flex:1!important}
+.vt-session.vt-session-expanded .vt-session-side{max-height:none;overflow-y:auto}
+@media(max-width:768px){
+  .vt-session.vt-session-expanded .vt-session-content{grid-template-columns:1fr!important}
+}
+
+/* ── YouTube iframe fills video container in expanded modes ── */
+.vt-session-fs .vt-360-scene,
+.vt-session-expanded .vt-360-scene{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+.vt-session-fs .vt-yt-pan-wrap,
+.vt-session-expanded .vt-yt-pan-wrap{width:100%!important;height:100%!important}
+.vt-session-fs .vt-yt-pan-iframe,
+.vt-session-expanded .vt-yt-pan-iframe{width:130%!important;height:100%!important}
+
+/* ── Audio unmute button ── */
+.vt-unmute-btn{position:absolute;bottom:48px;left:16px;z-index:20;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.vt-unmute-btn:hover{background:rgba(0,0,0,.8)}
+.vt-unmute-btn.muted i{animation:none}
 
 /* ======== SESSION CART DRAWER ======== */
 .vt-cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
@@ -14916,6 +14957,11 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                             <div class="vt-auction-watchers"><i class="fas fa-eye" style="margin-right:4px"></i> 34 people watching this auction</div>
                           </div>
                         </div>
+                        <!-- Audio unmute button -->
+                        <div class="vt-unmute-btn" id="vt-unmute-btn" onclick="vtToggleVideoAudio(this)" title="Toggle audio">
+                          <i class="fas fa-volume-xmark"></i> Tap for Audio
+                        </div>
+
                         <!-- Live Indicator -->
                         <div class="vt-live-indicator" title="You're watching a live session"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-xr-enter-btn" id="vt-xr-enter-btn" title="Enter XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard"></i><div class="vt-xr-mode-menu" id="vt-xr-mode-menu"><div class="vt-xr-mode-menu-title">Select XR Mode</div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-vr')"><i class="fas fa-vr-cardboard"></i><div><strong>Immersive VR</strong><span>Full 360&deg; virtual tour</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-ar')"><i class="fas fa-glasses"></i><div><strong>AR Passthrough</strong><span>Overlay tour on your room</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('glasses')"><i class="fas fa-sun"></i><div><strong>Glasses HUD</strong><span>Ray-Ban Meta heads-up view</span></div></div><div class="vt-xr-mode-divider"></div><div class="vt-xr-mode-status" id="vt-xr-mode-status"><i class="fas fa-circle"></i> Checking device...</div></div></div><div class="vt-session-expand" title="Fullscreen" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
 
@@ -16207,6 +16253,30 @@ function vtActivateLivePlayer(hlsUrl, playbackId){
 
   // Connect Supabase real-time chat for this stream
   if(playbackId) vtConnectSupabaseChat(playbackId);
+}
+
+function vtToggleVideoAudio(btn){
+  // For Mux live video
+  var vid=document.getElementById('vt-main-live-vid');
+  if(vid&&vid.style.display!=='none'){
+    vid.muted=!vid.muted;
+    btn.innerHTML=vid.muted?'<i class="fas fa-volume-xmark"></i> Tap for Audio':'<i class="fas fa-volume-high"></i> Audio On';
+    return;
+  }
+  // For YouTube iframes — use postMessage API
+  var iframes=[document.getElementById('vt-iframe-kayak'),document.getElementById('vt-iframe-market')];
+  var anyVisible=iframes.some(function(f){return f&&f.offsetParent!==null;});
+  if(!anyVisible) return;
+  if(!vtToggleVideoAudio._ytMuted) vtToggleVideoAudio._ytMuted=true; // starts muted
+  vtToggleVideoAudio._ytMuted=!vtToggleVideoAudio._ytMuted;
+  iframes.forEach(function(f){
+    if(!f) return;
+    var cmd=vtToggleVideoAudio._ytMuted?'{"event":"command","func":"mute","args":""}':'{"event":"command","func":"unMute","args":""}';
+    try{f.contentWindow.postMessage(cmd,'*');}catch(e){}
+  });
+  btn.innerHTML=vtToggleVideoAudio._ytMuted?
+    '<i class="fas fa-volume-xmark"></i> Tap for Audio':
+    '<i class="fas fa-volume-high"></i> Audio On';
 }
 
 function vtDeactivateLivePlayer(){
