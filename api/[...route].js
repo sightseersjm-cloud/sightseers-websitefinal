@@ -35,6 +35,15 @@ const handlers = {
 };
 
 module.exports = async function router(req, res) {
+  // Normalize the body once for every handler: undefined → {},
+  // JSON-looking strings → parsed object (handlers destructure req.body).
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    if (typeof req.body === 'string') {
+      try { req.body = JSON.parse(req.body); } catch (e) { req.body = {}; }
+    }
+    if (req.body == null || typeof req.body !== 'object') req.body = {};
+  }
+
   const path = (req.url || '').split('?')[0];
   const segment = path.replace(/^\/api\/?/, '').split('/')[0];
   const handler = handlers[segment];

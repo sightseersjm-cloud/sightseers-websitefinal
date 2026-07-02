@@ -144,20 +144,59 @@
 
   function listImages() { return api('images', 'GET'); }
 
-  function uploadImage(file, folder) {
-    return new Promise(function (resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function () {
-        var base64 = reader.result.split(',')[1];
-        api('images', 'POST', {
-          filename: file.name,
-          data: base64,
-          type: file.type,
-          folder: folder || 'site-images'
-        }).then(resolve).catch(reject);
+  /* Downscale/recompress images client-side so uploads stay well under
+     Vercel's 4.5MB request-body limit (phone photos are often 4-8MB). */
+  function compressImage(file, maxDim, quality) {
+    maxDim = maxDim || 1920; quality = quality || 0.85;
+    return new Promise(function (resolve) {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 400 * 1024) return resolve(file);
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () {
+        try {
+          var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            URL.revokeObjectURL(url);
+            if (blob && blob.size < file.size) {
+              blob.name = (file.name || 'image').replace(/\.[^.]+$/, '') + '.jpg';
+              resolve(blob);
+            } else resolve(file);
+          }, 'image/jpeg', quality);
+        } catch (e) { URL.revokeObjectURL(url); resolve(file); }
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      img.onerror = function () { URL.revokeObjectURL(url); resolve(file); };
+      img.src = url;
+    });
+  }
+
+  function uploadImage(file, folder) {
+    return compressImage(file).then(function (upload) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var base64 = reader.result.split(',')[1];
+          if (base64.length > 4 * 1024 * 1024) {
+            return reject(new Error('Image is too large even after compression (max ~3MB). Please crop or resize it.'));
+          }
+          api('images', 'POST', {
+            filename: upload.name || file.name,
+            data: base64,
+            type: upload.type || file.type,
+            folder: folder || 'site-images'
+          }).then(resolve).catch(function (err) {
+            if (err && (err.status === 413 || /too large|payload/i.test(err.message))) {
+              err.message = 'Image too large for upload — please use a photo under 3MB.';
+            }
+            reject(err);
+          });
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(upload);
+      });
     });
   }
 
@@ -316,6 +355,7 @@
 
   window.SS = {
     api: api,
+    compressImage: compressImage,
 
     signup: signup,
     signin: signin,
