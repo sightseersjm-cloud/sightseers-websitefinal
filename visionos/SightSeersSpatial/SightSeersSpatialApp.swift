@@ -18,7 +18,10 @@ struct SightSeersSpatialApp: App {
             TourGalleryView()
                 .environment(store)
                 .environment(appModel)
-                .task { await store.loadTours() }
+                .task {
+                    await store.loadTours()
+                    GroupPlanningCoordinator.shared.configureSessions(store: store, appModel: appModel)
+                }
         }
         .windowStyle(.plain)
         .defaultSize(width: 1100, height: 760)
@@ -29,6 +32,13 @@ struct SightSeersSpatialApp: App {
                 .environment(appModel)
         }
         .defaultSize(width: 460, height: 640)
+
+        // "Rest at the Lagoon" — panorama as passive surroundings; the
+        // Digital Crown dials it in/out around the user's real room.
+        ImmersiveSpace(id: "lagoon-environment") {
+            LagoonEnvironmentView()
+        }
+        .immersionStyle(selection: .constant(.progressive), in: .progressive, .full)
 
         ImmersiveSpace(id: "tour-immersive") {
             ImmersivePanoramaView()

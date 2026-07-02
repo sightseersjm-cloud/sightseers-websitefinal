@@ -72,12 +72,15 @@ Shared Space (default)                    Full Space (immersive)
       "panorama": "https://…/panos/blue-lagoon.jpg",
       "initialView": { "yaw": 15, "pitch": -4, "hfov": 100 },
       "ambientAudioLabel": "Ocean Waves",
+      "video360": null,      // equirect MP4/HLS → plays in-headset when set
       "hotspots": [{
         "id": "hs1",
         "title": "Blue Mahoe Seedling",
         "type": "identify",          // identify | auction | product
         "pitch": 6, "yaw": -118,     // degrees, same convention as the web viewer
         "priceUSD": 35,
+        "glb": null,          // hosted 3D scan (GLB) when captured
+        "usdz": null,         // AR Quick Look asset for Apple devices
         "cta": "Learn & Buy"
       }]
     },
@@ -132,7 +135,16 @@ position = normalize(x, y, z) * radius (e.g. 9.5 for a 10 m sphere)
    state; group voting cards.
 4. **M4 — Concierge.** Voice-first concierge (App Intents + server AI),
    handoff to human planner via existing contact/waitlist API.
-5. **M5 — Live sessions.** Join the same LiveKit room as web viewers via
+5a. **M4.5 — Shipped scaffolds (this repo).** Spatial widgets
+   (`Widgets/SightSeersWidgets.swift` — Live Now + Next Tour, pinned in the
+   user's room, fed by /api/vtours), spatial-scene photos
+   (`Views/SpatialPhotoView.swift` — visionOS 26 ImagePresentationComponent
+   turns 2D tour photos into depth scenes), the Blue Lagoon resting
+   Environment (`Views/LagoonEnvironmentView.swift`, progressive immersion),
+   and full SharePlay state sync (`TripSyncMessage` over
+   GroupSessionMessenger — works for FaceTime groups and visionOS 26
+   nearby window sharing).
+6. **M5 — Live sessions.** Join the same LiveKit room as web viewers via
    the LiveKit Swift SDK (token from `GET /api/live-token`, architecture in
    `docs/WEBRTC-PLAN.md`) — sub-second video in a spatial screen plus the
    shared DataChannel protocol (`scan3d` opens the item as a volumetric

@@ -70,7 +70,9 @@
           "pitch": 6,
           "yaw": -118,
           "priceUSD": 35,
-          "cta": "Learn & Buy"
+          "cta": "Learn & Buy",
+          "usdz": null,
+          "glb": null
         },
         {
           "id": "hs2",
@@ -79,7 +81,9 @@
           "pitch": -14,
           "yaw": 62,
           "priceUSD": 28,
-          "cta": "Join Auction"
+          "cta": "Join Auction",
+          "usdz": null,
+          "glb": null
         },
         {
           "id": "hs3",
@@ -88,9 +92,12 @@
           "pitch": -4,
           "yaw": -12,
           "priceUSD": 15,
-          "cta": "Buy Print"
+          "cta": "Buy Print",
+          "usdz": null,
+          "glb": null
         }
-      ]
+      ],
+      "video360": null
     }
   },
   {
@@ -164,7 +171,9 @@
           "pitch": -24,
           "yaw": -142,
           "priceUSD": 28,
-          "cta": "Add to Cart"
+          "cta": "Add to Cart",
+          "usdz": null,
+          "glb": null
         },
         {
           "id": "hs5",
@@ -173,7 +182,9 @@
           "pitch": 8,
           "yaw": 168,
           "priceUSD": 85,
-          "cta": "Add to Cart"
+          "cta": "Add to Cart",
+          "usdz": null,
+          "glb": null
         },
         {
           "id": "hs6",
@@ -182,7 +193,9 @@
           "pitch": -20,
           "yaw": 118,
           "priceUSD": 22,
-          "cta": "Add to Cart"
+          "cta": "Add to Cart",
+          "usdz": null,
+          "glb": null
         },
         {
           "id": "hs7",
@@ -191,9 +204,12 @@
           "pitch": -13,
           "yaw": -58,
           "priceUSD": 65,
-          "cta": "Add to Cart"
+          "cta": "Add to Cart",
+          "usdz": null,
+          "glb": null
         }
-      ]
+      ],
+      "video360": null
     }
   },
   {

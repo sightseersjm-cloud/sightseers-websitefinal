@@ -40,7 +40,10 @@ SightSeersSpatial/
 ├── Views/TourDetailView.swift      # glass detail panel (leading ornament)
 ├── Views/TripBoardView.swift       # itinerary board + quote handoff
 ├── Shared/GroupPlanningActivity.swift # SharePlay "Plan a Trip Together"
-└── Intents/TourIntents.swift       # Siri: "Add this to my trip", "Show me yacht tours"
+├── Intents/TourIntents.swift       # Siri: "Add this to my trip", "Show me yacht tours"
+├── Views/SpatialPhotoView.swift    # visionOS 26 spatial scenes from 2D tour photos
+├── Views/LagoonEnvironmentView.swift # Blue Lagoon resting Environment (progressive immersion)
+└── Widgets/SightSeersWidgets.swift # spatial widgets (separate Widget Extension target)
 ```
 
 ## Content pipeline

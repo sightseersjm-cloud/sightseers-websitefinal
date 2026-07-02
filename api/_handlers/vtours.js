@@ -51,6 +51,7 @@ function publicTour(t) {
           type: 'equirectangular',
           panorama: absolute(t.media.pano),
           initialView: t.spatial.view,
+          video360: t.spatial.video360 || null,
           ambientAudioLabel: t.spatial.ambient,
           hotspots: t.spatial.hotspots
         }

@@ -53,8 +53,10 @@ module.exports = async function handler(req, res) {
   const success = successUrl || `${origin}/?session=live&playbackId=${encodeURIComponent(playbackId||'')}&stripeSession={CHECKOUT_SESSION_ID}`;
   const cancel  = cancelUrl  || `${origin}/`;
 
+  // No payment_method_types: automatic payment methods enable Apple Pay /
+  // Google Pay in Stripe Checkout once the domain is verified in the
+  // Stripe dashboard (Settings → Payment methods → Apple Pay → add domain).
   const result = await stripeRequest('POST', '/v1/checkout/sessions', {
-    'payment_method_types[0]': 'card',
     'line_items[0][price_data][currency]': 'usd',
     'line_items[0][price_data][unit_amount]': String(Math.round(Number(priceUsd) * 100)),
     'line_items[0][price_data][product_data][name]': tourName,

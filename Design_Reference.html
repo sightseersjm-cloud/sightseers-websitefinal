@@ -15354,7 +15354,7 @@ function vtLoad3DEngine(cb){
     if(st)st.innerHTML='<div class="vt-3d-loading">3D viewer failed to load — please retry.</div>';};
   document.head.appendChild(s);
 }
-function vtOpen3D(name,glbUrl,price){
+function vtOpen3D(name,glbUrl,price,usdzUrl){
   var ov=document.getElementById('vt-3d-overlay');if(!ov)return;
   document.getElementById('vt-3d-title').textContent=name;
   var buy=document.getElementById('vt-3d-buy');
@@ -15363,7 +15363,14 @@ function vtOpen3D(name,glbUrl,price){
   ov.classList.add('open');
   vtLoad3DEngine(function(){
     var stage=document.getElementById('vt-3d-stage');
-    stage.innerHTML='<model-viewer src="'+glbUrl+'" camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="24deg" shadow-intensity="1" exposure="1.1" interaction-prompt="none" alt="Interactive 3D scan of '+name+'"></model-viewer>';
+    /* ar + quick-look: on iPhone/iPad/Vision Pro the AR button places the
+       item life-size in the room (USDZ via ios-src when the team's scan
+       includes one; WebXR/Scene Viewer elsewhere). */
+    stage.innerHTML='<model-viewer src="'+glbUrl+'"'+(usdzUrl?' ios-src="'+usdzUrl+'"':'')+' ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="24deg" shadow-intensity="1" exposure="1.1" interaction-prompt="none" alt="Interactive 3D scan of '+name+'"></model-viewer>';
+    var hint=document.querySelector('#vt-3d-overlay .vt-3d-hint');
+    if(hint)hint.innerHTML=usdzUrl
+      ?'<i class="fas fa-cube" style="margin-right:5px;color:var(--orange)"></i>Tap the AR button to place this item life-size in your room (iPhone, iPad, Apple Vision Pro).'
+      :'<i class="fas fa-hand-pointer" style="margin-right:5px;color:var(--orange)"></i>On Apple Vision Pro this scan opens in your space — rotate it with hand gestures.';
   });
 }
 function vtClose3D(){
@@ -15543,6 +15550,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 var vtPanoViewer=null,vtPanoScenes={
   lagoon:{
     title:'Blue Lagoon', panorama:'/panos/blue-lagoon.jpg',
+    video360:null, /* drop an equirect MP4/HLS URL here for immersive video */
     yaw:15,pitch:-4,hfov:100,
     loc:'Port Antonio &bull; Portland &bull; Jamaica',
     ambient:'Ocean Waves',
@@ -15554,6 +15562,7 @@ var vtPanoViewer=null,vtPanoScenes={
   },
   market:{
     title:'Market Stall', panorama:'/panos/market-stall.jpg',
+    video360:null,
     yaw:118,pitch:-16,hfov:105,
     loc:'Falmouth &bull; Trelawny &bull; Jamaica',
     ambient:'Street Ambience',
@@ -24537,12 +24546,88 @@ function vtXRRenderLoop(session,refSpace){
       var geo=new THREE.SphereGeometry(60,64,48);
       geo.scale(-1,1,1);
       var mat=new THREE.MeshBasicMaterial({color:0x0d3a5c});
-      new THREE.TextureLoader().load(sceneDef.panorama,function(tex){
-        try{if(THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;}catch(e){}
-        mat.color.set(0xffffff);mat.map=tex;mat.needsUpdate=true;
-      });
+
+      /* Texture priority: live Mux stream wrapped around you → per-scene
+         360 video → still panorama. */
+      var liveVid=document.getElementById('vt-main-live-vid');
+      var liveActive=liveVid&&liveVid.style.display!=='none'&&liveVid.readyState>=2;
+      var xrVideo=null;
+      if(liveActive){
+        xrVideo=liveVid;
+      }else if(sceneDef.video360){
+        xrVideo=document.createElement('video');
+        xrVideo.crossOrigin='anonymous';xrVideo.loop=true;xrVideo.muted=true;
+        xrVideo.playsInline=true;xrVideo.src=sceneDef.video360;
+      }
+      if(xrVideo){
+        try{
+          xrVideo.play().catch(function(){});
+          var vtex=new THREE.VideoTexture(xrVideo);
+          try{if(THREE.SRGBColorSpace)vtex.colorSpace=THREE.SRGBColorSpace;}catch(e){}
+          mat.color.set(0xffffff);mat.map=vtex;mat.needsUpdate=true;
+        }catch(e){xrVideo=null;}
+      }
+      if(!xrVideo){
+        new THREE.TextureLoader().load(sceneDef.panorama,function(tex){
+          try{if(THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;}catch(e){}
+          mat.color.set(0xffffff);mat.map=tex;mat.needsUpdate=true;
+        });
+      }
       scene.add(new THREE.Mesh(geo,mat));
-      var endClean=function(){try{renderer.setAnimationLoop(null);renderer.dispose()}catch(e){}};
+
+      /* Hotspots as gaze-and-pinch targets: visionOS hands and Quest
+         controllers both arrive as XR input 'select' events. */
+      var hsGroup=new THREE.Group();
+      var pendingHs=null;
+      try{
+        (sceneDef.hotSpots||[]).forEach(function(h){
+          var p=h.pitch*Math.PI/180,y=h.yaw*Math.PI/180,R=54;
+          var m=new THREE.Mesh(
+            new THREE.SphereGeometry(1.1,20,16),
+            new THREE.MeshBasicMaterial({color:0xef8731,transparent:true,opacity:.92})
+          );
+          m.position.set(Math.cos(p)*Math.sin(y)*R,Math.sin(p)*R,-Math.cos(p)*Math.cos(y)*R);
+          m.userData.hsId=h.hs||(h.createTooltipArgs&&h.createTooltipArgs.hs)||null;
+          hsGroup.add(m);
+        });
+        scene.add(hsGroup);
+        var ray=new THREE.Raycaster();
+        var tmpM=new THREE.Matrix4();
+        var onSelect=function(ev){
+          try{
+            var ctrl=ev.target;
+            tmpM.identity().extractRotation(ctrl.matrixWorld);
+            ray.ray.origin.setFromMatrixPosition(ctrl.matrixWorld);
+            ray.ray.direction.set(0,0,-1).applyMatrix4(tmpM);
+            var hits=ray.intersectObjects(hsGroup.children,false);
+            if(hits.length){
+              var obj=hits[0].object;
+              obj.scale.setScalar(1.8);
+              setTimeout(function(){obj.scale.setScalar(1)},350);
+              pendingHs=obj.userData.hsId;
+            }
+          }catch(e){}
+        };
+        [0,1].forEach(function(i){
+          var c=renderer.xr.getController(i);
+          c.addEventListener('select',onSelect);
+          scene.add(c);
+        });
+      }catch(e){}
+
+      var endClean=function(){
+        try{renderer.setAnimationLoop(null);renderer.dispose()}catch(e){}
+        if(xrVideo&&xrVideo!==liveVid){try{xrVideo.pause();xrVideo.src=''}catch(e){}}
+        /* pinched a hotspot in the headset → open its card back on the page */
+        if(pendingHs){
+          setTimeout(function(){
+            try{
+              var dot=document.querySelector('.vt-pnlm-hs .vt-hotspot-dot');
+              vtShowHotspot({stopPropagation:function(){},target:dot||document.body,clientX:innerWidth/2,clientY:innerHeight/2},pendingHs);
+            }catch(e){}
+          },400);
+        }
+      };
       session.addEventListener('end',endClean);
       renderer.xr.setSession(session).then(function(){
         renderer.setAnimationLoop(function(){renderer.render(scene,camera)});
