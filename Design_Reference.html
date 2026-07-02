@@ -18771,6 +18771,7 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
         <li><a href="#" onclick="nav('partners')"><i class="fas fa-chevron-right"></i>Our Partners</a></li>
         <li><a href="#" onclick="nav('vtours')"><i class="fas fa-chevron-right"></i>V-Tours</a></li>
+        <li><a href="/virtual-tours/"><i class="fas fa-chevron-right"></i>Virtual Tour Pages</a></li>
         <li><a href="#" onclick="nav('passport')"><i class="fas fa-chevron-right"></i>Passport Renewal</a></li>
         <li><a href="#" onclick="nav('booking')"><i class="fas fa-chevron-right"></i>Start Planning</a></li>
       </ul>
@@ -22616,6 +22617,17 @@ function smoothScrollToElement(el,duration=950,offset=0){
   ['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){document.addEventListener(ev,onFirst,{capture:true,passive:true})});
 })();
 
+/* Hash deep-links (/#vtours, /#booking, …) — lets the static
+   /virtual-tours/ landing pages and sitemap URLs open the right page */
+(function(){
+  function vtHashGo(){
+    var h=(location.hash||'').replace(/^#\/?/,'');
+    if(h&&document.getElementById('p-'+h)){try{nav(h)}catch(e){}}
+  }
+  window.addEventListener('hashchange',vtHashGo);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',vtHashGo);
+  else vtHashGo();
+})();
 function nav(id,opts={}){
   closeBlog();
   closeRhythmTour(true);

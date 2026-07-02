@@ -3,54 +3,104 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.sightseerscaribbean.com/</loc>
-    <lastmod>2026-07-01</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#vtours</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/</loc>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://www.sightseerscaribbean.com/jamaica-island.png</image:loc>
-      <image:title>Sight Seers Caribbean Virtual Tours - Jamaica 360° Experiences</image:title>
+      <image:loc>https://www.sightseerscaribbean.com/panos/og-blue-lagoon.jpg</image:loc>
+      <image:title>Sight Seers Caribbean Virtual Tours - Jamaica 360 Experiences</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#tours</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/blue-lagoon-morning-walk/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.sightseerscaribbean.com/panos/og-blue-lagoon.jpg</image:loc>
+      <image:title>Blue Lagoon Morning Walk - interactive 360 virtual tour</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/falmouth-market-stall-walk/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.sightseerscaribbean.com/panos/og-market-stall.jpg</image:loc>
+      <image:title>Falmouth Market Stall Walk - interactive 360 virtual tour</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/sunset-yacht-charter/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#stays</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/dunns-river-falls-climb/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/kingston-culture-food-tour/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/negril-seven-mile-sunset/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/#vtours</loc>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#yacht-charters</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.sightseerscaribbean.com/#tours</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#transfers</loc>
-    <lastmod>2026-07-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.sightseerscaribbean.com/#stays</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#about</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://www.sightseerscaribbean.com/#yacht-charters</loc>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/#contact</loc>
-    <lastmod>2026-07-01</lastmod>
+    <loc>https://www.sightseerscaribbean.com/#transfers</loc>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/#about</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/#contact</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
   </url>
 </urlset>
