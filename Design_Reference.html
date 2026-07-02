@@ -15029,6 +15029,8 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <div class="vt-session-shop-item"><div><div class="vt-session-shop-item-name">Handwoven Market Basket</div><div class="vt-session-shop-item-price">USD $28.00</div></div><div class="vt-session-shop-add" onclick="vtAddToCart(this,'Handwoven Market Basket',28)">Add</div></div>
                         <div class="vt-session-shop-item"><div><div class="vt-session-shop-item-name">Blue Mahoe Botanical Print</div><div class="vt-session-shop-item-price">USD $45.00</div></div><div class="vt-session-shop-add" onclick="vtAddToCart(this,'Blue Mahoe Botanical Print',45)">Add</div></div>
                         <div class="vt-session-shop-item"><div><div class="vt-session-shop-item-name">Jamaican Spice Collection</div><div class="vt-session-shop-item-price">USD $22.00</div></div><div class="vt-session-shop-add" onclick="vtAddToCart(this,'Jamaican Spice Collection',22)">Add</div></div>
+                        <div class="vt-session-shop-item"><div><div class="vt-session-shop-item-name">Market-Fresh Produce Box <span class="vt-3d-tag">3D SCAN</span></div><div class="vt-session-shop-item-price">USD $18.00</div></div><div style="display:flex;gap:6px"><div class="vt-session-shop-add vt-3d-view" onclick="vtOpen3D('Market-Fresh Produce Box','/models/market-avocado.glb',18)">View 3D</div><div class="vt-session-shop-add" onclick="vtAddToCart(this,'Market-Fresh Produce Box',18)">Add</div></div></div>
+                        <div class="vt-shop-3d-note">Items marked <b>3D SCAN</b> were captured at the stall with LiDAR photogrammetry — rotate them before you buy. Guides scan any item on request during live sessions.</div>
                       </div>
                     </div>
                   </div>
@@ -15056,7 +15058,76 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-session-bar-right .vt-session-bar-btn:not(.leave){background:rgba(0,0,0,.05);color:#3a4a5c}
 .vt-session-bar-right .vt-session-bar-btn:not(.leave):hover{background:rgba(0,0,0,.1)}
 @media(max-width:768px){#vt-active-session .vt-session-video{min-height:300px!important}}
+/* ── 3D craft scans (LiDAR photogrammetry pipeline) ── */
+.vt-3d-tag{display:inline-block;background:var(--orange);color:#fff;font-size:8px;font-weight:800;letter-spacing:.8px;padding:2px 6px;border-radius:6px;vertical-align:1px;margin-left:4px}
+.vt-3d-view{background:rgba(6,58,99,.9)!important}
+.vt-shop-3d-note{font-size:10.5px;color:#7c8b9a;line-height:1.5;padding:10px 2px 2px;border-top:1px dashed rgba(0,0,0,.08);margin-top:8px}
+.vt-3d-overlay{position:fixed;inset:0;z-index:10040;background:rgba(4,14,26,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+.vt-3d-overlay.open{display:flex}
+.vt-3d-modal{background:#fff;border-radius:22px;width:min(680px,96vw);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.vt-3d-modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid rgba(0,0,0,.06)}
+.vt-3d-modal-head h4{margin:0;font-size:16px;color:#12283d}
+.vt-3d-modal-head small{display:block;font-size:11px;color:#7c8b9a;font-weight:400;margin-top:2px}
+.vt-3d-close{width:32px;height:32px;border-radius:10px;border:none;background:rgba(0,0,0,.05);cursor:pointer;color:#5c6f82;font-size:14px}
+.vt-3d-close:hover{background:rgba(0,0,0,.12)}
+.vt-3d-stage{position:relative;height:min(52vh,440px);background:radial-gradient(circle at 50% 35%,#eef5fa 0%,#d7e5ef 100%)}
+.vt-3d-stage model-viewer{width:100%;height:100%;--poster-color:transparent}
+.vt-3d-stage .vt-3d-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#5c6f82;font-size:13px;font-weight:600}
+.vt-3d-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;flex-wrap:wrap}
+.vt-3d-foot .vt-3d-hint{font-size:11.5px;color:#7c8b9a}
+.vt-3d-buy{background:var(--orange);color:#fff;border:none;border-radius:999px;padding:11px 26px;font-size:13px;font-weight:700;cursor:pointer}
+.vt-3d-buy:hover{background:#d4741e}
+/* headset detected — light the in-player XR button */
+.vt-xr-enter-btn.vt-xr-ready{box-shadow:0 0 0 2px rgba(239,135,49,.65),0 0 18px rgba(239,135,49,.5);animation:vtXRReadyPulse 2.2s ease-in-out infinite}
+@keyframes vtXRReadyPulse{0%,100%{box-shadow:0 0 0 2px rgba(239,135,49,.65),0 0 14px rgba(239,135,49,.4)}50%{box-shadow:0 0 0 3px rgba(239,135,49,.9),0 0 26px rgba(239,135,49,.75)}}
 </style>
+
+<!-- ── 3D scan viewer modal (model-viewer lazy-loads on first open) ── -->
+<div class="vt-3d-overlay" id="vt-3d-overlay" onclick="if(event.target===this)vtClose3D()">
+  <div class="vt-3d-modal">
+    <div class="vt-3d-modal-head">
+      <div><h4 id="vt-3d-title">3D Scan</h4><small>LiDAR photogrammetry scan — drag to rotate, scroll or pinch to zoom</small></div>
+      <button class="vt-3d-close" onclick="vtClose3D()" aria-label="Close 3D viewer"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="vt-3d-stage" id="vt-3d-stage"><div class="vt-3d-loading"><i class="fas fa-cube fa-2x"></i>Loading 3D viewer…</div></div>
+    <div class="vt-3d-foot">
+      <span class="vt-3d-hint"><i class="fas fa-hand-pointer" style="margin-right:5px;color:var(--orange)"></i>On Apple Vision Pro this scan opens in your space — rotate it with hand gestures.</span>
+      <button class="vt-3d-buy" id="vt-3d-buy">Add to Cart</button>
+    </div>
+  </div>
+</div>
+<script>
+var vtMV={loaded:false,loading:false};
+function vtLoad3DEngine(cb){
+  if(vtMV.loaded)return cb();
+  if(vtMV.loading)return;
+  vtMV.loading=true;
+  var s=document.createElement('script');
+  s.type='module';s.src='/vendor/model-viewer/model-viewer.min.js';
+  s.onload=function(){vtMV.loaded=true;vtMV.loading=false;cb()};
+  s.onerror=function(){vtMV.loading=false;
+    var st=document.getElementById('vt-3d-stage');
+    if(st)st.innerHTML='<div class="vt-3d-loading">3D viewer failed to load — please retry.</div>';};
+  document.head.appendChild(s);
+}
+function vtOpen3D(name,glbUrl,price){
+  var ov=document.getElementById('vt-3d-overlay');if(!ov)return;
+  document.getElementById('vt-3d-title').textContent=name;
+  var buy=document.getElementById('vt-3d-buy');
+  buy.textContent='Add to Cart — USD $'+price+'.00';
+  buy.onclick=function(){vtAddToCart(buy,name,price);vtClose3D()};
+  ov.classList.add('open');
+  vtLoad3DEngine(function(){
+    var stage=document.getElementById('vt-3d-stage');
+    stage.innerHTML='<model-viewer src="'+glbUrl+'" camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="24deg" shadow-intensity="1" exposure="1.1" interaction-prompt="none" alt="Interactive 3D scan of '+name+'"></model-viewer>';
+  });
+}
+function vtClose3D(){
+  var ov=document.getElementById('vt-3d-overlay');if(ov)ov.classList.remove('open');
+  var stage=document.getElementById('vt-3d-stage');
+  if(stage)stage.innerHTML='<div class="vt-3d-loading"><i class="fas fa-cube fa-2x"></i>Loading 3D viewer…</div>';
+}
+</script>
 <script>
 var vtPanoViewer=null,vtPanoScenes={
   lagoon:{
@@ -15935,6 +16006,43 @@ function vtInitPanoViewer(){
 
 
 
+
+<!-- BROADCAST RIG — how live island sessions reach your headset -->
+  <section class="vt-sec vt-sec--dark" id="vt-rig-section" style="padding:56px 0">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal" style="color:#fff">
+        <span class="sec-pre" style="color:var(--orange)">Broadcast-Grade, Island-Side</span>
+        <h2 class="sec-title" style="color:#fff">How a Live Session Reaches Your Headset</h2>
+        <p class="sec-sub center" style="color:rgba(255,255,255,.65)">Our guides carry a professional spatial-capture rig through the craft markets, beaches, and VIP lounges — so what you see on a browser, iPhone, or Apple Vision Pro is crisp, stable, and live.</p>
+      </div>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:36px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-video" style="color:var(--orange);font-size:17px"></i></div>
+          <h3 style="color:#fff;font-size:16px;margin-bottom:6px">8K 360° Camera</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A spherical Insta360 X4 rides on the guide's rig, capturing everything around them — you choose where to look, not the camera.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-microphone-lines" style="color:var(--orange);font-size:17px"></i></div>
+          <h3 style="color:#fff;font-size:16px;margin-bottom:6px">Wind-Proof Audio</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A wireless clip-on mic with wind muff keeps the guide's voice crisp over market bustle and ocean breeze.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-tower-broadcast" style="color:var(--orange);font-size:17px"></i></div>
+          <h3 style="color:#fff;font-size:16px;margin-bottom:6px">5G Island Uplink</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A dedicated 5G hotspot pushes a 25–30&nbsp;Mbps stream from Ocho Rios or the Hip Strip to our global delivery network.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-vr-cardboard" style="color:var(--orange);font-size:17px"></i></div>
+          <h3 style="color:#fff;font-size:16px;margin-bottom:6px">Any Screen, Any Headset</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">Browser, phone, Meta Quest, or Apple Vision Pro — WebXR detects your device and offers Enter&nbsp;Spatial automatically.</p>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top:22px;background:rgba(239,135,49,.1);border:1px solid rgba(239,135,49,.25);border-radius:14px;padding:16px 22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <i class="fas fa-cube" style="color:var(--orange);font-size:20px"></i>
+        <p style="flex:1;min-width:240px;color:rgba(255,255,255,.75);font-size:13px;line-height:1.6;margin:0">Guides also carry LiDAR-equipped iPhones to <b style="color:#fff">3D-scan craft items and villa interiors on request</b> — scans open on your device as interactive models you can rotate before buying or booking. Look for the <span class="vt-3d-tag" style="vertical-align:0">3D SCAN</span> tag in the In-Session Shop above.</p>
+      </div>
+    </div>
+  </section>
 
 <!-- CREATE ACCOUNT -->
   <section class="vt-sec" id="vt-signup-section" style="padding:40px 0">
@@ -23904,6 +24012,12 @@ function vtInitWebXR(){
       else if(vtXRSupport.ar){modeStatus.innerHTML='<i class="fas fa-circle"></i> AR device detected';modeStatus.className='vt-xr-mode-status ready'}
       else{modeStatus.innerHTML='<i class="fas fa-circle"></i> No XR device — connect a headset';modeStatus.className='vt-xr-mode-status unavailable'}
     }
+    /* Headset browser detected (Vision Pro / Quest): light up the in-player
+       XR button so "Enter Spatial" is impossible to miss */
+    if(hasAny){
+      var xrBtn=document.getElementById('vt-xr-enter-btn');
+      if(xrBtn){xrBtn.classList.add('vt-xr-ready');xrBtn.title='Enter Spatial — headset detected'}
+    }
   });
 }
 
@@ -23970,6 +24084,40 @@ function vtEnterXR(mode){
 }
 
 function vtXRRenderLoop(session,refSpace){
+  /* Render the CURRENT 360° tour scene inside the headset (Vision Pro /
+     Quest via WebXR) — an inward-facing sphere textured with the same
+     equirectangular panorama the on-page viewer shows. */
+  var sceneDef=null;
+  try{
+    if(typeof vtPanoScenes!=='undefined'){
+      sceneDef=vtPanoScenes[typeof vtActivePanoScene!=='undefined'?vtActivePanoScene:'lagoon']||null;
+    }
+  }catch(e){}
+
+  if(window.THREE&&sceneDef&&sceneDef.panorama){
+    try{
+      var renderer=new THREE.WebGLRenderer({antialias:true});
+      renderer.xr.enabled=true;
+      renderer.xr.setReferenceSpaceType('local');
+      var scene=new THREE.Scene();
+      var camera=new THREE.PerspectiveCamera(75,1,0.1,200);
+      var geo=new THREE.SphereGeometry(60,64,48);
+      geo.scale(-1,1,1);
+      var mat=new THREE.MeshBasicMaterial({color:0x0d3a5c});
+      new THREE.TextureLoader().load(sceneDef.panorama,function(tex){
+        try{if(THREE.SRGBColorSpace)tex.colorSpace=THREE.SRGBColorSpace;}catch(e){}
+        mat.color.set(0xffffff);mat.map=tex;mat.needsUpdate=true;
+      });
+      scene.add(new THREE.Mesh(geo,mat));
+      var endClean=function(){try{renderer.setAnimationLoop(null);renderer.dispose()}catch(e){}};
+      session.addEventListener('end',endClean);
+      renderer.xr.setSession(session).then(function(){
+        renderer.setAnimationLoop(function(){renderer.render(scene,camera)});
+      }).catch(endClean);
+      return;
+    }catch(e){/* fall through to the plain-GL fallback below */}
+  }
+
   var gl=document.createElement('canvas').getContext('webgl2')||document.createElement('canvas').getContext('webgl');
   if(!gl)return;
   session.updateRenderState({baseLayer:new XRWebGLLayer(session,gl)});

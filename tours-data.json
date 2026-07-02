@@ -427,5 +427,121 @@
       "pano": null
     },
     "spatial": null
+  },
+  {
+    "slug": "ocho-rios-culture-craft",
+    "title": "Ocho Rios Culture & Craft Session",
+    "location": "Ocho Rios Craft Market, St. Ann",
+    "category": "Culture & Markets",
+    "intents": [
+      "Culture",
+      "Shopping",
+      "Groups"
+    ],
+    "duration": "2.5 hours",
+    "group": "2–15 guests",
+    "priceFrom": 45,
+    "short": "A live interactive walk through the Ocho Rios Craft Market — meet artisans, and receive 3D scans of handmade pieces you can rotate in your hands before buying.",
+    "overview": [
+      "The Ocho Rios Culture & Craft Session is our first fully interactive market experience. Your guide walks the stalls of the famous craft market off Turtle Beach Road, chatting with the wood carvers, weavers, and spice sellers who have worked here for decades.",
+      "Here is what makes it different: when the guide stops at a booth, they can push a 3D scan of the actual item — a handwoven bag, a carved figure, a spice set — to your screen or headset. Rotate it with your fingers (or hand gestures on Apple Vision Pro), inspect the stitching up close, then buy it live through the In-Session Shop. The guide hands your payment directly to the artisan on the spot.",
+      "Every purchase ships to your home address, and one hundred percent of the item price goes to the maker. Join from a browser, phone, or headset — the live portal handles all three."
+    ],
+    "included": [
+      "Live local guide on camera",
+      "Interactive 3D item scans pushed to your device",
+      "In-Session Shop with direct-to-artisan payment",
+      "Live chat and group voting on where to walk next",
+      "Worldwide shipping on purchases"
+    ],
+    "itinerary": [
+      "Market entrance and carving row",
+      "Weaving stalls — live 3D scan demos",
+      "Spice and seasoning tables",
+      "Meet-the-artisan finish and shop checkout"
+    ],
+    "faq": [
+      [
+        "How do the 3D item scans work?",
+        "Our guides scan items in advance (and on request) using LiDAR photogrammetry. During your session the scan opens on your device as an interactive model you can rotate and zoom — on Apple Vision Pro it appears in your space, life-size."
+      ],
+      [
+        "Can I request a specific type of item?",
+        "Yes — tell your guide in the live chat. Popular requests are woven baskets, carved birds, and jerk spice sets, and the guide will walk to the right stall."
+      ],
+      [
+        "Do I pay the artisan or Sight Seers?",
+        "You check out through the In-Session Shop; the guide hands the artisan their payment immediately, on camera. Shipping and tracking are handled by Sight Seers."
+      ]
+    ],
+    "related": [
+      "falmouth-market-stall-walk",
+      "montego-bay-arrival-adventure"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "/panos/og-market-stall.jpg",
+      "og": "/panos/og-market-stall.jpg",
+      "pano": null
+    },
+    "spatial": null
+  },
+  {
+    "slug": "montego-bay-arrival-adventure",
+    "title": "Montego Bay Arrival-to-Adventure Preview",
+    "location": "Sangster International (MBJ) → Montego Bay",
+    "category": "VIP & Transfers",
+    "intents": [
+      "Luxury",
+      "VIP",
+      "Groups"
+    ],
+    "duration": "90 minutes",
+    "group": "1–30 guests",
+    "priceFrom": 95,
+    "short": "Preview your entire arrival before you fly: the Club Mobay VIP lounge, your private transfer vehicle in 3D, and a sunset catamaran deck in 360°.",
+    "overview": [
+      "Landing in a new country is the most uncertain hour of any trip. This live preview session removes every unknown: your guide starts at the Club Mobay VIP gateway inside Sangster International, walking you through exactly what your group sees from jet bridge to lounge to fast-track immigration.",
+      "Next, you explore the transfer fleet — the interiors of the luxury vehicles open as spatial 3D views so you can check seating, luggage space, and comfort for your group size. On Apple Vision Pro the vehicle interior opens as a volumetric window you can lean into.",
+      "The session closes on a 360° catamaran deck at sunset — look around the bow, the dining area, and the rail where the light lands — so your group can decide on the spot whether to add the charter to your itinerary."
+    ],
+    "included": [
+      "Live guided VIP lounge walkthrough",
+      "Spatial 3D previews of transfer vehicles",
+      "360° sunset catamaran deck preview",
+      "Group Q&A with a Montego Bay planner",
+      "Same-session quote for your full arrival package"
+    ],
+    "itinerary": [
+      "Club Mobay VIP gateway and lounge",
+      "Fast-track and meet-point walkthrough",
+      "Transfer fleet — 3D interior previews",
+      "Sunset catamaran 360° finish and quote"
+    ],
+    "faq": [
+      [
+        "Is Club Mobay included in the price?",
+        "This session is the preview and planning experience. Club Mobay passes, transfers, and charters are quoted live during the session and added to your package only if you want them."
+      ],
+      [
+        "We are a group of 20+ — does this still work?",
+        "That is exactly who it is for. The planner sizes vehicles, lounge capacity, and catamaran space to your headcount during the session."
+      ],
+      [
+        "What device do I need?",
+        "Any browser works. iPhone and iPad get touch-rotate 3D previews; Apple Vision Pro and Quest get the full immersive versions."
+      ]
+    ],
+    "related": [
+      "sunset-yacht-charter",
+      "ocho-rios-culture-craft"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&h=900&fit=crop",
+      "og": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=630&fit=crop",
+      "pano": null
+    },
+    "spatial": null
   }
 ]

@@ -364,7 +364,7 @@ function hubPage() {
       <p style="max-width:640px;color:rgba(255,255,255,.88);font-size:16.5px">Every Sight Seers experience can be previewed before you commit &mdash; interactive 360&deg; scenes you can look around, and live guided sessions with a local host on camera, live chat, and shoppable moments.</p>
       <div class="chips">
         <span class="chip"><b>${TOURS.length}</b> tour pages</span>
-        <span class="chip"><b>2</b> interactive 360&deg; scenes</span>
+        <span class="chip"><b>${TOURS.filter(t => t.pano).length}</b> interactive 360&deg; scenes</span>
         <span class="chip">Live guided sessions daily</span>
       </div>
     </div>

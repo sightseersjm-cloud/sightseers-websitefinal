@@ -62,6 +62,18 @@
     <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/ocho-rios-culture-craft/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/montego-bay-arrival-adventure/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
     <loc>https://www.sightseerscaribbean.com/#vtours</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
