@@ -119,7 +119,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:30px 0 40px;font
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function money(n){return 'USD $' + n;}
 
-function chrome(inner, {title, desc, canonical, ogImage, jsonld, extraHead=''}) {
+function chrome(inner, {title, desc, canonical, ogImage, jsonld, extraHead='', trackKey='page'}) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -163,6 +163,16 @@ ${inner}
     <a href="/#contact">Contact a Planner</a>
   </div>
 </div></footer>
+<script>
+(function(){var q=[{e:'tour_page',k:'${trackKey}'}];
+function fl(){if(!q.length)return;var p=JSON.stringify({events:q.splice(0,25)});try{if(navigator.sendBeacon){navigator.sendBeacon('/api/track',p)}else{fetch('/api/track',{method:'POST',body:p,keepalive:true}).catch(function(){})}}catch(e){}}
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest&&ev.target.closest('a[href*="#booking"]');if(b)q.push({e:'book_cta',k:'${trackKey}'});
+  var c=ev.target.closest&&ev.target.closest('a[href*="#contact"]');if(c)q.push({e:'quote_cta',k:'${trackKey}'});
+  if(b||c)fl();
+});
+addEventListener('pagehide',fl);setTimeout(fl,1500);})();
+</script>
 </body>
 </html>`;
 }
@@ -308,7 +318,8 @@ window.addEventListener('DOMContentLoaded',function(){
     canonical: url,
     ogImage: t.ogImage,
     jsonld,
-    extraHead: panoScript
+    extraHead: panoScript,
+    trackKey: t.slug
   });
 }
 
@@ -402,7 +413,8 @@ function hubPage() {
     desc: 'Explore Jamaica in 360° before you book. Interactive panoramic previews and live guided virtual tours of Blue Lagoon, yacht charters, Dunn’s River Falls, markets, food tours, and Seven Mile Beach.',
     canonical: url,
     ogImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=630&fit=crop',
-    jsonld
+    jsonld,
+    trackKey: 'hub'
   });
 }
 

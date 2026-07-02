@@ -235,5 +235,15 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:30px 0 40px;font
     <a href="/#contact">Contact a Planner</a>
   </div>
 </div></footer>
+<script>
+(function(){var q=[{e:'tour_page',k:'hub'}];
+function fl(){if(!q.length)return;var p=JSON.stringify({events:q.splice(0,25)});try{if(navigator.sendBeacon){navigator.sendBeacon('/api/track',p)}else{fetch('/api/track',{method:'POST',body:p,keepalive:true}).catch(function(){})}}catch(e){}}
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest&&ev.target.closest('a[href*="#booking"]');if(b)q.push({e:'book_cta',k:'hub'});
+  var c=ev.target.closest&&ev.target.closest('a[href*="#contact"]');if(c)q.push({e:'quote_cta',k:'hub'});
+  if(b||c)fl();
+});
+addEventListener('pagehide',fl);setTimeout(fl,1500);})();
+</script>
 </body>
 </html>

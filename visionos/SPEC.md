@@ -132,8 +132,12 @@ position = normalize(x, y, z) * radius (e.g. 9.5 for a 10 m sphere)
    state; group voting cards.
 4. **M4 — Concierge.** Voice-first concierge (App Intents + server AI),
    handoff to human planner via existing contact/waitlist API.
-5. **M5 — Live sessions.** HLS playback of the Mux live streams inside a
-   spatial video screen; live chat via existing Supabase channel.
+5. **M5 — Live sessions.** Join the same LiveKit room as web viewers via
+   the LiveKit Swift SDK (token from `GET /api/live-token`, architecture in
+   `docs/WEBRTC-PLAN.md`) — sub-second video in a spatial screen plus the
+   shared DataChannel protocol (`scan3d` opens the item as a volumetric
+   model, `vote`/`sold`/`scene` drive the same UI). Mux HLS remains the
+   fallback tier; live chat via the existing Supabase channel.
 
 ## 6. Technical notes
 
