@@ -14830,7 +14830,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vision .vt-dash-frame .vt-session-bar{background:rgba(14,24,40,.62)!important;backdrop-filter:blur(30px) saturate(1.5)!important;-webkit-backdrop-filter:blur(30px) saturate(1.5)!important;border-bottom:1px solid rgba(255,255,255,.1)!important}
 .vt-vision #vt-active-session .vt-session-bar-left,.vt-vision #vt-active-session .vt-session-bar-left *{color:#fff!important}
 .vt-vision .vt-session-bar,.vt-vision .vt-session-bar *{color:rgba(255,255,255,.9)}
-.vt-vision .vt-session-bar-left{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46%}
+.vt-vision .vt-session-bar-left{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0;max-width:none;margin-right:10px}
+.vt-vision .vt-session-bar-right{flex:0 0 auto;display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.vt-vision .vt-session-bar-right .vt-session-bar-btn{padding:6px 12px;font-size:11px}
+@media(max-width:1180px){.vt-vision .vt-session-byline{display:none}}
 .vt-vision .vt-session-bar-btn,.vt-vision .vt-session-lang{white-space:nowrap}
 .vt-vision #vt-active-session .vt-session-side,
 .vt-vision .vt-dash-frame .vt-session-side{background:rgba(14,24,40,.55)!important;backdrop-filter:blur(30px) saturate(1.5)!important;-webkit-backdrop-filter:blur(30px) saturate(1.5)!important;border-left:1px solid rgba(255,255,255,.1)!important}
@@ -14853,6 +14856,78 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vision .vt-live-card-btn:hover{background:var(--orange)!important;border-color:var(--orange)!important}
 .vt-vision .vt-dash-topbar .vt-lang-btn,.vt-vision .vt-dash-topbar .vt-expand-btn{background:rgba(255,255,255,.12)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;border-radius:999px}
 .vt-vision .vt-dash-sidebar div,.vt-vision .vt-dash-sidebar span,.vt-vision .vt-dash-sidebar strong{color:rgba(255,255,255,.72)}
+/* placeholder views (Account Settings etc.) → glass tiles */
+.vt-vision .vt-dash-view{background:transparent!important}
+.vt-vision .vt-empty-state{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px;color:rgba(255,255,255,.55)!important}
+.vt-vision .vt-empty-state h4{color:#fff!important}
+.vt-vision .vt-empty-state p{color:rgba(255,255,255,.62)!important}
+.vt-vision .vt-empty-state i{color:rgba(255,255,255,.45)!important;opacity:1!important}
+/* guide/explorer data tables → readable glass rows */
+.vt-vision .vt-guide-table th{color:rgba(255,255,255,.5)!important;border-bottom-color:rgba(255,255,255,.14)!important}
+.vt-vision .vt-guide-table td{color:rgba(255,255,255,.78)!important;border-bottom-color:rgba(255,255,255,.07)!important}
+.vt-vision .vt-guide-table td:first-child{color:#fff!important;font-weight:700}
+.vt-vision .vt-guide-table tbody tr{cursor:pointer;transition:background .2s}
+.vt-vision .vt-guide-table tbody tr:hover{background:rgba(255,255,255,.07)!important}
+/* mood badge sits BELOW the scene switcher — no more collision */
+.vt-vision #vt-active-session .vt-mood-badge{top:52px!important;left:12px!important;right:auto!important}
+/* chat: clean text on glass — no gray slabs */
+.vt-vision #vt-active-session .vt-session-chat-text{background:transparent!important;padding:2px 0!important;color:rgba(255,255,255,.92)!important}
+.vt-vision #vt-active-session .vt-session-chat-title{color:rgba(255,255,255,.6)!important}
+.vt-vision #vt-active-session .vt-session-chat-title span{color:rgba(255,255,255,.45)!important}
+/* guide dashboard: earnings chart card + upcoming schedule */
+.vt-vision .vt-earnings-chart{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:18px!important}
+.vt-vision .vt-schedule-info h5{color:#fff!important}
+.vt-vision .vt-schedule-info p{color:rgba(255,255,255,.55)!important}
+.vt-vision .vt-schedule-item{border-bottom:1px solid rgba(255,255,255,.08)!important}
+/* ── guide + explorer portals: remaining light components → glass ── */
+.vt-vision .vt-dash-main h5,.vt-vision .vt-dash-main h6,.vt-vision .vt-dash-main strong,.vt-vision .vt-dash-main b{color:#fff!important}
+.vt-vision .vt-dash-main p{color:rgba(255,255,255,.6)}
+/* browse category chips */
+.vt-vision .vt-browse-filter{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.75)!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:999px}
+.vt-vision .vt-browse-filter:hover{background:rgba(255,255,255,.18)!important;color:#fff!important}
+.vt-vision .vt-browse-filter.active{background:var(--orange)!important;color:#fff!important;border-color:var(--orange)!important}
+/* group watch rooms */
+.vt-vision .vt-group-room{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:16px}
+.vt-vision .vt-group-room-info span{color:rgba(255,255,255,.55)!important}
+/* AI trip concierge chat */
+.vt-vision .vt-ai-chat{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px!important}
+.vt-vision .vt-concierge,.vt-vision .vt-concierge-chat{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.12)!important;border-radius:20px!important}
+.vt-vision .vt-ai-bubble{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.9)!important}
+.vt-vision .vt-ai-msg.user .vt-ai-bubble{background:rgba(239,135,49,.25)!important;color:#fff!important}
+.vt-vision .vt-ai-chip{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.8)!important;border:1px solid rgba(255,255,255,.16)!important}
+.vt-vision .vt-ai-chip:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.vt-vision .vt-ai-input-wrap{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important}
+.vt-vision .vt-ai-input,.vt-vision .vt-ai-input-wrap input{background:transparent!important;color:#fff!important}
+.vt-vision .vt-ai-input::placeholder,.vt-vision .vt-ai-input-wrap input::placeholder{color:rgba(255,255,255,.4)!important}
+/* XR device cards */
+.vt-vision .vt-xr-device-card{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:20px!important}
+.vt-vision .vt-xr-device-card h3{color:#fff!important}
+.vt-vision .vt-xr-device-body,.vt-vision .vt-xr-device-body div,.vt-vision .vt-xr-device-body span{color:rgba(255,255,255,.68)!important}
+/* AI guide clone */
+.vt-vision .vt-ai-clone-card{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:20px!important}
+.vt-vision .vt-ai-clone-info h3{color:#fff!important}
+.vt-vision .vt-ai-clone-stat strong{color:#fff!important}
+.vt-vision .vt-ai-clone-stat span{color:rgba(255,255,255,.55)!important}
+.vt-vision .vt-ai-clone-lang{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.85)!important;border:1px solid rgba(255,255,255,.16)!important}
+.vt-vision .vt-ai-clone-lang.active{background:rgba(239,135,49,.28)!important;border-color:rgba(239,135,49,.55)!important;color:#fff!important}
+/* mood-adaptive AI cards */
+.vt-vision .vt-mood-card{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:18px!important}
+.vt-vision .vt-mood-header strong{color:#fff!important}
+.vt-vision .vt-mood-header span{color:rgba(255,255,255,.6)!important}
+.vt-vision .vt-mood-suggestion{background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.75)!important;border-color:rgba(255,255,255,.1)!important}
+/* multi-cam */
+.vt-vision .vt-multicam-card{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;color:#fff!important}
+.vt-vision .vt-multicam-card div,.vt-vision .vt-multicam-card span{color:rgba(255,255,255,.8)}
+.vt-vision .vt-multicam-settings{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:16px!important}
+.vt-vision .vt-multicam-settings *{color:rgba(255,255,255,.8)}
+/* dynamic pricing panel */
+.vt-vision .vt-pricing-ctrl{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:18px!important}
+.vt-vision .vt-pricing-row span{color:rgba(255,255,255,.75)!important}
+.vt-vision .vt-pricing-row strong,.vt-vision .vt-pricing-val strong{color:#fff!important}
+/* selects & inputs inside the glass */
+.vt-vision .vt-dash-main select,.vt-vision .vt-dash-main input[type=text],.vt-vision .vt-dash-main input[type=number]{background:rgba(255,255,255,.1)!important;color:#fff!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px}
+/* passport achievement chips */
+.vt-vision .vt-passport-badges *{color:rgba(255,255,255,.8)}
 .vt-vision .vt-dash-stat{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.15)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important}
 .vt-vision .vt-dash-stat strong{color:#fff!important}
 .vt-vision .vt-dash-stat span{color:rgba(255,255,255,.65)!important}
@@ -15041,7 +15116,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                 <div class="vt-live-header"><h3>Your Active Session</h3></div>
                 <div class="vt-session" id="vt-active-session">
                   <div class="vt-session-bar">
-                    <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span id="vt-session-title">Blue Lagoon Morning Walk</span> &mdash; <span id="vt-session-guide">Marcus Thompson</span></div>
+                    <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span id="vt-session-title">Blue Lagoon Morning Walk</span><span class="vt-session-byline"> &mdash; <span id="vt-session-guide">Marcus Thompson</span></span></div>
                     <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span><i class="fas fa-check vt-lang-check"></i></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span><i class="fas fa-check vt-lang-check"></i></div></div></div><div class="vt-session-bar-btn" onclick="vtToggleCaptions(this)" title="Toggle live captions" aria-label="Toggle live captions"><i class="fas fa-closed-captioning" id="vt-cc-icon" style="margin-right:5px;font-size:10px"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-bar-btn" onclick="vtSessionAction(this,'invite')" title="Share this session"><i class="fas fa-user-plus" style="margin-right:5px;font-size:10px"></i>Invite</div><div class="vt-session-bar-btn" onclick="vtOpenCart()" title="Your cart" style="position:relative"><i class="fas fa-cart-shopping" style="margin-right:5px;font-size:10px"></i>Cart<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-session-expand-btn" onclick="vtExpandSession()" title="Expand session"><i class="fas fa-expand"></i></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
                   </div>
                   <div class="vt-session-content">
