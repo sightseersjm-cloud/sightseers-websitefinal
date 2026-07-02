@@ -1,0 +1,431 @@
+[
+  {
+    "slug": "blue-lagoon-morning-walk",
+    "title": "Blue Lagoon Morning Walk",
+    "location": "Port Antonio, Portland",
+    "category": "Beaches & Lagoons",
+    "intents": [
+      "Relaxation",
+      "Romance",
+      "Photography"
+    ],
+    "duration": "3 hours",
+    "group": "2–20 guests",
+    "priceFrom": 65,
+    "short": "Walk the wooden docks of Portland’s famous turquoise lagoon at sunrise, guided live by a local host.",
+    "overview": [
+      "The Blue Lagoon Morning Walk is Sight Seers Caribbean’s signature slow-travel experience. You arrive as the light comes up over Portland parish, when the water is glass-calm and the docks are quiet. A local guide walks your group along the waterfront, telling the stories behind the lagoon, the fishing boats, and the hills that keep this corner of Jamaica so green.",
+      "Before you book, step inside the tour with our interactive 360° preview below. Drag to look around the dock, find the marked points of interest, and get a feel for the real place — this is the actual scene your walk begins from.",
+      "The experience suits couples, small friend groups, and photographers. Morning departures keep the temperature comfortable and the light soft, and transport can be arranged from Port Antonio and nearby villas."
+    ],
+    "included": [
+      "Professional local guide",
+      "Waterfront dock walk & lookout stops",
+      "Fresh coconut water on arrival",
+      "Photo assistance at the best angles",
+      "Optional hotel pickup (Port Antonio area)"
+    ],
+    "itinerary": [
+      "Lagoon dock meeting point",
+      "Waterfront boardwalk & boat launch",
+      "Hillside lookout over the lagoon",
+      "Local craft & refreshment stop"
+    ],
+    "faq": [
+      [
+        "Is this tour good for groups?",
+        "Yes. The morning walk comfortably hosts groups of up to 20. For birthdays, greek-life trips, and larger private groups we can arrange a dedicated departure — request an itinerary and a planner will confirm timing."
+      ],
+      [
+        "Do I need to be able to swim?",
+        "No. This is a guided waterfront walk. Swimming and bamboo-raft add-ons are optional and always guide-supervised."
+      ],
+      [
+        "What should I bring?",
+        "Light clothing, comfortable sandals or trainers, sunscreen, and your camera or phone. Mornings are mild — a light cover-up is enough."
+      ]
+    ],
+    "related": [
+      "sunset-yacht-charter",
+      "falmouth-market-stall-walk"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "/panos/og-blue-lagoon.jpg",
+      "og": "/panos/og-blue-lagoon.jpg",
+      "pano": "/panos/blue-lagoon.jpg"
+    },
+    "spatial": {
+      "view": {
+        "yaw": 15,
+        "pitch": -4,
+        "hfov": 100
+      },
+      "ambient": "Ocean Waves",
+      "hotspots": [
+        {
+          "id": "hs1",
+          "title": "Blue Mahoe Seedling",
+          "type": "identify",
+          "pitch": 6,
+          "yaw": -118,
+          "priceUSD": 35,
+          "cta": "Learn & Buy"
+        },
+        {
+          "id": "hs2",
+          "title": "Portland Parish Tee",
+          "type": "auction",
+          "pitch": -14,
+          "yaw": 62,
+          "priceUSD": 28,
+          "cta": "Join Auction"
+        },
+        {
+          "id": "hs3",
+          "title": "Photo Print — This Moment",
+          "type": "product",
+          "pitch": -4,
+          "yaw": -12,
+          "priceUSD": 15,
+          "cta": "Buy Print"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "falmouth-market-stall-walk",
+    "title": "Falmouth Market Stall Walk",
+    "location": "Falmouth, Trelawny",
+    "category": "Culture & Markets",
+    "intents": [
+      "Culture",
+      "Food",
+      "Shopping"
+    ],
+    "duration": "2 hours",
+    "group": "2–15 guests",
+    "priceFrom": 35,
+    "short": "Browse a working Jamaican market stall with a local host — sweets, spices, craft, and the vendors behind them.",
+    "overview": [
+      "Markets are where Jamaica talks. On the Falmouth Market Stall Walk your host brings you stall to stall — tamarind balls and coconut drops, jerk seasoning and pimento, handwoven baskets and larimar jewellery — and introduces you to the people who make and sell them.",
+      "Use the interactive 360° preview below to stand at a stall counter before you book: drag around the goods, meet the vendor’s smile, and tap the marked items to see what guests most often take home.",
+      "This walk pairs perfectly with a morning at the lagoon or an afternoon beach session, and every purchase goes directly to the vendor — Sight Seers takes nothing from stall sales."
+    ],
+    "included": [
+      "Local market host",
+      "Tastings at three stalls",
+      "Craft & spice introductions",
+      "Bargaining help and fair-price guidance",
+      "Market map & vendor list to keep"
+    ],
+    "itinerary": [
+      "Market entrance & sweets counter",
+      "Spice and seasoning stalls",
+      "Craft row — baskets, canvas art, jewellery",
+      "Fresh fruit finish"
+    ],
+    "faq": [
+      [
+        "Can I pay by card at the stalls?",
+        "Most stalls are cash-first. Your host will point out the few that take cards and help you change small bills safely."
+      ],
+      [
+        "Is the market walk suitable for kids?",
+        "Very — children love the sweets counters. Strollers manage fine in the main aisles."
+      ],
+      [
+        "What if I don’t want to buy anything?",
+        "No pressure, ever. The tastings are included and browsing with your host is the point — buying is optional."
+      ]
+    ],
+    "related": [
+      "kingston-culture-food-tour",
+      "blue-lagoon-morning-walk"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "/panos/og-market-stall.jpg",
+      "og": "/panos/og-market-stall.jpg",
+      "pano": "/panos/market-stall.jpg"
+    },
+    "spatial": {
+      "view": {
+        "yaw": 118,
+        "pitch": -16,
+        "hfov": 105
+      },
+      "ambient": "Street Ambience",
+      "hotspots": [
+        {
+          "id": "hs4",
+          "title": "Handwoven Market Basket",
+          "type": "product",
+          "pitch": -24,
+          "yaw": -142,
+          "priceUSD": 28,
+          "cta": "Add to Cart"
+        },
+        {
+          "id": "hs5",
+          "title": "Hand-Painted Canvas Art",
+          "type": "product",
+          "pitch": 8,
+          "yaw": 168,
+          "priceUSD": 85,
+          "cta": "Add to Cart"
+        },
+        {
+          "id": "hs6",
+          "title": "Jamaican Spice Collection",
+          "type": "product",
+          "pitch": -20,
+          "yaw": 118,
+          "priceUSD": 22,
+          "cta": "Add to Cart"
+        },
+        {
+          "id": "hs7",
+          "title": "Larimar Stone Necklace",
+          "type": "product",
+          "pitch": -13,
+          "yaw": -58,
+          "priceUSD": 65,
+          "cta": "Add to Cart"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "sunset-yacht-charter",
+    "title": "Sunset Yacht Charter",
+    "location": "Montego Bay, St. James",
+    "category": "Yacht & Catamaran",
+    "intents": [
+      "Luxury",
+      "Groups",
+      "Celebrations"
+    ],
+    "duration": "4 hours",
+    "group": "4–30 guests",
+    "priceFrom": 180,
+    "short": "Private catamaran charter out of Montego Bay with open bar, sound system, and the best sunset in Jamaica.",
+    "overview": [
+      "The Sunset Yacht Charter is our most requested group experience: a private catamaran out of Montego Bay with an open bar, a captain and crew who know exactly where the light lands, and room for the whole crew — birthdays, bachelorettes, fraternity and sorority trips, corporate escapes.",
+      "A live guided 360° preview of this charter runs inside our V-Tours portal — join a session to walk the deck, check the dining area, and size the boat for your group before you commit.",
+      "Charters include swim stops on calm days, DJ add-ons, and catering upgrades. Sunset departures sell out first — request your date early."
+    ],
+    "included": [
+      "Private catamaran & crew",
+      "Open bar (rum punch, beer, soft drinks)",
+      "Bluetooth / DJ-ready sound system",
+      "Swim stop (weather permitting)",
+      "Hotel transfer add-on available"
+    ],
+    "itinerary": [
+      "Marina welcome & safety brief",
+      "Coastline cruise with open bar",
+      "Swim & snorkel stop",
+      "Sunset viewing point & return"
+    ],
+    "faq": [
+      [
+        "How many people fit on the charter?",
+        "Standard charters host up to 30 guests. Larger groups can split across two vessels that cruise together — ask a planner."
+      ],
+      [
+        "Can we bring our own music?",
+        "Yes — the sound system takes any phone, and a live DJ is available as an add-on."
+      ],
+      [
+        "What happens if the weather turns?",
+        "Your captain makes the final call. If a charter is cancelled for weather you rebook or receive a full refund per our refund policy."
+      ]
+    ],
+    "related": [
+      "negril-seven-mile-sunset",
+      "blue-lagoon-morning-walk"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&h=900&fit=crop",
+      "og": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=630&fit=crop",
+      "pano": null
+    },
+    "spatial": null
+  },
+  {
+    "slug": "dunns-river-falls-climb",
+    "title": "Dunn's River Falls Climb",
+    "location": "Ocho Rios, St. Ann",
+    "category": "Adventure & Waterfalls",
+    "intents": [
+      "Adventure",
+      "Family",
+      "Groups"
+    ],
+    "duration": "3 hours",
+    "group": "2–40 guests",
+    "priceFrom": 55,
+    "short": "Climb Jamaica’s iconic 600-ft terraced waterfall hand-in-hand with your group, led by licensed falls guides.",
+    "overview": [
+      "Dunn’s River Falls is the climb every visitor to Jamaica promises themselves — 600 feet of cool terraced limestone rising from the Caribbean Sea straight into the rainforest. Licensed falls guides lead your chain up the terraces, calling the footholds and catching the moments.",
+      "Preview the falls inside our live V-Tours portal before you book, then arrive already knowing the route, what to wear, and where the photo stops are.",
+      "We time entries to avoid the biggest cruise-ship waves, and combine the climb with river tubing or an Ocho Rios lunch stop for a full day out."
+    ],
+    "included": [
+      "Falls entry ticket",
+      "Licensed falls guide",
+      "Water-shoe rental",
+      "Locker & changing facilities",
+      "Round-trip transport add-on available"
+    ],
+    "itinerary": [
+      "Beach base & safety brief",
+      "Guided terrace climb (about 90 minutes)",
+      "Lagoon pools & photo stops",
+      "Gardens exit & craft market"
+    ],
+    "faq": [
+      [
+        "Do I need to be fit to climb?",
+        "A moderate level — children from 6 and active seniors climb daily. There are exit points partway if anyone wants to stop early."
+      ],
+      [
+        "Are water shoes really necessary?",
+        "Yes, and they’re included. The limestone is smooth in places and water shoes make the climb easy and safe."
+      ],
+      [
+        "Can we film the climb?",
+        "Yes — waterproof phone pouches are sold at the base, and our guides know every angle worth stopping for."
+      ]
+    ],
+    "related": [
+      "blue-lagoon-morning-walk",
+      "kingston-culture-food-tour"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600&h=900&fit=crop",
+      "og": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&h=630&fit=crop",
+      "pano": null
+    },
+    "spatial": null
+  },
+  {
+    "slug": "kingston-culture-food-tour",
+    "title": "Kingston Culture & Food Tour",
+    "location": "Kingston & St. Andrew",
+    "category": "Food & Culture",
+    "intents": [
+      "Culture",
+      "Food",
+      "Music"
+    ],
+    "duration": "4 hours",
+    "group": "2–15 guests",
+    "priceFrom": 75,
+    "short": "Jerk pits, patty shops, Bob Marley’s Kingston, and the food the city actually eats — guided by a born-and-raised host.",
+    "overview": [
+      "Kingston is Jamaica’s kitchen and its stage. This tour eats through both: pimento-smoke jerk pits, the patty counters locals argue over, fresh juice stands, and the streets that raised reggae — with stops tied to the music at every turn.",
+      "Join a live guided session in our V-Tours portal to taste the route virtually first — your host cooks through the menu on camera and answers questions in the live chat.",
+      "Tours run day and evening. Evening departures add the city’s skyline from Skyline Drive and a stop for the best soft-serve in the Caribbean."
+    ],
+    "included": [
+      "Local host & storyteller",
+      "Five food stops with tastings",
+      "Bottled water throughout",
+      "Music-history stops",
+      "Air-conditioned transport between stops"
+    ],
+    "itinerary": [
+      "Downtown patty counter",
+      "Jerk pit & pimento smoke",
+      "Market fruit walk",
+      "Music landmark stop & juice finish"
+    ],
+    "faq": [
+      [
+        "I’m vegetarian — will I eat well?",
+        "Extremely. Ital cooking is a Kingston strength: festival, roast breadfruit, ackee, callaloo, and fresh juice at every stop."
+      ],
+      [
+        "Is Kingston safe for this tour?",
+        "Your host is born and raised in the city and the route sticks to busy, welcoming neighbourhoods. Thousands of guests have walked it with us."
+      ],
+      [
+        "How spicy is the food?",
+        "You control it — scotch bonnet is always served on the side until you ask otherwise."
+      ]
+    ],
+    "related": [
+      "falmouth-market-stall-walk",
+      "dunns-river-falls-climb"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&h=900&fit=crop",
+      "og": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=630&fit=crop",
+      "pano": null
+    },
+    "spatial": null
+  },
+  {
+    "slug": "negril-seven-mile-sunset",
+    "title": "Negril Seven Mile Beach & Sunset",
+    "location": "Negril, Westmoreland",
+    "category": "Beaches & Lagoons",
+    "intents": [
+      "Relaxation",
+      "Romance",
+      "Groups"
+    ],
+    "duration": "5 hours",
+    "group": "2–25 guests",
+    "priceFrom": 60,
+    "short": "An unhurried afternoon on Jamaica’s most famous beach, ending at Rick’s Café for the island’s definitive sunset.",
+    "overview": [
+      "Seven Mile Beach earns its reputation quietly: powder sand, warm shallow water, and beach bars that have been perfecting rum punch for fifty years. This trip gives you a full unhurried afternoon of it, with a reserved shaded base and your host handling chairs, drinks, and timing.",
+      "As the light turns gold you move to the cliffs — Rick’s Café — for cliff divers, live music, and the sunset every postcard of Jamaica is chasing.",
+      "Preview the beach in a live 360° session inside our V-Tours portal, then let a planner time your visit to the best light of your travel week."
+    ],
+    "included": [
+      "Reserved beach base with shade & chairs",
+      "Welcome drink",
+      "Host on the beach all afternoon",
+      "Cliff sunset session at Rick’s Café",
+      "Round-trip transport add-on available"
+    ],
+    "itinerary": [
+      "Beach arrival & reserved base",
+      "Swim, paddle & beach-bar time",
+      "Golden-hour move to the cliffs",
+      "Sunset & cliff divers at Rick’s"
+    ],
+    "faq": [
+      [
+        "Is the sea calm enough for weak swimmers?",
+        "Seven Mile is famously shallow and calm — you can wade out a long way. Lifeguarded sections are part of our base setup."
+      ],
+      [
+        "Do we have to cliff-dive at Rick’s?",
+        "Not at all — most guests watch with a drink in hand. Diving is open to anyone who wants it, at posted heights."
+      ],
+      [
+        "Can this be a private romantic setup?",
+        "Yes — couples can add a private cabana, photographer hour, and beachside dinner. Request an itinerary and mention the occasion."
+      ]
+    ],
+    "related": [
+      "sunset-yacht-charter",
+      "blue-lagoon-morning-walk"
+    ],
+    "currency": "USD",
+    "media": {
+      "hero": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&h=900&fit=crop",
+      "og": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=630&fit=crop",
+      "pano": null
+    },
+    "spatial": null
+  }
+]
