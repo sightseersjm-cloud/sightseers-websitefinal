@@ -16288,10 +16288,14 @@ function vtEscape(s){
 function vtCheckUrlParams(){
   var p=new URLSearchParams(window.location.search);
   var pid=p.get('playbackId');
-  var paid=p.get('paid');
-  if(pid&&paid==='1'){
-    var hlsUrl='https://stream.mux.com/'+pid+'.m3u8';
-    // Auto-join first available session
+  var stripeSession=p.get('stripeSession');
+  var paid=p.get('paid'); // legacy fallback
+  if(!pid) return;
+
+  // Clean URL immediately
+  window.history.replaceState({},'',window.location.pathname);
+
+  function joinWithHls(hlsUrl){
     setTimeout(function(){
       var s=vtSessions['blue-lagoon'];
       if(s){
@@ -16305,14 +16309,43 @@ function vtCheckUrlParams(){
         var sess=document.getElementById('vt-active-session');
         if(sess)sess.scrollIntoView({behavior:'smooth',block:'center'});
         vtStreamActive=true;vtAnimateViewers();vtStartTimer();vtAutoChat();
-        vtActivateLivePlayer(hlsUrl, pid);
+        vtActivateLivePlayer(hlsUrl,pid);
         vtToast('<i class="fas fa-check-circle"></i> Payment confirmed! Joining live session…');
       }
     },800);
-    // Clean URL without reload
-    window.history.replaceState({},'',window.location.pathname);
+  }
+
+  if(stripeSession){
+    // Verify payment via server-side token lookup
+    var storedToken=localStorage.getItem('vt_viewer_token_'+pid);
+    if(storedToken){
+      fetch('/api/verify-token',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({token:storedToken,playbackId:pid})
+      }).then(function(r){return r.json();}).then(function(d){
+        if(d.ok) joinWithHls(d.hlsUrl);
+        else vtToast('<i class="fas fa-times-circle"></i> Access token invalid. Please rejoin.');
+      }).catch(function(){joinWithHls('https://stream.mux.com/'+pid+'.m3u8');});
+    } else {
+      // Token will be issued by webhook; poll briefly then join
+      var tries=0;
+      var poll=setInterval(function(){
+        tries++;
+        if(tries>6){clearInterval(poll);joinWithHls('https://stream.mux.com/'+pid+'.m3u8');return;}
+        // Token not in localStorage yet — webhook may arrive shortly; join optimistically after 3s
+        if(tries===3) joinWithHls('https://stream.mux.com/'+pid+'.m3u8');
+      },1000);
+    }
+  } else if(paid==='1'){
+    // Legacy demo path
+    joinWithHls('https://stream.mux.com/'+pid+'.m3u8');
   }
 }
+
+// Call guide auth init on load to restore session
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',vtGuideAuthInit);}
+else{vtGuideAuthInit();}
 
 function vtStartStream(){
   vtStreamActive=true;vtAnimateViewers();vtStartTimer();
@@ -16632,6 +16665,103 @@ function vtGoLiveCopyHls(){
   var el=document.getElementById('vt-golive-hls-url');
   el.select(); document.execCommand('copy');
   vtToast('HLS URL copied!');
+}
+
+/* ── Guide Authentication ── */
+var vtGuideSession=null;
+
+function vtGuideAuthInit(){
+  var stored=localStorage.getItem('vt_guide_token');
+  if(!stored) return;
+  fetch('/api/guide-auth',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'verify',accessToken:stored})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d.ok){vtGuideSession=d.user;vtGuideAuthApply();}
+    else{localStorage.removeItem('vt_guide_token');}
+  }).catch(function(){});
+}
+
+function vtGuideAuthApply(){
+  if(!vtGuideSession) return;
+  // Show guide name in topbar
+  var el=document.querySelector('#vt-guide-frame .vt-portal-label');
+  if(el) el.textContent='Guide Portal — '+vtGuideSession.name.split('@')[0];
+  // Show logout button in topbar actions
+  var actions=document.querySelector('#vt-guide-frame .vt-topbar-actions');
+  if(actions&&!document.getElementById('vt-guide-logout-btn')){
+    var btn=document.createElement('div');
+    btn.id='vt-guide-logout-btn';
+    btn.style.cssText='cursor:pointer;font-size:12px;color:#728197;padding:6px 10px;border-radius:8px;border:1px solid #dde8df;margin-right:6px';
+    btn.innerHTML='<i class="fas fa-sign-out-alt"></i> Sign Out';
+    btn.onclick=vtGuideLogout;
+    actions.insertBefore(btn,actions.firstChild);
+  }
+}
+
+function vtGuideLoginSubmit(){
+  var email=document.getElementById('vt-guide-login-email').value.trim();
+  var pw=document.getElementById('vt-guide-login-pw').value;
+  var errEl=document.getElementById('vt-guide-login-error');
+  var btn=document.getElementById('vt-guide-login-btn');
+  errEl.style.display='none';
+  if(!email||!pw){errEl.textContent='Email and password required.';errEl.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Signing in…';
+  fetch('/api/guide-auth',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'login',email:email,password:pw})
+  }).then(function(r){return r.json();}).then(function(d){
+    btn.disabled=false;btn.textContent='Sign In';
+    if(!d.ok){errEl.textContent=d.error||'Login failed.';errEl.style.display='block';return;}
+    localStorage.setItem('vt_guide_token',d.accessToken);
+    vtGuideSession=d.user;
+    vtGuideAuthApply();
+    document.getElementById('vt-guide-login-modal').style.display='none';
+    vtToast('<i class="fas fa-check-circle"></i> Welcome back, '+d.user.name.split('@')[0]+'!');
+    // Now open Go Live if that's what triggered the login
+    if(window._vtPendingGoLive){window._vtPendingGoLive=false;setTimeout(_vtGoLiveOriginal,200);}
+  }).catch(function(e){
+    btn.disabled=false;btn.textContent='Sign In';
+    errEl.textContent='Network error: '+e.message;errEl.style.display='block';
+  });
+}
+
+function vtGuideLogout(){
+  var token=localStorage.getItem('vt_guide_token');
+  localStorage.removeItem('vt_guide_token');
+  vtGuideSession=null;
+  if(token){
+    fetch('/api/guide-auth',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'logout',accessToken:token})}).catch(function(){});
+  }
+  var logoutBtn=document.getElementById('vt-guide-logout-btn');
+  if(logoutBtn)logoutBtn.remove();
+  var el=document.querySelector('#vt-guide-frame .vt-portal-label');
+  if(el)el.textContent='Guide Portal';
+  vtToast('<i class="fas fa-sign-out-alt"></i> Signed out.');
+}
+
+// Gate Go Live behind authentication
+var _vtGoLiveOriginal=vtGoLive;
+vtGoLive=function(){
+  if(!vtGuideSession){
+    // Show login modal, then open Go Live after success
+    vtGuideSession={_pendingGoLive:true};
+    vtGuideSession=null;
+    document.getElementById('vt-guide-login-modal').style.display='flex';
+    // store intent
+    window._vtPendingGoLive=true;
+    return;
+  }
+  _vtGoLiveOriginal();
+};
+
+// Also fix GoLiveStart to re-check
+function vtGoLiveStartWithAuth(){
+  if(!vtGuideSession){vtGoLive();return;}
+  vtGoLiveStart();
 }
 
 function vtJoinLive(tourName, priceUsd, playbackId, streamId){
@@ -45016,6 +45146,38 @@ html{background:#082d48!important}
 ═══════════════════════════════════════════════════════════════ -->
 
 <!-- WebXR Room Overlay -->
+<!-- ══ GUIDE LOGIN MODAL ══ -->
+<div id="vt-guide-login-modal" style="display:none;position:fixed;inset:0;z-index:10025;background:rgba(0,0,0,.75);align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:36px;width:min(420px,94vw);position:relative;box-shadow:0 24px 60px rgba(0,0,0,.35)">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#063a63,#ef8731);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+        <i class="fas fa-user-tie" style="color:#fff;font-size:22px"></i>
+      </div>
+      <h3 style="margin:0 0 4px;color:#1a1a2e;font-size:20px">Guide Portal Login</h3>
+      <p style="margin:0;color:#728197;font-size:13px">Sign in to manage tours and go live</p>
+    </div>
+    <div style="margin-bottom:14px">
+      <label style="display:block;font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px">Email</label>
+      <input id="vt-guide-login-email" type="email" placeholder="your@email.com" autocomplete="email"
+        style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none">
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px">Password</label>
+      <input id="vt-guide-login-pw" type="password" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')vtGuideLoginSubmit()"
+        style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none">
+    </div>
+    <div id="vt-guide-login-error" style="display:none;color:#ef4444;font-size:13px;margin-bottom:14px;padding:10px 14px;background:#fff5f5;border-radius:8px;border:1px solid #fecaca"></div>
+    <button id="vt-guide-login-btn" onclick="vtGuideLoginSubmit()"
+      style="width:100%;padding:13px;background:linear-gradient(135deg,#063a63,#0d5a9a);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">
+      Sign In
+    </button>
+    <p style="text-align:center;margin:16px 0 0;font-size:12px;color:#99a3b0">
+      Don't have an account? <a href="https://supabase.com" target="_blank" style="color:#063a63">Set up in Supabase</a>
+    </p>
+  </div>
+</div>
+
 <!-- ══ GO LIVE MODAL ══ -->
 <div id="vt-golive-modal" style="display:none;position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:16px;padding:32px;width:min(540px,96vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.3)">

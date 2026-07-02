@@ -49,7 +49,8 @@ module.exports = async function handler(req, res) {
   if (!tourName || !priceUsd) return res.status(400).json({ error: 'tourName and priceUsd required' });
 
   const origin = req.headers.origin || 'https://sightseerscaribbean.com';
-  const success = successUrl || `${origin}/?session=live&playbackId=${playbackId}&paid=1`;
+  // {CHECKOUT_SESSION_ID} is a Stripe template variable — replaced at redirect time
+  const success = successUrl || `${origin}/?session=live&playbackId=${encodeURIComponent(playbackId||'')}&stripeSession={CHECKOUT_SESSION_ID}`;
   const cancel  = cancelUrl  || `${origin}/`;
 
   const result = await stripeRequest('POST', '/v1/checkout/sessions', {
