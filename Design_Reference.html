@@ -4516,15 +4516,15 @@ body.theme-night .mba-getaway-kicker{color:#7ed8c7!important}
 @media (max-width:1024px){.admin-image-grid{grid-template-columns:1fr}}
 
 /* ======== Strong Jamaica pin alignment overrides ======== */
-#jm3dPins [data-id="negril"], #jm3dPins button[aria-label*="Negril"]{left:16.5% !important; top:52.6% !important;}
-#jm3dPins [data-id="mobay"], #jm3dPins button[aria-label*="Mobay"], #jm3dPins button[aria-label*="Montego"]{left:25.6% !important; top:49.6% !important;}
-#jm3dPins [data-id="rosehall"], #jm3dPins button[aria-label*="Rose Hall"]{left:28.6% !important; top:49.9% !important;}
-#jm3dPins [data-id="martha"], #jm3dPins button[aria-label*="Martha"]{left:37.6% !important; top:50.3% !important;}
-#jm3dPins [data-id="dunns"], #jm3dPins button[aria-label*="Dunn"]{left:54.0% !important; top:52.2% !important;}
-#jm3dPins [data-id="fern"], #jm3dPins button[aria-label*="Fern"]{left:56.4% !important; top:53.7% !important;}
-#jm3dPins [data-id="bluemtn"], #jm3dPins button[aria-label*="Blue Mountain"]{left:72.0% !important; top:59.4% !important;}
-#jm3dPins [data-id="devonhouse"], #jm3dPins button[aria-label*="Devon House"]{left:65.0% !important; top:58.0% !important;}
-#jm3dPins [data-id="bobmarley"], #jm3dPins button[aria-label*="Bob Marley"]{left:68.2% !important; top:58.8% !important;}
+#jm3dPins [data-id="negril"], #jm3dPins button[aria-label*="Negril"]{left:21.1% !important; top:48% !important;}
+#jm3dPins [data-id="mobay"], #jm3dPins button[aria-label*="Mobay"], #jm3dPins button[aria-label*="Montego"]{left:30% !important; top:43.7% !important;}
+#jm3dPins [data-id="rosehall"], #jm3dPins button[aria-label*="Rose Hall"]{left:34% !important; top:44.1% !important;}
+#jm3dPins [data-id="martha"], #jm3dPins button[aria-label*="Martha"]{left:42.5% !important; top:44.4% !important;}
+#jm3dPins [data-id="dunns"], #jm3dPins button[aria-label*="Dunn"]{left:49% !important; top:43.5% !important;}
+#jm3dPins [data-id="fern"], #jm3dPins button[aria-label*="Fern"]{left:52.5% !important; top:46% !important;}
+#jm3dPins [data-id="bluemtn"], #jm3dPins button[aria-label*="Blue Mountain"]{left:64.9% !important; top:53.8% !important;}
+#jm3dPins [data-id="devonhouse"], #jm3dPins button[aria-label*="Devon House"]{left:61% !important; top:56.5% !important;}
+#jm3dPins [data-id="bobmarley"], #jm3dPins button[aria-label*="Bob Marley"]{left:65% !important; top:55% !important;}
 #jm3dPins [data-id="portantonio"], #jm3dPins button[aria-label*="Blue Lagoon"]{left:76.8% !important; top:59.0% !important;}
 #jm3dPopupLayer .jm3d-pin-card, #jm3dPopupLayer .pin-card{max-width:240px}
 
@@ -9574,17 +9574,7 @@ filter:blur(1px)}
 @keyframes jmLeafFloatB{0%,100%{transform:translate(0,0) rotate(-12deg)}50%{transform:translate(-20px,-18px) rotate(6deg)}}
 @keyframes jmLeafFloatC{0%,100%{transform:translate(0,0) rotate(18deg)}50%{transform:translate(18px,-20px) rotate(-8deg)}}
 /* Hummingbirds */
-.jm3d-bird{position:absolute;width:34px;animation-iteration-count:infinite;animation-timing-function:ease-in-out;filter:drop-shadow(0 2px 6px rgba(0,0,0,.18))}
-.jm3d-bird svg{width:100%;height:auto;display:block;overflow:visible}
-.jm3d-bird .jm3d-wl,.jm3d-bird .jm3d-wr{transform-box:view-box;transform-origin:50% 67%}
-.jm3d-bird .jm3d-wl{animation:jm3dFlapL .85s ease-in-out infinite alternate}
-.jm3d-bird .jm3d-wr{animation:jm3dFlapR .85s ease-in-out infinite alternate}
-.jm3d-bird--b{width:24px}.jm3d-bird--b .jm3d-wl,.jm3d-bird--b .jm3d-wr{animation-duration:1.05s}
-.jm3d-bird--c{width:44px}.jm3d-bird--c .jm3d-wl,.jm3d-bird--c .jm3d-wr{animation-duration:.72s}
-.jm3d-bird--d{width:20px}.jm3d-bird--d .jm3d-wl,.jm3d-bird--d .jm3d-wr{animation-duration:1.2s}
-@keyframes jm3dFlapL{from{transform:rotate(9deg)}to{transform:rotate(-17deg)}}
-@keyframes jm3dFlapR{from{transform:rotate(-9deg)}to{transform:rotate(17deg)}}
-@media(prefers-reduced-motion:reduce){.jm3d-bird .jm3d-wl,.jm3d-bird .jm3d-wr{animation:none}}
+.jm3d-bird{position:absolute;font-size:18px;animation-iteration-count:infinite;animation-timing-function:ease-in-out;filter:drop-shadow(0 2px 6px rgba(0,0,0,.15))}
 .jm3d-bird--a{animation:birdFlyA 22s infinite 0s;top:28%}
 .jm3d-bird--b{animation:birdFlyB 28s infinite 5s;top:18%}
 .jm3d-bird--c{animation:birdFlyC 34s infinite 12s;top:35%}
@@ -9669,7 +9659,7 @@ filter:blur(1px)}
   .jm3d-pin-label{display:none}
   .jm3d-popup-card{width:min(190px,78vw)}
   .jm3d-sun{width:64px;height:64px;top:4%;right:5%}
-  .jm3d-bird{width:22px}
+  .jm3d-bird{font-size:14px}
   .jm3d-pin{width:18px;height:28px}
 }
 @media(max-width:480px){
@@ -10054,10 +10044,10 @@ body.theme-night .page .tag{
   <div class="jm3d-cloud jm3d-cloud--2"></div>
   <div class="jm3d-cloud jm3d-cloud--3"></div>
   <div class="jm3d-cloud jm3d-cloud--4"></div>
-  <div class="jm3d-bird jm3d-bird--a"><svg viewBox="0 0 60 24" class="jm3d-bird-svg" aria-hidden="true"><path class="jm3d-wl" d="M30 16 Q18 2 4 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><path class="jm3d-wr" d="M30 16 Q42 2 56 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="30" cy="16.2" rx="4.4" ry="2.5" fill="#16333f"/></svg></div>
-  <div class="jm3d-bird jm3d-bird--b"><svg viewBox="0 0 60 24" class="jm3d-bird-svg" aria-hidden="true"><path class="jm3d-wl" d="M30 16 Q18 2 4 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><path class="jm3d-wr" d="M30 16 Q42 2 56 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="30" cy="16.2" rx="4.4" ry="2.5" fill="#16333f"/></svg></div>
-  <div class="jm3d-bird jm3d-bird--c"><svg viewBox="0 0 60 24" class="jm3d-bird-svg" aria-hidden="true"><path class="jm3d-wl" d="M30 16 Q18 2 4 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><path class="jm3d-wr" d="M30 16 Q42 2 56 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="30" cy="16.2" rx="4.4" ry="2.5" fill="#16333f"/></svg></div>
-  <div class="jm3d-bird jm3d-bird--d"><svg viewBox="0 0 60 24" class="jm3d-bird-svg" aria-hidden="true"><path class="jm3d-wl" d="M30 16 Q18 2 4 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><path class="jm3d-wr" d="M30 16 Q42 2 56 10" fill="none" stroke="#16333f" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="30" cy="16.2" rx="4.4" ry="2.5" fill="#16333f"/></svg></div>
+  <div class="jm3d-bird jm3d-bird--a">🦜</div>
+  <div class="jm3d-bird jm3d-bird--b">🦜</div>
+  <div class="jm3d-bird jm3d-bird--c">🦜</div>
+  <div class="jm3d-bird jm3d-bird--d">🦜</div>
   <div class="jm3d-atmo-mist"></div>
   <div class="jm3d-palm-shadow jm3d-palm-shadow--l"></div>
   <div class="jm3d-palm-shadow jm3d-palm-shadow--r"></div>
@@ -10086,61 +10076,61 @@ body.theme-night .page .tag{
   var DEFAULT_JM_LANDMARKS = [
     {
       id:'negril',name:"Rick\'s Café, Negril",parish:"Westmoreland",
-      emoji:"🌅",px:16.5,py:50.5,popupDx:5,tilt:'tilt-w',
+      emoji:"🌅",px:21.1,py:48,popupDx:5,tilt:'tilt-w',
       desc:"Famous cliff-side bar where brave guests leap into the turquoise Caribbean Sea at sunset. A Negril institution since 1974 with world-class views over the Caribbean.",
       hist:"Rick's Café has been Negril's most iconic gathering spot since it opened in 1974. The tradition of cliff-diving at sunset draws visitors worldwide who come to watch the spectacle over the Caribbean Sea."
     },
     {
       id:'mobay',name:"Club Mobay, Sangster Airport",parish:"St. James",
-      emoji:"✈️",px:25.6,py:47.2,popupDx:4,tilt:'tilt-nw',
+      emoji:"✈️",px:30,py:43.7,popupDx:4,tilt:'tilt-nw',
       desc:"Jamaica's busiest airport and home to the legendary Club Mobay VIP lounge — the ultimate way to begin or end your Jamaica experience in premium style.",
       hist:"Sangster International Airport is named after PM Donald Sangster. Club Mobay has redefined the airport departure experience with premium lounges, fast-track services and panoramic runway views."
     },
     {
       id:'rosehall',name:"Rose Hall Great House",parish:"St. James",
-      emoji:"🏛️",px:28.6,py:47.5,popupDx:2,tilt:'tilt-nw',
+      emoji:"🏛️",px:34,py:44.1,popupDx:2,tilt:'tilt-nw',
       desc:"One of Jamaica's most iconic and haunted landmarks. The legendary home of Annie Palmer — the 'White Witch of Rose Hall' — said to still roam its Georgian halls.",
       hist:"Built in the 1770s, Rose Hall is one of the finest Georgian properties in the Caribbean. Annie Palmer, its infamous mistress in the 1800s, gave rise to one of Jamaica's most enduring legends."
     },
     {
       id:'martha',name:"Martha Brae River Rafting",parish:"Trelawny",
-      emoji:"🛶",px:37.6,py:47.9,popupDx:1,tilt:'tilt-n',
+      emoji:"🛶",px:42.5,py:44.4,popupDx:1,tilt:'tilt-n',
       desc:"Glide gracefully down Jamaica's famous Martha Brae River on a traditional bamboo raft guided by expert local raftsmen through lush tropical scenery.",
       hist:"The Martha Brae has been used for bamboo rafting since the 1960s. It is named after a Taíno woman said to have drowned herself to protect a secret gold mine from Spanish colonizers."
     },
     {
       id:'dunns',name:"Dunn\'s River Falls",parish:"St. Ann — Ocho Rios",
-      emoji:"💧",px:54.0,py:49.8,tilt:'tilt-n',
+      emoji:"💧",px:49,py:43.5,tilt:'tilt-n',
       desc:"Jamaica's most famous waterfall — breathtaking natural terraced cascades where human chains of visitors climb 600 feet hand-in-hand to the top.",
       hist:"Dunn's River Falls is one of the few rivers that flows directly into the sea. Rising 180 metres, the falls were the site of the 1657 Battle of Las Chorreras where Jamaicans repelled English soldiers."
     },
     {
       id:'fern',name:"Fern Gully, Ocho Rios",parish:"St. Ann",
-      emoji:"🌿",px:56.2,py:51.4,tilt:'tilt-ne',
+      emoji:"🌿",px:52.5,py:46,tilt:'tilt-ne',
       desc:"A breathtaking three-kilometre canopy of ferns and tropical foliage creating a natural green tunnel that winds through the hills above Ocho Rios.",
       hist:"Fern Gully follows the course of an old river bed and is home to over 300 species of ferns. It was once described as one of the most beautiful drives in the world and remains a beloved Jamaica landmark."
     },
     {
       id:'bluemtn',name:"Blue Mountains",parish:"St. Andrew / Portland",
-      emoji:"⛰️",px:72.0,py:59.0,popupDx:-1,tilt:'tilt-ne',
+      emoji:"⛰️",px:64.9,py:53.8,popupDx:-1,tilt:'tilt-ne',
       desc:"Home to the world-famous Blue Mountain Coffee and Jamaica's highest peak at 7,402 feet. Hikers are rewarded with spectacular sunrise views across the island.",
       hist:"Named for the blue mist that frequently shrouds their peaks, the Blue Mountains host some of the Caribbean's most pristine wilderness. Coffee cultivation began here in 1728 — Blue Mountain Coffee remains among the world's most prized."
     },
     {
       id:'devonhouse',name:"Devon House, Kingston",parish:"Kingston",
-      emoji:"🍦",px:65.0,py:57.5,popupDx:-3,tilt:'tilt-se',
+      emoji:"🍦",px:61,py:56.5,popupDx:-3,tilt:'tilt-se',
       desc:"A stunning 19th-century Georgian mansion and National Heritage Site, beloved for I-Scream — widely considered the best ice cream in Jamaica.",
       hist:"Devon House was built in 1881 by George Stiebel, Jamaica's first Black millionaire who made his fortune mining gold in Venezuela. Today it's a UNESCO site with boutique shops, restaurants and famous Devon House I-Scream."
     },
     {
       id:'bobmarley',name:"Bob Marley Museum, Kingston",parish:"Kingston",
-      emoji:"🎵",px:68.2,py:58.4,popupDx:-4,tilt:'tilt-se',
+      emoji:"🎵",px:65,py:55,popupDx:-4,tilt:'tilt-se',
       desc:"The former home and recording studio of reggae legend Bob Marley at 56 Hope Road. A pilgrimage site for music lovers worldwide, preserved exactly as he left it.",
       hist:"56 Hope Road was Bob Marley's Kingston home and headquarters of Tuff Gong Records until his death in 1981. It features bullet hole-scarred walls from the 1976 assassination attempt and Marley's personal belongings."
     },
     {
       id:'portantonio',name:"Blue Lagoon, Port Antonio",parish:"Portland",
-      emoji:"💙",px:76.8,py:57.8,popupDx:-10,tilt:'tilt-e',
+      emoji:"💙",px:73.4,py:46.7,popupDx:-10,tilt:'tilt-e',
       desc:"A mesmerizing spring-fed coastal lagoon of impossibly vivid blue-green water, made famous by the 1980 Brooke Shields film and beloved by all who visit.",
       hist:"The Blue Lagoon (Blue Hole) in Portland is 55 metres deep and fed by underground freshwater springs. Its unique fresh/salt water blend creates its stunning colour. It gained worldwide fame as the filming location for The Blue Lagoon (1980)."
     }
@@ -26672,11 +26662,10 @@ body.theme-night .page .tag{
 @keyframes jm3dHBFlyC{0%{left:-8%;top:30%;transform:scaleX(1)}20%{top:25%;transform:scaleX(1) translateY(-8px)}45%{left:55%;top:28%;transform:scaleX(1) translateY(3px)}70%{top:23%;transform:scaleX(1) translateY(-5px)}100%{left:106%;top:32%;transform:scaleX(1)}}
 @keyframes jm3dHBFlyD{0%{left:104%;top:8%;transform:scaleX(-1)}35%{top:5%;transform:scaleX(-1) translateY(-4px)}65%{left:30%;top:11%;transform:scaleX(-1) translateY(5px)}100%{left:-6%;top:7%;transform:scaleX(-1)}}
 @keyframes jm3dHBFlyE{0%{left:-6%;top:18%;transform:scaleX(1)}40%{left:45%;top:13%;transform:scaleX(1) translateY(-7px)}100%{left:106%;top:20%;transform:scaleX(1) translateY(2px)}}
-.jm3d-hbird-wing{animation:jm3dWingFlap .82s ease-in-out infinite alternate;}
-.jm3d-hbird-wing--r{animation:jm3dWingFlapR .82s ease-in-out infinite alternate;}
-@keyframes jm3dWingFlap{from{transform:rotate(9deg)}to{transform:rotate(-16deg)}}
-@keyframes jm3dWingFlapR{from{transform:rotate(-9deg)}to{transform:rotate(16deg)}}
-@media(prefers-reduced-motion:reduce){.jm3d-hbird-wing,.jm3d-hbird-wing--r{animation:none}}
+.jm3d-hbird-wing{animation:jm3dWingFlap .12s ease-in-out infinite alternate;}
+.jm3d-hbird-wing--r{animation:jm3dWingFlapR .12s ease-in-out infinite alternate;}
+@keyframes jm3dWingFlap{from{transform:rotate(-50deg) scaleY(1)}to{transform:rotate(30deg) scaleY(.7)}}
+@keyframes jm3dWingFlapR{from{transform:rotate(50deg) scaleY(1)}to{transform:rotate(-30deg) scaleY(.7)}}
 .jm3d-pin{transition:transform .28s ease,filter .28s ease;}
 .jm3d-pin::before{content:'';position:absolute;left:50%;top:100%;width:24px;height:24px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.4) 0%,rgba(239,135,49,0) 70%);opacity:0;transition:opacity .3s ease;pointer-events:none;}
 .jm3d-pin:hover::before,.jm3d-pin.active::before{opacity:1;animation:jm3dPinGlow 1.6s ease-in-out infinite;}
@@ -27059,16 +27048,16 @@ body.theme-night .page .tag{
   /* Pin tips calibrated to the landmass in 30d8ac9911.webp —
      real parish geography mapped onto the island's 3D top surface. */
   const JM3D_COORDS = {
-    negril:[16.5,52.6],
-    mobay:[25.6,49.6],
-    rosehall:[28.6,49.9],
-    martha:[37.6,50.3],
-    dunns:[54.0,52.2],
-    fern:[56.4,53.7],
-    bluemtn:[72.0,59.4],
-    devonhouse:[65.0,58.0],
-    bobmarley:[68.2,58.8],
-    portantonio:[76.8,59.0]
+    negril:[14.8,56.5],
+    mobay:[24.2,40.2],
+    rosehall:[28.5,42.8],
+    martha:[33.8,43.5],
+    dunns:[44.2,40.0],
+    fern:[46.5,44.2],
+    bluemtn:[66.5,42.0],
+    devonhouse:[64.8,54.5],
+    bobmarley:[63.0,51.2],
+    portantonio:[76.5,38.5]
   };
   function applyJm3dRefresh(){
     const img = document.getElementById('jm3dIslandImg');
@@ -27077,12 +27066,16 @@ body.theme-night .page .tag{
     document.querySelectorAll('.jm3d-bird-real').forEach(el => el.remove());
     const sky = document.querySelector('.jm3d-skybox');
     if (sky && !sky.querySelector('.jm3d-hbird')) {
-      const hbirdSVG = '<svg viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
-        +'<g class="jm3d-hbird-wing" transform-origin="30 16"><path d="M30 16 Q18 2 4 10" stroke="#1c3a48" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>'
-        +'<g class="jm3d-hbird-wing--r" transform-origin="30 16"><path d="M30 16 Q42 2 56 10" stroke="#1c3a48" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>'
-        +'<ellipse cx="30" cy="16.2" rx="4.4" ry="2.5" fill="#1c3a48"/>'
-        +'<path d="M34 15.4 L39 14.2 L34.5 16.6 Z" fill="#1c3a48"/>'
-        +'</svg>';
+      const hbirdSVG = '<svg viewBox="0 0 60 44" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        +'<g class="jm3d-hbird-wing" transform-origin="30 26"><path d="M30 26C24 18 14 10 6 6C10 14 18 22 30 26Z" fill="url(#wg1)" opacity=".92"/></g>'
+        +'<g class="jm3d-hbird-wing--r" transform-origin="30 26"><path d="M30 26C36 18 46 10 54 6C50 14 42 22 30 26Z" fill="url(#wg2)" opacity=".92"/></g>'
+        +'<ellipse cx="30" cy="28" rx="8" ry="5" fill="url(#bd1)"/>'
+        +'<path d="M22 28C18 29 12 30 8 30C12 28 18 27 22 28Z" fill="#1a5c3a" opacity=".85"/>'
+        +'<path d="M38 27L46 24L38 26Z" fill="#2a7a4a" opacity=".8"/>'
+        +'<circle cx="26" cy="26" r="1.2" fill="#111"/>'
+        +'<defs><linearGradient id="wg1" x1="6" y1="6" x2="30" y2="26"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#166534"/></linearGradient>'
+        +'<linearGradient id="wg2" x1="54" y1="6" x2="30" y2="26"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#166534"/></linearGradient>'
+        +'<linearGradient id="bd1" x1="22" y1="24" x2="38" y2="32"><stop stop-color="#22c55e"/><stop offset=".5" stop-color="#166534"/><stop offset="1" stop-color="#14532d"/></linearGradient></defs></svg>';
       ['a','b','c','d','e'].forEach(key => {
         const bird = document.createElement('div');
         bird.className = 'jm3d-hbird jm3d-hbird--' + key;
@@ -28597,16 +28590,16 @@ body.theme-night .page .tag{
 (function(){
   function patchJamaicaHeadingAndPins(){
     var coords = {
-      negril:{x:16.5,y:52.6},
-      mobay:{x:25.6,y:49.6},
-      rosehall:{x:28.6,y:49.9},
-      martha:{x:37.6,y:50.3},
-      dunns:{x:54.0,y:52.2},
-      fern:{x:56.4,y:53.7},
-      bluemtn:{x:72.0,y:59.4},
-      devonhouse:{x:65.0,y:58.0},
-      bobmarley:{x:68.2,y:58.8},
-      portantonio:{x:76.8,y:59.0}
+      negril:{x:15.4,y:49.0},
+      mobay:{x:24.3,y:44.4},
+      rosehall:{x:29.6,y:43.4},
+      martha:{x:35.4,y:42.5},
+      dunns:{x:45.7,y:41.2},
+      fern:{x:47.0,y:44.6},
+      bluemtn:{x:57.8,y:43.0},
+      devonhouse:{x:63.9,y:51.0},
+      bobmarley:{x:61.5,y:48.8},
+      portantonio:{x:73.8,y:37.8}
     };
     Object.keys(coords).forEach(function(id){
       var pos = coords[id];
