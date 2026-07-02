@@ -14780,6 +14780,257 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 
     <!-- DASHBOARD SHOWCASE (TABBED) -->
+  <!-- ══════════════════════════════════════════════════════════════
+       360° SPATIAL TOUR PORTAL
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="vt-spatial-portal" style="background:linear-gradient(180deg,#04111f 0%,#062240 60%,#04111f 100%);padding:100px 0 80px;position:relative;overflow:hidden">
+    <!-- Ambient particles background -->
+    <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+      <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.08) 0%,transparent 70%);top:-100px;left:-200px"></div>
+      <div style="position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(6,58,99,.4) 0%,transparent 70%);bottom:-200px;right:-200px"></div>
+    </div>
+    <div class="vt-wrap" style="position:relative;z-index:2">
+      <!-- Header -->
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(239,135,49,.12);border:1px solid rgba(239,135,49,.25);border-radius:100px;padding:6px 16px;margin-bottom:20px">
+          <span style="width:7px;height:7px;background:#ef8731;border-radius:50%;display:inline-block;animation:vtRecPulse 1.5s ease infinite"></span>
+          <span style="font-size:12px;font-weight:700;letter-spacing:.12em;color:#ef8731;text-transform:uppercase">360° Spatial Tour Portals</span>
+        </div>
+        <h2 style="font-size:clamp(32px,5vw,58px);font-weight:800;color:#fff;margin:0 0 16px;line-height:1.1">Step Inside Every Tour<br><span style="background:linear-gradient(90deg,#ef8731,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Before You Book It</span></h2>
+        <p style="font-size:17px;color:rgba(255,255,255,.55);max-width:560px;margin:0 auto;line-height:1.7">Explore Jamaica and the Caribbean through immersive panoramic portals. Click hotspots, build your trip, invite your group, and request a quote — all inside the tour.</p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div id="vt-portal-filters" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:48px" class="reveal">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:100%">
+          <button class="vtp-filter active" data-filter="all" onclick="vtpFilter(this,'all')">All Tours</button>
+          <button class="vtp-filter" data-filter="adventure" onclick="vtpFilter(this,'adventure')"><i class="fas fa-mountain"></i> Adventure</button>
+          <button class="vtp-filter" data-filter="luxury" onclick="vtpFilter(this,'luxury')"><i class="fas fa-gem"></i> Luxury</button>
+          <button class="vtp-filter" data-filter="yacht" onclick="vtpFilter(this,'yacht')"><i class="fas fa-ship"></i> Yacht</button>
+          <button class="vtp-filter" data-filter="culture" onclick="vtpFilter(this,'culture')"><i class="fas fa-landmark"></i> Culture</button>
+          <button class="vtp-filter" data-filter="beach" onclick="vtpFilter(this,'beach')"><i class="fas fa-umbrella-beach"></i> Beach</button>
+          <button class="vtp-filter" data-filter="vip" onclick="vtpFilter(this,'vip')"><i class="fas fa-crown"></i> VIP</button>
+          <button class="vtp-filter" data-filter="group" onclick="vtpFilter(this,'group')"><i class="fas fa-users"></i> Groups</button>
+        </div>
+      </div>
+
+      <!-- Tour Gallery Grid -->
+      <div id="vt-portal-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-bottom:60px"></div>
+
+      <!-- Itinerary Tray (bottom, slides up) -->
+      <div id="vt-itinerary-tray" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)">
+        <div style="background:rgba(4,17,31,.97);backdrop-filter:blur(40px);border-top:1px solid rgba(255,255,255,.08);padding:20px 24px;max-width:1200px;margin:0 auto">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;background:linear-gradient(135deg,#ef8731,#ff6723);border-radius:10px;display:flex;align-items:center;justify-content:center"><i class="fas fa-map-marked-alt" style="color:#fff;font-size:14px"></i></div>
+              <div><div style="font-size:15px;font-weight:700;color:#fff">My Trip Board</div><div id="vt-itinerary-count" style="font-size:12px;color:rgba(255,255,255,.45)">0 tours added</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button onclick="vtpOpenQuote()" style="padding:8px 20px;background:linear-gradient(135deg,#ef8731,#ff6723);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Request Quote</button>
+              <button onclick="vtpCloseTray()" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">&times;</button>
+            </div>
+          </div>
+          <div id="vt-itinerary-items" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PANORAMIC VIEWER OVERLAY ══ -->
+  <div id="vt-panorama-viewer" style="display:none;position:fixed;inset:0;z-index:10050;background:#000">
+    <!-- Panorama canvas -->
+    <canvas id="vt-pano-canvas" style="position:absolute;inset:0;width:100%;height:100%;touch-action:none"></canvas>
+
+    <!-- Top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(rgba(0,0,0,.7),transparent);z-index:10">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="background:rgba(0,0,0,.4);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:8px">
+          <span id="vt-pano-category-icon" style="font-size:14px">🌊</span>
+          <span id="vt-pano-title" style="font-size:14px;font-weight:700;color:#fff">Tour Name</span>
+        </div>
+        <div style="display:flex;gap:6px" id="vt-pano-scene-tabs"></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="vtpToggleInfo()" title="Tour Info" style="width:40px;height:40px;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff;font-size:14px;cursor:pointer;border:none"><i class="fas fa-info-circle"></i></button>
+        <button onclick="vtpToggleFullscreen()" title="Fullscreen" style="width:40px;height:40px;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff;font-size:14px;cursor:pointer;border:none"><i class="fas fa-expand"></i></button>
+        <button onclick="vtpClose()" style="width:40px;height:40px;background:rgba(239,68,68,.2);backdrop-filter:blur(10px);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:#fff;font-size:16px;cursor:pointer;border:none">&times;</button>
+      </div>
+    </div>
+
+    <!-- Drag hint -->
+    <div id="vt-pano-hint" style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 18px;color:rgba(255,255,255,.7);font-size:12px;pointer-events:none;transition:opacity .5s"><i class="fas fa-arrows-alt" style="margin-right:6px"></i>Drag to explore · Pinch to zoom</div>
+
+    <!-- Hotspot layer -->
+    <div id="vt-pano-hotspots" style="position:absolute;inset:0;pointer-events:none;z-index:5"></div>
+
+    <!-- Tour Detail Panel (right side) -->
+    <div id="vt-pano-detail" style="position:absolute;top:72px;right:16px;bottom:100px;width:320px;background:rgba(4,17,31,.88);backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;overflow-y:auto;transform:translateX(360px);transition:transform .4s cubic-bezier(.16,1,.3,1);z-index:8;display:flex;flex-direction:column;gap:16px">
+      <div id="vt-pano-detail-vibe" style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;width:fit-content"></div>
+      <h3 id="vt-pano-detail-title" style="font-size:20px;font-weight:800;color:#fff;margin:0"></h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <span id="vt-pano-detail-location" style="font-size:12px;color:rgba(255,255,255,.5)"><i class="fas fa-map-marker-alt" style="margin-right:4px;color:#ef8731"></i></span>
+        <span id="vt-pano-detail-duration" style="font-size:12px;color:rgba(255,255,255,.5)"><i class="fas fa-clock" style="margin-right:4px;color:#ef8731"></i></span>
+        <span id="vt-pano-detail-group" style="font-size:12px;color:rgba(255,255,255,.5)"><i class="fas fa-users" style="margin-right:4px;color:#ef8731"></i></span>
+      </div>
+      <p id="vt-pano-detail-desc" style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;margin:0"></p>
+      <div id="vt-pano-detail-includes" style="background:rgba(255,255,255,.04);border-radius:12px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">What's Included</div>
+        <div id="vt-pano-includes-list" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+      <div id="vt-pano-detail-addons">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Add-Ons</div>
+        <div id="vt-pano-addons-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+      <div style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+        <div id="vt-pano-detail-price" style="font-size:22px;font-weight:800;color:#ef8731;margin-bottom:14px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button onclick="vtpAddToTrip()" style="width:100%;padding:12px;background:linear-gradient(135deg,#ef8731,#ff6723);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer"><i class="fas fa-plus" style="margin-right:6px"></i>Add to My Trip</button>
+          <button onclick="vtpOpenQuote()" style="width:100%;padding:12px;background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer"><i class="fas fa-file-invoice-dollar" style="margin-right:6px"></i>Request Quote</button>
+          <div style="display:flex;gap:8px">
+            <button onclick="vtpOpenConcierge()" style="flex:1;padding:10px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer"><i class="fas fa-robot" style="margin-right:4px"></i>Ask</button>
+            <button onclick="vtpOpenGroup()" style="flex:1;padding:10px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer"><i class="fas fa-user-plus" style="margin-right:4px"></i>Invite</button>
+            <button onclick="vtpSaveTour()" id="vt-pano-save-btn" style="flex:1;padding:10px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer"><i class="fas fa-bookmark" style="margin-right:4px"></i>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Action Dock -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;background:rgba(4,17,31,.8);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:8px 12px">
+      <button class="vtp-dock-btn" onclick="vtpToggleInfo()" title="Tour Info"><i class="fas fa-compass"></i><span>Explore</span></button>
+      <button class="vtp-dock-btn" onclick="vtpOpenConcierge()" title="Ask Concierge"><i class="fas fa-robot"></i><span>Ask</span></button>
+      <button class="vtp-dock-btn vtp-dock-primary" onclick="vtpAddToTrip()" title="Add Tour"><i class="fas fa-plus"></i><span>Add Tour</span></button>
+      <button class="vtp-dock-btn" onclick="vtpOpenGroup()" title="Invite Group"><i class="fas fa-user-plus"></i><span>Invite</span></button>
+      <button class="vtp-dock-btn" onclick="vtpOpenQuote()" title="Request Quote"><i class="fas fa-file-invoice-dollar"></i><span>Quote</span></button>
+      <button class="vtp-dock-btn" onclick="vtpSaveTour()" title="Save"><i class="fas fa-bookmark"></i><span>Save</span></button>
+    </div>
+
+    <!-- Hotspot info popup -->
+    <div id="vt-pano-hotspot-popup" style="display:none;position:absolute;z-index:20;background:rgba(4,17,31,.95);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;width:260px;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+      <button onclick="document.getElementById('vt-pano-hotspot-popup').style.display='none'" style="position:absolute;top:10px;right:10px;background:none;border:none;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer">&times;</button>
+      <div id="vt-hs-popup-icon" style="font-size:24px;margin-bottom:8px"></div>
+      <div id="vt-hs-popup-title" style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px"></div>
+      <div id="vt-hs-popup-desc" style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:12px"></div>
+      <button id="vt-hs-popup-cta" style="width:100%;padding:9px;background:linear-gradient(135deg,#ef8731,#ff6723);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer"></button>
+    </div>
+  </div>
+
+  <!-- ══ CONCIERGE MODAL ══ -->
+  <div id="vt-concierge-modal" style="display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+    <div style="background:linear-gradient(160deg,#04111f,#062240);border:1px solid rgba(255,255,255,.1);border-radius:24px;width:min(520px,96vw);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)">
+      <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,#063a63,#ef8731);border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="fas fa-robot" style="color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:700;color:#fff">AI Concierge</div><div style="font-size:12px;color:rgba(255,255,255,.4)">Sight Seers Caribbean</div></div>
+        </div>
+        <button onclick="vtpCloseConcierge()" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">&times;</button>
+      </div>
+      <div id="vt-concierge-msgs" style="flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px">
+        <div class="vtp-concierge-msg bot"><div class="vtp-cm-bubble">👋 Hello! I'm your Sight Seers Caribbean AI Concierge. I can help you plan tours, compare experiences, suggest add-ons, and build your perfect Caribbean itinerary. What are you looking for?</div></div>
+      </div>
+      <div style="padding:12px 24px 20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="vtp-concierge-prompt" onclick="vtpConciergePrompt(this)">Best for birthday groups?</button>
+          <button class="vtp-concierge-prompt" onclick="vtpConciergePrompt(this)">Yacht vs ATV?</button>
+          <button class="vtp-concierge-prompt" onclick="vtpConciergePrompt(this)">Build 3-day itinerary</button>
+          <button class="vtp-concierge-prompt" onclick="vtpConciergePrompt(this)">Add private transport</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input id="vt-concierge-input" type="text" placeholder="Ask anything about Caribbean tours..." onkeydown="if(event.key==='Enter')vtpConciergeSend()"
+            style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;color:#fff;font-size:14px;outline:none;font-family:inherit">
+          <button onclick="vtpConciergeSend()" style="width:44px;height:44px;background:linear-gradient(135deg,#ef8731,#ff6723);border:none;border-radius:12px;color:#fff;cursor:pointer;font-size:16px"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ QUOTE REQUEST MODAL ══ -->
+  <div id="vt-quote-modal" style="display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:24px;width:min(560px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.4)">
+      <div style="padding:28px 28px 0;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <h3 style="margin:0 0 4px;font-size:20px;color:#1a1a2e">Request a Quote</h3>
+          <p style="margin:0;font-size:13px;color:#728197">We'll get back to you within 2 hours</p>
+        </div>
+        <button onclick="vtpCloseQuote()" style="background:none;border:none;font-size:22px;color:#728197;cursor:pointer">&times;</button>
+      </div>
+      <div id="vt-quote-tour-summary" style="margin:20px 28px 0;background:linear-gradient(135deg,#063a63,#0d5a9a);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:18px" id="vt-quote-icon">🌊</div>
+        <div><div id="vt-quote-tour-name" style="font-size:14px;font-weight:700;color:#fff">Selected Tour</div><div id="vt-quote-tour-meta" style="font-size:12px;color:rgba(255,255,255,.6)"></div></div>
+      </div>
+      <form id="vt-quote-form" onsubmit="vtpSubmitQuote(event)" style="padding:20px 28px 28px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Full Name</label><input name="name" required placeholder="Your name" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Email</label><input name="email" type="email" required placeholder="email@example.com" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Phone / WhatsApp</label><input name="phone" placeholder="+1 876 000 0000" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Group Size</label>
+            <select name="groupSize" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit;background:#fff">
+              <option>1–4 people</option><option>5–10 people</option><option>11–20 people</option><option>21–40 people</option><option>40+ people</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Travel Date</label><input name="date" type="date" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Budget Range</label>
+            <select name="budget" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit;background:#fff">
+              <option>Under $500</option><option>$500–$1,500</option><option>$1,500–$5,000</option><option>$5,000–$15,000</option><option>$15,000+</option>
+            </select>
+          </div>
+        </div>
+        <div><label style="font-size:12px;font-weight:700;color:#1a1a2e;display:block;margin-bottom:5px">Tell us about your group & vision</label>
+          <textarea name="message" rows="3" placeholder="Birthday trip for 15? Honeymoon? Corporate retreat? Tell us anything..." style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none;font-family:inherit;resize:vertical"></textarea>
+        </div>
+        <div id="vt-quote-selected-tours" style="background:#f8fafc;border-radius:10px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:#728197;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Selected Tours</div>
+          <div id="vt-quote-tours-list" style="font-size:13px;color:#1a1a2e"></div>
+        </div>
+        <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,#063a63,#0d5a9a);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer">
+          <i class="fas fa-paper-plane" style="margin-right:8px"></i>Send Quote Request
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ GROUP PLANNER MODAL ══ -->
+  <div id="vt-group-modal" style="display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+    <div style="background:linear-gradient(160deg,#04111f,#062240);border:1px solid rgba(255,255,255,.1);border-radius:24px;width:min(500px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.5);padding:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <div>
+          <h3 style="margin:0 0 4px;font-size:18px;color:#fff">Invite Your Group</h3>
+          <p style="margin:0;font-size:13px;color:rgba(255,255,255,.45)">Share this tour with your crew to vote</p>
+        </div>
+        <button onclick="vtpCloseGroup()" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">&times;</button>
+      </div>
+      <!-- Share link -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:20px">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Share Link</div>
+        <div style="display:flex;gap:8px">
+          <input id="vt-group-share-link" readonly style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;color:rgba(255,255,255,.8);font-size:12px;outline:none;font-family:inherit" value="">
+          <button onclick="vtpCopyGroupLink()" style="padding:8px 14px;background:#ef8731;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button>
+        </div>
+      </div>
+      <!-- Group vote -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px"><i class="fas fa-vote-yea" style="margin-right:6px;color:#ef8731"></i>Group Votes</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="vt-group-votes">
+          <div class="vtp-vote-item"><div class="vtp-vote-label">Should we do this tour?</div><div style="display:flex;gap:6px"><button class="vtp-vote-btn yes" onclick="vtpVote(this,'yes')">👍 Yes (3)</button><button class="vtp-vote-btn no" onclick="vtpVote(this,'no')">👎 No (1)</button><button class="vtp-vote-btn maybe" onclick="vtpVote(this,'maybe')">🤔 Maybe (2)</button></div></div>
+          <div class="vtp-vote-item"><div class="vtp-vote-label">Add private transportation?</div><div style="display:flex;gap:6px"><button class="vtp-vote-btn yes" onclick="vtpVote(this,'yes')">👍 Yes (4)</button><button class="vtp-vote-btn no" onclick="vtpVote(this,'no')">👎 No (0)</button><button class="vtp-vote-btn maybe" onclick="vtpVote(this,'maybe')">🤔 Maybe (1)</button></div></div>
+        </div>
+      </div>
+      <!-- Invite form -->
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:10px">Invite by Email or WhatsApp</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <input id="vt-group-invite-input" type="text" placeholder="Email or phone number" style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;outline:none;font-family:inherit">
+          <button onclick="vtpSendInvite()" style="padding:10px 16px;background:#063a63;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600">Send</button>
+        </div>
+        <div id="vt-group-invited" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+    </div>
+  </div>
+
   <section class="vt-sec vt-sec--alt">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
@@ -16623,6 +16874,64 @@ function vtCheckout(){
   },2000);
 }
 
+/* ══ 360° SPATIAL TOUR PORTAL STYLES ══ */
+.vtp-filter{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.vtp-filter:hover{background:rgba(255,255,255,.12);color:#fff}
+.vtp-filter.active{background:linear-gradient(135deg,#ef8731,#ff6723);border-color:transparent;color:#fff}
+.vtp-tour-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);position:relative}
+.vtp-tour-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.vtp-tour-thumb{height:200px;background:linear-gradient(135deg,#063a63,#1a8a6e);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:80px}
+.vtp-tour-thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.vtp-tour-card:hover .vtp-tour-thumb-img{transform:scale(1.06)}
+.vtp-tour-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);opacity:0;transition:opacity .3s}
+.vtp-tour-card:hover .vtp-tour-enter{opacity:1}
+.vtp-enter-btn{background:rgba(255,255,255,.95);color:#063a63;border:none;padding:10px 22px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.vtp-tour-body{padding:18px}
+.vtp-tour-vibe{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.vtp-tour-name{font-size:17px;font-weight:800;color:#fff;margin:0 0 6px;line-height:1.3}
+.vtp-tour-location{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.vtp-tour-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:14px}
+.vtp-tour-meta{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.vtp-tour-meta span{font-size:11px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:4px}
+.vtp-tour-actions{display:flex;gap:8px}
+.vtp-btn-primary{flex:1;padding:9px;background:linear-gradient(135deg,#ef8731,#ff6723);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity .2s}
+.vtp-btn-primary:hover{opacity:.9}
+.vtp-btn-ghost{padding:9px 12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.vtp-btn-ghost:hover{background:rgba(255,255,255,.1);color:#fff}
+.vtp-tour-price{font-size:13px;font-weight:700;color:#ef8731;margin-bottom:14px}
+/* Dock */
+.vtp-dock-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;padding:6px 10px;border-radius:12px;transition:all .2s;font-size:18px}
+.vtp-dock-btn span{font-size:9px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.vtp-dock-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.vtp-dock-primary{background:linear-gradient(135deg,#ef8731,#ff6723)!important;color:#fff!important;border-radius:14px!important}
+.vtp-dock-primary:hover{opacity:.9}
+/* Hotspot */
+.vtp-hotspot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:6;pointer-events:auto}
+.vtp-hotspot-dot{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;animation:vtpHsPulse 2s ease infinite;transition:transform .2s}
+.vtp-hotspot:hover .vtp-hotspot-dot{transform:scale(1.2)}
+@keyframes vtpHsPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,135,49,.5)}50%{box-shadow:0 0 0 8px rgba(239,135,49,0)}}
+.vtp-hotspot-label{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(4,17,31,.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 10px;font-size:11px;color:#fff;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.vtp-hotspot:hover .vtp-hotspot-label{opacity:1}
+/* Concierge */
+.vtp-concierge-msg{display:flex;gap:10px}
+.vtp-concierge-msg.bot .vtp-cm-bubble{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.85);border-radius:4px 16px 16px 16px}
+.vtp-concierge-msg.user{flex-direction:row-reverse}
+.vtp-concierge-msg.user .vtp-cm-bubble{background:linear-gradient(135deg,#ef8731,#ff6723);color:#fff;border-radius:16px 4px 16px 16px}
+.vtp-cm-bubble{padding:10px 14px;font-size:13px;line-height:1.6;max-width:88%;border-radius:16px}
+.vtp-concierge-prompt{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);padding:5px 12px;border-radius:100px;font-size:11px;cursor:pointer;transition:all .2s;font-family:inherit}
+.vtp-concierge-prompt:hover{background:rgba(255,255,255,.12);color:#fff}
+/* Group */
+.vtp-vote-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px}
+.vtp-vote-label{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:8px;font-weight:600}
+.vtp-vote-btn{padding:5px 12px;border:1px solid rgba(255,255,255,.1);border-radius:100px;font-size:11px;cursor:pointer;background:rgba(255,255,255,.05);color:rgba(255,255,255,.65);transition:all .2s;font-family:inherit}
+.vtp-vote-btn:hover,.vtp-vote-btn.voted{background:rgba(239,135,49,.2);border-color:#ef8731;color:#ef8731}
+/* Itinerary tray items */
+.vtp-itinerary-item{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:180px}
+.vtp-itinerary-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.vtp-itinerary-item-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:2px}
+.vtp-itinerary-item-price{font-size:11px;color:rgba(255,255,255,.4)}
+.vtp-itinerary-remove{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;margin-left:auto;padding:2px}
+
 /* ── Go Live (guide) ── */
 var vtLive={streamId:null,playbackId:null,hlsUrl:null,statusTimer:null,isLive:false};
 
@@ -16940,6 +17249,434 @@ vtInit360();
 // Check for post-Stripe redirect with playbackId
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',vtCheckUrlParams);}
 else{vtCheckUrlParams();}
+
+/* ════════════════════════════════════════════════════
+   360° SPATIAL TOUR PORTAL ENGINE
+════════════════════════════════════════════════════ */
+var VTP = {
+  tours: [
+    {id:'blue-lagoon',title:'Blue Lagoon Morning Walk',location:'Port Antonio, Portland, Jamaica',category:'beach',vibe:'Relaxation',vibeColor:'#0ea5e9',vibeIcon:'🌊',icon:'🏝️',duration:'3 hours',group:'Best for couples & small groups',price:'From $42 per person',description:'Glide through the crystal-clear turquoise waters of Jamaica\'s legendary Blue Lagoon. Kayak past lush tropical vegetation, dive into natural springs, and let your guide reveal the hidden stories of this magical place.',includes:['Kayak & equipment','Professional guide','Snorkeling gear','Refreshments','Hotel pickup optional'],addons:['🚐 Private hotel transfer (+$35)','📸 Content package — photo & video (+$60)','🎶 Private acoustic set (+$80)','🍹 Rum tasting add-on (+$25)'],
+      scenes:[{name:'Main Lagoon',emoji:'🌊',hotspots:[{x:30,y:45,icon:'🌿',title:'Blue Mahoe Trees',desc:'Jamaica\'s national tree lines the lagoon edge. Endemic to the Caribbean.',cta:'Learn More',type:'culture'},{x:65,y:35,icon:'🤿',title:'Snorkeling Spot',desc:'Visibility up to 20 feet. Tropical fish, coral, and sea grass meadows.',cta:'Add Snorkeling (+$15)',type:'addon'},{x:80,y:60,icon:'📸',title:'Perfect Photo Moment',desc:'Golden hour hits this spot at 9 AM. Best framing for group shots.',cta:'Add Content Package',type:'photo'},{x:20,y:70,icon:'🚣',title:'Kayak Launch',desc:'All equipment provided. No experience needed — guides assist beginners.',cta:'Book Now',type:'booking'}]},{name:'Spring Pool',emoji:'💧',hotspots:[{x:50,y:50,icon:'💧',title:'Natural Freshwater Spring',desc:'Where the fresh spring water meets the sea. Jump in — water is 68°F.',cta:'Add to Trip',type:'highlight'},{x:75,y:40,icon:'🎶',title:'Acoustic Music Spot',desc:'Local musicians perform Jamaican folk songs at this scenic overlook.',cta:'Add Music (+$80)',type:'addon'}]}]},
+    {id:'yacht-charter',title:'Catamaran Sunset Cruise',location:'Montego Bay, St James, Jamaica',category:'yacht',vibe:'Luxury',vibeColor:'#8b5cf6',vibeIcon:'✨',icon:'⛵',duration:'4 hours',group:'Best for VIP groups 10–60',price:'From $89 per person',description:'Sail along Jamaica\'s northern coast on a premium catamaran. Swim in open water, snorkel pristine reefs, enjoy an open bar, and watch the Caribbean sunset from the deck of a luxury vessel.',includes:['Open bar (rum punch, beer, water)','Snorkeling equipment','Floating water mats','Onboard music & sound system','Professional crew & captain'],addons:['🎧 Private DJ (+$250)','🍽️ Catering package — BBQ (+$35pp)','🛥️ Private charter — full boat (+$1,200)','📸 Drone footage (+$150)','🎂 Birthday cake & decoration (+$75)'],
+      scenes:[{name:'Main Deck',emoji:'⛵',hotspots:[{x:25,y:45,icon:'🎧',title:'Sound System',desc:'4,000W JBL marine sound system. Connect your playlist or add our DJ.',cta:'Add DJ Package (+$250)',type:'addon'},{x:60,y:30,icon:'🍹',title:'Open Bar',desc:'Premium rum punch, Red Stripe beer, local spirits. All included.',cta:'View Menu',type:'highlight'},{x:75,y:65,icon:'🍽️',title:'Dining Area',desc:'Onboard catering available. Jerk chicken, festival, and seasonal sides.',cta:'Add Catering (+$35pp)',type:'addon'},{x:45,y:70,icon:'👥',title:'Group Package',desc:'Charter the whole boat for 20–60 guests. Perfect for birthdays & corporates.',cta:'Private Charter ($1,200)',type:'group'}]},{name:'Ocean View',emoji:'🌅',hotspots:[{x:50,y:40,icon:'🌅',title:'Sunset Point',desc:'Best viewing spot. We anchor here for 30 minutes during golden hour.',cta:'Save Photo Moment',type:'photo'},{x:30,y:60,icon:'🤿',title:'Snorkel Stop',desc:'We anchor at two reef systems. Bring an underwater camera.',cta:'Add Content Package',type:'addon'}]}]},
+    {id:'atv-adventure',title:'Blue Mountain ATV Safari',location:'Blue Mountains, St Andrew, Jamaica',category:'adventure',vibe:'Adventure',vibeColor:'#22c55e',vibeIcon:'🏔️',icon:'🏎️',duration:'3.5 hours',group:'Best for birthday groups, fraternities & sororities',price:'From $75 per person',description:'Tear through the Blue Mountains on rugged ATVs, discovering hidden trails, waterfall pools, and panoramic views over Kingston. No experience needed — expert guides lead every run.',includes:['ATV & safety gear','Professional trail guide','Safety briefing','Scenic waterfall stop','Certificate of completion'],addons:['🚐 Hotel transfer (+$30)','📸 GoPro & content shoot (+$55)','🌮 Jerk chicken lunch stop (+$20)','🏆 Group competition scoring (+$0)','💆 Mud therapy add-on (+$15)'],
+      scenes:[{name:'Trail Start',emoji:'🏎️',hotspots:[{x:30,y:50,icon:'🛡️',title:'Safety Briefing Zone',desc:'15-minute briefing on ATV controls. All levels welcome — guides stay with beginners.',cta:'Book Now',type:'highlight'},{x:65,y:35,icon:'📸',title:'Action Photo Spot',desc:'GoPro-mounted ATVs capture every moment on the trail. Package available.',cta:'Add Content Package (+$55)',type:'photo'},{x:50,y:70,icon:'🏆',title:'Group Race Track',desc:'Special birthday or group competition track. Scoreboards and trophies available.',cta:'Add Group Competition',type:'group'}]},{name:'Waterfall Stop',emoji:'💦',hotspots:[{x:50,y:45,icon:'💦',title:'Hidden Waterfall',desc:'Natural pool perfect for a dip. Clean mountain water, 15-ft falls.',cta:'Add to Itinerary',type:'highlight'},{x:75,y:30,icon:'🌄',title:'Kingston Panorama',desc:'On a clear day you can see the entire Kingston Harbour from here.',cta:'Save Photo Moment',type:'photo'}]}]},
+    {id:'river-tubing',title:'White River Tubing & Raft',location:'Ocho Rios, St Ann, Jamaica',category:'adventure',vibe:'Adventure',vibeColor:'#22c55e',vibeIcon:'🏔️',icon:'🌊',duration:'2.5 hours',group:'Best for families & mixed groups',price:'From $55 per person',description:'Float down the White River on inflatable tubes through a jungle canyon, with natural rock slides, waterfall showers, and lush rainforest canopy overhead. Pure Jamaica magic.',includes:['Tube & life jacket','Certified river guides','Changing facilities','Complimentary fruit punch','Shuttle from Ocho Rios'],addons:['🚐 Hotel transfer (+$25)','📸 Underwater photography (+$45)','🍽️ Riverside jerk lunch (+$18)','🎶 River DJ party (+$150 for group)'],
+      scenes:[{name:'River Entry',emoji:'🌊',hotspots:[{x:35,y:55,icon:'🌿',title:'Rainforest Canopy',desc:'100-year-old trees form a natural cathedral overhead. Spot toucans and hummingbirds.',cta:'Learn More',type:'culture'},{x:68,y:40,icon:'📸',title:'Underwater Photo Point',desc:'Crystal clear river allows stunning underwater shots. Package captures every slide.',cta:'Add Photography (+$45)',type:'photo'},{x:25,y:65,icon:'🎶',title:'Party Zone',desc:'Add our river DJ for group celebrations. Floating speaker system — JBL waterproof.',cta:'Add River DJ (+$150)',type:'addon'}]}]},
+    {id:'vip-lounge',title:'VIP Airport Lounge & Arrival',location:'Sangster Airport, Montego Bay, Jamaica',category:'vip',vibe:'VIP',vibeColor:'#f59e0b',vibeIcon:'👑',icon:'✈️',duration:'Full arrival day',group:'Best for luxury groups & corporate',price:'From $120 per person',description:'Skip the queues and arrive in style. VIP lounge access, personal arrival coordinator, private immigration fast-track, luxury vehicle transfer, and a champagne welcome to Jamaica.',includes:['VIP lounge access (3 hours)','Private immigration fast-track','Meet-and-greet coordinator','Champagne or mocktail welcome','Luxury vehicle transfer'],addons:['🌸 Personal flower lei greeting (+$25)','🛁 Day room for freshening up (+$80)','🍽️ Full catered arrival meal (+$45)','👔 Private tour concierge (+$120/day)','📱 Local SIM card & wifi setup (+$15)'],
+      scenes:[{name:'Arrival Lounge',emoji:'✈️',hotspots:[{x:30,y:45,icon:'🥂',title:'Champagne Welcome',desc:'Chilled Moët or premium Jamaican rum punch upon arrival. Includes group setup.',cta:'Upgrade Welcome (+$25)',type:'addon'},{x:65,y:35,icon:'🚗',title:'Transport Desk',desc:'Fleet of luxury vehicles: Sprinter vans, SUVs, and sedans. Pre-booked to your hotel.',cta:'Add Private Transfer',type:'addon'},{x:75,y:65,icon:'⚡',title:'Fast Track',desc:'Private immigration lane. No general queue. 10-minute clearance guaranteed.',cta:'Add Fast Track',type:'vip'},{x:20,y:65,icon:'👥',title:'Group Meet Point',desc:'Coordinate arrivals for groups on different flights. Dedicated coordinator on WhatsApp.',cta:'Book Group Arrival',type:'group'}]}]},
+    {id:'cultural-walk',title:'Kingston Heritage Cultural Walk',location:'Downtown Kingston, St Andrew, Jamaica',category:'culture',vibe:'Culture',vibeColor:'#ef4444',vibeIcon:'🎭',icon:'🎭',duration:'4 hours',group:'Best for culture seekers & history lovers',price:'From $48 per person',description:'Walk through the heartbeat of Jamaica\'s capital. Visit Bob Marley\'s birthplace, the National Gallery, Trench Town, authentic jerk cookeries, and hidden murals with a passionate local guide.',includes:['Expert local cultural guide','Museum & gallery entries','Jerk chicken tasting','Transportation between stops','Souvenir market stop'],addons:['🎤 Live reggae performance (+$35)','📸 Street photography session (+$50)','🍺 Beer & rum bar crawl (+$40)','🎨 Art purchase consultation (+$0)'],
+      scenes:[{name:'Bob Marley Museum',emoji:'🎤',hotspots:[{x:40,y:50,icon:'🎤',title:'Bob Marley\'s Studio',desc:'Original recording studio and home. Bullet holes from 1976 still visible in the walls.',cta:'Learn More',type:'culture'},{x:70,y:35,icon:'🎨',title:'Trench Town Murals',desc:'Stunning street art documenting 60 years of Jamaican music, politics, and culture.',cta:'Add Photo Session (+$50)',type:'photo'},{x:25,y:60,icon:'🍗',title:'Jerk Lane',desc:'Jamaica\'s most legendary jerk strip. Chicken slow-cooked on barrel pits since 1971.',cta:'Add Tasting (+$18)',type:'addon'}]}]},
+    {id:'villa-preview',title:'Beachfront Villa Tour & Preview',location:'Tryall Club, Hanover, Jamaica',category:'luxury',vibe:'Luxury',vibeColor:'#8b5cf6',vibeIcon:'✨',icon:'🏠',duration:'2 hours',group:'Best for luxury groups 8–30',price:'From $0 — inquire for rates',description:'Preview Jamaica\'s finest private villas and estate properties before you book. Walk the grounds, view the facilities, meet the private chef and staff, and design your group getaway from the inside out.',includes:['Private villa walkthrough','Meeting with villa manager','Chef consultation','Pool, beach & facility preview','Custom quote on your timeline'],addons:['🍳 Private chef dinner (+$85pp)','🌊 Private beach day (+$150 setup)','💆 In-villa spa services (+$120pp)','🎶 Live private concert (+$500)','🛥️ Yacht pickup add-on (+$300)'],
+      scenes:[{name:'Main Villa',emoji:'🏠',hotspots:[{x:35,y:50,icon:'🍳',title:'Private Chef\'s Kitchen',desc:'World-class chef prepares 3-course Jamaican fusion meals. Pre-order your menu.',cta:'Add Chef Dinner (+$85pp)',type:'addon'},{x:65,y:40,icon:'🌊',title:'Infinity Pool',desc:'Heated 40-ft pool overlooking the Caribbean. Exclusive to your group.',cta:'Inquire About Rates',type:'booking'},{x:20,y:65,icon:'💆',title:'Spa Pavilion',desc:'In-villa spa with local treatments: sugar scrubs, bamboo massage, aromatherapy.',cta:'Add Spa Day (+$120pp)',type:'addon'},{x:78,y:60,icon:'🎶',title:'Entertainment Deck',desc:'300-person capacity outdoor stage. Perfect for private concerts and celebrations.',cta:'Add Live Concert (+$500)',type:'addon'}]}]},
+    {id:'nightlife-transfer',title:'Nightlife VIP Transportation',location:'Montego Bay & Negril, Jamaica',category:'vip',vibe:'Party',vibeColor:'#ec4899',vibeIcon:'🎉',icon:'🎉',duration:'Full evening',group:'Best for party groups 10–50',price:'From $35 per person',description:'Move your group between Jamaica\'s top nightlife venues in style. Luxury Sprinter vans with mood lighting, sound system, and onboard host. No Uber confusion — just seamless VIP transfers all night.',includes:['Luxury Sprinter van','Onboard sound system','Group coordination host','Venue recommendations','Safe late-night return'],addons:['🎧 DJ in the van (+$200)','🍾 Champagne pre-party kit (+$45pp)','🎟️ VIP table reservations (+$100)','📸 Night photography (+$60)'],
+      scenes:[{name:'Sprinter Interior',emoji:'🚐',hotspots:[{x:40,y:45,icon:'🎧',title:'Sound System',desc:'Built-in 2,000W sound. Connect Spotify or add our DJ for the ride.',cta:'Add DJ (+$200)',type:'addon'},{x:65,y:35,icon:'🍾',title:'Pre-Party Station',desc:'Champagne, Red Stripe, and rum punch for the ride. Pre-order your kit.',cta:'Add Pre-Party Kit (+$45pp)',type:'addon'},{x:25,y:65,icon:'🎟️',title:'VIP Table Access',desc:'Pre-arranged VIP tables at Jamaica\'s top clubs. Skip the line, reserved seating.',cta:'Add Table Reservations',type:'vip'}]}]}
+  ],
+  itinerary: [],
+  savedTours: [],
+  activeTour: null,
+  activeScene: 0,
+  panoRenderer: null,
+  panoScene: null,
+  panoCamera: null,
+  panoMesh: null,
+  panoIsDragging: false,
+  panoLon: 0,
+  panoLat: 0,
+  panoStartX: 0,
+  panoStartY: 0,
+  panoStartLon: 0,
+  panoStartLat: 0,
+  panoRAF: null,
+  panoFov: 75
+};
+
+function vtpInit(){
+  vtpRenderGallery('all');
+  vtpUpdateItineraryTray();
+}
+
+function vtpFilter(btn, cat){
+  document.querySelectorAll('.vtp-filter').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  vtpRenderGallery(cat);
+}
+
+function vtpRenderGallery(cat){
+  var grid=document.getElementById('vt-portal-grid');
+  if(!grid) return;
+  var tours=cat==='all'?VTP.tours:VTP.tours.filter(function(t){return t.category===cat||t.vibe.toLowerCase()===cat;});
+  grid.innerHTML=tours.map(function(t){
+    var saved=VTP.savedTours.indexOf(t.id)>-1;
+    return '<div class="vtp-tour-card reveal" data-cat="'+t.category+'" onclick="vtpOpenTour(\''+t.id+'\')">'
+      +'<div class="vtp-tour-thumb"><div style="font-size:80px">'+t.icon+'</div>'
+      +'<div class="vtp-tour-enter"><button class="vtp-enter-btn"><i class="fas fa-vr-cardboard" style="font-size:16px"></i> Enter 360° Tour</button></div>'
+      +'<div style="position:absolute;top:12px;left:12px"><span class="vtp-tour-vibe" style="background:'+t.vibeColor+'22;border:1px solid '+t.vibeColor+'44;color:'+t.vibeColor+'">'+t.vibeIcon+' '+t.vibe+'</span></div>'
+      +(saved?'<div style="position:absolute;top:12px;right:12px;background:rgba(239,135,49,.9);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-bookmark"></i></div>':'')
+      +'</div>'
+      +'<div class="vtp-tour-body">'
+      +'<div class="vtp-tour-vibe" style="background:'+t.vibeColor+'15;border:1px solid '+t.vibeColor+'30;color:'+t.vibeColor+'">'+t.vibeIcon+' '+t.vibe+'</div>'
+      +'<div class="vtp-tour-name">'+t.title+'</div>'
+      +'<div class="vtp-tour-location"><i class="fas fa-map-marker-alt" style="color:#ef8731"></i>'+t.location+'</div>'
+      +'<div class="vtp-tour-desc">'+t.description.substring(0,100)+'...</div>'
+      +'<div class="vtp-tour-meta">'
+      +'<span><i class="fas fa-clock" style="color:#ef8731"></i>'+t.duration+'</span>'
+      +'<span><i class="fas fa-users" style="color:#ef8731"></i>'+t.group.replace('Best for ','')+'</span>'
+      +'</div>'
+      +'<div class="vtp-tour-price">'+t.price+'</div>'
+      +'<div class="vtp-tour-actions">'
+      +'<button class="vtp-btn-primary" onclick="event.stopPropagation();vtpOpenTour(\''+t.id+'\')"><i class="fas fa-vr-cardboard"></i> Enter 360°</button>'
+      +'<button class="vtp-btn-ghost" onclick="event.stopPropagation();vtpAddToItinerary(\''+t.id+'\')"><i class="fas fa-plus"></i> Add Trip</button>'
+      +'<button class="vtp-btn-ghost" onclick="event.stopPropagation();vtpOpenQuoteForTour(\''+t.id+'\')"><i class="fas fa-file-invoice-dollar"></i></button>'
+      +'</div>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function vtpOpenTour(tourId){
+  var tour=VTP.tours.find(function(t){return t.id===tourId;});
+  if(!tour) return;
+  VTP.activeTour=tour;
+  VTP.activeScene=0;
+  document.getElementById('vt-panorama-viewer').style.display='block';
+  document.body.style.overflow='hidden';
+  vtpLoadTourDetail(tour);
+  vtpLoadScene(tour,0);
+  vtpBuildSceneTabs(tour);
+  // Show hint then hide
+  var hint=document.getElementById('vt-pano-hint');
+  if(hint){hint.style.opacity='1';setTimeout(function(){hint.style.opacity='0';},3500);}
+}
+
+function vtpClose(){
+  document.getElementById('vt-panorama-viewer').style.display='none';
+  document.body.style.overflow='';
+  document.getElementById('vt-pano-detail').style.transform='translateX(360px)';
+  if(VTP.panoRAF){cancelAnimationFrame(VTP.panoRAF);VTP.panoRAF=null;}
+  if(VTP.panoRenderer){VTP.panoRenderer.dispose();}
+  VTP.panoRenderer=null;VTP.panoScene=null;VTP.panoCamera=null;VTP.panoMesh=null;
+  document.getElementById('vt-pano-hotspot-popup').style.display='none';
+}
+
+function vtpBuildSceneTabs(tour){
+  var el=document.getElementById('vt-pano-scene-tabs');
+  if(!el) return;
+  el.innerHTML=tour.scenes.map(function(sc,i){
+    return '<button onclick="event.stopPropagation();vtpLoadScene(VTP.activeTour,'+i+')" style="background:'+(i===VTP.activeScene?'rgba(239,135,49,.8)':'rgba(0,0,0,.4)')+';backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:4px;border:none">'+sc.emoji+' '+sc.name+'</button>';
+  }).join('');
+}
+
+function vtpLoadScene(tour, sceneIdx){
+  VTP.activeScene=sceneIdx;
+  var scene=tour.scenes[sceneIdx];
+  var canvas=document.getElementById('vt-pano-canvas');
+  if(!canvas) return;
+
+  // Title
+  var titleEl=document.getElementById('vt-pano-title');
+  if(titleEl) titleEl.textContent=tour.title+' — '+scene.name;
+  var iconEl=document.getElementById('vt-pano-category-icon');
+  if(iconEl) iconEl.textContent=tour.icon;
+
+  // Re-render scene tabs
+  vtpBuildSceneTabs(tour);
+
+  // Init or reset Three.js
+  if(VTP.panoRAF){cancelAnimationFrame(VTP.panoRAF);VTP.panoRAF=null;}
+  if(VTP.panoRenderer){VTP.panoRenderer.dispose();}
+
+  var W=window.innerWidth,H=window.innerHeight;
+  VTP.panoRenderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+  VTP.panoRenderer.setSize(W,H);
+  VTP.panoRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+  VTP.panoScene=new THREE.Scene();
+  VTP.panoCamera=new THREE.PerspectiveCamera(VTP.panoFov,W/H,0.1,1000);
+  VTP.panoCamera.position.set(0,0,0);
+
+  // Gradient sphere (placeholder — replace with actual equirectangular images)
+  var colors=['#063a63','#1a8a6e','#0b4d3a','#145a7a','#062240','#1e3a5f','#0d4a5e','#2a1a4e'];
+  var color=colors[VTP.tours.indexOf(tour)%colors.length]||'#063a63';
+  var geo=new THREE.SphereGeometry(500,60,40);
+  geo.scale(-1,1,1);
+  var mat=new THREE.MeshBasicMaterial({color:new THREE.Color(color),side:THREE.BackSide});
+  VTP.panoMesh=new THREE.Mesh(geo,mat);
+  VTP.panoScene.add(VTP.panoMesh);
+
+  // Ambient lights as colored points to simulate a scene
+  var ambColors=['#0ea5e9','#22d3ee','#6ee7b7','#fbbf24'];
+  ambColors.forEach(function(c,i){
+    var light=new THREE.PointLight(c,.6,800);
+    light.position.set(Math.cos(i*Math.PI/2)*200,100,Math.sin(i*Math.PI/2)*200);
+    VTP.panoScene.add(light);
+  });
+
+  VTP.panoLon=0;VTP.panoLat=0;
+  vtpInitPanoControls(canvas);
+  vtpPanoLoop();
+
+  // Render hotspots as DOM overlays
+  vtpRenderHotspots(scene.hotspots);
+}
+
+function vtpPanoLoop(){
+  VTP.panoRAF=requestAnimationFrame(vtpPanoLoop);
+  if(!VTP.panoRenderer||!VTP.panoScene||!VTP.panoCamera) return;
+  VTP.panoLat=Math.max(-85,Math.min(85,VTP.panoLat));
+  var phi=THREE.MathUtils.degToRad(90-VTP.panoLat);
+  var theta=THREE.MathUtils.degToRad(VTP.panoLon);
+  VTP.panoCamera.lookAt(Math.sin(phi)*Math.cos(theta),Math.cos(phi),Math.sin(phi)*Math.sin(theta));
+  VTP.panoRenderer.render(VTP.panoScene,VTP.panoCamera);
+  // Update hotspot positions
+  vtpUpdateHotspotPositions();
+}
+
+function vtpInitPanoControls(canvas){
+  canvas.onmousedown=function(e){VTP.panoIsDragging=true;VTP.panoStartX=e.clientX;VTP.panoStartY=e.clientY;VTP.panoStartLon=VTP.panoLon;VTP.panoStartLat=VTP.panoLat;};
+  canvas.onmousemove=function(e){if(!VTP.panoIsDragging)return;VTP.panoLon=VTP.panoStartLon-(e.clientX-VTP.panoStartX)*.2;VTP.panoLat=VTP.panoStartLat+(e.clientY-VTP.panoStartY)*.2;};
+  canvas.onmouseup=function(){VTP.panoIsDragging=false;};
+  canvas.ontouchstart=function(e){var t=e.touches[0];VTP.panoIsDragging=true;VTP.panoStartX=t.clientX;VTP.panoStartY=t.clientY;VTP.panoStartLon=VTP.panoLon;VTP.panoStartLat=VTP.panoLat;};
+  canvas.ontouchmove=function(e){if(!VTP.panoIsDragging)return;var t=e.touches[0];VTP.panoLon=VTP.panoStartLon-(t.clientX-VTP.panoStartX)*.2;VTP.panoLat=VTP.panoStartLat+(t.clientY-VTP.panoStartY)*.2;e.preventDefault();};
+  canvas.ontouchend=function(){VTP.panoIsDragging=false;};
+  canvas.onwheel=function(e){VTP.panoFov=Math.max(40,Math.min(100,VTP.panoFov+e.deltaY*.05));if(VTP.panoCamera)VTP.panoCamera.fov=VTP.panoFov,VTP.panoCamera.updateProjectionMatrix();};
+  // Gyroscope on mobile
+  if(window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation',function(e){
+      if(!VTP.panoIsDragging&&e.alpha!==null){
+        VTP.panoLon=-e.alpha*.3;
+        VTP.panoLat=(e.beta-90)*.2;
+      }
+    });
+  }
+  window.onresize=function(){
+    if(!VTP.panoRenderer||!VTP.panoCamera)return;
+    VTP.panoRenderer.setSize(window.innerWidth,window.innerHeight);
+    VTP.panoCamera.aspect=window.innerWidth/window.innerHeight;
+    VTP.panoCamera.updateProjectionMatrix();
+  };
+}
+
+function vtpRenderHotspots(hotspots){
+  var layer=document.getElementById('vt-pano-hotspots');
+  if(!layer) return;
+  layer.innerHTML='';
+  if(!hotspots) return;
+  hotspots.forEach(function(hs,i){
+    var div=document.createElement('div');
+    div.className='vtp-hotspot';
+    div.style.cssText='left:'+hs.x+'%;top:'+hs.y+'%;pointer-events:auto';
+    div.setAttribute('data-hs-idx',i);
+    var bgColor=hs.type==='addon'?'#ef8731':hs.type==='booking'?'#22c55e':hs.type==='vip'?'#f59e0b':hs.type==='photo'?'#ec4899':'#063a63';
+    div.innerHTML='<div class="vtp-hotspot-dot" style="background:'+bgColor+'99;border-color:'+bgColor+'">'+hs.icon+'</div>'
+      +'<div class="vtp-hotspot-label">'+hs.title+'</div>';
+    div.onclick=function(e){e.stopPropagation();vtpShowHotspot(hs,div);};
+    layer.appendChild(div);
+  });
+}
+
+function vtpUpdateHotspotPositions(){
+  // Hotspots are positioned by % on the canvas overlay — no 3D projection needed for this implementation
+}
+
+function vtpShowHotspot(hs, el){
+  var popup=document.getElementById('vt-pano-hotspot-popup');
+  if(!popup) return;
+  document.getElementById('vt-hs-popup-icon').textContent=hs.icon;
+  document.getElementById('vt-hs-popup-title').textContent=hs.title;
+  document.getElementById('vt-hs-popup-desc').textContent=hs.desc;
+  var cta=document.getElementById('vt-hs-popup-cta');
+  cta.textContent=hs.cta;
+  cta.onclick=function(){
+    if(hs.type==='addon'||hs.type==='booking'||hs.type==='vip'){vtpAddToItinerary(VTP.activeTour.id);vtToast('<i class="fas fa-check"></i> Added to trip!');}
+    else if(hs.type==='group'){vtpOpenGroup();}
+    else if(hs.type==='photo'){vtpAddToItinerary(VTP.activeTour.id);}
+    popup.style.display='none';
+  };
+  var rect=el.getBoundingClientRect();
+  popup.style.display='block';
+  popup.style.left=Math.min(rect.left,window.innerWidth-280)+'px';
+  popup.style.top=Math.max(80,rect.top-180)+'px';
+}
+
+function vtpLoadTourDetail(tour){
+  var panel=document.getElementById('vt-pano-detail');
+  document.getElementById('vt-pano-detail-vibe').innerHTML=tour.vibeIcon+' '+tour.vibe;
+  document.getElementById('vt-pano-detail-vibe').style.cssText='display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;width:fit-content;background:'+tour.vibeColor+'20;border:1px solid '+tour.vibeColor+'40;color:'+tour.vibeColor;
+  document.getElementById('vt-pano-detail-title').textContent=tour.title;
+  document.getElementById('vt-pano-detail-location').innerHTML='<i class="fas fa-map-marker-alt" style="margin-right:4px;color:#ef8731"></i>'+tour.location;
+  document.getElementById('vt-pano-detail-duration').innerHTML='<i class="fas fa-clock" style="margin-right:4px;color:#ef8731"></i>'+tour.duration;
+  document.getElementById('vt-pano-detail-group').innerHTML='<i class="fas fa-users" style="margin-right:4px;color:#ef8731"></i>'+tour.group;
+  document.getElementById('vt-pano-detail-desc').textContent=tour.description;
+  document.getElementById('vt-pano-includes-list').innerHTML=tour.includes.map(function(item){return '<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.7)"><i class="fas fa-check" style="color:#22c55e;font-size:10px"></i>'+item+'</div>';}).join('');
+  document.getElementById('vt-pano-addons-list').innerHTML=tour.addons.map(function(addon){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:8px;cursor:pointer" onclick="vtToast(\'<i class=&quot;fas fa-check&quot;></i> Add-on noted!\')"><span style="font-size:12px;color:rgba(255,255,255,.7)">'+addon+'</span><i class="fas fa-plus" style="color:#ef8731;font-size:11px"></i></div>';}).join('');
+  document.getElementById('vt-pano-detail-price').textContent=tour.price;
+}
+
+function vtpToggleInfo(){
+  var panel=document.getElementById('vt-pano-detail');
+  var isOpen=panel.style.transform==='translateX(0px)'||panel.style.transform==='translateX(0)';
+  panel.style.transform=isOpen?'translateX(360px)':'translateX(0)';
+}
+
+function vtpToggleFullscreen(){
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(function(){});}
+  else{document.exitFullscreen();}
+}
+
+function vtpAddToTrip(){
+  if(!VTP.activeTour) return;
+  vtpAddToItinerary(VTP.activeTour.id);
+  vtToast('<i class="fas fa-check-circle"></i> Added to your trip board!');
+}
+
+function vtpAddToItinerary(tourId){
+  var tour=VTP.tours.find(function(t){return t.id===tourId;});
+  if(!tour) return;
+  if(VTP.itinerary.find(function(t){return t.id===tourId;})) {vtToast(tour.title+' is already in your trip!');return;}
+  VTP.itinerary.push(tour);
+  vtpUpdateItineraryTray();
+  vtpShowTray();
+}
+
+function vtpUpdateItineraryTray(){
+  var count=document.getElementById('vt-itinerary-count');
+  if(count) count.textContent=VTP.itinerary.length+' tour'+(VTP.itinerary.length!==1?'s':'')+' added';
+  var items=document.getElementById('vt-itinerary-items');
+  if(!items) return;
+  items.innerHTML=VTP.itinerary.map(function(t,i){
+    return '<div class="vtp-itinerary-item">'
+      +'<div class="vtp-itinerary-item-icon" style="background:'+t.vibeColor+'22">'+t.icon+'</div>'
+      +'<div><div class="vtp-itinerary-item-name">'+t.title+'</div><div class="vtp-itinerary-item-price">'+t.price+'</div></div>'
+      +'<button class="vtp-itinerary-remove" onclick="vtpRemoveFromItinerary('+i+')" title="Remove">&times;</button>'
+      +'</div>';
+  }).join('');
+  // Update quote form tours list
+  var list=document.getElementById('vt-quote-tours-list');
+  if(list) list.innerHTML=VTP.itinerary.length?VTP.itinerary.map(function(t){return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span>'+t.icon+'</span><span>'+t.title+'</span></div>';}).join(''):'<span style="color:#728197">No tours added yet. Add tours from the 360° portal above.</span>';
+}
+
+function vtpRemoveFromItinerary(idx){
+  VTP.itinerary.splice(idx,1);
+  vtpUpdateItineraryTray();
+  if(VTP.itinerary.length===0)vtpCloseTray();
+}
+
+function vtpShowTray(){
+  var tray=document.getElementById('vt-itinerary-tray');
+  if(tray) tray.style.transform='translateY(0)';
+}
+
+function vtpCloseTray(){
+  var tray=document.getElementById('vt-itinerary-tray');
+  if(tray) tray.style.transform='translateY(100%)';
+}
+
+function vtpSaveTour(){
+  if(!VTP.activeTour) return;
+  var id=VTP.activeTour.id;
+  var idx=VTP.savedTours.indexOf(id);
+  if(idx>-1){VTP.savedTours.splice(idx,1);vtToast('<i class="fas fa-bookmark"></i> Removed from saved tours.');}
+  else{VTP.savedTours.push(id);vtToast('<i class="fas fa-bookmark"></i> Tour saved!');}
+  var btn=document.getElementById('vt-pano-save-btn');
+  if(btn){
+    var saved=VTP.savedTours.indexOf(id)>-1;
+    btn.style.color=saved?'#ef8731':'rgba(255,255,255,.7)';
+  }
+  vtpRenderGallery(document.querySelector('.vtp-filter.active')&&document.querySelector('.vtp-filter.active').getAttribute('data-filter')||'all');
+}
+
+// Concierge
+var vtpConciergeResponses={
+  'birthday':['🎉 For birthday groups, I\'d recommend the **Catamaran Sunset Cruise** (perfect for 10–60) or **Blue Mountain ATV Safari** for the adventurous crew. Both support DJ add-ons and custom decorations!','Our **Nightlife VIP Transportation** package is also a must for birthday groups moving between venues safely.'],
+  'yacht':['⛵ The **Catamaran Sunset Cruise** is perfect — 4 hours, open bar included, DJ option, drone footage add-on. For private charters the whole boat is $1,200.','For a luxury option I also recommend pairing it with our **VIP Airport Arrival** package so the group starts the trip right.'],
+  'atv':['🏎️ **Blue Mountain ATV Safari** — 3.5 hours, no experience needed, stunning views of Kingston Harbour. Perfect for birthdays, fraternities, and mixed groups.','You can add a competitive group race track, GoPro footage, and a jerk chicken lunch stop.'],
+  'itinerary':['📅 A great 3-day Jamaica itinerary:\n\n**Day 1:** VIP Airport Arrival → Blue Lagoon Morning Walk → Catamaran Sunset Cruise\n\n**Day 2:** Blue Mountain ATV Safari → Kingston Cultural Walk → Nightlife VIP Transfer\n\n**Day 3:** River Tubing → Beachfront Villa Preview → Private Chef Dinner','I can refine this based on your group size, vibe, and budget. What\'s most important to your crew?'],
+  'transport':['🚐 Private transportation is available as an add-on for every tour. We have luxury Sprinter vans, SUVs, and full coach buses for large groups.','Our **Nightlife VIP Transportation** package is dedicated for multi-venue evenings.'],
+  'default':['I\'d love to help you plan the perfect Caribbean experience! Could you tell me a bit more about your group? How many people, what\'s the occasion, and what\'s your vibe — Adventure, Luxury, Culture, or Party?','You can also use the 360° portal above to explore tours visually before deciding. Every tour has interactive hotspots with add-on details.']
+};
+
+function vtpConciergeSend(){
+  var inp=document.getElementById('vt-concierge-input');
+  if(!inp||!inp.value.trim()) return;
+  var text=inp.value.trim();
+  inp.value='';
+  vtpAppendConciergeMsg(text,true);
+  setTimeout(function(){
+    var lower=text.toLowerCase();
+    var key='default';
+    if(lower.indexOf('birthday')>-1||lower.indexOf('group')>-1) key='birthday';
+    else if(lower.indexOf('yacht')>-1||lower.indexOf('boat')>-1||lower.indexOf('catamaran')>-1) key='yacht';
+    else if(lower.indexOf('atv')>-1||lower.indexOf('adventure')>-1) key='atv';
+    else if(lower.indexOf('itinerary')>-1||lower.indexOf('3 day')>-1||lower.indexOf('plan')>-1) key='itinerary';
+    else if(lower.indexOf('transport')>-1||lower.indexOf('transfer')>-1) key='transport';
+    var replies=vtpConciergeResponses[key];
+    var reply=replies[Math.floor(Math.random()*replies.length)];
+    vtpAppendConciergeMsg(reply,false);
+    if(VTP.itinerary.length===0){
+      setTimeout(function(){vtpAppendConciergeMsg('💡 Tip: Click **Enter 360°** on any tour card to explore it immersively, then add it to your trip board with one click.',false);},600);
+    }
+  },700);
+}
+
+function vtpConciergePrompt(btn){
+  var inp=document.getElementById('vt-concierge-input');
+  if(inp) inp.value=btn.textContent;
+  vtpConciergeSend();
+}
+
+function vtpAppendConciergeMsg(text,isUser){
+  var msgs=document.getElementById('vt-concierge-msgs');
+  if(!msgs) return;
+  var div=document.createElement('div');
+  div.className='vtp-concierge-msg '+(isUser?'user':'bot');
+  div.innerHTML='<div class="vtp-cm-bubble">'+text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function vtpOpenConcierge(){document.getElementById('vt-concierge-modal').style.display='flex';}
+function vtpCloseConcierge(){document.getElementById('vt-concierge-modal').style.display='none';}
+
+// Quote
+function vtpOpenQuote(){
+  if(VTP.activeTour){vtpOpenQuoteForTour(VTP.activeTour.id);}
+  else{document.getElementById('vt-quote-modal').style.display='flex';}
+  vtpUpdateItineraryTray();
+}
+function vtpOpenQuoteForTour(tourId){
+  var tour=VTP.tours.find(function(t){return t.id===tourId;});
+  if(tour&&VTP.itinerary.indexOf(tour)===-1)vtpAddToItinerary(tourId);
+  var icon=document.getElementById('vt-quote-icon');if(icon&&tour)icon.textContent=tour.icon;
+  var name=document.getElementById('vt-quote-tour-name');if(name&&tour)name.textContent=tour.title;
+  var meta=document.getElementById('vt-quote-tour-meta');if(meta&&tour)meta.textContent=tour.location+' · '+tour.duration;
+  vtpUpdateItineraryTray();
+  document.getElementById('vt-quote-modal').style.display='flex';
+}
+function vtpCloseQuote(){document.getElementById('vt-quote-modal').style.display='none';}
+function vtpSubmitQuote(e){
+  e.preventDefault();
+  var data=new FormData(e.target);
+  var body={name:data.get('name'),email:data.get('email'),phone:data.get('phone'),groupSize:data.get('groupSize'),date:data.get('date'),budget:data.get('budget'),message:data.get('message'),tours:VTP.itinerary.map(function(t){return t.title;}).join(', ')};
+  fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'quote-request',...body})}).catch(function(){});
+  vtpCloseQuote();
+  vtToast('<i class="fas fa-check-circle"></i> Quote request sent! We\'ll reply within 2 hours.');
+  e.target.reset();
+}
+
+// Group
+function vtpOpenGroup(){
+  var link=document.getElementById('vt-group-share-link');
+  if(link&&VTP.activeTour)link.value=window.location.origin+'/?tour='+VTP.activeTour.id;
+  document.getElementById('vt-group-modal').style.display='flex';
+}
+function vtpCloseGroup(){document.getElementById('vt-group-modal').style.display='none';}
+function vtpCopyGroupLink(){var el=document.getElementById('vt-group-share-link');if(el){el.select();document.execCommand('copy');vtToast('Group link copied!');}}
+function vtpVote(btn,choice){btn.classList.toggle('voted');vtToast('Vote recorded: '+choice+'!');}
+function vtpSendInvite(){var inp=document.getElementById('vt-group-invite-input');if(!inp||!inp.value.trim())return;var invited=document.getElementById('vt-group-invited');if(invited){var chip=document.createElement('div');chip.style.cssText='background:rgba(239,135,49,.15);border:1px solid rgba(239,135,49,.3);border-radius:100px;padding:4px 12px;font-size:11px;color:#ef8731;display:inline-flex;align-items:center;gap:6px';chip.innerHTML='<i class="fas fa-user-check"></i>'+inp.value;invited.appendChild(chip);}inp.value='';vtToast('<i class="fas fa-paper-plane"></i> Invite sent!');}
+
+// Init on load
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',vtpInit);}else{vtpInit();}
 
 /* ═══════ HOTSPOT PURCHASE SYSTEM ═══════ */
 var vtHotspotData={
