@@ -14780,21 +14780,161 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
 
 
-    <!-- DASHBOARD SHOWCASE (TABBED) -->
-  <section class="vt-sec vt-sec--alt">
+<style>
+/* ═══════════ visionOS 26 "LIQUID GLASS" THEME — .vt-vision ═══════════
+   Dimmed Caribbean environment behind floating translucent glass:
+   glass window frame, icon rail, spatial widgets, gaze hover glows. */
+.vt-vision{position:relative;overflow:hidden;padding:70px 0 90px}
+.vt-vision::before{content:'';position:absolute;inset:-40px;background:url('/panos/blue-lagoon.jpg') center 62%/cover no-repeat;filter:blur(22px) brightness(.42) saturate(1.25);transform:scale(1.06)}
+.vt-vision::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(10,22,40,.1) 0%,rgba(6,14,26,.55) 78%)}
+.vt-vision>.vt-wrap{position:relative;z-index:2}
+
+/* spatial widgets */
+.vt-vision-widgets{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:26px 0 30px}
+.vt-vision-widget{display:flex;align-items:center;gap:12px;padding:14px 22px;border-radius:22px;background:rgba(255,255,255,.1);backdrop-filter:blur(28px) saturate(1.7);-webkit-backdrop-filter:blur(28px) saturate(1.7);border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 34px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.28);animation:vtVwFloat 6s ease-in-out infinite}
+@keyframes vtVwFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.vt-vw-icon{font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;width:30px}
+.vt-vw-main{color:#fff;font-size:14.5px;font-weight:700;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-vw-sub{color:rgba(255,255,255,.55);font-size:10.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.vt-vw-livedot{width:12px;height:12px;border-radius:50%;background:#30d158;box-shadow:0 0 12px rgba(48,209,88,.9);display:block;animation:vtVwPulse 1.6s ease infinite}
+@keyframes vtVwPulse{0%,100%{opacity:1}50%{opacity:.45}}
+@media(prefers-reduced-motion:reduce){.vt-vision-widget{animation:none}}
+
+/* tabs → glass segmented control */
+.vt-vision .vt-dash-tabs{background:rgba(255,255,255,.08);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px;display:inline-flex;gap:4px;left:50%;position:relative;transform:translateX(-50%)}
+.vt-vision .vt-dash-tab{border-radius:999px;color:rgba(255,255,255,.65)!important;background:transparent!important;border:none!important;transition:all .3s}
+.vt-vision .vt-dash-tab:hover{color:#fff!important;background:rgba(255,255,255,.1)!important}
+.vt-vision .vt-dash-tab.active{background:rgba(255,255,255,.22)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 4px 14px rgba(0,0,0,.25)}
+
+/* the glass window */
+.vt-vision .vt-dash-frame{background:rgba(24,34,52,.44)!important;backdrop-filter:blur(42px) saturate(1.65);-webkit-backdrop-filter:blur(42px) saturate(1.65);border:1px solid rgba(255,255,255,.2)!important;border-radius:32px!important;box-shadow:0 40px 100px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25)!important}
+.vt-vision .vt-dash-topbar{background:rgba(255,255,255,.05)!important;border-bottom:1px solid rgba(255,255,255,.1)!important}
+.vt-vision .vt-dash-topbar *{color:rgba(255,255,255,.85)}
+.vt-vision .vt-dash-sidebar{background:rgba(255,255,255,.04)!important;border-right:1px solid rgba(255,255,255,.1)!important}
+.vt-vision .vt-dash-sidebar a{color:rgba(255,255,255,.6)!important;border-radius:14px;margin:2px 10px;transition:all .25s}
+.vt-vision .vt-dash-sidebar a:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+.vt-vision .vt-dash-sidebar a.active,.vt-vision .vt-dash-sidebar a.act{background:rgba(255,255,255,.16)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.vt-vision .vt-dash-sidebar a i{color:inherit!important}
+.vt-vision .vt-dash-main{background:transparent!important}
+
+/* text inside the glass goes light */
+.vt-vision .vt-dash-main h2,.vt-vision .vt-dash-main h3,.vt-vision .vt-dash-main h4{color:#fff!important}
+.vt-vision .vt-dash-main,.vt-vision .vt-dash-main p,.vt-vision .vt-dash-main span,.vt-vision .vt-dash-main div{color:rgba(255,255,255,.82)}
+.vt-vision .vt-dash-main small{color:rgba(255,255,255,.5)}
+.vt-vision .vt-live-header h3{color:#fff!important}
+.vt-vision .vt-live-header a{color:var(--orange)!important}
+
+/* glass tiles: cards, list rows, session panels */
+.vt-vision .vt-dash-main .vt-session{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:24px!important;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.3)}
+.vt-vision #vt-active-session .vt-session-bar,
+.vt-vision .vt-dash-frame .vt-session-bar{background:rgba(14,24,40,.62)!important;backdrop-filter:blur(30px) saturate(1.5)!important;-webkit-backdrop-filter:blur(30px) saturate(1.5)!important;border-bottom:1px solid rgba(255,255,255,.1)!important}
+.vt-vision #vt-active-session .vt-session-bar-left,.vt-vision #vt-active-session .vt-session-bar-left *{color:#fff!important}
+.vt-vision .vt-session-bar,.vt-vision .vt-session-bar *{color:rgba(255,255,255,.9)}
+.vt-vision .vt-session-bar-left{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46%}
+.vt-vision .vt-session-bar-btn,.vt-vision .vt-session-lang{white-space:nowrap}
+.vt-vision #vt-active-session .vt-session-side,
+.vt-vision .vt-dash-frame .vt-session-side{background:rgba(14,24,40,.55)!important;backdrop-filter:blur(30px) saturate(1.5)!important;-webkit-backdrop-filter:blur(30px) saturate(1.5)!important;border-left:1px solid rgba(255,255,255,.1)!important}
+.vt-vision #vt-active-session .vt-session-shop,
+.vt-vision .vt-dash-frame .vt-session-shop{background:rgba(255,255,255,.05)!important;border-top:1px solid rgba(255,255,255,.1)!important}
+.vt-vision #vt-active-session .vt-session-chat{background:transparent!important}
+.vt-vision #vt-active-session .vt-session-chat-text{background:rgba(255,255,255,.12)!important;color:#fff!important}
+.vt-vision #vt-active-session .vt-session-chat-title,.vt-vision #vt-active-session .vt-session-shop-title{color:rgba(255,255,255,.6)!important}
+.vt-vision #vt-active-session .vt-session-shop-item-name{color:#fff!important}
+.vt-vision #vt-active-session .vt-session-shop-item-price{color:rgba(255,255,255,.55)!important}
+.vt-vision #vt-active-session .vt-chat-input{background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.16)!important;color:#fff!important}
+.vt-vision #vt-active-session .vt-session-lang,.vt-vision #vt-active-session .vt-session-bar-btn:not(.leave),.vt-vision #vt-active-session .vt-session-expand-btn{background:rgba(255,255,255,.12)!important;color:#fff!important}
+/* live-now cards + topbar chips + sidebar footer */
+.vt-vision .vt-live-card{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:18px!important;overflow:hidden}
+.vt-vision .vt-live-card-body{background:transparent!important}
+.vt-vision .vt-live-card-title{color:#fff!important}
+.vt-vision .vt-live-card-guide{color:rgba(255,255,255,.55)!important}
+.vt-vision .vt-live-card-price{color:#fff!important}
+.vt-vision .vt-live-card-btn{background:rgba(255,255,255,.14)!important;color:#fff!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:999px}
+.vt-vision .vt-live-card-btn:hover{background:var(--orange)!important;border-color:var(--orange)!important}
+.vt-vision .vt-dash-topbar .vt-lang-btn,.vt-vision .vt-dash-topbar .vt-expand-btn{background:rgba(255,255,255,.12)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;border-radius:999px}
+.vt-vision .vt-dash-sidebar div,.vt-vision .vt-dash-sidebar span,.vt-vision .vt-dash-sidebar strong{color:rgba(255,255,255,.72)}
+.vt-vision .vt-dash-stat{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.15)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important}
+.vt-vision .vt-dash-stat strong{color:#fff!important}
+.vt-vision .vt-dash-stat span{color:rgba(255,255,255,.65)!important}
+.vt-vision .vt-dash-stat small{color:rgba(255,255,255,.4)!important}
+.vt-vision .vt-session-bar-right .vt-session-bar-btn:not(.leave){background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.85)!important;border-radius:999px}
+.vt-vision .vt-session-bar-right .vt-session-bar-btn:not(.leave):hover{background:rgba(255,255,255,.2)!important}
+.vt-vision .vt-session-lang{background:rgba(255,255,255,.1)!important;color:#fff!important;border-radius:999px}
+.vt-vision .vt-session-expand-btn{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.85)!important;border-radius:12px}
+.vt-vision .vt-session-side .vt-session-chat,.vt-vision .vt-session-side .vt-session-shop{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:18px}
+.vt-vision .vt-session-chat-title,.vt-vision .vt-session-shop-title{color:rgba(255,255,255,.6)!important}
+.vt-vision .vt-session-chat-text{background:rgba(255,255,255,.1)!important;color:#fff!important}
+.vt-vision .vt-session-chat-msg .vt-session-chat-avatar{background:rgba(255,255,255,.16);color:#fff}
+.vt-vision .vt-chat-input-wrap .vt-chat-input{background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.16)!important;color:#fff!important;border-radius:999px}
+.vt-vision .vt-chat-input::placeholder{color:rgba(255,255,255,.4)}
+.vt-vision .vt-session-shop-item{border-bottom:1px solid rgba(255,255,255,.08)!important}
+.vt-vision .vt-session-shop-item-name{color:#fff!important}
+.vt-vision .vt-session-shop-item-price{color:rgba(255,255,255,.55)!important}
+.vt-vision .vt-shop-3d-note{color:rgba(255,255,255,.45)!important;border-top-color:rgba(255,255,255,.12)!important}
+.vt-vision .vt-shop-3d-note b{color:rgba(255,255,255,.8)}
+
+/* generic buttons + cards inside views */
+.vt-vision .vt-dash-header-btn{background:rgba(255,255,255,.1)!important;color:#fff!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:999px;transition:all .25s}
+.vt-vision .vt-dash-header-btn:hover{background:rgba(255,255,255,.2)!important}
+.vt-vision .vt-dash-header-btn.primary{background:var(--orange)!important;border-color:transparent!important}
+.vt-vision .vt-dash-main [class*="card"],.vt-vision .vt-dash-main [class*="tile"],.vt-vision .vt-dash-main [class*="-item"]{border-color:rgba(255,255,255,.12)!important}
+
+/* gaze hover for anything interactive in the frame */
+.vt-vision .vt-dash-frame [onclick]{transition:filter .2s}
+.vt-vision .vt-dash-frame [onclick]:hover{filter:brightness(1.12)}
+
+/* scrollbars */
+.vt-vision ::-webkit-scrollbar{width:8px;height:8px}
+.vt-vision ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:99px}
+.vt-vision ::-webkit-scrollbar-track{background:transparent}
+@media(max-width:768px){.vt-vision-widgets{gap:10px}.vt-vision-widget{padding:10px 16px}.vt-vision .vt-dash-frame{border-radius:22px!important}}
+</style>
+<script>
+(function(){
+  function tick(){
+    var el=document.getElementById('vt-vw-clock');if(!el)return;
+    try{
+      el.textContent=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Jamaica'}).format(new Date());
+    }catch(e){el.textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',tick);
+  else tick();
+  setInterval(tick,30000);
+})();
+</script>
+
+    <!-- DASHBOARD SHOWCASE (TABBED) — visionOS 26 Liquid Glass theme -->
+  <section class="vt-sec vt-vision">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
-        <span class="sec-pre">V-Tours</span>
-        <h2 class="sec-title">Explore Jamaica in 360°</h2>
-        <p class="sec-sub center">Preview tours, villas, and Caribbean experiences before you book. Interact with the live explorer dashboard below, or dive into a 360° virtual tour.</p>
+        <span class="sec-pre" style="color:var(--orange)">V-Tours · Spatial</span>
+        <h2 class="sec-title" style="color:#fff">Explore Jamaica in 360°</h2>
+        <p class="sec-sub center" style="color:rgba(255,255,255,.72)">Preview tours, villas, and Caribbean experiences before you book. Interact with the live explorer dashboard below, or dive into a 360° virtual tour.</p>
       </div>
+
+      <!-- Spatial widgets (visionOS 26 style) -->
+      <div class="vt-vision-widgets reveal">
+        <div class="vt-vision-widget" style="animation-delay:0s">
+          <div class="vt-vw-icon">☀️</div>
+          <div><div class="vt-vw-main">29°C Sunny</div><div class="vt-vw-sub">Port Antonio · Live</div></div>
+        </div>
+        <div class="vt-vision-widget" style="animation-delay:.8s">
+          <div class="vt-vw-icon">🕐</div>
+          <div><div class="vt-vw-main" id="vt-vw-clock">--:--</div><div class="vt-vw-sub">Jamaica Time</div></div>
+        </div>
+        <div class="vt-vision-widget" style="animation-delay:1.6s">
+          <div class="vt-vw-icon"><span class="vt-vw-livedot"></span></div>
+          <div><div class="vt-vw-main">247 Watching</div><div class="vt-vw-sub">Blue Lagoon · Live Now</div></div>
+        </div>
+      </div>
+
       <div class="vt-dash-tabs reveal">
         <div class="vt-dash-tab active" onclick="vtSwitchTab('explorer')"><i class="fas fa-compass"></i> Explorer Dashboard</div>
         <div class="vt-dash-tab" onclick="vtSwitchTab('guide')"><i class="fas fa-user-tie"></i> Guide Portal</div>
       </div>
       <div class="vt-dash-panel active" id="vt-panel-explorer">
 <div class="vt-dash-showcase reveal">
-        <div class="vt-dash-frame vt-dash-light" id="vt-explorer-frame">
+        <div class="vt-dash-frame" id="vt-explorer-frame">
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
             <div class="vt-portal-label">Explorer Portal</div>
@@ -15691,7 +15831,7 @@ function vtInitPanoViewer(){
       </div>
       <div class="vt-dash-panel" id="vt-panel-guide">
 <div class="vt-dash-showcase reveal">
-        <div class="vt-dash-frame vt-dash-light" id="vt-guide-frame">
+        <div class="vt-dash-frame" id="vt-guide-frame">
           <div class="vt-dash-topbar">
             <div><span class="vt-logo">VTours</span></div>
             <div class="vt-portal-label">Guide Portal</div>
