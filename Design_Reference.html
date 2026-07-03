@@ -2097,6 +2097,13 @@ body.account-clean .account-sec{padding-bottom:112px}
 .admin-image-preview{margin-top:12px}
 .admin-image-preview img{width:100%;max-width:220px;height:140px;object-fit:cover;border-radius:18px;border:1px solid var(--border);box-shadow:0 10px 22px rgba(12,29,47,.08)}
 .admin-image-empty{font-size:12px;color:var(--grey);line-height:1.7}
+/* Live upload progress (percentage ring + bar) */
+.admin-upload-prog{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 12px;max-width:220px}
+.admin-upload-prog-ring{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--orange,#ef8731) calc(var(--p,0)*1%),rgba(6,58,99,.12) 0);transition:background .2s ease}
+.admin-upload-prog-ring span{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--navy,#063a63);font-variant-numeric:tabular-nums}
+.admin-upload-prog-label{font-size:12px;font-weight:600;color:var(--grey,#5c6f82)}
+.admin-upload-prog-bar{width:100%;height:6px;border-radius:999px;background:rgba(6,58,99,.1);overflow:hidden}
+.admin-upload-prog-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange,#ef8731),#ffb066);border-radius:999px;transition:width .2s ease}
 @media (max-width:640px){
   .admin-group summary{padding:18px}
   .admin-group-body{padding:0 18px 18px}
@@ -20085,26 +20092,40 @@ function updateAdminImagePreview(id){
   if(!value){holder.innerHTML='<div class="admin-image-empty">No image selected yet.</div>'; return;}
   holder.innerHTML=`<img src="${escapeAdminAttr(value)}" alt="Preview for ${escapeAdminAttr(id)}">`;
 }
+function showAdminUploadProgress(targetId,pct,label){
+  const holder=document.getElementById('preview-'+targetId);
+  if(!holder) return;
+  holder.innerHTML='<div class="admin-upload-prog">'
+    +'<div class="admin-upload-prog-ring" style="--p:'+pct+'"><span>'+pct+'%</span></div>'
+    +'<div class="admin-upload-prog-label">'+(label||'Uploading…')+'</div>'
+    +'<div class="admin-upload-prog-bar"><i style="width:'+pct+'%"></i></div></div>';
+}
 function handleAdminImageUpload(event,targetId){
   const file=event?.target?.files?.[0];
   if(!file) return;
   const input=document.getElementById(targetId);
   if(!input) return;
   const fallbackToDataUri=function(){
+    showAdminUploadProgress(targetId,20,'Preparing image…');
     const useFile=(window.SS&&SS.compressImage)?SS.compressImage(file):Promise.resolve(file);
     useFile.then(function(f){
+      showAdminUploadProgress(targetId,70,'Embedding image…');
       const reader=new FileReader();
-      reader.onload=function(e){input.value=e.target?.result||'';updateAdminImagePreview(targetId);};
+      reader.onload=function(e){input.value=e.target?.result||'';showAdminUploadProgress(targetId,100,'Ready');setTimeout(function(){updateAdminImagePreview(targetId);},350);};
       reader.readAsDataURL(f);
     });
   };
-  /* Prefer a real hosted upload (Vercel Blob) — keeps the page light and
-     images CDN-cached. Falls back to an inline data URI if not signed in. */
-  if(window.SS&&SS.uploadImage&&SS.getToken&&SS.getToken()){
+  /* Prefer a real hosted upload (Vercel Blob) with a live percentage.
+     Falls back to an inline data URI if not signed in / upload fails. */
+  if(window.SS&&SS.uploadImageWithProgress&&SS.getToken&&SS.getToken()){
     input.placeholder='Uploading image…';
-    SS.uploadImage(file,'site-images').then(function(res){
+    showAdminUploadProgress(targetId,2,'Uploading…');
+    SS.uploadImageWithProgress(file,'site-images',function(pct){
+      showAdminUploadProgress(targetId,pct,pct>=100?'Processing…':'Uploading…');
+    }).then(function(res){
       input.value=res.url;
-      updateAdminImagePreview(targetId);
+      showAdminUploadProgress(targetId,100,'Uploaded ✓');
+      setTimeout(function(){updateAdminImagePreview(targetId);},400);
     }).catch(function(err){
       console.warn('Hosted upload failed, embedding compressed image:',err&&err.message);
       fallbackToDataUri();

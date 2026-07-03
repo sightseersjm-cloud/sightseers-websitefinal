@@ -200,6 +200,55 @@
     });
   }
 
+  // Upload with a real progress callback (bytes actually sent to the server).
+  // onProgress receives an integer 0-100. Phases: 0-15 compressing/encoding,
+  // 15-99 network upload, 100 done.
+  function uploadImageWithProgress(file, folder, onProgress) {
+    var report = function (p) { try { onProgress && onProgress(Math.max(0, Math.min(100, Math.round(p)))); } catch (e) {} };
+    report(2);
+    return compressImage(file).then(function (upload) {
+      report(8);
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var base64 = reader.result.split(',')[1];
+          if (base64.length > 4 * 1024 * 1024) {
+            return reject(new Error('Image is too large even after compression (max ~3MB). Please crop or resize it.'));
+          }
+          report(15);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/images', true);
+          var h = authHeaders();
+          Object.keys(h).forEach(function (k) { xhr.setRequestHeader(k, h[k]); });
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) report(15 + (e.loaded / e.total) * 84);
+          };
+          xhr.onload = function () {
+            var data = {};
+            try { data = JSON.parse(xhr.responseText); } catch (e) {}
+            if (xhr.status >= 200 && xhr.status < 300 && (data.url)) {
+              report(100);
+              resolve(data);
+            } else {
+              var msg = (data && data.error) || ('Upload failed (' + xhr.status + ')');
+              if (xhr.status === 413) msg = 'Image too large for upload — please use a photo under 3MB.';
+              reject(Object.assign(new Error(msg), { status: xhr.status }));
+            }
+          };
+          xhr.onerror = function () { reject(new Error('Network error during upload')); };
+          xhr.send(JSON.stringify({
+            filename: upload.name || file.name,
+            data: base64,
+            type: upload.type || file.type,
+            folder: folder || 'site-images'
+          }));
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(upload);
+      });
+    });
+  }
+
   function deleteImage(url) { return api('images', 'POST', { action: 'delete', url: url }); }
 
   /* ── Pages ────────────────────────── */
@@ -391,6 +440,7 @@
 
     listImages: listImages,
     uploadImage: uploadImage,
+    uploadImageWithProgress: uploadImageWithProgress,
     deleteImage: deleteImage,
 
     getPages: getPages,
