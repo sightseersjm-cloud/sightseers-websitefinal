@@ -2109,6 +2109,17 @@ body.account-clean .account-sec{padding-bottom:112px}
 .admin-upload-err-msg{font-size:12px;color:#b5321c;line-height:1.55;font-weight:600}
 .admin-upload-retry{margin-top:2px;background:var(--navy,#063a63);color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer}
 .admin-upload-retry:hover{background:#0d5371}
+/* Upload complete moment */
+.admin-upload-done{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 12px;max-width:240px;text-align:center;animation:admDonePop .35s cubic-bezier(.34,1.56,.64,1)}
+.admin-upload-done-check{width:52px;height:52px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 20px rgba(34,197,94,.4)}
+.admin-upload-done-t{font-size:14px;font-weight:800;color:#15803d}
+.admin-upload-done-s{font-size:11.5px;font-weight:600;color:#5c6f82}
+@keyframes admDonePop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+/* Preview with an "Uploaded" badge */
+.admin-image-shot{position:relative;display:inline-block}
+.admin-image-badge{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(34,197,94,.95);color:#fff;font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:4px 9px;border-radius:999px;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.admin-image-shot.just-up{animation:admShotReveal .4s ease}
+@keyframes admShotReveal{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 @media (max-width:640px){
   .admin-group summary{padding:18px}
   .admin-group-body{padding:0 18px 18px}
@@ -20105,13 +20116,25 @@ function applyPageEditorSettings(){
 function getAllAdminImageFieldIds(){
   return ADMIN_SECTION_SCHEMA.flatMap(section=>section.fields.filter(field=>field.type==='image').map(field=>field.id));
 }
-function updateAdminImagePreview(id){
+function updateAdminImagePreview(id,justUploaded){
   const holder=document.getElementById('preview-'+id);
   const input=document.getElementById(id);
   if(!holder || !input) return;
   const value=(input.value||'').trim();
   if(!value){holder.innerHTML='<div class="admin-image-empty">No image selected yet.</div>'; return;}
-  holder.innerHTML=`<img src="${escapeAdminAttr(value)}" alt="Preview for ${escapeAdminAttr(id)}">`;
+  holder.innerHTML=`<div class="admin-image-shot${justUploaded?' just-up':''}"><img src="${escapeAdminAttr(value)}" alt="Preview for ${escapeAdminAttr(id)}">`
+    +(justUploaded?'<span class="admin-image-badge"><i class="fas fa-circle-check"></i> Uploaded</span>':'')+'</div>';
+}
+/* Clear "done" moment: fill to 100%, show a green complete card, then
+   reveal the image with a persistent "Uploaded" badge. */
+function showAdminUploadComplete(targetId,hosted){
+  const holder=document.getElementById('preview-'+targetId);
+  if(!holder){ updateAdminImagePreview(targetId,true); return; }
+  holder.innerHTML='<div class="admin-upload-done">'
+    +'<div class="admin-upload-done-check"><i class="fas fa-check"></i></div>'
+    +'<div class="admin-upload-done-t">Upload complete</div>'
+    +'<div class="admin-upload-done-s">'+(hosted?'Saved to the live website':'Saved in this browser')+'</div></div>';
+  setTimeout(function(){ updateAdminImagePreview(targetId,true); },1100);
 }
 function showAdminUploadProgress(targetId,pct,label){
   const holder=document.getElementById('preview-'+targetId);
@@ -20158,7 +20181,7 @@ function startAdminImageUpload(file,targetId,attempt){
     useFile.then(function(f){
       showAdminUploadProgress(targetId,70,'Embedding image…');
       const reader=new FileReader();
-      reader.onload=function(e){input.value=e.target?.result||'';showAdminUploadProgress(targetId,100,'Ready (this browser)');setTimeout(function(){updateAdminImagePreview(targetId);},350);};
+      reader.onload=function(e){input.value=e.target?.result||'';showAdminUploadProgress(targetId,100,'Finishing…');setTimeout(function(){showAdminUploadComplete(targetId,false);},250);};
       reader.readAsDataURL(f);
     });
   };
@@ -20172,8 +20195,8 @@ function startAdminImageUpload(file,targetId,attempt){
       showAdminUploadProgress(targetId,pct,pct>=100?'Processing…':'Uploading… '+attempt);
     }).then(function(res){
       input.value=res.url;
-      showAdminUploadProgress(targetId,100,'Uploaded ✓');
-      setTimeout(function(){updateAdminImagePreview(targetId);},400);
+      showAdminUploadProgress(targetId,100,'Finishing…');
+      setTimeout(function(){showAdminUploadComplete(targetId,true);},250);
     }).catch(function(err){
       var status=err&&err.status;
       var transient=!status||status>=500;
