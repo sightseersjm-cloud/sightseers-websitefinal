@@ -2190,6 +2190,18 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-verify-btn:hover{border-color:var(--navy,#063a63);background:rgba(6,58,99,.04)}
 .adm-verify-btn.checking i{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.upload-diag{background:#fff;border:1px solid rgba(6,58,99,.12);border-radius:16px;padding:18px 20px;margin:0 0 20px;box-shadow:0 8px 24px rgba(6,58,99,.08)}
+.upload-diag-head{font-size:15px;font-weight:800;color:var(--navy,#063a63);margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.upload-diag-head i{color:var(--orange,#ef8731)}
+.upload-diag .udl{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px dashed rgba(6,58,99,.1)}
+.upload-diag .udl i{margin-top:2px;font-size:15px}
+.upload-diag .udl.ok i{color:#16a34a}
+.upload-diag .udl.bad i{color:#dc2626}
+.upload-diag .udl b{display:block;font-size:13.5px;color:#15293d}
+.upload-diag .udl span{display:block;font-size:12px;color:#5c6f82;margin-top:2px;line-height:1.5}
+.upload-diag-verdict{margin-top:14px;padding:12px 15px;border-radius:11px;font-size:13px;font-weight:700;line-height:1.5}
+.upload-diag-verdict.ok{background:rgba(34,197,94,.1);color:#15803d}
+.upload-diag-verdict.bad{background:rgba(239,68,68,.1);color:#b91c1c}
 .adm-pub-btn i{font-size:14px}
 .adm-pub-btn.saved{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 14px rgba(34,197,94,.3)}
 .adm-pub-btn.saving{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 4px 14px rgba(59,130,246,.3);pointer-events:none;opacity:.85}
@@ -18807,7 +18819,7 @@ vtSessionAction=function(el,type){
 <main class="adm-main">
 <header class="adm-topbar">
 <div class="adm-topbar-l"><button class="adm-menu-toggle" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h1>Content Manager</h1></div>
-<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-verify-btn" id="adminVerifyBtn" type="button" onclick="verifyPublishedContent()" title="Check what is actually live on the server"><i class="fas fa-circle-check"></i><span>Verify Live</span></button><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
+<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-verify-btn" id="adminDiagBtn" type="button" onclick="runUploadDiagnostics()" title="Test the whole upload chain and report what's wrong"><i class="fas fa-stethoscope"></i><span>Diagnose Uploads</span></button><button class="adm-verify-btn" id="adminVerifyBtn" type="button" onclick="verifyPublishedContent()" title="Check what is actually live on the server"><i class="fas fa-circle-check"></i><span>Verify Live</span></button><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
 </header>
 <div class="adm-body">
 <select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
@@ -22616,6 +22628,53 @@ document.addEventListener('ss-settings-synced',function(){
   try{ if(typeof renderStayCountryPage==='function') renderStayCountryPage(); }catch(e){}
   try{ if(typeof window.ssReapplyDynamicSections==='function') window.ssReapplyDynamicSections(); }catch(e){}
 });
+
+/* One-click end-to-end upload diagnostic. Tests sign-in, storage config,
+   a real round-trip upload, and settings persistence — then prints a
+   plain-English verdict so a failing upload is never a mystery. */
+function runUploadDiagnostics(){
+  var out=document.getElementById('uploadDiagOut');
+  if(!out){ out=document.createElement('div'); out.id='uploadDiagOut'; out.className='upload-diag'; var host=document.getElementById('adminStructuredEditor')||document.querySelector('.adm-body')||document.body; host.insertBefore(out,host.firstChild); }
+  out.innerHTML='<div class="upload-diag-head"><i class="fas fa-stethoscope"></i> Running upload diagnostics…</div>';
+  var lines=[]; var fatal=false;
+  function row(ok,label,detail){ lines.push('<div class="udl '+(ok?'ok':'bad')+'"><i class="fas fa-'+(ok?'circle-check':'circle-xmark')+'"></i><div><b>'+label+'</b>'+(detail?'<span>'+detail+'</span>':'')+'</div></div>'); }
+  function render(){ out.innerHTML='<div class="upload-diag-head"><i class="fas fa-stethoscope"></i> Upload Diagnostics</div>'+lines.join('')+verdict; }
+  var verdict='';
+  var tok=(window.SS&&SS.getToken&&SS.getToken())||localStorage.getItem('ss_auth_token')||'';
+  var user=null; try{ user=(window.SS&&SS.currentUser&&SS.currentUser())||JSON.parse(localStorage.getItem('ss_user')||'null'); }catch(e){}
+
+  // 1. Signed in?
+  if(!tok){ row(false,'Signed in','No admin session. Uploads will only save to THIS browser.'); fatal=true; }
+  else row(true,'Signed in', user?('as '+(user.name||user.email||'editor')+' ('+(user.role||'?')+')'):'session token present');
+
+  // tiny 1x1 transparent PNG
+  var testB64='iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMBAQDJ/pLvAAAAAElFTkSuQmCC';
+
+  // 2. Settings endpoint reachable (GET)
+  fetch('/api/settings',{cache:'no-store',headers:tok?{'Authorization':'Bearer '+tok}:{}})
+    .then(function(r){ row(r.ok,'Live server reachable','/api/settings responded '+r.status); return r.ok; })
+    .catch(function(){ row(false,'Live server reachable','Could not reach /api/settings'); return false; })
+    .then(function(){
+      // 3. Real upload round-trip
+      return fetch('/api/images',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},tok?{'Authorization':'Bearer '+tok}:{}),
+        body:JSON.stringify({filename:'diagnostic-test.png',data:testB64,type:'image/png',folder:'site-images'})})
+      .then(function(r){ return r.json().catch(function(){return{};}).then(function(d){return{status:r.status,d:d};}); })
+      .then(function(res){
+        if(res.status===200&&res.d.url){ row(true,'Test upload to storage','Stored OK → '+res.d.url.split('/').pop()); }
+        else if(res.status===503){ row(false,'Test upload to storage','Storage not configured. Set BLOB_READ_WRITE_TOKEN in Vercel → Settings → Environment Variables, then redeploy.'); fatal=true; }
+        else if(res.status===401||res.status===403){ row(false,'Test upload to storage','Rejected ('+res.status+'): '+(res.d.error||'not authorized')+'. Sign in with your admin account.'); fatal=true; }
+        else { row(false,'Test upload to storage','Failed ('+res.status+'): '+(res.d.error||'unknown error')); fatal=true; }
+      })
+      .catch(function(){ row(false,'Test upload to storage','Network error contacting /api/images'); fatal=true; });
+    })
+    .then(function(){
+      verdict = fatal
+        ? '<div class="upload-diag-verdict bad">Uploads are NOT publishing live. Fix the ✗ item above — most often: sign in as admin, or set BLOB_READ_WRITE_TOKEN in Vercel.</div>'
+        : '<div class="upload-diag-verdict ok">All systems go — uploads save to the live website. If an image still looks unchanged, hard-refresh (Cmd/Ctrl+Shift+R).</div>';
+      render();
+    });
+  render();
+}
 
 /* Read the live server back and report exactly what is published, so a
    save is never ambiguous. Compares the server's stored settings against
