@@ -2104,6 +2104,11 @@ body.account-clean .account-sec{padding-bottom:112px}
 .admin-upload-prog-label{font-size:12px;font-weight:600;color:var(--grey,#5c6f82)}
 .admin-upload-prog-bar{width:100%;height:6px;border-radius:999px;background:rgba(6,58,99,.1);overflow:hidden}
 .admin-upload-prog-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange,#ef8731),#ffb066);border-radius:999px;transition:width .2s ease}
+.admin-upload-err{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;max-width:240px;text-align:center}
+.admin-upload-err-icon{color:#e0341c;font-size:22px}
+.admin-upload-err-msg{font-size:12px;color:#b5321c;line-height:1.55;font-weight:600}
+.admin-upload-retry{margin-top:2px;background:var(--navy,#063a63);color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer}
+.admin-upload-retry:hover{background:#0d5371}
 @media (max-width:640px){
   .admin-group summary{padding:18px}
   .admin-group-body{padding:0 18px 18px}
@@ -2181,6 +2186,10 @@ body.account-clean .account-sec{padding-bottom:110px}
 .adm-pub-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--orange),#f59f47);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 14px rgba(239,135,49,.25);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
 .adm-pub-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(239,135,49,.35)}
 .adm-pub-btn:active{transform:scale(.97)}
+.adm-verify-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border:1.5px solid rgba(6,58,99,.18);border-radius:12px;background:#fff;color:var(--navy,#063a63);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;margin-right:8px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif}
+.adm-verify-btn:hover{border-color:var(--navy,#063a63);background:rgba(6,58,99,.04)}
+.adm-verify-btn.checking i{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .adm-pub-btn i{font-size:14px}
 .adm-pub-btn.saved{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 14px rgba(34,197,94,.3)}
 .adm-pub-btn.saving{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 4px 14px rgba(59,130,246,.3);pointer-events:none;opacity:.85}
@@ -18798,7 +18807,7 @@ vtSessionAction=function(el,type){
 <main class="adm-main">
 <header class="adm-topbar">
 <div class="adm-topbar-l"><button class="adm-menu-toggle" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h1>Content Manager</h1></div>
-<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
+<div class="adm-topbar-r"><span class="inline-status" id="adminSaveStatus"></span><button class="adm-verify-btn" id="adminVerifyBtn" type="button" onclick="verifyPublishedContent()" title="Check what is actually live on the server"><i class="fas fa-circle-check"></i><span>Verify Live</span></button><button class="adm-pub-btn" id="adminPubBtn" onclick="saveAdminPortal()"><i class="fas fa-cloud-arrow-up"></i><span>Save &amp; Publish</span></button></div>
 </header>
 <div class="adm-body">
 <select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
@@ -20100,33 +20109,76 @@ function showAdminUploadProgress(targetId,pct,label){
     +'<div class="admin-upload-prog-label">'+(label||'Uploading…')+'</div>'
     +'<div class="admin-upload-prog-bar"><i style="width:'+pct+'%"></i></div></div>';
 }
+function showAdminUploadError(targetId,msg,file){
+  const holder=document.getElementById('preview-'+targetId);
+  if(!holder) return;
+  holder.innerHTML='<div class="admin-upload-err">'
+    +'<div class="admin-upload-err-icon"><i class="fas fa-triangle-exclamation"></i></div>'
+    +'<div class="admin-upload-err-msg">'+msg+'</div>'
+    +(file?'<button type="button" class="admin-upload-retry" data-target="'+targetId+'">Retry upload</button>':'')+'</div>';
+  const btn=holder.querySelector('.admin-upload-retry');
+  if(btn&&file) btn.onclick=function(){ startAdminImageUpload(file,targetId); };
+}
+/* Client-side validation so bad files never reach the network. */
+var ADMIN_IMG_TYPES=['image/jpeg','image/png','image/webp','image/gif','image/svg+xml'];
+var ADMIN_IMG_MAX=15*1024*1024; /* pre-compression ceiling; compression shrinks below the 3MB server cap */
+function validateAdminImage(file){
+  if(!file) return 'No file selected.';
+  if(file.type && ADMIN_IMG_TYPES.indexOf(file.type)===-1) return 'That file is a '+(file.type||'unknown type')+'. Use a JPG, PNG, WebP, GIF or SVG image.';
+  if(file.size>ADMIN_IMG_MAX) return 'That image is '+(Math.round(file.size/1048576*10)/10)+'MB — too large. Please pick one under 15MB (it will be compressed for you).';
+  return null;
+}
 function handleAdminImageUpload(event,targetId){
   const file=event?.target?.files?.[0];
   if(!file) return;
+  startAdminImageUpload(file,targetId);
+}
+function startAdminImageUpload(file,targetId,attempt){
+  attempt=attempt||1;
   const input=document.getElementById(targetId);
   if(!input) return;
+  const verr=validateAdminImage(file);
+  if(verr){ showAdminUploadError(targetId,verr,null); return; }
+
   const fallbackToDataUri=function(){
     showAdminUploadProgress(targetId,20,'Preparing image…');
     const useFile=(window.SS&&SS.compressImage)?SS.compressImage(file):Promise.resolve(file);
     useFile.then(function(f){
       showAdminUploadProgress(targetId,70,'Embedding image…');
       const reader=new FileReader();
-      reader.onload=function(e){input.value=e.target?.result||'';showAdminUploadProgress(targetId,100,'Ready');setTimeout(function(){updateAdminImagePreview(targetId);},350);};
+      reader.onload=function(e){input.value=e.target?.result||'';showAdminUploadProgress(targetId,100,'Ready (this browser)');setTimeout(function(){updateAdminImagePreview(targetId);},350);};
       reader.readAsDataURL(f);
     });
   };
-  /* Prefer a real hosted upload (Vercel Blob) with a live percentage.
-     Falls back to an inline data URI if not signed in / upload fails. */
+
+  /* Hosted upload (Vercel Blob) with a live percentage; retries once on a
+     transient network/storage error, then falls back to an inline image. */
   if(window.SS&&SS.uploadImageWithProgress&&SS.getToken&&SS.getToken()){
     input.placeholder='Uploading image…';
     showAdminUploadProgress(targetId,2,'Uploading…');
     SS.uploadImageWithProgress(file,'site-images',function(pct){
-      showAdminUploadProgress(targetId,pct,pct>=100?'Processing…':'Uploading…');
+      showAdminUploadProgress(targetId,pct,pct>=100?'Processing…':'Uploading… '+attempt);
     }).then(function(res){
       input.value=res.url;
       showAdminUploadProgress(targetId,100,'Uploaded ✓');
       setTimeout(function(){updateAdminImagePreview(targetId);},400);
     }).catch(function(err){
+      var status=err&&err.status;
+      var transient=!status||status>=500;
+      if(transient&&attempt<2){
+        showAdminUploadProgress(targetId,5,'Upload hiccup — retrying…');
+        setTimeout(function(){ startAdminImageUpload(file,targetId,attempt+1); },800);
+        return;
+      }
+      if(status===401||status===403){
+        showAdminUploadError(targetId,'Sign in as admin to upload to the live site. Saving to this browser instead…',null);
+        setTimeout(fallbackToDataUri,1200);
+        return;
+      }
+      if(status===503||status===413){
+        showAdminUploadError(targetId,(err&&err.message)||'Upload could not be stored.',file);
+        return;
+      }
       console.warn('Hosted upload failed, embedding compressed image:',err&&err.message);
       fallbackToDataUri();
     });
@@ -22564,6 +22616,50 @@ document.addEventListener('ss-settings-synced',function(){
   try{ if(typeof renderStayCountryPage==='function') renderStayCountryPage(); }catch(e){}
   try{ if(typeof window.ssReapplyDynamicSections==='function') window.ssReapplyDynamicSections(); }catch(e){}
 });
+
+/* Read the live server back and report exactly what is published, so a
+   save is never ambiguous. Compares the server's stored settings against
+   the values currently in the admin form. */
+function verifyPublishedContent(){
+  var el=document.getElementById('adminSaveStatus');
+  var btn=document.getElementById('adminVerifyBtn');
+  if(btn){btn.classList.add('checking');}
+  if(el){el.textContent='Checking the live website…';el.className='inline-status show';}
+  var tok=(window.SS&&SS.getToken&&SS.getToken())||localStorage.getItem('ss_auth_token')||'';
+  fetch('/api/settings',{cache:'no-store',headers:tok?{'Authorization':'Bearer '+tok}:{}})
+    .then(function(r){ if(!r.ok) throw Object.assign(new Error('HTTP '+r.status),{status:r.status}); return r.json(); })
+    .then(function(server){
+      var serverPE=(server&&server.ss_page_editor_settings)||{};
+      var localPE={}; try{localPE=JSON.parse(localStorage.getItem('ss_page_editor_settings')||'{}');}catch(e){}
+      var bindings=window.PAGE_EDITOR_BINDINGS||{};
+      var livePublished=0, pendingKeys=[];
+      Object.keys(localPE).forEach(function(k){
+        if(!localPE[k]) return;
+        if(serverPE[k]===localPE[k]) livePublished++;
+        else if(bindings[k]) pendingKeys.push(k);
+      });
+      var serverCount=Object.keys(serverPE).filter(function(k){return serverPE[k];}).length;
+      if(btn){btn.classList.remove('checking');}
+      if(!el) return;
+      if(pendingKeys.length===0){
+        el.textContent='✓ Live and in sync — '+serverCount+' published field'+(serverCount===1?'':'s')+' on the server match this browser.';
+        el.className='inline-status ok show';
+      }else{
+        el.textContent='⚠ '+pendingKeys.length+' edit'+(pendingKeys.length===1?'':'s')+' not yet published (e.g. '+pendingKeys.slice(0,2).join(', ')+'). Click Save & Publish to push them live.';
+        el.className='inline-status err show';
+      }
+    })
+    .catch(function(err){
+      if(btn){btn.classList.remove('checking');}
+      if(!el) return;
+      if(err&&(err.status===401||err.status===403)){
+        el.textContent='Could not verify — sign in with your admin account first (banner above).';
+      }else{
+        el.textContent='Could not reach the live website to verify. Check your connection or storage configuration.';
+      }
+      el.className='inline-status err show';
+    });
+}
 
 /* Tell the admin whether a save actually reached the live website. */
 document.addEventListener('ss-settings-sync-result',function(ev){
