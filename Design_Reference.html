@@ -14031,6 +14031,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 /* ── VIDEO AREA — OVERLAY CHIPS (Apple HIG: SF Pro, translucent materials) ── */
 /* Live indicator */
 #vt-active-session .vt-live-indicator{
+  top:52px!important;right:12px!important;left:auto!important; /* row 2 right — clear of the scene switcher */
   background:rgba(0,0,0,.4)!important;backdrop-filter:blur(20px) saturate(1.6)!important;
   -webkit-backdrop-filter:blur(20px) saturate(1.6)!important;
   border:1px solid rgba(255,255,255,.14)!important;color:#fff!important;
@@ -15264,6 +15265,18 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                           </div>
                           <div class="vt-setup-hint"><i class="fas fa-hand-pointer"></i> Drag to look around · scroll or pinch to zoom · tap a glowing dot to shop the scene</div>
                         </div>
+                        <!-- Live-now chooser (opens above the bottom bar — joins in place, no page hop) -->
+                        <div class="vt-setup-panel vt-live-panel" id="vtLivePanel" role="dialog" aria-label="Live sessions available now">
+                          <div class="vt-setup-head"><strong id="vtLivePanelTitle">Live right now</strong><span id="vtLivePanelSub">Join a guide instantly</span></div>
+                          <div id="vtLivePanelList"></div>
+                        </div>
+                        <!-- Look-around nudge: invites you into a live session after ~7s of free look -->
+                        <div class="vt-live-prompt" id="vtLivePrompt" role="status" data-session="blue-lagoon">
+                          <span class="vt-live-prompt-dot"></span>
+                          <div class="vt-live-prompt-txt"><strong id="vtLpGuide">Marcus Thompson</strong><span id="vtLpMeta">is live now · Blue Lagoon Morning Walk</span></div>
+                          <button class="vt-live-prompt-join" id="vtLpJoin" onclick="vtLivePromptJoin()">Join</button>
+                          <button class="vt-live-prompt-close" onclick="vtHideLivePrompt(true)" aria-label="Dismiss" title="Maybe later"><i class="fas fa-times"></i></button>
+                        </div>
                         <!-- Unified bottom control bar: comfort gear + choose-your-path (one cluster → no overlap with XR/expand) -->
                         <div class="vt-paths" id="vtSetup">
                           <button class="vt-path vt-path-gear" id="vtSetupToggle" onclick="vtToggleSetup()" aria-expanded="false" aria-label="Comfort &amp; accessibility" title="Comfort &amp; accessibility"><i class="fas fa-sliders-h"></i></button>
@@ -15388,6 +15401,27 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-path-gear i{font-size:13.5px}
 .vt-path-gear.on{background:rgba(255,255,255,.22);color:#fff}
 .vt-path-div{width:1px;align-self:stretch;margin:5px 1px;background:rgba(255,255,255,.18);flex:0 0 1px}
+/* Live-now chooser rows (panel reuses .vt-setup-panel shell) */
+.vt-live-panel{width:320px}
+.vt-live-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.07)}
+.vt-live-row:last-child{border-bottom:none}
+.vt-live-row-dot{width:7px;height:7px;border-radius:50%;background:#ff453a;box-shadow:0 0 8px rgba(255,69,58,.8);flex:0 0 7px;animation:vtHudBlink 1.2s ease infinite}
+.vt-live-row-info{flex:1;min-width:0}
+.vt-live-row-info strong{display:block;color:#fff;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt-live-row-info span{color:rgba(255,255,255,.55);font-size:10.5px}
+.vt-live-row-join{background:var(--orange);border:none;color:#fff;font-size:10.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:inherit;transition:filter .2s}
+.vt-live-row-join:hover{filter:brightness(1.1)}
+/* Look-around nudge — appears above the bottom bar after 7s of free look */
+.vt-live-prompt{position:absolute;left:50%;bottom:70px;transform:translateX(-50%) translateY(10px);z-index:24;display:flex;align-items:center;gap:10px;background:rgba(10,24,42,.92);backdrop-filter:blur(30px) saturate(1.6);-webkit-backdrop-filter:blur(30px) saturate(1.6);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:8px 8px 8px 16px;box-shadow:0 18px 44px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s cubic-bezier(.25,.46,.45,.94);font-family:-apple-system,'SF Pro Text',sans-serif;max-width:calc(100% - 24px)}
+.vt-live-prompt.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.vt-live-prompt-dot{width:8px;height:8px;border-radius:50%;background:#ff453a;box-shadow:0 0 10px rgba(255,69,58,.8);flex:0 0 8px;animation:vtHudBlink 1.2s ease infinite}
+.vt-live-prompt-txt{display:flex;flex-direction:column;min-width:0}
+.vt-live-prompt-txt strong{color:#fff;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt-live-prompt-txt span{color:rgba(255,255,255,.6);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt-live-prompt-join{background:var(--orange);border:none;color:#fff;font-size:11.5px;font-weight:700;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:filter .2s}
+.vt-live-prompt-join:hover{filter:brightness(1.1)}
+.vt-live-prompt-close{background:rgba(255,255,255,.12);border:none;color:rgba(255,255,255,.7);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;flex:0 0 28px;transition:all .2s}
+.vt-live-prompt-close:hover{background:rgba(255,255,255,.24);color:#fff}
 @media(max-width:600px){.vt-paths{gap:3px;padding:4px}.vt-path{padding:8px 10px;font-size:10.5px}.vt-path span{display:none}.vt-path-gear{padding:8px 10px}.vt-setup-panel{width:min(290px,calc(100vw - 24px))}}
 /* reduced motion → still the decorative pulses/floats inside the session */
 #vt-active-session.vt-reduced-motion .vt-mood-badge,#vt-active-session.vt-reduced-motion .vt-hotspot-dot,#vt-active-session.vt-reduced-motion .vt-audio-zone-bars span,#vt-active-session.vt-reduced-motion .vt-live-indicator-dot{animation:none!important}
@@ -15741,6 +15775,7 @@ function vtSaveComfort(){ try{ localStorage.setItem('vt_comfort',JSON.stringify(
 function vtToggleSetup(){
   var panel=document.getElementById('vtSetupPanel'), t=document.getElementById('vtSetupToggle');
   if(!panel)return;
+  var lp=document.getElementById('vtLivePanel');if(lp)lp.classList.remove('open');
   var open=panel.classList.toggle('open');
   if(t){t.classList.toggle('on',open);t.setAttribute('aria-expanded',open?'true':'false');}
   if(open){
@@ -15787,9 +15822,8 @@ function vtSetAudioMix(mode,btn){
 function vtChoosePath(path,btn){
   document.querySelectorAll('.vt-path').forEach(function(b){b.classList.toggle('on',b===btn);});
   if(path==='live'){
-    /* jump to the live sessions list */
-    if(typeof vtExpNav==='function'){var a=document.querySelector('#vt-exp-sidebar a[data-view=browse]');vtExpNav('browse',a);}
-    if(typeof vtToast==='function')vtToast('<i class="fas fa-tower-broadcast"></i> Browse live &amp; upcoming guided sessions');
+    /* open the live-now chooser right here — no page hop */
+    vtOpenLivePanel();
   }else if(path==='shop'){
     /* the shoppable hotspots live on the 360° layer */
     if(typeof vtSceneVideoOn!=='undefined'&&vtSceneVideoOn)vtHideSceneVideo();
@@ -15798,8 +15832,84 @@ function vtChoosePath(path,btn){
     if(typeof vtToast==='function')vtToast('<i class="fas fa-bag-shopping"></i> Shop items from this scene — or tap a glowing dot');
   }else{
     if(typeof vtSceneVideoOn!=='undefined'&&vtSceneVideoOn)vtHideSceneVideo();
+    /* free look re-arms the 7s live invitation */
+    vtLivePromptDismissed=false;
+    vtArmLivePrompt();
     if(typeof vtToast==='function')vtToast('<i class="fas fa-panorama"></i> Free look — drag to explore the scene');
   }
+}
+/* ── Live-now chooser + look-around nudge ──
+   Joining happens in place (vtJoinSessionDirect). Set vtCheckoutEnabled=true
+   once the Stripe checkout return flow is production-ready. */
+var vtCheckoutEnabled=false;
+var vtLivePromptTimer=null,vtLivePromptHideTimer=null,vtLivePromptDismissed=false,vtLivePromptIdx=0;
+function vtLiveT(){return (typeof vtTranslations!=='undefined'&&(vtTranslations[typeof vtCurrentLang!=='undefined'?vtCurrentLang:'en']||vtTranslations.en))||{};}
+function vtOpenLivePanel(){
+  var p=document.getElementById('vtLivePanel');if(!p)return;
+  vtHideLivePrompt();
+  /* one panel at a time above the bar */
+  var sp=document.getElementById('vtSetupPanel');if(sp)sp.classList.remove('open');
+  var st=document.getElementById('vtSetupToggle');if(st){st.classList.remove('on');st.setAttribute('aria-expanded','false');}
+  var t=vtLiveT();
+  var title=document.getElementById('vtLivePanelTitle');if(title)title.textContent=t.liveNow||'Live right now';
+  var list=document.getElementById('vtLivePanelList');
+  var keys=Object.keys(vtSessions);
+  var sub=document.getElementById('vtLivePanelSub');if(sub)sub.textContent=keys.length+' '+(t.guidesLive||'guides are live');
+  if(list){
+    var html='';
+    keys.forEach(function(id){
+      var s=vtSessions[id];
+      html+='<div class="vt-live-row"><span class="vt-live-row-dot"></span><div class="vt-live-row-info"><strong>'+s.title+'</strong><span>'+s.guide+' · USD $'+s.price+'</span></div><button class="vt-live-row-join" onclick="vtJoinFromPanel(\''+id+'\')">'+(t.joinNow||'Join')+'</button></div>';
+    });
+    list.innerHTML=html;
+  }
+  p.classList.add('open');
+  var close=function(e){ if(!p.contains(e.target)&&!e.target.closest('.vt-path[data-p=live]')){p.classList.remove('open');document.removeEventListener('click',close);} };
+  setTimeout(function(){document.addEventListener('click',close)},10);
+}
+function vtJoinFromPanel(id){
+  var p=document.getElementById('vtLivePanel');if(p)p.classList.remove('open');
+  var s=vtSessions[id];if(!s)return;
+  vtJoinSessionDirect(id,s);
+}
+function vtArmLivePrompt(){
+  clearTimeout(vtLivePromptTimer);
+  if(vtLivePromptDismissed)return;
+  vtLivePromptTimer=setTimeout(vtShowLivePrompt,7000);
+}
+function vtShowLivePrompt(){
+  var p=document.getElementById('vtLivePrompt');if(!p||vtLivePromptDismissed)return;
+  /* stay quiet while a panel is open — try again shortly after */
+  var sp=document.getElementById('vtSetupPanel'),lp=document.getElementById('vtLivePanel');
+  if((sp&&sp.classList.contains('open'))||(lp&&lp.classList.contains('open'))){vtLivePromptTimer=setTimeout(vtShowLivePrompt,7000);return;}
+  var keys=Object.keys(vtSessions);
+  var id=keys[vtLivePromptIdx++%keys.length];
+  var s=vtSessions[id];if(!s)return;
+  var t=vtLiveT();
+  p.setAttribute('data-session',id);
+  var g=document.getElementById('vtLpGuide');if(g)g.textContent=s.guide;
+  var m=document.getElementById('vtLpMeta');if(m)m.textContent=(t.isLiveNow||'is live now')+' · '+s.title;
+  var j=document.getElementById('vtLpJoin');if(j)j.textContent=t.joinNow||'Join';
+  p.classList.add('show');
+  clearTimeout(vtLivePromptHideTimer);
+  vtLivePromptHideTimer=setTimeout(function(){vtHideLivePrompt()},14000);
+}
+function vtHideLivePrompt(dismiss){
+  var p=document.getElementById('vtLivePrompt');if(p)p.classList.remove('show');
+  clearTimeout(vtLivePromptTimer);clearTimeout(vtLivePromptHideTimer);
+  if(dismiss)vtLivePromptDismissed=true;
+}
+function vtLivePromptJoin(){
+  var p=document.getElementById('vtLivePrompt');
+  var id=(p&&p.getAttribute('data-session'))||'blue-lagoon';
+  vtHideLivePrompt(true);
+  var s=vtSessions[id]||vtSessions['blue-lagoon'];
+  vtJoinSessionDirect(id,s);
+}
+/* arm the nudge whenever the 360° portal (re)initialises */
+if(typeof vtInitPanoViewer==='function'){
+  var vtOrigInitPano=vtInitPanoViewer;
+  vtInitPanoViewer=function(){vtOrigInitPano.apply(this,arguments);vtArmLivePrompt();};
 }
 /* restore saved comfort prefs once the viewer exists */
 (function(){
@@ -16916,6 +17026,13 @@ function vtJoinSession(id){
   // If a live Mux stream is active (guide went live), use real playbackId
   if(vtLive&&vtLive.playbackId) s.playbackId=vtLive.playbackId;
 
+  // Checkout redirect is disabled until the paid flow is production-ready —
+  // join in place instead of bouncing to a half-built page.
+  if(typeof vtCheckoutEnabled==='undefined'||!vtCheckoutEnabled){
+    vtJoinSessionDirect(id,s);
+    return;
+  }
+
   // Stripe checkout — redirect to payment
   vtToast('<i class="fas fa-spinner fa-spin"></i> Opening secure checkout…');
   fetch('/api/stripe-checkout',{
@@ -16944,6 +17061,9 @@ function vtJoinSession(id){
 }
 
 function vtJoinSessionDirect(id,s){
+  /* joined — stop nudging and close the chooser */
+  if(typeof vtHideLivePrompt==='function')vtHideLivePrompt(true);
+  var lp=document.getElementById('vtLivePanel');if(lp)lp.classList.remove('open');
   /* match the session's scene first (it rewrites the location line),
      then apply the session's own details over it */
   if(s.scene&&typeof vtSwitchScene==='function'&&typeof vtActivePanoScene!=='undefined'&&vtActivePanoScene!==s.scene)vtSwitchScene(s.scene);
@@ -17956,24 +18076,26 @@ var vtTranslations={
 };
 
 /* Labels for the comfort setup + choose-your-path controls, per language:
-   [lookAround, joinLive, shopScene, video, beforeYou, reducedMotion, vignette, audio, dragHint] */
+   [lookAround, joinLive, shopScene, video, beforeYou, reducedMotion, vignette, audio, dragHint,
+    isLiveNow, joinNow, liveNow, guidesLive] */
 (function(){
   var extra={
-    en:['Look Around','Join Live','Shop the Scene','Video','Before you explore','Reduced motion','Comfort vignette','Audio','Drag to look around · scroll or pinch to zoom · tap a glowing dot to shop the scene'],
-    es:['Mirar Alrededor','Ver en Vivo','Comprar la Escena','Vídeo','Antes de explorar','Menos movimiento','Viñeta de confort','Audio','Arrastra para mirar · pellizca para acercar · toca un punto brillante para comprar'],
-    fr:['Regarder Autour','Rejoindre le Direct','Acheter la Scène','Vidéo','Avant d\'explorer','Mouvement réduit','Vignette de confort','Audio','Glissez pour regarder · pincez pour zoomer · touchez un point lumineux pour acheter'],
-    de:['Umsehen','Live Ansehen','Szene Shoppen','Video','Bevor du erkundest','Reduzierte Bewegung','Komfort-Vignette','Audio','Ziehen zum Umsehen · Kneifen zum Zoomen · leuchtenden Punkt antippen zum Shoppen'],
-    pt:['Olhar ao Redor','Ver ao Vivo','Comprar a Cena','Vídeo','Antes de explorar','Menos movimento','Vinheta de conforto','Áudio','Arraste para olhar · belisque para ampliar · toque num ponto brilhante para comprar'],
-    ja:['見回す','ライブ参加','シーンで買う','動画','探検の前に','モーション軽減','快適ビネット','オーディオ','ドラッグで見回す・ピンチでズーム・光る点をタップして購入'],
-    zh:['环顾四周','加入直播','场景购物','视频','探索之前','减少动态','舒适暗角','音频','拖动环顾·捏合缩放·点击发光点购物'],
-    hi:['चारों ओर देखें','लाइव जुड़ें','सीन से खरीदें','वीडियो','खोजने से पहले','कम गति','कम्फर्ट विनेट','ऑडियो','देखने के लिए खींचें · ज़ूम के लिए पिंच करें · चमकते बिंदु पर टैप करें'],
-    ar:['انظر حولك','انضم مباشرة','تسوق المشهد','فيديو','قبل الاستكشاف','حركة أقل','تظليل مريح','صوت','اسحب للنظر · اقرص للتكبير · انقر نقطة مضيئة للتسوق'],
-    it:['Guardati Intorno','Unisciti Live','Compra la Scena','Video','Prima di esplorare','Movimento ridotto','Vignettatura comfort','Audio','Trascina per guardare · pizzica per zoomare · tocca un punto luminoso per comprare']
+    en:['Look Around','Join Live','Shop the Scene','Video','Before you explore','Reduced motion','Comfort vignette','Audio','Drag to look around · scroll or pinch to zoom · tap a glowing dot to shop the scene','is live now','Join','Live right now','guides are live'],
+    es:['Mirar Alrededor','Ver en Vivo','Comprar la Escena','Vídeo','Antes de explorar','Menos movimiento','Viñeta de confort','Audio','Arrastra para mirar · pellizca para acercar · toca un punto brillante para comprar','está en vivo ahora','Unirse','En vivo ahora','guías en vivo'],
+    fr:['Regarder Autour','Rejoindre le Direct','Acheter la Scène','Vidéo','Avant d\'explorer','Mouvement réduit','Vignette de confort','Audio','Glissez pour regarder · pincez pour zoomer · touchez un point lumineux pour acheter','est en direct','Rejoindre','En direct maintenant','guides en direct'],
+    de:['Umsehen','Live Ansehen','Szene Shoppen','Video','Bevor du erkundest','Reduzierte Bewegung','Komfort-Vignette','Audio','Ziehen zum Umsehen · Kneifen zum Zoomen · leuchtenden Punkt antippen zum Shoppen','ist jetzt live','Beitreten','Jetzt live','Guides sind live'],
+    pt:['Olhar ao Redor','Ver ao Vivo','Comprar a Cena','Vídeo','Antes de explorar','Menos movimento','Vinheta de conforto','Áudio','Arraste para olhar · belisque para ampliar · toque num ponto brilhante para comprar','está ao vivo agora','Entrar','Ao vivo agora','guias ao vivo'],
+    ja:['見回す','ライブ参加','シーンで買う','動画','探検の前に','モーション軽減','快適ビネット','オーディオ','ドラッグで見回す・ピンチでズーム・光る点をタップして購入','ライブ配信中','参加','現在ライブ中','人のガイドが配信中'],
+    zh:['环顾四周','加入直播','场景购物','视频','探索之前','减少动态','舒适暗角','音频','拖动环顾·捏合缩放·点击发光点购物','正在直播','加入','正在直播','位导游在直播'],
+    hi:['चारों ओर देखें','लाइव जुड़ें','सीन से खरीदें','वीडियो','खोजने से पहले','कम गति','कम्फर्ट विनेट','ऑडियो','देखने के लिए खींचें · ज़ूम के लिए पिंच करें · चमकते बिंदु पर टैप करें','अभी लाइव है','जुड़ें','अभी लाइव','गाइड लाइव हैं'],
+    ar:['انظر حولك','انضم مباشرة','تسوق المشهد','فيديو','قبل الاستكشاف','حركة أقل','تظليل مريح','صوت','اسحب للنظر · اقرص للتكبير · انقر نقطة مضيئة للتسوق','يبث الآن','انضم','مباشر الآن','مرشدون مباشرون'],
+    it:['Guardati Intorno','Unisciti Live','Compra la Scena','Video','Prima di esplorare','Movimento ridotto','Vignettatura comfort','Audio','Trascina per guardare · pizzica per zoomare · tocca un punto luminoso per comprare','è in diretta ora','Unisciti','In diretta ora','guide in diretta']
   };
   for(var l in extra){ if(vtTranslations[l]){ var a=extra[l];
     vtTranslations[l].lookAround=a[0];vtTranslations[l].joinLive=a[1];vtTranslations[l].shopScene=a[2];
     vtTranslations[l].video=a[3];vtTranslations[l].beforeYou=a[4];vtTranslations[l].reducedMotion=a[5];
     vtTranslations[l].vignette=a[6];vtTranslations[l].audioLbl=a[7];vtTranslations[l].dragHint=a[8];
+    vtTranslations[l].isLiveNow=a[9];vtTranslations[l].joinNow=a[10];vtTranslations[l].liveNow=a[11];vtTranslations[l].guidesLive=a[12];
   }}
 })();
 
@@ -18059,6 +18181,20 @@ function vtApplyTranslation(lang){
   });
   var hint=document.querySelector('#vtSetupPanel .vt-setup-hint');
   if(hint&&t.dragHint){var ic2=hint.querySelector('i');hint.innerHTML='';if(ic2)hint.appendChild(ic2);hint.appendChild(document.createTextNode(' '+t.dragHint));}
+  // Live-now chooser + look-around nudge
+  var lpTitle=document.getElementById('vtLivePanelTitle');
+  if(lpTitle&&t.liveNow)lpTitle.textContent=t.liveNow;
+  var lpSub=document.getElementById('vtLivePanelSub');
+  if(lpSub&&t.guidesLive&&typeof vtSessions!=='undefined')lpSub.textContent=Object.keys(vtSessions).length+' '+t.guidesLive;
+  document.querySelectorAll('#vtLivePanelList .vt-live-row-join').forEach(function(b){if(t.joinNow)b.textContent=t.joinNow;});
+  var lpJoin=document.getElementById('vtLpJoin');
+  if(lpJoin&&t.joinNow)lpJoin.textContent=t.joinNow;
+  var lpMeta=document.getElementById('vtLpMeta');
+  if(lpMeta&&t.isLiveNow&&typeof vtSessions!=='undefined'){
+    var pEl=document.getElementById('vtLivePrompt');
+    var sid=(pEl&&pEl.getAttribute('data-session'))||'blue-lagoon';
+    if(vtSessions[sid])lpMeta.textContent=t.isLiveNow+' · '+vtSessions[sid].title;
+  }
   // Sync language code indicators
   var data=vtLangData[lang];
   if(data){
