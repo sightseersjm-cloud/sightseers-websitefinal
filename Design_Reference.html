@@ -17955,6 +17955,28 @@ var vtTranslations={
   it:{explore:'Esplora',browse:'Cerca Tour',bookings:'Le Mie Prenotazioni',favorites:'Preferiti',concierge:'Concierge IA',passport:'Passaporto',social:'Sociale',replays:'Replay',history:'Cronologia',profile:'Profilo',settings:'Impostazioni',main:'Principale',smart:'Smart',account:'Account',dashboard:'Dashboard',myTours:'I Miei Tour',schedule:'Programma',shopItems:'Articoli',sentiment:'Sentimento',tips:'Mance',multiCam:'Multi-Cam',liveTools:'Strumenti Live',business:'Business',earnings:'Guadagni',aiEditor:'Editor IA',pricing:'Prezzi',reviews:'Recensioni',explorerPortal:'Portale Esploratore',guidePortal:'Portale Guida',shopNow:'Acquista',cart:'Carrello',capturePhoto:'Scatta Foto',pointAndAsk:'Chiedi',audioToggle:'Audio',inviteFriend:'Invita',captions:'Sottotitoli',enterVR:'Entra VR',leaveSession:'Esci',liveChat:'Chat dal Vivo',watching:'guardando',addToCart:'AGGIUNGI',inSessionShop:'Negozio',watchrooms:'Stanze',xr:'Dispositivi XR',aiclone:'Clone IA',mood:'IA Umore',analytics:'Analisi',gprofile:'Profilo',gsettings:'Impostazioni'}
 };
 
+/* Labels for the comfort setup + choose-your-path controls, per language:
+   [lookAround, joinLive, shopScene, video, beforeYou, reducedMotion, vignette, audio, dragHint] */
+(function(){
+  var extra={
+    en:['Look Around','Join Live','Shop the Scene','Video','Before you explore','Reduced motion','Comfort vignette','Audio','Drag to look around · scroll or pinch to zoom · tap a glowing dot to shop the scene'],
+    es:['Mirar Alrededor','Ver en Vivo','Comprar la Escena','Vídeo','Antes de explorar','Menos movimiento','Viñeta de confort','Audio','Arrastra para mirar · pellizca para acercar · toca un punto brillante para comprar'],
+    fr:['Regarder Autour','Rejoindre le Direct','Acheter la Scène','Vidéo','Avant d\'explorer','Mouvement réduit','Vignette de confort','Audio','Glissez pour regarder · pincez pour zoomer · touchez un point lumineux pour acheter'],
+    de:['Umsehen','Live Ansehen','Szene Shoppen','Video','Bevor du erkundest','Reduzierte Bewegung','Komfort-Vignette','Audio','Ziehen zum Umsehen · Kneifen zum Zoomen · leuchtenden Punkt antippen zum Shoppen'],
+    pt:['Olhar ao Redor','Ver ao Vivo','Comprar a Cena','Vídeo','Antes de explorar','Menos movimento','Vinheta de conforto','Áudio','Arraste para olhar · belisque para ampliar · toque num ponto brilhante para comprar'],
+    ja:['見回す','ライブ参加','シーンで買う','動画','探検の前に','モーション軽減','快適ビネット','オーディオ','ドラッグで見回す・ピンチでズーム・光る点をタップして購入'],
+    zh:['环顾四周','加入直播','场景购物','视频','探索之前','减少动态','舒适暗角','音频','拖动环顾·捏合缩放·点击发光点购物'],
+    hi:['चारों ओर देखें','लाइव जुड़ें','सीन से खरीदें','वीडियो','खोजने से पहले','कम गति','कम्फर्ट विनेट','ऑडियो','देखने के लिए खींचें · ज़ूम के लिए पिंच करें · चमकते बिंदु पर टैप करें'],
+    ar:['انظر حولك','انضم مباشرة','تسوق المشهد','فيديو','قبل الاستكشاف','حركة أقل','تظليل مريح','صوت','اسحب للنظر · اقرص للتكبير · انقر نقطة مضيئة للتسوق'],
+    it:['Guardati Intorno','Unisciti Live','Compra la Scena','Video','Prima di esplorare','Movimento ridotto','Vignettatura comfort','Audio','Trascina per guardare · pizzica per zoomare · tocca un punto luminoso per comprare']
+  };
+  for(var l in extra){ if(vtTranslations[l]){ var a=extra[l];
+    vtTranslations[l].lookAround=a[0];vtTranslations[l].joinLive=a[1];vtTranslations[l].shopScene=a[2];
+    vtTranslations[l].video=a[3];vtTranslations[l].beforeYou=a[4];vtTranslations[l].reducedMotion=a[5];
+    vtTranslations[l].vignette=a[6];vtTranslations[l].audioLbl=a[7];vtTranslations[l].dragHint=a[8];
+  }}
+})();
+
 /* Labels for the 7 new feature action buttons per language */
 var vtFeatureBtnLabels={
   en:['Narrate','Translate','React','Reel','Split','Trivia','Save'],
@@ -18017,7 +18039,26 @@ function vtApplyTranslation(lang){
   var shopTitle=document.querySelector('.vt-session-shop-title');
   if(shopTitle)shopTitle.textContent=t.inSessionShop;
   // ADD buttons
-  document.querySelectorAll('.vt-session-shop-add').forEach(function(b){if(!b.classList.contains('added'))b.textContent=t.addToCart;});
+  document.querySelectorAll('.vt-session-shop-add').forEach(function(b){if(!b.classList.contains('added')&&!b.classList.contains('vt-3d-view'))b.textContent=t.addToCart;});
+  // Choose-your-path bar
+  var pmap={look:'lookAround',live:'joinLive',shop:'shopScene'};
+  document.querySelectorAll('#vtSetup .vt-path[data-p]').forEach(function(b){
+    var k=pmap[b.getAttribute('data-p')],sp=b.querySelector('span');
+    if(k&&t[k]&&sp)sp.textContent=' '+t[k];
+  });
+  // Scene-switcher Video segment
+  var vlbl=document.querySelector('.vt-scene-video-lbl');
+  if(vlbl&&t.video)vlbl.textContent=t.video;
+  // Comfort & accessibility panel
+  var head=document.querySelector('#vtSetupPanel .vt-setup-head strong');
+  if(head&&t.beforeYou)head.textContent=t.beforeYou;
+  var rmap=['reducedMotion','vignette','audioLbl'];
+  document.querySelectorAll('#vtSetupPanel .vt-setup-row>span:first-child').forEach(function(sp,i){
+    var k=rmap[i];
+    if(k&&t[k]){var ic=sp.querySelector('i');sp.innerHTML='';if(ic)sp.appendChild(ic);sp.appendChild(document.createTextNode(' '+t[k]));}
+  });
+  var hint=document.querySelector('#vtSetupPanel .vt-setup-hint');
+  if(hint&&t.dragHint){var ic2=hint.querySelector('i');hint.innerHTML='';if(ic2)hint.appendChild(ic2);hint.appendChild(document.createTextNode(' '+t.dragHint));}
   // Sync language code indicators
   var data=vtLangData[lang];
   if(data){
