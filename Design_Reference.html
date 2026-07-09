@@ -15251,6 +15251,31 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
                         <!-- 360° PANORAMIC SCENES — Pannellum (real equirectangular panoramas) -->
                         <div class="vt-pano-host" id="vt-pano-host" role="application" aria-label="Interactive 360 degree panoramic scene — click and drag to look around"></div>
+                        <!-- Comfort vignette (edge-dims during motion to reduce discomfort) -->
+                        <div class="vt-comfort-vignette" id="vtComfortVignette" aria-hidden="true"></div>
+                        <!-- Spatial Setup: device readiness + comfort & accessibility controls (WCAG 2.2 AA / W3C XAUR) -->
+                        <div class="vt-setup" id="vtSetup">
+                          <button class="vt-setup-toggle" id="vtSetupToggle" onclick="vtToggleSetup()" aria-expanded="false" title="Comfort &amp; accessibility"><i class="fas fa-sliders-h"></i><span>Comfort</span></button>
+                          <div class="vt-setup-panel" id="vtSetupPanel" role="dialog" aria-label="Comfort and accessibility setup">
+                            <div class="vt-setup-head"><strong>Before you explore</strong><span id="vtSetupDevice">Checking your device…</span></div>
+                            <label class="vt-setup-row"><span><i class="fas fa-wind"></i> Reduced motion</span><input type="checkbox" id="vtCfReducedMotion" onchange="vtApplyComfort()"><span class="vt-sw"></span></label>
+                            <label class="vt-setup-row"><span><i class="fas fa-circle-half-stroke"></i> Comfort vignette</span><input type="checkbox" id="vtCfVignette" onchange="vtApplyComfort()"><span class="vt-sw"></span></label>
+                            <div class="vt-setup-row static"><span><i class="fas fa-volume-high"></i> Audio</span>
+                              <div class="vt-seg" id="vtCfAudioSeg">
+                                <button data-a="spatial" class="on" onclick="vtSetAudioMix('spatial',this)">Spatial</button>
+                                <button data-a="stereo" onclick="vtSetAudioMix('stereo',this)">Stereo</button>
+                                <button data-a="mono" onclick="vtSetAudioMix('mono',this)">Mono</button>
+                              </div>
+                            </div>
+                            <div class="vt-setup-hint"><i class="fas fa-hand-pointer"></i> Drag to look around · scroll or pinch to zoom · tap a glowing dot to shop the scene</div>
+                          </div>
+                        </div>
+                        <!-- Choose your path (deterministic funnel: preview → live → commerce) -->
+                        <div class="vt-paths" id="vtPaths">
+                          <button class="vt-path on" data-p="look" onclick="vtChoosePath('look',this)"><i class="fas fa-panorama"></i> Look Around</button>
+                          <button class="vt-path" data-p="live" onclick="vtChoosePath('live',this)"><i class="fas fa-tower-broadcast"></i> Join Live</button>
+                          <button class="vt-path" data-p="shop" onclick="vtChoosePath('shop',this)"><i class="fas fa-bag-shopping"></i> Shop the Scene</button>
+                        </div>
 
                         <!-- Hotspot popup moved to body via JS -->
 
@@ -15327,6 +15352,42 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 <script defer src="/vendor/pannellum/pannellum.js"></script>
 <style>
 .vt-pano-host{position:absolute;inset:0;z-index:1;background:#0d3a5c}
+/* Comfort vignette — edge dimming to reduce motion discomfort (W3C XAUR) */
+.vt-comfort-vignette{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity .35s ease;box-shadow:inset 0 0 clamp(60px,14vw,150px) clamp(30px,7vw,80px) rgba(0,0,0,.72)}
+.vt-comfort-vignette.on{opacity:1}
+/* Spatial Setup (comfort + accessibility) */
+.vt-setup{position:absolute;top:12px;right:12px;z-index:22;font-family:-apple-system,'SF Pro Text',sans-serif}
+.vt-setup-toggle{display:inline-flex;align-items:center;gap:7px;background:rgba(6,20,38,.62);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11.5px;font-weight:700;padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .2s}
+.vt-setup-toggle:hover{background:rgba(6,20,38,.8)}
+.vt-setup-panel{position:absolute;top:calc(100% + 8px);right:0;width:270px;background:rgba(10,24,42,.9);backdrop-filter:blur(30px) saturate(1.6);-webkit-backdrop-filter:blur(30px) saturate(1.6);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px;box-shadow:0 22px 50px rgba(0,0,0,.5);opacity:0;transform:translateY(-6px);pointer-events:none;transition:all .25s cubic-bezier(.25,.46,.45,.94)}
+.vt-setup.open .vt-setup-panel{opacity:1;transform:none;pointer-events:auto}
+.vt-setup.open .vt-setup-toggle{background:var(--orange);border-color:var(--orange)}
+.vt-setup-head{display:flex;flex-direction:column;gap:2px;padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.1)}
+.vt-setup-head strong{color:#fff;font-size:13px}
+.vt-setup-head span{color:rgba(255,255,255,.55);font-size:10.5px}
+.vt-setup-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;cursor:pointer}
+.vt-setup-row.static{cursor:default}
+.vt-setup-row>span:first-child{color:rgba(255,255,255,.9);font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px}
+.vt-setup-row>span:first-child i{color:var(--orange);width:15px;text-align:center}
+.vt-setup-row input{display:none}
+.vt-sw{width:38px;height:22px;border-radius:999px;background:rgba(255,255,255,.18);position:relative;transition:background .2s;flex-shrink:0}
+.vt-sw::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.vt-setup-row input:checked+.vt-sw{background:#30d158}
+.vt-setup-row input:checked+.vt-sw::after{transform:translateX(16px)}
+.vt-seg{display:inline-flex;background:rgba(255,255,255,.1);border-radius:999px;padding:3px}
+.vt-seg button{background:transparent;border:none;color:rgba(255,255,255,.6);font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px;cursor:pointer;transition:all .2s}
+.vt-seg button.on{background:rgba(255,255,255,.22);color:#fff}
+.vt-setup-hint{margin-top:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.55}
+.vt-setup-hint i{color:var(--orange);margin-right:5px}
+/* Choose your path */
+.vt-paths{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:22;display:flex;gap:8px;background:rgba(6,20,38,.55);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:5px}
+.vt-path{display:inline-flex;align-items:center;gap:7px;background:transparent;border:none;color:rgba(255,255,255,.7);font-size:11.5px;font-weight:700;padding:9px 15px;border-radius:999px;cursor:pointer;transition:all .2s;font-family:-apple-system,'SF Pro Text',sans-serif;white-space:nowrap}
+.vt-path:hover{color:#fff;background:rgba(255,255,255,.1)}
+.vt-path.on{background:var(--orange);color:#fff;box-shadow:0 4px 14px rgba(239,135,49,.4)}
+.vt-path i{font-size:12px}
+@media(max-width:600px){.vt-paths{gap:3px;padding:4px}.vt-path{padding:8px 10px;font-size:10.5px}.vt-path span{display:none}.vt-setup-panel{width:230px}}
+/* reduced motion → still the decorative pulses/floats inside the session */
+#vt-active-session.vt-reduced-motion .vt-mood-badge,#vt-active-session.vt-reduced-motion .vt-hotspot-dot,#vt-active-session.vt-reduced-motion .vt-audio-zone-bars span,#vt-active-session.vt-reduced-motion .vt-live-indicator-dot{animation:none!important}
 .vt-pano-host .pnlm-container{width:100%!important;height:100%!important;background:#0d3a5c}
 .vt-pano-host .pnlm-load-box{background:rgba(6,20,38,.85);border-radius:14px}
 .vt-pano-host .pnlm-about-msg{display:none!important}
@@ -15668,6 +15729,84 @@ function vtInitPanoViewer(){
   }else if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',vtInitPanoViewer);
   }else{vtInitPanoViewer();}
+})();
+
+/* ═══════ SPATIAL SETUP: comfort, accessibility & path (audit "revised user flow") ═══════ */
+var vtComfort={reducedMotion:false,vignette:false,audio:'spatial'};
+try{ vtComfort=Object.assign(vtComfort, JSON.parse(localStorage.getItem('vt_comfort')||'{}')); }catch(e){}
+function vtSaveComfort(){ try{ localStorage.setItem('vt_comfort',JSON.stringify(vtComfort)); }catch(e){} }
+function vtToggleSetup(){
+  var s=document.getElementById('vtSetup'); if(!s)return;
+  var open=s.classList.toggle('open');
+  var t=document.getElementById('vtSetupToggle'); if(t)t.setAttribute('aria-expanded',open?'true':'false');
+  if(open){
+    var d=document.getElementById('vtSetupDevice');
+    if(d){
+      var dev='This browser — drag & zoom';
+      if(/OculusBrowser|Quest/i.test(navigator.userAgent)) dev='Meta Quest — WebXR hands + look-around ready';
+      else if(navigator.xr) dev='Headset-capable browser — Enter Spatial available';
+      else if(/Vision/i.test(navigator.userAgent)) dev='Apple Vision Pro — WebXR & Quick Look ready';
+      d.textContent=dev;
+    }
+    var close=function(e){ if(!s.contains(e.target)){ s.classList.remove('open'); if(t)t.setAttribute('aria-expanded','false'); document.removeEventListener('click',close);} };
+    setTimeout(function(){document.addEventListener('click',close)},10);
+  }
+}
+function vtApplyComfort(){
+  var rm=document.getElementById('vtCfReducedMotion'), vg=document.getElementById('vtCfVignette');
+  if(rm)vtComfort.reducedMotion=rm.checked;
+  if(vg)vtComfort.vignette=vg.checked;
+  /* reduced motion → stop the panorama auto-rotate and pause CSS motion */
+  try{
+    if(vtPanoViewer){
+      if(vtComfort.reducedMotion){ vtPanoViewer.stopAutoRotate&&vtPanoViewer.stopAutoRotate(); }
+      else { vtPanoViewer.startAutoRotate&&vtPanoViewer.startAutoRotate(-1.5); }
+    }
+  }catch(e){}
+  var sess=document.getElementById('vt-active-session');
+  if(sess)sess.classList.toggle('vt-reduced-motion',vtComfort.reducedMotion);
+  /* vignette overlay */
+  var v=document.getElementById('vtComfortVignette');
+  if(v)v.classList.toggle('on',vtComfort.vignette);
+  vtSaveComfort();
+}
+function vtSetAudioMix(mode,btn){
+  vtComfort.audio=mode;
+  var seg=document.getElementById('vtCfAudioSeg');
+  if(seg)seg.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b===btn);});
+  var lbl=document.querySelector('.vt-audio-zone-label');
+  if(lbl){var name=(typeof vtPanoScenes!=='undefined'&&vtActivePanoScene&&vtPanoScenes[vtActivePanoScene]?vtPanoScenes[vtActivePanoScene].ambient:'Ambient');lbl.innerHTML=name+'<small>'+(mode.charAt(0).toUpperCase()+mode.slice(1))+' audio</small>';}
+  vtSaveComfort();
+  if(typeof vtToast==='function')vtToast('<i class="fas fa-volume-high"></i> Audio set to '+mode);
+}
+function vtChoosePath(path,btn){
+  document.querySelectorAll('.vt-path').forEach(function(b){b.classList.toggle('on',b===btn);});
+  if(path==='live'){
+    /* jump to the live sessions list */
+    if(typeof vtExpNav==='function'){var a=document.querySelector('#vt-exp-sidebar a[data-view=browse]');vtExpNav('browse',a);}
+    if(typeof vtToast==='function')vtToast('<i class="fas fa-tower-broadcast"></i> Browse live &amp; upcoming guided sessions');
+  }else if(path==='shop'){
+    var shop=document.querySelector('.vt-session-shop');
+    if(shop){shop.scrollIntoView({behavior:'smooth',block:'nearest'});shop.style.transition='background .4s';shop.style.background='rgba(239,135,49,.14)';setTimeout(function(){shop.style.background='';},1400);}
+    if(typeof vtToast==='function')vtToast('<i class="fas fa-bag-shopping"></i> Shop items from this scene — or tap a glowing dot');
+  }else{
+    if(typeof vtToast==='function')vtToast('<i class="fas fa-panorama"></i> Free look — drag to explore the scene');
+  }
+}
+/* restore saved comfort prefs once the viewer exists */
+(function(){
+  function restore(){
+    var rm=document.getElementById('vtCfReducedMotion'), vg=document.getElementById('vtCfVignette');
+    if(rm)rm.checked=vtComfort.reducedMotion;
+    if(vg)vg.checked=vtComfort.vignette;
+    var seg=document.getElementById('vtCfAudioSeg');
+    if(seg)seg.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-a')===vtComfort.audio);});
+    /* honor the OS "reduce motion" setting as the default if the user hasn't chosen */
+    try{ if(!localStorage.getItem('vt_comfort') && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ if(rm)rm.checked=true; vtComfort.reducedMotion=true; } }catch(e){}
+    vtApplyComfort();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);
+  else setTimeout(restore,400);
 })();
 </script>
 
