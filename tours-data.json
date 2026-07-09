@@ -57,9 +57,9 @@
     },
     "spatial": {
       "view": {
-        "yaw": 15,
-        "pitch": -4,
-        "hfov": 100
+        "yaw": -88,
+        "pitch": -2,
+        "hfov": 96
       },
       "ambient": "Ocean Waves",
       "hotspots": [
