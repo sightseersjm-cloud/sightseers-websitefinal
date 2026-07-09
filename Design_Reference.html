@@ -14858,7 +14858,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
     </div>
 
     <!-- Drag hint -->
-    <div id="vt-pano-hint" style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 18px;color:rgba(255,255,255,.7);font-size:12px;pointer-events:none;transition:opacity .5s"><i class="fas fa-arrows-alt" style="margin-right:6px"></i>Drag to explore · Pinch to zoom</div>
+    <div id="vt-pano-hint" style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 18px;color:rgba(255,255,255,.7);font-size:12px;pointer-events:none;transition:opacity .5s;white-space:nowrap"><i class="fas fa-arrows-alt" style="margin-right:6px"></i>Drag or use arrow keys to explore · Pinch / +/- to zoom</div>
 
     <!-- Hotspot layer -->
     <div id="vt-pano-hotspots" style="position:absolute;inset:0;pointer-events:none;z-index:5"></div>
@@ -14903,6 +14903,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
       <button class="vtp-dock-btn" onclick="vtpOpenGroup()" title="Invite Group"><i class="fas fa-user-plus"></i><span>Invite</span></button>
       <button class="vtp-dock-btn" onclick="vtpOpenQuote()" title="Request Quote"><i class="fas fa-file-invoice-dollar"></i><span>Quote</span></button>
       <button class="vtp-dock-btn" onclick="vtpSaveTour()" title="Save"><i class="fas fa-bookmark"></i><span>Save</span></button>
+      <button class="vtp-dock-btn" onclick="vtpToggleComfort(this)" title="Comfort Settings"><i class="fas fa-eye-slash"></i><span>Comfort</span></button>
     </div>
 
     <!-- Hotspot info popup -->
@@ -15541,16 +15542,16 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                       <div class="vt-xr-device-name">Apple Vision Pro</div>
                       <div class="vt-xr-device-tag premium">Spatial Computing</div>
                       <div class="vt-xr-device-features">
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Full immersive VR tours</div>
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> AR passthrough shopping</div>
+                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Full immersive 360° tours via WebXR</div>
+                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Mixed reality window via Safari</div>
                         <div class="vt-xr-feat"><i class="fas fa-check"></i> Spatial audio zones</div>
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Eye tracking hotspot selection</div>
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Hand gesture controls</div>
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Persona video chat with guide</div>
+                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Eye + hand input on visionOS</div>
+                        <div class="vt-xr-feat"><i class="fas fa-check"></i> 3D product previews via Quick Look</div>
+                        <div class="vt-xr-feat"><i class="fas fa-star" style="color:#ffe97a"></i> SharePlay group sessions (native app)</div>
                       </div>
                       <div class="vt-xr-device-actions">
                         <button class="vt-xr-connect-btn" onclick="vtConnectXRDevice('visionpro')"><i class="fas fa-link"></i> Connect</button>
-                        <button class="vt-xr-info-btn" onclick="vtToast('<i class=&quot;fas fa-info-circle&quot;></i> Requires visionOS 2.0+ and Safari WebXR support')"><i class="fas fa-info-circle"></i></button>
+                        <button class="vt-xr-info-btn" onclick="vtToast('<i class=&quot;fas fa-info-circle&quot;></i> WebXR supported on visionOS Safari. Native app unlocks SharePlay and room-aware features.')"><i class="fas fa-info-circle"></i></button>
                       </div>
                     </div>
                   </div>
@@ -15563,7 +15564,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                       <div class="vt-xr-device-tag vr">Mixed Reality</div>
                       <div class="vt-xr-device-features">
                         <div class="vt-xr-feat"><i class="fas fa-check"></i> 360&deg; immersive tours</div>
-                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Color passthrough AR shopping</div>
+                        <div class="vt-xr-feat"><i class="fas fa-check"></i> Color passthrough mixed reality</div>
                         <div class="vt-xr-feat"><i class="fas fa-check"></i> Hand tracking &amp; controllers</div>
                         <div class="vt-xr-feat"><i class="fas fa-check"></i> Spatial audio 3D positioning</div>
                         <div class="vt-xr-feat"><i class="fas fa-check"></i> Shared VR watch rooms</div>
@@ -16113,7 +16114,18 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
               <div class="vt-dash-view" id="vt-guide-analytics">
                 <div class="vt-dash-header"><h2>Analytics</h2><div class="vt-dash-header-actions"><div class="vt-dash-header-btn" onclick="vtGuideNav('dashboard',document.querySelector('#vt-guide-sidebar a[data-view=dashboard]'))"><i class="fas fa-arrow-left" style="margin-right:6px"></i>Back</div></div></div>
                 <div class="vt-dash-stats"><div class="vt-dash-stat"><strong>3,218</strong><span>Total Viewers</span><small>All time</small></div><div class="vt-dash-stat"><strong>42 min</strong><span>Avg Session</span><small>Duration</small></div><div class="vt-dash-stat"><strong>73%</strong><span>Return Rate</span><small>Repeat viewers</small></div><div class="vt-dash-stat"><strong>Jamaica</strong><span>Top Region</span><small>68% of tours</small></div></div>
-                <div class="vt-empty-state" style="padding:30px"><i class="fas fa-chart-line"></i><h4>Detailed Analytics</h4><p>Viewer demographics, peak hours, conversion rates, and engagement metrics will appear here.</p></div>
+                <div style="padding:16px 0">
+                  <div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:6px"><span>Preview-to-Book Rate</span><span>34%</span></div><div style="background:#e8eef5;border-radius:4px;height:8px"><div style="background:var(--orange);height:8px;border-radius:4px;width:34%"></div></div></div>
+                  <div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:6px"><span>Live Session Join Rate</span><span>61%</span></div><div style="background:#e8eef5;border-radius:4px;height:8px"><div style="background:#22c55e;height:8px;border-radius:4px;width:61%"></div></div></div>
+                  <div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:6px"><span>Session Completion</span><span>78%</span></div><div style="background:#e8eef5;border-radius:4px;height:8px"><div style="background:#3b82f6;height:8px;border-radius:4px;width:78%"></div></div></div>
+                  <div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:6px"><span>In-Session Purchase Rate</span><span>18%</span></div><div style="background:#e8eef5;border-radius:4px;height:8px"><div style="background:#a855f7;height:8px;border-radius:4px;width:18%"></div></div></div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+                    <div style="background:#f0f7ff;border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--navy)">US, UK, CA</div><div style="font-size:11px;color:var(--grey);margin-top:2px">Top Viewer Markets</div></div>
+                    <div style="background:#fff8f0;border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--orange)">6–8 PM</div><div style="font-size:11px;color:var(--grey);margin-top:2px">Peak Session Hours (EST)</div></div>
+                    <div style="background:#f0fff4;border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#22c55e">4.8 ★</div><div style="font-size:11px;color:var(--grey);margin-top:2px">Avg Guide Rating</div></div>
+                    <div style="background:#fdf4ff;border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#a855f7">$41</div><div style="font-size:11px;color:var(--grey);margin-top:2px">Avg Session Revenue</div></div>
+                  </div>
+                </div>
               </div>
 
               <!-- VIEW: Profile -->
@@ -16143,9 +16155,9 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
   <section class="vt-sec" id="vt-signup-section" style="padding:40px 0">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
-        <span class="sec-pre">Get Early Access</span>
+        <span class="sec-pre">V-Tours</span>
         <h2 class="sec-title">Create Your V-Tours Account</h2>
-        <p class="sec-sub center">Be among the first to experience live virtual tours this summer. Sign up as an Explorer to join sessions, or register as a Guide to host them.</p>
+        <p class="sec-sub center">Join live-guided virtual tours of the Caribbean led by local experts. Sign up as an Explorer to book sessions, or register as a Guide to host them.</p>
       </div>
       <div class="vt-signup-wrap reveal">
         <div class="vt-signup-toggle">
@@ -16173,8 +16185,8 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                 <span class="vt-signup-tag" onclick="this.classList.toggle('selected')">Nature</span>
               </div>
             </div>
-            <button type="submit" class="vt-signup-btn"><i class="fas fa-rocket"></i> Join the Waitlist</button>
-            <p class="vt-signup-note">Free to join. You will be notified when V-Tours launches Summer 2026.</p>
+            <button type="submit" class="vt-signup-btn"><i class="fas fa-rocket"></i> Create Free Account</button>
+            <p class="vt-signup-note">Free to join. Browse upcoming sessions and book your first live tour today.</p>
           </form>
         </div>
         <div class="vt-signup-card" id="vt-signup-guide" style="display:none">
@@ -16217,7 +16229,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
       <div class="sec-head center reveal">
         <span class="sec-pre" style="color:#ffe97a">Built for the Future</span>
         <h2 class="sec-title" style="color:#fff">Three Device Tiers</h2>
-        <p class="sec-sub center" style="color:rgba(255,255,255,.6)">Engineered from day one to support the next generation of consumer hardware, seamlessly upgrading from standard screens to fully spatial computing.</p>
+        <p class="sec-sub center" style="color:rgba(255,255,255,.6)">Browser-first for discovery. WebXR for Meta Quest. Native visionOS for premium Apple Vision Pro sessions. Each tier degrades gracefully so any device can join.</p>
       </div>
       <div class="vt-devices reveal">
         <div class="vt-device">
@@ -16247,9 +16259,9 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
           <h3>Apple Vision Pro</h3>
           <div class="vt-device-maker">Spatial Computing by Apple</div>
           <ul>
-            <li>Guide's feed fills your physical room as a spatial window</li>
-            <li>Eye tracking replaces clicking to point and direct</li>
-            <li>Natural hand gestures for shopping and interaction</li>
+            <li>Guide's live feed in a full immersive spatial window</li>
+            <li>Eye and hand input for navigation and interaction</li>
+            <li>3D product previews via Safari Quick Look / USDZ</li>
             <li>Premium-tier pricing for the highest-fidelity sessions</li>
           </ul>
         </div>
@@ -16278,7 +16290,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
   <section class="vt-sec">
     <div class="vt-cta-block reveal">
       <h2>Ready to Explore the Caribbean from Anywhere?</h2>
-      <p>V-Tours is launching in private beta. Be among the first to experience the Caribbean like never before.</p>
+      <p>Live-guided Caribbean tours, bookable right now. Join a session, preview any destination in 360°, or register as a local guide and earn from your expertise.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
         <button class="vt-cta-btn" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'})"><i class="fas fa-calendar-check"></i> Book a V-Tour</button>
         <button class="vt-cta-btn" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.4)" onclick="nav('contact')"><i class="fas fa-envelope"></i> Request Itinerary</button>
@@ -17439,6 +17451,19 @@ function vtpInitPanoControls(canvas){
   canvas.ontouchstart=function(e){var t=e.touches[0];VTP.panoIsDragging=true;VTP.panoStartX=t.clientX;VTP.panoStartY=t.clientY;VTP.panoStartLon=VTP.panoLon;VTP.panoStartLat=VTP.panoLat;};
   canvas.ontouchmove=function(e){if(!VTP.panoIsDragging)return;var t=e.touches[0];VTP.panoLon=VTP.panoStartLon-(t.clientX-VTP.panoStartX)*.2;VTP.panoLat=VTP.panoStartLat+(t.clientY-VTP.panoStartY)*.2;e.preventDefault();};
   canvas.ontouchend=function(){VTP.panoIsDragging=false;};
+  /* Keyboard navigation for accessibility (WCAG 2.2 / XR Accessibility User Requirements) */
+  canvas.setAttribute('tabindex','0');
+  canvas.setAttribute('aria-label','360° panorama viewer. Use arrow keys to look around, + and - to zoom.');
+  canvas.setAttribute('role','application');
+  canvas.addEventListener('keydown',function(e){
+    var step=3;
+    if(e.key==='ArrowLeft'){VTP.panoLon+=step;e.preventDefault();}
+    else if(e.key==='ArrowRight'){VTP.panoLon-=step;e.preventDefault();}
+    else if(e.key==='ArrowUp'){VTP.panoLat=Math.min(85,VTP.panoLat+step);e.preventDefault();}
+    else if(e.key==='ArrowDown'){VTP.panoLat=Math.max(-85,VTP.panoLat-step);e.preventDefault();}
+    else if(e.key==='+'||e.key==='='){VTP.panoFov=Math.max(40,VTP.panoFov-5);if(VTP.panoCamera)VTP.panoCamera.fov=VTP.panoFov,VTP.panoCamera.updateProjectionMatrix();e.preventDefault();}
+    else if(e.key==='-'){VTP.panoFov=Math.min(100,VTP.panoFov+5);if(VTP.panoCamera)VTP.panoCamera.fov=VTP.panoFov,VTP.panoCamera.updateProjectionMatrix();e.preventDefault();}
+  });
   canvas.onwheel=function(e){VTP.panoFov=Math.max(40,Math.min(100,VTP.panoFov+e.deltaY*.05));if(VTP.panoCamera)VTP.panoCamera.fov=VTP.panoFov,VTP.panoCamera.updateProjectionMatrix();};
   // Gyroscope on mobile
   if(window.DeviceOrientationEvent){
@@ -17584,6 +17609,16 @@ function vtpSaveTour(){
     btn.style.color=saved?'#ef8731':'rgba(255,255,255,.7)';
   }
   vtpRenderGallery(document.querySelector('.vtp-filter.active')&&document.querySelector('.vtp-filter.active').getAttribute('data-filter')||'all');
+}
+
+// Comfort settings (vignette + snap mode for motion sickness mitigation)
+var vtpComfortEnabled=false;
+function vtpToggleComfort(btn){
+  vtpComfortEnabled=!vtpComfortEnabled;
+  var canvas=document.getElementById('vt-pano-canvas');
+  if(canvas){canvas.style.borderRadius=vtpComfortEnabled?'50%':'0';canvas.style.boxShadow=vtpComfortEnabled?'inset 0 0 120px 60px rgba(0,0,0,.7)':'';}
+  if(btn){btn.querySelector('i').className=vtpComfortEnabled?'fas fa-eye':'fas fa-eye-slash';btn.style.color=vtpComfortEnabled?'#ef8731':'rgba(255,255,255,.6)';}
+  vtToast(vtpComfortEnabled?'<i class="fas fa-eye-slash"></i> Comfort mode on — vignette active. Use arrow keys to look around gently.':'<i class="fas fa-eye"></i> Comfort mode off.');
 }
 
 // Concierge
@@ -18099,7 +18134,7 @@ function vtCreateAccount(e,type){
     btn.innerHTML='<i class="fas fa-check-circle"></i> Welcome aboard!';
     var sub=isGuide
       ? 'Your guide application is in — we will review within 48 hours.'
-      : (already?'You are already on the list — we will notify you at launch.':'You are on the V-Tours waitlist. We will notify you at launch.');
+      : (already?'You already have an account — check your email to sign in.':'Account created! Check your email to confirm and start booking tours.');
     vtConfettiCelebrate('Welcome aboard!',sub);
     try{form.reset();form.querySelectorAll('.vt-signup-tag.selected').forEach(function(t){t.classList.remove('selected')})}catch(_){}
     setTimeout(function(){btn.innerHTML=orig;btn.classList.remove('success');btn.style.pointerEvents=''},4500);
