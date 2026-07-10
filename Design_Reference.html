@@ -12,15 +12,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="canonical" href="https://www.sightseerscaribbean.com/">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#063a63">
 <meta property="og:title" content="Sight Seers Caribbean | Virtual Tours & 360° Immersive Experiences">
 <meta property="og:description" content="Explore Jamaica and the Caribbean through immersive 360° virtual tours before you book. See beaches, villas, excursions and cultural experiences up close.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.sightseerscaribbean.com/">
-<meta property="og:image" content="https://www.sightseerscaribbean.com/jamaica-island.png">
+<meta property="og:image" content="https://www.sightseerscaribbean.com/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sight Seers Caribbean — 360° virtual tours of Jamaica">
+<meta property="og:site_name" content="Sight Seers Caribbean">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sight Seers Caribbean | Virtual Tours & 360° Experiences">
 <meta name="twitter:description" content="Explore Jamaica and the Caribbean in 360° before you book.">
+<meta name="twitter:image" content="https://www.sightseerscaribbean.com/og-cover.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Sight Seers Caribbean","url":"https://www.sightseerscaribbean.com","description":"Sight Seers Caribbean offers immersive 360° virtual tours and curated travel experiences across Jamaica and the Caribbean.","areaServed":{"@type":"Place","name":"Jamaica, Caribbean"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Virtual Tours & Caribbean Experiences","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Blue Lagoon Virtual Tour","description":"Explore the stunning Blue Lagoon in Portland, Jamaica through an immersive 360° virtual tour.","touristType":"Couples, Groups, Adventure Travelers"}},{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Sunset Yacht Experience Virtual Tour","description":"Preview the iconic Sight Seers sunset yacht charter with a 360° immersive walkthrough.","touristType":"Couples, Groups, Celebration Travel"}},{"@type":"Offer","itemOffered":{"@type":"TouristTrip","name":"Kingston Cultural Food Tour Virtual Preview","description":"Explore Kingston's vibrant jerk and ackee food scene virtually before booking.","touristType":"Food Enthusiasts, Cultural Travelers"}}]}}</script>
+<script>
+/* ── Google Analytics 4 ──
+   Set the Measurement ID here (window.SS_GA4_ID='G-XXXXXXXXXX') or save it
+   from the admin portal (Settings → key "ss_ga4_id") — no rebuild needed.
+   Loads nothing until an ID exists. */
+window.SS_GA4_ID = window.SS_GA4_ID || '';
+(function(){
+  function boot(id){
+    id = String(id||'').trim();
+    if(!/^(G|GT|AW)-[A-Z0-9]+$/i.test(id) || window.gtag) return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', id, { anonymize_ip: true });
+  }
+  if (window.SS_GA4_ID) return boot(window.SS_GA4_ID);
+  window.addEventListener('DOMContentLoaded', function(){
+    try {
+      fetch('/api/settings').then(function(r){ return r.json(); }).then(function(d){
+        if (d && d.ss_ga4_id) boot(d.ss_ga4_id);
+      }).catch(function(){});
+    } catch(e) {}
+  });
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
@@ -20025,6 +20065,18 @@ const PAGE_EDITOR_BINDINGS={
   adminSpecialPoint4Title:{selector:'.special-grid .special-point:nth-child(4) strong',mode:'text'},
   adminSpecialPoint4Body:{selector:'.special-grid .special-point:nth-child(4) p',mode:'text'}
 };
+/* GA4 Measurement ID saves the moment it's changed (bridge syncs it to the
+   server, where writes are admin-gated) — analytics start on next page load. */
+document.addEventListener('change',function(e){
+  if(!e.target||e.target.id!=='adminGa4Id')return;
+  var v=String(e.target.value||'').trim();
+  if(v&&!/^(G|GT|AW)-[A-Z0-9]+$/i.test(v)){
+    e.target.style.border='2px solid #e94560';
+    return;
+  }
+  e.target.style.border='';
+  try{ localStorage.setItem('ss_ga4_id',v); }catch(err){}
+});
 const ADMIN_SECTION_SCHEMA=[
   {key:'global',label:'Global Brand & Contact',intro:'Edit business identity, phones, email and the main footer description.',open:true,fields:[
     {id:'adminBrandName',label:'Brand Name',type:'text'},
@@ -20032,7 +20084,8 @@ const ADMIN_SECTION_SCHEMA=[
     {id:'adminPhone1',label:'Primary Phone',type:'text'},
     {id:'adminPhone2',label:'Secondary Phone',type:'text'},
     {id:'adminEmail',label:'Email Address',type:'text',full:true},
-    {id:'adminFooterAbout',label:'Footer About Text',type:'textarea',full:true}
+    {id:'adminFooterAbout',label:'Footer About Text',type:'textarea',full:true},
+    {id:'adminGa4Id',label:'Google Analytics 4 Measurement ID',type:'text',full:true,placeholder:'G-XXXXXXXXXX',help:'Paste the Measurement ID from analytics.google.com (Admin → Data streams). Saves instantly and turns on visitor analytics site-wide. Leave blank to keep analytics off.'}
   ]},
   {key:'home',label:'Home Page',intro:'Hero copy, homepage sections, Jamaica map art, feature cards and homepage image swaps.',open:true,fields:[
     {id:'adminHeroEyebrow',label:'Hero Eyebrow',type:'text'},
@@ -22873,6 +22926,7 @@ function galleryToTextarea(data){
 
 function populateAdminForms(){
   const set=(id,val)=>{const el=document.getElementById(id); if(el) el.value=val ?? '';};
+  try{ set('adminGa4Id', localStorage.getItem('ss_ga4_id')||''); }catch(e){}
   set('adminBrandName',siteSettings.brandName);
   set('adminTagline',siteSettings.tagline);
   set('adminPhone1',siteSettings.phone1);

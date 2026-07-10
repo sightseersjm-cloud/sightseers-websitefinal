@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
     const user = getUser(req);
     const { key, value, batch } = req.body || {};
 
-    const adminKeys = ['ss_site_settings', 'ss_page_editor_settings', 'ss_stay_page_settings', 'ss_customer_gallery', 'ss_master_tours_manager_v1', 'ss_dynamic_sections_v1', 'ss_blog_requests_v1'];
+    const adminKeys = ['ss_site_settings', 'ss_page_editor_settings', 'ss_stay_page_settings', 'ss_customer_gallery', 'ss_master_tours_manager_v1', 'ss_dynamic_sections_v1', 'ss_blog_requests_v1', 'ss_ga4_id'];
 
     if (batch && typeof batch === 'object') {
       const keys = Object.keys(batch);
