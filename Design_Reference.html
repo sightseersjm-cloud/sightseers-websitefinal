@@ -17121,10 +17121,10 @@ function vtGuideNav(view,el){
 var vtSessions={
   /* yt = guide-video replay shown in the session player until the guide's real
      Mux live stream (playbackId) takes over */
-  'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247,price:42,playbackId:'',yt:'kQF0I0EYeEU',scene:'lagoon'},
-  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183,price:38,playbackId:'',yt:'l7DGxnDfTL8',scene:'market'},
-  'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156,price:35,playbackId:'',yt:'l7DGxnDfTL8',scene:'market'},
-  'bigship-dj':{title:'Big Ship Records DJ Mixing Session',guide:'Stephen McGregor',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:312,price:40,playbackId:'',yt:'',scene:'lagoon'}
+  'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247,price:42,playbackId:'',scene:'lagoon'},
+  'kingston-jerk':{title:'Kingston Jerk and Ackee Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183,price:38,playbackId:'',scene:'market'},
+  'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156,price:35,playbackId:'',scene:'market'},
+  'bigship-dj':{title:'Big Ship Records DJ Mixing Session',guide:'Stephen McGregor',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:312,price:40,playbackId:'',scene:'lagoon'}
 };
 function vtJoinSession(id){
   var s=vtSessions[id];if(!s)return;
@@ -17173,7 +17173,10 @@ function vtJoinSessionDirect(id,s){
      then apply the session's own details over it */
   if(s.scene&&typeof vtSwitchScene==='function'&&typeof vtActivePanoScene!=='undefined'&&vtActivePanoScene!==s.scene)vtSwitchScene(s.scene);
   if(typeof vtShowSceneVideo==='function'){
-    if(s.yt)vtShowSceneVideo(s.yt); else vtHideSceneVideo();
+    /* A session may pin its own footage via `yt`; otherwise it inherits the
+       video configured for its scene, so there is one place to change it. */
+    var vid = s.yt || (typeof vtSceneYT!=='undefined' && s.scene ? vtSceneYT[s.scene] : null);
+    if(vid) vtShowSceneVideo(vid); else vtHideSceneVideo();
   }
   var el;
   el=document.getElementById('vt-session-title');if(el)el.textContent=s.title;
@@ -19060,11 +19063,22 @@ function vtToggleSplitView(btn){
   if(vtSplitOn){
     btn.classList.add('vt-active');
     var row=document.createElement('div');row.className='vt-split-row';row.id='vt-split-row';
-    var s1='https://www.youtube.com/embed/kQF0I0EYeEU?autoplay=1&mute=1&loop=1&playlist=kQF0I0EYeEU&controls=1&modestbranding=1&rel=0&playsinline=1&vq=hd2160&hd=1';
-    var s2='https://www.youtube.com/embed/l7DGxnDfTL8?autoplay=1&mute=1&loop=1&playlist=l7DGxnDfTL8&controls=1&modestbranding=1&rel=0&playsinline=1&vq=hd2160&hd=1';
-    row.innerHTML='<div class="vt-split-pane"><div class="vt-split-label-tag">Blue Lagoon · Portland</div><iframe src="'+s1+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-pane"><div class="vt-split-label-tag" style="left:auto;right:10px">Craft Market · Kingston</div><iframe src="'+s2+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-divider"></div>';
+    /* Read from the scene map so split view cannot drift from the videos the
+       rest of the portal plays; these were hardcoded and had gone stale. */
+    function vtSplitSrc(scene){
+      var e=(typeof vtYTEntry==='function')?vtYTEntry(vtSceneYT[scene]):{id:''};
+      if(!e||!e.id) return '';
+      return 'https://www.youtube.com/embed/'+e.id+'?autoplay=1&mute=1&loop=1&playlist='+e.id
+           + (e.start?('&start='+e.start):'')
+           + '&controls=1&modestbranding=1&rel=0&playsinline=1&vq=hd2160&hd=1';
+    }
+    var s1=vtSplitSrc('lagoon');
+    var s2=vtSplitSrc('market');
+    var lbl1=(typeof vtYTEntry==='function'&&vtYTEntry(vtSceneYT['lagoon']).label)||'Blue Lagoon';
+    var lbl2=(typeof vtYTEntry==='function'&&vtYTEntry(vtSceneYT['market']).label)||'Craft Market';
+    row.innerHTML='<div class="vt-split-pane"><div class="vt-split-label-tag">'+lbl1+'</div><iframe src="'+s1+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-pane"><div class="vt-split-label-tag" style="left:auto;right:10px">'+lbl2+'</div><iframe src="'+s2+'" allow="autoplay" allowfullscreen></iframe></div><div class="vt-split-divider"></div>';
     vid.appendChild(row);
-    vtToast('<i class="fas fa-table-columns"></i> Split View — Blue Lagoon + Craft Market');
+    vtToast('<i class="fas fa-table-columns"></i> Split View — '+lbl1+' + '+lbl2);
   }else{
     btn.classList.remove('vt-active');
     var row=document.getElementById('vt-split-row');if(row)row.remove();
