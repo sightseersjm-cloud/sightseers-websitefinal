@@ -16,7 +16,8 @@
     'ss_stay_page_settings',
     'ss_master_tours_manager_v1',
     'ss_dynamic_sections_v1',
-    'ss_blog_requests_v1'
+    'ss_blog_requests_v1',
+    'ss_ga4_id'
   ];
 
   function getToken() {
@@ -144,20 +145,108 @@
 
   function listImages() { return api('images', 'GET'); }
 
-  function uploadImage(file, folder) {
-    return new Promise(function (resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function () {
-        var base64 = reader.result.split(',')[1];
-        api('images', 'POST', {
-          filename: file.name,
-          data: base64,
-          type: file.type,
-          folder: folder || 'site-images'
-        }).then(resolve).catch(reject);
+  /* Downscale/recompress images client-side so uploads stay well under
+     Vercel's 4.5MB request-body limit (phone photos are often 4-8MB). */
+  function compressImage(file, maxDim, quality) {
+    maxDim = maxDim || 1920; quality = quality || 0.85;
+    return new Promise(function (resolve) {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 400 * 1024) return resolve(file);
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () {
+        try {
+          var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            URL.revokeObjectURL(url);
+            if (blob && blob.size < file.size) {
+              blob.name = (file.name || 'image').replace(/\.[^.]+$/, '') + '.jpg';
+              resolve(blob);
+            } else resolve(file);
+          }, 'image/jpeg', quality);
+        } catch (e) { URL.revokeObjectURL(url); resolve(file); }
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      img.onerror = function () { URL.revokeObjectURL(url); resolve(file); };
+      img.src = url;
+    });
+  }
+
+  function uploadImage(file, folder) {
+    return compressImage(file).then(function (upload) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var base64 = reader.result.split(',')[1];
+          if (base64.length > 4 * 1024 * 1024) {
+            return reject(new Error('Image is too large even after compression (max ~3MB). Please crop or resize it.'));
+          }
+          api('images', 'POST', {
+            filename: upload.name || file.name,
+            data: base64,
+            type: upload.type || file.type,
+            folder: folder || 'site-images'
+          }).then(resolve).catch(function (err) {
+            if (err && (err.status === 413 || /too large|payload/i.test(err.message))) {
+              err.message = 'Image too large for upload — please use a photo under 3MB.';
+            }
+            reject(err);
+          });
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(upload);
+      });
+    });
+  }
+
+  // Upload with a real progress callback (bytes actually sent to the server).
+  // onProgress receives an integer 0-100. Phases: 0-15 compressing/encoding,
+  // 15-99 network upload, 100 done.
+  function uploadImageWithProgress(file, folder, onProgress) {
+    var report = function (p) { try { onProgress && onProgress(Math.max(0, Math.min(100, Math.round(p)))); } catch (e) {} };
+    report(2);
+    return compressImage(file).then(function (upload) {
+      report(8);
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var base64 = reader.result.split(',')[1];
+          if (base64.length > 4 * 1024 * 1024) {
+            return reject(new Error('Image is too large even after compression (max ~3MB). Please crop or resize it.'));
+          }
+          report(15);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/images', true);
+          var h = authHeaders();
+          Object.keys(h).forEach(function (k) { xhr.setRequestHeader(k, h[k]); });
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) report(15 + (e.loaded / e.total) * 84);
+          };
+          xhr.onload = function () {
+            var data = {};
+            try { data = JSON.parse(xhr.responseText); } catch (e) {}
+            if (xhr.status >= 200 && xhr.status < 300 && (data.url)) {
+              report(100);
+              resolve(data);
+            } else {
+              var msg = (data && data.error) || ('Upload failed (' + xhr.status + ')');
+              if (xhr.status === 413) msg = 'Image too large for upload — please use a photo under 3MB.';
+              reject(Object.assign(new Error(msg), { status: xhr.status }));
+            }
+          };
+          xhr.onerror = function () { reject(new Error('Network error during upload')); };
+          xhr.send(JSON.stringify({
+            filename: upload.name || file.name,
+            data: base64,
+            type: upload.type || file.type,
+            folder: folder || 'site-images'
+          }));
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(upload);
+      });
     });
   }
 
@@ -316,6 +405,7 @@
 
   window.SS = {
     api: api,
+    compressImage: compressImage,
 
     signup: signup,
     signin: signin,
@@ -351,6 +441,7 @@
 
     listImages: listImages,
     uploadImage: uploadImage,
+    uploadImageWithProgress: uploadImageWithProgress,
     deleteImage: deleteImage,
 
     getPages: getPages,

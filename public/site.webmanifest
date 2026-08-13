@@ -1,0 +1,13 @@
+{
+  "name": "Sight Seers Caribbean",
+  "short_name": "Sight Seers",
+  "description": "360° virtual tours and curated travel experiences across Jamaica and the Caribbean.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#063a63",
+  "theme_color": "#063a63",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
