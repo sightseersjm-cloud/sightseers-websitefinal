@@ -47058,7 +47058,9 @@ window.vtConfigReady = (function(){
       if(c.mux && c.mux.scenes && Object.keys(c.mux.scenes).length){
         VT_CONFIG.mux.scenes = c.mux.scenes;
       }
-      window.VT_STATUS = { loaded:true, configured:!!d.configured, checks:d.checks||[] };
+      window.VT_STATUS = { loaded:true, configured:!!d.configured,
+                           checks:d.checks||[], needsAuth:!!d.checksRequireAuth,
+                           remaining:d.remaining|0 };
       return !!d.configured;
     })
     .catch(function(){ window.VT_STATUS.loaded = true; return false; });
@@ -47073,7 +47075,11 @@ window.vtDiagnostics = function(){
     if(!s.loaded){ console.log('V-Tours config could not be reached.'); return s; }
     console.log(s.configured
       ? 'V-Tours: all integrations configured.'
-      : 'V-Tours: running in preview mode. Outstanding items below.');
+      : 'V-Tours: running in preview mode. ' + (s.remaining||0) + ' item(s) outstanding.');
+    if(s.needsAuth){
+      console.log('  Sign in as an admin or editor to see which variables are still missing.');
+      return s;
+    }
     (s.checks||[]).forEach(function(c){
       console.log((c.ready ? '  ready   ' : '  MISSING ') + c.label
         + (c.ready ? '' : '\n            set: ' + c.needs.join(', ') + '\n            ' + c.blocks));

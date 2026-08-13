@@ -14,7 +14,15 @@
  * service-role key, Stripe secret key, Mux token secret and JWT secret are
  * deliberately absent — they must never reach the browser. `checks` reports
  * whether a secret is *present*, never its value.
+ *
+ * The per-integration `checks` array is additionally restricted to signed-in
+ * admin/editor users: telling an anonymous caller precisely which secrets are
+ * unset is reconnaissance. Anonymous callers still receive the `configured`
+ * boolean, which the player needs in order to decide between live and preview
+ * behaviour, and which reveals nothing specific.
  */
+
+const { getUser } = require('../_lib/auth');
 
 const API_VERSION = '2026-08-13';
 
@@ -117,7 +125,11 @@ module.exports = async function handler(req, res) {
   // setting a variable would be confusing during setup.
   res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=30, stale-while-revalidate=60');
 
-  return res.status(200).json({
+  let user = null;
+  try { user = getUser(req); } catch { user = null; }
+  const privileged = !!user && (user.role === 'admin' || user.role === 'editor');
+
+  const body = {
     ok: true,
     version: API_VERSION,
     configured,
@@ -125,9 +137,18 @@ module.exports = async function handler(req, res) {
       supabase: { url: supabaseUrl, anonKey: supabaseAnonKey },
       stripe:   { publishableKey: stripePk },
       mux:      { scenes }
-    },
-    checks: checks.map(({ id, label, ready, needs, blocks }) => ({
+    }
+  };
+
+  if (privileged) {
+    body.checks = checks.map(({ id, label, ready, needs, blocks }) => ({
       id, label, ready, needs, blocks: ready ? null : blocks
-    }))
-  });
+    }));
+  } else {
+    // Enough for the setup page to prompt a sign-in, without naming anything.
+    body.checksRequireAuth = true;
+    body.remaining = checks.filter(c => !c.ready).length;
+  }
+
+  return res.status(200).json(body);
 };

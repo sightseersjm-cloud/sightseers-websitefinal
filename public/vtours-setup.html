@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>V-Tours Readiness</title>
+<style>
+  :root{
+    --ink:#0d1b2a; --ink-soft:#4a5c6e; --ink-faint:#7d8b99;
+    --ground:#f4f7f9; --card:#ffffff; --line:#dfe7ec;
+    --navy:#063a63; --orange:#ef8731;
+    --ok:#0f7b5f; --ok-bg:#e4f4ee; --wait:#a35a09; --wait-bg:#fdf0e0;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ink:#e8eef4; --ink-soft:#a8b8c6; --ink-faint:#7d8b99;
+      --ground:#0b1620; --card:#132433; --line:#243545;
+      --navy:#7eb8d4; --ok:#4ecfa4; --ok-bg:#0f2f26; --wait:#e0a561; --wait-bg:#332413;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#e8eef4; --ink-soft:#a8b8c6; --ink-faint:#7d8b99;
+    --ground:#0b1620; --card:#132433; --line:#243545;
+    --navy:#7eb8d4; --ok:#4ecfa4; --ok-bg:#0f2f26; --wait:#e0a561; --wait-bg:#332413;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);
+    font:15px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    padding:32px 20px 80px}
+  .wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  header h1{margin:0 0 6px;font-size:26px;letter-spacing:-.02em;text-wrap:balance}
+  header p{margin:0;color:var(--ink-soft)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .banner{display:flex;gap:14px;align-items:flex-start;border-radius:12px;padding:16px 18px;
+    border:1px solid var(--line)}
+  .banner.ok{background:var(--ok-bg);border-color:color-mix(in srgb,var(--ok) 35%,transparent)}
+  .banner.wait{background:var(--wait-bg);border-color:color-mix(in srgb,var(--wait) 35%,transparent)}
+  .banner strong{display:block;margin-bottom:2px}
+  .dot{width:10px;height:10px;border-radius:50%;flex:none;margin-top:7px}
+  .dot.ok{background:var(--ok)} .dot.wait{background:var(--wait)}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-faint);
+    margin:0 0 12px;font-weight:700}
+  ul.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+  ul.checks li{border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+    display:flex;gap:12px;align-items:flex-start}
+  .label{font-weight:600}
+  .blocks{color:var(--ink-soft);font-size:13.5px;margin-top:3px}
+  .vars{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  .vars code{background:var(--ground);border:1px solid var(--line);
+    padding:2px 7px;border-radius:5px}
+  ol.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;
+    color:var(--ink-soft)}
+  ol.steps strong{color:var(--ink)}
+  .muted{color:var(--ink-faint);font-size:13px}
+  a{color:var(--navy)}
+  button{font:inherit;font-weight:600;cursor:pointer;border-radius:8px;padding:9px 16px;
+    border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  button:hover{border-color:var(--navy)}
+  button:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>V-Tours readiness</h1>
+    <p>Live status of every integration the 360&deg; portal depends on. Set the
+       variables in Vercel, redeploy, then reload this page.</p>
+  </header>
+
+  <div id="banner" class="banner wait">
+    <span class="dot wait"></span>
+    <div><strong>Checking&hellip;</strong><span class="muted">Reading /api/vt-config</span></div>
+  </div>
+
+  <section class="card" id="checks-card">
+    <h2>Integrations</h2>
+    <div id="checks"><p class="muted">Loading&hellip;</p></div>
+  </section>
+
+  <section class="card">
+    <h2>Rehearse before selling a seat</h2>
+    <ol class="steps">
+      <li><strong>Confirm every line above reads ready.</strong></li>
+      <li><strong>Start the Mux stream.</strong> In OBS use server
+          <code>rtmp://global-live.mux.com:5222/app</code> with your stream key.
+          Wait for Mux to show <em>Active</em>.</li>
+      <li><strong>Sign the guide in</strong> using the Supabase account you created.</li>
+      <li><strong>Join as a viewer on a second device</strong> &mdash; a phone on mobile
+          data, not your own laptop. Test what a customer actually gets.</li>
+      <li><strong>Check the delay.</strong> HLS runs 10&ndash;30 seconds behind. That is
+          normal, and it is why chat questions lag the picture.</li>
+      <li><strong>Send a chat message from the viewer.</strong> If the
+          &ldquo;Preview &mdash; sample activity&rdquo; label is still showing, chat is
+          not connected.</li>
+      <li><strong>Buy a seat with a real card</strong> on a session priced at a token
+          amount. Confirm Stripe shows a <code>200</code> webhook delivery and the
+          viewer can join afterwards.</li>
+      <li><strong>Refund the test purchase.</strong></li>
+    </ol>
+    <p class="muted" style="margin-bottom:0;margin-top:14px">
+      Full instructions, including where to find each credential, are in
+      <code>docs/VTOURS-SETUP.md</code>.</p>
+  </section>
+
+  <section class="card">
+    <h2>Not yet wired to real data</h2>
+    <ul class="checks">
+      <li><div><span class="label">Viewer counts</span>
+        <div class="blocks">Generated in preview mode. They stop once chat connects,
+        but presence-based real counts are not implemented.</div></div></li>
+      <li><div><span class="label">Replay clips</span>
+        <div class="blocks">Placeholders. There is no recording pipeline yet.</div></div></li>
+      <li><div><span class="label">In-session shop</span>
+        <div class="blocks">Adds to the cart, but stock levels are not tracked.</div></div></li>
+    </ul>
+  </section>
+
+  <div class="row">
+    <button onclick="load()">Re-check</button>
+    <span class="muted" id="stamp"></span>
+  </div>
+</div>
+
+<script>
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e;}
+
+function render(d){
+  var banner=document.getElementById('banner'), checks=document.getElementById('checks');
+  banner.className='banner '+(d.configured?'ok':'wait');
+  banner.innerHTML='';
+  banner.appendChild(el('span','dot '+(d.configured?'ok':'wait')));
+  var t=el('div'); var s=el('strong',null,
+    d.configured?'All integrations configured':'Running in preview mode');
+  t.appendChild(s);
+  t.appendChild(el('span','muted', d.configured
+    ? 'Live sessions can run. Complete the rehearsal below before selling a seat.'
+    : (d.remaining!=null? d.remaining+' item(s) still to set.' : 'Some integrations are not set.')
+      + ' Sample chat is labelled as preview until they are.'));
+  banner.appendChild(t);
+
+  checks.innerHTML='';
+  if(d.checksRequireAuth){
+    var p=el('p','muted');
+    p.textContent='Sign in to the site as an admin or editor to see exactly which '
+      + 'variables are missing. This detail is withheld from anonymous visitors so the '
+      + 'page cannot be used to probe which secrets are unset.';
+    checks.appendChild(p);
+    return;
+  }
+  var ul=el('ul','checks');
+  (d.checks||[]).forEach(function(c){
+    var li=el('li');
+    li.appendChild(el('span','dot '+(c.ready?'ok':'wait')));
+    var body=el('div');
+    body.appendChild(el('span','label', c.label));
+    if(!c.ready){
+      if(c.blocks) body.appendChild(el('div','blocks', c.blocks));
+      var v=el('div','vars');
+      (c.needs||[]).forEach(function(n){ v.appendChild(el('code',null,n)); });
+      body.appendChild(v);
+    }
+    li.appendChild(body);
+    ul.appendChild(li);
+  });
+  checks.appendChild(ul);
+}
+
+function load(){
+  document.getElementById('stamp').textContent='';
+  fetch('/api/vt-config',{headers:{'Accept':'application/json'}})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(d){
+      render(d);
+      document.getElementById('stamp').textContent='Checked '+new Date().toLocaleTimeString();
+    })
+    .catch(function(e){
+      var b=document.getElementById('banner');
+      b.className='banner wait'; b.innerHTML='';
+      b.appendChild(el('span','dot wait'));
+      var t=el('div'); t.appendChild(el('strong',null,'Could not reach /api/vt-config'));
+      t.appendChild(el('span','muted','The endpoint may not be deployed yet. '+e.message));
+      b.appendChild(t);
+      document.getElementById('checks').innerHTML='';
+    });
+}
+load();
+</script>
+</body>
+</html>
