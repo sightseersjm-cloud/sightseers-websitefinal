@@ -17907,10 +17907,11 @@ function vtSwitchScene(scene){
   if(typeof vtInitPanoViewer==='function')vtInitPanoViewer();
   if(vtPanoViewer){try{vtPanoViewer.loadScene(scene)}catch(e){}}
   if(typeof vtApplyMoodTheme==='function')vtApplyMoodTheme();
-  /* keep the guide-video layer in sync: market defaults to real video footage,
-     the lagoon defaults to the interactive 360° panorama */
+  /* Any scene with footage configured opens on the video, so arriving on the
+     page shows something moving rather than a static panorama waiting to be
+     dragged. The 360 view stays one tap away on the same toggle. */
   if(typeof vtSceneVideoOn!=='undefined'){
-    var wantVideo=(scene==='market')?true:(scene==='lagoon'?false:vtSceneVideoOn);
+    var wantVideo=vtSceneYT[scene]?true:vtSceneVideoOn;
     if(wantVideo&&vtSceneYT[scene])vtShowSceneVideo(vtSceneYT[scene]);
     else vtHideSceneVideo();
   }
@@ -17956,6 +17957,18 @@ function vtHideSceneVideo(){
   var um=document.getElementById('vt-unmute-btn');
   if(um&&(!vid||vid.style.display==='none'))um.style.display='none';
 }
+/* vtSwitchScene only fires when the scene actually changes, so arriving on the
+   page left the video layer closed even for scenes that have footage. Open it
+   once on first view; after that the visitor's own choice on the toggle stands. */
+var vtSceneVideoInit=false;
+function vtInitSceneVideo(){
+  if(vtSceneVideoInit) return;
+  var scene=(typeof vtActivePanoScene!=='undefined'&&vtActivePanoScene)?vtActivePanoScene:'lagoon';
+  if(typeof vtSceneYT==='undefined'||!vtSceneYT[scene]) return;
+  vtSceneVideoInit=true;
+  vtShowSceneVideo(vtSceneYT[scene]);
+}
+
 function vtToggleSceneVideo(){
   var scene=(typeof vtActivePanoScene!=='undefined'&&vtActivePanoScene)?vtActivePanoScene:'lagoon';
   if(vtSceneVideoOn){
@@ -24155,6 +24168,7 @@ function nav(id,opts={}){
     try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
     vtShowLangPrompt();
     try{ vtApplyCategoryColour(); vtApplyCardArt(); }catch(e){}
+    try{ vtInitSceneVideo(); }catch(e){}
   }
   if(id!=='vtours'){
     try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
