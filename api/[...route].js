@@ -30,6 +30,7 @@ const handlers = {
   'tours':           require('./_handlers/tours'),
   'track':           require('./_handlers/track'),
   'verify-token':    require('./_handlers/verify-token'),
+  'vt-config':       require('./_handlers/vt-config'),
   'vtours':          require('./_handlers/vtours'),
   'waitlist':        require('./_handlers/waitlist'),
 };

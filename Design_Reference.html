@@ -17191,8 +17191,19 @@ function vtActivateLivePlayer(hlsUrl, playbackId){
     vtXRLoadHLS(hlsUrl);
   }
 
-  // Connect Supabase real-time chat for this stream
-  if(playbackId) vtConnectSupabaseChat(playbackId);
+  // Connect Supabase real-time chat for this stream. Credentials arrive from
+  // /api/vt-config, so wait for that before deciding whether chat is available.
+  if(playbackId){
+    if(window.vtConfigReady && window.vtConfigReady.then){
+      window.vtConfigReady.then(function(){
+        vtConnectSupabaseChat(playbackId);
+        vtAutoChat();          /* re-evaluates: stops itself if chat is now live */
+        vtAnimateViewers();
+      });
+    } else {
+      vtConnectSupabaseChat(playbackId);
+    }
+  }
 
   // Race the sub-second WebRTC tier; HLS above stays as the fallback
   if(typeof vtRTCTryJoin==='function'&&playbackId){
@@ -17409,7 +17420,8 @@ var vtAutoChatMsgs=[
    this first, so sample activity can never interleave with real viewers. */
 function vtBackendLive(){
   var cfg = (typeof VT_CONFIG!=='undefined') && VT_CONFIG.supabase;
-  return !!(cfg && cfg.url && cfg.url!=='YOUR_SUPABASE_URL' && vtSupabaseChan);
+  return !!(cfg && cfg.url && cfg.url.indexOf('YOUR_')!==0 && cfg.anonKey
+            && cfg.anonKey.indexOf('YOUR_')!==0 && vtSupabaseChan);
 }
 
 /* Marks the session UI as showing sample activity rather than live data. */
@@ -47020,6 +47032,56 @@ var VT_CONFIG = {
    VT_CONFIG across a closure boundary and throw ReferenceError, which meant the
    Supabase chat could never connect no matter what credentials were set. */
 window.VT_CONFIG = VT_CONFIG;
+
+/* ── Runtime configuration ────────────────────
+   VT_CONFIG below holds only inert placeholders. Real credentials come from
+   /api/vt-config, which reads them from Vercel environment variables, so a key
+   can be rotated without editing this file or redeploying the site.
+   vtConfigReady is awaited by anything that needs live credentials. */
+window.VT_STATUS = { loaded:false, configured:false, checks:[] };
+
+window.vtConfigReady = (function(){
+  return fetch('/api/vt-config', { headers:{ 'Accept':'application/json' } })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d || !d.ok || !d.config) return false;
+      var c = d.config;
+      /* Merge rather than replace: scene titles and prices already present stay
+         put unless the server supplies its own. */
+      if(c.supabase && c.supabase.url){
+        VT_CONFIG.supabase.url = c.supabase.url;
+        VT_CONFIG.supabase.anonKey = c.supabase.anonKey || '';
+      }
+      if(c.stripe && c.stripe.publishableKey){
+        VT_CONFIG.stripe.publishableKey = c.stripe.publishableKey;
+      }
+      if(c.mux && c.mux.scenes && Object.keys(c.mux.scenes).length){
+        VT_CONFIG.mux.scenes = c.mux.scenes;
+      }
+      window.VT_STATUS = { loaded:true, configured:!!d.configured, checks:d.checks||[] };
+      return !!d.configured;
+    })
+    .catch(function(){ window.VT_STATUS.loaded = true; return false; });
+})();
+
+/* Human-readable readiness report. Call vtDiagnostics() from the console at any
+   time to see exactly which environment variables are still missing and what
+   each one is holding up. */
+window.vtDiagnostics = function(){
+  return window.vtConfigReady.then(function(){
+    var s = window.VT_STATUS;
+    if(!s.loaded){ console.log('V-Tours config could not be reached.'); return s; }
+    console.log(s.configured
+      ? 'V-Tours: all integrations configured.'
+      : 'V-Tours: running in preview mode. Outstanding items below.');
+    (s.checks||[]).forEach(function(c){
+      console.log((c.ready ? '  ready   ' : '  MISSING ') + c.label
+        + (c.ready ? '' : '\n            set: ' + c.needs.join(', ') + '\n            ' + c.blocks));
+    });
+    return s;
+  });
+};
+
 /* ──────────────────────────────────────────────────────────────── */
 
 /* ─── STATE ──────────────────────────────────────────────────── */
