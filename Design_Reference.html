@@ -23815,6 +23815,115 @@ function smoothScrollToElement(el,duration=950,offset=0){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',vtHashGo);
   else vtHashGo();
 })();
+
+/* ── URL routing ──────────────────────────────
+   Gives every page a real, bookmarkable URL and keeps the browser back
+   button working. Paths are served by a vercel.json rewrite back to
+   index.html, so the SPA still boots from a single document. */
+var SS_ROUTES = {
+  'home':'/',
+  'tours':'/tours',
+  'school-tours':'/school-tours',
+  'senior-tours':'/senior-tours',
+  'transfers':'/airport-transfers',
+  'yacht-charters':'/yacht-charters',
+  'stays':'/villas-and-stays',
+  'staycountry':'/stays-by-country',
+  'greek-life':'/greek-life-travel',
+  'destinations':'/destinations',
+  'discoverjamaica':'/discover-jamaica',
+  'landmark':'/landmark-experiences',
+  'vtours':'/virtual-tours',
+  'shop':'/shop',
+  'giftcards':'/gift-cards',
+  'gallery':'/gallery',
+  'about':'/about',
+  'partners':'/partners',
+  'blog':'/blog',
+  'passport':'/passport-and-travel-documents',
+  'booking':'/booking',
+  'contact':'/contact',
+  'account':'/account',
+  'privacy-policy':'/privacy-policy',
+  'terms-of-service':'/terms-of-service',
+  'refund-policy':'/refund-policy'
+};
+var SS_PATH_TO_ID = (function(){ var m={}; for(var k in SS_ROUTES){ m[SS_ROUTES[k]]=k; } return m; })();
+
+/* Per-page title and description. Falls back to the site defaults. */
+var SS_META = {
+  'home':['Sight Seers Caribbean — Tours, Villas, Charters & Airport Transfers','Book Caribbean tours, private villas, yacht charters and airport transfers with a local team. Curated experiences across Jamaica and the wider Caribbean.'],
+  'tours':['Caribbean Tours & Excursions | Sight Seers Caribbean','Curated Caribbean tours led by local guides — rafting, waterfalls, catamaran cruises and cultural day trips. See what is included and book online.'],
+  'school-tours':['School & Educational Travel | Sight Seers Caribbean','Educational Caribbean trips for schools and universities, with coordinated logistics, chaperone support and itineraries built around learning outcomes.'],
+  'senior-tours':['Senior Caribbean Travel — Comfortable & Accessible','Slower-paced, mobility-friendly Caribbean tours designed for senior travellers from the US and Canada. Comfort, safety and unhurried days.'],
+  'transfers':['Jamaica Airport Transfers — Private & Reliable','Private airport transfers from Montego Bay, Kingston and Ocho Rios to any resort or villa. Licensed drivers and flight-aware pickups.'],
+  'yacht-charters':['Private Yacht & Catamaran Charters — Caribbean','Charter a private yacht or catamaran with captain and crew. Half-day, full-day and multi-day trips across the Caribbean.'],
+  'stays':['Caribbean Villas & Curated Stays','Handpicked private villas and hotels across Jamaica and the Caribbean, with concierge support and on-property staff on select homes.'],
+  'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
+  'greek-life':['Fraternity & Sorority Trips — Caribbean Group Travel','Spring break, formals and chapter trips built for Greek life, with group rates and a dedicated coordinator handling the logistics.'],
+  'destinations':['Caribbean Destinations | Sight Seers Caribbean','Explore the destinations we serve across the Caribbean, from Jamaica to Barbados, Belize, Saint Lucia and beyond.'],
+  'discoverjamaica':['Discover Jamaica — Travel Guide & Experiences','A local guide to Jamaica: where to go, what to do, and how to plan a trip that goes beyond the resort strip.'],
+  'landmark':['Landmark Caribbean Experiences | Sight Seers','Signature Caribbean experiences for travellers who want the trip to be the story, not the backdrop.'],
+  'vtours':['360 Live Virtual Caribbean Tours & Experiences','Explore Caribbean destinations in 360 with live local guides. Join a session, ask questions in real time, and book the real trip when you are ready.'],
+  'shop':['Shop | Sight Seers Caribbean','Sight Seers Caribbean merchandise and travel goods.'],
+  'giftcards':['Caribbean Travel Gift Cards | Sight Seers','Give a Caribbean experience. Gift cards redeemable across tours, transfers, villas and charters.'],
+  'gallery':['Gallery | Sight Seers Caribbean','Photographs and video from Caribbean tours, villas, charters and virtual sessions.'],
+  'about':['About Sight Seers Caribbean — Our Story & Team','Meet the team behind Sight Seers Caribbean — locally rooted, guest-obsessed, and based in Ocho Rios, Jamaica.'],
+  'partners':['Partners & Affiliates | Sight Seers Caribbean','The operators, hotels and transport partners we work with across the Caribbean.'],
+  'blog':['Caribbean Travel Guides & Inspiration | Sight Seers','Destination guides, packing advice and Caribbean travel inspiration from a team that lives there.'],
+  'passport':['Passport & Travel Document Requirements — Caribbean','Entry requirements, passport validity and travel documents for Caribbean destinations. Check before you book.'],
+  'booking':['Book Your Caribbean Experience | Sight Seers','Tell us what you have in mind and we will build the itinerary. Office hours Monday to Sunday, 10:00 AM to 6:00 PM.'],
+  'contact':['Contact Sight Seers Caribbean','Reach us by phone, email or WhatsApp. We typically reply within 24 hours.'],
+  'account':['Your Account | Sight Seers Caribbean','Sign in to track bookings and saved experiences.'],
+  'privacy-policy':['Privacy Policy | Sight Seers Caribbean','How Sight Seers Caribbean collects, uses and safeguards your information.'],
+  'terms-of-service':['Terms of Service | Sight Seers Caribbean','The terms that govern bookings and use of the Sight Seers Caribbean website.'],
+  'refund-policy':['Refund & Cancellation Policy | Sight Seers Caribbean','Our cancellation windows, deposit terms and refund process.']
+};
+
+function ssSetMeta(id){
+  var m = SS_META[id];
+  if(!m) return;
+  try{
+    document.title = m[0];
+    var d = document.querySelector('meta[name="description"]');
+    if(d) d.setAttribute('content', m[1]);
+    var ot = document.querySelector('meta[property="og:title"]');
+    if(ot) ot.setAttribute('content', m[0]);
+    var od = document.querySelector('meta[property="og:description"]');
+    if(od) od.setAttribute('content', m[1]);
+    var ou = document.querySelector('meta[property="og:url"]');
+    if(ou) ou.setAttribute('content', location.origin + (SS_ROUTES[id]||'/'));
+    var can = document.querySelector('link[rel="canonical"]');
+    if(!can){ can = document.createElement('link'); can.setAttribute('rel','canonical'); document.head.appendChild(can); }
+    can.setAttribute('href', location.origin + (SS_ROUTES[id]||'/'));
+  }catch(e){}
+}
+
+function ssPushRoute(id){
+  var path = SS_ROUTES[id];
+  if(!path) return;                       // unmapped (dynamic detail views) keep the current URL
+  if(location.pathname === path) return;  // no duplicate history entries
+  try{ history.pushState({ssPage:id}, '', path + location.search); }catch(e){}
+}
+
+function ssIdFromLocation(){
+  var p = location.pathname.replace(/\/+$/,'') || '/';
+  return SS_PATH_TO_ID[p] || SS_PATH_TO_ID[p+'/'] || null;
+}
+
+window.addEventListener('popstate', function(ev){
+  var id = (ev.state && ev.state.ssPage) || ssIdFromLocation() || 'home';
+  nav(id, {fromPop:true, skipScroll:true});
+});
+
+/* Boot into whatever page the URL asks for. */
+document.addEventListener('DOMContentLoaded', function(){
+  var id = ssIdFromLocation();
+  if(id && id !== 'home'){ nav(id, {fromPop:true, skipScroll:true}); }
+  else { ssSetMeta('home'); }
+  try{ history.replaceState({ssPage: id || 'home'}, '', location.pathname + location.search); }catch(e){}
+});
+
 function nav(id,opts={}){
   closeBlog();
   closeRhythmTour(true);
@@ -23822,6 +23931,10 @@ function nav(id,opts={}){
   document.body.classList.toggle('account-clean', id==='account');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   const el=document.getElementById('p-'+id);if(el)el.classList.add('on');
+  /* Update URL and metadata as soon as the page is shown, so a failure in any
+     downstream render function below cannot leave the address bar stale. */
+  if(!opts.fromPop){ try{ ssPushRoute(id); }catch(e){} }
+  try{ ssSetMeta(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
   const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
