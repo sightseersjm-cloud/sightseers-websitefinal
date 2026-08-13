@@ -17133,6 +17133,9 @@ function vtJoinSessionDirect(id,s){
 var vtViewerInterval;
 function vtAnimateViewers(){
   clearInterval(vtViewerInterval);
+  /* The viewer count was a random walk between 200 and 400 seeded at 247. With a
+     real backend it must come from presence data, not be invented here. */
+  if(vtBackendLive()) return;
   vtViewerInterval=setInterval(function(){
     var el=document.getElementById('vt-viewer-count');if(!el)return;
     var v=parseInt(el.textContent)||247;
@@ -17382,25 +17385,52 @@ function vtLeaveSession(){
 
 /* ── Auto chat messages ── */
 var vtAutoChatInterval;
+/* Sample chat used only in preview mode, when no real chat backend is
+   connected. Deliberately contains no purchase claims, no viewer counts and no
+   price references: simulated buying pressure shown to real visitors is a
+   deceptive practice, and these lines used to include "Just bought the spice
+   collection!" and "Best $42 I ever spent". Keep this list to questions and
+   reactions that demonstrate the feature without inventing commercial activity. */
 var vtAutoChatMsgs=[
   {a:'K',m:'This is absolutely stunning!'},
   {a:'L',m:'Can you show the blue water up close?'},
-  {a:'D',m:'Just bought the spice collection!'},
   {a:'A',m:'How deep is the lagoon?'},
   {a:'T',m:'I visited Jamaica last year, brings back memories'},
   {a:'N',m:'The guide is so knowledgeable'},
   {a:'P',m:'Adding this to my bucket list'},
-  {a:'M',m:'That basket is gorgeous, purchasing now!',guide:true},
-  {a:'R',m:'Best $42 I ever spent'},
   {a:'E',m:'Can you turn the camera to the left?'},
   {a:'W',m:'The colors are unreal!'},
   {a:'B',m:'How do I book a private session?'},
   {a:'M',m:'Great question! I will show you the reef next.',guide:true},
-  {a:'C',m:'Wow I can almost feel the breeze'},
-  {a:'H',m:'Just invited my friend to join!'}
+  {a:'C',m:'Wow I can almost feel the breeze'}
 ];
+
+/* True once a real chat backend is connected. Everything simulated must check
+   this first, so sample activity can never interleave with real viewers. */
+function vtBackendLive(){
+  var cfg = (typeof VT_CONFIG!=='undefined') && VT_CONFIG.supabase;
+  return !!(cfg && cfg.url && cfg.url!=='YOUR_SUPABASE_URL' && vtSupabaseChan);
+}
+
+/* Marks the session UI as showing sample activity rather than live data. */
+function vtSetPreviewFlag(on){
+  var el=document.getElementById('vt-preview-flag');
+  if(!el){
+    var host=document.querySelector('.vt-session-chat-title')||document.getElementById('vt-chat-messages');
+    if(!host||!on) return;
+    el=document.createElement('span');
+    el.id='vt-preview-flag';
+    el.textContent='Preview - sample activity';
+    el.style.cssText='display:inline-block;margin-left:8px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:rgba(239,135,49,.16);color:#ef8731;border:1px solid rgba(239,135,49,.35)';
+    host.appendChild(el);
+  }
+  el.style.display = on ? 'inline-block' : 'none';
+}
 function vtAutoChat(){
   clearInterval(vtAutoChatInterval);
+  /* Never run sample chat once a real backend is live. */
+  if(vtBackendLive()){ vtSetPreviewFlag(false); return; }
+  vtSetPreviewFlag(true);
   var i=0;
   vtAutoChatInterval=setInterval(function(){var msgs=document.querySelectorAll('#vt-chat-messages .vt-session-chat-msg');if(msgs.length>15){msgs[0].remove()}
     if(!vtStreamActive)return;
@@ -46985,6 +47015,11 @@ var VT_CONFIG = {
     publishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY' /* ← pk_live_... or pk_test_... */
   }
 };
+/* This config lives inside an IIFE, but the live-chat and session functions are
+   defined in an earlier, global script block. Without this line they reference
+   VT_CONFIG across a closure boundary and throw ReferenceError, which meant the
+   Supabase chat could never connect no matter what credentials were set. */
+window.VT_CONFIG = VT_CONFIG;
 /* ──────────────────────────────────────────────────────────────── */
 
 /* ─── STATE ──────────────────────────────────────────────────── */
