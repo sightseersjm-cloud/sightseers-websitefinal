@@ -15294,7 +15294,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 
                         <!-- Scene Switcher -->
                         <div class="vt-scene-switcher">
-                          <div class="vt-scene-btn active" id="vt-scene-btn-lagoon" title="Switch to the Blue Lagoon scene" onclick="vtSwitchScene('lagoon')"><i class="fas fa-water" style="margin-right:4px"></i> Blue Lagoon</div>
+                          <div class="vt-scene-btn active" id="vt-scene-btn-lagoon" title="Switch to the Water Park Tour scene" onclick="vtSwitchScene('lagoon')"><i class="fas fa-water" style="margin-right:4px"></i> Water Park Tour</div>
                           <div class="vt-scene-btn" id="vt-scene-btn-market" title="Switch to the local craft market scene" onclick="vtSwitchScene('market')"><i class="fas fa-store" style="margin-right:4px"></i> Market Stall</div>
                           <span class="vt-scene-div" aria-hidden="true"></span>
                           <div class="vt-scene-btn" id="vt-scene-video-btn" title="Watch the guide&#39;s video of this scene" onclick="vtToggleSceneVideo()"><i class="fas fa-film"></i><span class="vt-scene-video-lbl" style="margin-left:4px">Video</span></div>
@@ -15791,7 +15791,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 <script>
 var vtPanoViewer=null,vtPanoScenes={
   lagoon:{
-    title:'Blue Lagoon', panorama:'/panos/blue-lagoon.jpg',
+    title:'Water Park Tour', panorama:'/panos/blue-lagoon.jpg',
     video360:null, /* drop an equirect MP4/HLS URL here for immersive video */
     yaw:-88,pitch:-2,hfov:96,
     loc:'Port Antonio &bull; Portland &bull; Jamaica',
@@ -17923,7 +17923,7 @@ function vtSwitchScene(scene){
    the control can name what it actually plays rather than always saying
    "Video". */
 var vtSceneYT={
-  lagoon:{id:'tiXwxfMiHaI',start:14,label:'Water Park Demo'},
+  lagoon:{id:'tiXwxfMiHaI',start:14,label:'Water Park Tour'},
   market:{id:'kQF0I0EYeEU',label:'Jamaica Demo Tour'}
 };
 function vtYTEntry(v){ return (typeof v==='string') ? {id:v} : (v||{}); }
@@ -17936,10 +17936,17 @@ function vtShowSceneVideo(v){
   var st=e.start?('&start='+e.start):'';
   var src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+st+'&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1';
   if(f.getAttribute('data-yt')!==id){f.src=src;f.setAttribute('data-yt',id);}
+  /* Name the video on the toggle, unless that would just repeat the scene tab
+     sitting next to it — two identical labels read as a duplicate control. */
+  var sceneTitle='';
+  try{ sceneTitle=(vtPanoScenes&&vtActivePanoScene&&vtPanoScenes[vtActivePanoScene])?vtPanoScenes[vtActivePanoScene].title:''; }catch(_){}
+  var shown=(e.label&&e.label!==sceneTitle)?e.label:'Video';
   var lbl=document.querySelector('.vt-scene-video-lbl');
-  if(lbl&&e.label)lbl.textContent=e.label;
+  if(lbl)lbl.textContent=shown;
   var btn=document.getElementById('vt-scene-video-btn');
-  if(btn&&e.label)btn.setAttribute('title','Watch the '+e.label+' for this scene');
+  if(btn)btn.setAttribute('title', shown==='Video'
+    ? 'Watch the video for this scene'
+    : 'Watch the '+shown+' for this scene');
   host.classList.add('on');
   vtSceneVideoOn=true;
   var b=document.getElementById('vt-scene-video-btn');if(b)b.classList.add('active');
