@@ -169,7 +169,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <h2><span class="s-num">00</span> Deep-Dive Introduction</h2>
   <p>The <a href="/audit.html" class="crosslink">v1 executive audit</a> covers the required 23 deliverables at summary depth. This v2 companion fills the gaps that the audit brief demanded but that a scannable summary could not carry: every page audited against the full 14-field template, a WCAG 2.2 AA per-criterion checklist, a full analytics event schema, an administrative operations workflow, a standardized page template, and per-audience conversion playbooks.</p>
   <div class="callout critical">
-    <div><strong>Revision note (v1.1).</strong> Five findings in the first release were disproved by direct inspection of the source and have been corrected here and in the summary: alt text is complete across all 130 images; the $15 deposit and the 24-hour contact response time are both documented on the booking page; a GA4 loader and homepage JSON-LD both ship; and the admin passcode is scoped to an <code>editor</code> role that cannot reach bookings, messages, or accounts. Two items have since been fixed in the codebase — the skip-navigation link and the office-hours copy — and are marked <span class="tag green">Fixed</span> below.</div>
+    <div><strong>Revision note (v1.2).</strong> Nine findings across two correction passes were disproved by direct inspection of the source and are corrected here and in the summary. First pass: alt text is complete across all 130 images; the $15 deposit and the 24-hour contact response time are both documented on the booking page; a GA4 loader and homepage JSON-LD both ship; and the admin passcode is scoped to an <code>editor</code> role that cannot reach bookings, messages, or accounts. Second pass: all three legal pages exist as real pages (<code>p-privacy-policy</code>, <code>p-terms-of-service</code>, <code>p-refund-policy</code>) with working footer links; four testimonials ship with names, cities, and ratings; and the About page has a full team section. Verification surfaced two genuine new problems in their place — the testimonial avatars come from <code>i.pravatar.cc</code> and the team portraits from Unsplash, both stock placeholders standing in for real people. Two items have since been fixed in the codebase — the skip-navigation link and the office-hours copy — and are marked <span class="tag green">Fixed</span> below.</div>
   </div>
   <div class="callout info">
     <div><strong>How to read this document:</strong> Each page is scored using the full field template (URL, Audience, Conversion Goal, Evidence, Current, Expected, Severity, Status, Fix, Impact, Effort, Role, Phase). Anything marked <span class="mono">REQUIRES TESTING</span> could not be verified without access to the live production environment, backend systems, or user session data.</div>
@@ -423,7 +423,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <div class="page-card">
     <div class="pc-head"><div class="pc-title">About Sight Seers</div><div class="pc-id"><span class="mono">#p-about</span></div></div>
     <div class="findings-list">
-      <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No team photos, founder story, or credentials.</strong> Primary trust signals for travel. <em>Effort: Low · Role: Content · Phase: 1</em></div></div>
+      <div class="finding-mini"><span class="sev-badge critical">Crit</span><div><strong>Team portraits are Unsplash stock photos.</strong> The layout and role tags are real; the faces are not. Replace with genuine headshots. <em>Effort: Low · Role: Content · Phase: 1</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">Med</span><div><strong>No mission statement or years-in-business number.</strong> <em>Effort: Low · Role: Content · Phase: 1</em></div></div>
     </div>
   </div>
@@ -474,7 +474,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <div class="page-card">
     <div class="pc-head"><div class="pc-title">Blog / Editorial</div><div class="pc-id"><span class="mono">#p-blog</span></div></div>
     <div class="findings-list">
-      <div class="finding-mini"><span class="sev-badge critical">Crit</span><div><strong>Thin blog content.</strong> Zero-cost, highest-lift SEO channel. Publish 4–8 destination guides in 30 days. <em>Effort: High · Role: Content · Phase: 4</em></div></div>
+      <div class="finding-mini"><span class="sev-badge info">RT</span><div><strong>Post volume unverifiable from source.</strong> Blog renders from <code>/api/blog</code>; markup in the source is the template. Count published posts against the live API before acting. <em>Requires Testing.</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>Posts not indexable individually</strong> (SPA routing). <em>Effort: Med · Role: Dev+SEO · Phase: 4</em></div></div>
     </div>
   </div>
@@ -838,6 +838,11 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <section class="audit-section" id="s-audiences">
   <h2><span class="s-num">09</span> Per-Audience Conversion Playbooks</h2>
   <p>For each of the 10 target audiences: primary pain, ideal entry page, decision drivers, and conversion assets required.</p>
+
+  <h3>Trust-Signal Integrity</h3>
+  <div class="callout critical">
+    <div><strong>Placeholder people.</strong> Two sections that exist to prove the business is real are currently populated with stock imagery. The four homepage testimonials — Melissa Thompson (New York), Alyssa Morgan (Atlanta), Marcus Williams (London), Priya Sharma (Miami) — carry avatars from <code>i.pravatar.cc</code>, a random-face service. The About page team portraits come from <code>images.unsplash.com</code>. Both are trivially discoverable by reverse image search, and for a travel operator asking strangers to wire deposits for trips abroad, being caught with invented faces costs more than having no faces at all. Treat as Phase 1, ahead of any conversion-optimization work: replace with real photographs and consent, keep name-and-city without an avatar where no photo exists, and remove outright any testimonial text not traceable to a real guest.</div>
+  </div>
 
   <div class="tbl-wrap">
   <table class="audit-table">

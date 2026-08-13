@@ -385,10 +385,10 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
       <svg width="100" height="100" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
         <circle cx="50" cy="50" r="42" fill="none" stroke="#ef8731" stroke-width="10"
-          stroke-dasharray="263.9" stroke-dashoffset="74" stroke-linecap="round"/>
+          stroke-dasharray="263.9" stroke-dashoffset="69" stroke-linecap="round"/>
       </svg>
       <div class="score-ring-center">
-        <div class="num">72</div>
+        <div class="num">74</div>
         <div class="denom">/100</div>
       </div>
     </div>
@@ -400,7 +400,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 
   <div class="callout critical">
     <div class="callout-icon">⚑</div>
-    <div><strong>Revision note (v1.1).</strong> The first release of this audit contained five findings that direct inspection of the source disproved: alt text was reported missing (all 130 images have it), the $15 deposit and contact response time were reported unexplained (both are documented), GA4 and JSON-LD were reported absent (both ship), and the admin passcode was rated as customer-data exposure (it is scoped to an <code>editor</code> role that cannot reach bookings or accounts). Those findings arose from inferring behaviour off page structure instead of reading the implementation. Every claim below has now been checked against the code, and the overall score moved from 65 to 72 as a result. Findings that survived verification are unchanged.</div>
+    <div><strong>Revision note (v1.2).</strong> This audit has been corrected twice. Nine findings across both passes were disproved by direct inspection of the source. First pass: alt text was reported missing (all 130 images have it), the $15 deposit and contact response time were reported unexplained (both are documented), GA4 and JSON-LD were reported absent (both ship), and the admin passcode was rated as customer-data exposure (it is scoped to an <code>editor</code> role that cannot reach bookings or accounts). Second pass: all three legal pages exist (<code>p-privacy-policy</code>, <code>p-terms-of-service</code>, <code>p-refund-policy</code>) and the footer links reach them correctly — an earlier grep used the wrong page-ID prefix and the <code>nav('home')</code> call cited as evidence was a breadcrumb inside the privacy page, not the footer link; four customer testimonials ship with names, cities, and ratings; and the About page has a full team section. All of these arose from inferring behaviour off page structure instead of reading the implementation. Verification did surface two <em>new</em> and genuine trust problems, detailed under Content &amp; Trust: the testimonial avatars and the team photographs are both stock placeholders. Overall score moved from 65 to 74.</div>
   </div>
 
   <p>Sight Seers Caribbean is a single-page application built on a 46,000-line Design_Reference.html compiled to a minified public/index.html. The site covers tours, villa stays, yacht charters, school and senior trips, Greek-life experiences, V-Tours (live-streamed 360° sessions), and a gift card/shop. Navigation is JavaScript-driven with no real URL routing, which creates SEO and deep-link limitations. Backend is Vercel serverless + Vercel Blob with Stripe payments and Supabase real-time chat for V-Tours.</p>
@@ -422,9 +422,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="finding-fix"><strong>Fix:</strong> Implement hash routing (<code>#/tours</code>) or the History API, and drive per-page <code>&lt;title&gt;</code>/meta updates from the same handler.</div>
   </div>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Footer legal links are dead — they route to the homepage</div></div>
-    <div class="finding-body">"Privacy Policy" and "Refund &amp; Cancellation" appear in the footer, but the anchors resolve to <code>onclick="nav('home');return false;"</code>. No <code>#p-privacy</code>, <code>#p-terms</code>, or <code>#p-refund</code> page exists in the source. A visitor clicking either lands back on the homepage.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Build the three legal pages and repoint the links. Stripe also requires a reachable refund-policy URL in the checkout session.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Testimonials and team photos are stock placeholders</div></div>
+    <div class="finding-body">The four testimonials carry real-looking names, cities, and five-star ratings — Melissa Thompson (New York), Alyssa Morgan (Atlanta), Marcus Williams (London), Priya Sharma (Miami) — but every avatar loads from <code>i.pravatar.cc</code>, a random-face generator. The team section on the About page pulls its portraits from Unsplash. Presenting generated faces as customers and stock models as staff is the single highest-risk item in this audit: it is discoverable by anyone doing a reverse image search, and it undermines the exact trust the sections exist to build.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Replace with real customer photos (with written consent) and real team photographs. Where a customer will not supply a photo, drop the avatar and keep the name and city — an initial in a circle reads as honest; a stranger's face does not. If any testimonial text is not from a real guest, remove it entirely.</div>
   </div>
   <div class="finding warning">
     <div class="finding-head"><span class="sev-badge warning">High</span><div class="finding-title">GA4 is wired but has no measurement ID — nothing is being recorded</div></div>
@@ -500,8 +500,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     </div>
     <div class="score-card">
       <div class="cat">Overall</div>
-      <div class="val b">72</div>
-      <div class="bar"><div class="bar-fill" style="width:72%;background:#063a63"></div></div>
+      <div class="val b">74</div>
+      <div class="bar"><div class="bar-fill" style="width:74%;background:#063a63"></div></div>
     </div>
   </div>
 </section>
@@ -675,17 +675,18 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   </div>
 
   <h3>Blog (#p-blog)</h3>
-  <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Blog content is thin — significant SEO and trust opportunity missed</div></div>
-    <div class="finding-body">Blog exists as a page but has minimal or no real articles. This is the primary opportunity for organic SEO traffic on long-tail Caribbean travel terms.</div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">Blog post volume cannot be confirmed from source</div></div>
+    <div class="finding-body">The blog renders from a JS template bound to <code>/api/blog</code>, with fields for date and read time — so posts live in the database, not the markup. The card markup in the source is the template, not the content. Post count and depth need checking against the live API before any claim about thinness holds.</div>
+    <div class="test-note">REQUIRES TESTING: Call /api/blog on production and count published posts.</div>
     <div class="finding-fix"><strong>Fix:</strong> Publish 4–8 destination guides as full blog posts. Each post should target a specific keyword cluster (e.g., "best beaches Jamaica", "all-inclusive yacht charter Caribbean").</div>
   </div>
 
   <h3>About Page (#p-about)</h3>
   <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No team photos, founder story, or credentials visible</div></div>
-    <div class="finding-body">About page exists but lacks photos of real team members, years in business, licenses, affiliations, or a compelling origin story — all primary trust signals for a travel business.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add headshots, names, roles, a founder quote, and any industry certifications or accreditations.</div>
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Team section is built, but the portraits are Unsplash stock</div></div>
+    <div class="finding-body">The About page has a proper team layout with role tags (Guest Concierge, Destination Curation) and per-member actions. The portraits, however, load from <code>images.unsplash.com</code> — stock models standing in for staff. Years in business, licenses, and accreditations are still absent.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Replace with real headshots and add years operating plus any tourism-board or IATA/ASTA accreditation.</div>
   </div>
 </section>
 
@@ -713,8 +714,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="finding-fix"><strong>Fix:</strong> Add "From $X per person" to each category card. Full pricing can stay on a quote form — but a floor price is required for intent qualification.</div>
   </div>
   <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No social proof on service pages</div></div>
-    <div class="finding-body">No reviews, testimonials, ratings, or traveler counts visible on any tour or charter page at decision point.</div>
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Social proof sits on the homepage, not at the decision point</div></div>
+    <div class="finding-body">The four testimonials live in a homepage carousel. Individual tour and charter pages — where the buyer actually decides — carry star markup (<code>tour-review-stars</code>, <code>pd-stars</code>) but no accompanying review text at the CTA.</div>
     <div class="finding-fix"><strong>Fix:</strong> Add 2–3 testimonials per service category, ideally with names, origin cities, and photos. Star ratings near the CTA improve conversion 15–25%.</div>
   </div>
 
@@ -812,9 +813,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <!-- ─── 9. CONTENT & TRUST ─── -->
 <section class="audit-section" id="s-content">
   <h2><span class="s-num">09</span> Content, Branding & Trust</h2>
-  <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Legal links exist in the footer but resolve to the homepage</div></div>
-    <div class="finding-body">"Privacy Policy" and "Refund &amp; Cancellation" are present as footer links, but each fires <code>nav('home')</code>, and no <code>#p-privacy</code>, <code>#p-terms</code>, or <code>#p-refund</code> page exists. A dead legal link is worse than an absent one — it reads as evasion. Some cancellation terms do appear in the booking FAQ, so the content partially exists and needs a home.</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">All three legal pages exist and are correctly linked</div></div>
+    <div class="finding-body">The source contains <code>p-privacy-policy</code>, <code>p-terms-of-service</code>, and <code>p-refund-policy</code> as full pages with breadcrumbs, and the footer anchors call <code>nav()</code> against each of them. The privacy page covers collection, use, sharing, and update terms. Reported as missing and then as broken in earlier passes of this audit — both were wrong, caused by grepping the wrong page-ID prefix.</div>
     <div class="finding-fix"><strong>Fix:</strong> Add /terms, /privacy, and /refunds pages. Link from footer and all payment CTAs. Stripe also requires a refund policy URL in the checkout session.</div>
   </div>
   <div class="finding warning">
@@ -822,9 +823,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="finding-body">Tourism accreditations (Jamaica Tourist Board, IATA, ASTA), payment security badges (SSL, Stripe), and media mentions add significant conversion lift near payment CTAs.</div>
   </div>
   <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No customer reviews or user-generated content integrated</div></div>
-    <div class="finding-body">No TripAdvisor widget, Google Reviews embed, or native testimonials with verifiable social proof. Travel is one of the highest-review-dependency categories.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Integrate at minimum 6–8 text testimonials with traveler names and photos. Add a Google Reviews widget in the footer.</div>
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Testimonials exist, but the avatars are generated faces</div></div>
+    <div class="finding-body">Four testimonials ship in a rotating carousel with names, home cities, and five-star ratings. The copy is specific and credible — it names bamboo rafting, the MBA Experience, networking dinners. But all four avatars resolve to <code>i.pravatar.cc</code>, which serves random generated portraits, so the faces belong to no one. No third-party review source (Google, TripAdvisor) is embedded to corroborate any of it.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Swap in real photos with consent, or drop the avatars and keep name plus city. Then add a Google Reviews or TripAdvisor embed so the claims are externally verifiable.</div>
   </div>
   <div class="finding ok">
     <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Brand identity is consistent and distinctive</div></div>
