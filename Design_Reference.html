@@ -12395,14 +12395,14 @@ body.theme-night .page .tag{
           
         </div>
         <div class="form-success" id="bookMsg">✅ Your request has been submitted! We'll contact you within 24 hours.</div>
-        <div class="form-row"><div class="fg"><label>First Name *</label><input type="text" id="b_fn"></div><div class="fg"><label>Last Name *</label><input type="text" id="b_ln"></div></div>
-        <div class="form-row"><div class="fg"><label>Email *</label><input type="email" id="b_em"></div><div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="b_ph"></div></div>
-        <input type="hidden" id="b_funnelSource" value=""><input type="hidden" id="b_funnelLabel" value=""><div class="form-row"><div class="fg"><label>Destination *</label><select id="b_dest"><option value="">Select Destination</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curaçao</option></select></div><div class="fg"><label>Experience Type *</label><select id="b_type"><option value="">Select Experience Type</option><option>Water Experience</option><option>Land Experience</option><option>Zip-line / Canopy</option><option>ATV Adventures</option><option>Bamboo Rafting</option><option>Horseback Riding</option><option>Parasailing</option><option>Kayaking</option><option>Snorkeling / Scuba</option><option>Waterfalls Trip</option><option>Beach Trip</option><option>Efoil Surfboarding</option><option>MBA Experience</option><option>Luxury Getaway Weekend</option><option>Yacht Charters Tour</option><option>Yacht Charter</option><option>Greek Life Travel</option><option>School Tour Package</option><option>Senior Excursion Package</option><option>Villa &amp; Vacation Rental Booking</option><option>Airport Shuttle (NMIA/MBJ)</option><option>Executive Transfer</option><option>Group Transfer</option><option>Club Kingston / Club Mobay</option><option>Custom Package</option></select></div></div>
-        <div class="form-row"><div class="fg" style="grid-column:1/-1"><label>Selected Experience</label><input type="text" id="b_package" readonly></div></div>
+        <div class="form-row"><div class="fg"><label for="b_fn">First Name *</label><input type="text" id="b_fn"></div><div class="fg"><label for="b_ln">Last Name *</label><input type="text" id="b_ln"></div></div>
+        <div class="form-row"><div class="fg"><label for="b_em">Email *</label><input type="email" id="b_em"></div><div class="fg"><label for="b_ph">Phone / WhatsApp *</label><input type="tel" id="b_ph"></div></div>
+        <input type="hidden" id="b_funnelSource" value=""><input type="hidden" id="b_funnelLabel" value=""><div class="form-row"><div class="fg"><label for="b_dest">Destination *</label><select id="b_dest"><option value="">Select Destination</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curaçao</option></select></div><div class="fg"><label for="b_type">Experience Type *</label><select id="b_type"><option value="">Select Experience Type</option><option>Water Experience</option><option>Land Experience</option><option>Zip-line / Canopy</option><option>ATV Adventures</option><option>Bamboo Rafting</option><option>Horseback Riding</option><option>Parasailing</option><option>Kayaking</option><option>Snorkeling / Scuba</option><option>Waterfalls Trip</option><option>Beach Trip</option><option>Efoil Surfboarding</option><option>MBA Experience</option><option>Luxury Getaway Weekend</option><option>Yacht Charters Tour</option><option>Yacht Charter</option><option>Greek Life Travel</option><option>School Tour Package</option><option>Senior Excursion Package</option><option>Villa &amp; Vacation Rental Booking</option><option>Airport Shuttle (NMIA/MBJ)</option><option>Executive Transfer</option><option>Group Transfer</option><option>Club Kingston / Club Mobay</option><option>Custom Package</option></select></div></div>
+        <div class="form-row"><div class="fg" style="grid-column:1/-1"><label for="b_package">Selected Experience</label><input type="text" id="b_package" readonly></div></div>
         
-        <div class="form-row"><div class="fg"><label>Travel Date *</label><input type="date" id="b_dt"></div><div class="fg"><label>Travel Party *</label><select id="b_gs"><option value="">Select</option><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
-        <div class="form-row"><div class="fg"><label>Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500 – $5,000</option><option>$5,000 – $10,000</option><option>$10,000+</option></select></div></div>
-        <div class="fg"><label>Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
+        <div class="form-row"><div class="fg"><label for="b_dt">Travel Date *</label><input type="date" id="b_dt"></div><div class="fg"><label for="b_gs">Travel Party *</label><select id="b_gs"><option value="">Select</option><option>1–2 Persons</option><option>3–5 Persons</option><option>6–10 Persons</option><option>11–20 Persons</option><option>20+ Persons</option></select></div></div>
+        <div class="form-row"><div class="fg"><label for="b_budget">Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500 – $5,000</option><option>$5,000 – $10,000</option><option>$10,000+</option></select></div></div>
+        <div class="fg"><label for="b_notes">Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
         
         <div class="upsell-section">
           <h3>Enhance Your Experience</h3>
@@ -12518,10 +12518,10 @@ body.theme-night .page .tag{
           <p class="fw-sub">Use this tab to prepare your renewal with the core items you asked for: your passport biography page, your birth certificate number (IA No.), and a digital passport-size photograph. Add your contact details so your team can follow up quickly.</p>
           <div class="form-success" id="passportMsg">Your renewal request details were saved in this browser preview. Connect this form to your live frontend form handler to receive the uploaded files online.</div>
           <div class="form-row">
-            <div class="fg"><label>Full Name *</label><input type="text" id="passName"></div>
-            <div class="fg"><label>Email *</label><input type="email" id="passEmail"></div>
+            <div class="fg"><label for="passName">Full Name *</label><input type="text" id="passName"></div>
+            <div class="fg"><label for="passEmail">Email *</label><input type="email" id="passEmail"></div>
           </div>
-          <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="passPhone"></div>
+          <div class="fg"><label for="passPhone">Phone / WhatsApp *</label><input type="tel" id="passPhone"></div>
           <div class="fg">
             <label>Picture of your passport biography page *</label>
             <label class="passport-upload" for="passBioUpload">
@@ -12534,7 +12534,7 @@ body.theme-night .page .tag{
             <input type="file" id="passBioUpload" accept="image/*,.pdf" onchange="handlePassportBioUpload()" hidden>
             <div class="passport-file-meta" id="passBioMeta">No biography page uploaded yet.</div>
           </div>
-          <div class="fg"><label>Birth Certificate Number (IA No.) *</label><input type="text" id="passIaNo"></div>
+          <div class="fg"><label for="passIaNo">Birth Certificate Number (IA No.) *</label><input type="text" id="passIaNo"></div>
           <div class="fg">
             <label>Digital passport-size photograph *</label>
             <label class="passport-upload" for="passPhotoUpload">
@@ -15442,7 +15442,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                           <div class="vt-session-chat-msg"><div class="vt-session-chat-avatar">R</div><div class="vt-session-chat-text">This feels like I am really there</div></div>
                         </div>
                         <div class="vt-chat-input-wrap">
-                          <input type="text" class="vt-chat-input" id="vt-chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')vtSendChat()">
+                          <input type="text" class="vt-chat-input" id="vt-chat-input" aria-label="Type a chat message" placeholder="Type a message..." onkeydown="if(event.key==='Enter')vtSendChat()">
                           <button class="vt-chat-send" onclick="vtSendChat()"><i class="fas fa-paper-plane"></i></button>
                         </div>
                       </div>
@@ -16143,7 +16143,7 @@ if(typeof vtInitPanoViewer==='function'){
                     <div class="vt-ai-msg bot"><div class="vt-ai-avatar"><i class="fas fa-wand-magic-sparkles"></i></div><div class="vt-ai-bubble">Hi Sarah! I am your V-Tours AI concierge. I can help you find the perfect tour, plan your Caribbean adventure, or answer questions about any destination. What sounds good today?</div></div>
                     <div class="vt-ai-chips"><div class="vt-ai-chip" onclick="vtAskAI(this.textContent)">Food tours under $40</div><div class="vt-ai-chip" onclick="vtAskAI(this.textContent)">Best nature experiences</div><div class="vt-ai-chip" onclick="vtAskAI(this.textContent)">Weekend tours available</div><div class="vt-ai-chip" onclick="vtAskAI(this.textContent)">Family-friendly options</div></div>
                   </div>
-                  <div class="vt-ai-input-wrap"><input type="text" class="vt-ai-input" id="vt-ai-field" placeholder="Ask me anything about tours, destinations, or planning..." onkeydown="if(event.key==='Enter')vtSendAI()"><button class="vt-ai-send" onclick="vtSendAI()"><i class="fas fa-paper-plane"></i></button></div>
+                  <div class="vt-ai-input-wrap"><input type="text" class="vt-ai-input" id="vt-ai-field" aria-label="Ask the AI concierge about tours, destinations or planning" placeholder="Ask me anything about tours, destinations, or planning..." onkeydown="if(event.key==='Enter')vtSendAI()"><button class="vt-ai-send" onclick="vtSendAI()"><i class="fas fa-paper-plane"></i></button></div>
                 </div>
               </div>
 
@@ -16293,7 +16293,7 @@ if(typeof vtInitPanoViewer==='function'){
                   <div class="vt-xr-prefs-grid">
                     <div class="vt-xr-pref-item">
                       <div class="vt-xr-pref-label">Default Mode</div>
-                      <select class="vt-xr-pref-select" id="vt-xr-pref-mode">
+                      <select class="vt-xr-pref-select" id="vt-xr-pref-mode" aria-label="Headset viewing mode">
                         <option value="vr">Immersive VR</option>
                         <option value="ar">AR Passthrough</option>
                         <option value="glasses">Glasses HUD</option>
@@ -16302,7 +16302,7 @@ if(typeof vtInitPanoViewer==='function'){
                     </div>
                     <div class="vt-xr-pref-item">
                       <div class="vt-xr-pref-label">Render Quality</div>
-                      <select class="vt-xr-pref-select" id="vt-xr-pref-quality">
+                      <select class="vt-xr-pref-select" id="vt-xr-pref-quality" aria-label="Streaming quality">
                         <option value="low">Low (72 FPS)</option>
                         <option value="medium" selected>Medium (90 FPS)</option>
                         <option value="high">High (120 FPS)</option>
@@ -16310,7 +16310,7 @@ if(typeof vtInitPanoViewer==='function'){
                     </div>
                     <div class="vt-xr-pref-item">
                       <div class="vt-xr-pref-label">Comfort Mode</div>
-                      <select class="vt-xr-pref-select" id="vt-xr-pref-comfort">
+                      <select class="vt-xr-pref-select" id="vt-xr-pref-comfort" aria-label="Motion comfort level">
                         <option value="off">Off</option>
                         <option value="vignette" selected>Vignette</option>
                         <option value="teleport">Teleport Only</option>
@@ -16465,11 +16465,11 @@ if(typeof vtInitPanoViewer==='function'){
                     <!-- Step 1: Basics -->
                     <div class="vt-ct-page active" id="vt-ct-page-1">
                       <div class="vt-ct-field">
-                        <label>Tour Name</label>
+                        <label for="vt-ct-name">Tour Name</label>
                         <input type="text" id="vt-ct-name" placeholder="e.g. Montego Bay Sunset Walk">
                       </div>
                       <div class="vt-ct-field">
-                        <label>Category</label>
+                        <label for="vt-ct-category">Category</label>
                         <select id="vt-ct-category">
                           <option value="">Select a category...</option>
                           <option value="nature">Nature and Outdoors</option>
@@ -16483,7 +16483,7 @@ if(typeof vtInitPanoViewer==='function'){
                       </div>
                       <div class="vt-ct-row">
                         <div class="vt-ct-field">
-                          <label>Country</label>
+                          <label for="vt-ct-country">Country</label>
                           <select id="vt-ct-country">
                             <option value="jamaica" selected>Jamaica</option>
                             <option value="barbados">Barbados</option>
@@ -16494,7 +16494,7 @@ if(typeof vtInitPanoViewer==='function'){
                           </select>
                         </div>
                         <div class="vt-ct-field">
-                          <label>Location / Parish</label>
+                          <label for="vt-ct-location">Location / Parish</label>
                           <input type="text" id="vt-ct-location" placeholder="e.g. Portland, Port Antonio">
                         </div>
                       </div>
@@ -16511,12 +16511,12 @@ if(typeof vtInitPanoViewer==='function'){
                     <!-- Step 2: Details -->
                     <div class="vt-ct-page" id="vt-ct-page-2">
                       <div class="vt-ct-field">
-                        <label>Tour Description</label>
+                        <label for="vt-ct-desc">Tour Description</label>
                         <textarea id="vt-ct-desc" rows="4" placeholder="Describe what explorers will see and experience on this tour..."></textarea>
                       </div>
                       <div class="vt-ct-row">
                         <div class="vt-ct-field">
-                          <label>Duration</label>
+                          <label for="vt-ct-duration">Duration</label>
                           <select id="vt-ct-duration">
                             <option value="30">30 minutes</option>
                             <option value="45">45 minutes</option>
@@ -16526,12 +16526,12 @@ if(typeof vtInitPanoViewer==='function'){
                           </select>
                         </div>
                         <div class="vt-ct-field">
-                          <label>Max Group Size</label>
+                          <label for="vt-ct-groupsize">Max Group Size</label>
                           <input type="number" id="vt-ct-groupsize" value="50" min="1" max="500">
                         </div>
                       </div>
                       <div class="vt-ct-field">
-                        <label>Tour Highlights</label>
+                        <label for="vt-ct-highlights">Tour Highlights</label>
                         <input type="text" id="vt-ct-highlights" placeholder="Comma-separated: Blue waters, Local guides, Hidden trails">
                       </div>
                       <div class="vt-ct-field">
@@ -16545,7 +16545,7 @@ if(typeof vtInitPanoViewer==='function'){
                         </div>
                       </div>
                       <div class="vt-ct-field">
-                        <label>Stream Setup</label>
+                        <label for="vt-ct-stream">Stream Setup</label>
                         <select id="vt-ct-stream">
                           <option value="youtube360">YouTube 360&deg; Live</option>
                           <option value="youtube">YouTube Standard Live</option>
@@ -16559,11 +16559,11 @@ if(typeof vtInitPanoViewer==='function'){
                     <div class="vt-ct-page" id="vt-ct-page-3">
                       <div class="vt-ct-row">
                         <div class="vt-ct-field">
-                          <label>Ticket Price (USD)</label>
+                          <label for="vt-ct-price">Ticket Price (USD)</label>
                           <input type="number" id="vt-ct-price" value="35" min="0" step="1">
                         </div>
                         <div class="vt-ct-field">
-                          <label>VIP Price (USD)</label>
+                          <label for="vt-ct-vip-price">VIP Price (USD)</label>
                           <input type="number" id="vt-ct-vip-price" value="65" min="0" step="1">
                         </div>
                       </div>
@@ -19311,11 +19311,11 @@ vtSessionAction=function(el,type){
                 <div class="account-auth-panel">
                   <div class="auth-panel on" id="auth-unified">
                     <div class="form-grid">
-                      <div class="field-col full auth-extra-fields" id="authExtraFields" style="display:none"><label>Full Name</label><input type="text" id="signupName"></div>
-                      <div class="field-col full"><label>Email Address</label><input type="email" id="unifiedEmail"></div>
-                      <div class="field-col full"><label>Password</label><input type="password" id="unifiedPassword"></div>
-                      <div class="field-col auth-extra-fields" style="display:none"><label>Phone Number</label><input type="text" id="signupPhone"></div>
-                      <div class="field-col full auth-extra-fields" style="display:none"><label>Travel Style</label><select id="signupStyle"><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group">Group Charter</option></select></div>
+                      <div class="field-col full auth-extra-fields" id="authExtraFields" style="display:none"><label for="signupName">Full Name</label><input type="text" id="signupName"></div>
+                      <div class="field-col full"><label for="unifiedEmail">Email Address</label><input type="email" id="unifiedEmail"></div>
+                      <div class="field-col full"><label for="unifiedPassword">Password</label><input type="password" id="unifiedPassword"></div>
+                      <div class="field-col auth-extra-fields" style="display:none"><label for="signupPhone">Phone Number</label><input type="text" id="signupPhone"></div>
+                      <div class="field-col full auth-extra-fields" style="display:none"><label for="signupStyle">Travel Style</label><select id="signupStyle"><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group">Group Charter</option></select></div>
                     </div>
                     <div class="admin-actions" style="margin-top:22px">
                       <button class="auth-submit" id="authMainBtn" onclick="handleUnifiedAuth()"><i class="fas fa-right-to-bracket"></i>Sign In</button>
@@ -19446,11 +19446,11 @@ vtSessionAction=function(el,type){
           <div class="blog-request-kicker"><i class="fas fa-pen-nib"></i>Blog Request Form</div>
           <h3>Write your blog</h3>
           <div class="form-grid">
-            <div class="field-col full"><label>Article Title</label><input type="text" id="blogReqTitle"></div>
-            <div class="field-col"><label>Category / Island</label><input type="text" id="blogReqCategory"></div>
-            <div class="field-col"><label>Cover Image URL</label><input type="url" id="blogReqImage"></div>
-            <div class="field-col full"><label>Short Excerpt</label><textarea id="blogReqExcerpt" rows="3"></textarea></div>
-            <div class="field-col full"><label>Blog Article</label><textarea id="blogReqContent" rows="10"></textarea></div>
+            <div class="field-col full"><label for="blogReqTitle">Article Title</label><input type="text" id="blogReqTitle"></div>
+            <div class="field-col"><label for="blogReqCategory">Category / Island</label><input type="text" id="blogReqCategory"></div>
+            <div class="field-col"><label for="blogReqImage">Cover Image URL</label><input type="url" id="blogReqImage"></div>
+            <div class="field-col full"><label for="blogReqExcerpt">Short Excerpt</label><textarea id="blogReqExcerpt" rows="3"></textarea></div>
+            <div class="field-col full"><label for="blogReqContent">Blog Article</label><textarea id="blogReqContent" rows="10"></textarea></div>
           </div>
           
           <div class="admin-actions">
@@ -30198,7 +30198,7 @@ body.theme-night .page .tag{
       block=document.createElement('details');
       block.className='admin-group';
       block.id='admin-group-custom-builder';
-      block.innerHTML=`<summary><span><strong>Custom Section Builder</strong><small>Add new homepage sections such as packages, cards, banners, and highlight blocks.</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div class="form-grid"><div class="field-col"><label>Section Type</label><select id="dynamicSectionType" onchange="window.updateDynamicSectionTypeHelp && window.updateDynamicSectionTypeHelp()"><option value="packages">Packages Section</option><option value="cards">Feature Cards Section</option><option value="banner">Banner Section</option><option value="text">Text Highlights</option></select></div><div class="field-col"><label>Section Eyebrow</label><input type="text" id="dynamicSectionEyebrow"></div><div class="field-col full"><label>Section Heading</label><input type="text" id="dynamicSectionTitle"></div><div class="field-col full"><label>Section Intro / Subtitle</label><textarea id="dynamicSectionSubtitle"></textarea></div><div class="field-col full"><label>Section Image / Banner Image</label><input type="url" id="dynamicSectionImage" oninput="window.updateDynamicSectionImagePreview && window.updateDynamicSectionImagePreview()"><div class="admin-upload-box"><div class="admin-upload-row"><input type="file" accept="image/*" onchange="window.handleDynamicSectionImageUpload && window.handleDynamicSectionImageUpload(event)"></div><div class="admin-size-hint"><strong>Recommended size:</strong> 1400 × 900 px for banners or 1200 × 900 px for cards</div><div class="admin-image-preview" id="dynamicSectionImagePreview"></div></div></div><div class="field-col full"><label>Items / Cards</label><textarea id="dynamicSectionEntries"></textarea></div><div class="field-col full"><label>Banner Highlights (optional)</label><textarea id="dynamicSectionExtra"></textarea></div></div><input type="hidden" id="dynamicSectionEditIndex" value=""><div class="admin-actions" style="margin-top:18px"><button class="admin-btn" type="button" onclick="window.saveDynamicSectionFromAdmin && window.saveDynamicSectionFromAdmin()"><i class="fas fa-plus"></i><span id="dynamicSectionActionLabel">Add Section</span></button><button class="admin-btn secondary" type="button" onclick="window.resetDynamicSectionForm && window.resetDynamicSectionForm()"><i class="fas fa-eraser"></i>Clear Builder</button></div><div class="inline-status" id="dynamicSectionBuilderStatus"></div><div class="dynamic-admin-list" id="dynamicSectionList"></div></div>`;
+      block.innerHTML=`<summary><span><strong>Custom Section Builder</strong><small>Add new homepage sections such as packages, cards, banners, and highlight blocks.</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div class="form-grid"><div class="field-col"><label for="dynamicSectionType">Section Type</label><select id="dynamicSectionType" onchange="window.updateDynamicSectionTypeHelp && window.updateDynamicSectionTypeHelp()"><option value="packages">Packages Section</option><option value="cards">Feature Cards Section</option><option value="banner">Banner Section</option><option value="text">Text Highlights</option></select></div><div class="field-col"><label for="dynamicSectionEyebrow">Section Eyebrow</label><input type="text" id="dynamicSectionEyebrow"></div><div class="field-col full"><label for="dynamicSectionTitle">Section Heading</label><input type="text" id="dynamicSectionTitle"></div><div class="field-col full"><label for="dynamicSectionSubtitle">Section Intro / Subtitle</label><textarea id="dynamicSectionSubtitle"></textarea></div><div class="field-col full"><label for="dynamicSectionImage">Section Image / Banner Image</label><input type="url" id="dynamicSectionImage" oninput="window.updateDynamicSectionImagePreview && window.updateDynamicSectionImagePreview()"><div class="admin-upload-box"><div class="admin-upload-row"><input type="file" accept="image/*" onchange="window.handleDynamicSectionImageUpload && window.handleDynamicSectionImageUpload(event)"></div><div class="admin-size-hint"><strong>Recommended size:</strong> 1400 × 900 px for banners or 1200 × 900 px for cards</div><div class="admin-image-preview" id="dynamicSectionImagePreview"></div></div></div><div class="field-col full"><label for="dynamicSectionEntries">Items / Cards</label><textarea id="dynamicSectionEntries"></textarea></div><div class="field-col full"><label for="dynamicSectionExtra">Banner Highlights (optional)</label><textarea id="dynamicSectionExtra"></textarea></div></div><input type="hidden" id="dynamicSectionEditIndex" value=""><div class="admin-actions" style="margin-top:18px"><button class="admin-btn" type="button" onclick="window.saveDynamicSectionFromAdmin && window.saveDynamicSectionFromAdmin()"><i class="fas fa-plus"></i><span id="dynamicSectionActionLabel">Add Section</span></button><button class="admin-btn secondary" type="button" onclick="window.resetDynamicSectionForm && window.resetDynamicSectionForm()"><i class="fas fa-eraser"></i>Clear Builder</button></div><div class="inline-status" id="dynamicSectionBuilderStatus"></div><div class="dynamic-admin-list" id="dynamicSectionList"></div></div>`;
       mount.appendChild(block);
     }
     const jump=document.getElementById('adminSectionJump');
@@ -30927,12 +30927,12 @@ body.theme-night .page .tag{
         <div class="admin-studio-card">
           <h4>Visual polish</h4>
           <div class="admin-mini-grid">
-            <div class="field-col"><label>Gloss level</label><select id="studioGloss"><option value="standard">Standard</option><option value="high">High gloss</option></select></div>
-            <div class="field-col"><label>Location pin style</label><select id="studioPinStyle"><option value="glass">Glass glow</option><option value="gold">Golden luxe</option><option value="pulse">Pulse glow</option><option value="minimal">Minimal dots</option></select></div>
-            <div class="field-col"><label>Floating island skin</label><select id="studioIslandSkin"><option value="holographic">Holographic blue</option><option value="tropical">Tropical green</option><option value="sunset">Sunset amber</option><option value="emerald">Emerald aqua</option></select></div>
-            <div class="field-col"><label>Jamaica hotspot preset</label><select id="studioPinPreset"><option value="classic">Classic layout</option><option value="north_focus">North coast focus</option><option value="resort_spread">Resort spread</option><option value="west_shift">West shift</option></select></div>
-            <div class="field-col"><label>Island size</label><input id="studioIslandScale" type="range" min="0.82" max="1.35" step="0.01"></div>
-            <div class="field-col"><label>Float speed</label><input id="studioFloatSpeed" type="range" min="3" max="10" step="0.5"></div>
+            <div class="field-col"><label for="studioGloss">Gloss level</label><select id="studioGloss"><option value="standard">Standard</option><option value="high">High gloss</option></select></div>
+            <div class="field-col"><label for="studioPinStyle">Location pin style</label><select id="studioPinStyle"><option value="glass">Glass glow</option><option value="gold">Golden luxe</option><option value="pulse">Pulse glow</option><option value="minimal">Minimal dots</option></select></div>
+            <div class="field-col"><label for="studioIslandSkin">Floating island skin</label><select id="studioIslandSkin"><option value="holographic">Holographic blue</option><option value="tropical">Tropical green</option><option value="sunset">Sunset amber</option><option value="emerald">Emerald aqua</option></select></div>
+            <div class="field-col"><label for="studioPinPreset">Jamaica hotspot preset</label><select id="studioPinPreset"><option value="classic">Classic layout</option><option value="north_focus">North coast focus</option><option value="resort_spread">Resort spread</option><option value="west_shift">West shift</option></select></div>
+            <div class="field-col"><label for="studioIslandScale">Island size</label><input id="studioIslandScale" type="range" min="0.82" max="1.35" step="0.01"></div>
+            <div class="field-col"><label for="studioFloatSpeed">Float speed</label><input id="studioFloatSpeed" type="range" min="3" max="10" step="0.5"></div>
           </div>
           <div class="admin-studio-actions">
             <button class="admin-btn" type="button" id="applyStudioSettingsBtn"><i class="fas fa-wand-magic-sparkles"></i>Apply settings</button>
@@ -31663,7 +31663,7 @@ body.theme-night .page .tag{
       block=document.createElement('details');
       block.className='admin-group';
       block.id='admin-group-discover-jamaica-manager';
-      block.innerHTML=`<summary><span><strong>Discover Jamaica Parish Manager</strong><small>Fully edit parish cards, hidden gems, images, and airport distances from the admin portal.</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div class="form-grid"><div class="field-col"><label>Parish Name</label><input type="text" id="djAdminParishName"></div><div class="field-col"><label>Capital</label><input type="text" id="djAdminCapital"></div><div class="field-col full"><label>Popular Destination</label><input type="text" id="djAdminDestination"></div><div class="field-col"><label>Badge / Category</label><input type="text" id="djAdminBadge"></div><div class="field-col full"><label>Parish Image</label><input type="url" id="djAdminImage" oninput="window.updateParishImagePreview && window.updateParishImagePreview()"><div class="admin-upload-box"><div class="admin-upload-row"><input type="file" accept="image/*" onchange="window.handleParishImageUpload && window.handleParishImageUpload(event)"></div><div class="admin-size-hint"><strong>Recommended size:</strong> 1400 × 900 px landscape</div><div class="admin-image-preview" id="preview-djAdminImage"></div></div></div><div class="field-col full"><label>Summary</label><textarea id="djAdminSummary"></textarea></div><div class="field-col full"><label>Hidden Gem</label><textarea id="djAdminHiddenGem"></textarea></div><div class="field-col"><label>KIN Distance (km)</label><input type="number" id="djAdminKIN"></div><div class="field-col"><label>MBJ Distance (km)</label><input type="number" id="djAdminMBJ"></div><div class="field-col"><label>OCJ Distance (km)</label><input type="number" id="djAdminOCJ"></div></div><input type="hidden" id="djAdminEditIndex" value=""><div class="admin-actions" style="margin-top:18px"><button class="admin-btn" type="button" onclick="window.saveParishFromAdmin && window.saveParishFromAdmin()"><i class="fas fa-map-marked-alt"></i><span id="djAdminActionLabel">Add Parish</span></button><button class="admin-btn secondary" type="button" onclick="window.resetParishForm && window.resetParishForm()"><i class="fas fa-eraser"></i>Clear Form</button></div><div class="inline-status" id="djAdminStatus"></div><div class="dynamic-admin-list" id="djAdminList"></div></div>`;
+      block.innerHTML=`<summary><span><strong>Discover Jamaica Parish Manager</strong><small>Fully edit parish cards, hidden gems, images, and airport distances from the admin portal.</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div class="form-grid"><div class="field-col"><label for="djAdminParishName">Parish Name</label><input type="text" id="djAdminParishName"></div><div class="field-col"><label for="djAdminCapital">Capital</label><input type="text" id="djAdminCapital"></div><div class="field-col full"><label for="djAdminDestination">Popular Destination</label><input type="text" id="djAdminDestination"></div><div class="field-col"><label for="djAdminBadge">Badge / Category</label><input type="text" id="djAdminBadge"></div><div class="field-col full"><label for="djAdminImage">Parish Image</label><input type="url" id="djAdminImage" oninput="window.updateParishImagePreview && window.updateParishImagePreview()"><div class="admin-upload-box"><div class="admin-upload-row"><input type="file" accept="image/*" onchange="window.handleParishImageUpload && window.handleParishImageUpload(event)"></div><div class="admin-size-hint"><strong>Recommended size:</strong> 1400 × 900 px landscape</div><div class="admin-image-preview" id="preview-djAdminImage"></div></div></div><div class="field-col full"><label for="djAdminSummary">Summary</label><textarea id="djAdminSummary"></textarea></div><div class="field-col full"><label for="djAdminHiddenGem">Hidden Gem</label><textarea id="djAdminHiddenGem"></textarea></div><div class="field-col"><label for="djAdminKIN">KIN Distance (km)</label><input type="number" id="djAdminKIN"></div><div class="field-col"><label for="djAdminMBJ">MBJ Distance (km)</label><input type="number" id="djAdminMBJ"></div><div class="field-col"><label for="djAdminOCJ">OCJ Distance (km)</label><input type="number" id="djAdminOCJ"></div></div><input type="hidden" id="djAdminEditIndex" value=""><div class="admin-actions" style="margin-top:18px"><button class="admin-btn" type="button" onclick="window.saveParishFromAdmin && window.saveParishFromAdmin()"><i class="fas fa-map-marked-alt"></i><span id="djAdminActionLabel">Add Parish</span></button><button class="admin-btn secondary" type="button" onclick="window.resetParishForm && window.resetParishForm()"><i class="fas fa-eraser"></i>Clear Form</button></div><div class="inline-status" id="djAdminStatus"></div><div class="dynamic-admin-list" id="djAdminList"></div></div>`;
       const discoverBlock=document.getElementById('admin-group-discoverjamaica');
       if(discoverBlock && discoverBlock.parentNode) discoverBlock.parentNode.insertBefore(block, discoverBlock.nextSibling);
       else mount.appendChild(block);
@@ -32147,7 +32147,7 @@ body.theme-night .page .tag{
     <div class="admin-group-body">
       <div class="form-grid">
         <div class="field-col full">
-          <label>Homepage landmark popup mode</label>
+          <label for="adminJamaicaPopupMode">Homepage landmark popup mode</label>
           <select id="adminJamaicaPopupMode">
             <option value="click">Open only when location icon is clicked</option>
             <option value="always">Keep popups visible</option>
@@ -34621,27 +34621,27 @@ body.theme-night .page .tag{
         <div class="admin-package-manager">
           <div class="admin-package-grid">
             <div class="field-col">
-              <label>Club Name</label>
+              <label for="clubNameInput">Club Name</label>
               <input type="text" id="clubNameInput">
             </div>
             <div class="field-col">
-              <label>Headline</label>
+              <label for="clubHeadlineInput">Headline</label>
               <input type="text" id="clubHeadlineInput">
             </div>
             <div class="field-col">
-              <label>Points Label</label>
+              <label for="clubPointsLabelInput">Points Label</label>
               <input type="text" id="clubPointsLabelInput">
             </div>
             <div class="field-col">
-              <label>Points on Signup</label>
+              <label for="clubSignupPointsInput">Points on Signup</label>
               <input type="number" id="clubSignupPointsInput">
             </div>
             <div class="field-col">
-              <label>Points on Booking</label>
+              <label for="clubBookingPointsInput">Points on Booking</label>
               <input type="number" id="clubBookingPointsInput">
             </div>
             <div class="field-col full">
-              <label>Points Copy</label>
+              <label for="clubPointsCopyInput">Points Copy</label>
               <textarea id="clubPointsCopyInput"></textarea>
             </div>
           </div>
@@ -34840,27 +34840,27 @@ body.theme-night .page .tag{
       <div class="admin-group-body">
         <div class="admin-package-manager">
           <div class="admin-package-grid">
-            <div class="field-col"><label>Eyebrow</label><input type="text" id="homeClubEyebrow" value="${s.eyebrow.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Title</label><input type="text" id="homeClubTitle" value="${s.title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Body</label><textarea id="homeClubBody">${s.body}</textarea></div>
-            <div class="field-col"><label>Chip 1</label><input type="text" id="homeClubChip1" value="${s.chip1.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label>Chip 2</label><input type="text" id="homeClubChip2" value="${s.chip2.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label>Chip 3</label><input type="text" id="homeClubChip3" value="${s.chip3.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubEyebrow">Eyebrow</label><input type="text" id="homeClubEyebrow" value="${s.eyebrow.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubTitle">Title</label><input type="text" id="homeClubTitle" value="${s.title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubBody">Body</label><textarea id="homeClubBody">${s.body}</textarea></div>
+            <div class="field-col"><label for="homeClubChip1">Chip 1</label><input type="text" id="homeClubChip1" value="${s.chip1.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubChip2">Chip 2</label><input type="text" id="homeClubChip2" value="${s.chip2.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubChip3">Chip 3</label><input type="text" id="homeClubChip3" value="${s.chip3.replace(/"/g,'&quot;')}"></div>
 
-            <div class="field-col"><label>Point 1 Title</label><input type="text" id="homeClubPoint1Title" value="${s.point1Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Point 1 Body</label><textarea id="homeClubPoint1Body">${s.point1Body}</textarea></div>
+            <div class="field-col"><label for="homeClubPoint1Title">Point 1 Title</label><input type="text" id="homeClubPoint1Title" value="${s.point1Title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubPoint1Body">Point 1 Body</label><textarea id="homeClubPoint1Body">${s.point1Body}</textarea></div>
 
-            <div class="field-col"><label>Point 2 Title</label><input type="text" id="homeClubPoint2Title" value="${s.point2Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Point 2 Body</label><textarea id="homeClubPoint2Body">${s.point2Body}</textarea></div>
+            <div class="field-col"><label for="homeClubPoint2Title">Point 2 Title</label><input type="text" id="homeClubPoint2Title" value="${s.point2Title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubPoint2Body">Point 2 Body</label><textarea id="homeClubPoint2Body">${s.point2Body}</textarea></div>
 
-            <div class="field-col"><label>Point 3 Title</label><input type="text" id="homeClubPoint3Title" value="${s.point3Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Point 3 Body</label><textarea id="homeClubPoint3Body">${s.point3Body}</textarea></div>
+            <div class="field-col"><label for="homeClubPoint3Title">Point 3 Title</label><input type="text" id="homeClubPoint3Title" value="${s.point3Title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubPoint3Body">Point 3 Body</label><textarea id="homeClubPoint3Body">${s.point3Body}</textarea></div>
 
-            <div class="field-col"><label>Point 4 Title</label><input type="text" id="homeClubPoint4Title" value="${s.point4Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label>Point 4 Body</label><textarea id="homeClubPoint4Body">${s.point4Body}</textarea></div>
+            <div class="field-col"><label for="homeClubPoint4Title">Point 4 Title</label><input type="text" id="homeClubPoint4Title" value="${s.point4Title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubPoint4Body">Point 4 Body</label><textarea id="homeClubPoint4Body">${s.point4Body}</textarea></div>
 
-            <div class="field-col"><label>Primary Button</label><input type="text" id="homeClubPrimaryBtn" value="${s.primaryBtn.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label>Secondary Button</label><input type="text" id="homeClubSecondaryBtn" value="${s.secondaryBtn.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubPrimaryBtn">Primary Button</label><input type="text" id="homeClubPrimaryBtn" value="${s.primaryBtn.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubSecondaryBtn">Secondary Button</label><input type="text" id="homeClubSecondaryBtn" value="${s.secondaryBtn.replace(/"/g,'&quot;')}"></div>
           </div>
           <div class="admin-package-actions">
             <button type="button" class="admin-inline-btn" onclick="saveHomeTravelClubSection()"><i class="fas fa-save"></i>Save Home Travel Club</button>
@@ -36134,7 +36134,7 @@ body.theme-night .page .tag{
     if(!typeField || document.getElementById('dynamicSectionPage')) return;
     const holder=typeField.closest('.field-col');
     if(!holder) return;
-    holder.insertAdjacentHTML('afterend','<div class="field-col"><label>Add Section To</label><select id="dynamicSectionPage">'+PAGE_OPTIONS.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('')+'</select></div>');
+    holder.insertAdjacentHTML('afterend','<div class="field-col"><label for="dynamicSectionPage">Add Section To</label><select id="dynamicSectionPage">'+PAGE_OPTIONS.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('')+'</select></div>');
     const help=holder.querySelector('.form-help'); if(help) help.textContent='Choose the section style you want to add, then choose which page should display it.';
     const title=document.querySelector('#admin-group-custom-builder summary small'); if(title) title.textContent='Add new sections to Home, About, Gallery, Tours, Stays, Contact, Blog, Partners, Booking or Destinations.';
   }
@@ -41975,22 +41975,22 @@ window.openBlogRequestComposer=function(){
         <summary><span><strong>Account & Blog Writer</strong><small>Edit the guest account heading, action cards, and writer-page text.</small></span><i class="fas fa-chevron-down"></i></summary>
         <div class="admin-group-body">
           <div class="form-grid">
-            <div class="field-col full"><label>Account Section Title</label><input type="text" id="accAdminTitle" value="${escapeAttr(s.accountTitle)}"></div>
-            <div class="field-col full"><label>Account Intro</label><textarea id="accAdminIntro">${escapeHtml(s.accountIntro)}</textarea></div>
-            <div class="field-col"><label>Tours Card Title</label><input type="text" id="accAdminToursTitle" value="${escapeAttr(s.toursTitle)}"></div>
-            <div class="field-col"><label>Tours Button Text</label><input type="text" id="accAdminToursCta" value="${escapeAttr(s.toursCta)}"></div>
-            <div class="field-col full"><label>Tours Card Copy</label><textarea id="accAdminToursCopy">${escapeHtml(s.toursCopy)}</textarea></div>
-            <div class="field-col"><label>Cart Card Title</label><input type="text" id="accAdminCartTitle" value="${escapeAttr(s.cartTitle)}"></div>
-            <div class="field-col"><label>Cart Button Text</label><input type="text" id="accAdminCartCta" value="${escapeAttr(s.cartCta)}"></div>
-            <div class="field-col full"><label>Cart Card Copy</label><textarea id="accAdminCartCopy">${escapeHtml(s.cartCopy)}</textarea></div>
-            <div class="field-col"><label>Booking Card Title</label><input type="text" id="accAdminBookingTitle" value="${escapeAttr(s.bookingTitle)}"></div>
-            <div class="field-col"><label>Booking Button Text</label><input type="text" id="accAdminBookingCta" value="${escapeAttr(s.bookingCta)}"></div>
-            <div class="field-col full"><label>Booking Card Copy</label><textarea id="accAdminBookingCopy">${escapeHtml(s.bookingCopy)}</textarea></div>
-            <div class="field-col"><label>Blog Card Title</label><input type="text" id="accAdminBlogTitle" value="${escapeAttr(s.blogTitle)}"></div>
-            <div class="field-col"><label>Blog Button Text</label><input type="text" id="accAdminBlogCta" value="${escapeAttr(s.blogCta)}"></div>
-            <div class="field-col full"><label>Blog Card Copy</label><textarea id="accAdminBlogCopy">${escapeHtml(s.blogCopy)}</textarea></div>
-            <div class="field-col full"><label>Writer Page Title</label><input type="text" id="accAdminWriterTitle" value="${escapeAttr(s.writerTitle)}"></div>
-            <div class="field-col full"><label>Writer Page Intro</label><textarea id="accAdminWriterIntro">${escapeHtml(s.writerIntro)}</textarea></div>
+            <div class="field-col full"><label for="accAdminTitle">Account Section Title</label><input type="text" id="accAdminTitle" value="${escapeAttr(s.accountTitle)}"></div>
+            <div class="field-col full"><label for="accAdminIntro">Account Intro</label><textarea id="accAdminIntro">${escapeHtml(s.accountIntro)}</textarea></div>
+            <div class="field-col"><label for="accAdminToursTitle">Tours Card Title</label><input type="text" id="accAdminToursTitle" value="${escapeAttr(s.toursTitle)}"></div>
+            <div class="field-col"><label for="accAdminToursCta">Tours Button Text</label><input type="text" id="accAdminToursCta" value="${escapeAttr(s.toursCta)}"></div>
+            <div class="field-col full"><label for="accAdminToursCopy">Tours Card Copy</label><textarea id="accAdminToursCopy">${escapeHtml(s.toursCopy)}</textarea></div>
+            <div class="field-col"><label for="accAdminCartTitle">Cart Card Title</label><input type="text" id="accAdminCartTitle" value="${escapeAttr(s.cartTitle)}"></div>
+            <div class="field-col"><label for="accAdminCartCta">Cart Button Text</label><input type="text" id="accAdminCartCta" value="${escapeAttr(s.cartCta)}"></div>
+            <div class="field-col full"><label for="accAdminCartCopy">Cart Card Copy</label><textarea id="accAdminCartCopy">${escapeHtml(s.cartCopy)}</textarea></div>
+            <div class="field-col"><label for="accAdminBookingTitle">Booking Card Title</label><input type="text" id="accAdminBookingTitle" value="${escapeAttr(s.bookingTitle)}"></div>
+            <div class="field-col"><label for="accAdminBookingCta">Booking Button Text</label><input type="text" id="accAdminBookingCta" value="${escapeAttr(s.bookingCta)}"></div>
+            <div class="field-col full"><label for="accAdminBookingCopy">Booking Card Copy</label><textarea id="accAdminBookingCopy">${escapeHtml(s.bookingCopy)}</textarea></div>
+            <div class="field-col"><label for="accAdminBlogTitle">Blog Card Title</label><input type="text" id="accAdminBlogTitle" value="${escapeAttr(s.blogTitle)}"></div>
+            <div class="field-col"><label for="accAdminBlogCta">Blog Button Text</label><input type="text" id="accAdminBlogCta" value="${escapeAttr(s.blogCta)}"></div>
+            <div class="field-col full"><label for="accAdminBlogCopy">Blog Card Copy</label><textarea id="accAdminBlogCopy">${escapeHtml(s.blogCopy)}</textarea></div>
+            <div class="field-col full"><label for="accAdminWriterTitle">Writer Page Title</label><input type="text" id="accAdminWriterTitle" value="${escapeAttr(s.writerTitle)}"></div>
+            <div class="field-col full"><label for="accAdminWriterIntro">Writer Page Intro</label><textarea id="accAdminWriterIntro">${escapeHtml(s.writerIntro)}</textarea></div>
           </div>
           <div class="admin-actions" style="margin-top:18px">
             <button class="admin-btn" type="button" id="accAdminSaveBtn"><i class="fas fa-floppy-disk"></i>Save Account Settings</button>
