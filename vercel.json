@@ -3,6 +3,9 @@
   "buildCommand": "node build.js",
   "outputDirectory": "public",
   "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/((?!api/|logos/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
