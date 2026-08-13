@@ -13402,6 +13402,9 @@ body.theme-night .vt-dash-tab.active{background:var(--orange);color:#fff;border-
 .vt-live-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
 .vt-live-card{background:rgba(255,255,255,.04);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:transform .3s,box-shadow .3s}
 .vt-live-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
+.vt-live-card-img.vt-has-art{background-repeat:no-repeat;transition:background-size .6s ease}
+.vt-live-card:hover .vt-live-card-img.vt-has-art{background-size:112%,112%}
+@media (prefers-reduced-motion:reduce){.vt-live-card-img.vt-has-art,.vt-live-card:hover .vt-live-card-img.vt-has-art{transition:none;background-size:cover,cover}}
 .vt-live-card-img{height:110px;background:linear-gradient(135deg,#0d5371,#1a7a9e);position:relative;display:flex;align-items:flex-end;padding:10px}
 .vt-live-card-badge{position:absolute;top:8px;left:8px;background:rgba(239,68,68,.9);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:4px}
 .vt-live-card-badge.scheduled{background:rgba(59,130,246,.9)}
@@ -18311,6 +18314,84 @@ function vtSkipLangPrompt(){
 function vtCloseLangPrompt(){
   var p=document.getElementById('vt-lang-prompt');
   if(p)p.classList.remove('open');
+}
+
+
+/* ── Session-card artwork ──────────────────────
+   The live-session cards shipped as flat CSS gradients, which reads oddly for a
+   product whose whole pitch is "see the place before you book". Where we own a
+   still of the real location, use it; everything else keeps its gradient, which
+   also stays underneath as the fallback if an image 404s.
+
+   To add artwork for a session, add one line here — key is the card title,
+   lowercased, with punctuation stripped by vtNormTitle(). Prefer a still lifted
+   from that tour's own 360 panorama over stock photography. */
+var VT_CARD_ART = {
+  'blue lagoon morning walk'   : '/panos/og-blue-lagoon.jpg',
+  'blue lagoon best moments'   : '/panos/og-blue-lagoon.jpg',
+  'bridgetown market tour'     : '/panos/og-market-stall.jpg',
+  'falmouth craft market walk' : '/panos/og-market-stall.jpg'
+};
+
+/* Category colour system. The cards shipped with 19 unrelated gradients drawn
+   from a default utility palette — purples, hot pinks and indigos that share no
+   DNA with the navy-and-orange identity. These five families are all derived
+   from the brand anchors (--navy #063a63, --orange #ef8731), so colour now
+   encodes what kind of session a card is rather than decorating it at random. */
+var VT_CAT_GRADIENT = {
+  sea    : 'linear-gradient(135deg,#063a63,#1a9aa8)',  /* water, wildlife, the outdoors */
+  warm   : 'linear-gradient(135deg,#b8560f,#ef8731)',  /* food, cooking, rum, coffee    */
+  deep   : 'linear-gradient(135deg,#0a2540,#2d5a87)',  /* culture, history, art, faith  */
+  sunset : 'linear-gradient(135deg,#8c2f39,#ef8731)',  /* music and nightlife           */
+  market : 'linear-gradient(135deg,#0d5c52,#4bb89a)'   /* markets and shopping          */
+};
+var VT_CAT_FAMILY = {
+  'nature':'sea','nature and outdoors':'sea','marine':'sea','wildlife':'sea',
+  'adventure':'sea','outdoors':'sea',
+  'food':'warm','food and drink':'warm','cooking':'warm','rum':'warm','coffee':'warm',
+  'culture':'deep','history':'deep','art':'deep','spiritual':'deep','wellness':'deep',
+  'music':'sunset','nightlife':'sunset',
+  'shopping':'market','personal shopping':'market'
+};
+
+function vtApplyCategoryColour(){
+  document.querySelectorAll('.vt-live-card').forEach(function(card){
+    var imgEl = card.querySelector('.vt-live-card-img');
+    var catEl = card.querySelector('.vt-live-card-cat');
+    if(!imgEl || !catEl || imgEl.dataset.vtCat) return;
+    var fam = VT_CAT_FAMILY[vtNormTitle(catEl.textContent)];
+    if(!fam) return;                     /* replay clips show a duration, not a category */
+    imgEl.style.background = VT_CAT_GRADIENT[fam];
+    imgEl.dataset.vtCat = fam;
+  });
+}
+
+function vtNormTitle(t){
+  return String(t||'').replace(/&amp;/g,'&').replace(/[^a-z0-9 ]/gi,'').replace(/\s+/g,' ').trim().toLowerCase();
+}
+
+function vtApplyCardArt(){
+  document.querySelectorAll('.vt-live-card').forEach(function(card){
+    var imgEl = card.querySelector('.vt-live-card-img');
+    var titleEl = card.querySelector('.vt-live-card-title');
+    if(!imgEl || !titleEl || imgEl.dataset.vtArt) return;
+    var src = VT_CARD_ART[vtNormTitle(titleEl.textContent)];
+    if(!src) return;
+    /* Keep the original gradient as the base layer so the card still reads if
+       the photograph fails to load, and scrim the photo so the badge and
+       category label stay legible over it. */
+    var base = imgEl.style.background || '';
+    var probe = new Image();
+    probe.onload = function(){
+      imgEl.style.backgroundImage =
+        'linear-gradient(180deg, rgba(4,26,45,0) 35%, rgba(4,26,45,.72) 100%), url("'+src+'")';
+      imgEl.style.backgroundSize = 'cover, cover';
+      imgEl.style.backgroundPosition = 'center, center';
+      imgEl.classList.add('vt-has-art');
+    };
+    probe.src = src;
+    imgEl.dataset.vtArt = base ? '1' : '1';
+  });
 }
 
 function vtShowLangPrompt(){
@@ -23943,6 +24024,7 @@ function nav(id,opts={}){
     // Keep the tour video playing but muted — audio must not auto-play
     try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
     vtShowLangPrompt();
+    try{ vtApplyCategoryColour(); vtApplyCardArt(); }catch(e){}
   }
   if(id!=='vtours'){
     try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
