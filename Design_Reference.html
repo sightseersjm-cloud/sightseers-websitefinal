@@ -73,6 +73,8 @@ window.SS_GA4_ID = window.SS_GA4_ID || '';
 html{scroll-behavior:smooth}
 body{font-family:'Raleway',sans-serif;color:#333;background:linear-gradient(180deg,#ffffff 0%,#f6fbf8 58%,#fff9f1 100%);overflow-x:hidden;font-size:14px;line-height:1.7}
 a{text-decoration:none;color:inherit}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:100000;background:var(--navy,#063a63);color:#fff;padding:12px 20px;font-weight:700;border-radius:0 0 6px 0}
+.skip-link:focus{left:0;outline:3px solid var(--orange,#ef8731);outline-offset:2px}
 ul{list-style:none}
 img{display:block;max-width:100%}
 button{font-family:'Raleway',sans-serif;cursor:pointer}
@@ -9345,6 +9347,8 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
+
+<a href="#hero" class="skip-link">Skip to main content</a>
 
 <!-- ── TOP BAR ─────────────────────────────── -->
 <div class="topbar">
