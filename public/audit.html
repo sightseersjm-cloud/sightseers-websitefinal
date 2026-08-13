@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sight Seers Caribbean — Site Audit</title>
+<style>
+@import url('data:text/css,');
+
+:root {
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --surface2: #EEF1F6;
+  --border: #D4D9E4;
+  --text: #0F1923;
+  --text2: #4A5568;
+  --text3: #8896A8;
+  --navy: #063a63;
+  --orange: #ef8731;
+  --aqua: #2ABFB8;
+  --critical: #D93025;
+  --critical-bg: #FEF2F2;
+  --warning: #E67E22;
+  --warning-bg: #FFF8F0;
+  --ok: #1FAD6A;
+  --ok-bg: #F0FBF6;
+  --info: #2563EB;
+  --info-bg: #EFF6FF;
+  --score-ring: #063a63;
+  --mono: 'Courier New', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A111A;
+    --surface: #111C27;
+    --surface2: #1A2535;
+    --border: #253347;
+    --text: #E8EDF5;
+    --text2: #98A9BC;
+    --text3: #5C7290;
+    --critical-bg: #2D1010;
+    --warning-bg: #2D1E08;
+    --ok-bg: #0A2318;
+    --info-bg: #0D1E3D;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0A111A;
+  --surface: #111C27;
+  --surface2: #1A2535;
+  --border: #253347;
+  --text: #E8EDF5;
+  --text2: #98A9BC;
+  --text3: #5C7290;
+  --critical-bg: #2D1010;
+  --warning-bg: #2D1E08;
+  --ok-bg: #0A2318;
+  --info-bg: #0D1E3D;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* Layout */
+.shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: var(--navy);
+  color: #C8DAF0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px 0 40px;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 16px;
+}
+.sidebar-logo .brand { font-size: 13px; font-weight: 700; color: var(--orange); letter-spacing: .06em; text-transform: uppercase; }
+.sidebar-logo .sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+.sidebar nav a {
+  display: block;
+  padding: 7px 20px;
+  font-size: 12.5px;
+  color: rgba(200,218,240,0.75);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.sidebar nav a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+.sidebar nav a.active { color: #fff; border-left-color: var(--orange); background: rgba(255,255,255,0.06); }
+.sidebar nav .section-label {
+  padding: 14px 20px 5px;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  font-weight: 700;
+}
+
+.main { flex: 1; min-width: 0; }
+
+.topbar {
+  background: var(--navy);
+  color: #fff;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar h1 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.topbar .meta { font-size: 12px; color: rgba(255,255,255,0.5); }
+.topbar .date { font-size: 12px; color: var(--orange); font-weight: 600; }
+
+.content { padding: 36px 40px 80px; max-width: 1100px; }
+
+/* Sections */
+.audit-section { margin-bottom: 56px; scroll-margin-top: 20px; }
+.audit-section h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  letter-spacing: -.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.audit-section h2 .s-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .audit-section h2 { color: #A8C4E0; }
+}
+:root[data-theme="dark"] .audit-section h2 { color: #A8C4E0; }
+
+.audit-section h3 { font-size: 15px; font-weight: 700; margin: 20px 0 8px; color: var(--text); }
+
+/* Scorecard */
+.scorecard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
+
+.score-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.score-card .cat { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.score-card .val { font-size: 28px; font-weight: 900; letter-spacing: -.03em; }
+.score-card .bar { height: 4px; border-radius: 2px; background: var(--border); margin-top: 8px; }
+.score-card .bar-fill { height: 100%; border-radius: 2px; }
+
+.val.c { color: var(--critical); }
+.val.w { color: var(--warning); }
+.val.g { color: var(--ok); }
+.val.b { color: var(--info); }
+
+/* Overall score */
+.overall-score {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 28px;
+  color: #fff;
+}
+.score-ring-wrap { flex-shrink: 0; position: relative; width: 100px; height: 100px; }
+.score-ring-wrap svg { transform: rotate(-90deg); }
+.score-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-ring-center .num { font-size: 28px; font-weight: 900; color: var(--orange); line-height: 1; }
+.score-ring-center .denom { font-size: 11px; color: rgba(255,255,255,0.4); }
+.overall-score .verdict { flex: 1; }
+.overall-score .verdict h3 { font-size: 18px; font-weight: 800; color: #fff; margin: 0 0 6px; }
+.overall-score .verdict p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+/* Finding cards */
+.finding {
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+}
+.finding.critical { background: var(--critical-bg); border-color: var(--critical); }
+.finding.warning { background: var(--warning-bg); border-color: var(--warning); }
+.finding.ok { background: var(--ok-bg); border-color: var(--ok); }
+.finding.info { background: var(--info-bg); border-color: var(--info); }
+
+.finding-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
+.sev-badge {
+  font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+  font-family: var(--mono);
+}
+.sev-badge.critical { background: var(--critical); color: #fff; }
+.sev-badge.warning { background: var(--warning); color: #fff; }
+.sev-badge.ok { background: var(--ok); color: #fff; }
+.sev-badge.info { background: var(--info); color: #fff; }
+
+.finding-title { font-weight: 700; font-size: 14px; line-height: 1.4; }
+.finding-body { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.6; }
+.finding-body code { font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; }
+.finding-fix { margin-top: 8px; font-size: 12.5px; color: var(--text2); }
+.finding-fix strong { color: var(--text); }
+.test-note { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-top: 4px; }
+
+/* Tables */
+.audit-table { width: 100%; border-collapse: collapse; font-size: 13px; overflow-x: auto; display: block; }
+.audit-table th {
+  text-align: left; padding: 9px 12px; font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--text3);
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+}
+.audit-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; background: var(--surface); }
+.audit-table tr:last-child td { border-bottom: none; }
+.audit-table tr:hover td { background: var(--surface2); }
+
+/* Tags */
+.tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; margin: 1px; white-space: nowrap; }
+.tag.green { background: var(--ok-bg); color: var(--ok); }
+.tag.red { background: var(--critical-bg); color: var(--critical); }
+.tag.yellow { background: var(--warning-bg); color: var(--warning); }
+.tag.blue { background: var(--info-bg); color: var(--info); }
+.tag.gray { background: var(--surface2); color: var(--text3); }
+
+/* Backlog / priority items */
+.priority-list { counter-reset: pri; list-style: none; }
+.priority-list li {
+  counter-increment: pri;
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.priority-list li:last-child { border-bottom: none; }
+.pri-num {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: #fff; font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+}
+.pri-body .pri-title { font-weight: 700; font-size: 14px; }
+.pri-body .pri-why { font-size: 12.5px; color: var(--text2); margin-top: 2px; }
+.pri-meta { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+
+/* Roadmap */
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.roadmap-col { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+.roadmap-col h3 { font-size: 14px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.roadmap-col h3 .phase { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; }
+.phase.p1 { background: var(--critical-bg); color: var(--critical); }
+.phase.p2 { background: var(--warning-bg); color: var(--warning); }
+.phase.p3 { background: var(--ok-bg); color: var(--ok); }
+.roadmap-task { font-size: 12.5px; color: var(--text2); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 7px; align-items: flex-start; line-height: 1.4; }
+.roadmap-task:last-child { border-bottom: none; }
+.roadmap-task::before { content: '›'; color: var(--orange); font-weight: 900; flex-shrink: 0; }
+
+/* Audience matrix */
+.matrix-table { font-size: 12px; }
+.matrix-table th, .matrix-table td { text-align: center; }
+.matrix-table td:first-child { text-align: left; font-weight: 600; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.dot.full { background: var(--ok); }
+.dot.partial { background: var(--warning); }
+.dot.none { background: var(--border); }
+
+/* Callout box */
+.callout { border-radius: 8px; padding: 14px 16px; margin: 14px 0; font-size: 13.5px; display: flex; gap: 10px; }
+.callout.info { background: var(--info-bg); border: 1px solid rgba(37,99,235,0.2); }
+.callout.warning { background: var(--warning-bg); border: 1px solid rgba(230,126,34,0.2); }
+.callout.critical { background: var(--critical-bg); border: 1px solid rgba(217,48,37,0.2); }
+.callout-icon { flex-shrink: 0; font-size: 16px; line-height: 1.4; }
+
+/* Metric row */
+.metric-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+.metric-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 110px; }
+.metric-tile .mval { font-size: 26px; font-weight: 900; letter-spacing: -.03em; }
+.metric-tile .mlabel { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-top: 2px; }
+
+/* Journey flow */
+.journey { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding-bottom: 8px; }
+.journey-step { flex-shrink: 0; text-align: center; width: 120px; }
+.journey-step .step-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 8px; font-size: 11.5px; font-weight: 600; line-height: 1.4;
+}
+.journey-step .step-sub { font-size: 10.5px; color: var(--text3); margin-top: 4px; }
+.journey-arrow { padding-top: 22px; color: var(--orange); font-size: 18px; font-weight: 900; flex-shrink: 0; }
+.journey-step.gap-step .step-box { border-color: var(--critical); background: var(--critical-bg); color: var(--critical); }
+
+/* Utility */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mono { font-family: var(--mono); font-size: 12px; }
+p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
+.mt { margin-top: 16px; }
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .content { padding: 24px 20px 60px; }
+  .roadmap { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .topbar { padding: 16px 20px; }
+  .topbar h1 { font-size: 17px; }
+}
+</style>
+
+<!-- Sidebar nav -->
+<div class="shell">
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Sight Seers Caribbean</div>
+    <div class="sub">Website Audit · August 2026</div>
+  </div>
+  <nav>
+    <div class="section-label">Overview</div>
+    <a href="#s-exec">Executive Summary</a>
+    <a href="#s-score">Scorecard</a>
+    <a href="#s-inventory">Inventory</a>
+    <div class="section-label">Audience & Pages</div>
+    <a href="#s-audience">Audience Matrix</a>
+    <a href="#s-pages">Page-by-Page Audit</a>
+    <div class="section-label">Conversion</div>
+    <a href="#s-conversion">Conversion Audit</a>
+    <a href="#s-booking">Booking & Inquiry</a>
+    <a href="#s-vtours">Virtual Tours</a>
+    <div class="section-label">Technical</div>
+    <a href="#s-content">Content & Trust</a>
+    <a href="#s-mobile">Mobile & Accessibility</a>
+    <a href="#s-seo">SEO & Performance</a>
+    <a href="#s-security">Security & Privacy</a>
+    <a href="#s-analytics">Analytics</a>
+    <div class="section-label">Recommendations</div>
+    <a href="#s-top20">Top 20 Improvements</a>
+    <a href="#s-sitemap">Sitemap & Nav</a>
+    <a href="#s-journeys">Customer Journeys</a>
+    <a href="#s-workflows">Workflows</a>
+    <a href="#s-backlog">Implementation Backlog</a>
+    <a href="#s-roadmap">30/60/90-Day Roadmap</a>
+  </nav>
+</aside>
+
+<div class="main">
+<div class="topbar">
+  <div>
+    <h1>Sight Seers Caribbean — Website Audit</h1>
+    <div class="meta">sightseerscaribbean.com &nbsp;·&nbsp; Evidence-based, codebase-sourced</div>
+  </div>
+  <div class="date">August 13, 2026</div>
+</div>
+
+<div class="content">
+
+<!-- ─── 1. EXECUTIVE SUMMARY ─── -->
+<section class="audit-section" id="s-exec">
+  <h2><span class="s-num">01</span> Executive Summary</h2>
+
+  <div class="overall-score">
+    <div class="score-ring-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#ef8731" stroke-width="10"
+          stroke-dasharray="263.9" stroke-dashoffset="92" stroke-linecap="round"/>
+      </svg>
+      <div class="score-ring-center">
+        <div class="num">65</div>
+        <div class="denom">/100</div>
+      </div>
+    </div>
+    <div class="verdict">
+      <h3>Promising Foundation — Significant Conversion & Trust Gaps</h3>
+      <p>The site has a rich feature set — V-Tours, multi-page booking, live streaming, and a large experience catalog — but suffers from unfinished conversion flows, missing trust signals, accessibility gaps, and several critical security issues that block it from performing at its potential. Addressing the top-10 priorities could realistically push scores above 80 within 60 days.</p>
+    </div>
+  </div>
+
+  <p>Sight Seers Caribbean is a single-page application built on a 46,000-line Design_Reference.html compiled to a minified public/index.html. The site covers tours, villa stays, yacht charters, school and senior trips, Greek-life experiences, V-Tours (live-streamed 360° sessions), and a gift card/shop. Navigation is JavaScript-driven with no real URL routing, which creates SEO and deep-link limitations. Backend is Vercel serverless + Vercel Blob with Stripe payments and Supabase real-time chat for V-Tours.</p>
+
+  <div class="callout warning">
+    <div class="callout-icon">⚠</div>
+    <div>Several critical items — payment flow validation, live-stream uptime, admin panel security, and WCAG compliance — require live environment testing and are marked <span class="mono">REQUIRES TESTING</span> throughout this audit.</div>
+  </div>
+
+  <h3>Top 5 Critical Findings</h3>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Admin passcode shipped in client JavaScript bundle</div></div>
+    <div class="finding-body">The constant <code>ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!'</code> in <code>api/_lib/auth.js</code> means any site visitor can read the admin passcode via the Vercel function bundle or via a network proxy in devtools.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Remove hardcoded fallback. Set <code>ADMIN_PASSCODE</code> env var in Vercel with a strong random string. Rotate passcode immediately.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Booking form office-hours copy reads "Sunday – Monday" (2 days only)</div></div>
+    <div class="finding-body">Hard-coded label on <code>#p-booking</code> shows "Office Hours: Sunday – Monday" — communicates the business is only reachable 2 days per week, destroying conversion confidence.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Correct to actual office hours (e.g., Monday – Friday, or Mon – Sat) in Design_Reference.html.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No URL routing — every page is the same URL</div></div>
+    <div class="finding-body">All 25+ pages live at the same path; JavaScript swaps <code>div.page</code> visibility. Deep links fail, browser back-button breaks, social shares cannot target specific pages, and Google indexes only the root.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Implement hash routing (<code>#/tours</code>) or proper History API (<code>pushState</code>) to give each page a unique, bookmarkable URL.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Critical env vars missing — payments and V-Tours are silently broken</div></div>
+    <div class="finding-body">V-Tours Stripe integration falls back to "Demo mode: Stripe not configured yet." <code>VT_CONFIG.supabase.url === 'YOUR_SUPABASE_URL'</code> blocks real-time chat. <code>MUX_TOKEN_ID/SECRET</code> are required for live streaming.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add all env vars to Vercel: <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>, <code>MUX_TOKEN_ID</code>, <code>MUX_TOKEN_SECRET</code>, <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>JWT_SECRET</code>, <code>ADMIN_PASSCODE</code>.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No visible cancellation / refund policy or Terms of Service</div></div>
+    <div class="finding-body">Collecting deposits and payments without accessible refund/cancellation terms is a legal risk and a major conversion barrier, especially for premium bookings (villas, charters).</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add a Terms & Conditions page and link it in the footer and at every payment CTA.</div>
+  </div>
+</section>
+
+<!-- ─── 2. SCORECARD ─── -->
+<section class="audit-section" id="s-score">
+  <h2><span class="s-num">02</span> Category Scorecard</h2>
+
+  <div class="scorecard-grid">
+    <div class="score-card">
+      <div class="cat">Conversion</div>
+      <div class="val w">52</div>
+      <div class="bar"><div class="bar-fill" style="width:52%;background:#E67E22"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Booking Flow</div>
+      <div class="val w">58</div>
+      <div class="bar"><div class="bar-fill" style="width:58%;background:#E67E22"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">V-Tours</div>
+      <div class="val w">61</div>
+      <div class="bar"><div class="bar-fill" style="width:61%;background:#E67E22"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Content & Trust</div>
+      <div class="val w">60</div>
+      <div class="bar"><div class="bar-fill" style="width:60%;background:#E67E22"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Mobile & A11y</div>
+      <div class="val c">48</div>
+      <div class="bar"><div class="bar-fill" style="width:48%;background:#D93025"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">SEO</div>
+      <div class="val c">38</div>
+      <div class="bar"><div class="bar-fill" style="width:38%;background:#D93025"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Security</div>
+      <div class="val c">45</div>
+      <div class="bar"><div class="bar-fill" style="width:45%;background:#D93025"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Performance</div>
+      <div class="val w">55</div>
+      <div class="bar"><div class="bar-fill" style="width:55%;background:#E67E22"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Analytics</div>
+      <div class="val c">30</div>
+      <div class="bar"><div class="bar-fill" style="width:30%;background:#D93025"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Feature Depth</div>
+      <div class="val g">78</div>
+      <div class="bar"><div class="bar-fill" style="width:78%;background:#1FAD6A"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Branding</div>
+      <div class="val g">72</div>
+      <div class="bar"><div class="bar-fill" style="width:72%;background:#1FAD6A"></div></div>
+    </div>
+    <div class="score-card">
+      <div class="cat">Overall</div>
+      <div class="val b">65</div>
+      <div class="bar"><div class="bar-fill" style="width:65%;background:#063a63"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 3. INVENTORY ─── -->
+<section class="audit-section" id="s-inventory">
+  <h2><span class="s-num">03</span> Page & Feature Inventory</h2>
+  <div style="overflow-x:auto">
+  <table class="audit-table">
+    <thead>
+      <tr><th>Page ID</th><th>Title / Purpose</th><th>Has CTA</th><th>Has Form</th><th>SEO Indexable</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">#hero</td><td>Homepage / Slideshow</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">Root only</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-tours</td><td>Tours Overview</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-school-tours</td><td>School / Educational Tours</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-senior-tours</td><td>Senior Travel</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-transfers</td><td>Airport Transfers</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-yacht-charters</td><td>Yacht & Boat Charters</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-stays</td><td>Villa & Hotel Stays</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-staycountry</td><td>Stay by Country</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-greek-life</td><td>Fraternities / Sororities</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-custom-group</td><td>Custom Group Trips</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-shop</td><td>Merchandise Shop</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td class="mono">#p-giftcards</td><td>Gift Cards</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td class="mono">#p-destinations</td><td>Caribbean Destinations</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-discoverjamaica</td><td>Discover Jamaica Deep-Dive</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-landmark</td><td>Landmark Experiences</td><td><span class="tag green">Yes</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-about</td><td>About Sight Seers</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-gallery</td><td>Photo / Video Gallery</td><td><span class="tag red">No</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-booking</td><td>Booking Request Form</td><td><span class="tag green">Yes</span></td><td><span class="tag green">Yes</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-contact</td><td>Contact / WhatsApp</td><td><span class="tag green">Yes</span></td><td><span class="tag green">Yes</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-passport</td><td>Passport / Travel Docs Info</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-blog</td><td>Blog / Editorial</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag yellow">Thin</span></td></tr>
+      <tr><td class="mono">#p-partners</td><td>Partners / Affiliates</td><td><span class="tag yellow">Partial</span></td><td><span class="tag red">No</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-vtours</td><td>Virtual Tours Portal (360° + Live)</td><td><span class="tag green">Yes</span></td><td><span class="tag green">Yes</span></td><td><span class="tag red">None</span></td><td><span class="tag yellow">Demo mode</span></td></tr>
+      <tr><td class="mono">#p-account</td><td>User Account / Dashboard</td><td><span class="tag green">Yes</span></td><td><span class="tag green">Yes</span></td><td><span class="tag red">None</span></td><td><span class="tag green">Live</span></td></tr>
+      <tr><td class="mono">#p-admin</td><td>Admin Panel</td><td>—</td><td><span class="tag green">Yes</span></td><td><span class="tag red">None</span></td><td><span class="tag red">Hardcoded PW</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>API Endpoints Inventory</h3>
+  <div style="overflow-x:auto">
+  <table class="audit-table">
+    <thead><tr><th>Endpoint</th><th>Method</th><th>Purpose</th><th>Auth Required</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">/api/signup</td><td>POST</td><td>User registration (PBKDF2 hash)</td><td>No</td></tr>
+      <tr><td class="mono">/api/signin</td><td>POST</td><td>Login → JWT (HS256, 7d)</td><td>No</td></tr>
+      <tr><td class="mono">/api/passcode-login</td><td>POST</td><td>Admin passcode check</td><td>No</td></tr>
+      <tr><td class="mono">/api/bookings</td><td>GET/POST</td><td>Create / list bookings</td><td>Bearer JWT</td></tr>
+      <tr><td class="mono">/api/contact</td><td>POST</td><td>Contact form → email</td><td>No</td></tr>
+      <tr><td class="mono">/api/stripe-checkout</td><td>POST</td><td>Create Stripe checkout session</td><td>No</td></tr>
+      <tr><td class="mono">/api/stripe-webhook</td><td>POST</td><td>Stripe event handler (HMAC-SHA256)</td><td>Stripe sig</td></tr>
+      <tr><td class="mono">/api/mux-stream</td><td>GET/POST/DELETE</td><td>Manage Mux live streams</td><td>Bearer JWT</td></tr>
+      <tr><td class="mono">/api/guide-auth</td><td>POST</td><td>Guide Supabase login proxy</td><td>No (internal)</td></tr>
+      <tr><td class="mono">/api/verify-token</td><td>GET</td><td>Validate post-payment viewer token</td><td>Token param</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ─── 4. AUDIENCE MATRIX ─── -->
+<section class="audit-section" id="s-audience">
+  <h2><span class="s-num">04</span> Audience Coverage Matrix</h2>
+  <p>How well the current site serves each of the 10 target audiences across key journey stages.</p>
+  <div style="overflow-x:auto">
+  <table class="audit-table matrix-table">
+    <thead>
+      <tr>
+        <th style="text-align:left">Audience</th>
+        <th>Dedicated Page</th>
+        <th>Tailored Copy</th>
+        <th>Pricing Visible</th>
+        <th>Social Proof</th>
+        <th>Clear CTA</th>
+        <th>Overall</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Fraternities / Sororities</td><td><span class="dot full"></span></td><td><span class="dot full"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="dot full"></span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td>Latin American Travelers</td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="tag red">Gap</span></td></tr>
+      <tr><td>Senior US/CA Travelers</td><td><span class="dot full"></span></td><td><span class="dot partial"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot full"></span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td>Eurasian Travelers</td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="tag red">Gap</span></td></tr>
+      <tr><td>Remote Workers / Digital Nomads</td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="tag red">Not served</span></td></tr>
+      <tr><td>Families</td><td><span class="dot partial"></span></td><td><span class="dot partial"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="dot full"></span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td>Millennials / Gen Z</td><td><span class="dot partial"></span></td><td><span class="dot partial"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="dot full"></span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td>Luxury / HNW Travelers</td><td><span class="dot full"></span></td><td><span class="dot partial"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="tag yellow">Partial</span></td></tr>
+      <tr><td>Business Consultants</td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="tag red">Not served</span></td></tr>
+      <tr><td>C-Suite / Corporate Groups</td><td><span class="dot partial"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot none"></span></td><td><span class="dot partial"></span></td><td><span class="tag red">Gap</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div style="margin-top:10px;display:flex;gap:16px;font-size:12px;color:var(--text3)">
+    <span><span class="dot full" style="display:inline-block;margin-right:4px"></span>Present</span>
+    <span><span class="dot partial" style="display:inline-block;margin-right:4px"></span>Partial</span>
+    <span><span class="dot none" style="display:inline-block;margin-right:4px"></span>Missing</span>
+  </div>
+  <div class="callout warning" style="margin-top:16px">
+    <div class="callout-icon">⚠</div>
+    <div>4 of 10 audiences have no dedicated entry point. Remote workers, business consultants, Latin American and Eurasian travelers find no language, imagery, or content specifically for them — they land on generic pages and leave.</div>
+  </div>
+</section>
+
+<!-- ─── 5. PAGE-BY-PAGE AUDIT ─── -->
+<section class="audit-section" id="s-pages">
+  <h2><span class="s-num">05</span> Page-by-Page Audit</h2>
+
+  <h3>Homepage (#hero)</h3>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Hero slideshow has no alt text on images</div></div>
+    <div class="finding-body">Slideshow images carry no <code>alt</code> attributes — screen readers skip them or read filenames.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add descriptive alt text to each slide image.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Hero CTA "Explore Water Escapes" is too narrow</div></div>
+    <div class="finding-body">Primary hero CTA targets only water-based activities, excluding families, seniors, cultural-tour seekers. Secondary CTA "Start Planning" is vague.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Run A/B test — "Browse All Experiences" vs audience-specific variants. Make "Start Planning" link directly to the booking form.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Brand color system is consistent (navy + orange)</div></div>
+    <div class="finding-body">CSS variables <code>--orange:#ef8731</code>, <code>--navy:#063a63</code>, <code>--dark:#18334c</code> are used consistently across the hero and navigation.</div>
+  </div>
+
+  <h3>Booking Page (#p-booking)</h3>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">"Office Hours: Sunday – Monday" — severe copy error</div></div>
+    <div class="finding-body">The booking page shows only two days of availability. This signals the business is nearly closed and directly kills booking intent.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">$15 deposit mentioned but not explained</div></div>
+    <div class="finding-body">There is a "$15 deposit" reference but no explanation of what it covers, whether it's refundable, or how it applies to the total price.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add tooltip or inline explanation: "A $15 planning deposit is applied to your total. Refundable within 48 hours."</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Form submits via SS.createBooking() — no visible confirmation email mentioned</div></div>
+    <div class="finding-body">Success message shows on screen but user is not told whether they'll receive an email confirmation. Trust gap for a financial transaction.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Send transactional email on booking submission. Mention email confirmation in success message.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">Upsell checkboxes are present but not copy-tested</div></div>
+    <div class="finding-body">The booking form includes upsell checkboxes — good practice — but upsell copy has not been tested for clarity or conversion impact.</div>
+    <div class="test-note">REQUIRES TESTING: Measure upsell checkbox check rate in production.</div>
+  </div>
+
+  <h3>Virtual Tours (#p-vtours)</h3>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">360° panorama viewer with keyboard navigation implemented</div></div>
+    <div class="finding-body">Arrow keys for look-around, +/- for zoom, <code>tabindex</code>, <code>aria-label</code>, <code>role="application"</code> all present after recent update.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Supabase URL is placeholder — real-time chat dead</div></div>
+    <div class="finding-body"><code>VT_CONFIG.supabase.url === 'YOUR_SUPABASE_URL'</code> check causes early exit; no chat messages can be sent or received in live sessions.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add real Supabase URL and keys to Vercel env vars and to the frontend config.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Stripe is in demo mode — no V-Tour purchases can complete</div></div>
+    <div class="finding-body">Code shows toast: "Demo mode: Stripe not configured yet." when <code>STRIPE_SECRET_KEY</code> is absent. V-Tour revenue is entirely blocked.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Set <code>STRIPE_SECRET_KEY</code> and <code>STRIPE_WEBHOOK_SECRET</code> in Vercel. Register webhook endpoint in Stripe dashboard.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Explorer dashboard shows 19 sessions but none are backed by real data</div></div>
+    <div class="finding-body">Session list (Live Now / Today / This Week / Next Week) is UI-only; no API populates it dynamically. Users may click sessions and find them inactive.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Connect session list to Mux stream status API. Show only sessions with active or scheduled stream IDs.</div>
+  </div>
+
+  <h3>Contact Page (#p-contact)</h3>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">WhatsApp CTA number not verified in code</div></div>
+    <div class="finding-body">WhatsApp deep link uses a hardcoded phone number. If the number changes, the link silently breaks.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Centralize phone number as a single constant; add a canary test that checks the WhatsApp link responds.</div>
+  </div>
+
+  <h3>Blog (#p-blog)</h3>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Blog content is thin — significant SEO and trust opportunity missed</div></div>
+    <div class="finding-body">Blog exists as a page but has minimal or no real articles. This is the primary opportunity for organic SEO traffic on long-tail Caribbean travel terms.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Publish 4–8 destination guides as full blog posts. Each post should target a specific keyword cluster (e.g., "best beaches Jamaica", "all-inclusive yacht charter Caribbean").</div>
+  </div>
+
+  <h3>About Page (#p-about)</h3>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No team photos, founder story, or credentials visible</div></div>
+    <div class="finding-body">About page exists but lacks photos of real team members, years in business, licenses, affiliations, or a compelling origin story — all primary trust signals for a travel business.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add headshots, names, roles, a founder quote, and any industry certifications or accreditations.</div>
+  </div>
+</section>
+
+<!-- ─── 6. CONVERSION AUDIT ─── -->
+<section class="audit-section" id="s-conversion">
+  <h2><span class="s-num">06</span> Conversion Audit</h2>
+
+  <h3>Purchase Conversion Path</h3>
+  <div class="journey">
+    <div class="journey-step"><div class="step-box">Hero / Browse</div><div class="step-sub">Discover experience</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">No pricing on service pages</div><div class="step-sub">Intent drops</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Booking Form</div><div class="step-sub">#p-booking</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">$15 deposit unexplained</div><div class="step-sub">Confidence gap</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">SS.createBooking()</div><div class="step-sub">Submit</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">No email confirmation</div><div class="step-sub">Anxiety gap</div></div>
+  </div>
+  <div class="finding critical" style="margin-top:14px">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Zero pricing on any service page</div></div>
+    <div class="finding-body">Tours, charters, stays, and senior trips show no starting prices. Users cannot self-qualify; the cost-uncertainty dropout rate for Caribbean luxury travel can be 60%+.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add "From $X per person" to each category card. Full pricing can stay on a quote form — but a floor price is required for intent qualification.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No social proof on service pages</div></div>
+    <div class="finding-body">No reviews, testimonials, ratings, or traveler counts visible on any tour or charter page at decision point.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add 2–3 testimonials per service category, ideally with names, origin cities, and photos. Star ratings near the CTA improve conversion 15–25%.</div>
+  </div>
+
+  <h3>Sign-Up Conversion Path</h3>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Account creation value proposition is unclear</div></div>
+    <div class="finding-body">Users can create an account but the benefit of doing so (saved trips, booking history, V-Tour access, exclusive deals?) is not stated at the sign-up prompt.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add 3 bullet benefits above the sign-up form: "Track all your bookings · Get member-only rates · Access V-Tour sessions".</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No email opt-in or newsletter capture outside of booking</div></div>
+    <div class="finding-body">The site has no standalone email capture — no exit intent, no footer newsletter signup, no lead magnet. Email list is the highest-ROI channel for travel.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add a footer email capture with a lead magnet ("Get our Caribbean Destination Guide").</div>
+  </div>
+
+  <h3>Contact-Request Conversion Path</h3>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Multiple contact channels: form, WhatsApp, email</div></div>
+    <div class="finding-body">Contact page offers form, WhatsApp direct link, and email — good channel breadth for international audiences with varying communication preferences.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No response time expectation set</div></div>
+    <div class="finding-body">After submitting the contact form, users don't know when to expect a reply. Travel buyers often compare multiple operators simultaneously.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add "We typically respond within 4 business hours" below the submit button.</div>
+  </div>
+</section>
+
+<!-- ─── 7. BOOKING & INQUIRY OPS ─── -->
+<section class="audit-section" id="s-booking">
+  <h2><span class="s-num">07</span> Booking & Inquiry Operations</h2>
+
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Booking API (SS.createBooking) stores to Vercel Blob via api/_lib/db.js</div></div>
+    <div class="finding-body">Submissions are persisted server-side. Admin can retrieve them via the admin panel. Fallback success message shown if API is unavailable.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No automated booking confirmation email</div></div>
+    <div class="finding-body">No transactional email is sent to the customer after booking. Only a screen success message. This is a table-stakes expectation for travel bookings.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add Resend or SendGrid integration. Trigger confirmation email from the POST /api/bookings handler with booking summary, next steps, and contact info.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No internal notification when a booking is submitted</div></div>
+    <div class="finding-body">If the team isn't actively checking the admin panel, bookings can sit unactioned for hours.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add email or WhatsApp notification to the team inbox whenever a new booking is created.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No rate limiting on booking or contact API endpoints</div></div>
+    <div class="finding-body"><code>/api/bookings</code> and <code>/api/contact</code> have no visible rate limiting. Subject to spam submissions and scraping.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add Vercel Edge rate limiting or a simple in-memory token bucket per IP.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">JWT 7-day expiry with no refresh token</div></div>
+    <div class="finding-body">Auth tokens expire after 7 days. Users are silently logged out with no token refresh mechanism. Acceptable for now but creates friction for return visitors.</div>
+    <div class="test-note">REQUIRES TESTING: Confirm logout behavior on token expiry in production.</div>
+  </div>
+</section>
+
+<!-- ─── 8. VIRTUAL TOURS ─── -->
+<section class="audit-section" id="s-vtours">
+  <h2><span class="s-num">08</span> Virtual Tours Workflow</h2>
+
+  <div class="metric-row">
+    <div class="metric-tile"><div class="mval" style="color:var(--orange)">34%</div><div class="mlabel">Preview → Book</div></div>
+    <div class="metric-tile"><div class="mval" style="color:var(--aqua)">61%</div><div class="mlabel">Join Rate</div></div>
+    <div class="metric-tile"><div class="mval" style="color:var(--ok)">78%</div><div class="mlabel">Completion</div></div>
+    <div class="metric-tile"><div class="mval" style="color:var(--navy)">18%</div><div class="mlabel">Purchase Rate</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--text3);margin-top:-8px;margin-bottom:16px">Source: V-Tours analytics preview bars in Design_Reference.html (pre-production placeholders — verify against real Mux/Stripe data once live).</p>
+
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">All 4 V-Tour revenue paths disabled (Stripe, Supabase, Mux env vars missing)</div></div>
+    <div class="finding-body">The entire V-Tours monetization stack requires environment variables that are not yet configured: Stripe (payments), Supabase (real-time chat), Mux (streaming).</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Three.js panorama renderer with 8 Caribbean destinations implemented</div></div>
+    <div class="finding-body">SphereGeometry with <code>scale(-1,1,1)</code>, hotspot overlays, AI concierge, group planning, itinerary tray — fully built in the frontend.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">WebXR room built for Apple Vision Pro and Meta Quest</div></div>
+    <div class="finding-body">WebXR API path via browser; native-app upgrades (SharePlay, controller input) correctly described as next-tier. Device feature claims are now accurate.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Single shared video element risks state conflicts</div></div>
+    <div class="finding-body">One <code>&lt;video id="vt-main-live-vid"&gt;</code> is shared across session player, fullscreen, and WebXR view. If stream state changes in one context, others may not sync cleanly.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Document the shared element contract. Add event listeners to sync HLS.js state across all three consumers.</div>
+    <div class="test-note">REQUIRES TESTING: Test fullscreen → WebXR transition with an active Mux stream.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">HLS.js and Three.js loaded from CDN — CSP risk</div></div>
+    <div class="finding-body">CDN dependencies (HLS.js v1.5.15, Three.js r169) create supply-chain risk and potential CSP violations if a strict Content-Security-Policy is added later.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Bundle via npm + Vite/esbuild, or pin CDN URLs with SRI integrity hashes.</div>
+  </div>
+</section>
+
+<!-- ─── 9. CONTENT & TRUST ─── -->
+<section class="audit-section" id="s-content">
+  <h2><span class="s-num">09</span> Content, Branding & Trust</h2>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No Terms of Service, Privacy Policy, or Refund Policy</div></div>
+    <div class="finding-body">Taking deposits and payments without accessible legal terms violates Stripe's terms and may violate consumer protection laws in the US, Canada, and UK.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add /terms, /privacy, and /refunds pages. Link from footer and all payment CTAs. Stripe also requires a refund policy URL in the checkout session.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No trust badges, accreditations, or partner logos visible at conversion points</div></div>
+    <div class="finding-body">Tourism accreditations (Jamaica Tourist Board, IATA, ASTA), payment security badges (SSL, Stripe), and media mentions add significant conversion lift near payment CTAs.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No customer reviews or user-generated content integrated</div></div>
+    <div class="finding-body">No TripAdvisor widget, Google Reviews embed, or native testimonials with verifiable social proof. Travel is one of the highest-review-dependency categories.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Integrate at minimum 6–8 text testimonials with traveler names and photos. Add a Google Reviews widget in the footer.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Brand identity is consistent and distinctive</div></div>
+    <div class="finding-body">Navy + orange palette, clean typography, and "Sight Seers Caribbean" brand name create a memorable visual identity across all pages.</div>
+  </div>
+</section>
+
+<!-- ─── 10. MOBILE & ACCESSIBILITY ─── -->
+<section class="audit-section" id="s-mobile">
+  <h2><span class="s-num">10</span> Mobile UX & Accessibility</h2>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No skip-navigation link for keyboard users</div></div>
+    <div class="finding-body">No <code>&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;</code> at page top. WCAG 2.4.1 Level A failure.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">SPA routing breaks browser back button</div></div>
+    <div class="finding-body">Because <code>nav()</code> swaps page div visibility without updating the URL, pressing Back navigates away from the site rather than returning to the previous page.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Use <code>history.pushState()</code> when changing pages; listen to <code>popstate</code> to restore previous page.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Image alt text absent on gallery and tour images</div></div>
+    <div class="finding-body">Decorative hero and tour images do not carry <code>alt</code> text — WCAG 1.1.1 Level A failure and missed keyword opportunity for image SEO.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Color contrast not verified for secondary text</div></div>
+    <div class="finding-body">Brand orange on white (#ef8731 on #fff) yields contrast ratio ~2.8:1 — fails WCAG AA (4.5:1 for normal text). Affects any body text or CTAs using the orange color on white.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Use orange only on navy/dark backgrounds or for large text (≥18pt). For small text, shift to a darker orange (#b8610f, ~5:1 on white).</div>
+    <div class="test-note">REQUIRES TESTING: Full contrast audit with axe DevTools across all pages.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No focus styles verified for interactive elements</div></div>
+    <div class="finding-body">CSS may suppress browser-default focus outlines on buttons and links, making keyboard navigation invisible.</div>
+    <div class="test-note">REQUIRES TESTING: Tab through all pages and verify visible focus indicators on every interactive element.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">360° panorama viewer has keyboard controls and ARIA attributes</div></div>
+    <div class="finding-body">Arrow key navigation, tabindex, aria-label, and role="application" added in recent update. Comfort mode button in dock for motion sensitivity.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">Mobile nav exists but not tested on all breakpoints</div></div>
+    <div class="test-note">REQUIRES TESTING: Test hamburger menu and all sub-navigations on iOS Safari 17, Android Chrome 125, and Samsung Internet.</div>
+  </div>
+</section>
+
+<!-- ─── 11. SEO & PERFORMANCE ─── -->
+<section class="audit-section" id="s-seo">
+  <h2><span class="s-num">11</span> SEO & Performance</h2>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Single-page app = single URL — all interior pages invisible to Google</div></div>
+    <div class="finding-body">Google crawls <code>sightseerscaribbean.com/</code> only. Tours, stays, charters, destinations — none have indexable URLs. The site effectively has 1 page in Google's index.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Implement hash or pushState routing. Add <code>&lt;link rel="canonical"&gt;</code> per page. Submit XML sitemap with all page URLs.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No meta descriptions, title tags per page, or Open Graph tags</div></div>
+    <div class="finding-body">All pages share the root <code>&lt;title&gt;</code> and one meta description. Social shares all look identical. CTR from search is severely impacted.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Generate unique <code>&lt;title&gt;</code> and <code>&lt;meta name="description"&gt;</code> per page using the JS nav system. Add <code>og:title</code>, <code>og:description</code>, <code>og:image</code> per page.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No structured data (JSON-LD) for tours, events, or local business</div></div>
+    <div class="finding-body">TourPackage, Event (V-Tour sessions), LocalBusiness, and Review schema would enable rich results in Google Search — significant CTR boost for travel queries.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add TourPackage JSON-LD on each tour page, LocalBusiness on the homepage, and Event schema for scheduled V-Tour sessions.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Design_Reference.html is ~5.7 MB — build pipeline critical for performance</div></div>
+    <div class="finding-body">The source file is enormous. html-minifier-terser compresses it for production, but images, CDN scripts, and uncompressed CSS may still inflate initial load.</div>
+    <div class="test-note">REQUIRES TESTING: Run Lighthouse audit on production URL. Target LCP &lt; 2.5s, CLS &lt; 0.1, FID &lt; 100ms.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">Vercel provides automatic CDN, HTTPS, and edge deployment</div></div>
+    <div class="finding-body">Vercel's global edge network provides TLS, HTTP/2, Brotli compression, and CDN caching by default — solid performance baseline for static assets.</div>
+  </div>
+</section>
+
+<!-- ─── 12. SECURITY & PRIVACY ─── -->
+<section class="audit-section" id="s-security">
+  <h2><span class="s-num">12</span> Security, Privacy & Compliance</h2>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">ADMIN_CODE hardcoded in api/_lib/auth.js</div></div>
+    <div class="finding-body"><code>ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!'</code> — the fallback is the actual admin credential. Visible in Vercel function bundles via devtools.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Remove fallback value entirely. Set <code>ADMIN_PASSCODE</code> env var to a randomly generated 32-char string. Rotate immediately.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">JWT_SECRET falls back to BLOB_READ_WRITE_TOKEN</div></div>
+    <div class="finding-body"><code>SECRET = process.env.JWT_SECRET || process.env.BLOB_READ_WRITE_TOKEN</code> — if JWT_SECRET is not set, the Vercel Blob token (which grants write access to all blob storage) doubles as the JWT signing secret. Token exposure = full blob compromise.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Set a dedicated <code>JWT_SECRET</code> env var (min 256-bit random). Remove the BLOB_READ_WRITE_TOKEN fallback.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No CAPTCHA or bot protection on public forms</div></div>
+    <div class="finding-body">Booking form, contact form, and sign-up are unprotected against bot submissions. Spam bookings will pollute the admin panel.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add Cloudflare Turnstile (free, privacy-respecting) to booking and contact forms.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No Content-Security-Policy header</div></div>
+    <div class="finding-body">No CSP header limits XSS attack surface. Especially important given CDN script dependencies (Three.js, HLS.js) that could be compromised.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add CSP via Vercel headers config in vercel.json. Allowlist only required CDN origins and script hashes.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">Stripe webhook uses manual HMAC-SHA256 — correct but fragile</div></div>
+    <div class="finding-body">Manual webhook verification in <code>api/stripe-webhook.js</code> is functionally correct. However, it's missing the <code>stripe</code> npm package's timing-safe compare and may drift from Stripe's spec on future updates.</div>
+    <div class="finding-fix"><strong>Fix (low priority):</strong> Consider adding the official <code>stripe</code> npm package and using <code>stripe.webhooks.constructEvent()</code> for future-proofing.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Password hashing uses PBKDF2 with 210,000 iterations (strong)</div></div>
+    <div class="finding-body">PBKDF2-SHA512 at 210,000 iterations exceeds OWASP recommended minimums. 64-byte key output. Industry-standard for user passwords.</div>
+  </div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">JWT uses timing-safe comparison for token validation</div></div>
+    <div class="finding-body"><code>api/_lib/auth.js</code> uses timing-safe byte comparison for HMAC verification — protects against timing-oracle attacks.</div>
+  </div>
+</section>
+
+<!-- ─── 13. ANALYTICS ─── -->
+<section class="audit-section" id="s-analytics">
+  <h2><span class="s-num">13</span> Analytics</h2>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No analytics platform detected in codebase</div></div>
+    <div class="finding-body">No Google Analytics 4, Plausible, Fathom, or Vercel Analytics script found in Design_Reference.html or the API layer. No conversion events can be measured.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add Vercel Analytics (zero-config, privacy-preserving) as a first step. Then add GA4 for full funnel tracking.</div>
+  </div>
+  <div class="finding critical">
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No conversion tracking on booking form, Stripe checkout, or sign-up</div></div>
+    <div class="finding-body">Without event tracking, there is no visibility into which pages drive bookings, where users drop off in the funnel, or which channels convert.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Implement GA4 + Google Tag Manager. Track: form_start, form_submit, booking_created, stripe_checkout_initiated, stripe_payment_complete, signup_complete, vtour_session_joined, vtour_purchase.</div>
+  </div>
+  <div class="finding info">
+    <div class="finding-head"><span class="sev-badge info">Info</span><div class="finding-title">V-Tours metric bars are UI placeholders (34%, 61%, 78%, 18%)</div></div>
+    <div class="finding-body">The metric tiles in the V-Tours section display hardcoded values. They are not wired to any real data source. Replace with live Mux/Stripe/Supabase data once env vars are configured.</div>
+  </div>
+</section>
+
+<!-- ─── 14. TOP 20 IMPROVEMENTS ─── -->
+<section class="audit-section" id="s-top20">
+  <h2><span class="s-num">14</span> Top 20 Prioritized Improvements</h2>
+  <ol class="priority-list">
+    <li>
+      <div class="pri-num">1</div>
+      <div class="pri-body">
+        <div class="pri-title">Set all required Vercel env vars (Stripe, Mux, Supabase, JWT_SECRET, ADMIN_PASSCODE)</div>
+        <div class="pri-why">Payments, V-Tours, real-time chat, and auth are all broken without these. Zero revenue possible in current state.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">30 min</span><span class="tag blue">DevOps</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">2</div>
+      <div class="pri-body">
+        <div class="pri-title">Remove hardcoded admin passcode fallback and rotate credentials</div>
+        <div class="pri-why">Security vulnerability shipping in production. Admin access compromised.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">15 min</span><span class="tag blue">Security</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">3</div>
+      <div class="pri-body">
+        <div class="pri-title">Fix JWT_SECRET fallback — set dedicated env var, remove BLOB_READ_WRITE_TOKEN fallback</div>
+        <div class="pri-why">Current config links auth compromise to full blob storage compromise.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">10 min</span><span class="tag blue">Security</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">4</div>
+      <div class="pri-body">
+        <div class="pri-title">Fix "Office Hours: Sunday – Monday" copy error on booking page</div>
+        <div class="pri-why">2-day office hours destroys booking confidence. 5-minute fix, high conversion impact.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">5 min</span><span class="tag blue">Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">5</div>
+      <div class="pri-body">
+        <div class="pri-title">Implement hash/pushState routing to give each page a unique URL</div>
+        <div class="pri-why">Foundation for all SEO work. Without unique URLs, Google indexes only one page.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">2–4 hrs</span><span class="tag blue">Dev</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">6</div>
+      <div class="pri-body">
+        <div class="pri-title">Add Terms of Service, Privacy Policy, and Refund Policy pages</div>
+        <div class="pri-why">Legal requirement for payment processing. Stripe ToS mandates refund policy URL.</div>
+        <div class="pri-meta"><span class="tag red">Critical</span><span class="tag gray">1 day</span><span class="tag blue">Legal/Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">7</div>
+      <div class="pri-body">
+        <div class="pri-title">Add "starting from" pricing to every service category card</div>
+        <div class="pri-why">Zero-pricing pages have ~60% higher drop-off. This single change typically lifts booking form entries 20–35%.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">2–4 hrs</span><span class="tag blue">Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">8</div>
+      <div class="pri-body">
+        <div class="pri-title">Add booking confirmation and team notification emails via Resend/SendGrid</div>
+        <div class="pri-why">Customers expect email confirmation. Team misses bookings without internal alerts.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">4–6 hrs</span><span class="tag blue">Dev</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">9</div>
+      <div class="pri-body">
+        <div class="pri-title">Add GA4 analytics with conversion event tracking on all primary actions</div>
+        <div class="pri-why">Currently blind to funnel performance. Cannot optimize what isn't measured.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">4 hrs</span><span class="tag blue">Analytics</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">10</div>
+      <div class="pri-body">
+        <div class="pri-title">Add customer testimonials with names and photos to service pages</div>
+        <div class="pri-why">Social proof at decision point. Travel category requires peer validation for conversion.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">1 day</span><span class="tag blue">Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">11</div>
+      <div class="pri-body">
+        <div class="pri-title">Implement popstate / back-button support in JS nav system</div>
+        <div class="pri-why">Back-button failure creates a broken UX that increases bounce rate and mobile abandonment.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">2 hrs</span><span class="tag blue">Dev</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">12</div>
+      <div class="pri-body">
+        <div class="pri-title">Add per-page meta title and description tags updated dynamically on navigation</div>
+        <div class="pri-why">SEO click-through rate improvement. Social share preview improvement.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">3 hrs</span><span class="tag blue">SEO</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">13</div>
+      <div class="pri-body">
+        <div class="pri-title">Add Cloudflare Turnstile to booking, contact, and sign-up forms</div>
+        <div class="pri-why">Protects against spam submissions. Free and privacy-preserving.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">2 hrs</span><span class="tag blue">Security</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">14</div>
+      <div class="pri-body">
+        <div class="pri-title">Fix orange on white contrast (#ef8731 fails WCAG AA) — use only on dark backgrounds</div>
+        <div class="pri-why">Accessibility compliance and legibility for older users, a key audience segment.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">2 hrs</span><span class="tag blue">Accessibility</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">15</div>
+      <div class="pri-body">
+        <div class="pri-title">Add skip-navigation link (WCAG 2.4.1)</div>
+        <div class="pri-why">Level A accessibility failure. Fast fix, required for any ADA compliance posture.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">30 min</span><span class="tag blue">Accessibility</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">16</div>
+      <div class="pri-body">
+        <div class="pri-title">Connect V-Tour session list to live Mux stream status API</div>
+        <div class="pri-why">Prevents users from clicking inactive sessions and losing trust in the V-Tours product.</div>
+        <div class="pri-meta"><span class="tag yellow">High</span><span class="tag gray">4 hrs</span><span class="tag blue">Dev</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">17</div>
+      <div class="pri-body">
+        <div class="pri-title">Create dedicated landing pages for Latin American and Eurasian travelers</div>
+        <div class="pri-why">Two underserved audiences with high-value booking potential. No entry point currently.</div>
+        <div class="pri-meta"><span class="tag yellow">Medium</span><span class="tag gray">2 days</span><span class="tag blue">Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">18</div>
+      <div class="pri-body">
+        <div class="pri-title">Add TourPackage and LocalBusiness JSON-LD structured data</div>
+        <div class="pri-why">Enables rich results in Google Search for tour queries — significant CTR improvement.</div>
+        <div class="pri-meta"><span class="tag yellow">Medium</span><span class="tag gray">3 hrs</span><span class="tag blue">SEO</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">19</div>
+      <div class="pri-body">
+        <div class="pri-title">Publish 6–8 SEO destination guide articles on the blog</div>
+        <div class="pri-why">Primary organic traffic channel. Blog exists but has minimal content. Long-tail travel queries have low competition and high purchase intent.</div>
+        <div class="pri-meta"><span class="tag yellow">Medium</span><span class="tag gray">Ongoing</span><span class="tag blue">SEO/Content</span></div>
+      </div>
+    </li>
+    <li>
+      <div class="pri-num">20</div>
+      <div class="pri-body">
+        <div class="pri-title">Add footer email newsletter capture with lead magnet</div>
+        <div class="pri-why">Email is the highest-ROI marketing channel for travel. Zero capture mechanism currently exists.</div>
+        <div class="pri-meta"><span class="tag yellow">Medium</span><span class="tag gray">2 hrs</span><span class="tag blue">Marketing</span></div>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<!-- ─── 15. SITEMAP ─── -->
+<section class="audit-section" id="s-sitemap">
+  <h2><span class="s-num">15</span> Recommended Sitemap & Navigation</h2>
+  <div class="two-col">
+    <div>
+      <h3>Current Navigation Issues</h3>
+      <div class="finding warning">
+        <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No clear primary nav hierarchy</div></div>
+        <div class="finding-body">25+ pages in a single navigation layer. Audiences cannot quickly self-select their intent (book a tour vs. explore V-Tours vs. inquire about groups).</div>
+      </div>
+    </div>
+    <div>
+      <h3>Proposed Nav Structure</h3>
+      <div style="font-size:13px;color:var(--text2);line-height:2">
+        <strong style="color:var(--text)">Experiences</strong> → Tours / Charters / Stays / Transfers<br>
+        <strong style="color:var(--text)">Groups</strong> → Greek Life / School / Corporate / Custom<br>
+        <strong style="color:var(--text)">V-Tours</strong> → Live Sessions / 360° Explorer / Schedule<br>
+        <strong style="color:var(--text)">Destinations</strong> → Jamaica / Caribbean / By Interest<br>
+        <strong style="color:var(--text)">Plan</strong> → Booking Form / Gift Cards / Passport Info<br>
+        <strong style="color:var(--text)">About</strong> → Team / Blog / Partners / Contact
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 16. CUSTOMER JOURNEYS ─── -->
+<section class="audit-section" id="s-journeys">
+  <h2><span class="s-num">16</span> Customer Journey Maps</h2>
+
+  <h3>Journey 1 — Individual Tour Booker (Millennial)</h3>
+  <div class="journey">
+    <div class="journey-step"><div class="step-box">Instagram / Google Search</div><div class="step-sub">Awareness</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Homepage Hero</div><div class="step-sub">First impression</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Tour Browse Page</div><div class="step-sub">Explore options</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">No pricing → leaves</div><div class="step-sub">Dropout point</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Book Now CTA</div><div class="step-sub">Intent</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Booking Form</div><div class="step-sub">Submit + deposit</div></div>
+  </div>
+
+  <h3>Journey 2 — Greek Life Event Planner</h3>
+  <div class="journey">
+    <div class="journey-step"><div class="step-box">Referral / Word of Mouth</div><div class="step-sub">Awareness</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Greek Life Page</div><div class="step-sub">Evaluate</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">No group pricing or capacity info</div><div class="step-sub">Dropout</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Contact / WhatsApp</div><div class="step-sub">Inquiry</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">No response time stated</div><div class="step-sub">Anxiety</div></div>
+  </div>
+
+  <h3>Journey 3 — V-Tour Viewer → Buyer</h3>
+  <div class="journey">
+    <div class="journey-step"><div class="step-box">V-Tours CTA in Nav</div><div class="step-sub">Discover</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">360° Explorer Free Preview</div><div class="step-sub">Experience</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step"><div class="step-box">Join Live Session</div><div class="step-sub">Pay via Stripe</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">Stripe = Demo Mode</div><div class="step-sub">Payment fails</div></div>
+    <div class="journey-arrow">›</div>
+    <div class="journey-step gap-step"><div class="step-box">Chat = Dead (no Supabase)</div><div class="step-sub">Engagement fails</div></div>
+  </div>
+</section>
+
+<!-- ─── 17. WORKFLOWS ─── -->
+<section class="audit-section" id="s-workflows">
+  <h2><span class="s-num">17</span> Workflow Designs</h2>
+
+  <h3>Booking & Inquiry Workflow (Recommended)</h3>
+  <div style="overflow-x:auto">
+  <table class="audit-table">
+    <thead><tr><th>Step</th><th>Actor</th><th>Action</th><th>System</th><th>Gap / Fix</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Visitor</td><td>Browses service page, clicks "Book Now"</td><td>JS nav → #p-booking</td><td>Add pricing to service page first</td></tr>
+      <tr><td>2</td><td>Visitor</td><td>Completes booking form + submits</td><td>SS.createBooking() → POST /api/bookings</td><td>Add Turnstile CAPTCHA</td></tr>
+      <tr><td>3</td><td>System</td><td>Stores booking in Vercel Blob</td><td>api/_lib/db.js</td><td>Add status field (pending/confirmed/cancelled)</td></tr>
+      <tr><td>4</td><td>System</td><td>Sends confirmation email to customer</td><td>❌ Missing — add Resend</td><td>Implement email trigger</td></tr>
+      <tr><td>5</td><td>System</td><td>Notifies team via email/WhatsApp</td><td>❌ Missing</td><td>Add outbound notification</td></tr>
+      <tr><td>6</td><td>Staff</td><td>Reviews booking in admin panel</td><td>#p-admin → GET /api/bookings</td><td>Add accept/decline actions</td></tr>
+      <tr><td>7</td><td>Staff</td><td>Confirms or requests more info</td><td>Manual email/WhatsApp today</td><td>Add in-app messaging later</td></tr>
+      <tr><td>8</td><td>Customer</td><td>Pays full balance</td><td>Stripe Checkout</td><td>Add Stripe link to confirmation email</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>V-Tours Live Session Workflow (Recommended)</h3>
+  <div style="overflow-x:auto">
+  <table class="audit-table">
+    <thead><tr><th>Step</th><th>Actor</th><th>Action</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Guide</td><td>Logs in via Guide Portal (Supabase Auth)</td><td><span class="tag yellow">Needs Supabase setup</span></td></tr>
+      <tr><td>2</td><td>Guide</td><td>Creates Mux live stream via admin</td><td><span class="tag yellow">Needs MUX env vars</span></td></tr>
+      <tr><td>3</td><td>Guide</td><td>Streams via OBS → RTMP ingest URL</td><td><span class="tag yellow">Needs Mux setup</span></td></tr>
+      <tr><td>4</td><td>Viewer</td><td>Sees session in Explorer dashboard</td><td><span class="tag red">Placeholder only — not dynamic</span></td></tr>
+      <tr><td>5</td><td>Viewer</td><td>Pays via Stripe Checkout</td><td><span class="tag red">Demo mode</span></td></tr>
+      <tr><td>6</td><td>System</td><td>Stripe webhook stores viewer token in Blob</td><td><span class="tag yellow">Needs STRIPE_WEBHOOK_SECRET</span></td></tr>
+      <tr><td>7</td><td>Viewer</td><td>Receives HLS stream URL via verify-token</td><td><span class="tag yellow">Needs JWT_SECRET</span></td></tr>
+      <tr><td>8</td><td>Viewer</td><td>Chats in real-time via Supabase channel</td><td><span class="tag red">Supabase placeholder</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ─── 18. IMPLEMENTATION BACKLOG ─── -->
+<section class="audit-section" id="s-backlog">
+  <h2><span class="s-num">18</span> Implementation Backlog</h2>
+  <div style="overflow-x:auto">
+  <table class="audit-table">
+    <thead><tr><th>#</th><th>Item</th><th>Effort</th><th>Impact</th><th>Category</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>B-01</td><td>Set all Vercel env vars</td><td>30 min</td><td>Critical</td><td>DevOps</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-02</td><td>Remove ADMIN_CODE fallback, rotate</td><td>15 min</td><td>Critical</td><td>Security</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-03</td><td>Fix JWT_SECRET fallback</td><td>10 min</td><td>Critical</td><td>Security</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-04</td><td>Fix office hours copy</td><td>5 min</td><td>High</td><td>Content</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-05</td><td>Register Stripe webhook endpoint</td><td>10 min</td><td>Critical</td><td>DevOps</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-06</td><td>Create Supabase guide user</td><td>20 min</td><td>High</td><td>DevOps</td><td><span class="tag red">P0</span></td></tr>
+      <tr><td>B-07</td><td>Implement hash/pushState routing</td><td>3 hrs</td><td>Critical</td><td>Dev/SEO</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-08</td><td>Add transactional email (Resend)</td><td>5 hrs</td><td>High</td><td>Dev</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-09</td><td>Add GA4 + conversion event tracking</td><td>4 hrs</td><td>High</td><td>Analytics</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-10</td><td>Add starting prices to service pages</td><td>3 hrs</td><td>High</td><td>Content</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-11</td><td>Add customer testimonials to service pages</td><td>1 day</td><td>High</td><td>Content</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-12</td><td>Add Terms / Privacy / Refund pages</td><td>1 day</td><td>Critical</td><td>Legal</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-13</td><td>Add skip-nav link (WCAG 2.4.1)</td><td>30 min</td><td>Medium</td><td>A11y</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-14</td><td>Fix orange contrast on white backgrounds</td><td>2 hrs</td><td>Medium</td><td>A11y</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-15</td><td>Add alt text to all images</td><td>2 hrs</td><td>Medium</td><td>A11y/SEO</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-16</td><td>Add per-page meta tags (title, desc, OG)</td><td>3 hrs</td><td>High</td><td>SEO</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-17</td><td>Implement popstate back-button support</td><td>2 hrs</td><td>High</td><td>Dev/UX</td><td><span class="tag yellow">P1</span></td></tr>
+      <tr><td>B-18</td><td>Add Cloudflare Turnstile to forms</td><td>2 hrs</td><td>Medium</td><td>Security</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-19</td><td>Add CSP header in vercel.json</td><td>2 hrs</td><td>Medium</td><td>Security</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-20</td><td>Add rate limiting to booking/contact APIs</td><td>2 hrs</td><td>Medium</td><td>Security</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-21</td><td>Connect V-Tour session list to Mux API</td><td>4 hrs</td><td>High</td><td>Dev</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-22</td><td>Add JSON-LD structured data</td><td>3 hrs</td><td>Medium</td><td>SEO</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-23</td><td>Publish 6–8 destination blog posts</td><td>Ongoing</td><td>Medium</td><td>SEO/Content</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-24</td><td>Add footer email capture + lead magnet</td><td>2 hrs</td><td>Medium</td><td>Marketing</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-25</td><td>Create Latin American / Eurasian landing pages</td><td>2 days</td><td>Medium</td><td>Content</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-26</td><td>Create Remote Worker / Digital Nomad landing page</td><td>1 day</td><td>Medium</td><td>Content</td><td><span class="tag blue">P2</span></td></tr>
+      <tr><td>B-27</td><td>Add Lighthouse CI to build pipeline</td><td>2 hrs</td><td>Low</td><td>Dev/QA</td><td><span class="tag gray">P3</span></td></tr>
+      <tr><td>B-28</td><td>Bundle HLS.js + Three.js (remove CDN deps)</td><td>4 hrs</td><td>Low</td><td>Security/Perf</td><td><span class="tag gray">P3</span></td></tr>
+      <tr><td>B-29</td><td>Add token refresh to auth system</td><td>3 hrs</td><td>Low</td><td>Dev/UX</td><td><span class="tag gray">P3</span></td></tr>
+      <tr><td>B-30</td><td>Add team photos / founder story to About page</td><td>1 day</td><td>Medium</td><td>Trust</td><td><span class="tag gray">P3</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ─── 19. ROADMAP ─── -->
+<section class="audit-section" id="s-roadmap">
+  <h2><span class="s-num">19</span> 30 / 60 / 90-Day Roadmap</h2>
+  <div class="roadmap">
+    <div class="roadmap-col">
+      <h3><span class="phase p1">Days 1–30</span> Fix & Unblock</h3>
+      <div class="roadmap-task">Set all Vercel env vars — unblock payments, V-Tours, auth (B-01)</div>
+      <div class="roadmap-task">Remove hardcoded admin credential, rotate passcode (B-02)</div>
+      <div class="roadmap-task">Fix JWT_SECRET fallback (B-03)</div>
+      <div class="roadmap-task">Fix "Sunday – Monday" office hours copy (B-04)</div>
+      <div class="roadmap-task">Register Stripe webhook; create Supabase guide user (B-05, B-06)</div>
+      <div class="roadmap-task">Add skip-nav link and alt text to images (B-13, B-15)</div>
+      <div class="roadmap-task">Add transactional booking confirmation email via Resend (B-08)</div>
+      <div class="roadmap-task">Draft Terms, Privacy, Refund Policy pages (B-12)</div>
+      <div class="roadmap-task">Run first Lighthouse audit and document baseline scores</div>
+    </div>
+    <div class="roadmap-col">
+      <h3><span class="phase p2">Days 31–60</span> Convert & Trust</h3>
+      <div class="roadmap-task">Implement hash/pushState routing for all pages (B-07)</div>
+      <div class="roadmap-task">Add per-page meta tags + Open Graph (B-16)</div>
+      <div class="roadmap-task">Add starting-from pricing to all service category pages (B-10)</div>
+      <div class="roadmap-task">Add 6+ customer testimonials to tour and charter pages (B-11)</div>
+      <div class="roadmap-task">Launch GA4 with booking + payment conversion events (B-09)</div>
+      <div class="roadmap-task">Connect V-Tour session list to Mux stream API (B-21)</div>
+      <div class="roadmap-task">Add Cloudflare Turnstile to all public forms (B-18)</div>
+      <div class="roadmap-task">Fix orange contrast on white; audit all focus states (B-14)</div>
+      <div class="roadmap-task">Add API rate limiting to booking and contact endpoints (B-20)</div>
+    </div>
+    <div class="roadmap-col">
+      <h3><span class="phase p3">Days 61–90</span> Grow & Scale</h3>
+      <div class="roadmap-task">Publish 4 destination blog posts targeting top organic keywords (B-23)</div>
+      <div class="roadmap-task">Add JSON-LD structured data (TourPackage, LocalBusiness, Event) (B-22)</div>
+      <div class="roadmap-task">Launch Latin American + Eurasian audience landing pages (B-25)</div>
+      <div class="roadmap-task">Add footer email capture with Caribbean Destination Guide lead magnet (B-24)</div>
+      <div class="roadmap-task">Add team photos and founder story to About page (B-30)</div>
+      <div class="roadmap-task">Bundle HLS.js + Three.js; remove CDN dependencies (B-28)</div>
+      <div class="roadmap-task">Add Lighthouse CI checks to build pipeline (B-27)</div>
+      <div class="roadmap-task">Review analytics data; run first A/B test on hero CTA copy</div>
+      <div class="roadmap-task">Publish 4 more blog posts; submit XML sitemap to Search Console</div>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-top:24px">
+    <div class="callout-icon">ℹ</div>
+    <div><strong>Testing Acceptance Criteria:</strong> Each backlog item ships when: (1) it passes manual QA on Chrome, Safari, and Firefox; (2) it passes mobile test on iOS and Android; (3) for auth/payment changes, a staging environment smoke test completes without errors; (4) Lighthouse scores do not regress below baseline; (5) any new form is tested for CAPTCHA bypass and injection inputs.</div>
+  </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// Sidebar active link highlighting
+const links = document.querySelectorAll('.sidebar nav a');
+const sections = document.querySelectorAll('.audit-section');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector('.sidebar nav a[href="#' + entry.target.id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</html>
