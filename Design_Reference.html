@@ -15071,6 +15071,64 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vision ::-webkit-scrollbar-track{background:transparent}
 @media(max-width:768px){.vt-vision-widgets{gap:10px}.vt-vision-widget{padding:10px 16px}.vt-vision .vt-dash-frame{border-radius:22px!important}}
 </style>
+
+<style>
+/* ── Session stage proportions ─────────────────
+   The session player rendered portrait on desktop: the dashboard inherits
+   .vt-wrap's 1100px cap, leaving the video column 468px wide while a 430px
+   min-height pushed it to 639px tall — a 0.73 ratio on a 1440px screen.
+   Video wants to be wider than it is tall, so on large viewports the stage
+   breaks out of that cap and the picture is given an explicit 16:9 box. */
+@media (min-width:1180px){
+  .vt-dash-showcase{
+    width:min(1440px,94vw);
+    margin-inline:calc(50% - min(720px,47vw));
+  }
+  .vt-session-content{grid-template-columns:minmax(0,1fr) 340px!important}
+  /* The chat column scrolls already but has no cap, so its content was setting
+     the grid row height and stretching the video to match. Size the row from
+     the video's own 16:9 box instead: the stage is the breakout width less the
+     200px dash rail, its padding, and the 340px chat column. */
+  /* #vt-active-session .vt-session-video sets min-height:430px!important, so
+     these must match that specificity to win. */
+  #vt-active-session .vt-session-content,
+  .vt-session-content{
+    height:calc((min(1440px,94vw) - 590px) * 0.5625);
+    min-height:320px;
+  }
+  /* With the row now sized to the video, the side column is ~430px. Left to
+     natural flow the shop took 359px of it and squeezed live chat to 70px —
+     about one message. Split it deliberately: chat keeps a workable minimum and
+     the shop scrolls within whatever remains. */
+  #vt-active-session .vt-session-side,
+  .vt-session-side{min-height:0;overflow:hidden;display:flex;flex-direction:column}
+  #vt-active-session .vt-session-chat,
+  .vt-session-chat{flex:1 1 auto;min-height:180px;display:flex;flex-direction:column}
+  #vt-active-session .vt-session-shop,
+  .vt-session-shop{flex:0 1 auto;min-height:0;overflow-y:auto}
+  #vt-active-session .vt-session-content .vt-session-video,
+  #vt-active-session .vt-session-video,
+  .vt-session-video{
+    min-height:0!important;
+    max-height:none!important;
+  }
+}
+/* Below the breakout the stage is single-column, where the stacked min-heights
+   left it nearly square on a phone (322x300). Give it the same 16:9 box, with a
+   floor so it never becomes a letterbox slot on the narrowest screens. */
+@media (max-width:1179px){
+  #vt-active-session .vt-session-video,
+  .vt-session-video{
+    aspect-ratio:16/9;
+    min-height:0!important;
+    max-height:none!important;
+  }
+}
+@media (max-width:560px){
+  #vt-active-session .vt-session-video,
+  .vt-session-video{min-height:200px!important}
+}
+</style>
 <script>
 (function(){
   function tick(){
@@ -17856,13 +17914,28 @@ function vtSwitchScene(scene){
   vtToast('<i class="fas fa-sync-alt"></i> Scene: '+s.title+(vtSceneVideoOn?' — guide video':' — 360&deg; view'));
 }
 /* ── Guide video layer (YouTube) — real scene footage / live-tour replays ── */
-var vtSceneYT={lagoon:'kQF0I0EYeEU',market:'l7DGxnDfTL8'};
+/* Each scene's guide video. Entries may be a bare YouTube id or an object with
+   an optional `start` offset in seconds and a `label` for the toggle button, so
+   the control can name what it actually plays rather than always saying
+   "Video". */
+var vtSceneYT={
+  lagoon:{id:'tiXwxfMiHaI',start:14,label:'Water Park Demo'},
+  market:{id:'kQF0I0EYeEU',label:'Jamaica Demo Tour'}
+};
+function vtYTEntry(v){ return (typeof v==='string') ? {id:v} : (v||{}); }
 var vtSceneVideoOn=false;
-function vtShowSceneVideo(id){
+function vtShowSceneVideo(v){
+  var e=vtYTEntry(v), id=e.id;
   var host=document.getElementById('vt-session-yt'),f=document.getElementById('vt-session-yt-iframe');
   if(!host||!f||!id)return false;
-  var src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+'&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1';
+  /* A looped embed restarts at `start`, so the intro is skipped on every pass. */
+  var st=e.start?('&start='+e.start):'';
+  var src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+st+'&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1';
   if(f.getAttribute('data-yt')!==id){f.src=src;f.setAttribute('data-yt',id);}
+  var lbl=document.querySelector('.vt-scene-video-lbl');
+  if(lbl&&e.label)lbl.textContent=e.label;
+  var btn=document.getElementById('vt-scene-video-btn');
+  if(btn&&e.label)btn.setAttribute('title','Watch the '+e.label+' for this scene');
   host.classList.add('on');
   vtSceneVideoOn=true;
   var b=document.getElementById('vt-scene-video-btn');if(b)b.classList.add('active');
@@ -17886,8 +17959,9 @@ function vtToggleSceneVideo(){
     vtHideSceneVideo();
     vtToast('<i class="fas fa-panorama"></i> 360&deg; view — drag to look around');
   }else if(vtSceneYT[scene]){
+    var ent=vtYTEntry(vtSceneYT[scene]);
     vtShowSceneVideo(vtSceneYT[scene]);
-    vtToast('<i class="fas fa-film"></i> Guide video — tap the speaker for sound');
+    vtToast('<i class="fas fa-film"></i> '+(ent.label||'Guide video')+' — tap the speaker for sound');
   }else{
     vtToast('<i class="fas fa-circle-info"></i> No video for this scene yet');
   }
