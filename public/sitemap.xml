@@ -13,7 +13,7 @@
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://www.sightseerscaribbean.com/virtual-tours</loc>
+    <loc>https://www.sightseerscaribbean.com/live-360</loc>
     <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -149,5 +149,59 @@
     <lastmod>2026-08-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/blue-lagoon-morning-walk/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/dunns-river-falls-climb/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/falmouth-market-stall-walk/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/kingston-culture-food-tour/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/montego-bay-arrival-adventure/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/negril-seven-mile-sunset/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/ocho-rios-culture-craft/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/virtual-tours/sunset-yacht-charter/</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

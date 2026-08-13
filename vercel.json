@@ -4,7 +4,7 @@
   "outputDirectory": "public",
   "installCommand": "npm install",
   "rewrites": [
-    { "source": "/((?!api/|logos/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|logos/|panos/|models/|assets/|vendor/|virtual-tours($|/)|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

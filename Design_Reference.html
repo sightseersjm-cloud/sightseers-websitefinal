@@ -24064,7 +24064,10 @@ var SS_ROUTES = {
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
   'landmark':'/landmark-experiences',
-  'vtours':'/virtual-tours',
+  /* NOT /virtual-tours — that path belongs to the statically generated tour
+     landing pages under public/virtual-tours/, and Vercel serves static files
+     before applying the SPA rewrite, so reloading there would leave the app. */
+  'vtours':'/live-360',
   'shop':'/shop',
   'giftcards':'/gift-cards',
   'gallery':'/gallery',
