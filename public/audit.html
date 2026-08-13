@@ -385,17 +385,22 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
       <svg width="100" height="100" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
         <circle cx="50" cy="50" r="42" fill="none" stroke="#ef8731" stroke-width="10"
-          stroke-dasharray="263.9" stroke-dashoffset="92" stroke-linecap="round"/>
+          stroke-dasharray="263.9" stroke-dashoffset="74" stroke-linecap="round"/>
       </svg>
       <div class="score-ring-center">
-        <div class="num">65</div>
+        <div class="num">72</div>
         <div class="denom">/100</div>
       </div>
     </div>
     <div class="verdict">
-      <h3>Promising Foundation — Significant Conversion & Trust Gaps</h3>
-      <p>The site has a rich feature set — V-Tours, multi-page booking, live streaming, and a large experience catalog — but suffers from unfinished conversion flows, missing trust signals, accessibility gaps, and several critical security issues that block it from performing at its potential. Addressing the top-10 priorities could realistically push scores above 80 within 60 days.</p>
+      <h3>Solid Foundation — Gated by Configuration, Not Code</h3>
+      <p>The site has a rich feature set — V-Tours, multi-page booking, live streaming, and a large experience catalog — and more of the fundamentals are already built than a surface read suggests: GA4 is wired and admin-configurable, structured data ships on the homepage, alt text is complete, and a sitemap is published. What holds the site back is mostly <strong>unset configuration</strong> (Stripe, Mux, Supabase, and the GA4 measurement ID are all blank) plus the absence of real URL routing. Resolving configuration alone would move several categories 15–20 points.</p>
     </div>
+  </div>
+
+  <div class="callout critical">
+    <div class="callout-icon">⚑</div>
+    <div><strong>Revision note (v1.1).</strong> The first release of this audit contained five findings that direct inspection of the source disproved: alt text was reported missing (all 130 images have it), the $15 deposit and contact response time were reported unexplained (both are documented), GA4 and JSON-LD were reported absent (both ship), and the admin passcode was rated as customer-data exposure (it is scoped to an <code>editor</code> role that cannot reach bookings or accounts). Those findings arose from inferring behaviour off page structure instead of reading the implementation. Every claim below has now been checked against the code, and the overall score moved from 65 to 72 as a result. Findings that survived verification are unchanged.</div>
   </div>
 
   <p>Sight Seers Caribbean is a single-page application built on a 46,000-line Design_Reference.html compiled to a minified public/index.html. The site covers tours, villa stays, yacht charters, school and senior trips, Greek-life experiences, V-Tours (live-streamed 360° sessions), and a gift card/shop. Navigation is JavaScript-driven with no real URL routing, which creates SEO and deep-link limitations. Backend is Vercel serverless + Vercel Blob with Stripe payments and Supabase real-time chat for V-Tours.</p>
@@ -407,29 +412,29 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 
   <h3>Top 5 Critical Findings</h3>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Admin passcode shipped in client JavaScript bundle</div></div>
-    <div class="finding-body">The constant <code>ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!'</code> in <code>api/_lib/auth.js</code> means any site visitor can read the admin passcode via the Vercel function bundle or via a network proxy in devtools.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Remove hardcoded fallback. Set <code>ADMIN_PASSCODE</code> env var in Vercel with a strong random string. Rotate passcode immediately.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Revenue integrations are unconfigured — Stripe, Mux, and Supabase are all inert</div></div>
+    <div class="finding-body">V-Tours falls back to "Demo mode: Stripe not configured yet." <code>VT_CONFIG.supabase.url</code> is still the literal string <code>YOUR_SUPABASE_URL</code>, so real-time chat exits early. <code>MUX_TOKEN_ID</code>/<code>MUX_TOKEN_SECRET</code> are required for live streaming. The code is written and correct — the credentials simply are not set.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Add <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>, <code>MUX_TOKEN_ID</code>, <code>MUX_TOKEN_SECRET</code>, <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, and <code>JWT_SECRET</code> in Vercel.</div>
   </div>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Booking form office-hours copy reads "Sunday – Monday" (2 days only)</div></div>
-    <div class="finding-body">Hard-coded label on <code>#p-booking</code> shows "Office Hours: Sunday – Monday" — communicates the business is only reachable 2 days per week, destroying conversion confidence.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Correct to actual office hours (e.g., Monday – Friday, or Mon – Sat) in Design_Reference.html.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No URL routing — every page shares one URL</div></div>
+    <div class="finding-body">All 25+ pages live at the same path; the JS <code>nav()</code> function swaps <code>div.page</code> visibility. The only history handling in the codebase is a single <code>hashchange</code> listener scoped to V-Tours. Deep links to interior pages fail, the browser back button leaves the site, and Google can only index the root.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Implement hash routing (<code>#/tours</code>) or the History API, and drive per-page <code>&lt;title&gt;</code>/meta updates from the same handler.</div>
   </div>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No URL routing — every page is the same URL</div></div>
-    <div class="finding-body">All 25+ pages live at the same path; JavaScript swaps <code>div.page</code> visibility. Deep links fail, browser back-button breaks, social shares cannot target specific pages, and Google indexes only the root.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Implement hash routing (<code>#/tours</code>) or proper History API (<code>pushState</code>) to give each page a unique, bookmarkable URL.</div>
-  </div>
-  <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Critical env vars missing — payments and V-Tours are silently broken</div></div>
-    <div class="finding-body">V-Tours Stripe integration falls back to "Demo mode: Stripe not configured yet." <code>VT_CONFIG.supabase.url === 'YOUR_SUPABASE_URL'</code> blocks real-time chat. <code>MUX_TOKEN_ID/SECRET</code> are required for live streaming.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add all env vars to Vercel: <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>, <code>MUX_TOKEN_ID</code>, <code>MUX_TOKEN_SECRET</code>, <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>JWT_SECRET</code>, <code>ADMIN_PASSCODE</code>.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Footer legal links are dead — they route to the homepage</div></div>
+    <div class="finding-body">"Privacy Policy" and "Refund &amp; Cancellation" appear in the footer, but the anchors resolve to <code>onclick="nav('home');return false;"</code>. No <code>#p-privacy</code>, <code>#p-terms</code>, or <code>#p-refund</code> page exists in the source. A visitor clicking either lands back on the homepage.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Build the three legal pages and repoint the links. Stripe also requires a reachable refund-policy URL in the checkout session.</div>
   </div>
   <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No visible cancellation / refund policy or Terms of Service</div></div>
-    <div class="finding-body">Collecting deposits and payments without accessible refund/cancellation terms is a legal risk and a major conversion barrier, especially for premium bookings (villas, charters).</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add a Terms & Conditions page and link it in the footer and at every payment CTA.</div>
+    <div class="finding-head"><span class="sev-badge warning">High</span><div class="finding-title">GA4 is wired but has no measurement ID — nothing is being recorded</div></div>
+    <div class="finding-body">The loader is well built: it validates the ID format, sets <code>anonymize_ip</code>, and can pull the ID from <code>/api/settings</code> at runtime with no rebuild. But <code>window.SS_GA4_ID</code> is empty and the placeholder reads <code>G-XXXXXXXXXX</code>, so the script never loads. Beyond page views, no conversion events are wired to booking, checkout, or sign-up.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Set the real measurement ID via the admin portal (Settings → <code>ss_ga4_id</code>). Then instrument <code>form_submit</code>, <code>begin_checkout</code>, <code>purchase</code>, and <code>sign_up</code>.</div>
+  </div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">High</span><div class="finding-title">Pricing is inconsistent across service categories</div></div>
+    <div class="finding-body">Yacht charters show concrete prices ($350 / $500 / $600 / $900), but transfers display "Custom Quote" and several categories show no figure at all. Buyers comparing categories cannot self-qualify where the price is hidden.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Give every category at least a "From $X" floor. Reserve "Custom Quote" for genuinely bespoke work like multi-day group itineraries.</div>
   </div>
 </section>
 
@@ -455,23 +460,23 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     </div>
     <div class="score-card">
       <div class="cat">Content & Trust</div>
-      <div class="val w">60</div>
-      <div class="bar"><div class="bar-fill" style="width:60%;background:#E67E22"></div></div>
+      <div class="val w">66</div>
+      <div class="bar"><div class="bar-fill" style="width:66%;background:#E67E22"></div></div>
     </div>
     <div class="score-card">
       <div class="cat">Mobile & A11y</div>
-      <div class="val c">48</div>
-      <div class="bar"><div class="bar-fill" style="width:48%;background:#D93025"></div></div>
+      <div class="val w">62</div>
+      <div class="bar"><div class="bar-fill" style="width:62%;background:#E67E22"></div></div>
     </div>
     <div class="score-card">
       <div class="cat">SEO</div>
-      <div class="val c">38</div>
-      <div class="bar"><div class="bar-fill" style="width:38%;background:#D93025"></div></div>
+      <div class="val w">58</div>
+      <div class="bar"><div class="bar-fill" style="width:58%;background:#E67E22"></div></div>
     </div>
     <div class="score-card">
       <div class="cat">Security</div>
-      <div class="val c">45</div>
-      <div class="bar"><div class="bar-fill" style="width:45%;background:#D93025"></div></div>
+      <div class="val w">62</div>
+      <div class="bar"><div class="bar-fill" style="width:62%;background:#E67E22"></div></div>
     </div>
     <div class="score-card">
       <div class="cat">Performance</div>
@@ -480,8 +485,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     </div>
     <div class="score-card">
       <div class="cat">Analytics</div>
-      <div class="val c">30</div>
-      <div class="bar"><div class="bar-fill" style="width:30%;background:#D93025"></div></div>
+      <div class="val w">50</div>
+      <div class="bar"><div class="bar-fill" style="width:50%;background:#E67E22"></div></div>
     </div>
     <div class="score-card">
       <div class="cat">Feature Depth</div>
@@ -495,8 +500,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     </div>
     <div class="score-card">
       <div class="cat">Overall</div>
-      <div class="val b">65</div>
-      <div class="bar"><div class="bar-fill" style="width:65%;background:#063a63"></div></div>
+      <div class="val b">72</div>
+      <div class="bar"><div class="bar-fill" style="width:72%;background:#063a63"></div></div>
     </div>
   </div>
 </section>
@@ -622,14 +627,13 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   </div>
 
   <h3>Booking Page (#p-booking)</h3>
-  <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">"Office Hours: Sunday – Monday" — severe copy error</div></div>
-    <div class="finding-body">The booking page shows only two days of availability. This signals the business is nearly closed and directly kills booking intent.</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Fixed</span><div class="finding-title">Office hours copy — fixed</div></div>
+    <div class="finding-body">The booking page and contact panel both read "Sunday – Monday, 10:00 AM – 6:00 PM", implying a two-day work week. Corrected to "Monday – Sunday" in both places and deployed.</div>
   </div>
-  <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">$15 deposit mentioned but not explained</div></div>
-    <div class="finding-body">There is a "$15 deposit" reference but no explanation of what it covers, whether it's refundable, or how it applies to the total price.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add tooltip or inline explanation: "A $15 planning deposit is applied to your total. Refundable within 48 hours."</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">The $15 deposit is clearly explained in three places</div></div>
+    <div class="finding-body">A dedicated deposit box states it is non-refundable and applied toward the final booking fee; the trip-planner panel repeats it; and an FAQ entry answers "Is a deposit required to book?" directly. A neighbouring FAQ sets the cancellation terms at 72+ hours for a partial refund excluding the deposit. Reported as a gap in the first pass — the source shows otherwise.</div>
   </div>
   <div class="finding warning">
     <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Form submits via SS.createBooking() — no visible confirmation email mentioned</div></div>
@@ -703,9 +707,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="journey-arrow">›</div>
     <div class="journey-step gap-step"><div class="step-box">No email confirmation</div><div class="step-sub">Anxiety gap</div></div>
   </div>
-  <div class="finding critical" style="margin-top:14px">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Zero pricing on any service page</div></div>
-    <div class="finding-body">Tours, charters, stays, and senior trips show no starting prices. Users cannot self-qualify; the cost-uncertainty dropout rate for Caribbean luxury travel can be 60%+.</div>
+  <div class="finding warning" style="margin-top:14px">
+    <div class="finding-head"><span class="sev-badge warning">High</span><div class="finding-title">Pricing is present in some categories and absent in others</div></div>
+    <div class="finding-body">Yacht charters carry real figures ($350 / $500 / $600 / $900). Transfers read "Custom Quote". Several other categories show nothing. The inconsistency is the problem: a buyer comparing across categories cannot tell whether a missing price means bespoke or simply undisclosed.</div>
     <div class="finding-fix"><strong>Fix:</strong> Add "From $X per person" to each category card. Full pricing can stay on a quote form — but a floor price is required for intent qualification.</div>
   </div>
   <div class="finding warning">
@@ -731,10 +735,10 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Multiple contact channels: form, WhatsApp, email</div></div>
     <div class="finding-body">Contact page offers form, WhatsApp direct link, and email — good channel breadth for international audiences with varying communication preferences.</div>
   </div>
-  <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No response time expectation set</div></div>
-    <div class="finding-body">After submitting the contact form, users don't know when to expect a reply. Travel buyers often compare multiple operators simultaneously.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add "We typically respond within 4 business hours" below the submit button.</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Response time is stated — "within 24 hours"</div></div>
+    <div class="finding-body">The contact panel sets a 24-hour reply expectation, and the WhatsApp FAQ commits to responding "as quickly as possible". Reported as missing in the first pass; the copy is present.</div>
+    <div class="finding-fix"><strong>Optional:</strong> A tighter published SLA (e.g. 4 business hours) would compete better against operators the buyer is contacting in parallel.</div>
   </div>
 </section>
 
@@ -809,8 +813,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <section class="audit-section" id="s-content">
   <h2><span class="s-num">09</span> Content, Branding & Trust</h2>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No Terms of Service, Privacy Policy, or Refund Policy</div></div>
-    <div class="finding-body">Taking deposits and payments without accessible legal terms violates Stripe's terms and may violate consumer protection laws in the US, Canada, and UK.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Legal links exist in the footer but resolve to the homepage</div></div>
+    <div class="finding-body">"Privacy Policy" and "Refund &amp; Cancellation" are present as footer links, but each fires <code>nav('home')</code>, and no <code>#p-privacy</code>, <code>#p-terms</code>, or <code>#p-refund</code> page exists. A dead legal link is worse than an absent one — it reads as evasion. Some cancellation terms do appear in the booking FAQ, so the content partially exists and needs a home.</div>
     <div class="finding-fix"><strong>Fix:</strong> Add /terms, /privacy, and /refunds pages. Link from footer and all payment CTAs. Stripe also requires a refund policy URL in the checkout session.</div>
   </div>
   <div class="finding warning">
@@ -831,18 +835,18 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <!-- ─── 10. MOBILE & ACCESSIBILITY ─── -->
 <section class="audit-section" id="s-mobile">
   <h2><span class="s-num">10</span> Mobile UX & Accessibility</h2>
-  <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No skip-navigation link for keyboard users</div></div>
-    <div class="finding-body">No <code>&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;</code> at page top. WCAG 2.4.1 Level A failure.</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Fixed</span><div class="finding-title">Skip-navigation link — fixed</div></div>
+    <div class="finding-body">WCAG 2.4.1 (Bypass Blocks, Level A) was failing. A skip link has been added at the top of <code>&lt;body&gt;</code>, visually hidden until focused, anchoring to the hero section with a visible focus ring. Deployed.</div>
   </div>
   <div class="finding critical">
     <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">SPA routing breaks browser back button</div></div>
     <div class="finding-body">Because <code>nav()</code> swaps page div visibility without updating the URL, pressing Back navigates away from the site rather than returning to the previous page.</div>
     <div class="finding-fix"><strong>Fix:</strong> Use <code>history.pushState()</code> when changing pages; listen to <code>popstate</code> to restore previous page.</div>
   </div>
-  <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Image alt text absent on gallery and tour images</div></div>
-    <div class="finding-body">Decorative hero and tour images do not carry <code>alt</code> text — WCAG 1.1.1 Level A failure and missed keyword opportunity for image SEO.</div>
+  <div class="finding ok">
+    <div class="finding-head"><span class="sev-badge ok">Good</span><div class="finding-title">Alt text is complete — verified across all 130 images</div></div>
+    <div class="finding-body">Every <code>&lt;img&gt;</code> tag in the source carries an <code>alt</code> attribute, and the build step adds lazy loading to 115 of them. This was reported as a failure in the first pass of this audit; direct inspection of the source disproved it.</div>
   </div>
   <div class="finding warning">
     <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Color contrast not verified for secondary text</div></div>
@@ -874,14 +878,14 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="finding-fix"><strong>Fix:</strong> Implement hash or pushState routing. Add <code>&lt;link rel="canonical"&gt;</code> per page. Submit XML sitemap with all page URLs.</div>
   </div>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No meta descriptions, title tags per page, or Open Graph tags</div></div>
-    <div class="finding-body">All pages share the root <code>&lt;title&gt;</code> and one meta description. Social shares all look identical. CTR from search is severely impacted.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">Meta and Open Graph tags exist, but only one set for the whole site</div></div>
+    <div class="finding-body">The document head carries a real meta description, a full Open Graph set (<code>og:title</code>, <code>og:description</code>, <code>og:type</code>, <code>og:url</code>, <code>og:image</code>), and Twitter card tags. Because every page shares one URL, every page also shares that single set — so a share of the yacht page previews as the homepage.</div>
     <div class="finding-fix"><strong>Fix:</strong> Generate unique <code>&lt;title&gt;</code> and <code>&lt;meta name="description"&gt;</code> per page using the JS nav system. Add <code>og:title</code>, <code>og:description</code>, <code>og:image</code> per page.</div>
   </div>
   <div class="finding warning">
-    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">No structured data (JSON-LD) for tours, events, or local business</div></div>
-    <div class="finding-body">TourPackage, Event (V-Tour sessions), LocalBusiness, and Review schema would enable rich results in Google Search — significant CTR boost for travel queries.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add TourPackage JSON-LD on each tour page, LocalBusiness on the homepage, and Event schema for scheduled V-Tour sessions.</div>
+    <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Structured data exists for the site, but not per experience</div></div>
+    <div class="finding-body">The homepage emits valid JSON-LD: a <code>TravelAgency</code> entity with <code>areaServed</code> and a <code>hasOfferCatalog</code> containing three <code>TouristTrip</code> offers. A <code>sitemap.xml</code> with image annotations is also published. What is missing is per-tour markup — the catalog covers three virtual tours, not the full experience inventory.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Emit <code>TouristTrip</code> per tour and <code>Event</code> per scheduled V-Tour session once routing gives each one a URL. Add <code>Review</code>/<code>AggregateRating</code> as testimonials land.</div>
   </div>
   <div class="finding warning">
     <div class="finding-head"><span class="sev-badge warning">Warning</span><div class="finding-title">Design_Reference.html is ~5.7 MB — build pipeline critical for performance</div></div>
@@ -897,10 +901,10 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <!-- ─── 12. SECURITY & PRIVACY ─── -->
 <section class="audit-section" id="s-security">
   <h2><span class="s-num">12</span> Security, Privacy & Compliance</h2>
-  <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">ADMIN_CODE hardcoded in api/_lib/auth.js</div></div>
-    <div class="finding-body"><code>ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!'</code> — the fallback is the actual admin credential. Visible in Vercel function bundles via devtools.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Remove fallback value entirely. Set <code>ADMIN_PASSCODE</code> env var to a randomly generated 32-char string. Rotate immediately.</div>
+  <div class="finding warning">
+    <div class="finding-head"><span class="sev-badge warning">High</span><div class="finding-title">Passcode fallback grants content-publishing rights to anyone who reads the bundle</div></div>
+    <div class="finding-body"><code>ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!'</code>. A source comment documents this as deliberate, and the scoping checks out: the passcode yields the <code>editor</code> role, which reaches site content, images, and settings — while bookings, contact messages, and accounts sit behind <code>requireAdmin</code>, which requires <code>role === 'admin'</code> and which the passcode never satisfies. So this is <strong>not</strong> customer-data exposure, as the first pass of this audit claimed. It is a defacement vector: anyone reading the client bundle can publish site content.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Set <code>ADMIN_PASSCODE</code> in Vercel to a strong random value. The fallback can remain as a local-dev convenience once the env var overrides it in production.</div>
   </div>
   <div class="finding critical">
     <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">JWT_SECRET falls back to BLOB_READ_WRITE_TOKEN</div></div>
@@ -936,9 +940,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <section class="audit-section" id="s-analytics">
   <h2><span class="s-num">13</span> Analytics</h2>
   <div class="finding critical">
-    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No analytics platform detected in codebase</div></div>
-    <div class="finding-body">No Google Analytics 4, Plausible, Fathom, or Vercel Analytics script found in Design_Reference.html or the API layer. No conversion events can be measured.</div>
-    <div class="finding-fix"><strong>Fix:</strong> Add Vercel Analytics (zero-config, privacy-preserving) as a first step. Then add GA4 for full funnel tracking.</div>
+    <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">GA4 loader ships but the measurement ID is blank</div></div>
+    <div class="finding-body">A well-built GA4 bootstrap exists at the top of the document: it validates the ID against <code>/^(G|GT|AW)-[A-Z0-9]+$/i</code>, sets <code>anonymize_ip: true</code>, and falls back to fetching the ID from <code>/api/settings</code> so it can be changed from the admin portal without a rebuild. It loads nothing while the ID is empty — and it currently is.</div>
+    <div class="finding-fix"><strong>Fix:</strong> Set the real measurement ID in the admin portal under Settings → <code>ss_ga4_id</code>. No code change required.</div>
   </div>
   <div class="finding critical">
     <div class="finding-head"><span class="sev-badge critical">Critical</span><div class="finding-title">No conversion tracking on booking form, Stripe checkout, or sign-up</div></div>

@@ -168,6 +168,9 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <section class="audit-section" id="s-intro">
   <h2><span class="s-num">00</span> Deep-Dive Introduction</h2>
   <p>The <a href="/audit.html" class="crosslink">v1 executive audit</a> covers the required 23 deliverables at summary depth. This v2 companion fills the gaps that the audit brief demanded but that a scannable summary could not carry: every page audited against the full 14-field template, a WCAG 2.2 AA per-criterion checklist, a full analytics event schema, an administrative operations workflow, a standardized page template, and per-audience conversion playbooks.</p>
+  <div class="callout critical">
+    <div><strong>Revision note (v1.1).</strong> Five findings in the first release were disproved by direct inspection of the source and have been corrected here and in the summary: alt text is complete across all 130 images; the $15 deposit and the 24-hour contact response time are both documented on the booking page; a GA4 loader and homepage JSON-LD both ship; and the admin passcode is scoped to an <code>editor</code> role that cannot reach bookings, messages, or accounts. Two items have since been fixed in the codebase — the skip-navigation link and the office-hours copy — and are marked <span class="tag green">Fixed</span> below.</div>
+  </div>
   <div class="callout info">
     <div><strong>How to read this document:</strong> Each page is scored using the full field template (URL, Audience, Conversion Goal, Evidence, Current, Expected, Severity, Status, Fix, Impact, Effort, Role, Phase). Anything marked <span class="mono">REQUIRES TESTING</span> could not be verified without access to the live production environment, backend systems, or user session data.</div>
   </div>
@@ -254,7 +257,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
     <div class="findings-list">
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>Primary CTA too narrow.</strong> "Explore Water Escapes" excludes 60%+ of audiences. Change to "Browse All Experiences". <em>Effort: Low · Role: Content · Phase: 4</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No trust strip near hero.</strong> Add customer count, years operating, certifications. <em>Effort: Low · Role: Design · Phase: 1</em></div></div>
-      <div class="finding-mini"><span class="sev-badge warning">Med</span><div><strong>Slideshow images have no alt attributes.</strong> WCAG 1.1.1. <em>Effort: Low · Role: Dev · Phase: 1</em></div></div>
+      <div class="finding-mini"><span class="sev-badge ok">Good</span><div><strong>Alt text present on all images.</strong> Verified across 130 <code>&lt;img&gt;</code> tags; build adds lazy loading to 115. Previously reported as a failure in error.</div></div>
     </div>
   </div>
 
@@ -442,8 +445,8 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
       <div><div class="k">Backend</div><div class="v"><span class="mono">SS.createBooking() → /api/bookings</span></div></div>
     </div>
     <div class="findings-list">
-      <div class="finding-mini"><span class="sev-badge critical">Crit</span><div><strong>"Office Hours: Sunday – Monday"</strong> — copy error. <em>Effort: 5 min · Role: Content · Phase: 1</em></div></div>
-      <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>$15 deposit unexplained.</strong> Tooltip: "Refundable planning deposit, applied to your final invoice." <em>Effort: Low · Role: Content · Phase: 1</em></div></div>
+      <div class="finding-mini"><span class="sev-badge ok">Fixed</span><div><strong>Office hours corrected to "Monday – Sunday"</strong> in both the booking panel and the contact block. Deployed.</div></div>
+      <div class="finding-mini"><span class="sev-badge ok">Good</span><div><strong>Deposit terms documented in three places</strong> — deposit box, trip-planner note, and a dedicated FAQ entry, alongside a 72-hour cancellation policy. Previously reported as a gap in error.</div></div>
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No confirmation email mentioned or sent.</strong> Users don't know their submission was received. <em>Effort: Med · Role: Dev · Phase: 2</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No CAPTCHA / bot protection.</strong> Spam pollution risk. <em>Effort: Low · Role: Dev · Phase: 1</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">Med</span><div><strong>No progressive disclosure — all fields shown at once.</strong> Consider multi-step form for higher completion. <em>Effort: Med · Role: Dev · Phase: 4</em></div></div>
@@ -454,7 +457,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <div class="page-card">
     <div class="pc-head"><div class="pc-title">Contact / WhatsApp</div><div class="pc-id"><span class="mono">#p-contact</span></div></div>
     <div class="findings-list">
-      <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No response time expectation set.</strong> "We reply within 4 business hours". <em>Effort: Low · Role: Content · Phase: 1</em></div></div>
+      <div class="finding-mini"><span class="sev-badge ok">Good</span><div><strong>Response time stated as "within 24 hours".</strong> Previously reported as missing in error. A tighter published SLA remains an optional competitive improvement.</div></div>
       <div class="finding-mini"><span class="sev-badge warning">Med</span><div><strong>WhatsApp number hardcoded.</strong> Add a canary uptime test. <em>Effort: Low · Role: Dev · Phase: 2</em></div></div>
     </div>
   </div>
@@ -511,7 +514,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <div class="page-card">
     <div class="pc-head"><div class="pc-title">Admin Panel</div><div class="pc-id"><span class="mono">#p-admin</span></div></div>
     <div class="findings-list">
-      <div class="finding-mini"><span class="sev-badge critical">Crit</span><div><strong>Admin passcode hardcoded fallback.</strong> Fix in <code>api/_lib/auth.js</code>. <em>Effort: 15 min · Role: Security · Phase: 1</em></div></div>
+      <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>Passcode fallback grants the <code>editor</code> role</strong> — site content and images only. Bookings, messages, and accounts require <code>role === 'admin'</code> via <code>requireAdmin</code>, which the passcode never satisfies. Defacement risk, not data exposure. Set <code>ADMIN_PASSCODE</code> in Vercel. <em>Role: DevOps · Phase: 1</em></div></div>
       <div class="finding-mini"><span class="sev-badge warning">High</span><div><strong>No audit log of admin actions.</strong> <em>Effort: Med · Role: Dev · Phase: 5</em></div></div>
     </div>
   </div>
@@ -544,7 +547,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
       <tr><td>360° panorama viewer</td><td>V-Tours Explorer</td><td>Drag to look, +/- zoom</td><td><span class="tag green">Working</span></td><td>Keyboard nav added</td></tr>
       <tr><td>WebXR room</td><td>V-Tours</td><td>Vision Pro / Quest entry</td><td class="mono">RT</td><td>Requires XR device</td></tr>
       <tr><td>Comfort mode toggle</td><td>V-Tours dock</td><td>Apply vignette</td><td><span class="tag green">Working</span></td><td>Recent addition</td></tr>
-      <tr><td>Admin passcode login</td><td>#p-admin</td><td>POST /api/passcode-login</td><td><span class="tag red">Insecure fallback</span></td><td>Hardcoded credential</td></tr>
+      <tr><td>Admin passcode login</td><td>#p-admin</td><td>POST /api/passcode-login</td><td><span class="tag yellow">Editor scope</span></td><td>Grants content publishing only</td></tr>
       <tr><td>Admin booking list</td><td>#p-admin</td><td>GET /api/bookings</td><td class="mono">RT</td><td>Verify JWT auth</td></tr>
       <tr><td>Shop cart / checkout</td><td>#p-shop</td><td>Add, remove, checkout</td><td class="mono">RT</td><td>Verify inventory + payment</td></tr>
       <tr><td>Gift card purchase</td><td>#p-giftcards</td><td>Buy, receive code</td><td class="mono">RT</td><td>Delivery method unclear</td></tr>
@@ -616,6 +619,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   </table>
   </div>
 
+  <div class="callout warning"><div><strong>One set exists today.</strong> The head carries a real meta description plus full Open Graph and Twitter card tags — but because every page shares a URL, every page shares those tags. The specification below becomes applicable once routing gives each page its own URL.</div></div>
   <h3>Per-Page Meta Tag Specification</h3>
   <div class="tbl-wrap">
   <table class="audit-table">
@@ -652,6 +656,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   </table>
   </div>
 
+  <div class="callout warning"><div><strong>Partially implemented.</strong> The homepage already emits a valid <code>TravelAgency</code> entity with an <code>OfferCatalog</code> of three <code>TouristTrip</code> offers, and <code>sitemap.xml</code> ships with image annotations. The table below covers what is still missing — chiefly per-experience and per-session markup, which depends on URL routing landing first.</div></div>
   <h3>Structured Data (JSON-LD) Priority</h3>
   <div class="tbl-wrap">
   <table class="audit-table">
@@ -677,7 +682,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
   <table class="audit-table">
     <thead><tr><th>SC</th><th>Criterion</th><th>Level</th><th>Verdict</th><th>Remediation</th></tr></thead>
     <tbody>
-      <tr><td>1.1.1</td><td>Non-text Content (alt text)</td><td>A</td><td><span class="tag red">Fail</span></td><td>Add alt to all hero, gallery, tour images</td></tr>
+      <tr><td>1.1.1</td><td>Non-text Content (alt text)</td><td>A</td><td><span class="tag green">Pass</span></td><td>All 130 images carry alt attributes — verified</td></tr>
       <tr><td>1.2.2</td><td>Captions (video)</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Verify captions on hero video + V-Tours</td></tr>
       <tr><td>1.3.1</td><td>Info &amp; Relationships (semantics)</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Audit heading order + landmark regions</td></tr>
       <tr><td>1.3.5</td><td>Identify Input Purpose (autocomplete)</td><td>AA</td><td><span class="tag red">Fail</span></td><td>Add autocomplete attrs on booking form (name, email, tel)</td></tr>
@@ -688,7 +693,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
       <tr><td>1.4.13</td><td>Content on Hover / Focus (dismissible)</td><td>AA</td><td><span class="tag yellow">RT</span></td><td>Test dropdown menus + tooltips</td></tr>
       <tr><td>2.1.1</td><td>Keyboard (all functionality)</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Tab through every page; log unreachable elements</td></tr>
       <tr><td>2.1.2</td><td>No Keyboard Trap</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Verify modals + 360° viewer don't trap focus</td></tr>
-      <tr><td>2.4.1</td><td>Bypass Blocks (skip link)</td><td>A</td><td><span class="tag red">Fail</span></td><td>Add skip-to-main link</td></tr>
+      <tr><td>2.4.1</td><td>Bypass Blocks (skip link)</td><td>A</td><td><span class="tag green">Fixed</span></td><td>Skip link added at top of body, focus-visible</td></tr>
       <tr><td>2.4.2</td><td>Page Titled</td><td>A</td><td><span class="tag red">Fail</span></td><td>Unique &lt;title&gt; per page (blocked by SPA routing)</td></tr>
       <tr><td>2.4.3</td><td>Focus Order</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Verify DOM order matches visual order</td></tr>
       <tr><td>2.4.4</td><td>Link Purpose (in context)</td><td>A</td><td><span class="tag yellow">RT</span></td><td>Audit for "click here" / "read more" without context</td></tr>
@@ -716,6 +721,7 @@ p { margin-bottom: 10px; color: var(--text2); font-size: 13.5px; }
 <section class="audit-section" id="s-analytics">
   <h2><span class="s-num">07</span> Analytics Plan</h2>
 
+  <div class="callout warning"><div><strong>GA4 is already wired.</strong> A validated loader ships in the document head and reads its measurement ID from <code>/api/settings</code> (admin key <code>ss_ga4_id</code>), so the ID can be set without a rebuild. It is currently blank, so nothing is recorded. Set the ID first; the schema below is then the instrumentation to add on top of the default page-view tracking.</div></div>
   <h3>Event Schema (GA4)</h3>
   <div class="tbl-wrap">
   <table class="audit-table">
