@@ -23,6 +23,7 @@ const handlers = {
   'images':          require('./_handlers/images'),
   'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
+  'passport':        require('./_handlers/passport'),
   'sections':        require('./_handlers/sections'),
   'settings':        require('./_handlers/settings'),
   'stays':           require('./_handlers/stays'),

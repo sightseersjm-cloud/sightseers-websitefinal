@@ -12,10 +12,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="canonical" href="https://www.sightseerscaribbean.com/">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#063a63">
 <meta property="og:title" content="Sight Seers Caribbean | Virtual Tours & 360° Immersive Experiences">
@@ -12540,7 +12542,7 @@ body.theme-night .page .tag{
           <div class="passport-badge"><i class="fas fa-passport"></i>Renewal Request Form</div>
           <h2 class="fw-title">Submit your Jamaican passport renewal request</h2>
           <p class="fw-sub">Use this tab to prepare your renewal with the core items you asked for: your passport biography page, your birth certificate number (IA No.), and a digital passport-size photograph. Add your contact details so your team can follow up quickly.</p>
-          <div class="form-success" id="passportMsg">Your details are ready — we've opened WhatsApp so you can send your renewal request straight to our team on +1 (876) 465-0630. Please attach your biography page and passport photo in that chat to finish.</div>
+          <div class="form-success" id="passportMsg">Thank you — your passport renewal request, including your biography page and passport photo, has been sent to our team. We'll follow up shortly by email or WhatsApp.</div>
           <div class="form-row">
             <div class="fg"><label for="passName">Full Name *</label><input type="text" id="passName"></div>
             <div class="fg"><label for="passEmail">Email *</label><input type="email" id="passEmail"></div>
@@ -24567,6 +24569,35 @@ function clearPassportPhoto(){
   if(input) input.value='';
   handlePassportPhotoUpload();
 }
+/* Read an upload for emailing: images are downscaled to a sane size (so the
+   email stays under the serverless upload limit), everything else is sent as-is.
+   Returns {name,type,b64} via cb(err,data). */
+function ssReadPassportFile(file,maxDim,cb){
+  function rawRead(){
+    var r=new FileReader();
+    r.onload=function(e){ cb(null,{name:file.name||'file',type:file.type||'application/octet-stream',b64:String(e.target.result).split(',')[1]||''}); };
+    r.onerror=function(){ cb(new Error('read-failed')); };
+    r.readAsDataURL(file);
+  }
+  if(file.type&&file.type.indexOf('image/')===0&&file.type.indexOf('gif')<0){
+    try{
+      var img=new Image(),url=URL.createObjectURL(file);
+      img.onload=function(){
+        try{
+          var scale=Math.min(1,maxDim/Math.max(img.width,img.height));
+          var cw=Math.max(1,Math.round(img.width*scale)),ch=Math.max(1,Math.round(img.height*scale));
+          var c=document.createElement('canvas');c.width=cw;c.height=ch;
+          c.getContext('2d').drawImage(img,0,0,cw,ch);
+          URL.revokeObjectURL(url);
+          var dataUrl=c.toDataURL('image/jpeg',0.85);
+          cb(null,{name:(file.name||'image').replace(/\.(png|webp|heic|heif|gif|bmp)$/i,'.jpg'),type:'image/jpeg',b64:dataUrl.split(',')[1]||''});
+        }catch(err){ URL.revokeObjectURL(url); rawRead(); }
+      };
+      img.onerror=function(){ URL.revokeObjectURL(url); rawRead(); };
+      img.src=url;
+    }catch(err){ rawRead(); }
+  } else { rawRead(); }
+}
 function submitPassportRenewal(){
   var name=document.getElementById('passName')&&document.getElementById('passName').value.trim();
   var email=document.getElementById('passEmail')&&document.getElementById('passEmail').value.trim();
@@ -24578,25 +24609,27 @@ function submitPassportRenewal(){
     toast('Please complete all required passport renewal fields before submitting.');
     return;
   }
-  var payload={name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()};
-  try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift(payload);localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
-  var msgText='Passport Renewal Request'
-    +'\n\nName: '+name
-    +'\nEmail: '+email
-    +'\nPhone: '+phone
-    +'\nBirth Certificate Number (IA No.): '+ia
-    +'\nBiography Page File: '+bio.name
-    +'\nPassport Photo File: '+photo.name
-    +'\n\nI will attach my biography page and passport photo here in this chat.';
-  /* Best-effort backend record — does not block the WhatsApp handoff */
-  try{ if(window.SS&&typeof SS.sendContactMessage==='function'){ SS.sendContactMessage({name:name,email:email,phone:phone,subject:'Passport Renewal Request',message:msgText}).catch(function(){}); } }catch(e){}
   var btn=document.querySelector('#p-passport .auth-submit');
-  if(btn){var origBtn=btn.innerHTML;btn.innerHTML='<i class="fas fa-check-circle"></i> Opening WhatsApp…';btn.style.pointerEvents='none';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},4000);}
-  var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
-  var waUrl='https://wa.me/18764650630?text='+encodeURIComponent(msgText);
-  var win=window.open(waUrl,'_blank');
-  if(!win){window.location.href=waUrl;}
-  window.scrollTo({top:0,behavior:'smooth'});
+  var origBtn=btn?btn.innerHTML:'';
+  function restore(){ if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents='';} }
+  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending…';btn.style.pointerEvents='none';}
+  try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift({name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()});localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
+  ssReadPassportFile(bio,2000,function(e1,bioData){
+    if(e1||!bioData||!bioData.b64){ restore(); toast('Could not read your biography page file — please try another image or PDF.'); return; }
+    ssReadPassportFile(photo,1400,function(e2,photoData){
+      if(e2||!photoData||!photoData.b64){ restore(); toast('Could not read your passport photo — please try another image.'); return; }
+      var approxKb=Math.round((bioData.b64.length+photoData.b64.length)*0.75/1024);
+      if(approxKb>4200){ restore(); toast('Your files are a little large to email. Please upload smaller images (about 3 MB or less each).'); return; }
+      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,ia:ia,bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
+        .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error(d&&d.error?d.error:'Request failed'); return d; }); })
+        .then(function(){
+          if(btn){ btn.innerHTML='<i class="fas fa-check-circle"></i> Request Sent!'; setTimeout(restore,4000); }
+          var msg=document.getElementById('passportMsg'); if(msg) msg.style.display='block';
+          window.scrollTo({top:0,behavior:'smooth'});
+        })
+        .catch(function(){ restore(); toast('Could not submit your passport renewal request — please try again, or email info@sightseerscaribbean.com.'); });
+    });
+  });
 }
 
 function pointFromPercent(el, pt){
