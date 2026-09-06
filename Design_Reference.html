@@ -1619,7 +1619,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
   .hero-brand-badge img{height:38px}
   .passport-wrap{padding:0 18px}
   .passport-card{padding:24px}
-  .passport-photo-preview{width:140px;height:140px}
+  .passport-photo-preview{width:56px;height:56px}
   .hero-small{letter-spacing:4px;font-size:10px}
   .hero-title{font-size:clamp(2.4rem,12vw,3.7rem);margin-bottom:20px}
   .hero-sub{font-size:13px;max-width:92%;margin-bottom:28px}
@@ -1895,15 +1895,28 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .passport-check i{width:40px;height:40px;border-radius:14px;background:rgba(112,194,87,.12);color:var(--green);display:flex;align-items:center;justify-content:center;min-width:40px;font-size:16px}
 .passport-check strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
 .passport-check span{display:block;font-size:12px;line-height:1.75;color:#607188}
-.passport-photo-stage{display:none;margin-top:18px;padding:16px;border-radius:24px;background:#fbfcfe;border:1px solid rgba(6,58,99,.08)}
-.passport-photo-stage.on{display:block}
-.passport-photo-preview{width:180px;height:180px;border-radius:26px;overflow:hidden;background:linear-gradient(135deg,#eaf3eb,#fff);border:1px solid rgba(6,58,99,.08);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.passport-photo-stage{display:none;margin-top:14px;padding:12px 14px;border-radius:18px;background:#fbfcfe;border:1px solid rgba(6,58,99,.08)}
+.passport-photo-stage.on{display:flex;align-items:center;gap:14px}
+.passport-photo-preview{width:60px;height:60px;flex:0 0 auto;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#eaf3eb,#fff);border:1px solid rgba(6,58,99,.08);display:flex;align-items:center;justify-content:center;margin-bottom:0}
 .passport-photo-preview img{width:100%;height:100%;object-fit:cover}
-.passport-photo-preview small{color:#8da0b3;font-size:11px;text-align:center;padding:0 22px;line-height:1.7}
+.passport-photo-preview small{color:#8da0b3;font-size:10px;text-align:center;padding:0 6px;line-height:1.4}
+.passport-photo-body{flex:1;min-width:0}
+.passport-photo-remove{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid rgba(6,58,99,.14);background:#fff;color:var(--navy);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.passport-photo-remove:hover{background:#fff2f0;border-color:#e0a29a;color:#c0392b}
 .passport-inline-note{padding:16px 18px;border-radius:20px;background:rgba(239,135,49,.09);border:1px solid rgba(239,135,49,.18);font-size:12px;line-height:1.8;color:#89593a;margin:16px 0 0}
 .passport-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
 .passport-mini{font-size:12px;color:#607188;line-height:1.8}
 .passport-mini strong{color:var(--navy)}
+/* ── SHOP COMING SOON ───────── */
+.shop-coming-soon{background:linear-gradient(135deg,#063a63,#0d5a73);color:#fff;padding:66px 24px;text-align:center}
+.shop-coming-inner{max-width:640px;margin:0 auto}
+.scs-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:7px 16px;border-radius:999px;margin-bottom:18px}
+.scs-title{font-size:clamp(34px,6vw,54px);margin:0 0 12px;color:#fff;letter-spacing:.5px}
+.scs-sub{font-size:16px;line-height:1.7;color:rgba(255,255,255,.85);margin:0 auto 26px;max-width:520px}
+.scs-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.shop-coming-soon .btn-outline{border-color:rgba(255,255,255,.6);color:#fff}
+.shop-coming-soon .btn-outline:hover{background:#fff;color:var(--navy)}
+.shop-muted{filter:grayscale(1);opacity:.45;pointer-events:none;user-select:none}
 .passport-hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .passport-hero-meta span{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#fff}
 .passport-hero-meta i{color:var(--green)}
@@ -11290,8 +11303,19 @@ body.theme-night .page .tag{
      SHOP PAGE
 ════════════════════════════════════ -->
 <div class="page" id="p-shop">
+  <section class="shop-coming-soon">
+    <div class="shop-coming-inner">
+      <span class="scs-badge"><i class="fas fa-bag-shopping"></i>Travel Shop</span>
+      <h1 class="scs-title">Coming Soon</h1>
+      <p class="scs-sub">Our curated travel shop is being restocked. Check back shortly — in the meantime, explore our tours and experiences.</p>
+      <div class="scs-actions">
+        <a href="#" class="btn-primary" onclick="nav('tours');return false;">Browse Tours</a>
+        <a href="#" class="btn-outline" onclick="nav('contact');return false;">Contact Us</a>
+      </div>
+    </div>
+  </section>
   <!-- Product Grid -->
-  <section class="shop-sec" id="shopListSection">
+  <section class="shop-sec shop-muted" id="shopListSection" aria-hidden="true">
     <div class="shop-wrap">
       <div class="sec-head center reveal"><span class="sec-pre">Travel in Style</span><h2 class="sec-title">Curated Travel Essentials</h2><p class="sec-sub center">Shop polished travel pieces, giftable finds and island-ready essentials selected to complement your journey beautifully.</p></div>
       <div class="shop-filter-shell reveal">
@@ -12516,7 +12540,7 @@ body.theme-night .page .tag{
           <div class="passport-badge"><i class="fas fa-passport"></i>Renewal Request Form</div>
           <h2 class="fw-title">Submit your Jamaican passport renewal request</h2>
           <p class="fw-sub">Use this tab to prepare your renewal with the core items you asked for: your passport biography page, your birth certificate number (IA No.), and a digital passport-size photograph. Add your contact details so your team can follow up quickly.</p>
-          <div class="form-success" id="passportMsg">Your renewal request details were saved in this browser preview. Connect this form to your live frontend form handler to receive the uploaded files online.</div>
+          <div class="form-success" id="passportMsg">Your details are ready — we've opened WhatsApp so you can send your renewal request straight to our team on +1 (876) 465-0630. Please attach your biography page and passport photo in that chat to finish.</div>
           <div class="form-row">
             <div class="fg"><label for="passName">Full Name *</label><input type="text" id="passName"></div>
             <div class="fg"><label for="passEmail">Email *</label><input type="email" id="passEmail"></div>
@@ -12547,8 +12571,9 @@ body.theme-night .page .tag{
             <input type="file" id="passPhotoUpload" accept="image/*" onchange="handlePassportPhotoUpload()" hidden>
             <div class="passport-file-meta" id="passPhotoMeta">No passport photo uploaded yet.</div>
             <div class="passport-photo-stage" id="passportPhotoStage">
-              <div class="passport-photo-preview" id="passportPhotoPreview"><small>Your passport-style preview will appear here.</small></div>
-              <div class="passport-mini" id="passportPhotoHint"><strong>Tip:</strong> A square upload gives the cleanest passport-size preview inside the site.</div>
+              <div class="passport-photo-preview" id="passportPhotoPreview"><small>Preview</small></div>
+              <div class="passport-photo-body"><div class="passport-mini" id="passportPhotoHint"><strong>Tip:</strong> A square upload gives the cleanest passport-size result.</div></div>
+              <button type="button" class="passport-photo-remove" id="passportPhotoRemove" onclick="clearPassportPhoto()" aria-label="Remove photo" hidden>&times;</button>
             </div>
           </div>
           <div class="passport-cta-row">
@@ -24494,35 +24519,52 @@ function handlePassportPhotoUpload(){
   const stage=document.getElementById('passportPhotoStage');
   const preview=document.getElementById('passportPhotoPreview');
   const hint=document.getElementById('passportPhotoHint');
+  const removeBtn=document.getElementById('passportPhotoRemove');
   if(!input||!meta||!stage||!preview||!hint) return;
   const file=input.files && input.files[0];
   if(!file){
     meta.className='passport-file-meta';
     meta.textContent='No passport photo uploaded yet.';
     stage.classList.remove('on');
-    preview.innerHTML='<small>Your passport-style preview will appear here.</small>';
-    hint.innerHTML='<strong>Tip:</strong> A square upload gives the cleanest passport-size preview inside the site.';
+    preview.innerHTML='<small>Preview</small>';
+    hint.innerHTML='<strong>Tip:</strong> A square upload gives the cleanest passport-size result.';
+    if(removeBtn) removeBtn.hidden=true;
     return;
   }
+  const sizeKb=Math.max(1,Math.round(file.size/1024));
   meta.className='passport-file-meta';
-  meta.textContent=`${file.name} selected.`;
+  meta.textContent=`${file.name} attached.`;
   const reader=new FileReader();
   reader.onload=e=>{
     const img=new Image();
     img.onload=()=>{
       const ratio=img.width/img.height;
       const square=Math.abs(ratio-1)<=0.12;
-      preview.innerHTML=`<img src="${e.target.result}" alt="Passport upload preview">`;
+      preview.innerHTML=`<img src="${e.target.result}" alt="Passport photo attachment">`;
       stage.classList.add('on');
       meta.className='passport-file-meta '+(square?'ok':'warn');
-      meta.textContent=`${file.name} • ${img.width}×${img.height}px`;
+      meta.textContent=`${file.name} • ${img.width}×${img.height}px • ${sizeKb} KB`;
       hint.innerHTML=square
-        ? `<strong>Looks passport-ready:</strong> this upload is close to a square crop, which works well for a passport-size preview.`
-        : `<strong>Adjust before sending:</strong> this image is ${img.width}×${img.height}px. A square crop will give a stronger passport-size result.`;
+        ? `<strong>${file.name}</strong><br>Attached &bull; passport-ready square crop.`
+        : `<strong>${file.name}</strong><br>Attached &bull; ${img.width}×${img.height}px. A square crop looks best, but you can still send this.`;
+      if(removeBtn) removeBtn.hidden=false;
+    };
+    img.onerror=()=>{
+      preview.innerHTML='<small>File</small>';
+      stage.classList.add('on');
+      meta.className='passport-file-meta';
+      meta.textContent=`${file.name} attached.`;
+      hint.innerHTML=`<strong>${file.name}</strong><br>Attached &bull; ${sizeKb} KB.`;
+      if(removeBtn) removeBtn.hidden=false;
     };
     img.src=e.target.result;
   };
   reader.readAsDataURL(file);
+}
+function clearPassportPhoto(){
+  const input=document.getElementById('passPhotoUpload');
+  if(input) input.value='';
+  handlePassportPhotoUpload();
 }
 function submitPassportRenewal(){
   var name=document.getElementById('passName')&&document.getElementById('passName').value.trim();
@@ -24537,29 +24579,23 @@ function submitPassportRenewal(){
   }
   var payload={name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()};
   try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift(payload);localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
-  var btn=document.querySelector('.auth-submit');
-  var origBtn=btn?btn.innerHTML:'';
-  if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';btn.style.pointerEvents='none'}
-  var msgText='Passport Renewal Request\n\nName: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nIA Number: '+ia+'\nBio Page File: '+bio.name+'\nPassport Photo File: '+photo.name;
-  if(window.SS&&typeof SS.sendContactMessage==='function'){
-    SS.sendContactMessage({
-      name:name,email:email,phone:phone,
-      subject:'Passport Renewal Request',
-      message:msgText
-    }).then(function(){
-      var msg=document.getElementById('passportMsg');
-      if(msg) msg.style.display='block';
-      if(btn){btn.innerHTML='<i class="fas fa-check-circle"></i> Request Submitted!';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},4000)}
-      window.scrollTo({top:0,behavior:'smooth'});
-    }).catch(function(){
-      if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
-      toast('Could not submit your passport renewal request — please try again.');
-    });
-  }else{
-    if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
-    var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
+  var msgText='Passport Renewal Request'
+    +'\n\nName: '+name
+    +'\nEmail: '+email
+    +'\nPhone: '+phone
+    +'\nBirth Certificate Number (IA No.): '+ia
+    +'\nBiography Page File: '+bio.name
+    +'\nPassport Photo File: '+photo.name
+    +'\n\nI will attach my biography page and passport photo here in this chat.';
+  /* Best-effort backend record — does not block the WhatsApp handoff */
+  try{ if(window.SS&&typeof SS.sendContactMessage==='function'){ SS.sendContactMessage({name:name,email:email,phone:phone,subject:'Passport Renewal Request',message:msgText}).catch(function(){}); } }catch(e){}
+  var btn=document.querySelector('#p-passport .auth-submit');
+  if(btn){var origBtn=btn.innerHTML;btn.innerHTML='<i class="fas fa-check-circle"></i> Opening WhatsApp…';btn.style.pointerEvents='none';setTimeout(function(){btn.innerHTML=origBtn;btn.style.pointerEvents=''},4000);}
+  var msg=document.getElementById('passportMsg');if(msg)msg.style.display='block';
+  var waUrl='https://wa.me/18764650630?text='+encodeURIComponent(msgText);
+  var win=window.open(waUrl,'_blank');
+  if(!win){window.location.href=waUrl;}
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function pointFromPercent(el, pt){
