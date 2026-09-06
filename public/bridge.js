@@ -66,6 +66,21 @@
     });
   }
 
+  function requestPasswordReset(email) {
+    return api('auth', 'POST', { action: 'request-reset', email: email });
+  }
+  function resetPassword(email, code, newPassword) {
+    return api('auth', 'POST', { action: 'reset-password', email: email, code: code, newPassword: newPassword }).then(function (res) {
+      if (res && res.token) {
+        setToken(res.token);
+        try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
+        document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
+      }
+      return res;
+    });
+  }
+  function getMyBlogRequests() { return api('blog?type=my-requests', 'GET'); }
+
   // Exchange the admin passcode for a real server token so the passcode alone
   // is enough to publish edits/uploads to the live site (no separate account needed).
   function passcodeLogin(passcode) {
@@ -482,6 +497,9 @@
     getBlogRequests: getBlogRequests,
     reviewBlogRequest: reviewBlogRequest,
     approveBlogRequest: approveBlogRequest,
+    getMyBlogRequests: getMyBlogRequests,
+    requestPasswordReset: requestPasswordReset,
+    resetPassword: resetPassword,
 
     sendContactMessage: sendContactMessage,
     getContactMessages: getContactMessages,

@@ -1,5 +1,6 @@
 const db = require('../_lib/db');
-const { requireAdmin, requireAuth, requireEditor, getUser, uid } = require('../_lib/auth');
+const { requireAdmin, requireAuth, requireEditor, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 
 /* Build a URL-safe slug from a title. */
 function slugify(s) {
@@ -35,6 +36,17 @@ module.exports = async function handler(req, res) {
       if (!editor) return;
       const requests = await db.getCollection('blog-requests');
       requests.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+      return res.status(200).json({ ok: true, requests });
+    }
+
+    // A signed-in member's own submissions (with status), for their dashboard.
+    if (type === 'my-requests') {
+      const caller = requireAuth(req, res);
+      if (!caller) return;
+      const requests = (await db.getCollection('blog-requests'))
+        .filter(r => r.userId === caller.id)
+        .sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
+        .map(({ email, ...r }) => r);
       return res.status(200).json({ ok: true, requests });
     }
 
@@ -76,6 +88,27 @@ module.exports = async function handler(req, res) {
       };
 
       await db.addToCollection('blog-requests', request);
+
+      // Notify the team so requests don't sit unseen in the admin queue.
+      sendEmail({
+        to: BUSINESS_EMAIL,
+        replyTo: request.email,
+        subject: `New blog request: "${request.title}" from ${request.name}`,
+        html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#1a2b3f">
+          <h2 style="color:#0a3557">New blog request &mdash; Sight Seers Club</h2>
+          <table style="border-collapse:collapse;width:100%;font-size:14px">
+            <tr><td style="padding:6px 8px;font-weight:bold;width:110px">Writer</td><td style="padding:6px 8px">${escapeHtml(request.name)}</td></tr>
+            <tr style="background:#f5f5f5"><td style="padding:6px 8px;font-weight:bold">Email</td><td style="padding:6px 8px">${escapeHtml(request.email)}</td></tr>
+            <tr><td style="padding:6px 8px;font-weight:bold">Title</td><td style="padding:6px 8px">${escapeHtml(request.title)}</td></tr>
+            <tr style="background:#f5f5f5"><td style="padding:6px 8px;font-weight:bold">Category</td><td style="padding:6px 8px">${escapeHtml(request.category)}</td></tr>
+          </table>
+          ${request.excerpt ? `<p style="margin:12px 0 4px;font-weight:bold">Excerpt</p><p style="margin:0;color:#4a5a68">${escapeHtml(request.excerpt)}</p>` : ''}
+          <p style="margin:14px 0 4px;font-weight:bold">Article</p>
+          <div style="white-space:pre-wrap;color:#4a5a68;border-left:3px solid #e2e8ee;padding-left:12px">${escapeHtml((request.content || '').slice(0, 4000))}</div>
+          <p style="color:#888;font-size:12px;margin-top:18px">Open your admin portal to approve &amp; publish it, or reject it.</p>
+        </div>`
+      }).catch(() => {});
+
       return res.status(201).json({ ok: true, request });
     }
 

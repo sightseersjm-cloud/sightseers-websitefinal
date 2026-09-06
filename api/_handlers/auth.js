@@ -185,6 +185,69 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
+  // Step 1 of self-service reset: email the user a 6-digit code.
+  if (action === 'request-reset') {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+    if (!checkRate('reset:' + clientIp)) {
+      return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+    }
+    const cleanEmail = String(email).trim().toLowerCase();
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.email === cleanEmail);
+    // Only send if the account exists, but always return ok so we don't reveal which emails are registered.
+    if (idx !== -1) {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      users[idx].resetCode = code;
+      users[idx].resetExpires = Date.now() + 30 * 60 * 1000; // 30 minutes
+      await db.setCollection('users', users);
+      const firstName = (users[idx].name || 'there').split(' ')[0];
+      sendEmail({
+        to: cleanEmail,
+        subject: `Your Sight Seers password reset code: ${code}`,
+        html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;color:#1a2b3f">
+          <h2 style="color:#0a3557">Password reset</h2>
+          <p>Hi ${firstName}, use this code to reset your Sight Seers Travel Club password. It expires in 30 minutes.</p>
+          <p style="font-size:32px;font-weight:800;letter-spacing:8px;color:#0d6e96;background:#f4f7fa;border-radius:12px;padding:18px;text-align:center">${code}</p>
+          <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email — your password stays the same.</p>
+        </div>`
+      }).catch(() => {});
+    }
+    return res.status(200).json({ ok: true });
+  }
+
+  // Step 2 of self-service reset: verify the code and set a new password.
+  if (action === 'reset-password') {
+    const { email, code, newPassword } = req.body;
+    if (!email || !code || !newPassword) return res.status(400).json({ error: 'Email, code and new password are required' });
+    if (!checkRate('reset:' + clientIp)) {
+      return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+    }
+    const pwError = validatePassword(String(newPassword));
+    if (pwError) return res.status(400).json({ error: pwError });
+
+    const cleanEmail = String(email).trim().toLowerCase();
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.email === cleanEmail);
+    if (idx === -1 || !users[idx].resetCode || String(code) !== String(users[idx].resetCode)) {
+      return res.status(400).json({ error: 'That reset code is not correct.' });
+    }
+    if (!users[idx].resetExpires || Date.now() > users[idx].resetExpires) {
+      return res.status(400).json({ error: 'That reset code has expired. Please request a new one.' });
+    }
+
+    users[idx].passwordHash = hashPassword(String(newPassword));
+    delete users[idx].resetCode;
+    delete users[idx].resetExpires;
+    users[idx].updatedAt = new Date().toISOString();
+    await db.setCollection('users', users);
+
+    const u = users[idx];
+    const token = createToken({ id: u.id, email: u.email, name: u.name, role: u.role });
+    const { passwordHash, ...safe } = u;
+    return res.status(200).json({ ok: true, token, user: safe });
+  }
+
   if (action === 'admin-create') {
     const admin = requireAdmin(req, res);
     if (!admin) return;

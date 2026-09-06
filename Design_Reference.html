@@ -47771,3 +47771,181 @@ function vtXRStatus(msg){
   document.addEventListener('ss-account-updated', function(){ setTimeout(function(){injectAdmin(); loadLive();},150); });
 })();
 </script>
+
+<style>
+.ss-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#7a8896;cursor:pointer;font-size:15px;padding:4px;line-height:1;z-index:2}
+.ss-eye:hover{color:#0d5371}
+.ss-field-rel{position:relative}
+.ss-forgot-row{margin-top:10px;text-align:center}
+.ss-forgot-link{background:none;border:none;color:#0d5371;font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline;padding:2px}
+.ss-reset-overlay{position:fixed;inset:0;background:rgba(6,20,32,.6);z-index:100000;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:48px 18px}
+.ss-reset-overlay.on{display:flex}
+.ss-reset-modal{background:#fff;max-width:420px;width:100%;border-radius:18px;padding:28px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.ss-reset-modal h3{margin:0 0 6px;color:#0a3557;font-size:21px}
+.ss-reset-modal p.sub{margin:0 0 18px;color:#6b7a8d;font-size:13.5px;line-height:1.6}
+.ss-reset-modal label{display:block;font-size:12px;font-weight:700;color:#33424f;margin:12px 0 5px}
+.ss-reset-modal input{width:100%;padding:12px 40px 12px 13px;border:1px solid #d7dee5;border-radius:10px;font-size:15px}
+.ss-reset-btn{width:100%;margin-top:18px;border:none;border-radius:11px;padding:13px;background:#ef8731;color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+.ss-reset-btn[disabled]{opacity:.6;cursor:default}
+.ss-reset-close{position:absolute;top:12px;right:14px;border:none;background:#f1f4f7;color:#33424f;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
+.ss-reset-status{margin-top:12px;font-size:13px;min-height:18px}
+.ss-reset-status.err{color:#c0392b}.ss-reset-status.ok{color:#2f7d43}
+.ss-mysubs{margin-top:22px}
+.ss-mysubs-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ss-sub-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border:1px solid rgba(6,58,99,.1);border-radius:11px;margin-bottom:8px;background:#fff}
+.ss-sub-row strong{font-size:14px;color:#0d2a43;font-weight:700}
+.ss-sub-row .cat{font-size:12px;color:#6a7a88}
+.ss-sub-badge{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.ss-sub-badge.wait{background:#fdf1dc;color:#a9701a}.ss-sub-badge.ok{background:#e6f4ea;color:#2f7d43}.ss-sub-badge.no{background:#fbe9e7;color:#b23b2e}
+.ss-mysubs-empty{font-size:13px;color:#7a8896}
+</style>
+<script id="ss-club-portal-v1">
+(function(){
+  function S(){ return window.SS; }
+  function esc(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  /* ---------- password show / hide ---------- */
+  function addEye(input){
+    if(!input || input.dataset.ssEye==='1') return;
+    var wrap=input.parentElement; if(!wrap) return;
+    input.dataset.ssEye='1';
+    wrap.classList.add('ss-field-rel');
+    var b=document.createElement('button');
+    b.type='button'; b.className='ss-eye'; b.setAttribute('aria-label','Show password');
+    b.innerHTML='<i class="fas fa-eye"></i>';
+    b.addEventListener('click',function(){
+      var show=input.type==='password';
+      input.type=show?'text':'password';
+      b.innerHTML=show?'<i class="fas fa-eye-slash"></i>':'<i class="fas fa-eye"></i>';
+      b.setAttribute('aria-label',show?'Hide password':'Show password');
+    });
+    wrap.appendChild(b);
+  }
+
+  /* ---------- forgot-password flow ---------- */
+  function ensureResetOverlay(){
+    var ov=document.getElementById('ssResetOverlay');
+    if(ov) return ov;
+    ov=document.createElement('div'); ov.id='ssResetOverlay'; ov.className='ss-reset-overlay';
+    ov.innerHTML='<div class="ss-reset-modal">'+
+      '<button class="ss-reset-close" aria-label="Close">&times;</button>'+
+      '<h3>Reset your password</h3>'+
+      '<p class="sub" id="ssResetSub">Enter your account email and we\'ll send you a 6-digit reset code.</p>'+
+      '<div id="ssResetStep1">'+
+        '<label for="ssResetEmail">Email address</label>'+
+        '<input type="email" id="ssResetEmail" autocomplete="email">'+
+        '<button class="ss-reset-btn" id="ssResetSendBtn">Send reset code</button>'+
+      '</div>'+
+      '<div id="ssResetStep2" style="display:none">'+
+        '<label for="ssResetCode">6-digit code</label>'+
+        '<input type="text" id="ssResetCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code">'+
+        '<label for="ssResetPass">New password</label>'+
+        '<div class="ss-field-rel"><input type="password" id="ssResetPass" autocomplete="new-password"></div>'+
+        '<button class="ss-reset-btn" id="ssResetDoBtn">Reset password &amp; sign in</button>'+
+      '</div>'+
+      '<div class="ss-reset-status" id="ssResetStatus"></div>'+
+    '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click',function(e){ if(e.target===ov||(e.target.closest&&e.target.closest('.ss-reset-close'))) close(); });
+    function setStatus(m,ok){ var s=ov.querySelector('#ssResetStatus'); s.textContent=m||''; s.className='ss-reset-status '+(ok?'ok':(m?'err':'')); }
+    function close(){ ov.classList.remove('on'); }
+    ov.querySelector('#ssResetSendBtn').addEventListener('click',function(){
+      var email=(ov.querySelector('#ssResetEmail').value||'').trim();
+      if(!email){ setStatus('Please enter your email.'); return; }
+      if(!S()||!S().requestPasswordReset){ setStatus('Still loading — try again in a moment.'); return; }
+      var btn=this; btn.disabled=true; btn.textContent='Sending…'; setStatus('');
+      S().requestPasswordReset(email).then(function(){
+        ov.querySelector('#ssResetStep1').style.display='none';
+        ov.querySelector('#ssResetStep2').style.display='block';
+        ov.querySelector('#ssResetSub').textContent='We sent a code to '+email+' (if an account exists). Enter it below with your new password.';
+        addEye(ov.querySelector('#ssResetPass'));
+        setStatus('Code sent — check your email (and spam).',true);
+      }).catch(function(err){ setStatus((err&&err.message)||'Could not send the code. Please try again.'); })
+        .then(function(){ btn.disabled=false; btn.textContent='Send reset code'; });
+    });
+    ov.querySelector('#ssResetDoBtn').addEventListener('click',function(){
+      var email=(ov.querySelector('#ssResetEmail').value||'').trim();
+      var code=(ov.querySelector('#ssResetCode').value||'').trim();
+      var pass=(ov.querySelector('#ssResetPass').value||'');
+      if(!code||!pass){ setStatus('Enter the code and a new password.'); return; }
+      if(!S()||!S().resetPassword){ setStatus('Still loading — try again in a moment.'); return; }
+      var btn=this; btn.disabled=true; btn.textContent='Resetting…'; setStatus('');
+      S().resetPassword(email, code, pass).then(function(){
+        setStatus('Password reset — you\'re signed in.',true);
+        if(window.toast) toast('Password updated. Welcome back!');
+        setTimeout(close,900);
+      }).catch(function(err){ setStatus((err&&err.message)||'Could not reset. Check your code and try again.'); })
+        .then(function(){ btn.disabled=false; btn.textContent='Reset password & sign in'; });
+    });
+    return ov;
+  }
+  window.ssOpenForgotPassword=function(){
+    var ov=ensureResetOverlay();
+    var em=document.getElementById('unifiedEmail');
+    var pre=em&&em.value?em.value.trim():'';
+    ov.querySelector('#ssResetEmail').value=pre;
+    ov.querySelector('#ssResetStep1').style.display='block';
+    ov.querySelector('#ssResetStep2').style.display='none';
+    ov.querySelector('#ssResetStatus').textContent='';
+    ov.querySelector('#ssResetSub').textContent='Enter your account email and we\'ll send you a 6-digit reset code.';
+    ov.classList.add('on');
+  };
+  function injectForgot(){
+    var pass=document.getElementById('unifiedPassword');
+    if(pass) addEye(pass);
+    var toggleRow=document.querySelector('#p-account .auth-toggle-row');
+    if(toggleRow && !document.getElementById('ssForgotRow')){
+      var row=document.createElement('div');
+      row.id='ssForgotRow'; row.className='ss-forgot-row';
+      row.innerHTML='<button type="button" class="ss-forgot-link" onclick="ssOpenForgotPassword()">Forgot password?</button>';
+      toggleRow.parentNode.insertBefore(row, toggleRow.nextSibling);
+    }
+  }
+
+  /* ---------- member: My submissions ---------- */
+  function subBadge(st){
+    if(st==='approved') return '<span class="ss-sub-badge ok">Published</span>';
+    if(st==='rejected') return '<span class="ss-sub-badge no">Not approved</span>';
+    return '<span class="ss-sub-badge wait">In review</span>';
+  }
+  function renderMySubs(){
+    var host=document.getElementById('ssMySubsList'); if(!host) return;
+    if(!S()||!S().getMyBlogRequests){ return; }
+    S().getMyBlogRequests().then(function(res){
+      var reqs=(res&&res.requests)||[];
+      if(!reqs.length){ host.innerHTML='<p class="ss-mysubs-empty">You haven\'t submitted any blog posts yet. Use “Create a Blog” above to write one.</p>'; return; }
+      host.innerHTML=reqs.map(function(r){
+        return '<div class="ss-sub-row"><div><strong>'+esc(r.title||r.topic||'Untitled')+'</strong><div class="cat">'+esc(r.category||'Guest Journal')+'</div></div>'+subBadge(r.status)+'</div>';
+      }).join('');
+    }).catch(function(){ /* not signed in / no data */ });
+  }
+  window.ssRenderMySubmissions=renderMySubs;
+  function injectMySubs(){
+    var dash=document.getElementById('accountDashboard'); if(!dash) return;
+    var shell=dash.querySelector('.dashboard-shell')||dash;
+    if(dash.querySelector('#ssMySubs')) return;
+    var sec=document.createElement('div');
+    sec.id='ssMySubs'; sec.className='ss-mysubs';
+    sec.innerHTML='<div class="ss-mysubs-head"><span class="label-eyebrow"><i class="fas fa-feather-pointed"></i> My blog submissions</span></div><div id="ssMySubsList"><p class="ss-mysubs-empty">Loading…</p></div>';
+    shell.appendChild(sec);
+    renderMySubs();
+  }
+
+  /* ---------- boot ---------- */
+  function tick(){ injectForgot(); injectMySubs(); }
+  function wrapNav(){
+    if(typeof window.nav==='function' && !window.nav.__ssClubWrapped){
+      var orig=window.nav;
+      window.nav=function(){ var r=orig.apply(this,arguments);
+        try{ if(arguments[0]==='account') setTimeout(function(){ injectMySubs(); renderMySubs(); injectForgot(); },200); }catch(e){}
+        return r; };
+      window.nav.__ssClubWrapped=true;
+    }
+  }
+  function boot(){ wrapNav(); tick(); setTimeout(function(){wrapNav();tick();},800); setTimeout(tick,2000); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  document.addEventListener('ss-account-updated', function(){ setTimeout(function(){ tick(); renderMySubs(); },150); });
+  var mo=new MutationObserver(function(){ injectForgot(); injectMySubs(); });
+  try{ mo.observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
