@@ -86,6 +86,15 @@ function requireAdmin(req, res) {
   return user;
 }
 
+/* Content-management guard: full admins AND passcode editors may publish
+   site content (blog posts, etc.), but not read customer PII. */
+function requireEditor(req, res) {
+  const user = getUser(req);
+  if (!user) { res.status(401).json({ error: 'Sign in required' }); return null; }
+  if (user.role !== 'admin' && user.role !== 'editor') { res.status(403).json({ error: 'Editor or admin access required' }); return null; }
+  return user;
+}
+
 function uid() { return crypto.randomUUID(); }
 
 function escapeHtml(str) {
@@ -97,4 +106,4 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, uid, escapeHtml, ADMIN_CODE };
+module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml, ADMIN_CODE };

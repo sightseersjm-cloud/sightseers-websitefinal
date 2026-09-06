@@ -1,5 +1,28 @@
 const db = require('../_lib/db');
-const { requireAdmin, requireAuth, getUser, uid } = require('../_lib/auth');
+const { requireAdmin, requireAuth, requireEditor, getUser, uid } = require('../_lib/auth');
+
+/* Build a URL-safe slug from a title. */
+function slugify(s) {
+  return String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('post-' + Date.now());
+}
+/* Turn an approved request into a published post record. */
+function postFromRequest(r, editor) {
+  return {
+    id: uid(),
+    title: (r.title || r.topic || 'Untitled').trim(),
+    slug: slugify(r.title || r.topic),
+    excerpt: (r.excerpt || '').trim(),
+    content: r.content || r.outline || '',
+    coverImage: r.coverImage || r.image || '',
+    author: r.name || r.authorName || 'Guest writer',
+    tags: r.tags || [],
+    category: (r.category || 'Guest Journal').trim(),
+    status: 'published',
+    fromRequestId: r.id,
+    createdBy: editor.id,
+    createdAt: new Date().toISOString()
+  };
+}
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -8,9 +31,10 @@ module.exports = async function handler(req, res) {
     const { id, type } = req.query || {};
 
     if (type === 'requests') {
-      const admin = requireAdmin(req, res);
-      if (!admin) return;
+      const editor = requireEditor(req, res);
+      if (!editor) return;
       const requests = await db.getCollection('blog-requests');
+      requests.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
       return res.status(200).json({ ok: true, requests });
     }
 
@@ -28,15 +52,23 @@ module.exports = async function handler(req, res) {
 
     if (action === 'submit-request') {
       const user = getUser(req);
-      const { name, email, topic, outline, sampleUrl } = req.body;
-      if (!name || !email || !topic) return res.status(400).json({ error: 'Name, email and topic required' });
+      const { name, email, title, topic, excerpt, content, coverImage, image, outline, category, sampleUrl } = req.body;
+      const postTitle = (title || topic || '').trim();
+      const body = (content || outline || '').trim();
+      if (!name || !email || !postTitle) return res.status(400).json({ error: 'Name, email and a title are required' });
+      if (!body) return res.status(400).json({ error: 'Please include the blog article content' });
 
       const request = {
         id: uid(),
         userId: user ? user.id : null,
         name: name.trim(),
         email: email.trim().toLowerCase(),
-        topic: topic.trim(),
+        title: postTitle,
+        topic: postTitle,
+        excerpt: (excerpt || '').trim(),
+        content: body,
+        coverImage: (coverImage || image || '').trim(),
+        category: (category || 'Guest Journal').trim(),
         outline: (outline || '').trim(),
         sampleUrl: (sampleUrl || '').trim(),
         status: 'pending',
@@ -48,8 +80,8 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'review-request') {
-      const admin = requireAdmin(req, res);
-      if (!admin) return;
+      const editor = requireEditor(req, res);
+      if (!editor) return;
 
       const { id, status: newStatus, note } = req.body;
       if (!id || !newStatus) return res.status(400).json({ error: 'Request ID and status required' });
@@ -57,15 +89,42 @@ module.exports = async function handler(req, res) {
       const request = await db.updateInCollection('blog-requests', id, {
         status: newStatus,
         adminNote: note || '',
-        reviewedBy: admin.id
+        reviewedBy: editor.id
       });
       if (!request) return res.status(404).json({ error: 'Request not found' });
 
       return res.status(200).json({ ok: true, request });
     }
 
+    /* One click: approve a member's request AND publish it as a live post. */
+    if (action === 'approve-request') {
+      const editor = requireEditor(req, res);
+      if (!editor) return;
+
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ error: 'Request ID required' });
+
+      const requests = await db.getCollection('blog-requests');
+      const request = requests.find(r => r.id === id);
+      if (!request) return res.status(404).json({ error: 'Request not found' });
+      if (request.postId) {
+        return res.status(200).json({ ok: true, alreadyPublished: true, postId: request.postId });
+      }
+
+      const post = postFromRequest(request, editor);
+      await db.addToCollection('blog-posts', post);
+      await db.updateInCollection('blog-requests', id, {
+        status: 'approved',
+        reviewedBy: editor.id,
+        postId: post.id,
+        approvedAt: new Date().toISOString()
+      });
+
+      return res.status(201).json({ ok: true, post });
+    }
+
     if (action === 'create') {
-      const admin = requireAdmin(req, res);
+      const admin = requireEditor(req, res);
       if (!admin) return;
 
       const { title, slug, excerpt, content, coverImage, author, tags, category } = req.body;
@@ -91,7 +150,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'update') {
-      const admin = requireAdmin(req, res);
+      const admin = requireEditor(req, res);
       if (!admin) return;
 
       const { id, ...updates } = req.body;
@@ -105,7 +164,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'delete') {
-      const admin = requireAdmin(req, res);
+      const admin = requireEditor(req, res);
       if (!admin) return;
 
       const { id } = req.body;

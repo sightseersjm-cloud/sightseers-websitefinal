@@ -47591,3 +47591,183 @@ function vtXRStatus(msg){
   try{ new MutationObserver(function(muts){ muts.forEach(function(m){ if(m.addedNodes) m.addedNodes.forEach(function(n){ if(n.tagName==='IMG') bind(n); else if(n.querySelectorAll) scan(n); }); }); }).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
 </script>
+
+<style>
+.ssbl-wrap{margin-top:16px}
+.ssbl-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
+.ssbl-refresh{border:1px solid rgba(6,58,99,.2);background:#fff;color:#063a63;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.ssbl-card{border:1px solid rgba(6,58,99,.12);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#fff}
+.ssbl-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ssbl-top strong{font-size:15px;color:#0d2a43}
+.ssbl-badge{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.ssbl-badge.wait{background:#fdf1dc;color:#a9701a}.ssbl-badge.ok{background:#e6f4ea;color:#2f7d43}.ssbl-badge.no{background:#fbe9e7;color:#b23b2e}
+.ssbl-meta{font-size:12px;color:#6a7a88;margin:6px 0}
+.ssbl-ex{font-size:13px;color:#33424f;margin:4px 0;font-style:italic}
+.ssbl-body{font-size:13px;color:#4a5a68;line-height:1.6;margin:6px 0 12px;white-space:pre-wrap}
+.ssbl-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ssbl-btn{border:none;border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer}
+.ssbl-btn.approve{background:#2f8a43;color:#fff}
+.ssbl-btn.reject{background:#f3f4f6;color:#b23b2e;border:1px solid #e6c9c5}
+.ssbl-btn[disabled]{opacity:.6;cursor:default}
+.ssbl-empty{font-size:13px;color:#7a8896;padding:10px 0}
+.ss-post-overlay{position:fixed;inset:0;background:rgba(6,20,32,.6);z-index:99999;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:40px 18px}
+.ss-post-overlay.on{display:flex}
+.ss-post-modal{background:#fff;max-width:720px;width:100%;border-radius:18px;padding:26px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.ss-post-modal img{width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin-bottom:16px}
+.ss-post-modal h2{font-size:26px;color:#0d2a43;margin:8px 0 14px;font-family:'Playfair Display',serif}
+.ss-post-close{position:absolute;top:14px;right:16px;border:none;background:rgba(0,0,0,.5);color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer;line-height:1}
+.ss-post-content{font-size:15px;line-height:1.85;color:#33424f}
+</style>
+<script id="ss-blog-live-v1">
+(function(){
+  function S(){ return window.SS; }
+  function user(){ try{ return (typeof currentUser==='function') ? currentUser() : null; }catch(e){ return null; } }
+  function esc(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function note(el,msg,ok){ if(!el)return; el.textContent=msg; el.className='inline-status '+(ok?'ok':'err'); }
+
+  /* ---------- MEMBER: submit a blog request to the server ---------- */
+  window.submitBlogRequest=function(){
+    var status=document.getElementById('blogRequestStatus');
+    var u=user();
+    if(!u){ note(status,'Please sign in to send a blog request.',false); if(window.nav)nav('account'); return; }
+    var g=function(id){ var el=document.getElementById(id); return el?String(el.value||'').trim():''; };
+    var title=g('blogReqTitle'), category=g('blogReqCategory')||'Guest Journal',
+        image=g('blogReqImage'), excerpt=g('blogReqExcerpt'), content=g('blogReqContent');
+    if(!title||!content){ note(status,'Please add a title and the full blog article before sending.',false); return; }
+    if(!S()||!S().submitBlogRequest){ note(status,'Blog service is still loading — please try again in a moment.',false); return; }
+    note(status,'Sending your blog request…',true);
+    S().submitBlogRequest({ name:u.name||'Guest writer', email:u.email||'', title:title, category:category, coverImage:image, excerpt:excerpt, content:content })
+      .then(function(){
+        ['blogReqTitle','blogReqCategory','blogReqImage','blogReqExcerpt','blogReqContent'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+        note(status,'Your blog request was sent to the Sight Seers team for review. It goes live once approved.',true);
+        if(window.toast) toast('Blog request submitted for approval.');
+      })
+      .catch(function(err){ note(status,(err&&err.message)||'Could not send your request — please try again.',false); });
+  };
+
+  /* ---------- ADMIN: live request queue (server-backed) ---------- */
+  function reqCard(r){
+    var pending = r.status==='pending' || !r.status;
+    var badge = r.status==='approved' ? '<span class="ssbl-badge ok">Published</span>'
+              : r.status==='rejected' ? '<span class="ssbl-badge no">Rejected</span>'
+              : '<span class="ssbl-badge wait">Pending</span>';
+    var actions = pending
+      ? '<button class="ssbl-btn approve" data-id="'+esc(r.id)+'">Approve &amp; Publish</button><button class="ssbl-btn reject" data-id="'+esc(r.id)+'">Reject</button>'
+      : (r.status==='rejected' ? '<button class="ssbl-btn approve" data-id="'+esc(r.id)+'">Publish anyway</button>' : '');
+    var body=(r.content||'');
+    return '<div class="ssbl-card">'+
+      '<div class="ssbl-top"><strong>'+esc(r.title||r.topic||'Untitled')+'</strong>'+badge+'</div>'+
+      '<div class="ssbl-meta">'+esc(r.name||'—')+' &middot; '+esc(r.email||'')+' &middot; '+esc(r.category||'Guest Journal')+'</div>'+
+      (r.excerpt?'<div class="ssbl-ex">'+esc(r.excerpt)+'</div>':'')+
+      '<div class="ssbl-body">'+esc(body.slice(0,500))+(body.length>500?'…':'')+'</div>'+
+      '<div class="ssbl-actions">'+actions+'</div>'+
+    '</div>';
+  }
+  function loadLive(){
+    var host=document.getElementById('ssBlogReqLive'); if(!host) return;
+    if(!S()||!S().getBlogRequests){ host.innerHTML='<p class="ssbl-empty">Loading…</p>'; return; }
+    host.innerHTML='<p class="ssbl-empty">Loading requests…</p>';
+    S().getBlogRequests().then(function(res){
+      var reqs=(res&&res.requests)||[];
+      if(!reqs.length){ host.innerHTML='<p class="ssbl-empty">No blog requests yet. When a member submits one from their account, it appears here to approve.</p>'; return; }
+      host.innerHTML=reqs.map(reqCard).join('');
+    }).catch(function(err){
+      var denied=err&&(err.status===401||err.status===403);
+      host.innerHTML='<p class="ssbl-empty">'+esc(denied?'Enter your admin passcode above to load member blog requests.':((err&&err.message)||'Could not load requests.'))+'</p>';
+    });
+  }
+  window.ssLoadBlogRequests=loadLive;
+
+  document.addEventListener('click', function(e){
+    var a=e.target.closest && e.target.closest('#ssBlogReqLive .ssbl-btn'); if(!a) return;
+    e.preventDefault();
+    var id=a.getAttribute('data-id'); if(!id||!S()) return;
+    if(a.classList.contains('approve')){
+      a.textContent='Publishing…'; a.disabled=true;
+      S().approveBlogRequest(id).then(function(){ if(window.toast)toast('Published to the blog.'); loadLive(); renderPublic(true); })
+        .catch(function(err){ a.disabled=false; a.textContent='Approve & Publish'; if(window.toast)toast((err&&err.message)||'Could not publish.'); });
+    } else if(a.classList.contains('reject')){
+      a.disabled=true;
+      S().reviewBlogRequest({id:id,status:'rejected'}).then(function(){ loadLive(); })
+        .catch(function(err){ a.disabled=false; if(window.toast)toast((err&&err.message)||'Could not update.'); });
+    }
+  });
+
+  function injectAdmin(){
+    var old=document.getElementById('adminBlogRequestList');
+    if(!old || document.getElementById('ssBlogReqLive')) return;
+    old.style.display='none';
+    var wrap=document.createElement('div');
+    wrap.className='ssbl-wrap';
+    wrap.innerHTML='<div class="ssbl-head"><span class="label-eyebrow"><i class="fas fa-inbox"></i> Member blog requests</span>'+
+      '<button type="button" class="ssbl-refresh" id="ssBlogReqRefresh">Refresh</button></div><div id="ssBlogReqLive"></div>';
+    old.parentNode.insertBefore(wrap, old.nextSibling);
+    var rb=wrap.querySelector('#ssBlogReqRefresh'); if(rb) rb.addEventListener('click', loadLive);
+    loadLive();
+  }
+
+  /* ---------- PUBLIC BLOG: render published posts ---------- */
+  var loadedPosts=[];
+  function postCard(p){
+    var img=p.coverImage||'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85&auto=format&fit=crop';
+    var d=p.createdAt?new Date(p.createdAt):new Date();
+    var ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    return '<article class="blog-gallery-item ss-live-post" data-id="'+esc(p.id)+'">'+
+      '<div class="blog-gallery-media"><img src="'+esc(img)+'" alt="'+esc(p.title)+'" loading="lazy"></div>'+
+      '<div class="blog-gallery-body"><span class="blog-gallery-cat">'+esc(p.category||'Guest Journal')+'</span>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt||(p.content||'').slice(0,140))+'</p>'+
+      '<span class="blog-gallery-date">'+esc(ds)+'</span></div></article>';
+  }
+  function renderPublic(force){
+    var track=document.querySelector('#p-blog .blog-gallery-track'); if(!track) return;
+    if(!S()||!S().getBlogPosts) return;
+    if(track.dataset.ssLoaded==='1' && !force) return;
+    track.dataset.ssLoaded='1';
+    S().getBlogPosts().then(function(res){
+      var posts=(res&&res.posts)||[]; loadedPosts=posts;
+      track.querySelectorAll('.ss-live-post').forEach(function(n){n.remove();});
+      posts.slice().reverse().forEach(function(p){ track.insertAdjacentHTML('afterbegin', postCard(p)); });
+    }).catch(function(){});
+  }
+  window.ssRenderPublishedBlog=renderPublic;
+
+  document.addEventListener('click', function(e){
+    var c=e.target.closest && e.target.closest('.ss-live-post'); if(!c) return;
+    e.preventDefault(); e.stopPropagation();
+    var id=c.getAttribute('data-id');
+    var p=loadedPosts.find(function(x){return String(x.id)===String(id);}); if(!p) return;
+    openOverlay(p);
+  }, true);
+  function openOverlay(p){
+    var ov=document.getElementById('ssPostOverlay');
+    if(!ov){ ov=document.createElement('div'); ov.id='ssPostOverlay'; ov.className='ss-post-overlay'; document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||(e.target.closest&&e.target.closest('.ss-post-close'))) ov.classList.remove('on'); }); }
+    var img=p.coverImage?'<img src="'+esc(p.coverImage)+'" alt="'+esc(p.title)+'">':'';
+    ov.innerHTML='<div class="ss-post-modal"><button class="ss-post-close" aria-label="Close">&times;</button>'+img+
+      '<span class="blog-gallery-cat">'+esc(p.category||'Guest Journal')+'</span><h2>'+esc(p.title)+'</h2>'+
+      '<div class="ss-post-content">'+esc(p.content||'').replace(/\n/g,'<br>')+'</div></div>';
+    ov.classList.add('on');
+  }
+
+  /* ---------- boot / nav hooks ---------- */
+  function tick(){
+    injectAdmin();
+    var b=document.getElementById('p-blog');
+    if(b && (b.classList.contains('active')||b.offsetParent!==null)) renderPublic(false);
+  }
+  function wrapNav(){
+    if(typeof window.nav==='function' && !window.nav.__ssBlogWrapped){
+      var orig=window.nav;
+      window.nav=function(){ var r=orig.apply(this,arguments);
+        try{ var t=arguments[0];
+          if(t==='blog') setTimeout(function(){renderPublic(true);},60);
+          if(t==='admin') setTimeout(function(){injectAdmin(); loadLive();},250);
+        }catch(e){} return r; };
+      window.nav.__ssBlogWrapped=true;
+    }
+  }
+  function boot(){ wrapNav(); tick(); setTimeout(function(){wrapNav();tick();},800); setTimeout(tick,2200); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  document.addEventListener('ss-account-updated', function(){ setTimeout(function(){injectAdmin(); loadLive();},150); });
+})();
+</script>
