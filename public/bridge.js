@@ -300,6 +300,7 @@
   function submitBlogRequest(data) { return api('blog', 'POST', Object.assign({ action: 'submit-request' }, data)); }
   function getBlogRequests() { return api('blog?type=requests', 'GET'); }
   function reviewBlogRequest(data) { return api('blog', 'POST', Object.assign({ action: 'review-request' }, data)); }
+  function approveBlogRequest(id) { return api('blog', 'POST', { action: 'approve-request', id: id }); }
 
   /* ── Contact ──────────────────────── */
 
@@ -480,6 +481,7 @@
     submitBlogRequest: submitBlogRequest,
     getBlogRequests: getBlogRequests,
     reviewBlogRequest: reviewBlogRequest,
+    approveBlogRequest: approveBlogRequest,
 
     sendContactMessage: sendContactMessage,
     getContactMessages: getContactMessages,
