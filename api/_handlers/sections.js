@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { requireAdmin, getUser, uid } = require('../_lib/auth');
+const { requireEditor, getUser, uid } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -10,7 +10,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const admin = requireAdmin(req, res);
+    const admin = requireEditor(req, res);
     if (!admin) return;
 
     const { action } = req.body;
