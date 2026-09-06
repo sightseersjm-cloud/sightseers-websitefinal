@@ -16247,6 +16247,7 @@ if(typeof vtInitPanoViewer==='function'){
                 </div>
 
                 <!-- Device Cards -->
+                <div class="vt-xr-devices-note" style="margin:0 0 14px;padding:10px 14px;border:1px dashed rgba(239,135,49,.45);border-radius:12px;background:rgba(239,135,49,.06);font-size:12.5px;color:#8a5a2b;line-height:1.6"><i class="fas fa-flask"></i> <strong>Preview:</strong> the headset capabilities below are in active development and roll out gradually — what's available depends on your device and the tour. The browser 360&deg; preview works today.</div>
                 <div class="vt-xr-devices-grid">
                   <!-- Apple Vision Pro -->
                   <div class="vt-xr-device-card" id="vt-xr-card-visionpro">
@@ -16925,7 +16926,7 @@ if(typeof vtInitPanoViewer==='function'){
               </div>
             </div>
             <button type="submit" class="vt-signup-btn"><i class="fas fa-rocket"></i> Join the Waitlist</button>
-            <p class="vt-signup-note">Free to join. You will be notified when V-Tours launches Summer 2026.</p>
+            <p class="vt-signup-note">Free to join — be the first to know as new live V-Tours experiences roll out.</p>
           </form>
         </div>
         <div class="vt-signup-card" id="vt-signup-guide" style="display:none">
@@ -24495,7 +24496,7 @@ function submitBook(){
       try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').selectedIndex=0;if(document.getElementById('b_budget'))document.getElementById('b_budget').selectedIndex=0;if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
       setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
     }).catch(function(err){
-      alert(err&&err.message?err.message:'Something went wrong. Please try again.');
+      toast(err&&err.message?err.message:'Something went wrong. Please try again.');
       if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
     });
   }else{
@@ -24574,7 +24575,7 @@ function submitPassportRenewal(){
   var bio=document.getElementById('passBioUpload')&&document.getElementById('passBioUpload').files&&document.getElementById('passBioUpload').files[0];
   var photo=document.getElementById('passPhotoUpload')&&document.getElementById('passPhotoUpload').files&&document.getElementById('passPhotoUpload').files[0];
   if(!name||!email||!phone||!ia||!bio||!photo){
-    alert('Please complete all required passport renewal fields before submitting.');
+    toast('Please complete all required passport renewal fields before submitting.');
     return;
   }
   var payload={name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()};
@@ -34728,7 +34729,7 @@ body.theme-night .page .tag{
       updateVisibleClubText();
       refreshPointsUI();
       if(window.showToast) showToast('Travel club settings saved.');
-      else alert('Travel club settings saved.');
+      else toast('Travel club settings saved.');
     };
 
     window.resetTravelClubSettings=function(){
@@ -47544,5 +47545,16 @@ function vtXRStatus(msg){
   if(el) el.textContent = msg;
 }
 
+})();
+</script>
+
+<script>
+/* Graceful fallback for hotlinked images that fail to load (e.g. Unsplash rate-limit/removal). No network needed. */
+(function(){
+  var PH='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#e8eef3"/><text x="50%" y="50%" fill="#9bb0c2" font-family="Raleway,Arial,sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">Sight Seers Caribbean</text></svg>');
+  function bind(img){ if(!img||img.dataset.fbk)return; img.dataset.fbk='1'; img.addEventListener('error',function(){ if(img.getAttribute('src')!==PH){ img.src=PH; } },{once:true}); }
+  function scan(root){ (root||document).querySelectorAll('img').forEach(bind); }
+  if(document.readyState!=='loading') scan(); else document.addEventListener('DOMContentLoaded',function(){scan();});
+  try{ new MutationObserver(function(muts){ muts.forEach(function(m){ if(m.addedNodes) m.addedNodes.forEach(function(n){ if(n.tagName==='IMG') bind(n); else if(n.querySelectorAll) scan(n); }); }); }).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
 </script>

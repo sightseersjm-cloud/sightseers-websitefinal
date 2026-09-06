@@ -1,5 +1,5 @@
-const BUSINESS_EMAIL = 'sightseersjm@gmail.com';
-const FROM = 'Sight Seers Caribbean <onboarding@resend.dev>';
+const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL || 'sightseersjm@gmail.com';
+const FROM = process.env.RESEND_FROM || 'Sight Seers Caribbean <onboarding@resend.dev>';
 const KEY  = process.env.RESEND_API_KEY || '';
 
 async function sendEmail({ to, subject, html }) {
