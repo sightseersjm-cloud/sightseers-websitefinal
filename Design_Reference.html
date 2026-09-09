@@ -20622,7 +20622,7 @@ const ADMIN_SECTION_SCHEMA=[
     {id:'adminPhone2',label:'Secondary Phone',type:'text'},
     {id:'adminEmail',label:'Email Address',type:'text',full:true},
     {id:'adminFooterAbout',label:'Footer About Text',type:'textarea',full:true},
-    {id:'adminGa4Id',label:'Google Analytics 4 Measurement ID',type:'text',full:true,placeholder:'G-XXXXXXXXXX',help:'Paste the Measurement ID from analytics.google.com (Admin → Data streams). Saves instantly and turns on visitor analytics site-wide. Leave blank to keep analytics off.'}
+    {id:'adminGa4Id',label:'Google Analytics 4 Measurement ID',type:'text',full:true,placeholder:'G-XXXXXXXXXX',help:'Paste the Measurement ID from analytics.google.com (Admin → Data streams). Use Save & Publish to turn on visitor analytics site-wide. Leave blank to keep analytics off.'}
   ]},
   {key:'home',label:'Home Page',intro:'Hero copy, homepage sections, Jamaica map art, feature cards and homepage image swaps.',open:true,fields:[
     {id:'adminHeroEyebrow',label:'Hero Eyebrow',type:'text'},
@@ -21057,17 +21057,19 @@ function loadPageEditorSettings(){
     var saved=JSON.parse(localStorage.getItem(PAGE_EDITOR_STORAGE_KEY)||'{}');
     var merged={};
     Object.keys(pageEditorDefaults).forEach(function(k){ merged[k]=pageEditorDefaults[k]; });
-    Object.keys(saved).forEach(function(k){ if(saved[k]) merged[k]=saved[k]; });
+    Object.keys(saved).forEach(function(k){ if(saved[k] !== null && saved[k] !== undefined) merged[k]=saved[k]; });
     return merged;
   }catch(e){return Object.assign({},pageEditorDefaults);}
 }
+window.PAGE_EDITOR_BINDINGS = PAGE_EDITOR_BINDINGS;
+window.PAGE_EDITOR_STORAGE_KEY = PAGE_EDITOR_STORAGE_KEY;
 function applyPageEditorSettings(){
   if(!Object.keys(pageEditorDefaults).length) pageEditorDefaults=capturePageEditorDefaults();
   pageEditorSettings=loadPageEditorSettings();
   Object.entries(PAGE_EDITOR_BINDINGS).forEach(([id,binding])=>{
     const el=document.querySelector(binding.selector);
     if(!el) return;
-    const value=(pageEditorSettings[id] || pageEditorDefaults[id] || '').trim();
+    const value=String(pageEditorSettings[id] ?? pageEditorDefaults[id] ?? '').trim();
     if(binding.mode==='bg' && value) el.style.backgroundImage=`url('${value.replace(/'/g,"%27")}')`;
     else if(binding.mode==='src' && value) {
       if(el.tagName==='IMG'){
@@ -21079,7 +21081,7 @@ function applyPageEditorSettings(){
       }
     }
     else if(binding.mode==='href' && value) el.setAttribute('href', value);
-    else if(binding.mode==='text' && value) el.textContent=value;
+    else if(binding.mode==='text') el.textContent=value;
   });
   getAllAdminImageFieldIds().forEach(updateAdminImagePreview);
 }
@@ -21206,7 +21208,8 @@ if(!siteSettings.heroImg2 || siteSettings.heroImg2.includes('photo-1436491865332
   }catch(e){}
 }
 let customerGalleryData=loadCustomerGallery();
-let adminUnlocked=sessionStorage.getItem('ss_admin_unlocked')==='1';
+let adminUnlocked=false;
+Object.defineProperty(window, 'adminUnlocked', {get(){return adminUnlocked;},set(value){adminUnlocked=!!value;},configurable:true});
 
 const TOURS=[
   {id:1,title:'Bamboo Rafting Adventure',cat:'Water Adventures',type:'water',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85&auto=format&fit=crop'],tag:'Popular',rating:'9.0',reviews:'(41 reviews)',dur:'4 hrs',pax:'1 to 8',price:75,priceLabel:'$75',optionLabel:'Tour Format',options:['Shared Experience','Private Upgrade'],desc:'Your raft. Your river. Your moment. Drift through Jamaica\'s lush interior on handcrafted bamboo, no rush, no crowds, just you and the island doing its thing.',meta:'Location: Jamaica · Category: Water Adventure · Includes: Local guide, scenic river ride, pickup coordination support',includes:['Guided bamboo rafting experience','Flexible planning support from Sight Seers','Ideal for couples, small groups and relaxed itineraries'],notes:['Transport add-ons can be arranged separately.','Wear light clothing and bring sun protection.'],highlights:['Scenic river route','Relaxed island pace','Great for couples']},
@@ -23515,43 +23518,7 @@ function updateAdminPortalState(){
   }
   if(adminUnlocked) updateAdminSigninBanner();
 }
-function updateAdminSigninBanner(){
-  const wrap=document.getElementById('adminFormWrap');
-  if(!wrap) return;
-  let banner=document.getElementById('adminSigninBanner');
-  if(!banner){
-    banner=document.createElement('div');
-    banner.id='adminSigninBanner';
-    wrap.insertBefore(banner, wrap.firstChild);
-  }
-  let canPublish=false, role='';
-  try{
-    const tok=(window.SS&&window.SS.getToken&&window.SS.getToken())||localStorage.getItem('ss_auth_token')||'';
-    const u=(window.SS&&window.SS.currentUser&&window.SS.currentUser())||null;
-    role=u&&u.role||'';
-    canPublish=!!tok && (role==='admin'||role==='editor');
-  }catch(e){}
-  if(canPublish){
-    banner.className='admin-signin-banner ok';
-    banner.innerHTML='<div><strong>Connected to the live website.</strong> Your text edits and image uploads publish to the live site for everyone.</div>';
-  }else{
-    // Auto-attempt passcode exchange, if it succeeds, re-render as green
-    if(window.SS&&typeof window.SS.passcodeLogin==='function'&&!banner.__ssAutoLoginAttempted){
-      banner.__ssAutoLoginAttempted=true;
-      banner.className='admin-signin-banner ok';
-      banner.innerHTML='<i class="fas fa-spinner fa-spin"></i><div>Connecting to the live website…</div>';
-      window.SS.passcodeLogin(window.ADMIN_PASSCODE||'SightSeers2026!').then(function(){
-        banner.__ssAutoLoginAttempted=false;
-        updateAdminSigninBanner();
-      }).catch(function(){
-        banner.__ssAutoLoginAttempted=false;
-        showBannerDisconnected(banner);
-      });
-      return;
-    }
-    showBannerDisconnected(banner);
-  }
-}
+function updateAdminSigninBanner(){ if(window.SSAdmin) window.SSAdmin.updateBanner(); }
 function showBannerDisconnected(banner){
   banner.className='admin-signin-banner warn';
   banner.innerHTML=''
@@ -23721,6 +23688,7 @@ document.addEventListener('ss-settings-sync-result',function(ev){
   var el=document.getElementById('adminSaveStatus');
   if(!el) return;
   var btn=document.getElementById('adminPubBtn');
+  if(d.pending) return;
   if(d.ok){
     el.textContent='Published to the live website, your changes are now live for everyone.';
     el.className='inline-status ok show';
@@ -23737,53 +23705,7 @@ document.addEventListener('ss-settings-sync-result',function(ev){
   }
 });
 
-function unlockAdminPortal(){
-  const input=document.getElementById('adminPasscode');
-  const status=document.getElementById('adminUnlockStatus');
-  if(!input||!status) return;
-  const isAdminUser=window.SS&&window.SS.isAdmin&&window.SS.isAdmin();
-  const passValue=input.value.trim();
-  if(passValue===ADMIN_PASSCODE||isAdminUser){
-    adminUnlocked=true;
-    sessionStorage.setItem('ss_admin_unlocked','1');
-    updateAdminPortalState();
-    input.value='';
-    // Exchange the passcode for a server token so edits and image uploads
-    // publish to the live site, no separate account needed.
-    if(window.SS&&typeof window.SS.getToken==='function'&&window.SS.getToken()){
-      status.textContent='Portal unlocked and connected, your edits publish to the live website.';
-      status.className='inline-status ok';
-      if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
-    }else if(window.SS&&typeof window.SS.passcodeLogin==='function'){
-      status.textContent='Portal unlocked. Connecting to the live website…';
-      status.className='inline-status ok';
-      window.SS.passcodeLogin(passValue||ADMIN_PASSCODE).then(function(){
-        status.textContent='Portal unlocked and connected, your edits and image uploads publish to the live website.';
-        status.className='inline-status ok';
-        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
-      }).catch(function(err){
-        var m=(err&&err.data&&err.data.error)||(err&&err.message)||'';
-        if(/not configured/i.test(m)){
-          status.textContent='Portal unlocked (preview mode). Server publishing is not configured yet.';
-        }else{
-          status.textContent='Portal unlocked (preview mode). Could not connect to the live website, edits save on this device only.';
-        }
-        status.className='inline-status err';
-        if(typeof updateAdminSigninBanner==='function') updateAdminSigninBanner();
-      });
-    }else{
-      status.textContent='Portal unlocked. The editing sections are now visible below.';
-      status.className='inline-status ok';
-    }
-  }else{
-    adminUnlocked=false;
-    sessionStorage.removeItem('ss_admin_unlocked');
-    updateAdminPortalState();
-    status.textContent='That passcode did not match the admin key.';
-    status.className='inline-status err';
-    input.value='';
-  }
-}
+function unlockAdminPortal(){ return window.SSAdmin && window.SSAdmin.unlockAdminPortal(); }
 function parseGalleryTextarea(value=''){
   const lines=String(value).split(/\n+/).map(l=>l.trim()).filter(Boolean);
   const parsed=lines.map(line=>{
@@ -23793,83 +23715,9 @@ function parseGalleryTextarea(value=''){
   return parsed.length?parsed:DEFAULT_CUSTOMER_GALLERY.slice();
 }
 
-function saveAdminPortal(){
-  if(!adminUnlocked) return;
-  try{ if(window.ssCaptureScroll) window.ssCaptureScroll(); if(window.ssReArmScroll) window.ssReArmScroll(1600); }catch(e){}
-  siteSettings={
-    brandName:document.getElementById('adminBrandName')?.value?.trim()||DEFAULT_SITE_SETTINGS.brandName,
-    tagline:document.getElementById('adminTagline')?.value?.trim()||DEFAULT_SITE_SETTINGS.tagline,
-    phone1:document.getElementById('adminPhone1')?.value?.trim()||DEFAULT_SITE_SETTINGS.phone1,
-    phone2:document.getElementById('adminPhone2')?.value?.trim()||DEFAULT_SITE_SETTINGS.phone2,
-    email:document.getElementById('adminEmail')?.value?.trim()||DEFAULT_SITE_SETTINGS.email,
-    heroEyebrow:document.getElementById('adminHeroEyebrow')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroEyebrow,
-    heroTitle:document.getElementById('adminHeroTitle')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroTitle,
-    heroEm:document.getElementById('adminHeroEm')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroEm,
-    heroSub:document.getElementById('adminHeroSub')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroSub,
-    aboutTitle:document.getElementById('adminAboutTitle')?.value?.trim()||DEFAULT_SITE_SETTINGS.aboutTitle,
-    aboutBody:document.getElementById('adminAboutBody')?.value?.trim()||DEFAULT_SITE_SETTINGS.aboutBody,
-    customerTitle:document.getElementById('adminCustomerTitle')?.value?.trim()||DEFAULT_SITE_SETTINGS.customerTitle,
-    customerSub:document.getElementById('adminCustomerSub')?.value?.trim()||DEFAULT_SITE_SETTINGS.customerSub,
-    heroImg1:document.getElementById('adminHeroImg1')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroImg1,
-    heroImg2:document.getElementById('adminHeroImg2')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroImg2,
-    heroImg3:document.getElementById('adminHeroImg3')?.value?.trim()||DEFAULT_SITE_SETTINGS.heroImg3,
-    aboutImage:document.getElementById('adminAboutImage')?.value?.trim()||DEFAULT_SITE_SETTINGS.aboutImage,
-    jamaicaImage:document.getElementById('adminJamaicaImage')?.value?.trim()||DEFAULT_SITE_SETTINGS.jamaicaImage,
-    jamaicaPins:document.getElementById('adminJamaicaPins')?.value?.trim()||'',
-    jamaicaPopupMode:(document.getElementById('adminJamaicaPopupMode')?.value==='always'?'always':'click'),
-    tropicalMotionIntensity:document.getElementById('adminTropicalMotionIntensity')?.value?.trim()||'100',
-    specialKicker:document.getElementById('adminSpecialKicker')?.value?.trim()||DEFAULT_SITE_SETTINGS.specialKicker,
-    specialTitle:document.getElementById('adminSpecialTitle')?.value?.trim()||DEFAULT_SITE_SETTINGS.specialTitle,
-    specialBody:document.getElementById('adminSpecialBody')?.value?.trim()||DEFAULT_SITE_SETTINGS.specialBody
-  };
-  customerGalleryData=parseGalleryTextarea(document.getElementById('adminGalleryData')?.value||'');
-  const nextPageSettings={};
-  if(!Object.keys(pageEditorDefaults).length) pageEditorDefaults=capturePageEditorDefaults();
-  Object.keys(PAGE_EDITOR_BINDINGS).forEach(id=>{
-    const value=document.getElementById(id)?.value?.trim()||'';
-    const fallback=pageEditorDefaults[id]||'';
-    if(value && value!==fallback) nextPageSettings[id]=value;
-  });
-  pageEditorSettings=nextPageSettings;
-  stayPageSettings={
-    ...DEFAULT_STAY_PAGE_SETTINGS,
-    ...stayPageSettings,
-    hubLead:document.getElementById('adminStaysHubLead')?.value?.trim()||DEFAULT_STAY_PAGE_SETTINGS.hubLead,
-    countryHeroTitle:(document.getElementById('adminStayCountryPrefix')?.value?.trim()||DEFAULT_STAY_PAGE_SETTINGS.countryHeroTitle),
-    countryLeadTemplate:document.getElementById('adminStayCountryLeadTemplate')?.value?.trim()||DEFAULT_STAY_PAGE_SETTINGS.countryLeadTemplate,
-    countryDescriptions:document.getElementById('adminStayCountryDescriptions')?.value?.trim()||'',
-    listings:parseStayListingsTextarea(document.getElementById('adminStayListingsData')?.value||'')
-  };
-  if(!getStayCountries().includes(activeStayCountry)) activeStayCountry=getStayCountries()[0]||'Jamaica';
-  localStorage.setItem('ss_site_settings',JSON.stringify(siteSettings));
-  localStorage.setItem('ss_customer_gallery',JSON.stringify(customerGalleryData));
-  localStorage.setItem(PAGE_EDITOR_STORAGE_KEY,JSON.stringify(pageEditorSettings));
-  localStorage.setItem(STAY_ADMIN_STORAGE_KEY,JSON.stringify(stayPageSettings));
-  applySiteSettings();
-  applyPageEditorSettings();
-  renderStays();
-  renderStayCountryPage();
-  const status=document.getElementById('adminSaveStatus');
-  if(status){status.textContent='Saved. Your page-by-page text and image updates were applied in this browser.';status.className='inline-status ok';}
-}
+function saveAdminPortal(){ return window.SSAdmin && window.SSAdmin.saveAdminPortal(); }
 
-function resetAdminPortal(){
-  if(!confirm('Reset the editable site content back to the default version?')) return;
-  localStorage.removeItem('ss_site_settings');
-  localStorage.removeItem('ss_customer_gallery');
-  localStorage.removeItem(PAGE_EDITOR_STORAGE_KEY);
-  localStorage.removeItem(STAY_ADMIN_STORAGE_KEY);
-  siteSettings=loadSiteSettings();
-  customerGalleryData=loadCustomerGallery();
-  pageEditorSettings=loadPageEditorSettings();
-  stayPageSettings=loadStayPageSettings();
-  applySiteSettings();
-  applyPageEditorSettings();
-  renderStays();
-  renderStayCountryPage();
-  const status=document.getElementById('adminSaveStatus');
-  if(status){status.textContent='Defaults restored.';status.className='inline-status ok';}
-}
+function resetAdminPortal(){ return window.SSAdmin && window.SSAdmin.resetAdminPortal(); }
 
 function getUsers(){
   try{return JSON.parse(localStorage.getItem('ss_users')||'[]');}
@@ -30718,27 +30566,9 @@ body.theme-night .page .tag{
   }
   const originalSave=window.saveAdminPortal;
   if(typeof originalSave==='function'){
-    window.saveAdminPortal=function(){
-      originalSave.apply(this,arguments);
-      dynamicSections=loadDynamicSections();
-      renderDynamicSections();
-      renderDynamicSectionAdminList();
-    };
+    void 0;
   }
-  window.resetAdminPortal=function(){
-    if(!confirm('Reset the editable site content back to the default version?')) return;
-    localStorage.removeItem('ss_site_settings');
-    localStorage.removeItem('ss_customer_gallery');
-    localStorage.removeItem('ss_page_editor_settings');
-    localStorage.removeItem(STORAGE_KEY);
-    if(typeof window.applySiteSettings==='function') window.applySiteSettings();
-    if(typeof window.applyPageEditorSettings==='function') window.applyPageEditorSettings();
-    dynamicSections=[];
-    renderDynamicSections();
-    ensureAdminUi();
-    resetDynamicSectionForm();
-    customStatus('Defaults restored, including custom sections.','ok');
-  };
+  void 0;
   window.updateDynamicSectionTypeHelp=updateDynamicSectionTypeHelp;
   window.updateDynamicSectionImagePreview=updateDynamicSectionImagePreview;
   window.handleDynamicSectionImageUpload=handleDynamicSectionImageUpload;
@@ -31303,15 +31133,6 @@ body.theme-night .page .tag{
           </div>
           
         </div>
-        <div class="admin-studio-card" style="grid-column:1/-1">
-          <h4>Full HTML source editor</h4>
-          
-          <textarea id="siteSourceEditor" spellcheck="false"></textarea>
-          <div class="admin-studio-actions">
-            <button class="admin-btn" type="button" id="previewSourceBtn"><i class="fas fa-eye"></i>Preview source in new tab</button>
-            <button class="admin-btn secondary" type="button" id="applySourceBtn">Apply source now</button>
-          </div>
-        </div>
       </div>`;
     wrap.appendChild(shell);
     bindStudio();
@@ -31345,10 +31166,6 @@ body.theme-night .page .tag{
     byId('toggleLiveEditBtn')?.addEventListener('click',()=>{ const next=!load().liveEdit; setLiveEditMode(next,true); hydrateStudio(); if(window.customStatus) customStatus(next?'Live text edit mode enabled.':'Live text edit mode disabled.','ok'); });
     byId('saveLiveEditsBtn')?.addEventListener('click',()=>{ collectTextEdits(); if(window.customStatus) customStatus('Live text edits saved in this browser.','ok'); });
     byId('clearLiveEditsBtn')?.addEventListener('click',()=>{ localStorage.removeItem(LIVE_TEXT_STORAGE); window.location.reload(); });
-    byId('loadCurrentSourceBtn')?.addEventListener('click',()=>{ const ta=byId('siteSourceEditor'); if(ta) ta.value=document.documentElement.outerHTML; });
-    byId('previewSourceBtn')?.addEventListener('click',()=>{ const ta=byId('siteSourceEditor'); if(!ta?.value.trim()) return; const blob=new Blob([ta.value],{type:'text/html'}); window.open(URL.createObjectURL(blob),'_blank'); });
-    byId('applySourceBtn')?.addEventListener('click',()=>{ const ta=byId('siteSourceEditor'); if(!ta?.value.trim()) return; localStorage.setItem('ss_full_source_override', ta.value); document.open(); document.write(ta.value); document.close(); });
-    byId('downloadEditedHtmlBtn')?.addEventListener('click',()=>{ const src=(byId('siteSourceEditor')?.value||document.documentElement.outerHTML); const blob=new Blob([src],{type:'text/html'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='sightseers1.html'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1200); });
   }
   function boot(){
     applyTextEdits();
@@ -32050,7 +31867,7 @@ body.theme-night .page .tag{
     if(typeof originalReset==='function' && !originalReset.__djHooked){
       const wrapped=function(){ localStorage.removeItem(STORAGE_KEY); return originalReset.apply(this,arguments); };
       wrapped.__djHooked=true;
-      window.resetAdminPortal=wrapped;
+      void 0;
     }
   }
 
@@ -34784,39 +34601,17 @@ body.theme-night .page .tag{
 
   const originalUnlock=window.unlockAdminPortal;
   if(typeof originalUnlock==='function'){
-    window.unlockAdminPortal=function(){
-      const result=originalUnlock.apply(this,arguments);
-      setTimeout(injectAdminPackageManager,80);
-      return result;
-    };
+    void 0;
   }
 
   const originalSave=window.saveAdminPortal;
   if(typeof originalSave==='function'){
-    window.saveAdminPortal=function(){
-      savePackageData(getPackageData());
-      const result=originalSave.apply(this,arguments);
-      setTimeout(function(){
-        setLivePackageData(getPackageData());
-        if(typeof renderDests==='function') renderDests();
-        injectAdminPackageManager();
-      },60);
-      return result;
-    };
+    void 0;
   }
 
   const originalReset=window.resetAdminPortal;
   if(typeof originalReset==='function'){
-    window.resetAdminPortal=function(){
-      localStorage.removeItem(PACKAGE_STORAGE_KEY);
-      const result=originalReset.apply(this,arguments);
-      setTimeout(function(){
-        setLivePackageData(getPackageData());
-        if(typeof renderDests==='function') renderDests();
-        renderAdminPackageManager();
-      },80);
-      return result;
-    };
+    void 0;
   }
 
   function initPatch(){
@@ -35068,28 +34863,12 @@ body.theme-night .page .tag{
 
   const originalUnlock = window.unlockAdminPortal;
   if(typeof originalUnlock==='function'){
-    window.unlockAdminPortal=function(){
-      const res=originalUnlock.apply(this, arguments);
-      setTimeout(function(){
-        injectAdminClubManager();
-        if(window.populateTravelClubAdmin) window.populateTravelClubAdmin();
-      }, 80);
-      return res;
-    };
+    void 0;
   }
 
   const originalReset = window.resetAdminPortal;
   if(typeof originalReset==='function'){
-    window.resetAdminPortal=function(){
-      const res=originalReset.apply(this, arguments);
-      localStorage.removeItem(CLUB_KEY);
-      setTimeout(function(){
-        updateVisibleClubText();
-        refreshPointsUI();
-        if(window.populateTravelClubAdmin) window.populateTravelClubAdmin();
-      }, 80);
-      return res;
-    };
+    void 0;
   }
 
   function init(){
@@ -35263,29 +35042,13 @@ body.theme-night .page .tag{
   const originalUnlock = window.unlockAdminPortal;
   if(typeof originalUnlock === 'function' && !window.__homeTravelClubUnlockPatched){
     window.__homeTravelClubUnlockPatched = true;
-    window.unlockAdminPortal = function(){
-      const res = originalUnlock.apply(this, arguments);
-      setTimeout(function(){
-        injectAdmin();
-      }, 80);
-      return res;
-    };
+    void 0;
   }
 
   const originalResetPortal = window.resetAdminPortal;
   if(typeof originalResetPortal === 'function' && !window.__homeTravelClubResetPatched){
     window.__homeTravelClubResetPatched = true;
-    window.resetAdminPortal = function(){
-      const res = originalResetPortal.apply(this, arguments);
-      localStorage.removeItem(HOME_TRAVEL_CLUB_KEY);
-      setTimeout(function(){
-        applyHomeTravelClub();
-        const old = document.getElementById('adminHomeTravelClubManager');
-        if(old) old.remove();
-        injectAdmin();
-      }, 80);
-      return res;
-    };
+    void 0;
   }
 
   function init(){
@@ -36571,7 +36334,7 @@ body.theme-night .page .tag{
   const originalBuild=window.buildStructuredAdminEditor;
   if(typeof originalBuild==='function' && !window.__ssBuildWrapped){ window.__ssBuildWrapped=true; window.buildStructuredAdminEditor=function(){ const out=originalBuild.apply(this, arguments); setTimeout(hookAdmin, 30); return out; }; }
   const originalSave=window.saveAdminPortal;
-  if(typeof originalSave==='function' && !window.__ssSaveWrapped){ window.__ssSaveWrapped=true; window.saveAdminPortal=function(){ saveHeroFields(); const out=originalSave.apply(this, arguments); saveHeroFields(); rerenderDynamicSections(); return out; }; }
+  if(typeof originalSave==='function' && !window.__ssSaveWrapped){ window.__ssSaveWrapped=true; void 0; }
   document.addEventListener('DOMContentLoaded', function(){ applyHeroExtras(); setTimeout(hookAdmin, 80); setTimeout(rerenderDynamicSections, 140); });
   window.addEventListener('load', function(){ applyHeroExtras(); setTimeout(hookAdmin, 120); setTimeout(rerenderDynamicSections, 180); });
   window.rerenderDynamicSections = rerenderDynamicSections;
@@ -38468,42 +38231,12 @@ function openYachtBooking(title, category, note){
 
   const originalSave = typeof window.saveAdminPortal==='function' ? window.saveAdminPortal : null;
   if(originalSave){
-    window.saveAdminPortal = function(){
-      originalSave();
-      setStore(TRANSFER_KEY, parseExtraTextarea('adminTransfersData', 7));
-      setStore(YACHT_KEY, parseExtraTextarea('adminYachtData', 7));
-      setStore(CUSTOM_SECTION_KEY, parseExtraTextarea('adminCustomSectionsData', 6));
-
-      ['adminTransfersUploadNote','adminYachtUploadNote','adminCustomUploadNote'].forEach(id=>{
-        const input=document.getElementById(id);
-        if(input){
-          const map=getCustomImageMap();
-          if(input.value && input.value.trim()) map[id]=input.value.trim();
-          setCustomImageMap(map);
-        }
-      });
-
-      applyExtendedAdminData();
-      const status=document.getElementById('adminSaveStatus');
-      if(status){
-        status.className='inline-status ok';
-        status.textContent='Saved. Transfers, yacht packages, image uploads and extra website sections have been updated too.';
-      }
-    };
+    void 0;
   }
 
   const originalReset = typeof window.resetAdminPortal==='function' ? window.resetAdminPortal : null;
   if(originalReset){
-    window.resetAdminPortal = function(){
-      originalReset();
-      try{
-        localStorage.removeItem(TRANSFER_KEY);
-        localStorage.removeItem(YACHT_KEY);
-        localStorage.removeItem(CUSTOM_SECTION_KEY);
-      }catch(err){}
-      populateExtraAdminFields();
-      applyExtendedAdminData();
-    };
+    void 0;
   }
 
   document.addEventListener('DOMContentLoaded', function(){
@@ -39107,15 +38840,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const oldSave = window.saveAdminPortal;
   if(typeof oldSave === 'function' && !window.__propertyGallerySavePatched){
-    window.saveAdminPortal = function(){
-      oldSave();
-      saveAdminFields();
-      const status = document.getElementById('adminSaveStatus');
-      if(status){
-        status.className = 'inline-status ok';
-        status.textContent = 'Saved. Property gallery previews in Villa & Vacation Rentals have been updated too.';
-      }
-    };
+    void 0;
     window.__propertyGallerySavePatched = true;
   }
 
@@ -39272,16 +38997,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const oldSave = window.saveAdminPortal;
   if(typeof oldSave === 'function' && !window.__staysBuilderSavePatched){
-    window.saveAdminPortal = function(){
-      oldSave();
-      patchGetStayListings();
-      saveAdminFields();
-      const status = document.getElementById('adminSaveStatus');
-      if(status){
-        status.className = 'inline-status ok';
-        status.textContent = 'Saved. Villa and Vacation Rentals property listings have been updated too.';
-      }
-    };
+    void 0;
     window.__staysBuilderSavePatched = true;
   }
 
@@ -39519,13 +39235,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const oldSave = window.saveAdminPortal;
   if(typeof oldSave === 'function' && !window.__adminGalleryUploaderSavePatched){
-    window.saveAdminPortal = function(){
-      oldSave();
-      setTimeout(function(){
-        ensureUploaderUI();
-        refreshUploaderPreviews();
-      }, 120);
-    };
+    void 0;
     window.__adminGalleryUploaderSavePatched = true;
   }
 
@@ -39894,11 +39604,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const oldSave = window.saveAdminPortal;
   if(typeof oldSave === 'function' && !window.__stableUploaderSavePatched){
-    window.saveAdminPortal = function(){
-      oldSave();
-      applyStoredImages();
-      setTimeout(populateTargets, 250);
-    };
+    void 0;
     window.__stableUploaderSavePatched = true;
   }
 })();
@@ -40039,52 +39745,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const oldSaveAdminPortal = window.saveAdminPortal;
   if(typeof oldSaveAdminPortal === 'function' && !window.__saveAdminPortalFixPatched){
-    window.saveAdminPortal = function(){
-      try{
-        if(!window.adminUnlocked){
-          setStatus('error', 'Enter the admin passcode before saving.');
-          return;
-        }
-
-        const imageFields = Array.from(document.querySelectorAll('#p-admin input[type="url"][id], #p-admin input[type="text"][id][data-uploaded-image="1"]'));
-        imageFields.forEach(function(field){
-          if(field && field.id && /^admin|^djAdmin|^dynamicSectionImage|UploadNote|UploadHelper/.test(field.id)){
-            dispatchValueEvents(field);
-          }
-        });
-
-        oldSaveAdminPortal();
-
-        let persisted = true;
-        try{
-          persisted = !!localStorage.getItem('ss_site_settings');
-        }catch(storageErr){
-          persisted = false;
-        }
-
-        if(!persisted){
-          setStatus('error', 'Save failed. Your browser blocked storage for this page.');
-          return;
-        }
-
-        setStatus('ok', 'Save successful. Your changes were saved and applied.');
-      }catch(err){
-        setStatus('error', 'Save failed. ' + ((err && err.message) ? err.message : 'Please try again.'));
-      }
-    };
+    void 0;
     window.__saveAdminPortalFixPatched = true;
   }
 
   const oldResetAdminPortal = window.resetAdminPortal;
   if(typeof oldResetAdminPortal === 'function' && !window.__resetAdminPortalFixPatched){
-    window.resetAdminPortal = function(){
-      try{
-        oldResetAdminPortal();
-        setStatus('ok', 'Defaults restored successfully.');
-      }catch(err){
-        setStatus('error', 'Reset failed. ' + ((err && err.message) ? err.message : 'Please try again.'));
-      }
-    };
+    void 0;
     window.__resetAdminPortalFixPatched = true;
   }
 })();
@@ -40176,13 +39843,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // don't already have it. This keeps uploads/saves publishing to the live site
   // even when the portal was restored from sessionStorage without a fresh login.
   async function ensureAdminToken(){
-    var t=getAdminToken();
-    if(t) return t;
-    if(window.SS && typeof window.SS.passcodeLogin==='function'){
-      var pass=window.ADMIN_PASSCODE||'SightSeers2026!';
-      try{ await window.SS.passcodeLogin(pass); }catch(e){}
-    }
-    return getAdminToken();
+    return window.SS.ensureEditorSession();
   }
   window.ssEnsureAdminToken=ensureAdminToken;
 
@@ -40341,17 +40002,7 @@ document.addEventListener('DOMContentLoaded', function(){
   const oldSave=window.saveAdminPortal;
   if(typeof oldSave==='function' && !window.__quotaAwareSavePatched){
     window.__quotaAwareSavePatched=true;
-    window.saveAdminPortal=function(){
-      try{
-        oldSave();
-        setStatus('ok','Save successful. Your changes were saved and applied.');
-      }catch(err){
-        const msg=(err && err.name==='QuotaExceededError')
-          ? 'Save failed. The uploaded image is too large for browser storage. Try a smaller image; uploads are now compressed automatically.'
-          : 'Save failed. ' + ((err && err.message) ? err.message : 'Please try again.');
-        setStatus('error', msg);
-      }
-    };
+    void 0;
   }
 })();
 </script>
@@ -41055,7 +40706,7 @@ body.theme-night .page .tag{
       return out;
     };
     wrapped.__ssV5Wrapped = true;
-    window.saveAdminPortal = wrapped;
+    void 0;
   }
 
   function addAdminNote(){
@@ -41602,7 +41253,7 @@ body.theme-night .page .tag{
       return out;
     };
     wrapped.__ssV5AdminPortalExtended=true;
-    window.saveAdminPortal=wrapped;
+    void 0;
   }
 
   function init(){
@@ -42969,482 +42620,15 @@ body.theme-night .page .tag{
 
   const oldSave=window.saveAdminPortal;
   if(typeof oldSave==='function' && !window.__uaiSaveWrapped){
-    window.saveAdminPortal=function(){
-      const out=oldSave.apply(this, arguments);
-      applyStoredImages();
-      renderManager();
-      return out;
-    };
+    void 0;
     window.__uaiSaveWrapped=true;
   }
 })();
 </script>
 
-<script id="ss-admin-portal-failsafe-patch">
-(function(){
-  if(window.__ssAdminPortalFailsafePatched) return;
-  window.__ssAdminPortalFailsafePatched = true;
 
-  function ready(fn){
-    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
-    else fn();
-  }
 
-  ready(function(){
-    var statusId = 'adminSaveStatus';
-    var debounceTimer = null;
-    var ORIGINAL_SAVE = typeof window.saveAdminPortal === 'function' ? window.saveAdminPortal : null;
-    var ORIGINAL_UNLOCK = typeof window.unlockAdminPortal === 'function' ? window.unlockAdminPortal : null;
 
-    function status(msg, kind){
-      var el = document.getElementById(statusId);
-      if(!el) return;
-      el.textContent = msg || '';
-      el.className = 'inline-status' + (kind ? ' ' + kind : '');
-    }
-
-    function setButtonTypes(){
-      document.querySelectorAll('#p-admin button').forEach(function(btn){
-        if(!btn.getAttribute('type')) btn.setAttribute('type','button');
-      });
-    }
-
-    function applyFieldLive(field){
-      if(!field || !field.id) return;
-      try{
-        if(typeof window.PAGE_EDITOR_BINDINGS !== 'undefined' && window.PAGE_EDITOR_BINDINGS && window.PAGE_EDITOR_BINDINGS[field.id]){
-          try{
-            var stored = JSON.parse(localStorage.getItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings') || '{}');
-            stored[field.id] = field.value || '';
-            localStorage.setItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings', JSON.stringify(stored));
-          }catch(e){}
-          if(typeof window.applyPageEditorSettings === 'function') window.applyPageEditorSettings();
-        }
-        if(typeof window.saveAdminPortal === 'function' && window.adminUnlocked){
-          clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(function(){
-            try{
-              window.saveAdminPortal();
-              status('Live preview updated.', 'ok');
-            }catch(err){
-              console.error('Admin live save failed:', err);
-              status('A live preview error occurred. Use Save Changes to try again.', 'err');
-            }
-          }, 180);
-        }
-      }catch(err){
-        console.error('applyFieldLive failed:', err);
-      }
-    }
-
-    function bindLiveEditors(){
-      var wrap = document.getElementById('adminFormWrap');
-      if(!wrap || wrap.__ssLiveBound) return;
-      wrap.__ssLiveBound = true;
-      wrap.addEventListener('input', function(e){
-        var t = e.target;
-        if(!t || !/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
-        applyFieldLive(t);
-      });
-      wrap.addEventListener('change', function(e){
-        var t = e.target;
-        if(!t || !/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
-        applyFieldLive(t);
-      });
-    }
-
-    function revealIfUnlocked(){
-      try{
-        if(sessionStorage.getItem('ss_admin_unlocked') === '1'){
-          var wrap = document.getElementById('adminFormWrap');
-          if(wrap) wrap.classList.add('on');
-          document.querySelectorAll('.admin-protected-content').forEach(function(el){ el.classList.add('on'); });
-        }
-      }catch(e){}
-    }
-
-    if(ORIGINAL_UNLOCK){
-      window.unlockAdminPortal = function(){
-        var res = ORIGINAL_UNLOCK.apply(this, arguments);
-        setTimeout(function(){ bindLiveEditors(); setButtonTypes(); revealIfUnlocked(); }, 0);
-        return res;
-      };
-    }
-
-    window.saveAdminPortal = function(){
-      setButtonTypes();
-      try{
-        if(ORIGINAL_SAVE){
-          var result = ORIGINAL_SAVE.apply(this, arguments);
-          status('Saved. Changes are now applied to the website in this browser.', 'ok');
-          return result;
-        }
-      }catch(err){
-        console.error('Original saveAdminPortal failed:', err);
-      }
-
-      // Hard fallback save for the main site + page editor settings.
-      if(!window.adminUnlocked) return;
-      try{
-        var siteDefaults = window.DEFAULT_SITE_SETTINGS || {};
-        var nextSite = Object.assign({}, siteDefaults, window.loadSiteSettings ? window.loadSiteSettings() : {}, {
-          brandName: document.getElementById('adminBrandName')?.value?.trim() || siteDefaults.brandName || '',
-          tagline: document.getElementById('adminTagline')?.value?.trim() || siteDefaults.tagline || '',
-          phone1: document.getElementById('adminPhone1')?.value?.trim() || siteDefaults.phone1 || '',
-          phone2: document.getElementById('adminPhone2')?.value?.trim() || siteDefaults.phone2 || '',
-          email: document.getElementById('adminEmail')?.value?.trim() || siteDefaults.email || '',
-          heroEyebrow: document.getElementById('adminHeroEyebrow')?.value?.trim() || siteDefaults.heroEyebrow || '',
-          heroTitle: document.getElementById('adminHeroTitle')?.value?.trim() || siteDefaults.heroTitle || '',
-          heroEm: document.getElementById('adminHeroEm')?.value?.trim() || siteDefaults.heroEm || '',
-          heroSub: document.getElementById('adminHeroSub')?.value?.trim() || siteDefaults.heroSub || '',
-          aboutTitle: document.getElementById('adminAboutTitle')?.value?.trim() || siteDefaults.aboutTitle || '',
-          aboutBody: document.getElementById('adminAboutBody')?.value?.trim() || siteDefaults.aboutBody || '',
-          customerTitle: document.getElementById('adminCustomerTitle')?.value?.trim() || siteDefaults.customerTitle || '',
-          customerSub: document.getElementById('adminCustomerSub')?.value?.trim() || siteDefaults.customerSub || '',
-          heroImg1: document.getElementById('adminHeroImg1')?.value?.trim() || siteDefaults.heroImg1 || '',
-          heroImg2: document.getElementById('adminHeroImg2')?.value?.trim() || siteDefaults.heroImg2 || '',
-          heroImg3: document.getElementById('adminHeroImg3')?.value?.trim() || siteDefaults.heroImg3 || '',
-          aboutImage: document.getElementById('adminAboutImage')?.value?.trim() || siteDefaults.aboutImage || '',
-          jamaicaImage: document.getElementById('adminJamaicaImage')?.value?.trim() || siteDefaults.jamaicaImage || '',
-          jamaicaPins: document.getElementById('adminJamaicaPins')?.value?.trim() || '',
-          jamaicaPopupMode: document.getElementById('adminJamaicaPopupMode')?.value === 'always' ? 'always' : 'click',
-          tropicalMotionIntensity: document.getElementById('adminTropicalMotionIntensity')?.value?.trim() || '100',
-          specialKicker: document.getElementById('adminSpecialKicker')?.value?.trim() || siteDefaults.specialKicker || '',
-          specialTitle: document.getElementById('adminSpecialTitle')?.value?.trim() || siteDefaults.specialTitle || '',
-          specialBody: document.getElementById('adminSpecialBody')?.value?.trim() || siteDefaults.specialBody || ''
-        });
-        localStorage.setItem('ss_site_settings', JSON.stringify(nextSite));
-        if(typeof window.PAGE_EDITOR_BINDINGS !== 'undefined' && window.PAGE_EDITOR_BINDINGS){
-          var prevPe3={}; try{ prevPe3=JSON.parse(localStorage.getItem(window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings')||'{}'); }catch(e){}
-          var pe = {};
-          Object.keys(window.PAGE_EDITOR_BINDINGS).forEach(function(id){
-            var el = document.getElementById(id);
-            var val = el ? (el.value || '').trim() : '';
-            pe[id] = val || prevPe3[id] || '';
-          });
-          localStorage.setItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings', JSON.stringify(pe));
-        }
-        if(typeof window.parseGalleryTextarea === 'function'){
-          localStorage.setItem('ss_customer_gallery', JSON.stringify(window.parseGalleryTextarea(document.getElementById('adminGalleryData')?.value || '')));
-        }
-        if(typeof window.parseStayListingsTextarea === 'function'){
-          var defaults = window.DEFAULT_STAY_PAGE_SETTINGS || {};
-          localStorage.setItem(window.STAY_ADMIN_STORAGE_KEY || 'ss_stay_page_settings', JSON.stringify({
-            hubLead: document.getElementById('adminStaysHubLead')?.value?.trim() || defaults.hubLead || '',
-            countryHeroTitle: document.getElementById('adminStayCountryPrefix')?.value?.trim() || defaults.countryHeroTitle || '',
-            countryLeadTemplate: document.getElementById('adminStayCountryLeadTemplate')?.value?.trim() || defaults.countryLeadTemplate || '',
-            countryDescriptions: document.getElementById('adminStayCountryDescriptions')?.value?.trim() || '',
-            listings: window.parseStayListingsTextarea(document.getElementById('adminStayListingsData')?.value || '')
-          }));
-        }
-        if(typeof window.loadSiteSettings === 'function') window.siteSettings = window.loadSiteSettings();
-        if(typeof window.loadCustomerGallery === 'function') window.customerGalleryData = window.loadCustomerGallery();
-        if(typeof window.loadPageEditorSettings === 'function') window.pageEditorSettings = window.loadPageEditorSettings();
-        if(typeof window.loadStayPageSettings === 'function') window.stayPageSettings = window.loadStayPageSettings();
-        if(typeof window.applySiteSettings === 'function') window.applySiteSettings();
-        if(typeof window.applyPageEditorSettings === 'function') window.applyPageEditorSettings();
-        if(typeof window.renderStays === 'function') window.renderStays();
-        if(typeof window.renderStayCountryPage === 'function') window.renderStayCountryPage();
-        status('Saved. Changes are now applied to the website in this browser.', 'ok');
-      }catch(err){
-        console.error('Fallback saveAdminPortal failed:', err);
-        status('Save failed because of a script error in the admin portal.', 'err');
-      }
-    };
-
-    setButtonTypes();
-    bindLiveEditors();
-    revealIfUnlocked();
-  });
-})();
-</script>
-
-<script id="ss-admin-editability-master-patch">
-(function(){
-  if(window.__ssAdminEditabilityMasterPatch) return;
-  window.__ssAdminEditabilityMasterPatch = true;
-
-  var PAGE_KEY_FALLBACK = 'ss_page_editor_settings';
-  var SITE_KEY = 'ss_site_settings';
-  var GALLERY_KEY = 'ss_customer_gallery';
-  var STAY_KEY_FALLBACK = 'ss_stay_page_settings';
-
-  function ready(fn){
-    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
-    else fn();
-  }
-
-  function status(message, kind){
-    var el = document.getElementById('adminSaveStatus') || document.getElementById('adminUnlockStatus');
-    if(!el) return;
-    el.textContent = message || '';
-    el.className = 'inline-status' + (kind ? ' ' + kind : '');
-  }
-
-  function syncUnlockedState(){
-    try{
-      window.adminUnlocked = sessionStorage.getItem('ss_admin_unlocked') === '1';
-    }catch(e){
-      window.adminUnlocked = false;
-    }
-    var wrap = document.getElementById('adminFormWrap');
-    if(wrap) wrap.classList.toggle('on', !!window.adminUnlocked);
-    document.querySelectorAll('.admin-protected-content').forEach(function(block){
-      block.classList.toggle('on', !!window.adminUnlocked);
-    });
-    // When restoring from sessionStorage, re-acquire the server token so
-    // saves and uploads still publish to the live site.
-    if(window.adminUnlocked && window.SS && typeof window.SS.passcodeLogin === 'function'){
-      var tok = '';
-      try{ tok = (window.SS.getToken && window.SS.getToken()) || localStorage.getItem('ss_auth_token') || ''; }catch(e){}
-      if(!tok){
-        window.SS.passcodeLogin(window.ADMIN_PASSCODE || 'SightSeers2026!').then(function(){
-          if(typeof updateAdminSigninBanner === 'function') updateAdminSigninBanner();
-        }).catch(function(){});
-      }
-    }
-  }
-
-  function ensureEditableFields(root){
-    (root || document).querySelectorAll('#p-admin input, #p-admin textarea, #p-admin select, #p-admin button').forEach(function(el){
-      if(el.matches('input[readonly], textarea[readonly]')) el.removeAttribute('readonly');
-      if(el.matches('input[disabled], textarea[disabled], select[disabled], button[disabled]')) el.removeAttribute('disabled');
-      el.style.pointerEvents = 'auto';
-      el.style.userSelect = 'auto';
-    });
-  }
-
-  function previewBinding(field){
-    if(!field || !field.id) return;
-    if(!window.PAGE_EDITOR_BINDINGS || !window.PAGE_EDITOR_BINDINGS[field.id]) return;
-    var binding = window.PAGE_EDITOR_BINDINGS[field.id];
-    var target = document.querySelector(binding.selector);
-    if(!target) return;
-    var value = String(field.value || '');
-    if(binding.mode === 'text'){
-      target.textContent = value;
-    }else if(binding.mode === 'bg'){
-      target.style.backgroundImage = value ? 'url("' + value.replace(/"/g, '&quot;') + '")' : '';
-    }else if(binding.mode === 'src'){
-      target.setAttribute('src', value);
-      if(target.tagName === 'IMG'){
-        var ph = target.parentElement && target.parentElement.querySelector('.partner-placeholder');
-        if(ph) ph.style.display = value ? 'none' : '';
-        target.style.display = '';
-      }
-    }else if(binding.mode === 'href'){
-      target.setAttribute('href', value);
-    }
-  }
-
-  function collectPageEditorValues(){
-    var out = {};
-    var bindings = window.PAGE_EDITOR_BINDINGS || {};
-    Object.keys(bindings).forEach(function(id){
-      var el = document.getElementById(id);
-      out[id] = el ? String(el.value || '').trim() : '';
-    });
-    return out;
-  }
-
-  function collectSiteSettings(){
-    var defaults = window.DEFAULT_SITE_SETTINGS || {};
-    function val(id, fallback){
-      var el = document.getElementById(id);
-      var raw = el ? String(el.value || '').trim() : '';
-      return raw || fallback || '';
-    }
-    return Object.assign({}, defaults, window.siteSettings || {}, {
-      brandName: val('adminBrandName', defaults.brandName),
-      tagline: val('adminTagline', defaults.tagline),
-      phone1: val('adminPhone1', defaults.phone1),
-      phone2: val('adminPhone2', defaults.phone2),
-      email: val('adminEmail', defaults.email),
-      heroEyebrow: val('adminHeroEyebrow', defaults.heroEyebrow),
-      heroTitle: val('adminHeroTitle', defaults.heroTitle),
-      heroEm: val('adminHeroEm', defaults.heroEm),
-      heroSub: val('adminHeroSub', defaults.heroSub),
-      aboutTitle: val('adminAboutTitle', defaults.aboutTitle),
-      aboutBody: val('adminAboutBody', defaults.aboutBody),
-      customerTitle: val('adminCustomerTitle', defaults.customerTitle),
-      customerSub: val('adminCustomerSub', defaults.customerSub),
-      heroImg1: val('adminHeroImg1', defaults.heroImg1),
-      heroImg2: val('adminHeroImg2', defaults.heroImg2),
-      heroImg3: val('adminHeroImg3', defaults.heroImg3),
-      aboutImage: val('adminAboutImage', defaults.aboutImage),
-      jamaicaImage: val('adminJamaicaImage', defaults.jamaicaImage),
-      jamaicaPins: val('adminJamaicaPins', ''),
-      jamaicaPopupMode: (document.getElementById('adminJamaicaPopupMode') && document.getElementById('adminJamaicaPopupMode').value === 'always') ? 'always' : 'click',
-      tropicalMotionIntensity: val('adminTropicalMotionIntensity', '100'),
-      specialKicker: val('adminSpecialKicker', defaults.specialKicker),
-      specialTitle: val('adminSpecialTitle', defaults.specialTitle),
-      specialBody: val('adminSpecialBody', defaults.specialBody)
-    });
-  }
-
-  function collectStaySettings(){
-    var defaults = window.DEFAULT_STAY_PAGE_SETTINGS || {};
-    var parser = typeof window.parseStayListingsTextarea === 'function' ? window.parseStayListingsTextarea : function(){ return []; };
-    function val(id, fallback){
-      var el = document.getElementById(id);
-      var raw = el ? String(el.value || '').trim() : '';
-      return raw || fallback || '';
-    }
-    return {
-      hubLead: val('adminStaysHubLead', defaults.hubLead),
-      countryHeroTitle: val('adminStayCountryPrefix', defaults.countryHeroTitle),
-      countryLeadTemplate: val('adminStayCountryLeadTemplate', defaults.countryLeadTemplate),
-      countryDescriptions: val('adminStayCountryDescriptions', ''),
-      listings: parser((document.getElementById('adminStayListingsData') || {}).value || '')
-    };
-  }
-
-  var originalUnlock = typeof window.unlockAdminPortal === 'function' ? window.unlockAdminPortal : null;
-  if(originalUnlock && !window.__ssAdminEditabilityUnlockWrapped){
-    window.unlockAdminPortal = function(){
-      var result = originalUnlock.apply(this, arguments);
-      syncUnlockedState();
-      ensureEditableFields(document);
-      status(window.adminUnlocked ? 'Portal unlocked. All admin fields are editable.' : 'That passcode did not match the admin key.', window.adminUnlocked ? 'ok' : 'err');
-      return result;
-    };
-    window.__ssAdminEditabilityUnlockWrapped = true;
-  }
-
-  var originalSave = typeof window.saveAdminPortal === 'function' ? window.saveAdminPortal : null;
-  window.saveAdminPortal = function(){
-    syncUnlockedState();
-    if(!window.adminUnlocked){
-      status('Enter the admin passcode before saving.', 'err');
-      return;
-    }
-
-    try{
-      document.querySelectorAll('#p-admin input[type="file"]').forEach(function(fileInput){
-        fileInput.dispatchEvent(new Event('change', {bubbles:true}));
-      });
-    }catch(e){}
-
-    if(typeof originalSave === 'function'){
-      try{ originalSave.apply(this, arguments); }catch(err){ console.error('Original saveAdminPortal error:', err); }
-    }
-
-    try{
-      var pageKey = window.PAGE_EDITOR_STORAGE_KEY || PAGE_KEY_FALLBACK;
-      var stayKey = window.STAY_ADMIN_STORAGE_KEY || STAY_KEY_FALLBACK;
-
-      var pageEditorValues = collectPageEditorValues();
-      localStorage.setItem(pageKey, JSON.stringify(pageEditorValues));
-
-      var siteSettings = collectSiteSettings();
-      localStorage.setItem(SITE_KEY, JSON.stringify(siteSettings));
-
-      if(typeof window.parseGalleryTextarea === 'function'){
-        localStorage.setItem(GALLERY_KEY, JSON.stringify(window.parseGalleryTextarea((document.getElementById('adminGalleryData') || {}).value || '')));
-      }
-
-      localStorage.setItem(stayKey, JSON.stringify(collectStaySettings()));
-
-      if(typeof window.loadSiteSettings === 'function') window.siteSettings = window.loadSiteSettings();
-      if(typeof window.loadCustomerGallery === 'function') window.customerGalleryData = window.loadCustomerGallery();
-      if(typeof window.loadPageEditorSettings === 'function') window.pageEditorSettings = window.loadPageEditorSettings();
-      if(typeof window.loadStayPageSettings === 'function') window.stayPageSettings = window.loadStayPageSettings();
-
-      if(typeof window.applySiteSettings === 'function') window.applySiteSettings();
-      if(typeof window.applyPageEditorSettings === 'function') window.applyPageEditorSettings();
-      if(typeof window.renderStays === 'function') window.renderStays();
-      if(typeof window.renderStayCountryPage === 'function') window.renderStayCountryPage();
-      if(typeof window.renderAdminPackageManager === 'function') window.renderAdminPackageManager();
-      if(typeof window.renderAdminBlogRequests === 'function') window.renderAdminBlogRequests();
-
-      status('Save successful. All current admin values were stored and applied in this browser.', 'ok');
-    }catch(err){
-      console.error('Master admin save patch failed:', err);
-      status('Save failed because of a script error. Check the browser console.', 'err');
-    }
-  };
-
-  var debounce;
-  function queueLiveSave(field){
-    previewBinding(field);
-    clearTimeout(debounce);
-    debounce = setTimeout(function(){
-      try{
-        if(window.adminUnlocked) window.saveAdminPortal();
-      }catch(err){
-        console.error('Live save failed:', err);
-      }
-    }, 220);
-  }
-
-  function bindLive(root){
-    var wrap = document.getElementById('adminFormWrap');
-    if(!wrap || wrap.__ssAdminEditabilityBound) return;
-    wrap.__ssAdminEditabilityBound = true;
-
-    function handler(e){
-      var t = e.target;
-      if(!t || !/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
-      syncUnlockedState();
-      ensureEditableFields(document);
-      if(window.adminUnlocked) queueLiveSave(t);
-    }
-
-    wrap.addEventListener('input', handler, true);
-    wrap.addEventListener('change', handler, true);
-    wrap.addEventListener('click', function(){ syncUnlockedState(); ensureEditableFields(document); }, true);
-  }
-
-  function addPatchNote(){
-    var info = document.getElementById('adminInfoCard');
-    if(info && !document.getElementById('ssAdminEditabilityMasterNote')){
-      var note = document.createElement('div');
-      note.id = 'ssAdminEditabilityMasterNote';
-      note.className = 'admin-gallery-note';
-      note.innerHTML = '<strong>Admin editability patch:</strong> all admin inputs now force live editing, full save persistence, and stronger unlock syncing so text, image, layout, and listing changes are easier to keep.';
-      info.appendChild(note);
-    }
-  }
-
-  function observeAdmin(){
-    var admin = document.getElementById('p-admin');
-    if(!admin || admin.__ssAdminEditabilityObserved) return;
-    admin.__ssAdminEditabilityObserved = true;
-    var mo = new MutationObserver(function(){
-      syncUnlockedState();
-      ensureEditableFields(admin);
-      bindLive(admin);
-      addPatchNote();
-    });
-    mo.observe(admin, {subtree:true, childList:true, attributes:true, attributeFilter:['class','style','open']});
-  }
-
-  ready(function(){
-    syncUnlockedState();
-    ensureEditableFields(document);
-    bindLive(document);
-    addPatchNote();
-    observeAdmin();
-    setTimeout(function(){
-      syncUnlockedState();
-      ensureEditableFields(document);
-      bindLive(document);
-      addPatchNote();
-    }, 200);
-    setTimeout(function(){
-      syncUnlockedState();
-      ensureEditableFields(document);
-    }, 900);
-  });
-
-  window.addEventListener('load', function(){
-    syncUnlockedState();
-    ensureEditableFields(document);
-    bindLive(document);
-    addPatchNote();
-  });
-})();
-</script>
 
 <style id="assistant-setsail-carousel-refresh">
 .destinations-carousel-shell{
@@ -45458,104 +44642,7 @@ body.theme-night .page .tag{
 })();
 </script>
 
-<script id="ss-admin-typing-nojump-final-fix">
-(function(){
-  if(window.__ssAdminTypingNoJumpFinalFix) return;
-  window.__ssAdminTypingNoJumpFinalFix = true;
 
-  const TEXT_TYPES = new Set(['text','search','url','tel','email','password','number']);
-  function isTextLike(el){
-    if(!el || !el.closest || !el.closest('#p-admin')) return false;
-    if(el.tagName === 'TEXTAREA') return true;
-    if(el.tagName === 'SELECT') return true;
-    if(el.tagName !== 'INPUT') return false;
-    const type = String(el.type || 'text').toLowerCase();
-    return TEXT_TYPES.has(type);
-  }
-
-  function setStatus(msg, kind){
-    const box = document.getElementById('adminSaveStatus');
-    if(!box) return;
-    box.className = 'inline-status' + (kind ? ' ' + kind : '');
-    box.textContent = msg;
-  }
-
-  function applyPreviewOnly(field){
-    if(!field || !field.id) return;
-    try{
-      if(window.PAGE_EDITOR_BINDINGS && window.PAGE_EDITOR_BINDINGS[field.id]){
-        const binding = window.PAGE_EDITOR_BINDINGS[field.id];
-        const target = document.querySelector(binding.selector);
-        const value = String(field.value || '');
-        if(target){
-          if(binding.mode === 'text') target.textContent = value;
-          else if(binding.mode === 'bg') target.style.backgroundImage = value ? 'url("' + value.replace(/"/g,'&quot;') + '")' : '';
-          else if(binding.mode === 'src') target.setAttribute('src', value);
-          else if(binding.mode === 'href') target.setAttribute('href', value);
-        }
-      }
-      if(typeof window.updateAdminImagePreview === 'function' && field.id && /image|img|logo|hero/i.test(field.id)){
-        try{ window.updateAdminImagePreview(field.id); }catch(e){}
-      }
-    }catch(e){}
-  }
-
-  function bindNoJump(){
-    const wrap = document.getElementById('adminFormWrap');
-    if(!wrap || wrap.__ssNoJumpBound) return;
-    wrap.__ssNoJumpBound = true;
-
-    wrap.addEventListener('keydown', function(e){
-      if(!isTextLike(e.target)) return;
-      // Stop global admin/document hotkeys from interfering with typing/backspace.
-      e.stopPropagation();
-    }, true);
-
-    wrap.addEventListener('input', function(e){
-      if(!isTextLike(e.target)) return;
-      // Block older live-save listeners that rebuild the portal while typing.
-      e.stopImmediatePropagation();
-      applyPreviewOnly(e.target);
-      setStatus('Typing fix active. Edit freely, then click Save Changes when ready.', 'ok');
-    }, true);
-
-    wrap.addEventListener('change', function(e){
-      if(!isTextLike(e.target)) return;
-      e.stopImmediatePropagation();
-      applyPreviewOnly(e.target);
-    }, true);
-  }
-
-  function refreshBindings(){
-    bindNoJump();
-    const noteHost = document.getElementById('adminInfoCard');
-    if(noteHost && !document.getElementById('adminTypingFixNote')){
-      const note = document.createElement('div');
-      note.id = 'adminTypingFixNote';
-      note.className = 'admin-gallery-note';
-      note.innerHTML = '<strong>Typing fix:</strong> the admin portal now keeps text fields stable while you type. Live preview stays on, but saving is manual so the page does not jump or break backspace.';
-      noteHost.appendChild(note);
-    }
-  }
-
-  const oldUnlock = typeof window.unlockAdminPortal === 'function' ? window.unlockAdminPortal : null;
-  if(oldUnlock && !window.__ssNoJumpUnlockWrapped){
-    window.unlockAdminPortal = function(){
-      const out = oldUnlock.apply(this, arguments);
-      setTimeout(refreshBindings, 0);
-      setTimeout(refreshBindings, 150);
-      return out;
-    };
-    window.__ssNoJumpUnlockWrapped = true;
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    refreshBindings();
-    setTimeout(refreshBindings, 300);
-    setTimeout(refreshBindings, 1200);
-  });
-})();
-</script>
 
 <style id="ss-admin-portal-master-style">
 .admin-super-hub{margin:0 0 18px;padding:18px 18px 8px;border:1px solid rgba(6,58,99,.08);border-radius:26px;background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);box-shadow:0 18px 40px rgba(6,58,99,.08)}
@@ -46198,450 +45285,29 @@ body.theme-night .page .tag{
 
   const oldUnlock=typeof window.unlockAdminPortal==='function' ? window.unlockAdminPortal : null;
   if(oldUnlock && !window.__ssAdminPortalMasterUnlockWrapped){
-    window.unlockAdminPortal=function(){ const out=oldUnlock.apply(this,arguments); setTimeout(refreshAdminMaster,80); setTimeout(refreshAdminMaster,320); return out; };
+    void 0;
     window.__ssAdminPortalMasterUnlockWrapped=true;
   }
   const oldSave=typeof window.saveAdminPortal==='function' ? window.saveAdminPortal : null;
   if(oldSave && !window.__ssAdminPortalMasterSaveWrapped){
-    window.saveAdminPortal=function(){ saveToursData(getToursData()); const out=oldSave.apply(this,arguments); setTimeout(function(){ setLiveTours(getToursData()); refreshAdminMaster(); const status=document.getElementById('adminSaveStatus'); if(status) status.textContent='Saved. The organized admin portal, HD image checks, and package managers were updated in this browser.'; },80); return out; };
+    void 0;
     window.__ssAdminPortalMasterSaveWrapped=true;
   }
   const oldReset=typeof window.resetAdminPortal==='function' ? window.resetAdminPortal : null;
   if(oldReset && !window.__ssAdminPortalMasterResetWrapped){
-    window.resetAdminPortal=function(){ localStorage.removeItem(TOURS_KEY); const out=oldReset.apply(this,arguments); setTimeout(function(){ setLiveTours(getToursData()); refreshAdminMaster(); },120); return out; };
+    void 0;
     window.__ssAdminPortalMasterResetWrapped=true;
   }
 
   function boot(){ setLiveTours(getToursData()); refreshAdminMaster(); setTimeout(refreshAdminMaster,400); }
+  document.addEventListener('ss-settings-synced',boot);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
 })();
 </script>
 
-<script id="ss-admin-portal-clean-final-repair">
-(function(){
-  if(window.__ssAdminPortalCleanFinalRepair) return;
-  window.__ssAdminPortalCleanFinalRepair = true;
-  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn, {once:true}); else fn(); }
-  function q(id){ return document.getElementById(id); }
-  function status(msg, kind){ var el=q('adminSaveStatus')||q('adminUnlockStatus'); if(!el) return; el.className='inline-status'+(kind?' '+kind:'')+(msg?' show':''); el.textContent=msg||''; }
-  function isTextLike(el){ if(!el||!el.closest||!el.closest('#adminFormWrap')) return false; if(el.tagName==='TEXTAREA'||el.tagName==='SELECT') return true; if(el.tagName!=='INPUT') return false; return ['text','search','url','tel','email','password','number'].indexOf(String(el.type||'text').toLowerCase())!==-1; }
-  function previewField(field){ if(!field||!field.id||!window.PAGE_EDITOR_BINDINGS||!window.PAGE_EDITOR_BINDINGS[field.id]) return; var binding=window.PAGE_EDITOR_BINDINGS[field.id]; var target=document.querySelector(binding.selector); if(!target) return; var value=String(field.value||''); if(binding.mode==='text') target.textContent=value; else if(binding.mode==='bg') target.style.backgroundImage=value?'url("'+value.replace(/"/g,'&quot;')+'")':''; else if(binding.mode==='src') { target.setAttribute('src', value); if(target.tagName==='IMG') target.style.display=''; var phi2=target.closest('.partner-item'); var phd2=phi2&&phi2.querySelector('.partner-placeholder'); if(phd2&&value) phd2.style.display='none'; } else if(binding.mode==='href') target.setAttribute('href', value); }
-  function safeVal(id,fallback){ var el=q(id); var val=el?String(el.value||'').trim():''; return val||(fallback||''); }
-  function saveClean(){ if(!window.adminUnlocked){ status('Enter the admin passcode before saving.','err'); return; } try{ var d=window.DEFAULT_SITE_SETTINGS||{}; var site=Object.assign({}, d, window.siteSettings||{}, {brandName:safeVal('adminBrandName',d.brandName),tagline:safeVal('adminTagline',d.tagline),phone1:safeVal('adminPhone1',d.phone1),phone2:safeVal('adminPhone2',d.phone2),email:safeVal('adminEmail',d.email),heroEyebrow:safeVal('adminHeroEyebrow',d.heroEyebrow),heroTitle:safeVal('adminHeroTitle',d.heroTitle),heroEm:safeVal('adminHeroEm',d.heroEm),heroSub:safeVal('adminHeroSub',d.heroSub),aboutTitle:safeVal('adminAboutTitle',d.aboutTitle),aboutBody:safeVal('adminAboutBody',d.aboutBody),customerTitle:safeVal('adminCustomerTitle',d.customerTitle),customerSub:safeVal('adminCustomerSub',d.customerSub),heroImg1:safeVal('adminHeroImg1',d.heroImg1),heroImg2:safeVal('adminHeroImg2',d.heroImg2),heroImg3:safeVal('adminHeroImg3',d.heroImg3),aboutImage:safeVal('adminAboutImage',d.aboutImage),jamaicaImage:safeVal('adminJamaicaImage',d.jamaicaImage),jamaicaPins:safeVal('adminJamaicaPins',''),jamaicaPopupMode:q('adminJamaicaPopupMode')&&q('adminJamaicaPopupMode').value==='always'?'always':'click',tropicalMotionIntensity:safeVal('adminTropicalMotionIntensity','100'),specialKicker:safeVal('adminSpecialKicker',d.specialKicker),specialTitle:safeVal('adminSpecialTitle',d.specialTitle),specialBody:safeVal('adminSpecialBody',d.specialBody)}); localStorage.setItem('ss_site_settings', JSON.stringify(site)); var prevPe2={}; try{ prevPe2=JSON.parse(localStorage.getItem(window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings')||'{}'); }catch(e){} var pe={}; var bindings=window.PAGE_EDITOR_BINDINGS||{}; Object.keys(bindings).forEach(function(id){ var el=q(id); var val=el?String(el.value||'').trim():''; pe[id]=val||prevPe2[id]||''; }); localStorage.setItem(window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings', JSON.stringify(pe)); if(typeof window.parseGalleryTextarea==='function') localStorage.setItem('ss_customer_gallery', JSON.stringify(window.parseGalleryTextarea((q('adminGalleryData')||{}).value||''))); if(typeof window.parseStayListingsTextarea==='function'){ var sd=window.DEFAULT_STAY_PAGE_SETTINGS||{}; localStorage.setItem(window.STAY_ADMIN_STORAGE_KEY||'ss_stay_page_settings', JSON.stringify({hubLead:safeVal('adminStaysHubLead',sd.hubLead),countryHeroTitle:safeVal('adminStayCountryPrefix',sd.countryHeroTitle),countryLeadTemplate:safeVal('adminStayCountryLeadTemplate',sd.countryLeadTemplate),countryDescriptions:safeVal('adminStayCountryDescriptions',''),listings:window.parseStayListingsTextarea((q('adminStayListingsData')||{}).value||'')})); } if(typeof window.loadSiteSettings==='function') window.siteSettings=window.loadSiteSettings(); if(typeof window.loadCustomerGallery==='function') window.customerGalleryData=window.loadCustomerGallery(); if(typeof window.loadPageEditorSettings==='function') window.pageEditorSettings=window.loadPageEditorSettings(); if(typeof window.loadStayPageSettings==='function') window.stayPageSettings=window.loadStayPageSettings(); if(typeof window.applySiteSettings==='function') window.applySiteSettings(); if(typeof window.applyPageEditorSettings==='function') window.applyPageEditorSettings(); if(typeof window.renderStays==='function') window.renderStays(); if(typeof window.renderStayCountryPage==='function') window.renderStayCountryPage(); if(typeof window.renderAdminPackageManager==='function') window.renderAdminPackageManager(); if(typeof window.renderAdminBlogRequests==='function') window.renderAdminBlogRequests(); status('Saved. The admin portal is now using the repaired save flow.','ok'); }catch(err){ console.error('Clean save failed',err); status('Save failed because of a script error.','err'); } }
-  function unlockClean(){ var input=q('adminPasscode'); var pass=input?input.value:''; if(pass===window.ADMIN_PASSCODE){ window.adminUnlocked=true; try{sessionStorage.setItem('ss_admin_unlocked','1');}catch(e){} var wrap=q('adminFormWrap'); if(wrap) wrap.classList.add('on'); document.querySelectorAll('.admin-protected-content').forEach(function(el){ el.classList.add('on'); }); if(input) input.value=''; status('Portal unlocked. Typing and save flow repaired.','ok'); } else { window.adminUnlocked=false; try{sessionStorage.removeItem('ss_admin_unlocked');}catch(e){} if(input) input.value=''; status('That passcode did not match the admin key.','err'); } }
-  function cloneAdminWrap(){ var wrap=q('adminFormWrap'); if(!wrap||wrap.__ssCleanCloned) return wrap; var clone=wrap.cloneNode(true); clone.__ssCleanCloned=true; wrap.parentNode.replaceChild(clone,wrap); return clone; }
-  function bindStableTyping(){ var wrap=q('adminFormWrap'); if(!wrap||wrap.__ssStableTypingBound) return; wrap.__ssStableTypingBound=true; wrap.addEventListener('keydown', function(e){ if(!isTextLike(e.target)) return; e.stopPropagation(); }, true); wrap.addEventListener('input', function(e){ if(!isTextLike(e.target)) return; e.stopImmediatePropagation(); previewField(e.target); if(window.updateAdminImagePreview && /image|img|logo|hero/i.test(e.target.id||'')){ try{ window.updateAdminImagePreview(e.target.id); }catch(err){} } status('Typing is stable now. Click Save Changes after editing.','ok'); }, true); wrap.addEventListener('change', function(e){ var t=e.target; if(t&&t.matches&&t.matches('select, input[type="file"]')) e.stopImmediatePropagation(); if(t&&t.matches&&t.matches('select')) previewField(t); }, true); }
-  function attachHdChecks(){ document.querySelectorAll('#p-admin input[type="file"][accept*="image"]').forEach(function(fileInput){ if(fileInput.dataset.ssHdBound==='1') return; fileInput.dataset.ssHdBound='1'; var host=fileInput.closest('.admin-upload-box')||fileInput.parentElement; if(!host) return; var meta=host.querySelector('.admin-hd-meta'); if(!meta){ meta=document.createElement('div'); meta.className='admin-hd-meta'; meta.innerHTML='<strong>Upload quality:</strong> waiting for image'; host.appendChild(meta); } fileInput.addEventListener('change', function(){ var file=this.files&&this.files[0]; if(!file) return; var url=URL.createObjectURL(file), img=new Image(); img.onload=function(){ var w=img.naturalWidth||0,h=img.naturalHeight||0; var ok=(w>=1920&&h>=1080)||(w>=1080&&h>=1350)||(w>=1600&&h>=900); meta.className='admin-hd-meta '+(ok?'ok':'warn'); meta.innerHTML='<strong>Upload quality:</strong> '+w+' × '+h+' px'+(ok?', Full HD ready.':', below the preferred HD size.'); URL.revokeObjectURL(url); }; img.onerror=function(){ meta.className='admin-hd-meta warn'; meta.innerHTML='<strong>Upload quality:</strong> could not read this file.'; URL.revokeObjectURL(url); }; img.src=url; }); }); }
-  function organizeHub(){ var editor=q('adminStructuredEditor'); if(!editor||q('adminRepairNotice')) return; var box=document.createElement('div'); box.id='adminRepairNotice'; box.className='admin-super-hub'; box.innerHTML='<div class="admin-super-hub-head"><div><h3>Quick Start Guide</h3><p>Use the sidebar to jump to a section, or the dropdown to go directly to any page. Every field saves when you click Save &amp; Publish.</p></div></div>'; try{ editor.parentNode.insertBefore(box, editor); }catch(e){} }
-  function blockFutureNoisyListeners(){ var originalAdd=EventTarget.prototype.addEventListener; if(EventTarget.prototype.__ssAdminPatchedAdd) return; EventTarget.prototype.__ssAdminPatchedAdd=true; EventTarget.prototype.addEventListener=function(type,listener,options){ try{ var isAdminWrap=this&&this.id==='adminFormWrap'; var text=typeof listener==='function'?Function.prototype.toString.call(listener):''; if(isAdminWrap&&(type==='input'||type==='change'||type==='click')){ if(/saveAdminPortal|queueLiveSave|applyFieldLive|ensureEditableFields|syncUnlockedState/i.test(text)) return; } }catch(e){} return originalAdd.call(this,type,listener,options); }; }
-  ready(function(){ blockFutureNoisyListeners(); cloneAdminWrap(); window.saveAdminPortal=saveClean; window.unlockAdminPortal=unlockClean; bindStableTyping(); attachHdChecks(); organizeHub(); try{ if(sessionStorage.getItem('ss_admin_unlocked')==='1'){ window.adminUnlocked=true; var wrap=q('adminFormWrap'); if(wrap) wrap.classList.add('on'); document.querySelectorAll('.admin-protected-content').forEach(function(el){ el.classList.add('on'); }); } }catch(e){} setTimeout(function(){ bindStableTyping(); attachHdChecks(); organizeHub(); },300); setTimeout(function(){ bindStableTyping(); attachHdChecks(); },1200); });
-})();
-</script>
 
-<script id="ss-admin-portal-deduped-stability-patch">
-(function(){
-  if(window.__ssAdminPortalDedupedStabilityPatch) return;
-  window.__ssAdminPortalDedupedStabilityPatch = true;
 
-  function q(id){ return document.getElementById(id); }
-  function ready(fn){
-    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
-    else fn();
-  }
-  function status(msg, kind, unlockTarget){
-    var el;
-    if(unlockTarget && !window.adminUnlocked) el = q('adminUnlockStatus');
-    else el = q('adminSaveStatus') || q('adminUnlockStatus');
-    if(!el) return;
-    var cls = 'inline-status';
-    if(kind) cls += ' ' + kind;
-    if(msg) cls += ' show';
-    el.className = cls;
-    el.textContent = msg || '';
-    var btn = q('adminPubBtn');
-    if(btn){
-      btn.classList.remove('saved','saving');
-      if(kind === 'ok' && /publish|live/i.test(msg)) btn.classList.add('saved');
-      else if(/saving|publishing/i.test(msg)) btn.classList.add('saving');
-    }
-    clearTimeout(window.__ssStatusFadeTimer);
-    if(msg && kind === 'ok' && !/typing|stable|unlock/i.test(msg)){
-      window.__ssStatusFadeTimer = setTimeout(function(){
-        el.classList.remove('show');
-        if(btn) btn.classList.remove('saved','saving');
-      }, 5000);
-    }
-  }
-  function insideAdminWrap(el){
-    return !!(el && el.closest && el.closest('#adminFormWrap'));
-  }
-  function isTextLike(el){
-    if(!insideAdminWrap(el)) return false;
-    var tag = String(el.tagName || '').toUpperCase();
-    if(tag === 'TEXTAREA' || tag === 'SELECT') return true;
-    if(tag !== 'INPUT') return false;
-    var type = String(el.type || 'text').toLowerCase();
-    return ['text','search','url','tel','email','password','number'].indexOf(type) !== -1;
-  }
-  function safeVal(id, fallback){
-    var el = q(id);
-    var val = el ? String(el.value || '').trim() : '';
-    return val || (fallback || '');
-  }
-  function previewField(field){
-    try{
-      if(!field || !field.id || !window.PAGE_EDITOR_BINDINGS) return;
-      var binding = window.PAGE_EDITOR_BINDINGS[field.id];
-      if(!binding) return;
-      var target = document.querySelector(binding.selector);
-      if(!target) return;
-      var value = String(field.value || '');
-      if(binding.mode === 'text') target.textContent = value;
-      else if(binding.mode === 'bg') target.style.backgroundImage = value ? 'url("' + value.replace(/"/g,'&quot;') + '")' : '';
-      else if(binding.mode === 'src'){ target.setAttribute('src', value); if(target.tagName === 'IMG') target.style.display = ''; var phi=target.closest('.partner-item'); var phd=phi&&phi.querySelector('.partner-placeholder'); if(phd&&value) phd.style.display='none'; }
-      else if(binding.mode === 'href') target.setAttribute('href', value);
-    }catch(err){}
-  }
 
-  function getAdminToken(){
-    try{ return localStorage.getItem('ss_auth_token') || ''; }catch(e){ return ''; }
-  }
-
-  function publishToServer(key, value){
-    var token = getAdminToken();
-    if(!token) return Promise.resolve({ok:false, status:401, error:'not signed in'});
-    return fetch('/api/settings', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-      body:JSON.stringify({key:key, value:value})
-    }).then(function(r){
-      return r.json().catch(function(){return {};}).then(function(d){
-        return {ok:r.ok, status:r.status, error:d.error||''};
-      });
-    }).catch(function(){
-      return {ok:false, status:0, error:'network'};
-    });
-  }
-
-  // Resolve to a server token, exchanging the public admin passcode for one when
-  // we don't already have it, so saves publish to the live site without a
-  // separate account login.
-  function ensurePublishToken(){
-    var t = getAdminToken();
-    if(t) return Promise.resolve(t);
-    if(window.SS && typeof window.SS.passcodeLogin === 'function'){
-      var pass = window.ADMIN_PASSCODE || 'SightSeers2026!';
-      return window.SS.passcodeLogin(pass).then(function(){ return getAdminToken(); }).catch(function(){ return ''; });
-    }
-    return Promise.resolve('');
-  }
-
-  function publishAll(settingsMap){
-    var keys = Object.keys(settingsMap);
-    if(!keys.length) return Promise.resolve({ok:true});
-    return ensurePublishToken().then(function(token){
-      if(!token) return {ok:false, status:401, error:'Could not connect to the live website to publish your changes.'};
-      return fetch('/api/settings', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-        body:JSON.stringify({batch:settingsMap})
-      }).then(function(r){
-        return r.json().catch(function(){return {};}).then(function(d){
-          var result = {ok:r.ok, status:r.status, error:(d&&d.error)||''};
-          try{ document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {detail:{key:'batch', ok:r.ok, status:r.status, error:(d&&d.error)||''}})); }catch(e){}
-          return result;
-        });
-      }).catch(function(){
-        return {ok:false, status:0, error:'network'};
-      });
-    });
-  }
-
-  function applyUnlockedState(unlocked){
-    var wrap = q('adminFormWrap');
-    if(wrap){
-      if(unlocked) wrap.classList.add('on');
-      else wrap.classList.remove('on');
-    }
-    document.querySelectorAll('.admin-protected-content').forEach(function(el){
-      if(unlocked) el.classList.add('on');
-      else el.classList.remove('on');
-    });
-    if(unlocked && typeof window.updateAdminSigninBanner==='function'){ try{ window.updateAdminSigninBanner(); }catch(e){} }
-  }
-
-  function saveStable(){
-    if(!window.adminUnlocked){
-      status('Enter the admin passcode before saving.','err');
-      return false;
-    }
-    try{ if(window.ssCaptureScroll) window.ssCaptureScroll(); }catch(e){}
-    try{
-      var d = window.DEFAULT_SITE_SETTINGS || {};
-      var site = Object.assign({}, d, window.siteSettings || {}, {
-        brandName:safeVal('adminBrandName', d.brandName),
-        tagline:safeVal('adminTagline', d.tagline),
-        phone1:safeVal('adminPhone1', d.phone1),
-        phone2:safeVal('adminPhone2', d.phone2),
-        email:safeVal('adminEmail', d.email),
-        heroEyebrow:safeVal('adminHeroEyebrow', d.heroEyebrow),
-        heroTitle:safeVal('adminHeroTitle', d.heroTitle),
-        heroEm:safeVal('adminHeroEm', d.heroEm),
-        heroSub:safeVal('adminHeroSub', d.heroSub),
-        aboutTitle:safeVal('adminAboutTitle', d.aboutTitle),
-        aboutBody:safeVal('adminAboutBody', d.aboutBody),
-        customerTitle:safeVal('adminCustomerTitle', d.customerTitle),
-        customerSub:safeVal('adminCustomerSub', d.customerSub),
-        heroImg1:safeVal('adminHeroImg1', d.heroImg1),
-        heroImg2:safeVal('adminHeroImg2', d.heroImg2),
-        heroImg3:safeVal('adminHeroImg3', d.heroImg3),
-        aboutImage:safeVal('adminAboutImage', d.aboutImage),
-        jamaicaImage:safeVal('adminJamaicaImage', d.jamaicaImage),
-        jamaicaPins:safeVal('adminJamaicaPins', ''),
-        jamaicaPopupMode:q('adminJamaicaPopupMode') && q('adminJamaicaPopupMode').value === 'always' ? 'always' : 'click',
-        tropicalMotionIntensity:safeVal('adminTropicalMotionIntensity', '100'),
-        specialKicker:safeVal('adminSpecialKicker', d.specialKicker),
-        specialTitle:safeVal('adminSpecialTitle', d.specialTitle),
-        specialBody:safeVal('adminSpecialBody', d.specialBody)
-      });
-
-      var peKey = window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings';
-      var prevPe = {};
-      try{ prevPe = JSON.parse(localStorage.getItem(peKey) || '{}'); }catch(e){}
-      var pe = {};
-      var bindings = window.PAGE_EDITOR_BINDINGS || {};
-      Object.keys(bindings).forEach(function(id){
-        var el = q(id);
-        var val = el ? String(el.value || '').trim() : '';
-        pe[id] = val || prevPe[id] || '';
-      });
-
-      var gallery = null;
-      if(typeof window.parseGalleryTextarea === 'function'){
-        gallery = window.parseGalleryTextarea((q('adminGalleryData') || {}).value || '');
-      }
-
-      var stayKey = window.STAY_ADMIN_STORAGE_KEY || 'ss_stay_page_settings';
-      var stays = null;
-      if(typeof window.parseStayListingsTextarea === 'function'){
-        var sd = window.DEFAULT_STAY_PAGE_SETTINGS || {};
-        stays = {
-          hubLead:safeVal('adminStaysHubLead', sd.hubLead),
-          countryHeroTitle:safeVal('adminStayCountryPrefix', sd.countryHeroTitle),
-          countryLeadTemplate:safeVal('adminStayCountryLeadTemplate', sd.countryLeadTemplate),
-          countryDescriptions:safeVal('adminStayCountryDescriptions', ''),
-          listings:window.parseStayListingsTextarea((q('adminStayListingsData') || {}).value || '')
-        };
-      }
-
-      var _origSet = localStorage.setItem.__ssOriginal || localStorage.setItem.bind(localStorage);
-      _origSet.call(localStorage, 'ss_site_settings', JSON.stringify(site));
-      _origSet.call(localStorage, peKey, JSON.stringify(pe));
-      if(gallery !== null) _origSet.call(localStorage, 'ss_customer_gallery', JSON.stringify(gallery));
-      if(stays !== null) _origSet.call(localStorage, stayKey, JSON.stringify(stays));
-
-      if(typeof window.getToursData === 'function'){
-        var _td = window.getToursData();
-        if(_td) _origSet.call(localStorage, 'ss_master_tours_manager_v1', JSON.stringify(_td));
-      }
-
-      if(typeof window.loadSiteSettings === 'function') window.siteSettings = window.loadSiteSettings();
-      if(typeof window.loadCustomerGallery === 'function') window.customerGalleryData = window.loadCustomerGallery();
-      if(typeof window.loadPageEditorSettings === 'function') window.pageEditorSettings = window.loadPageEditorSettings();
-      if(typeof window.loadStayPageSettings === 'function') window.stayPageSettings = window.loadStayPageSettings();
-
-      if(typeof window.applySiteSettings === 'function') window.applySiteSettings();
-      if(typeof window.applyPageEditorSettings === 'function') window.applyPageEditorSettings();
-      if(typeof window.renderStays === 'function') window.renderStays();
-      if(typeof window.renderStayCountryPage === 'function') window.renderStayCountryPage();
-      if(typeof window.renderAdminPackageManager === 'function') window.renderAdminPackageManager();
-      if(typeof window.renderAdminBlogRequests === 'function') window.renderAdminBlogRequests();
-      if(typeof window.setLiveTours === 'function' && typeof window.getToursData === 'function'){
-        window.setLiveTours(window.getToursData());
-      }
-      if(typeof window.rerenderDynamicSections === 'function') window.rerenderDynamicSections();
-      if(typeof window.refreshAdminMaster === 'function') window.refreshAdminMaster();
-
-      try{ if(window.ssReArmScroll) window.ssReArmScroll(1600); }catch(e){}
-
-      var serverPayload = {};
-      serverPayload['ss_site_settings'] = site;
-      serverPayload[peKey] = pe;
-      if(gallery !== null) serverPayload['ss_customer_gallery'] = gallery;
-      if(stays !== null) serverPayload[stayKey] = stays;
-      try{
-        var toursData = typeof window.getToursData === 'function' ? window.getToursData() : null;
-        if(toursData) serverPayload['ss_master_tours_manager_v1'] = toursData;
-      }catch(e){}
-      try{
-        var dynRaw = localStorage.getItem('ss_dynamic_sections_v1');
-        if(dynRaw) serverPayload['ss_dynamic_sections_v1'] = JSON.parse(dynRaw);
-      }catch(e){}
-
-      window.__ssSaveInFlight = true;
-      status('Publishing to live website…','saving');
-      publishAll(serverPayload).then(function(result){
-        window.__ssSaveInFlight = false;
-        if(result.ok){
-          status('Published, your changes are now live for everyone.','ok');
-        }else if(result.status === 401 || result.status === 403){
-          status('Saved locally only. Sign in with your admin account (above) to publish to the live site.','err');
-          if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
-        }else{
-          status('Saved locally. Could not reach the server, try again in a moment.','err');
-        }
-      }).catch(function(){ window.__ssSaveInFlight = false; status('Save failed, check your connection and try again.','err'); });
-
-      return true;
-    }catch(err){
-      console.error('Stable save failed', err);
-      status('Save failed: ' + (err.message || 'script error'),'err');
-      return false;
-    }
-  }
-
-  function unlockStable(){
-    var input = q('adminPasscode');
-    var pass = input ? String(input.value || '').trim() : '';
-    var validPass = window.ADMIN_PASSCODE || 'SightSeers2026!';
-    if(pass.length < 1){ status('Enter the admin passcode to unlock.','err',true); return false; }
-    if(pass === validPass){
-      window.adminUnlocked = true;
-      try{ sessionStorage.setItem('ss_admin_unlocked', '1'); }catch(e){}
-      applyUnlockedState(true);
-      if(input) input.value = '';
-      // Exchange the passcode for a server token so edits/uploads publish to the live site
-      // without needing a separate account login.
-      if(getAdminToken()){
-        status('Portal unlocked. Connected, your edits will publish to the live website.','ok',true);
-        if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
-      }else if(window.SS && typeof window.SS.passcodeLogin === 'function'){
-        status('Portal unlocked. Connecting to the live website…','ok',true);
-        window.SS.passcodeLogin(pass).then(function(){
-          status('Portal unlocked and connected, your edits and image uploads now publish to the live website.','ok',true);
-          if(typeof window.updateAdminSigninBanner === 'function') window.updateAdminSigninBanner();
-        }).catch(function(err){
-          var m = (err && err.data && err.data.error) || (err && err.message) || '';
-          if(/not configured/i.test(m)){
-            status('Portal unlocked, but publishing is not set up on the server yet (ADMIN_PASSCODE env var missing in Vercel). Edits save on this device only.','err',true);
-          }else{
-            status('Portal unlocked. Could not connect to the live website to publish, edits save on this device only for now.','err',true);
-          }
-        });
-      }else{
-        status('Portal unlocked. Edits save on this device only (publishing service unavailable).','err',true);
-      }
-      return true;
-    }
-    window.adminUnlocked = false;
-    try{ sessionStorage.removeItem('ss_admin_unlocked'); }catch(e){}
-    applyUnlockedState(false);
-    if(input) input.value = '';
-    status('That passcode did not match.','err',true);
-    return false;
-  }
-
-  function resetStable(){
-    try{
-      localStorage.removeItem('ss_site_settings');
-      localStorage.removeItem(window.PAGE_EDITOR_STORAGE_KEY || 'ss_page_editor_settings');
-      localStorage.removeItem('ss_customer_gallery');
-      localStorage.removeItem(window.STAY_ADMIN_STORAGE_KEY || 'ss_stay_page_settings');
-      if(window.TOURS_KEY) localStorage.removeItem(window.TOURS_KEY);
-      try{ sessionStorage.removeItem('ss_admin_unlocked'); }catch(e){}
-      window.adminUnlocked = false;
-      applyUnlockedState(false);
-      location.reload();
-    }catch(err){
-      console.error('Stable reset failed', err);
-      status('Reset failed: ' + (err.message || 'script error'),'err');
-    }
-  }
-
-  function bindTypingShield(){
-    var wrap = q('adminFormWrap');
-    if(!wrap || wrap.dataset.ssStableTypingBound === '1') return;
-    wrap.dataset.ssStableTypingBound = '1';
-    ['keydown','keyup','keypress','beforeinput','input','change','focusin'].forEach(function(type){
-      wrap.addEventListener(type, function(e){
-        var t = e.target;
-        if(!isTextLike(t)) return;
-        if(type === 'input' || type === 'change' || type === 'beforeinput'){
-          e.stopImmediatePropagation();
-          previewField(t);
-        }else{
-          e.stopPropagation();
-        }
-      }, true);
-    });
-  }
-
-  function suppressDocumentLevelAdminNoise(){
-    if(document.documentElement.dataset.ssAdminNoiseBlocked === '1') return;
-    document.documentElement.dataset.ssAdminNoiseBlocked = '1';
-    ['input','beforeinput','change','keydown','keyup','keypress','focusin'].forEach(function(type){
-      document.addEventListener(type, function(e){
-        if(!isTextLike(e.target)) return;
-        e.stopPropagation();
-      }, true);
-    });
-  }
-
-  function repairButtonsAndState(){
-    window.unlockAdminPortal = unlockStable;
-    window.saveAdminPortal = saveStable;
-    window.resetAdminPortal = resetStable;
-    try{
-      if(sessionStorage.getItem('ss_admin_unlocked') === '1'){
-        window.adminUnlocked = true;
-        applyUnlockedState(true);
-      }else{
-        applyUnlockedState(!!window.adminUnlocked);
-      }
-    }catch(e){
-      applyUnlockedState(!!window.adminUnlocked);
-    }
-  }
-
-  var IDLE_TIMEOUT = 5 * 60 * 1000;
-  var idleTimer = null;
-  function resetIdleTimer(){
-    clearTimeout(idleTimer);
-    if(!window.adminUnlocked) return;
-    idleTimer = setTimeout(lockFromIdle, IDLE_TIMEOUT);
-  }
-  function lockFromIdle(){
-    if(!window.adminUnlocked) return;
-    if(window.__ssSaveInFlight){
-      idleTimer = setTimeout(lockFromIdle, 10000);
-      return;
-    }
-    window.adminUnlocked = false;
-    try{ sessionStorage.removeItem('ss_admin_unlocked'); }catch(e){}
-    applyUnlockedState(false);
-    status('Session locked due to inactivity. Enter the passcode to continue.','err',true);
-  }
-  function startIdleWatch(){
-    ['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(function(evt){
-      document.addEventListener(evt, resetIdleTimer, {passive:true,capture:true});
-    });
-    resetIdleTimer();
-  }
-
-  ready(function(){
-    repairButtonsAndState();
-    if(typeof window.populateAdminForms==='function') window.populateAdminForms();
-    bindTypingShield();
-    suppressDocumentLevelAdminNoise();
-    startIdleWatch();
-    setTimeout(function(){
-      repairButtonsAndState();
-      if(typeof window.populateAdminForms==='function') window.populateAdminForms();
-      bindTypingShield();
-    }, 600);
-  });
-})();
-</script>
 
 <!-- Floating admin save button -->
 <button class="admin-fab-save" id="adminFabSave" onclick="if(typeof saveAdminPortal==='function') saveAdminPortal()">
@@ -46689,11 +45355,7 @@ body.theme-night .page .tag{
   function patchSave(){
     if(window.saveAdminPortal && !window.saveAdminPortal.__fabPatched){
       origSave = window.saveAdminPortal;
-      window.saveAdminPortal = function(){
-        window.__ssSaveInFlight = true;
-        var result = origSave.apply(this, arguments);
-        return result;
-      };
+      void 0;
       window.saveAdminPortal.__fabPatched = true;
     }
   }
@@ -46701,7 +45363,7 @@ body.theme-night .page .tag{
   setTimeout(patchSave, 1500);
   document.addEventListener('ss-settings-sync-result', function(ev){
     var d = (ev && ev.detail) || {};
-    if(d.ok){ markClean(); window.__ssSaveInFlight = false; }
+    if(d.ok && d.verified && !d.pending){ markClean(); window.__ssSaveInFlight = false; }
   });
 
   // Also show on unlock

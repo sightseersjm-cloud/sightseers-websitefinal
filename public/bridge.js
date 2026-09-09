@@ -17,7 +17,15 @@
     'ss_master_tours_manager_v1',
     'ss_dynamic_sections_v1',
     'ss_blog_requests_v1',
-    'ss_ga4_id'
+    'ss_ga4_id',
+    'ss_destination_packages_v2', 'ss_travel_club_settings_v1',
+    'ss_home_travel_club_content_v1', 'ss_discover_jamaica_parishes',
+    'ss_admin_transfers_data_v1', 'ss_admin_yacht_data_v1',
+    'ss_admin_custom_sections_v1', 'ss_admin_custom_image_map_v1',
+    'ss_universal_visual_edits_v2', 'ss_stable_admin_uploaded_images_v1',
+    'ss_admin_upload_patch_v5', 'ss_universal_image_admin_fix_v1',
+    'ss_missing_image_manager_v1', 'ss_mba_gallery_image_overrides_v1',
+    'ss_mba_gallery_image_overrides_v2', 'ss_admin_studio_v1', 'ss_live_text_edits_v1'
   ];
 
   function getToken() {
@@ -85,6 +93,7 @@
   // is enough to publish edits/uploads to the live site (no separate account needed).
   function passcodeLogin(passcode) {
     return api('auth', 'POST', { action: 'passcode', passcode: passcode }).then(function (res) {
+      if (!res.token || !res.user || !/^(admin|editor)$/.test(res.user.role)) throw new Error('The server did not create an editor session.');
       setToken(res.token);
       try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
@@ -334,59 +343,63 @@
   /* ── Settings sync (legacy compat) ── */
 
   function syncSettings(key, value) {
-    return api('settings', 'POST', { key: key, value: value });
+    var batch = {}; batch[key] = value; return publishSettings(batch);
   }
 
+  var pendingSync = null;
   function syncFromServer() {
-    fetch('/api/settings', { cache: 'no-store', headers: authHeaders() })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var origSet = (localStorage.setItem.__ssOriginal) || localStorage.setItem.bind(localStorage);
+    if (pendingSync) return pendingSync;
+    pendingSync = fetch('/api/settings', { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw new Error('Could not load published content.');
+        return r.json();
+      }).then(function (data) {
+        // Never replace edits made while the initial request was in flight.
+        if (window.SSAdmin && window.SSAdmin.isDirty()) return data;
         SS_SYNC_KEYS.forEach(function (key) {
-          if (data[key]) {
-            var incoming = data[key];
-            if ((key === 'ss_page_editor_settings' || key === 'ss_site_settings') && typeof incoming === 'object' && !Array.isArray(incoming)) {
-              var existing = {};
-              try { existing = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
-              Object.keys(incoming).forEach(function(k) {
-                if (incoming[k] !== undefined && incoming[k] !== null && incoming[k] !== '') existing[k] = incoming[k];
-              });
-              try { origSet.call(localStorage, key, JSON.stringify(existing)); } catch (e) {}
-            } else {
-              try { origSet.call(localStorage, key, JSON.stringify(incoming)); } catch (e) {}
-            }
+          if (Object.prototype.hasOwnProperty.call(data, key)) {
+            localStorage.setItem(key, key === 'ss_ga4_id' ? String(data[key]) : JSON.stringify(data[key]));
           }
         });
         document.dispatchEvent(new CustomEvent('ss-settings-synced', { detail: data }));
-      })
-      .catch(function () {});
+        return data;
+      }).finally(function () { pendingSync = null; });
+    return pendingSync;
   }
 
-  function patchLocalStorage() {
-    var original = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function (key, value) {
-      original(key, value);
-      if (key.startsWith('ss_') && SS_SYNC_KEYS.indexOf(key) !== -1) {
-        var parsed;
-        try { parsed = JSON.parse(value); } catch (e) { return; }
-        fetch('/api/settings', {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify({ key: key, value: parsed })
-        }).then(function (r) {
-          return r.json().catch(function () { return {}; }).then(function (d) {
-            document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {
-              detail: { key: key, ok: r.ok, status: r.status, error: d && d.error }
-            }));
-          });
-        }).catch(function () {
-          document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {
-            detail: { key: key, ok: false, status: 0, error: 'network' }
-          }));
-        });
+  function ensureEditorSession() {
+    if (!getToken()) return Promise.reject(Object.assign(new Error('Enter your admin passcode to publish.'), {status:401}));
+    return me().then(function (res) {
+      if (!res.user || !/^(admin|editor)$/.test(res.user.role)) {
+        throw Object.assign(new Error('This account cannot publish. Enter your admin passcode.'), {status:403});
       }
-    };
-    localStorage.setItem.__ssOriginal = original;
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
+      return getToken();
+    });
+  }
+
+  // One writer for the newest portal. Local previews never issue competing writes.
+  var publishQueue = Promise.resolve();
+  function publishSettings(batch) {
+    var snapshot = JSON.parse(JSON.stringify(batch));
+    var job = publishQueue.catch(function () {}).then(function () {
+      return ensureEditorSession().then(function () {
+        return api('settings', 'POST', {batch:snapshot});
+      }).then(function () {
+        return fetch('/api/settings', {cache:'no-store'});
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Saved, but could not verify the published content.');
+        return r.json();
+      }).then(function (stored) {
+        var mismatch = Object.keys(snapshot).some(function (key) {
+          return JSON.stringify(stored[key]) !== JSON.stringify(snapshot[key]);
+        });
+        if (mismatch) throw new Error('The live content does not match this save. Please try again.');
+        return {ok:true};
+      });
+    });
+    publishQueue = job;
+    return job;
   }
 
   /* ── Token refresh check ──────────── */
@@ -402,7 +415,7 @@
     }).catch(function () {
       var stored = null;
       try { stored = JSON.parse(localStorage.getItem(USER_KEY)); } catch (e) {}
-      if (stored && stored.role === 'editor') return;
+      // Expired editor tokens must not masquerade as a connected session.
       setToken(null);
       try { localStorage.removeItem(USER_KEY); } catch (e) {}
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: null } }));
@@ -412,8 +425,7 @@
   /* ── Init ──────────────────────────── */
 
   document.addEventListener('DOMContentLoaded', function () {
-    syncFromServer();
-    patchLocalStorage();
+    syncFromServer().catch(function () {});
     checkAuth();
   });
 
@@ -511,6 +523,9 @@
     markWaitlistRead: markWaitlistRead,
     deleteWaitlistEntry: deleteWaitlistEntry,
 
+    settingsKeys: SS_SYNC_KEYS,
+    ensureEditorSession: ensureEditorSession,
+    publishSettings: publishSettings,
     syncSettings: syncSettings,
     syncFromServer: syncFromServer
   };
