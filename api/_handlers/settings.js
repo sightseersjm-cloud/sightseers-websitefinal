@@ -1,79 +1,54 @@
-const { put, get } = require('@vercel/blob');
-const { getUser } = require('../_lib/auth');
+const { put, get, BlobNotFoundError, BlobPreconditionFailedError } = require('@vercel/blob');
+const { requireEditor } = require('../_lib/auth');
 
 const SETTINGS_PATH = 'ss-admin/settings.json';
+const SETTINGS_KEYS = new Set(require('../_lib/settings-keys.json'));
 
-// Read the private settings doc through the authenticated get() API.
-// A plain fetch() of a private blob URL is unauthorized and returns {},
-// which is why admin edits previously never appeared on reload/other devices.
 async function readSettings() {
   try {
     const result = await get(SETTINGS_PATH, { access: 'private', useCache: false });
-    if (!result || !result.stream) return {};
-    return await new Response(result.stream).json();
-  } catch {
-    return {};
+    if (!result) return { data: {}, etag: null };
+    if (!result.stream) throw new Error('Settings storage returned no content');
+    const data = await new Response(result.stream).json();
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid settings document');
+    return { data, etag: result.blob.etag };
+  } catch (err) {
+    // A failed read must never turn into an empty document and erase saved edits.
+    if (err instanceof BlobNotFoundError) return { data: {}, etag: null };
+    throw err;
   }
-}
-
-async function writeSettings(data) {
-  await put(SETTINGS_PATH, JSON.stringify(data), {
-    access: 'private',
-    contentType: 'application/json',
-    addRandomSuffix: false,
-    allowOverwrite: true
-  });
 }
 
 module.exports = async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(200).end();
-
   if (req.method === 'GET') {
-    const data = await readSettings();
-    return res.status(200).json(data);
+    try { return res.status(200).json((await readSettings()).data); }
+    catch (err) { console.error('Settings read failed:', err.message); return res.status(503).json({error:'Could not load published settings. Please try again.'}); }
   }
+  if (req.method !== 'POST') return res.status(405).end();
+  if (!requireEditor(req, res)) return;
 
-  if (req.method === 'POST') {
-    const user = getUser(req);
-    const { key, value, batch } = req.body || {};
-
-    const adminKeys = ['ss_site_settings', 'ss_page_editor_settings', 'ss_stay_page_settings', 'ss_customer_gallery', 'ss_master_tours_manager_v1', 'ss_dynamic_sections_v1', 'ss_blog_requests_v1', 'ss_ga4_id'];
-
-    if (batch && typeof batch === 'object') {
-      const keys = Object.keys(batch);
-      for (const k of keys) {
-        if (adminKeys.includes(k) && (!user || (user.role !== 'admin' && user.role !== 'editor'))) {
-          return res.status(403).json({ error: 'Admin access required for this setting' });
-        }
-      }
-      try {
-        const current = await readSettings();
-        for (const k of keys) current[k] = batch[k];
-        await writeSettings(current);
-        return res.status(200).json({ ok: true });
-      } catch (err) {
-        console.error('Settings batch write error:', err && err.message);
-        return res.status(500).json({ error: 'Could not save settings' });
-      }
-    }
-
-    if (!key) return res.status(400).json({ error: 'Key required' });
-
-    // Content editors (passcode login) and full admins can write site content.
-    if (adminKeys.includes(key) && (!user || (user.role !== 'admin' && user.role !== 'editor'))) {
-      return res.status(403).json({ error: 'Admin access required for this setting' });
-    }
-
+  const { key, value, batch } = req.body || {};
+  const updates = batch === undefined ? (typeof key === 'string' ? {[key]:value} : null) : batch;
+  if (!updates || typeof updates !== 'object' || Array.isArray(updates) || !Object.keys(updates).length) {
+    return res.status(400).json({error:'A non-empty settings batch is required'});
+  }
+  if (Object.keys(updates).some(k => !SETTINGS_KEYS.has(k))) {
+    return res.status(400).json({error:'Unknown site setting'});
+  }
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const current = await readSettings();
-      current[key] = value;
-      await writeSettings(current);
-      return res.status(200).json({ ok: true });
+      await put(SETTINGS_PATH, JSON.stringify({...current.data, ...updates}), {
+        access:'private', contentType:'application/json', addRandomSuffix:false,
+        allowOverwrite:!!current.etag, ...(current.etag ? {ifMatch:current.etag} : {})
+      });
+      return res.status(200).json({ok:true});
     } catch (err) {
-      console.error('Settings write error:', err && err.message);
-      return res.status(500).json({ error: 'Could not save setting' });
+      if (err instanceof BlobPreconditionFailedError && attempt < 2) continue;
+      console.error('Settings save failed:', err.message);
+      return res.status(err instanceof BlobPreconditionFailedError ? 409 : 503).json({error:'Could not save changes. Your edits are still in this browser; please try again.'});
     }
   }
-
-  return res.status(405).end();
 };

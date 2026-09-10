@@ -126,6 +126,7 @@ module.exports = async function handler(req, res) {
     // (bookings, contact messages) or manage user accounts — those need a real admin login.
     const editorUser = { id: 'admin-passcode', email: 'editor@sightseerscaribbean.com', name: 'Site Editor', role: 'editor' };
     const token = createToken(editorUser);
+    if (!token) return res.status(503).json({error: 'Editor sign-in is unavailable. Please check the server signing configuration.'});
     return res.status(200).json({ ok: true, token, user: editorUser });
   }
 

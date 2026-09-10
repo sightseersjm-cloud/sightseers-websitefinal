@@ -25,7 +25,7 @@ if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 let html = fs.readFileSync(SRC, 'utf8');
 console.log(`📖  Read ${(html.length/1024).toFixed(0)} KB`);
 
-const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
+const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>\n  <script src="/admin-portal.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
 // Add loading="lazy" and decoding="async" to all images except hero
