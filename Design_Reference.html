@@ -2366,17 +2366,20 @@ body.account-clean .account-sec{padding-bottom:110px}
 /* ======== SIGHT SEERS AI POPUP ======== */
 .wa-btn{right:100px}
 .scroll-top{right:100px}
-.ss-bot-launcher{position:fixed;right:28px;bottom:24px;z-index:1200;border:none;border-radius:50%;width:68px;height:68px;padding:0;background:radial-gradient(circle at 28% 26%,rgba(255,255,255,.42),rgba(255,255,255,.06) 24%,transparent 25%),linear-gradient(145deg,#54bbff 0%,#1f79d8 38%,#0b4f9f 72%,#082f69 100%);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 42px rgba(7,42,92,.34),inset 0 1px 1px rgba(255,255,255,.42),inset 0 -12px 18px rgba(5,22,48,.18);cursor:pointer;transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;backdrop-filter:blur(12px);overflow:hidden}
-.ss-bot-launcher::before{content:'';position:absolute;inset:7px 10px 34px 10px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.05));opacity:.92;pointer-events:none}
-.ss-bot-launcher::after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.24),0 0 0 1px rgba(12,66,132,.12);pointer-events:none}
-.ss-bot-launcher:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 24px 52px rgba(7,42,92,.42),inset 0 1px 1px rgba(255,255,255,.5),inset 0 -14px 20px rgba(5,22,48,.2);filter:saturate(1.06)}
-.ss-bot-launcher:active{transform:translateY(-1px) scale(.98)}
-.ss-bot-launcher-icon{width:68px;height:68px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;overflow:hidden;border:none;z-index:1}
-.ss-bot-launcher-icon::after{content:'';position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(255,255,255,.18)}
+.ss-bot-launcher{position:fixed;right:28px;bottom:24px;z-index:1200;border:none;border-radius:50%;width:54px;height:54px;padding:0;background:linear-gradient(140deg,#0a4d73 0%,#063a63 44%,#ef8731 100%);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(6,58,99,.26),0 1px 2px rgba(6,58,99,.16);cursor:pointer;transition:transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s cubic-bezier(.2,.8,.2,1);overflow:visible}
+.ss-bot-launcher::before{content:'';position:absolute;inset:0;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 56%);pointer-events:none}
+.ss-bot-launcher::after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.26);pointer-events:none}
+.ss-bot-launcher:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(6,58,99,.32),0 1px 2px rgba(6,58,99,.18)}
+.ss-bot-launcher:active{transform:translateY(-1px) scale(.95)}
+.ss-bot-launcher:focus-visible{outline:none;box-shadow:0 6px 18px rgba(6,58,99,.26),0 0 0 3px rgba(239,135,49,.5)}
+@media(prefers-reduced-motion:reduce){.ss-bot-launcher,.ss-bot-launcher-icon svg{transition-duration:.01ms}.ss-bot-launcher-ring{animation:none}}
+.ss-bot-launcher-icon{width:100%;height:100%;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;position:relative;border:none;z-index:1}
+.ss-bot-launcher-icon svg{width:23px;height:23px;display:block;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.ss-bot-launcher:hover .ss-bot-launcher-icon svg{transform:rotate(-28deg)}
 .ss-bot-launcher-copy{display:none}
 .ss-bot-launcher-copy strong,.ss-bot-launcher-copy small{display:none}
-.ss-bot-launcher-ring{position:absolute;top:9px;right:9px;left:auto;width:12px;height:12px;border-radius:50%;background:#45e39c;border:2px solid rgba(255,255,255,.92);box-shadow:0 0 0 0 rgba(69,227,156,.56);animation:ssBotPulse 1.9s infinite;z-index:2}
-.ss-bot-panel{position:fixed;right:28px;bottom:94px;width:min(390px,calc(100vw - 32px));height:min(620px,calc(100vh - 140px));background:#fff;border-radius:28px;box-shadow:0 22px 64px rgba(14,28,50,.26);z-index:1900;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(20px) scale(.96);transition:all .3s ease}
+.ss-bot-launcher-ring{position:absolute;top:3px;right:3px;left:auto;width:10px;height:10px;border-radius:50%;background:#70c257;border:2px solid #fff;box-shadow:0 0 0 0 rgba(112,194,87,.5);animation:ssBotPulse 2.6s infinite;z-index:2}
+.ss-bot-panel{position:fixed;right:28px;bottom:88px;width:min(390px,calc(100vw - 32px));height:min(620px,calc(100vh - 140px));background:#fff;border-radius:28px;box-shadow:0 22px 64px rgba(14,28,50,.26);z-index:1900;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(20px) scale(.96);transition:all .3s ease}
 .ss-bot-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
 .ss-bot-head{padding:18px 18px 16px;background:linear-gradient(135deg,var(--navy),#24446f 70%,var(--orange));color:#fff;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .ss-bot-brand{display:flex;gap:12px;align-items:flex-start}
@@ -2415,8 +2418,9 @@ body.account-clean .account-sec{padding-bottom:110px}
 @media(max-width:900px){
   .wa-btn{right:92px}
   .scroll-top{right:92px}
-  .ss-bot-launcher{right:16px;bottom:18px;width:62px;height:62px}
-  .ss-bot-panel{right:10px;bottom:82px;width:calc(100vw - 20px);height:min(70vh,620px);border-radius:24px}
+  .ss-bot-launcher{right:16px;bottom:18px;width:48px;height:48px}
+  .ss-bot-launcher-icon svg{width:21px;height:21px}
+  .ss-bot-panel{right:10px;bottom:76px;width:calc(100vw - 20px);height:min(70vh,620px);border-radius:24px}
 }
 @media(max-width:600px){
   .ss-bot-launcher-copy{display:none}
@@ -2655,7 +2659,7 @@ body.account-clean .account-sec{padding-bottom:110px}
 .community-chips{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 22px}.community-chips span{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#fff}
 .community-point{background:rgba(255,255,255,.12);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16)}
 .community-point strong,.community-copy span,.community-copy h3,.community-copy p{color:#fff}.community-point p{color:rgba(255,255,255,.82)}
-.ss-bot-launcher{border:1px solid rgba(255,255,255,.16)}
+.ss-bot-launcher{border:none}
 .ss-bot-panel{background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.55);box-shadow:0 28px 70px rgba(14,28,50,.22)}
 .ss-bot-head{position:relative;overflow:hidden;background:linear-gradient(135deg,#072f4f,#0f4f72 60%,#f5793b)}
 .ss-bot-head::after{content:'';position:absolute;right:-40px;top:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 68%);pointer-events:none}
@@ -20933,7 +20937,13 @@ vtSessionAction=function(el,type){
 
 <button class="ss-bot-launcher" id="ssBotLauncher" type="button" onclick="toggleSightSeersBot()" aria-label="Open Sight Seers AI concierge" title="Open Sight Seers AI">
   <span class="ss-bot-launcher-ring"></span>
-  <span class="ss-bot-launcher-icon"></span>
+  <span class="ss-bot-launcher-icon">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".9"/>
+      <path d="M16.3 7.7l-2.4 5.9-5.9 2.4 2.4-5.9z" fill="currentColor"/>
+      <circle cx="12" cy="12" r="1.15" fill="#063a63"/>
+    </svg>
+  </span>
   <span class="ss-bot-launcher-copy"><strong>Plan with Sight Seers AI</strong><small>Live island concierge</small></span>
 </button>
 
@@ -20960,7 +20970,7 @@ vtSessionAction=function(el,type){
     <button type="button" onclick="quickAskSightSeers('How do gift cards work?')">Gift Cards</button>
   </div>
   <div class="ss-bot-input">
-    <textarea id="ssBotInput" rows="1"></textarea>
+    <textarea id="ssBotInput" rows="1" placeholder="Ask about tours, transfers, villas…"></textarea>
     <button type="button" onclick="submitSightSeersBot()" aria-label="Send message"></button>
   </div>
 </div>
@@ -25666,6 +25676,12 @@ function escapeBotHtml(value=''){
     .replace(/'/g,'&#39;');
 }
 function nl2br(value=''){return escapeBotHtml(value).replace(/\n/g,'<br>');}
+// Bot copy is authored in this file with light inline markup. Re-open only that
+// closed set of tags after escaping — attributes can never survive, so this
+// cannot reintroduce markup injection. User messages never pass through here.
+function botRichText(value=''){
+  return nl2br(value).replace(/&lt;(\/?)(strong|b|em|i|u|br)\s*\/?&gt;/gi,(m,slash,tag)=>'<'+slash+tag.toLowerCase()+'>');
+}
 
 // Re-render the island tour with holographic island shapes after the v19 overrides load.
 try{
@@ -25700,7 +25716,7 @@ function buildSightSeersActionMarkup(actions=[]){
 }
 function renderSightSeersBot(){
   const wrap=document.getElementById('ssBotMessages'); if(!wrap) return;
-  wrap.innerHTML=ssBotHistory.map(msg=>`<div class="ss-bot-msg ${msg.role==='user'?'user':'bot'}"><div class="ss-bot-bubble">${nl2br(msg.text||'')}${msg.actions?.length?`<div class="ss-bot-actions">${buildSightSeersActionMarkup(msg.actions)}</div>`:''}</div></div>`).join('') + (ssBotTyping?`<div class="ss-bot-msg bot"><div class="ss-bot-typing"><span></span><span></span><span></span></div></div>`:'');
+  wrap.innerHTML=ssBotHistory.map(msg=>`<div class="ss-bot-msg ${msg.role==='user'?'user':'bot'}"><div class="ss-bot-bubble">${msg.role==='user'?nl2br(msg.text||''):botRichText(msg.text||'')}${msg.actions?.length?`<div class="ss-bot-actions">${buildSightSeersActionMarkup(msg.actions)}</div>`:''}</div></div>`).join('') + (ssBotTyping?`<div class="ss-bot-msg bot"><div class="ss-bot-typing"><span></span><span></span><span></span></div></div>`:'');
   wrap.scrollTop=wrap.scrollHeight;
 }
 function minimizeSightSeersBot(event){
