@@ -9290,7 +9290,11 @@ body.theme-night .blog-gallery-arrow:hover{background:linear-gradient(145deg,rgb
 
 /* Team smaller + circular */
 .team-gloss-sec{padding:24px 0 74px!important} 
-.team-gloss-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px!important;max-width:1060px;margin:0 auto} 
+.team-gloss-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px!important;max-width:1060px;margin:0 auto}
+.team-gloss-grid--solo{grid-template-columns:minmax(0,560px)!important;justify-content:center}
+.team-gloss-card--lead .team-gloss-media img{object-position:56% 24%!important}
+.team-gloss-avatar-fallback{display:none;width:128px;height:128px;border-radius:50%;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:54px;font-weight:700;color:#fff;background:linear-gradient(140deg,#0a4d73,#063a63 58%,#ef8731);border:6px solid rgba(255,255,255,.88);box-shadow:0 18px 38px rgba(6,58,99,.16)}
+@media(max-width:600px){.team-gloss-avatar-fallback{width:112px;height:112px;font-size:46px}} 
 .team-gloss-card{padding:22px 22px 20px;border-radius:30px!important} 
 .team-gloss-media{height:auto!important;min-height:unset!important;background:none!important;overflow:visible!important;padding-top:6px;justify-content:flex-start!important} 
 .team-gloss-media::after{display:none!important} 
@@ -12523,71 +12527,21 @@ body.theme-night .page .tag{
       <span class="sec-pre">Meet the Team</span>
       <h2 class="sec-title">The People Behind the Island Flow</h2>
     </div>
-    <div class="team-gloss-grid">
-      <article class="team-gloss-card reveal">
+    <div class="team-gloss-grid team-gloss-grid--solo">
+      <article class="team-gloss-card team-gloss-card--lead reveal">
         <div class="team-gloss-media">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=85&auto=format&fit=crop" alt="Travel concierge team">
-          <span class="team-gloss-tag">Guest Concierge</span>
+          <img src="/assets/team/daine.jpg" alt="Daine, Managing Director of Sight Seers Caribbean Adventures" onerror="this.style.display='none';var f=document.getElementById('daineAvatarFallback');if(f)f.style.display='flex'">
+          <span class="team-gloss-avatar-fallback" id="daineAvatarFallback" aria-hidden="true">D</span>
+          <span class="team-gloss-tag">Managing Director</span>
         </div>
         <div class="team-gloss-body">
-          <span class="team-gloss-role">Travel Concierge Team</span>
-          <h3>Guest Planning & Arrival Support</h3>
-          <p>Handles itinerary flow, pre-arrival questions, VIP upgrades, and the details that make each booking feel smoother and more personal.</p>
+          <span class="team-gloss-role">Sight Seers Caribbean Adventures</span>
+          <h3>Daine</h3>
+          <p>Leads Sight Seers Caribbean Adventures day to day, from island experience planning through to guest care, and is reachable directly for trip planning, group travel and partnership enquiries.</p>
           <div class="team-gloss-actions">
-            <a href="/cdn-cgi/l/email-protection#345d5a525b74475d535c4047515146475755465d565651555a1a575b590b4741565e515740097341514740110604775b5a575d514653511106047d5a45415d464d" class="team-gloss-btn"><i class="fas fa-envelope"></i>Email</a>
-            <a href="https://www.linkedin.com/search/results/all/?keywords=Sight%20Seers%20Caribbean%20Adventures" target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-linkedin-in"></i>LinkedIn</a>
-            <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20would%20like%20help%20with%20my%20trip." target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-gloss-card reveal" style="transition-delay:.08s">
-        <div class="team-gloss-media">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=85&auto=format&fit=crop" alt="Destination curation team">
-          <span class="team-gloss-tag">Destination Curation</span>
-        </div>
-        <div class="team-gloss-body">
-          <span class="team-gloss-role">Island Experience Team</span>
-          <h3>Water & Land Experience Curation</h3>
-          <p>Builds attractive mixes of water experiences, land escapes, and destination-specific favorites across the Caribbean portfolio.</p>
-          <div class="team-gloss-actions">
-            <a href="/cdn-cgi/l/email-protection#ec85828a83ac9f858b84989f89899e9f8f8d9e858e8e898d82c28f8381d39f998e86898f98d1a8899f9885828d98858382c9dedca9949c899e8589828f89c9dedca5829d99859e95" class="team-gloss-btn"><i class="fas fa-envelope"></i>Email</a>
-            <a href="https://www.linkedin.com/search/results/all/?keywords=Sight%20Seers%20Caribbean%20Adventures" target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-linkedin-in"></i>LinkedIn</a>
-            <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20want%20help%20choosing%20an%20experience." target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-gloss-card reveal" style="transition-delay:.16s">
-        <div class="team-gloss-media">
-          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=900&q=85&auto=format&fit=crop" alt="MBA experience team">
-          <span class="team-gloss-tag">MBA Experiences</span>
-        </div>
-        <div class="team-gloss-body">
-          <span class="team-gloss-role">MBA Experience Team</span>
-          <h3>Professional & Elevated Group Travel</h3>
-          <p>Shapes MBA travel around networking, elevated accommodation, purpose-driven moments, and polished group coordination.</p>
-          <div class="team-gloss-actions">
-            <a href="/cdn-cgi/l/email-protection#0960676f66497a606e617d7a6c6c7b7a6a687b606b6b6c6867276a6664367a7c6b636c6a7d34444b482c3b394c71796c7b606c676a6c2c3b394067787c607b70" class="team-gloss-btn"><i class="fas fa-envelope"></i>Email</a>
-            <a href="https://www.linkedin.com/search/results/all/?keywords=Sight%20Seers%20Caribbean%20Adventures" target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-linkedin-in"></i>LinkedIn</a>
-            <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20want%20to%20learn%20more%20about%20MBA%20experiences." target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-gloss-card reveal" style="transition-delay:.24s">
-        <div class="team-gloss-media">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=85&auto=format&fit=crop" alt="Guest support team">
-          <span class="team-gloss-tag">Guest Support</span>
-        </div>
-        <div class="team-gloss-body">
-          <span class="team-gloss-role">Client Care Team</span>
-          <h3>Fast Follow-Up & Booking Support</h3>
-          <p>Keeps inquiries moving, helps guests finalize custom packages, and stays reachable by email and WhatsApp for quick support.</p>
-          <div class="team-gloss-actions">
-            <a href="/cdn-cgi/l/email-protection#e58c8b838aa5968c828d9196808097968684978c878780848bcb868a88da9690878f808691d8a6898c808b91c0d7d5a6849780c0d7d5ac8b94908c979c" class="team-gloss-btn"><i class="fas fa-envelope"></i>Email</a>
-            <a href="https://www.linkedin.com/search/results/all/?keywords=Sight%20Seers%20Caribbean%20Adventures" target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-linkedin-in"></i>LinkedIn</a>
-            <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20need%20booking%20support." target="_blank" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
+            <a href="mailto:info@sightseerscaribbean.com" class="team-gloss-btn"><i class="fas fa-envelope"></i>info@sightseerscaribbean.com</a>
+            <a href="https://www.linkedin.com/search/results/all/?keywords=Sight%20Seers%20Caribbean%20Adventures" target="_blank" rel="noopener" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-linkedin-in"></i>LinkedIn</a>
+            <a href="https://wa.me/18764650630?text=Hi%20Daine%2C%20I%20would%20like%20help%20planning%20a%20trip." target="_blank" rel="noopener" class="team-gloss-btn team-gloss-btn--ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
           </div>
         </div>
       </article>
