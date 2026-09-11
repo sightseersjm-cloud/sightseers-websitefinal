@@ -24841,16 +24841,12 @@ function smoothScrollToElement(el,duration=950,offset=0){
 }
 
 /* ═══════ WELCOME AMBIENCE, tropical wind + morning birds (~6s) ═══════
-   Plays on every arrival at the site, not once per browser session: each
-   page load, each back/forward (bfcache) restore, and each return to the
-   tab after a real absence. Browsers refuse to start audio without a user
-   gesture, so each arrival re-arms and the sound fires on the visitor's
-   next click, key, tap or scroll. A cooldown stops it stacking up. */
+   Start audio: plays once each time someone arrives on the site. Browsers
+   refuse to start audio without a user gesture, so it fires on the
+   visitor's first click, key, tap or scroll after arriving. */
 (function(){
   var EVENTS=['pointerdown','keydown','touchstart','scroll'];
-  var COOLDOWN=60000;        // never twice inside a minute
-  var AWAY=5*60*1000;        // a tab-return only counts as an arrival after this
-  var armed=false, lastPlayed=0, hiddenAt=0;
+  var armed=false;
 
   function playWelcomeAmbience(){
     var AC=window.AudioContext||window.webkitAudioContext;
@@ -24939,19 +24935,12 @@ function smoothScrollToElement(el,duration=950,offset=0){
   }
   function onFirst(){
     disarm();
-    if(Date.now()-lastPlayed<COOLDOWN) return;
-    lastPlayed=Date.now();
     playWelcomeAmbience();
   }
 
   arm();
   // back/forward restores keep this script's state, so re-arm explicitly
   window.addEventListener('pageshow',function(e){ if(e.persisted) arm(); });
-  // coming back to the tab after being away is an arrival too
-  document.addEventListener('visibilitychange',function(){
-    if(document.hidden){ hiddenAt=Date.now(); return; }
-    if(hiddenAt && Date.now()-hiddenAt>=AWAY) arm();
-  });
 })();
 
 /* Hash deep-links (/#vtours, /#booking, …), lets the static
