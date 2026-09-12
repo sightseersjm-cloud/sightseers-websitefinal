@@ -24173,9 +24173,11 @@ function runUploadDiagnostics(){
   var out=document.getElementById('uploadDiagOut');
   if(!out){ out=document.createElement('div'); out.id='uploadDiagOut'; out.className='upload-diag'; var host=document.getElementById('adminStructuredEditor')||document.querySelector('.adm-body')||document.body; host.insertBefore(out,host.firstChild); }
   out.innerHTML='<div class="upload-diag-head">Running upload diagnostics…</div>';
+  function showPanel(){ try{ out.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){ try{ out.scrollIntoView(); }catch(e2){} } }
+  showPanel();
   var lines=[]; var fatal=false;
   function row(ok,label,detail){ lines.push('<div class="udl '+(ok?'ok':'bad')+'"><div><b>'+label+'</b>'+(detail?'<span>'+detail+'</span>':'')+'</div></div>'); }
-  function render(){ out.innerHTML='<div class="upload-diag-head">Upload Diagnostics</div>'+lines.join('')+verdict; }
+  function render(){ out.innerHTML='<div class="upload-diag-head">Upload Diagnostics</div>'+lines.join('')+verdict; showPanel(); }
   var verdict='';
   var tok=(window.SS&&SS.getToken&&SS.getToken())||localStorage.getItem('ss_auth_token')||'';
   var user=null; try{ user=(window.SS&&SS.currentUser&&SS.currentUser())||JSON.parse(localStorage.getItem('ss_user')||'null'); }catch(e){}
