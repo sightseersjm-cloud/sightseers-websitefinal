@@ -40754,7 +40754,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const base64=m[2]||'';
     const ext=(type.split('/')[1]||'webp').replace(/[^a-z0-9]/gi,'').toLowerCase();
     const token=await ensureAdminToken();
-    if(!token){ const e=new Error('NO_ADMIN_TOKEN'); e.code='NO_ADMIN_TOKEN'; throw e; }
+    if(!token){
+      const e=new Error('Could not get an admin token from the server. If JWT_SECRET is not set in Vercel the server cannot issue one.');
+      e.code='NO_ADMIN_TOKEN'; throw e;
+    }
     const base=String(originalName||'image').replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]/gi,'').slice(0,40)||'image';
     const res=await fetch('/api/images',{
       method:'POST',
@@ -40762,7 +40765,10 @@ document.addEventListener('DOMContentLoaded', function(){
       body:JSON.stringify({filename:base+'.'+ext,data:base64,type:type,folder:'site-images'})
     });
     let out={}; try{ out=await res.json(); }catch(e){}
-    if(res.status===401||res.status===403){ const e=new Error('NO_ADMIN_TOKEN'); e.code='NO_ADMIN_TOKEN'; throw e; }
+    if(res.status===401||res.status===403){
+      const e=new Error((out && out.error) || 'The server did not accept the admin sign-in.');
+      e.code='NO_ADMIN_TOKEN'; throw e;
+    }
     if(!res.ok) throw new Error((out && out.error) || ('Upload failed ('+res.status+')'));
     if(!out || !out.url) throw new Error('Upload did not return an image URL.');
     return out.url;
@@ -40783,6 +40789,10 @@ document.addEventListener('DOMContentLoaded', function(){
       const url=await uploadToServer(dataUrl, file.name);
       return {value:url, published:true};
     }catch(err){
+      const detail=(err && err.message) ? err.message : 'the upload failed';
+      const msg='Image not saved to the server: '+detail+' You are seeing a local preview that only exists in this browser.';
+      try{ if(typeof toast==='function') toast(msg); }catch(e){}
+      console.warn('[image upload] not published —', err);
       return {value:dataUrl, published:false, error:err};
     }
   };
