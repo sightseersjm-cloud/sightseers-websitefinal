@@ -105,8 +105,16 @@ module.exports = async function handler(req, res) {
       allowOverwrite: true
     });
   } catch (err) {
+    // Blob rejected a request we already know carries a token, so the token
+    // itself is usually the problem (stale, rotated, or pointing at a store
+    // that is no longer connected). Pass the SDK's own wording through: this
+    // route is admin/editor-gated and the message never contains the token.
     console.error('Blob put error:', err && err.message);
-    return res.status(502).json({ error: 'Storage rejected the upload. Please try again.' });
+    const why = (err && err.message) ? String(err.message).slice(0, 300) : 'no detail returned';
+    return res.status(502).json({
+      error: 'Storage rejected the upload: ' + why +
+             ' — check that a Blob store is connected to this Vercel project and that BLOB_READ_WRITE_TOKEN matches it, then redeploy.'
+    });
   }
 
   const imgUrl = blob.url || blob.downloadUrl;
