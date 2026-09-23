@@ -20954,7 +20954,7 @@ vtSessionAction=function(el,type){
 <script>
 /* ── DATA ─────────────────────────── */
 
-const ADMIN_PASSCODE='SightSeers2026!';
+const ADMIN_PASSCODE='SIGHTSEERS94!';try{window.ADMIN_PASSCODE=ADMIN_PASSCODE;}catch(e){}
 const DEFAULT_SITE_SETTINGS={
   brandName:'Sight Seers',
   tagline:'Caribbean Adventures',
@@ -24184,7 +24184,7 @@ function updateAdminSigninBanner(){
       banner.__ssAutoLoginAttempted=true;
       banner.className='admin-signin-banner ok';
       banner.innerHTML='<i class="fas fa-spinner fa-spin"></i><div>Connecting to the live website…</div>';
-      window.SS.passcodeLogin(window.ADMIN_PASSCODE||'SightSeers2026!').then(function(){
+      window.SS.passcodeLogin(window.ADMIN_PASSCODE||'SIGHTSEERS94!').then(function(){
         banner.__ssAutoLoginAttempted=false;
         updateAdminSigninBanner();
       }).catch(function(){
@@ -40845,7 +40845,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var t=getAdminToken();
     if(t) return t;
     if(window.SS && typeof window.SS.passcodeLogin==='function'){
-      var pass=window.ADMIN_PASSCODE||'SightSeers2026!';
+      var pass=window.ADMIN_PASSCODE||'SIGHTSEERS94!';
       try{ await window.SS.passcodeLogin(pass); }catch(e){}
     }
     return getAdminToken();
@@ -43874,7 +43874,7 @@ body.theme-night .page .tag{
       var tok = '';
       try{ tok = (window.SS.getToken && window.SS.getToken()) || localStorage.getItem('ss_auth_token') || ''; }catch(e){}
       if(!tok){
-        window.SS.passcodeLogin(window.ADMIN_PASSCODE || 'SightSeers2026!').then(function(){
+        window.SS.passcodeLogin(window.ADMIN_PASSCODE || 'SIGHTSEERS94!').then(function(){
           if(typeof updateAdminSigninBanner === 'function') updateAdminSigninBanner();
         }).catch(function(){});
       }
@@ -47006,7 +47006,7 @@ body.theme-night .page .tag{
     var t = getAdminToken();
     if(t) return Promise.resolve(t);
     if(window.SS && typeof window.SS.passcodeLogin === 'function'){
-      var pass = window.ADMIN_PASSCODE || 'SightSeers2026!';
+      var pass = window.ADMIN_PASSCODE || 'SIGHTSEERS94!';
       return window.SS.passcodeLogin(pass).then(function(){ return getAdminToken(); }).catch(function(){ return ''; });
     }
     return Promise.resolve('');
@@ -47179,7 +47179,7 @@ body.theme-night .page .tag{
   function unlockStable(){
     var input = q('adminPasscode');
     var pass = input ? String(input.value || '').trim() : '';
-    var validPass = window.ADMIN_PASSCODE || 'SightSeers2026!';
+    var validPass = window.ADMIN_PASSCODE || 'SIGHTSEERS94!';
     if(pass.length < 1){ status('Enter the admin passcode to unlock.','err',true); return false; }
     if(pass === validPass){
       window.adminUnlocked = true;
