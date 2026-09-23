@@ -25,6 +25,60 @@ if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 let html = fs.readFileSync(SRC, 'utf8');
 console.log(`📖  Read ${(html.length/1024).toFixed(0)} KB`);
 
+/**
+ * Tour prices for the checkout API are derived from the TOURS array here, so
+ * the page and the server can never disagree about what a tour costs. The
+ * browser sends only ids and quantities; api/_handlers/stripe-checkout.js
+ * looks the price up in the file written below. Editing a price in
+ * Design_Reference.html is therefore enough — this regenerates on every build.
+ *
+ * A failure here stops the build rather than shipping stale prices.
+ */
+function writeTourPrices(source) {
+  const start = source.indexOf('const TOURS=[');
+  if (start === -1) throw new Error('TOURS array not found — cannot generate tour prices');
+  const open = source.indexOf('[', start);
+  let depth = 0, end = -1;
+  for (let i = open; i < source.length; i++) {
+    const c = source[i];
+    if (c === '[') depth++;
+    else if (c === ']') { depth--; if (depth === 0) { end = i; break; } }
+  }
+  if (end === -1) throw new Error('TOURS array is unterminated — cannot generate tour prices');
+
+  let tours;
+  try { tours = eval(source.slice(open, end + 1)); }
+  catch (e) { throw new Error('TOURS array could not be parsed: ' + e.message); }
+  if (!Array.isArray(tours) || !tours.length) throw new Error('TOURS array parsed empty');
+
+  const seen = new Map();
+  for (const t of tours) {
+    if (t.id === undefined || t.id === null) throw new Error(`Tour "${t.title}" has no id`);
+    if (seen.has(t.id)) {
+      throw new Error(`Duplicate tour id ${t.id}: "${seen.get(t.id)}" and "${t.title}" — ` +
+                      'ids must be unique or the wrong tour opens and the wrong price is charged');
+    }
+    seen.set(t.id, t.title);
+  }
+
+  const prices = {};
+  for (const t of tours) {
+    prices[String(t.id)] = {
+      title: t.title,
+      price: (typeof t.price === 'number' && t.price > 0) ? t.price : null,
+      optionLabel: t.optionLabel || 'Option',
+      options: Array.isArray(t.options) ? t.options : []
+    };
+  }
+  const dir = path.join(__dirname, 'api', '_data');
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'tour-prices.json'), JSON.stringify(prices, null, 2) + '\n', 'utf8');
+  const buyable = Object.values(prices).filter(p => p.price !== null).length;
+  console.log(`\uD83D\uDCB2  Tour prices: ${tours.length} tours (${buyable} purchasable, ${tours.length - buyable} quote-only)`);
+}
+
+writeTourPrices(html);
+
 const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
