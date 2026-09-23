@@ -9538,7 +9538,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   </div>
   <div class="cart-panel-foot" id="cartFoot" style="display:none">
     <div class="cart-total"><span>Total</span><span class="total-price" id="cartTotal">$0.00</span></div>
-    <button class="cart-checkout-btn" onclick="shopCheckout()"><i class="fas fa-lock"></i>Proceed to Checkout</button>
+    <button class="cart-checkout-btn" onclick="tourCartCheckout()"><i class="fas fa-lock"></i>Proceed to Checkout</button>
   </div>
 </div>
 
@@ -10629,7 +10629,8 @@ body.theme-night .page .tag{
           </div>
         </div>
         <div class="tour-side-actions">
-          <button class="pd-add-btn" id="tdAddBtn" onclick="openBookingForTour()">Request This Experience</button>
+          <button class="pd-add-btn" id="tdCartBtn" onclick="addTourToCart()" style="display:none"><i class="fas fa-shopping-bag"></i> Add to Cart</button>
+          <button class="pd-add-btn alt" id="tdAddBtn" onclick="openBookingForTour()">Request This Experience</button>
         </div>
         <div class="tour-side-points" id="tdMeta"></div>
         <div class="tour-highlight-row" id="tdHighlights"></div>
@@ -21766,7 +21767,7 @@ const TOURS=[
   {id:8,title:'Custom Package Experience',cat:'Custom Packages',type:'package',img:'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85&auto=format&fit=crop'],tag:'Group Plan',rating:'9.1',reviews:'(14 reviews)',dur:'Custom',pax:'20 to 120',price:null,priceLabel:'Custom Quote',optionLabel:'Package Style',options:['Day Trip Plan','Multi-Stop Group Package'],desc:'Field trips, but make it unforgettable. We handle the buses, the activities, and the flow, you just bring the energy.',meta:'Location: Jamaica / Caribbean · Category: Group Package · Includes: Group coordination, itinerary shaping, quote-based planning',includes:['Quote-based group planning','Ideal for schools and institutions','Transport and timing can be tailored'],notes:['Custom quotes depend on size, route and activity mix.','Lead time helps with smoother coordination.'],highlights:['Group-ready','Flexible itinerary','Quote based']},
   {id:9,title:'Efoil Surfboarding Session',cat:'Water Adventures',type:'water',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85&auto=format&fit=crop'],tag:'Future Sport',rating:'9.4',reviews:'(19 reviews)',dur:'1.5 hrs',pax:'1 to 4',price:220,priceLabel:'$220',optionLabel:'Session Type',options:['Intro Session','Private Coach Session'],desc:'Hover above the water like you own it. Efoil is the Caribbean\'s boldest new flex, smooth, electric, and impossibly cool.',meta:'Location: Jamaica / Caribbean · Category: Water Adventure · Includes: Efoil board access, coaching, planning support',includes:['Intro-friendly water sport session','Premium visual appeal and social content value','Best for adventurous guests wanting something newer'],notes:['Balance and water confidence help.','Weather and sea conditions may affect timing.'],highlights:['Modern water sport','Premium energy','Unique experience']},
   {id:10,title:'Custom Celebration Package',cat:'Custom Packages',type:'package',img:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop'],tag:'Comfort',rating:'9.2',reviews:'(11 reviews)',dur:'Custom',pax:'6 to 40',price:null,priceLabel:'Custom Quote',optionLabel:'Start Planning',options:['Soft Adventure Plan','Scenic Leisure Day'],desc:'Slow mornings, scenic drives, and not a single rushed moment. Designed for guests who know that the best luxury is time.',meta:'Location: Jamaica / Caribbean · Category: Group Package · Includes: Light itinerary planning, comfort-led pacing, quote support',includes:['Comfort-led group planning','Great for softer itineraries and scenic pacing','Can include transport and lighter activities'],notes:['Custom pricing depends on destination and activity mix.','Ideal for guests prioritizing ease and accessibility.'],highlights:['Comfort paced','Scenic planning','Quote based']},
-  {id:15,title:'Plan with your team',cat:'Start Planning',type:'package',img:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1515169067868-5387ec356754?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=85&auto=format&fit=crop'],tag:'Team Plan',rating:'9.3',reviews:'(9 reviews)',dur:'Custom',pax:'6 to 80',price:null,priceLabel:'Custom Quote',optionLabel:'Team Planning Style',options:['Corporate Retreat Flow','Private Team Offsite','Celebration + Strategy Mix'],desc:'Your crew. Your rules. Your island. We build the entire experience around your group, logistics, stays, activities, all of it.',meta:'Location: Jamaica / Caribbean · Category: Custom Team Package · Includes: Group planning, lodging coordination, activity pairing and quote-based support',includes:['Ideal for teams, departments and private groups','Can pair villa stays, Vacation Rentalss, transport and tours','Built around goals, vibe, budget and timing'],notes:['Quotes depend on country, accommodation style and group size.','Great for retreats, bonding weekends and mixed work-leisure itineraries.'],highlights:['Team focused','Stay + tour mix','Quote based']},
+  {id:16,title:'Plan with your team',cat:'Start Planning',type:'package',img:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1515169067868-5387ec356754?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=85&auto=format&fit=crop'],tag:'Team Plan',rating:'9.3',reviews:'(9 reviews)',dur:'Custom',pax:'6 to 80',price:null,priceLabel:'Custom Quote',optionLabel:'Team Planning Style',options:['Corporate Retreat Flow','Private Team Offsite','Celebration + Strategy Mix'],desc:'Your crew. Your rules. Your island. We build the entire experience around your group, logistics, stays, activities, all of it.',meta:'Location: Jamaica / Caribbean · Category: Custom Team Package · Includes: Group planning, lodging coordination, activity pairing and quote-based support',includes:['Ideal for teams, departments and private groups','Can pair villa stays, Vacation Rentalss, transport and tours','Built around goals, vibe, budget and timing'],notes:['Quotes depend on country, accommodation style and group size.','Great for retreats, bonding weekends and mixed work-leisure itineraries.'],highlights:['Team focused','Stay + tour mix','Quote based']},
   {id:13,title:'Power Snorkeling Tour',cat:'Water Adventures',type:'water',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=85&auto=format&fit=crop'],tag:'Underwater',rating:'8.8',reviews:'(31 reviews)',dur:'2.5 hrs',pax:'2 to 10',price:70,priceLabel:'$70',optionLabel:'Experience Style',options:['Shared Snorkel Tour','Private Water Guide'],desc:'Crystal-clear water. Reef life in full colour. This is snorkeling done the premium way, no packed boats, no rushing.',meta:'Location: Caribbean Waters · Category: Water Adventure · Includes: Snorkel support, scenic reef access, planning assistance',includes:['Snorkeling-oriented experience','Good for active couples and small groups','Works well with beach and boat itineraries'],notes:['Basic comfort in the water is recommended.','Bring reef-safe sun protection where possible.'],highlights:['Reef views','Water activity','Easy add-on']},
   {id:14,title:'Parasailing Experience',cat:'Aerial Tours',type:'air',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop',imgs:['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85&auto=format&fit=crop','https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85&auto=format&fit=crop'],tag:'Sky High',rating:'9.0',reviews:'(22 reviews)',dur:'1 hr',pax:'1 to 2',price:80,priceLabel:'$80',optionLabel:'Flight Option',options:['Single Flight','Tandem Flight'],desc:'Rise above the coastline and see the Caribbean the way it was meant to be seen, from up there, everything looks like paradise.',meta:'Location: Jamaica / Caribbean · Category: Aerial Tour · Includes: Flight coordination, scenic lift-off experience',includes:['High-visibility coastal views','Fast, memorable adventure add-on','Great for celebratory itineraries'],notes:['Availability depends on weather and wind conditions.','Tandem options depend on operator guidelines.'],highlights:['Coastal views','Quick thrill','Celebration ready']}
 ];
@@ -22309,6 +22310,68 @@ function renderCart(){
 }
 
 function removeFromCart(idx){cart.splice(idx,1);renderCart();}
+
+/* ── TOURS IN THE CART ─────────────
+   A tour is added per guest: qty is the number of people. Quote-only tours
+   (price null) have no online price, so they stay on the enquiry path. */
+function addTourToCart(tourId=null){
+  const t = tourId!==null ? TOURS.find(x=>x.id===tourId) : currentTour;
+  if(!t) return;
+  if(typeof t.price!=='number' || !(t.price>0)){ openBookingForTour(tourId); return; }
+  const onDetail = (tourId===null);
+  const qty = onDetail ? Math.max(1, parseInt(document.getElementById('tdQty')?.value,10)||1) : 1;
+  const option = onDetail
+    ? (getSelectedTourOption() || (t.options&&t.options[0]) || '')
+    : ((t.options&&t.options[0]) || '');
+  const label = t.optionLabel || 'Experience';
+  const existing = cart.find(i=>i.id===`tour-${t.id}` && i.metaValue===(option||'Standard'));
+  if(existing){ existing.qty += qty; }
+  else{
+    cart.push({
+      id:`tour-${t.id}`, tourId:t.id, kind:'tour',
+      name:t.title, price:t.price,
+      img:(Array.isArray(t.imgs)&&t.imgs[0])||t.img,
+      metaLabel:label, metaValue:option||'Standard', qty:qty
+    });
+  }
+  renderCart();
+  if(typeof awardPoints==='function') awardPoints(25);
+  const btn = onDetail ? document.getElementById('tdCartBtn') : null;
+  if(btn){
+    const prev = btn.innerHTML;
+    btn.innerHTML='Added to Cart!'; btn.style.background='#28a745';
+    setTimeout(()=>{ btn.innerHTML=prev; btn.style.background=''; },2000);
+  }
+  openCart();
+}
+
+/* Send the cart to Stripe Checkout. Only ids and quantities go to the server —
+   it looks the prices up itself, so a tampered cart cannot change what is
+   charged. Mixed carts fall back to the existing shop checkout. */
+function tourCartCheckout(){
+  if(!cart.length) return;
+  const tours = cart.filter(i=>i.kind==='tour');
+  if(!tours.length || tours.length!==cart.length){ openCheckout(); return; }
+  const btn=document.querySelector('.cart-checkout-btn');
+  const prev=btn?btn.innerHTML:'';
+  if(btn){ btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Opening secure checkout…'; btn.disabled=true; }
+  fetch('/api/stripe-checkout',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ items: tours.map(i=>({ id:i.tourId, qty:i.qty, option:i.metaValue })) })
+  })
+  .then(r=>r.json().catch(()=>({})))
+  .then(d=>{
+    if(d && d.ok && d.url){ window.location.href=d.url; return; }
+    if(btn){ btn.innerHTML=prev; btn.disabled=false; }
+    const msg=(d&&d.error)||'Checkout is unavailable right now.';
+    if(typeof toast==='function') toast(msg+' You can still send this as a request instead.');
+    else alert(msg);
+  })
+  .catch(()=>{
+    if(btn){ btn.innerHTML=prev; btn.disabled=false; }
+    if(typeof toast==='function') toast('Network error opening checkout. Please try again.');
+  });
+}
 
 function addToCart(){
   if(!currentProduct)return;
@@ -22908,21 +22971,27 @@ function openTour(id){
   document.getElementById('tdQty').value=1;
   const addBtn=document.getElementById('tdAddBtn');
   const bookBtn=document.getElementById('tdBookBtn');
+  const cartBtn=document.getElementById('tdCartBtn');
+  if(cartBtn){
+    const buyable = (typeof t.price==='number' && t.price>0);
+    cartBtn.style.display = buyable ? '' : 'none';
+    cartBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart · $'+(buyable?t.price:'');
+    cartBtn.onclick = ()=>addTourToCart();
+  }
+  // tdBookBtn was removed from the markup but the code still addressed it, so
+  // every tour detail threw here and never reached the code below. Guarded.
   if(t.price===null){
     addBtn.innerHTML='Request Quote';
     addBtn.onclick=()=>openBookingForTour();
-    bookBtn.innerHTML='Plan This Tour';
-    bookBtn.onclick=()=>openBookingForTour();
+    if(bookBtn){ bookBtn.innerHTML='Plan This Tour'; bookBtn.onclick=()=>openBookingForTour(); }
   } else if(isMba){
     addBtn.innerHTML='Reserve Experience';
     addBtn.onclick=()=>openBookingForTour();
-    bookBtn.innerHTML='<i class="fas fa-user-tie"></i>Schedule Consultation';
-    bookBtn.onclick=()=>openBookingForTour();
+    if(bookBtn){ bookBtn.innerHTML='<i class="fas fa-user-tie"></i>Schedule Consultation'; bookBtn.onclick=()=>openBookingForTour(); }
   } else {
     addBtn.innerHTML='Request This Experience';
     addBtn.onclick=()=>openBookingForTour();
-    bookBtn.style.display='none';
-    bookBtn.onclick=bookTourNow;
+    if(bookBtn){ bookBtn.style.display='none'; bookBtn.onclick=bookTourNow; }
   }
   setTimeout(()=>{window.scrollTo({top:0,behavior:'smooth'});},50);
   initReveal();
@@ -23209,7 +23278,9 @@ function switchTourTab(btn,id){
 }
 function quickAddTour(id){
   const t=TOURS.find(x=>x.id===id); if(!t) return;
-  openBookingForTour(t.id);
+  // The button says "Book / Cart" — make it cart. Quote-only tours have no
+  // online price, so addTourToCart sends those to the enquiry form instead.
+  addTourToCart(t.id);
 }
 
 function quickAddPopularTour(destination,title,price,img,type='Tour Experience',notes=''){

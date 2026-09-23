@@ -1,0 +1,166 @@
+{
+  "1": {
+    "title": "Bamboo Rafting Adventure",
+    "price": 75,
+    "optionLabel": "Tour Format",
+    "options": [
+      "Shared Experience",
+      "Private Upgrade"
+    ]
+  },
+  "2": {
+    "title": "ATV Mountain Expedition",
+    "price": 90,
+    "optionLabel": "Ride Type",
+    "options": [
+      "Shared Track Slot",
+      "Private Group Ride"
+    ]
+  },
+  "3": {
+    "title": "Zip-line Canopy Tour",
+    "price": 85,
+    "optionLabel": "Experience Type",
+    "options": [
+      "Standard Canopy Run",
+      "Private Adventure Slot"
+    ]
+  },
+  "4": {
+    "title": "Catamaran Sunset Cruise",
+    "price": 120,
+    "optionLabel": "Cruise Selection",
+    "options": [
+      "Shared Sunset Cruise",
+      "Private Charter Upgrade"
+    ]
+  },
+  "5": {
+    "title": "Jamaica MBA Experience",
+    "price": 950,
+    "optionLabel": "MBA Experience Format",
+    "options": [
+      "Leadership & Industry Edition",
+      "Luxury Networking Retreat",
+      "Alumni Development Escape",
+      "Luxury Getaway Weekend"
+    ]
+  },
+  "6": {
+    "title": "Dunn's River Falls Hike",
+    "price": 65,
+    "optionLabel": "Entry Option",
+    "options": [
+      "Standard Entry",
+      "Guided Combo Upgrade"
+    ]
+  },
+  "7": {
+    "title": "Horseback Beach Ride",
+    "price": 95,
+    "optionLabel": "Ride Style",
+    "options": [
+      "Standard Beach Ride",
+      "Private Scenic Upgrade"
+    ]
+  },
+  "8": {
+    "title": "Custom Package Experience",
+    "price": null,
+    "optionLabel": "Package Style",
+    "options": [
+      "Day Trip Plan",
+      "Multi-Stop Group Package"
+    ]
+  },
+  "9": {
+    "title": "Efoil Surfboarding Session",
+    "price": 220,
+    "optionLabel": "Session Type",
+    "options": [
+      "Intro Session",
+      "Private Coach Session"
+    ]
+  },
+  "10": {
+    "title": "Custom Celebration Package",
+    "price": null,
+    "optionLabel": "Start Planning",
+    "options": [
+      "Soft Adventure Plan",
+      "Scenic Leisure Day"
+    ]
+  },
+  "11": {
+    "title": "Barbados MBA Experience",
+    "price": 1250,
+    "optionLabel": "MBA Experience Format",
+    "options": [
+      "Beachfront Leadership Retreat",
+      "Graduate Networking Escape",
+      "Refined Alumni Weekend",
+      "Luxury Getaway Weekend"
+    ]
+  },
+  "12": {
+    "title": "Saint Lucia MBA Experience",
+    "price": 1450,
+    "optionLabel": "MBA Experience Format",
+    "options": [
+      "Pitons Luxury Retreat",
+      "Wellness + Leadership Escape",
+      "Curated Alumni Summit",
+      "Luxury Getaway Weekend"
+    ]
+  },
+  "13": {
+    "title": "Power Snorkeling Tour",
+    "price": 70,
+    "optionLabel": "Experience Style",
+    "options": [
+      "Shared Snorkel Tour",
+      "Private Water Guide"
+    ]
+  },
+  "14": {
+    "title": "Parasailing Experience",
+    "price": 80,
+    "optionLabel": "Flight Option",
+    "options": [
+      "Single Flight",
+      "Tandem Flight"
+    ]
+  },
+  "15": {
+    "title": "Luxury Getaway Weekend",
+    "price": 1350,
+    "optionLabel": "MBA Experience Format",
+    "options": [
+      "Yacht Social Escape",
+      "Villa & Excursion Weekend",
+      "Luxury Celebration Retreat",
+      "Networking Getaway Circle"
+    ]
+  },
+  "16": {
+    "title": "Plan with your team",
+    "price": null,
+    "optionLabel": "Team Planning Style",
+    "options": [
+      "Corporate Retreat Flow",
+      "Private Team Offsite",
+      "Celebration + Strategy Mix"
+    ]
+  },
+  "20": {
+    "title": "MBA Lifestyle Voyage",
+    "price": 1800,
+    "optionLabel": "Voyage Format",
+    "options": [
+      "Island-Hop Flotilla",
+      "Yacht & Villa Hybrid",
+      "Beach Club Circuit",
+      "Full Caribbean Crossing"
+    ]
+  }
+}
