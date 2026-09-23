@@ -6,6 +6,7 @@
 
 const https = require('https');
 const querystring = require('querystring');
+const { sceneByPlaybackId } = require('../_lib/vt-scenes');
 
 function stripeRequest(method, path, params) {
   return new Promise((resolve, reject) => {
@@ -71,8 +72,24 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  if (!cartLines && (!tourName || !priceUsd)) {
-    return res.status(400).json({ error: 'tourName and priceUsd required' });
+  // Live V-Tour seats. The browser used to send its own tourName and priceUsd,
+  // and they were billed as given — so a posted priceUsd of 1 charged $1 for an
+  // $1,800 experience. The cart path was hardened against exactly this; this one
+  // was not. The price now comes from the scene config keyed by playback id, and
+  // anything the browser claims is ignored.
+  let liveLine = null;
+  if (!cartLines) {
+    if (!playbackId) {
+      return res.status(400).json({ error: 'playbackId required' });
+    }
+    const scene = sceneByPlaybackId(playbackId);
+    if (!scene) {
+      return res.status(400).json({ error: 'Unknown live session.' });
+    }
+    if (!(scene.price > 0)) {
+      return res.status(400).json({ error: '"' + scene.title + '" has no online price set.' });
+    }
+    liveLine = { name: scene.title, price: scene.price };
   }
 
   const origin = req.headers.origin || 'https://sightseerscaribbean.com';
@@ -104,8 +121,8 @@ module.exports = async function handler(req, res) {
     params['metadata[tours]'] = cartLines.map(l => l.name + ' x' + l.qty).join(', ').slice(0, 480);
   } else {
     params['line_items[0][price_data][currency]'] = 'usd';
-    params['line_items[0][price_data][unit_amount]'] = String(Math.round(Number(priceUsd) * 100));
-    params['line_items[0][price_data][product_data][name]'] = tourName;
+    params['line_items[0][price_data][unit_amount]'] = String(Math.round(liveLine.price * 100));
+    params['line_items[0][price_data][product_data][name]'] = liveLine.name;
     params['line_items[0][price_data][product_data][description]'] = 'Sight Seers Caribbean Live Virtual Tour';
     params['line_items[0][quantity]'] = '1';
   }

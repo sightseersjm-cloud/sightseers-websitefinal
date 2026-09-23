@@ -23,31 +23,12 @@
  */
 
 const { getUser } = require('../_lib/auth');
+/* Shared with /api/stripe-checkout so the price shown and the price billed
+   come from the same place. */
+const { muxScenes } = require('../_lib/vt-scenes');
 
 const API_VERSION = '2026-08-13';
 
-/* Mux playback IDs are public by design — playback is gated by signed viewer
-   tokens, not by keeping the ID secret. Scene titles and prices stay here so a
-   new scene can be added without touching the client bundle. */
-function muxScenes() {
-  const raw = (process.env.MUX_PLAYBACK_IDS || '').trim();
-  const scenes = {};
-
-  // Format: "blue-lagoon:PLAYBACKID:Blue Lagoon Live:42,craft-market:ID:Title:38"
-  if (raw) {
-    raw.split(',').forEach(entry => {
-      const parts = entry.split(':').map(s => s.trim());
-      const [key, playbackId, title, price] = parts;
-      if (!key || !playbackId) return;
-      scenes[key] = {
-        playbackId,
-        title: title || key,
-        price: Number(price) || 0
-      };
-    });
-  }
-  return scenes;
-}
 
 function present(v) {
   return typeof v === 'string' && v.trim().length > 0;
