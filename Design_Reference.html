@@ -63,6 +63,32 @@ window.SS_GA4_ID = window.SS_GA4_ID || '';
   });
 })();
 </script>
+<script>
+/* ── Conversion tracking ──────────────────────
+   ssTrack() is a safe wrapper around gtag: it no-ops until a Measurement ID is
+   set in the admin portal, so these calls can be wired now and start recording
+   the moment analytics is switched on. Never throws — a tracking failure must
+   not break a booking. */
+window.ssTrack = function(name, params){
+  try{
+    if (typeof gtag !== 'function') return;
+    gtag('event', name, params || {});
+  }catch(e){}
+};
+/* Phone and WhatsApp taps are conversions for this business but leave the page,
+   so they are caught here by delegation rather than per-link handlers. */
+document.addEventListener('click', function(e){
+  try{
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('tel:') === 0) ssTrack('phone_click', { source_page: location.pathname });
+    else if (href.indexOf('wa.me') > -1 || href.indexOf('api.whatsapp.com') > -1)
+      ssTrack('whatsapp_click', { source_page: location.pathname });
+    else if (href.indexOf('mailto:') === 0) ssTrack('email_click', { source_page: location.pathname });
+  }catch(_){}
+}, true);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
@@ -18726,6 +18752,7 @@ function vtGoLiveStartWithAuth(){
 }
 
 function vtJoinLive(tourName, priceUsd, playbackId, streamId){
+  ssTrack('begin_checkout',{kind:'vtour-seat',item_name:tourName});
   vtToast('<i class="fas fa-spinner fa-spin"></i> Opening checkout…');
   fetch('/api/stripe-checkout',{
     method:'POST',
@@ -22355,6 +22382,7 @@ function tourCartCheckout(){
   const btn=document.querySelector('.cart-checkout-btn');
   const prev=btn?btn.innerHTML:'';
   if(btn){ btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Opening secure checkout…'; btn.disabled=true; }
+  ssTrack('begin_checkout',{kind:'tour-cart',items:tours.length});
   fetch('/api/stripe-checkout',{
     method:'POST', headers:{'Content-Type':'application/json'},
     body:JSON.stringify({ items: tours.map(i=>({ id:i.tourId, qty:i.qty, option:i.metaValue })) })
@@ -22374,6 +22402,7 @@ function tourCartCheckout(){
 }
 
 function addToCart(){
+  try{ssTrack('add_to_cart',{});}catch(e){}
   if(!currentProduct)return;
   const qty=parseInt(document.getElementById('pdQty').value)||1;
   const size=document.querySelector('.pd-size.active')?.textContent||'Standard';
@@ -25402,6 +25431,7 @@ function submitBook(){
   if(window.SS&&typeof SS.createBooking==='function'){
     SS.createBooking(data).then(function(){
       document.getElementById('bookMsg').style.display='block';
+      ssTrack('generate_lead',{form:'booking',method:'api'});
       if(btn){btn.innerHTML='Request Submitted!';btn.classList.add('success')}
       try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').selectedIndex=0;if(document.getElementById('b_budget'))document.getElementById('b_budget').selectedIndex=0;if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
       setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
@@ -25411,6 +25441,7 @@ function submitBook(){
     });
   }else{
     document.getElementById('bookMsg').style.display='block';
+    ssTrack('generate_lead',{form:'booking',method:'fallback'});
     if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents=''}
   }
 }
