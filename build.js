@@ -79,6 +79,46 @@ function writeTourPrices(source) {
 
 writeTourPrices(html);
 
+/**
+ * The same experience can be priced in two places: the V-Tour session records
+ * in Design_Reference.html, and tours-data.json, which generates the static
+ * landing pages under public/virtual-tours/. Nothing kept them in step, so a
+ * visitor could read one price on a landing page and be quoted another when
+ * they joined the session.
+ *
+ * This reports disagreements rather than failing the build, because deciding
+ * which figure is correct is a business call, not a build-time one. Set
+ * STRICT_PRICES=1 to make a mismatch fail instead, once the data agrees.
+ */
+function checkPriceAgreement(html) {
+  let tourData;
+  try { tourData = require('./tours-data.json'); }
+  catch (e) { return; }
+  if (!Array.isArray(tourData)) return;
+
+  const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const sessions = [];
+  const re = /'([a-z0-9-]+)':\{title:'([^']+)'[^}]*?price:(\d+)/g;
+  let m;
+  while ((m = re.exec(html))) sessions.push({ title: m[2], price: Number(m[3]) });
+
+  const clashes = [];
+  for (const s of sessions) {
+    const t = tourData.find(x => norm(x.title) === norm(s.title));
+    if (t && typeof t.priceFrom === 'number' && t.priceFrom !== s.price) {
+      clashes.push(`"${s.title}": session $${s.price} vs landing page $${t.priceFrom}`);
+    }
+  }
+  if (!clashes.length) return;
+
+  const msg = 'Price disagreement between session data and tours-data.json:\n' +
+    clashes.map(c => '     - ' + c).join('\n');
+  if (process.env.STRICT_PRICES === '1') throw new Error(msg);
+  console.log('\u26A0\uFE0F   ' + msg);
+}
+
+checkPriceAgreement(html);
+
 const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
