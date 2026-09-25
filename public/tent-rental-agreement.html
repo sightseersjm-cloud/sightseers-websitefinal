@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tent Rental Agreement</title>
+<meta name="description" content="Sight Seers Caribbean Adventures — Two Person Tent Rental Agreement.">
+<link rel="icon" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#063a63; --green:#70c257; --orange:#ef8731; --red:#d9483b;
+    --ink:#132a3a; --secondary:#5b6b76; --tertiary:#8a97a0;
+    --fill:#f3f8f4; --fill2:#e8f0ea; --hair:#d8e2db;
+    --gtint:rgba(112,194,87,.15); --otint:rgba(239,135,49,.14); --ntint:rgba(6,58,99,.09); --rtint:rgba(217,72,59,.12);
+  }
+  @page{ size: Letter; margin: 0.6in 0.6in 0.7in; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; color:var(--ink); }
+  body{ font-family:'Raleway',sans-serif; font-size:9.8pt; line-height:1.55; -webkit-font-smoothing:antialiased; letter-spacing:-0.003em; background:#fff; }
+  .page{ max-width:8.5in; margin:0 auto; }
+  @media screen{
+    body{ background:linear-gradient(180deg,#ffffff 0%,#f6fbf8 58%,#fff9f1 100%); }
+    .page{ background:#fff; padding:52px 60px; margin:32px auto; border-radius:26px; box-shadow:0 18px 60px rgba(6,58,99,.10); }
+  }
+  @media screen and (max-width:720px){
+    .page{ padding:26px 18px; margin:0; border-radius:0; }
+    .tiles{ grid-template-columns:1fr 1fr !important; }
+    .grid2,.sig,.wear{ grid-template-columns:1fr !important; }
+  }
+
+  /* Top bar */
+  .topbar{ display:flex; justify-content:space-between; align-items:center; gap:18px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:46px; width:auto; }
+  .brand .bt{ font-family:'Playfair Display',serif; font-weight:700; font-size:12.5pt; color:var(--navy); line-height:1.1; }
+  .brand .bt small{ display:block; font-family:'Raleway',sans-serif; font-weight:600; font-size:7.4pt; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); }
+  .docmeta{ display:flex; gap:8px; }
+  .chip{ background:var(--fill); border-radius:999px; padding:6px 13px; font-size:7.8pt; color:var(--secondary); white-space:nowrap; }
+  .chip b{ color:var(--ink); font-weight:600; }
+  .chip .bl{ display:inline-block; border-bottom:1px solid var(--tertiary); width:66px; height:10px; vertical-align:-1px; margin-left:4px; }
+
+  /* Hero */
+  .hero{ margin:34px 0 22px; }
+  .eyebrow{ font-size:8pt; font-weight:700; color:var(--orange); letter-spacing:.16em; text-transform:uppercase; margin-bottom:8px; }
+  h1{ font-family:'Playfair Display',serif; font-weight:700; font-size:31pt; line-height:1.05; letter-spacing:-0.01em; margin:0 0 12px; color:var(--ink); }
+  h1 .accent{ color:var(--navy); font-style:italic; }
+  .lede{ font-size:11pt; line-height:1.5; color:var(--secondary); max-width:6.3in; margin:0; }
+  .lede b{ color:var(--ink); font-weight:600; }
+
+  /* Spec tiles */
+  .tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:11px; margin:24px 0 8px; break-inside:avoid; }
+  .tile{ background:var(--fill); border-radius:18px; padding:15px 15px 13px; }
+  .tile .v{ font-family:'Playfair Display',serif; font-size:18pt; font-weight:700; letter-spacing:-0.01em; color:var(--navy); line-height:1.1; }
+  .tile .v small{ font-family:'Raleway',sans-serif; font-size:9pt; font-weight:700; color:var(--navy); }
+  .tile .l{ font-size:7.8pt; color:var(--secondary); margin-top:5px; }
+  .tile.accent{ background:var(--navy); } .tile.accent .v,.tile.accent .v small{ color:#fff; } .tile.accent .l{ color:rgba(255,255,255,.72); }
+
+  /* Sections */
+  section{ margin-top:30px; }
+  .sechead{ margin-bottom:11px; break-after:avoid; }
+  .sechead .n{ font-size:8pt; font-weight:700; color:var(--green); letter-spacing:.1em; text-transform:uppercase; }
+  h2{ font-family:'Playfair Display',serif; font-size:16.5pt; font-weight:700; letter-spacing:-0.005em; margin:2px 0 0; color:var(--ink); line-height:1.2; }
+  h3{ font-size:8pt; font-weight:700; color:var(--secondary); text-transform:uppercase; letter-spacing:.08em; margin:14px 0 6px 14px; break-after:avoid; }
+  p{ margin:0 0 8px; }
+  .muted{ color:var(--secondary); }
+
+  /* grouped list */
+  .group{ background:var(--fill); border-radius:16px; overflow:hidden; margin:0 0 8px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+  .row{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:10px 15px; position:relative; break-inside:avoid; }
+  .row + .row::before{ content:""; position:absolute; top:0; left:15px; right:0; border-top:0.75px solid var(--hair); }
+  .row .k{ color:var(--ink); font-weight:600; flex:0 0 38%; }
+  .row .v{ color:var(--secondary); text-align:right; flex:1; }
+  .row .v b{ color:var(--ink); font-weight:600; }
+  .bl{ display:inline-block; border-bottom:1px solid var(--tertiary); min-width:80px; height:12px; vertical-align:-1px; }
+
+  /* tables */
+  .table{ background:var(--fill); border-radius:16px; overflow:hidden; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+  .table .tr{ display:grid; grid-template-columns:2.4fr .7fr .7fr 2fr; padding:9px 15px; position:relative; break-inside:avoid; }
+  .table .tr + .tr::before{ content:""; position:absolute; top:0; left:15px; right:0; border-top:0.75px solid var(--hair); }
+  .table .th{ font-size:7.6pt; font-weight:700; color:var(--secondary); text-transform:uppercase; letter-spacing:.05em; background:var(--fill2); }
+  .table .tr > div:not(:first-child){ text-align:center; color:var(--secondary); }
+  .table .tr > div:last-child{ text-align:left; }
+  .table.dmg .tr{ grid-template-columns:1fr 2.6fr 1.7fr; align-items:start; }
+  .table.dmg .tr > div{ text-align:left !important; }
+  .table.dmg .tr > div:nth-child(2){ color:var(--ink); }
+  .table.charges .tr{ grid-template-columns:3fr 1fr; }
+
+  /* Fields */
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  .card{ background:var(--fill); border-radius:18px; padding:15px 17px; break-inside:avoid; }
+  .card .title{ font-family:'Playfair Display',serif; font-weight:700; font-size:11pt; margin-bottom:9px; color:var(--ink); }
+  .card .title small{ display:block; font-family:'Raleway',sans-serif; font-size:8pt; font-weight:500; color:var(--secondary); letter-spacing:0; margin-top:1px; }
+  .f{ margin-bottom:9px; }
+  .f label{ display:block; font-size:7.6pt; color:var(--secondary); margin:0 0 3px 2px; }
+  .f .in{ background:#fff; border-radius:10px; height:27px; box-shadow:inset 0 0 0 0.75px var(--hair); }
+  .f .in.tall{ height:40px; }
+  .card.white{ background:#fff; box-shadow:inset 0 0 0 0.75px var(--hair); }
+  .card.white .f .in{ background:var(--fill); box-shadow:none; }
+
+  /* Bullets */
+  ul{ list-style:none; padding:0; margin:0; }
+  .group ul li, ul.plain li{ position:relative; padding:9px 15px 9px 34px; }
+  .group ul li + li::before{ content:""; position:absolute; top:0; left:34px; right:0; border-top:0.75px solid var(--hair); }
+  .group ul li::after{ content:"•"; position:absolute; left:17px; top:8px; color:var(--green); font-weight:700; font-size:11pt; line-height:1.3; }
+  ul li{ break-inside:avoid; }
+
+  /* Circles and pills */
+  .o{ display:inline-block; width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1.2px var(--tertiary); vertical-align:-2px; margin:0 4px 0 10px; }
+  .o:first-child{ margin-left:0; }
+  .pill{ display:inline-block; border-radius:999px; padding:2px 10px; font-size:7.8pt; font-weight:700; }
+  .pill.g{ background:var(--gtint); color:#3f8a31; }
+  .pill.n{ background:var(--ntint); color:var(--navy); }
+  .pill.o2{ background:var(--otint); color:#c4631d; }
+  .pill.r{ background:var(--rtint); color:#b8352a; }
+
+  /* Wear compare */
+  .wear{ display:grid; grid-template-columns:1fr 1fr; gap:11px; break-inside:avoid; }
+  .wear .card{ padding:15px 0 7px; }
+  .wear .card .title{ padding:0 17px; display:flex; align-items:center; gap:8px; font-size:10.5pt; }
+  .wear .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+  .wear ul li{ padding:6px 17px 6px 34px; position:relative; }
+  .wear ul li::after{ content:"•"; position:absolute; left:19px; top:5px; font-weight:700; font-size:11pt; line-height:1.3; }
+  .wear .ok li::after{ color:var(--green); } .wear .bad li::after{ color:var(--orange); }
+
+  /* Note */
+  .note{ background:var(--otint); border-radius:16px; padding:13px 17px; margin:10px 0; break-inside:avoid; }
+  .note b{ font-weight:700; }
+  .note.g{ background:var(--gtint); }
+
+  /* Signatures */
+  .sig{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  .initials{ font-size:8pt; color:var(--secondary); margin-top:5px; }
+
+  .office{ margin-top:0; break-before:page; }
+  .otop{ display:flex; justify-content:space-between; align-items:center; margin-bottom:11px; }
+  .status{ display:flex; flex-wrap:wrap; gap:6px 0; padding:11px 15px; }
+
+  footer{ margin-top:28px; padding-top:11px; border-top:0.75px solid var(--hair); display:flex; justify-content:space-between; font-size:7.6pt; color:var(--tertiary); }
+
+  .actions{ max-width:8.5in; margin:0 auto 8px; display:flex; justify-content:flex-end; gap:10px; padding:0 6px; }
+  .btn{ font-family:'Raleway',sans-serif; font-weight:700; font-size:9.5pt; border:none; cursor:pointer; border-radius:999px; padding:10px 20px; background:var(--navy); color:#fff; box-shadow:0 8px 22px rgba(6,58,99,.22); }
+  .btn.ghost{ background:#fff; color:var(--navy); box-shadow:inset 0 0 0 1px var(--hair); }
+  @media print{ .actions{ display:none; } }
+</style>
+</head>
+<body>
+
+<div class="actions">
+  <a class="btn ghost" href="/">← Back to site</a>
+  <button class="btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <img src="/assets/inline/1ba92aa926.png" alt="Sight Seers Caribbean Adventures logo">
+      <div class="bt">Sight Seers<small>Caribbean Adventures</small></div>
+    </div>
+    <div class="docmeta">
+      <span class="chip">Agreement No.<span class="bl"></span></span>
+      <span class="chip">Date<span class="bl"></span></span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">Equipment Rental Agreement</div>
+    <h1>Two&nbsp;Person&nbsp;Tent. <span class="accent">Rented with care.</span></h1>
+    <p class="lede">This Agreement is between <b>Sight Seers Caribbean Adventures</b> ("Sight Seers", "we", "us") and the Renter named below ("you"). By signing, you confirm you have read and accepted every term, including the damage and replacement charges in Sections 7 to 9.</p>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="v">2</div><div class="l">Person capacity</div></div>
+    <div class="tile"><div class="v">4.3 <small>lb</small></div><div class="l">Packed weight</div></div>
+    <div class="tile"><div class="v">PU3000</div><div class="l">Waterproof coating</div></div>
+    <div class="tile accent"><div class="v">7.9 <small>mm</small></div><div class="l">Fibreglass poles</div></div>
+  </div>
+
+  <!-- Section 1 -->
+  <section>
+    <div class="sechead"><div class="n">Section 1</div><h2>Parties</h2></div>
+    <div class="grid2">
+      <div class="card">
+        <div class="title">Owner<small>Sight Seers Caribbean Adventures</small></div>
+        <div class="f"><label>Representative</label><div class="in"></div></div>
+        <div class="f"><label>Phone</label><div class="in"></div></div>
+        <div class="f"><label>Email</label><div class="in"></div></div>
+      </div>
+      <div class="card">
+        <div class="title">Renter<small>Person responsible for the equipment</small></div>
+        <div class="f"><label>Full name</label><div class="in"></div></div>
+        <div class="grid2">
+          <div class="f"><label>Phone</label><div class="in"></div></div>
+          <div class="f"><label>Email</label><div class="in"></div></div>
+        </div>
+        <div class="f"><label>Address</label><div class="in"></div></div>
+        <div class="grid2">
+          <div class="f"><label>ID type and last 4 digits</label><div class="in"></div></div>
+          <div class="f"><label>Group or tour reference</label><div class="in"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2 -->
+  <section>
+    <div class="sechead"><div class="n">Section 2</div><h2>Equipment and specifications</h2></div>
+    <p class="muted">JELUCAMP Dome Camping Tent · 1 to 2 Person</p>
+    <div class="group">
+      <div class="row"><div class="k">Capacity</div><div class="v"><b>Maximum two (2) occupants</b></div></div>
+      <div class="row"><div class="k">Dimensions (pitched)</div><div class="v">86.6" L × 59.1" W × 43.3" H · approx. 220 × 150 × 110 cm</div></div>
+      <div class="row"><div class="k">Weight</div><div class="v">4.3 lb (approx. 1.95 kg), packed in carry bag</div></div>
+      <div class="row"><div class="k">Fabric</div><div class="v">Polyester with PU3000 waterproof coating</div></div>
+      <div class="row"><div class="k">Frame</div><div class="v">7.9 mm fibreglass poles</div></div>
+      <div class="row"><div class="k">Door</div><div class="v">Double layer · inner insect mesh, outer zippered panel</div></div>
+      <div class="row"><div class="k">Replacement poles</div><div class="v">JELUCAMP set · Amazon ASIN B0CXT2J7S4</div></div>
+      <div class="row"><div class="k">Unit ID / serial tag</div><div class="v"><span class="bl"></span></div></div>
+    </div>
+
+    <h3>Inventory issued</h3>
+    <div class="table">
+      <div class="tr th"><div>Item</div><div>Out</div><div>In</div><div>Condition notes</div></div>
+      <div class="tr"><div>Tent body with double layer door</div><div>1</div><div></div><div></div></div>
+      <div class="tr"><div>Fibreglass pole set (7.9 mm)</div><div></div><div></div><div></div></div>
+      <div class="tr"><div>Rainfly / outer cover (if supplied)</div><div></div><div></div><div></div></div>
+      <div class="tr"><div>Ground stakes / pegs</div><div></div><div></div><div></div></div>
+      <div class="tr"><div>Guy ropes</div><div></div><div></div><div></div></div>
+      <div class="tr"><div>Portable carry bag</div><div>1</div><div></div><div></div></div>
+      <div class="tr"><div>Other <span class="bl"></span></div><div></div><div></div><div></div></div>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section>
+    <div class="sechead"><div class="n">Section 3</div><h2>Rental period and fees</h2></div>
+    <div class="grid2">
+      <div class="card white">
+        <div class="f"><label>Pickup date and time</label><div class="in"></div></div>
+        <div class="f"><label>Return date and time</label><div class="in"></div></div>
+        <div class="f"><label>Pickup and return location</label><div class="in"></div></div>
+      </div>
+      <div class="card white">
+        <div class="f"><label>Rental rate — J$ / US$ per day × days</label><div class="in"></div></div>
+        <div class="grid2">
+          <div class="f"><label>Total rental fee (J$ / US$)</label><div class="in"></div></div>
+          <div class="f"><label>Refundable security deposit (J$ / US$)</label><div class="in"></div></div>
+        </div>
+        <div class="f"><label>Payment method</label><div style="padding-top:5px"><span class="o"></span>Cash<span class="o"></span>Card<span class="o"></span>Transfer<span class="o"></span>Other</div></div>
+      </div>
+    </div>
+    <div class="note g"><b>Note.</b> The rental fee is paid in full before the equipment is released. A rental day is any 24 hour period, or part of one, from the pickup time above.</div>
+  </section>
+
+  <!-- Section 4 -->
+  <section>
+    <div class="sechead"><div class="n">Section 4</div><h2>Security deposit</h2></div>
+    <div class="group">
+      <ul>
+        <li>The deposit is held against late return, cleaning, damage, missing parts or loss.</li>
+        <li>If the tent comes back on time, clean, dry and complete, the deposit is refunded in full within <span class="bl"></span> business days of the return inspection.</li>
+        <li>Charges under Sections 7 to 10 come out of the deposit first. Any balance above the deposit is due within seven (7) days of an itemised invoice.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 5 -->
+  <section>
+    <div class="sechead"><div class="n">Section 5</div><h2>Condition at handover</h2></div>
+    <div class="group">
+      <ul>
+        <li>Both parties inspect the tent together at pickup, and it may be pitched on request. Existing marks, wear or faults are recorded in the inventory above and initialled by both parties.</li>
+        <li>Anything not recorded at pickup is treated as having happened during the rental period.</li>
+      </ul>
+    </div>
+    <div class="grid2">
+      <div class="card white"><div class="f"><label>Condition noted by</label><div class="in"></div></div></div>
+      <div class="card white"><div class="f"><label>Photos taken at pickup</label><div style="padding-top:5px"><span class="o"></span>Yes<span class="o"></span>No &nbsp;&nbsp; Count <span class="bl"></span></div></div></div>
+    </div>
+  </section>
+
+  <!-- Section 6 -->
+  <section>
+    <div class="sechead"><div class="n">Section 6</div><h2>Your responsibilities</h2></div>
+    <div class="group">
+      <ul>
+        <li>Use the tent only as intended, with no more than two (2) occupants.</li>
+        <li>Pitch on cleared ground, free of sharp rocks, sticks, coral or glass. A groundsheet or tarp underneath is strongly recommended.</li>
+        <li>Keep flames, stoves, grills, candles, cigarettes, mosquito coils and other heat sources at least 3 metres (10 feet) away. No cooking, smoking or flames inside.</li>
+        <li>Assemble and dismantle poles gently. Fully seat each section and never force or bend them past their natural arc.</li>
+        <li>Open and close zippers slowly, and never pull on the fabric to free a snag.</li>
+        <li>Keep food out of the tent to avoid animal and insect damage.</li>
+        <li>Take the tent down in high winds or severe weather. Tropical storm and hurricane conditions are outside its design limits.</li>
+        <li>Do not machine wash, bleach, use solvents or dry with direct heat.</li>
+        <li>Do not sublet, lend or transfer the tent to anyone outside your party.</li>
+        <li>Report damage, loss or theft to Sight Seers within 24 hours.</li>
+        <li>Return the tent clean, dry and packed in its carry bag with every component.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 7 -->
+  <section>
+    <div class="sechead"><div class="n">Section 7</div><h2>Normal wear versus damage</h2></div>
+    <div class="wear">
+      <div class="card ok">
+        <div class="title"><span class="dot" style="background:var(--green)"></span>Normal wear · <span class="pill g">no charge</span></div>
+        <ul>
+          <li>Light dust or sand that brushes off</li>
+          <li>Minor creasing from packing</li>
+          <li>Slight fading from prior use</li>
+          <li>Light scuffing on stakes</li>
+        </ul>
+      </div>
+      <div class="card bad">
+        <div class="title"><span class="dot" style="background:var(--orange)"></span>Damage · <span class="pill o2">chargeable</span></div>
+        <ul>
+          <li>Tears, holes, cuts, burns or melt marks</li>
+          <li>Cracked, splintered, bent or snapped poles</li>
+          <li>Broken zippers, sliders or mesh</li>
+          <li>Failed or peeling waterproof coating</li>
+          <li>Mould, mildew, odour or stains</li>
+          <li>Missing parts or carry bag</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8 -->
+  <section>
+    <div class="sechead"><div class="n">Section 8</div><h2>Damage assessment and charges</h2></div>
+    <p class="muted">On return, Sight Seers inspects the tent, pitching it where needed, and classifies any issue below. You may be present, and photos are kept as a record and shared on request.</p>
+    <div class="table dmg">
+      <div class="tr th"><div>Level</div><div>Examples</div><div>Charge</div></div>
+      <div class="tr"><div><span class="pill n">Cleaning</span></div><div>Returned wet, muddy, sandy inside or with food residue, needing washing and drying</div><div>Flat fee J$ / US$ <span class="bl"></span></div></div>
+      <div class="tr"><div><span class="pill g">Minor</span></div><div>Puncture or tear under 2.5 cm (1") repairable with a patch; one missing stake or guy rope</div><div>Repair cost, or J$ / US$ <span class="bl"></span> per item</div></div>
+      <div class="tr"><div><span class="pill o2">Moderate</span></div><div>Broken or cracked poles; damaged zipper; tear over 2.5 cm; mesh tear; damaged carry bag</div><div>Actual cost of parts plus delivery. Poles replaced with ASIN B0CXT2J7S4</div></div>
+      <div class="tr"><div><span class="pill r">Severe</span></div><div>Burns or melting; several large tears; failed waterproofing; mould; frame and fabric both damaged; no longer weathertight</div><div>Full replacement cost (Section 9)</div></div>
+      <div class="tr"><div><span class="pill r">Loss</span></div><div>Tent not returned, lost or stolen</div><div>Full replacement cost plus unpaid rental (Section 10)</div></div>
+    </div>
+    <div class="note"><b>Repair or replace.</b> If a repair would cost more than half the replacement cost, or would leave the tent unsafe or no longer waterproof, Sight Seers may replace the tent and charge the full replacement cost instead.</div>
+  </section>
+
+  <!-- Section 9 -->
+  <section>
+    <div class="sechead"><div class="n">Section 9</div><h2>Replacement terms</h2></div>
+    <h3>9.1 Pole replacement</h3>
+    <div class="group"><ul>
+      <li>Broken, cracked or missing poles are replaced with the JELUCAMP pole set, Amazon ASIN B0CXT2J7S4, or an equal 7.9 mm fibreglass set if that listing is unavailable.</li>
+      <li>You pay the pole set price plus shipping, import duties and local delivery to Sight Seers.</li>
+      <li>With written approval from Sight Seers, you may supply the correct pole set yourself within fourteen (14) days instead.</li>
+    </ul></div>
+    <h3>9.2 Full tent replacement</h3>
+    <div class="group"><ul>
+      <li>Full replacement cost is the current retail price of a new, identical JELUCAMP 1 to 2 person dome tent, plus shipping, import duties, taxes and local delivery.</li>
+      <li>If the model is discontinued, the nearest equivalent tent of the same capacity, dimensions, waterproof rating and frame specification is used.</li>
+      <li>Where the tent is fully replaced, any undamaged components returned remain the property of Sight Seers.</li>
+    </ul></div>
+    <div class="card white" style="margin-top:8px"><div class="f"><label>Agreed replacement value today (J$ / US$)</label><div class="in"></div></div></div>
+    <h3>9.3 Invoicing</h3>
+    <p class="muted">Sight Seers provides an itemised statement with photos and receipts, or current price listings, for any repair or replacement. Charges come out of the deposit first, with any balance due within seven (7) days.</p>
+  </section>
+
+  <!-- Section 10 -->
+  <section>
+    <div class="sechead"><div class="n">Section 10</div><h2>Late return, loss and theft</h2></div>
+    <div class="group">
+      <div class="row"><div class="k">Late return</div><div class="v">Charged at the daily rate for each day, or part of a day, past the agreed return time.</div></div>
+      <div class="row"><div class="k">Non-return</div><div class="v">If not returned within <span class="bl"></span> days of the return date without an agreed extension, the tent is treated as lost. Full replacement cost applies, plus late fees to that date.</div></div>
+      <div class="row"><div class="k">Theft</div><div class="v">Report to the police and give Sight Seers the report reference. You remain responsible for the replacement cost.</div></div>
+    </div>
+  </section>
+
+  <!-- Section 11 -->
+  <section>
+    <div class="sechead"><div class="n">Section 11</div><h2>Assumption of risk and liability</h2></div>
+    <div class="group"><ul>
+      <li>Camping carries natural risks including weather, insects, wildlife and uneven terrain. You accept these risks for yourself and the other occupant.</li>
+      <li>Sight Seers provides the tent in good working order but does not warrant it against extreme weather or misuse.</li>
+      <li>To the extent permitted by law, Sight Seers is not liable for injury, loss or damage to persons or property arising from use of the tent, except where caused by its own negligence.</li>
+      <li>You indemnify Sight Seers against third party claims arising from your use or misuse of the tent.</li>
+    </ul></div>
+  </section>
+
+  <!-- Section 12 -->
+  <section>
+    <div class="sechead"><div class="n">Section 12</div><h2>General</h2></div>
+    <div class="group"><ul>
+      <li>This Agreement is governed by the laws of Jamaica.</li>
+      <li>It is the entire agreement for this rental. Changes are valid only in writing, signed by both parties.</li>
+      <li>If any term is unenforceable, the remaining terms continue in full effect.</li>
+      <li>You authorise Sight Seers to deduct charges under this Agreement from the security deposit.</li>
+    </ul></div>
+  </section>
+
+  <!-- Section 13 -->
+  <section>
+    <div class="sechead"><div class="n">Section 13</div><h2>Signatures</h2></div>
+    <p class="muted">By signing, both parties accept these terms, and the Renter confirms receipt of the equipment in Section 2 in the condition recorded.</p>
+    <div class="sig">
+      <div class="card white">
+        <div class="title">Renter</div>
+        <div class="f"><label>Signature</label><div class="in tall"></div></div>
+        <div class="grid2">
+          <div class="f"><label>Printed name</label><div class="in"></div></div>
+          <div class="f"><label>Date</label><div class="in"></div></div>
+        </div>
+        <div class="initials">Initials confirming damage and replacement terms (Sections 7 to 9) <span class="bl" style="min-width:56px"></span></div>
+      </div>
+      <div class="card white">
+        <div class="title">Sight Seers Caribbean Adventures</div>
+        <div class="f"><label>Signature</label><div class="in tall"></div></div>
+        <div class="grid2">
+          <div class="f"><label>Printed name and title</label><div class="in"></div></div>
+          <div class="f"><label>Date</label><div class="in"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Office use -->
+  <section class="office">
+    <div class="otop">
+      <div class="sechead" style="margin:0"><div class="n">Office use</div><h2>Return inspection</h2></div>
+      <span class="pill n">Internal</span>
+    </div>
+    <div class="grid2">
+      <div class="card white"><div class="f"><label>Date and time returned</label><div class="in"></div></div></div>
+      <div class="card white"><div class="f"><label>Inspected by</label><div class="in"></div></div></div>
+    </div>
+    <div class="card" style="margin-top:8px">
+      <div class="f" style="margin-bottom:4px"><label>Condition on return</label></div>
+      <div class="status">
+        <span><span class="o"></span>Complete</span>
+        <span><span class="o"></span>Clean and dry</span>
+        <span><span class="o"></span>Cleaning required</span>
+        <span><span class="o"></span>Minor</span>
+        <span><span class="o"></span>Moderate</span>
+        <span><span class="o"></span>Severe</span>
+        <span><span class="o"></span>Missing parts</span>
+      </div>
+      <div class="f" style="margin:6px 0 0"><label>Notes</label><div class="in tall"></div></div>
+    </div>
+
+    <h3>Charges</h3>
+    <div class="table charges">
+      <div class="tr th"><div>Charge</div><div>Amount</div></div>
+      <div class="tr"><div>Late return (<span class="bl" style="min-width:36px"></span> days)</div><div class="bl"></div></div>
+      <div class="tr"><div>Cleaning</div><div class="bl"></div></div>
+      <div class="tr"><div>Repair or parts (incl. poles, ASIN B0CXT2J7S4)</div><div class="bl"></div></div>
+      <div class="tr"><div>Full replacement</div><div class="bl"></div></div>
+      <div class="tr"><div><b>Total charges</b></div><div class="bl"></div></div>
+      <div class="tr"><div><b>Deposit refunded or balance due</b></div><div class="bl"></div></div>
+    </div>
+
+    <div class="sig" style="margin-top:10px">
+      <div class="card white"><div class="f"><label>Renter signature (return)</label><div class="in tall"></div></div></div>
+      <div class="card white"><div class="f"><label>Staff signature</label><div class="in tall"></div></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Sight Seers Caribbean Adventures · Two Person Tent Rental Agreement</span>
+    <span>Renter initials <span class="bl" style="min-width:56px"></span></span>
+  </footer>
+
+</div>
+</body>
+</html>
