@@ -28,6 +28,7 @@ const handlers = {
   'settings':        require('./_handlers/settings'),
   'stays':           require('./_handlers/stays'),
   'stripe-checkout': require('./_handlers/stripe-checkout'),
+  'tent-rental':     require('./_handlers/tent-rental'),
   'tours':           require('./_handlers/tours'),
   'track':           require('./_handlers/track'),
   'verify-token':    require('./_handlers/verify-token'),
