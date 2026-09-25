@@ -18,8 +18,17 @@ module.exports = async function handler(req, res) {
       const { action } = req.body || {};
 
       if (action === 'send' || !action) {
-        const { name, email, phone, subject, message } = req.body || {};
+        const { name, email, phone, subject, message, attachmentBase64, attachmentName } = req.body || {};
         if (!name || !email || !message) return res.status(400).json({ error: 'Name, email and message required' });
+
+        // Optional single PDF attachment (e.g. a signed agreement). Base64 only,
+        // never stored in the database — just forwarded to the notification email.
+        let attachments;
+        if (typeof attachmentBase64 === 'string' && attachmentBase64.length) {
+          if (attachmentBase64.length > 8000000) return res.status(413).json({ error: 'Attachment too large' });
+          const safeName = String(attachmentName || 'attachment.pdf').replace(/[^\w.\- ]+/g, '').slice(0, 120) || 'attachment.pdf';
+          attachments = [{ filename: safeName, content: attachmentBase64 }];
+        }
 
         const user = getUser(req);
         const msg = {
@@ -47,7 +56,9 @@ module.exports = async function handler(req, res) {
               <tr><td style="padding:8px;font-weight:bold;vertical-align:top">Message</td><td style="padding:8px;white-space:pre-wrap">${escapeHtml(msg.message)}</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(msg.createdAt).toLocaleString('en-US',{timeZone:'America/Jamaica'})}</td></tr>
             </table>
-            <p style="color:#888;font-size:12px;margin-top:20px">This message was submitted via sightseerscaribbean.com</p>`
+            ${attachments ? `<p style="color:#0d5371;font-size:13px;margin-top:16px"><b>A signed PDF is attached to this email.</b></p>` : ''}
+            <p style="color:#888;font-size:12px;margin-top:20px">This message was submitted via sightseerscaribbean.com</p>`,
+          attachments
         });
         return res.status(201).json({ ok: true, id: msg.id });
       }
