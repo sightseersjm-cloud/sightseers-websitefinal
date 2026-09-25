@@ -232,10 +232,7 @@
       </div>
       <div class="card white">
         <div class="f"><label>Rental rate — J$ / US$ per day × days</label><input class="in" name="Rental rate"></div>
-        <div class="grid2">
-          <div class="f"><label>Total rental fee (J$ / US$)</label><input class="in" name="Total rental fee"></div>
-          <div class="f"><label>Refundable security deposit (J$ / US$)</label><input class="in" name="Security deposit"></div>
-        </div>
+        <div class="f"><label>Total rental fee (J$ / US$)</label><input class="in" name="Total rental fee"></div>
         <div class="f"><label>Payment method</label>
           <select class="in" name="Payment method"><option value="">Select</option><option>Cash</option><option>Card</option><option>Transfer</option><option>Other</option></select>
         </div>
@@ -496,7 +493,7 @@
     if(!hasSig){ msgEl.className='msg err'; msgEl.textContent='Please draw your signature in the box above.'; return false; }
 
     var names=['Full name','Phone','Email','Address','Country of residence','Number of occupants',
-      'Pickup','Return','Location','Rental rate','Total rental fee','Security deposit','Payment method',
+      'Pickup','Return','Location','Rental rate','Total rental fee','Payment method',
       'Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
     var data={};
     names.forEach(function(n){ var el=form.querySelector('[name="'+n+'"]'); data[n]=el?String(el.value).trim():''; });
