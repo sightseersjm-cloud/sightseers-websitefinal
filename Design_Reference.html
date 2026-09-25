@@ -9466,6 +9466,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           </div>
           <a href="#" onclick="goToMbaExperiences();return false;">MBA Experiences</a>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
+          <a href="#" onclick="nav('tent-rental');return false;">Camping Tent Rental</a>
         </div>
       </li>
       <li class="nav-item">
@@ -9520,6 +9521,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
     <a href="#" onclick="openToursFilter('mba');closeMob();return false;">MBA Experience</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
+    <a href="#" onclick="nav('tent-rental');closeMob();return false;">Camping Tent Rental</a>
   </div>
 
   <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Stays & Villas <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
@@ -10951,6 +10953,246 @@ body.theme-night .page .tag{
       </div>      </div>
     </div>
   </section>
+</div>
+
+<div class="page" id="p-tent-rental">
+  <style>
+    #p-tent-rental{
+      --tr-navy:#063a63;--tr-navy2:#0a4d73;--tr-green:#70c257;--tr-orange:#ef8731;
+      --tr-ink:#12293d;--tr-mut:#5c6f82;--tr-line:rgba(6,58,99,.10);
+      --tr-bg1:#f7fafc;--tr-bg2:#eef4f8;
+      --tr-shadow:0 1px 2px rgba(6,58,99,.05),0 18px 48px rgba(6,58,99,.09);
+      background:linear-gradient(180deg,var(--tr-bg1),var(--tr-bg2));
+      font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--tr-ink);
+    }
+    #p-tent-rental *{-webkit-font-smoothing:antialiased}
+    #p-tent-rental .trr-wrap{max-width:1000px;margin:0 auto;padding:0 24px 64px}
+    @media (max-width:640px){#p-tent-rental .trr-wrap{padding:0 16px 48px}}
+
+    /* Hero */
+    #p-tent-rental .trr-hero{position:relative;margin:0 -24px 26px;padding:52px 24px 60px;text-align:center;overflow:hidden;
+      background:radial-gradient(120% 120% at 15% 0%,#0a4d73 0%,#063a63 45%,#04294a 100%);color:#fff;
+      border-radius:0 0 40px 40px;box-shadow:0 30px 70px rgba(6,58,99,.28)}
+    @media (max-width:640px){#p-tent-rental .trr-hero{margin:0 -16px 22px;border-radius:0 0 28px 28px}}
+    #p-tent-rental .trr-hero::before{content:'';position:absolute;top:-25%;left:-10%;width:60%;height:90%;
+      background:radial-gradient(circle,rgba(112,194,87,.45),transparent 62%);filter:blur(20px);pointer-events:none}
+    #p-tent-rental .trr-hero::after{content:'';position:absolute;bottom:-30%;right:-8%;width:55%;height:95%;
+      background:radial-gradient(circle,rgba(239,135,49,.4),transparent 62%);filter:blur(20px);pointer-events:none}
+    #p-tent-rental .trr-hero-in{position:relative;z-index:2;max-width:720px;margin:0 auto}
+    #p-tent-rental .trr-kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+      color:#eaf6e4;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+      padding:8px 16px;border-radius:999px;margin-bottom:16px;backdrop-filter:blur(8px)}
+    #p-tent-rental .trr-hero h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(30px,4.6vw,50px);line-height:1.05;margin:0;letter-spacing:-.5px;color:#fff}
+    #p-tent-rental .trr-hero p{max-width:56ch;margin:16px auto 0;color:rgba(255,255,255,.86);font-size:clamp(15px,1.8vw,18px);line-height:1.6}
+
+    /* Cards */
+    #p-tent-rental .trr-card{background:#fff;border:1px solid var(--tr-line);border-radius:22px;padding:24px 26px;margin:18px 0;box-shadow:var(--tr-shadow)}
+    @media (max-width:640px){#p-tent-rental .trr-card{padding:20px 18px;border-radius:18px}}
+    #p-tent-rental .trr-card h2{font-family:'Playfair Display',serif;font-weight:700;font-size:22px;letter-spacing:-.3px;margin:2px 0 4px;color:var(--tr-navy)}
+    #p-tent-rental .trr-n{font-size:11px;font-weight:700;color:var(--tr-green);letter-spacing:1.5px;text-transform:uppercase}
+    #p-tent-rental .trr-sub{color:var(--tr-mut);font-size:14px;margin:2px 0 16px;line-height:1.5}
+
+    /* Fields */
+    #p-tent-rental .trr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    #p-tent-rental .trr-grid.one{grid-template-columns:1fr}
+    @media (max-width:640px){#p-tent-rental .trr-grid{grid-template-columns:1fr}}
+    #p-tent-rental .trr-f label{display:block;font-size:12px;font-weight:600;color:var(--tr-mut);margin:0 0 6px 2px}
+    #p-tent-rental .trr-f input,#p-tent-rental .trr-f select,#p-tent-rental .trr-f textarea{width:100%;box-sizing:border-box;font-family:'Raleway',sans-serif;font-size:14.5px;padding:12px 14px;border:1.5px solid var(--tr-line);border-radius:12px;background:#fbfdff;color:var(--tr-ink);transition:border-color .18s,box-shadow .18s}
+    #p-tent-rental .trr-f input:focus,#p-tent-rental .trr-f select:focus,#p-tent-rental .trr-f textarea:focus{outline:none;border-color:var(--tr-green);box-shadow:0 0 0 4px rgba(112,194,87,.16);background:#fff}
+    #p-tent-rental .trr-f .req{color:var(--tr-orange)}
+    #p-tent-rental .trr-spec{display:grid;grid-template-columns:auto 1fr;gap:9px 20px;font-size:14px}
+    #p-tent-rental .trr-spec dt{color:var(--tr-mut)}
+    #p-tent-rental .trr-spec dd{margin:0;color:var(--tr-ink);font-weight:600}
+
+    /* Gallery with floating shadow */
+    #p-tent-rental .trr-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:16px 0 20px}
+    @media (max-width:640px){#p-tent-rental .trr-gallery{grid-template-columns:1fr;gap:28px}}
+    #p-tent-rental .trr-shot{margin:0;position:relative;padding:8px 8px 28px;text-align:center}
+    #p-tent-rental .trr-shot img{width:100%;height:auto;display:block;border-radius:16px;position:relative;z-index:1;transition:transform .35s var(--spring-smooth,ease)}
+    #p-tent-rental .trr-shot::after{content:"";position:absolute;left:14%;right:14%;bottom:20px;height:22px;border-radius:50%;background:rgba(6,58,99,.34);filter:blur(12px);z-index:0;transition:all .35s ease}
+    #p-tent-rental .trr-shot:hover img{transform:translateY(-7px)}
+    #p-tent-rental .trr-shot:hover::after{left:18%;right:18%;background:rgba(6,58,99,.24);filter:blur(16px)}
+    #p-tent-rental .trr-shot figcaption{margin-top:14px;font-size:12.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--tr-mut)}
+
+    /* Terms */
+    #p-tent-rental .trr-terms{background:var(--tr-bg2);border:1px solid var(--tr-line);border-radius:16px;padding:16px 20px;margin:12px 0}
+    #p-tent-rental .trr-terms h3{font-size:13px;font-weight:800;letter-spacing:.3px;margin:16px 0 5px;color:var(--tr-navy)}
+    #p-tent-rental .trr-terms h3:first-child{margin-top:0}
+    #p-tent-rental .trr-terms ul{margin:0 0 4px;padding-left:20px}
+    #p-tent-rental .trr-terms li{font-size:13.5px;color:#3f5064;line-height:1.6;margin:4px 0}
+    #p-tent-rental .trr-ack{display:flex;gap:11px;align-items:flex-start;font-size:14px;color:var(--tr-ink);padding:11px 0;border-top:1px solid var(--tr-line);line-height:1.5}
+    #p-tent-rental .trr-ack:first-of-type{border-top:none}
+    #p-tent-rental .trr-ack input{margin-top:2px;width:19px;height:19px;flex:0 0 auto;accent-color:var(--tr-green)}
+
+    /* Signature + submit */
+    #p-tent-rental .trr-sigpad{border:1.5px dashed #a9bccb;border-radius:14px;background:#fbfdff;touch-action:none;width:100%;height:170px;display:block;cursor:crosshair}
+    #p-tent-rental .trr-sigrow{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    #p-tent-rental .trr-clear{background:none;border:1.5px solid var(--tr-line);border-radius:10px;padding:7px 14px;font-family:'Raleway',sans-serif;font-size:12.5px;font-weight:600;color:var(--tr-mut);cursor:pointer}
+    #p-tent-rental .trr-submit{margin-top:10px;width:100%;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;border:none;border-radius:999px;padding:16px 24px;font-family:'Raleway',sans-serif;font-size:16px;font-weight:700;letter-spacing:.2px;cursor:pointer;box-shadow:0 12px 26px rgba(239,135,49,.4);transition:transform .25s,box-shadow .25s}
+    #p-tent-rental .trr-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 36px rgba(239,135,49,.5)}
+    #p-tent-rental .trr-submit:disabled{opacity:.6;cursor:default}
+    #p-tent-rental .trr-note{font-size:12.5px;color:var(--tr-mut);text-align:center;margin-top:12px}
+    #p-tent-rental .trr-ok{display:none;background:rgba(112,194,87,.14);border:1px solid rgba(112,194,87,.5);color:#2f7d22;border-radius:14px;padding:15px 18px;margin-top:14px;font-size:14.5px;font-weight:600}
+  </style>
+  <div class="trr-wrap">
+    <div class="trr-hero reveal">
+      <div class="trr-hero-in">
+        <span class="trr-kicker"><i class="fas fa-campground"></i>&nbsp; Camping Tent Rental</span>
+        <h1>Two Person Tent Rental Agreement</h1>
+        <p>JELUCAMP 1&ndash;2 person dome tent, rented with care. Fill out the details below, read and accept the terms, sign, and submit &mdash; a copy is sent straight to the Sight Seers team.</p>
+      </div>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Section 1 &middot; Owner</span>
+      <h2>Sight Seers Caribbean Adventures</h2>
+      <div class="trr-spec" style="margin-top:10px">
+        <dt>Representative</dt><dd>Sight Seers Caribbean Adventures</dd>
+        <dt>Phone</dt><dd>+1 (876) 465-0630</dd>
+        <dt>Email</dt><dd>info@sightseerscaribbean.com</dd>
+      </div>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Section 2 &middot; Equipment</span>
+      <h2>JELUCAMP Dome Camping Tent &middot; 1 to 2 Person</h2>
+      <p class="trr-sub">Available in three colours &mdash; subject to stock.</p>
+      <div class="trr-gallery">
+        <figure class="trr-shot"><img src="/assets/tents/tent-blue.jpg" alt="JELUCAMP dome tent — blue" loading="lazy" onerror="this.closest('.trr-shot').style.display='none'"><figcaption>Blue</figcaption></figure>
+        <figure class="trr-shot"><img src="/assets/tents/tent-orange.jpg" alt="JELUCAMP dome tent — orange" loading="lazy" onerror="this.closest('.trr-shot').style.display='none'"><figcaption>Orange</figcaption></figure>
+        <figure class="trr-shot"><img src="/assets/tents/tent-green.jpg" alt="JELUCAMP dome tent — green" loading="lazy" onerror="this.closest('.trr-shot').style.display='none'"><figcaption>Green</figcaption></figure>
+      </div>
+      <dl class="trr-spec" style="margin-top:10px">
+        <dt>Capacity</dt><dd>Maximum two (2) occupants</dd>
+        <dt>Dimensions</dt><dd>86.6" L &times; 59.1" W &times; 43.3" H (&approx;220 &times; 150 &times; 110 cm)</dd>
+        <dt>Weight</dt><dd>4.3 lb (&approx;1.95 kg), packed in carry bag</dd>
+        <dt>Fabric</dt><dd>Polyester with PU3000 waterproof coating</dd>
+        <dt>Frame</dt><dd>7.9 mm fibreglass poles</dd>
+        <dt>Door</dt><dd>Double layer &middot; inner insect mesh, outer zippered panel</dd>
+        <dt>Replacement poles</dt><dd>JELUCAMP set &middot; Amazon ASIN B0CXT2J7S4</dd>
+      </dl>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Section 1 &middot; Renter</span>
+      <h2>Your details</h2>
+      <p class="trr-sub">Tell us who is renting the tent.</p>
+      <div class="trr-grid">
+        <div class="trr-f"><label>Full name <span class="req">*</span></label><input id="trr_name" type="text" autocomplete="name"></div>
+        <div class="trr-f"><label>Email <span class="req">*</span></label><input id="trr_email" type="email" autocomplete="email"></div>
+        <div class="trr-f"><label>Phone <span class="req">*</span></label><input id="trr_phone" type="tel" autocomplete="tel"></div>
+        <div class="trr-f"><label>ID type &amp; last 4 digits</label><input id="trr_id" type="text" placeholder="e.g. Driver's licence · 1234"></div>
+        <div class="trr-f"><label>Address</label><input id="trr_address" type="text" autocomplete="street-address"></div>
+        <div class="trr-f"><label>Group or tour reference</label><input id="trr_ref" type="text" placeholder="Optional"></div>
+      </div>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Section 3 &middot; Rental period &amp; fees</span>
+      <h2>Dates, location &amp; payment</h2>
+      <div class="trr-grid">
+        <div class="trr-f"><label>Pickup date &amp; time <span class="req">*</span></label><input id="trr_pickup" type="datetime-local"></div>
+        <div class="trr-f"><label>Return date &amp; time <span class="req">*</span></label><input id="trr_return" type="datetime-local"></div>
+        <div class="trr-f"><label>Pickup &amp; return location</label><input id="trr_location" type="text"></div>
+        <div class="trr-f"><label>Payment method</label>
+          <select id="trr_payment"><option value="">Select…</option><option>Cash</option><option>Card</option><option>Bank transfer</option><option>Online / link</option><option>Other</option></select>
+        </div>
+        <div class="trr-f"><label>Rental rate</label><input id="trr_rate" type="text" placeholder="J$ / US$ per day"></div>
+        <div class="trr-f"><label>Total rental fee</label><input id="trr_total" type="text" placeholder="J$ / US$"></div>
+        <div class="trr-f"><label>Refundable security deposit</label><input id="trr_deposit" type="text" placeholder="J$ / US$"></div>
+      </div>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Sections 4&ndash;12 &middot; Terms</span>
+      <h2>The terms you are agreeing to</h2>
+      <div class="trr-terms">
+        <h3>Security deposit (4)</h3>
+        <ul><li>A refundable deposit is held against loss or damage and returned after inspection, less any charges under this agreement.</li></ul>
+        <h3>Your responsibilities (6)</h3>
+        <ul><li>Pitch on suitable ground, keep the tent clean and dry, and use it only as intended for up to two occupants.</li><li>No fires, cooking, smoking, chemicals or pets inside; do not cut, alter or over-tension the tent.</li><li>Return complete and dry, with all poles, stakes, guy ropes and the carry bag.</li></ul>
+        <h3>Normal wear vs damage &amp; charges (7&ndash;8)</h3>
+        <ul><li>Normal wear (light dirt, minor scuffs) is expected. Tears, holes, burns, broken poles/zippers, failed waterproofing, mould, odour, stains or missing parts are chargeable.</li><li>On return the tent is inspected and any issue classified as Cleaning, Minor, Moderate, Severe or Loss, with charges accordingly.</li></ul>
+        <h3>Replacement (9)</h3>
+        <ul><li>Broken/missing poles are replaced with the JELUCAMP set (ASIN B0CXT2J7S4) or equal, at your cost plus shipping/duties.</li><li>Severe damage or loss is charged at full replacement cost of an identical/equivalent tent.</li></ul>
+        <h3>Late return, loss &amp; theft (10)</h3>
+        <ul><li>Late returns are charged per day. A tent not returned is treated as lost (full replacement plus late fees). Theft must be reported to the police.</li></ul>
+        <h3>Risk &amp; liability (11) &middot; General (12)</h3>
+        <ul><li>You accept the natural risks of camping and indemnify Sight Seers against claims from your use of the tent, except for its own negligence.</li><li>This agreement is governed by the laws of Jamaica and is the entire agreement for this rental.</li></ul>
+      </div>
+      <div class="trr-ack"><input id="trr_ackDeposit" type="checkbox"><label for="trr_ackDeposit">I have read and agree to the <b>security deposit</b> terms (Section 4).</label></div>
+      <div class="trr-ack"><input id="trr_ackResp" type="checkbox"><label for="trr_ackResp">I accept the <b>renter responsibilities</b> (Section 6).</label></div>
+      <div class="trr-ack"><input id="trr_ackDamage" type="checkbox"><label for="trr_ackDamage">I understand the <b>damage, charges &amp; replacement</b> terms (Sections 7&ndash;9).</label></div>
+      <div class="trr-ack"><input id="trr_ackRisk" type="checkbox"><label for="trr_ackRisk">I accept the <b>assumption of risk &amp; liability</b> (Section 11).</label></div>
+      <div class="trr-ack"><input id="trr_ackGeneral" type="checkbox"><label for="trr_ackGeneral">I agree to the <b>general terms</b>, governed by the laws of Jamaica (Section 12).</label></div>
+      <div class="trr-f" style="margin-top:14px;max-width:260px"><label>Initials confirming Sections 7&ndash;9 <span class="req">*</span></label><input id="trr_initials" type="text" maxlength="6" placeholder="e.g. J.B."></div>
+    </div>
+
+    <div class="trr-card">
+      <span class="trr-n">Section 13 &middot; Signature</span>
+      <h2>Sign &amp; submit</h2>
+      <p class="trr-sub">By signing, you accept these terms and confirm receipt of the equipment in Section 2.</p>
+      <div class="trr-grid">
+        <div class="trr-f"><label>Typed legal name <span class="req">*</span></label><input id="trr_signName" type="text" placeholder="Type your full legal name"></div>
+        <div class="trr-f"><label>Date <span class="req">*</span></label><input id="trr_date" type="date"></div>
+      </div>
+      <div class="trr-f" style="margin-top:6px">
+        <label>Draw your signature</label>
+        <canvas id="trr_sigpad" class="trr-sigpad" width="880" height="170"></canvas>
+        <div class="trr-sigrow"><span style="font-size:12px;color:#86868b">Use your mouse or finger</span><button type="button" class="trr-clear" onclick="clearTentSignature()">Clear</button></div>
+      </div>
+      <button type="button" class="trr-submit" id="trr_submit" onclick="submitTentRentalForm()"><i class="fas fa-paper-plane"></i> Submit agreement</button>
+      <p class="trr-note">A copy is emailed to Sight Seers Caribbean Adventures. We'll be in touch to confirm pickup.</p>
+      <div class="trr-ok" id="trr_ok"><i class="fas fa-check-circle"></i> Thank you — your rental agreement has been submitted. We'll confirm your booking shortly.</div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var pad=document.getElementById('trr_sigpad'); if(!pad) return;
+    var ctx=pad.getContext('2d'); ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#062E4B';
+    var drawing=false, dirty=false, lx=0, ly=0;
+    function pos(e){var r=pad.getBoundingClientRect();var t=e.touches&&e.touches[0]?e.touches[0]:e;var sx=pad.width/r.width, sy=pad.height/r.height;return{x:(t.clientX-r.left)*sx,y:(t.clientY-r.top)*sy};}
+    function start(e){drawing=true;dirty=true;var p=pos(e);lx=p.x;ly=p.y;e.preventDefault();}
+    function move(e){if(!drawing)return;var p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;e.preventDefault();}
+    function end(){drawing=false;}
+    pad.addEventListener('mousedown',start);pad.addEventListener('mousemove',move);window.addEventListener('mouseup',end);
+    pad.addEventListener('touchstart',start,{passive:false});pad.addEventListener('touchmove',move,{passive:false});pad.addEventListener('touchend',end);
+    window.clearTentSignature=function(){ctx.clearRect(0,0,pad.width,pad.height);dirty=false;};
+    window.__trrSigDirty=function(){return dirty;};
+    var dt=document.getElementById('trr_date'); if(dt&&!dt.value){dt.value=new Date().toISOString().slice(0,10);}
+  })();
+  window.submitTentRentalForm=function(){
+    var val=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+    var chk=function(id){var el=document.getElementById(id);return !!(el&&el.checked);};
+    var name=val('trr_name'), email=val('trr_email'), phone=val('trr_phone');
+    var pickup=val('trr_pickup'), ret=val('trr_return'), signName=val('trr_signName'), initials=val('trr_initials');
+    if(!name||!email||!phone){ (window.toast||alert)('Please fill in your name, email and phone.'); return; }
+    if(!pickup||!ret){ (window.toast||alert)('Please add pickup and return dates.'); return; }
+    if(!(chk('trr_ackDeposit')&&chk('trr_ackResp')&&chk('trr_ackDamage')&&chk('trr_ackRisk')&&chk('trr_ackGeneral'))){ (window.toast||alert)('Please accept all the terms to continue.'); return; }
+    if(!initials){ (window.toast||alert)('Please add your initials for Sections 7–9.'); return; }
+    if(!signName){ (window.toast||alert)('Please type your legal name to sign.'); return; }
+    var pad=document.getElementById('trr_sigpad');
+    var signature=(pad && window.__trrSigDirty && window.__trrSigDirty()) ? pad.toDataURL('image/png') : '';
+    var payload={name:name,email:email,phone:phone,address:val('trr_address'),id:val('trr_id'),ref:val('trr_ref'),
+      pickup:pickup,'return':ret,location:val('trr_location'),rate:val('trr_rate'),total:val('trr_total'),deposit:val('trr_deposit'),payment:val('trr_payment'),
+      ackDeposit:chk('trr_ackDeposit'),ackResp:chk('trr_ackResp'),ackDamage:chk('trr_ackDamage'),ackRisk:chk('trr_ackRisk'),ackGeneral:chk('trr_ackGeneral'),
+      initials:initials,signName:signName,date:val('trr_date'),signature:signature};
+    var btn=document.getElementById('trr_submit'); if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending…';}
+    fetch('/api/tent-rental',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().catch(function(){return{ok:r.ok};});})
+      .then(function(res){
+        if(res&&(res.ok||res.id)){ var ok=document.getElementById('trr_ok'); if(ok)ok.style.display='block'; (window.toast||function(){})('Agreement submitted — thank you!'); if(ok&&ok.scrollIntoView)ok.scrollIntoView({behavior:'smooth',block:'center'}); if(btn){btn.style.display='none';} }
+        else { throw new Error((res&&res.error)||'Submission failed'); }
+      })
+      .catch(function(err){
+        if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit agreement';}
+        var subject=encodeURIComponent('Camping Tent Rental Agreement — '+name);
+        var body=encodeURIComponent('Renter: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nPickup: '+pickup+'\nReturn: '+ret+'\nLocation: '+val('trr_location')+'\nSigned: '+signName+' ('+val('trr_date')+')\nInitials (7-9): '+initials+'\n\nAll terms accepted.');
+        if(confirm("We couldn't submit online right now. Send your agreement by email instead?")){ window.location.href='mailto:info@sightseerscaribbean.com?subject='+subject+'&body='+body; }
+        else { (window.toast||alert)('Could not submit: '+(err&&err.message||'error')); }
+      });
+  };
+  </script>
 </div>
 
 <div class="page" id="p-yacht-charters">
@@ -25025,6 +25267,7 @@ var SS_ROUTES = {
   'staycountry':'/stays-by-country',
   'greek-life':'/greek-life-travel',
   'leaders-jamaica':'/leaders-in-jamaica',
+  'tent-rental':'/camping-tent-rental',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
   'landmark':'/landmark-experiences',
@@ -25060,6 +25303,7 @@ var SS_META = {
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Fraternity & Sorority Trips, Caribbean Group Travel','Spring break, formals and chapter trips built for Greek life, with group rates and a dedicated coordinator handling the logistics.'],
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
+  'tent-rental':['Camping Tent Rental Agreement | Sight Seers Caribbean','Rent a JELUCAMP 1–2 person dome tent from Sight Seers Caribbean. Complete and sign the rental agreement online.'],
   'destinations':['Caribbean Destinations | Sight Seers Caribbean','Explore the destinations we serve across the Caribbean, from Jamaica to Barbados, Belize, Saint Lucia and beyond.'],
   'discoverjamaica':['Discover Jamaica, Travel Guide & Experiences','A local guide to Jamaica: where to go, what to do, and how to plan a trip that goes beyond the resort strip.'],
   'landmark':['Landmark Caribbean Experiences | Sight Seers','Signature Caribbean experiences for travellers who want the trip to be the story, not the backdrop.'],
@@ -25135,7 +25379,7 @@ function nav(id,opts={}){
   if(!opts.fromPop){ try{ ssPushRoute(id); }catch(e){} }
   try{ ssSetMeta(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
+  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers' || id==='tent-rental')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   if(!opts.skipScroll){ smoothScrollToY(0,900); }
   if(id==='vtours'){
