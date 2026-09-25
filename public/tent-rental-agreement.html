@@ -31,7 +31,6 @@
     .grid2,.sig,.wear{ grid-template-columns:1fr !important; }
   }
 
-  /* Top bar */
   .topbar{ display:flex; justify-content:space-between; align-items:center; gap:18px; }
   .brand{ display:flex; align-items:center; gap:12px; }
   .brand img{ height:46px; width:auto; }
@@ -42,7 +41,6 @@
   .chip b{ color:var(--ink); font-weight:600; }
   .chip .bl{ display:inline-block; border-bottom:1px solid var(--tertiary); width:66px; height:10px; vertical-align:-1px; margin-left:4px; }
 
-  /* Hero */
   .hero{ margin:34px 0 22px; }
   .eyebrow{ font-size:8pt; font-weight:700; color:var(--orange); letter-spacing:.16em; text-transform:uppercase; margin-bottom:8px; }
   h1{ font-family:'Playfair Display',serif; font-weight:700; font-size:31pt; line-height:1.05; letter-spacing:-0.01em; margin:0 0 12px; color:var(--ink); }
@@ -50,7 +48,6 @@
   .lede{ font-size:11pt; line-height:1.5; color:var(--secondary); max-width:6.3in; margin:0; }
   .lede b{ color:var(--ink); font-weight:600; }
 
-  /* Spec tiles */
   .tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:11px; margin:24px 0 8px; break-inside:avoid; }
   .tile{ background:var(--fill); border-radius:18px; padding:15px 15px 13px; }
   .tile .v{ font-family:'Playfair Display',serif; font-size:18pt; font-weight:700; letter-spacing:-0.01em; color:var(--navy); line-height:1.1; }
@@ -58,7 +55,6 @@
   .tile .l{ font-size:7.8pt; color:var(--secondary); margin-top:5px; }
   .tile.accent{ background:var(--navy); } .tile.accent .v,.tile.accent .v small{ color:#fff; } .tile.accent .l{ color:rgba(255,255,255,.72); }
 
-  /* Sections */
   section{ margin-top:30px; }
   .sechead{ margin-bottom:11px; break-after:avoid; }
   .sechead .n{ font-size:8pt; font-weight:700; color:var(--green); letter-spacing:.1em; text-transform:uppercase; }
@@ -67,7 +63,6 @@
   p{ margin:0 0 8px; }
   .muted{ color:var(--secondary); }
 
-  /* grouped list */
   .group{ background:var(--fill); border-radius:16px; overflow:hidden; margin:0 0 8px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
   .row{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:10px 15px; position:relative; break-inside:avoid; }
   .row + .row::before{ content:""; position:absolute; top:0; left:15px; right:0; border-top:0.75px solid var(--hair); }
@@ -76,7 +71,6 @@
   .row .v b{ color:var(--ink); font-weight:600; }
   .bl{ display:inline-block; border-bottom:1px solid var(--tertiary); min-width:80px; height:12px; vertical-align:-1px; }
 
-  /* tables */
   .table{ background:var(--fill); border-radius:16px; overflow:hidden; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
   .table .tr{ display:grid; grid-template-columns:2.4fr .7fr .7fr 2fr; padding:9px 15px; position:relative; break-inside:avoid; }
   .table .tr + .tr::before{ content:""; position:absolute; top:0; left:15px; right:0; border-top:0.75px solid var(--hair); }
@@ -88,7 +82,6 @@
   .table.dmg .tr > div:nth-child(2){ color:var(--ink); }
   .table.charges .tr{ grid-template-columns:3fr 1fr; }
 
-  /* Fields */
   .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
   .card{ background:var(--fill); border-radius:18px; padding:15px 17px; break-inside:avoid; }
   .card .title{ font-family:'Playfair Display',serif; font-weight:700; font-size:11pt; margin-bottom:9px; color:var(--ink); }
@@ -97,26 +90,31 @@
   .f label{ display:block; font-size:7.6pt; color:var(--secondary); margin:0 0 3px 2px; }
   .f .in{ background:#fff; border-radius:10px; height:27px; box-shadow:inset 0 0 0 0.75px var(--hair); }
   .f .in.tall{ height:40px; }
+  /* real inputs styled like .in */
+  input.in, textarea.in, select.in{ font-family:'Raleway',sans-serif; font-size:9.5pt; color:var(--ink); width:100%; border:none; background:#fff; border-radius:10px; height:27px; box-shadow:inset 0 0 0 0.75px var(--hair); padding:0 11px; outline:none; -webkit-appearance:none; appearance:none; }
+  textarea.in{ height:40px; padding:7px 11px; line-height:1.4; resize:vertical; }
+  input.in:focus, textarea.in:focus, select.in:focus{ box-shadow:inset 0 0 0 1.4px var(--green); }
+  input.in.sig{ font-family:'Playfair Display',serif; font-style:italic; font-size:14pt; height:40px; color:var(--navy); }
   .card.white{ background:#fff; box-shadow:inset 0 0 0 0.75px var(--hair); }
-  .card.white .f .in{ background:var(--fill); box-shadow:none; }
+  .card.white .f .in, .card.white input.in, .card.white textarea.in, .card.white select.in{ background:var(--fill); box-shadow:none; }
+  .card.white input.in:focus, .card.white textarea.in:focus, .card.white select.in:focus{ box-shadow:inset 0 0 0 1.4px var(--green); }
 
-  /* Bullets */
   ul{ list-style:none; padding:0; margin:0; }
   .group ul li, ul.plain li{ position:relative; padding:9px 15px 9px 34px; }
   .group ul li + li::before{ content:""; position:absolute; top:0; left:34px; right:0; border-top:0.75px solid var(--hair); }
   .group ul li::after{ content:"•"; position:absolute; left:17px; top:8px; color:var(--green); font-weight:700; font-size:11pt; line-height:1.3; }
   ul li{ break-inside:avoid; }
 
-  /* Circles and pills */
   .o{ display:inline-block; width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1.2px var(--tertiary); vertical-align:-2px; margin:0 4px 0 10px; }
   .o:first-child{ margin-left:0; }
+  .radio{ display:inline-flex; align-items:center; gap:5px; margin:0 12px 0 0; font-size:9pt; cursor:pointer; }
+  .radio input{ accent-color:var(--green); width:14px; height:14px; }
   .pill{ display:inline-block; border-radius:999px; padding:2px 10px; font-size:7.8pt; font-weight:700; }
   .pill.g{ background:var(--gtint); color:#3f8a31; }
   .pill.n{ background:var(--ntint); color:var(--navy); }
   .pill.o2{ background:var(--otint); color:#c4631d; }
   .pill.r{ background:var(--rtint); color:#b8352a; }
 
-  /* Wear compare */
   .wear{ display:grid; grid-template-columns:1fr 1fr; gap:11px; break-inside:avoid; }
   .wear .card{ padding:15px 0 7px; }
   .wear .card .title{ padding:0 17px; display:flex; align-items:center; gap:8px; font-size:10.5pt; }
@@ -125,14 +123,14 @@
   .wear ul li::after{ content:"•"; position:absolute; left:19px; top:5px; font-weight:700; font-size:11pt; line-height:1.3; }
   .wear .ok li::after{ color:var(--green); } .wear .bad li::after{ color:var(--orange); }
 
-  /* Note */
   .note{ background:var(--otint); border-radius:16px; padding:13px 17px; margin:10px 0; break-inside:avoid; }
   .note b{ font-weight:700; }
   .note.g{ background:var(--gtint); }
 
-  /* Signatures */
   .sig{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
-  .initials{ font-size:8pt; color:var(--secondary); margin-top:5px; }
+  .agree{ display:flex; align-items:flex-start; gap:10px; background:var(--gtint); border-radius:16px; padding:13px 16px; margin-top:10px; break-inside:avoid; }
+  .agree input{ width:18px; height:18px; margin-top:1px; accent-color:var(--green); flex:0 0 auto; }
+  .agree label{ font-size:9.4pt; color:var(--ink); }
 
   .office{ margin-top:0; break-before:page; }
   .otop{ display:flex; justify-content:space-between; align-items:center; margin-bottom:11px; }
@@ -141,9 +139,17 @@
   footer{ margin-top:28px; padding-top:11px; border-top:0.75px solid var(--hair); display:flex; justify-content:space-between; font-size:7.6pt; color:var(--tertiary); }
 
   .actions{ max-width:8.5in; margin:0 auto 8px; display:flex; justify-content:flex-end; gap:10px; padding:0 6px; }
-  .btn{ font-family:'Raleway',sans-serif; font-weight:700; font-size:9.5pt; border:none; cursor:pointer; border-radius:999px; padding:10px 20px; background:var(--navy); color:#fff; box-shadow:0 8px 22px rgba(6,58,99,.22); }
+  .btn{ font-family:'Raleway',sans-serif; font-weight:700; font-size:9.5pt; border:none; cursor:pointer; border-radius:999px; padding:11px 22px; background:var(--navy); color:#fff; box-shadow:0 8px 22px rgba(6,58,99,.22); text-decoration:none; display:inline-block; }
+  .btn:hover{ filter:brightness(1.06); }
   .btn.ghost{ background:#fff; color:var(--navy); box-shadow:inset 0 0 0 1px var(--hair); }
-  @media print{ .actions{ display:none; } }
+  .btn.green{ background:var(--green); box-shadow:0 8px 22px rgba(112,194,87,.3); }
+  .btn[disabled]{ opacity:.55; cursor:default; }
+
+  .submitbar{ margin-top:22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .msg{ font-size:9.5pt; font-weight:600; }
+  .msg.ok{ color:#3f8a31; } .msg.err{ color:var(--red); }
+
+  @media print{ .actions, .submitbar, .office{ } .actions,.submitbar{ display:none; } }
 </style>
 </head>
 <body>
@@ -153,7 +159,7 @@
   <button class="btn" onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="page">
+<form class="page" id="tentForm" onsubmit="return submitTent(event)">
 
   <div class="topbar">
     <div class="brand">
@@ -189,17 +195,17 @@
         <div class="f"><label>Phone</label><div class="in"></div></div>
         <div class="f"><label>Email</label><div class="in"></div></div>
       </div>
-      <div class="card">
+      <div class="card white">
         <div class="title">Renter<small>Person responsible for the equipment</small></div>
-        <div class="f"><label>Full name</label><div class="in"></div></div>
+        <div class="f"><label>Full name *</label><input class="in" name="Full name" required></div>
         <div class="grid2">
-          <div class="f"><label>Phone</label><div class="in"></div></div>
-          <div class="f"><label>Email</label><div class="in"></div></div>
+          <div class="f"><label>Phone *</label><input class="in" name="Phone" required></div>
+          <div class="f"><label>Email *</label><input class="in" type="email" name="Email" required></div>
         </div>
-        <div class="f"><label>Address</label><div class="in"></div></div>
+        <div class="f"><label>Address</label><input class="in" name="Address"></div>
         <div class="grid2">
-          <div class="f"><label>ID type and last 4 digits</label><div class="in"></div></div>
-          <div class="f"><label>Group or tour reference</label><div class="in"></div></div>
+          <div class="f"><label>ID type and last 4 digits</label><input class="in" name="ID"></div>
+          <div class="f"><label>Group or tour reference</label><input class="in" name="Group / tour reference"></div>
         </div>
       </div>
     </div>
@@ -238,17 +244,24 @@
     <div class="sechead"><div class="n">Section 3</div><h2>Rental period and fees</h2></div>
     <div class="grid2">
       <div class="card white">
-        <div class="f"><label>Pickup date and time</label><div class="in"></div></div>
-        <div class="f"><label>Return date and time</label><div class="in"></div></div>
-        <div class="f"><label>Pickup and return location</label><div class="in"></div></div>
+        <div class="f"><label>Pickup date and time</label><input class="in" name="Pickup"></div>
+        <div class="f"><label>Return date and time</label><input class="in" name="Return"></div>
+        <div class="f"><label>Pickup and return location</label><input class="in" name="Location"></div>
       </div>
       <div class="card white">
-        <div class="f"><label>Rental rate — J$ / US$ per day × days</label><div class="in"></div></div>
+        <div class="f"><label>Rental rate — J$ / US$ per day × days</label><input class="in" name="Rental rate"></div>
         <div class="grid2">
-          <div class="f"><label>Total rental fee (J$ / US$)</label><div class="in"></div></div>
-          <div class="f"><label>Refundable security deposit (J$ / US$)</label><div class="in"></div></div>
+          <div class="f"><label>Total rental fee (J$ / US$)</label><input class="in" name="Total rental fee"></div>
+          <div class="f"><label>Refundable security deposit (J$ / US$)</label><input class="in" name="Security deposit"></div>
         </div>
-        <div class="f"><label>Payment method</label><div style="padding-top:5px"><span class="o"></span>Cash<span class="o"></span>Card<span class="o"></span>Transfer<span class="o"></span>Other</div></div>
+        <div class="f"><label>Payment method</label>
+          <div style="padding-top:5px">
+            <label class="radio"><input type="radio" name="Payment method" value="Cash">Cash</label>
+            <label class="radio"><input type="radio" name="Payment method" value="Card">Card</label>
+            <label class="radio"><input type="radio" name="Payment method" value="Transfer">Transfer</label>
+            <label class="radio"><input type="radio" name="Payment method" value="Other">Other</label>
+          </div>
+        </div>
       </div>
     </div>
     <div class="note g"><b>Note.</b> The rental fee is paid in full before the equipment is released. A rental day is any 24 hour period, or part of one, from the pickup time above.</div>
@@ -274,10 +287,6 @@
         <li>Both parties inspect the tent together at pickup, and it may be pitched on request. Existing marks, wear or faults are recorded in the inventory above and initialled by both parties.</li>
         <li>Anything not recorded at pickup is treated as having happened during the rental period.</li>
       </ul>
-    </div>
-    <div class="grid2">
-      <div class="card white"><div class="f"><label>Condition noted by</label><div class="in"></div></div></div>
-      <div class="card white"><div class="f"><label>Photos taken at pickup</label><div style="padding-top:5px"><span class="o"></span>Yes<span class="o"></span>No &nbsp;&nbsp; Count <span class="bl"></span></div></div></div>
     </div>
   </section>
 
@@ -358,7 +367,6 @@
       <li>If the model is discontinued, the nearest equivalent tent of the same capacity, dimensions, waterproof rating and frame specification is used.</li>
       <li>Where the tent is fully replaced, any undamaged components returned remain the property of Sight Seers.</li>
     </ul></div>
-    <div class="card white" style="margin-top:8px"><div class="f"><label>Agreed replacement value today (J$ / US$)</label><div class="in"></div></div></div>
     <h3>9.3 Invoicing</h3>
     <p class="muted">Sight Seers provides an itemised statement with photos and receipts, or current price listings, for any repair or replacement. Charges come out of the deposit first, with any balance due within seven (7) days.</p>
   </section>
@@ -397,27 +405,26 @@
 
   <!-- Section 13 -->
   <section>
-    <div class="sechead"><div class="n">Section 13</div><h2>Signatures</h2></div>
+    <div class="sechead"><div class="n">Section 13</div><h2>Signature</h2></div>
     <p class="muted">By signing, both parties accept these terms, and the Renter confirms receipt of the equipment in Section 2 in the condition recorded.</p>
-    <div class="sig">
-      <div class="card white">
-        <div class="title">Renter</div>
-        <div class="f"><label>Signature</label><div class="in tall"></div></div>
-        <div class="grid2">
-          <div class="f"><label>Printed name</label><div class="in"></div></div>
-          <div class="f"><label>Date</label><div class="in"></div></div>
-        </div>
-        <div class="initials">Initials confirming damage and replacement terms (Sections 7 to 9) <span class="bl" style="min-width:56px"></span></div>
-      </div>
-      <div class="card white">
-        <div class="title">Sight Seers Caribbean Adventures</div>
-        <div class="f"><label>Signature</label><div class="in tall"></div></div>
-        <div class="grid2">
-          <div class="f"><label>Printed name and title</label><div class="in"></div></div>
-          <div class="f"><label>Date</label><div class="in"></div></div>
-        </div>
+    <div class="card white">
+      <div class="title">Renter signature</div>
+      <div class="f"><label>Signature — type your full name *</label><input class="in sig" name="Signature (typed full name)" placeholder="Your full name" required></div>
+      <div class="grid2">
+        <div class="f"><label>Printed full name *</label><input class="in" name="Printed full name" required></div>
+        <div class="f"><label>Date *</label><input class="in" type="date" name="Date" required></div>
       </div>
     </div>
+    <div class="agree">
+      <input type="checkbox" id="agree" name="agree" required>
+      <label for="agree">I have read and agree to all terms of this Agreement, including the damage, charge and replacement terms in Sections 7 to 9, and I confirm my typed full name above is my electronic signature.</label>
+    </div>
+
+    <div class="submitbar">
+      <button class="btn green" type="submit" id="sendBtn">Sign &amp; Send Agreement</button>
+      <span class="msg" id="formMsg"></span>
+    </div>
+    <p class="muted" style="font-size:8.2pt;margin-top:8px">Your completed agreement is sent to Sight Seers Caribbean Adventures. Keep a copy for your records using Print / Save PDF above.</p>
   </section>
 
   <!-- Office use -->
@@ -466,6 +473,64 @@
     <span>Renter initials <span class="bl" style="min-width:56px"></span></span>
   </footer>
 
-</div>
+</form>
+
+<script>
+  function submitTent(e){
+    e.preventDefault();
+    var form=document.getElementById('tentForm');
+    var btn=document.getElementById('sendBtn');
+    var msgEl=document.getElementById('formMsg');
+    if(!form.checkValidity()){ form.reportValidity(); return false; }
+
+    var fields=[
+      'Full name','Phone','Email','Address','ID','Group / tour reference',
+      'Pickup','Return','Location','Rental rate','Total rental fee','Security deposit','Payment method',
+      'Signature (typed full name)','Printed full name','Date'
+    ];
+    var data={};
+    fields.forEach(function(n){
+      var el=form.querySelector('[name="'+n+'"]');
+      if(el && el.type==='radio'){ var c=form.querySelector('[name="'+n+'"]:checked'); data[n]=c?c.value:''; }
+      else data[n]=el?el.value.trim():'';
+    });
+
+    var lines=['TWO PERSON TENT RENTAL AGREEMENT — signed online',''];
+    fields.forEach(function(n){ if(data[n]) lines.push(n+': '+data[n]); });
+    lines.push('');
+    lines.push('Agreed to all terms including Sections 7 to 9: YES');
+    lines.push('Electronic signature (typed full name): '+data['Signature (typed full name)']);
+    lines.push('Submitted: '+new Date().toLocaleString());
+
+    var payload={
+      action:'send',
+      name:data['Full name'],
+      email:data['Email'],
+      phone:data['Phone'],
+      subject:'Tent Rental Agreement — '+data['Full name'],
+      message:lines.join('\n')
+    };
+
+    btn.disabled=true; btn.textContent='Sending…'; msgEl.className='msg'; msgEl.textContent='';
+
+    fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+      .then(function(res){
+        if(res.ok){
+          msgEl.className='msg ok';
+          msgEl.textContent='✓ Agreement sent. A copy has been emailed to Sight Seers — thank you.';
+          btn.textContent='Sent ✓';
+        } else {
+          throw new Error((res.j&&res.j.error)||'Submission failed');
+        }
+      })
+      .catch(function(err){
+        msgEl.className='msg err';
+        msgEl.textContent='Could not send: '+err.message+'. Please try again or contact us directly.';
+        btn.disabled=false; btn.textContent='Sign & Send Agreement';
+      });
+    return false;
+  }
+</script>
 </body>
 </html>
