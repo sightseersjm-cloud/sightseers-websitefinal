@@ -11679,8 +11679,8 @@ body.theme-night .page .tag{
   #p-tent-rental .tr-h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--tr-mut);margin:18px 0 8px}
   #p-tent-rental .tr-sigwrap{position:relative;background:var(--tr-fill);border-radius:12px;box-shadow:inset 0 0 0 1px var(--tr-hair)}
   #p-tent-rental #trSigPad{width:100%;height:150px;display:block;border-radius:12px;touch-action:none;cursor:crosshair}
-  #p-tent-rental .tr-sigbase{position:absolute;left:16px;right:16px;bottom:34px;border-top:1px solid var(--tr-hair)}
-  #p-tent-rental .tr-sighint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--tr-tert)}
+  #p-tent-rental .tr-sigbase{position:absolute;left:16px;right:16px;bottom:34px;border-top:1px solid var(--tr-hair);pointer-events:none}
+  #p-tent-rental .tr-sighint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--tr-tert);pointer-events:none}
   #p-tent-rental .tr-sigclear{position:absolute;right:12px;top:10px;font-size:12px;font-weight:700;color:var(--tr-navy);background:var(--tr-fill2);border:none;border-radius:999px;padding:5px 14px;cursor:pointer}
   #p-tent-rental .tr-agree{display:flex;align-items:flex-start;gap:12px;background:var(--tr-gtint);border-radius:16px;padding:16px 18px;margin-top:16px}
   #p-tent-rental .tr-agree input{width:20px;height:20px;margin-top:1px;accent-color:var(--tr-green2);flex:0 0 auto}
@@ -11736,25 +11736,11 @@ body.theme-night .page .tag{
       </section>
 
       <section class="tr-sec">
-        <div class="tr-eyebrow">Section 02</div><h2 class="tr-h2">Equipment and specifications</h2>
-        <p class="tr-sub">JELUCAMP Dome Camping Tent · 1 to 2 Person</p>
-        <div class="tr-card soft">
-          <div class="tr-row"><div class="k">Capacity</div><div class="v"><b>Maximum two (2) occupants</b></div></div>
-          <div class="tr-row"><div class="k">Dimensions (pitched)</div><div class="v">86.6" L × 59.1" W × 43.3" H · approx. 220 × 150 × 110 cm</div></div>
-          <div class="tr-row"><div class="k">Weight</div><div class="v">4.3 lb (approx. 1.95 kg), packed in carry bag</div></div>
-          <div class="tr-row"><div class="k">Fabric</div><div class="v">Polyester with PU3000 waterproof coating</div></div>
-          <div class="tr-row"><div class="k">Frame</div><div class="v">7.9 mm fibreglass poles</div></div>
-          <div class="tr-row"><div class="k">Door</div><div class="v">Double layer · inner insect mesh, outer zippered panel</div></div>
-          <div class="tr-row"><div class="k">Replacement poles</div><div class="v">JELUCAMP set · Amazon ASIN B0CXT2J7S4</div></div>
-        </div>
-      </section>
-
-      <section class="tr-sec">
-        <div class="tr-eyebrow">Section 03</div><h2 class="tr-h2">Rental period and fees</h2>
+        <div class="tr-eyebrow">Section 02</div><h2 class="tr-h2">Rental period and fees</h2>
         <div class="tr-grid2">
           <div class="tr-card">
-            <div class="tr-f"><label>Pickup date and time</label><input class="tr-in" name="Pickup"></div>
-            <div class="tr-f"><label>Return date and time</label><input class="tr-in" name="Return"></div>
+            <div class="tr-f"><label>Pickup date</label><input class="tr-in" type="date" name="Pickup"></div>
+            <div class="tr-f"><label>Return date</label><input class="tr-in" type="date" name="Return"></div>
             <div class="tr-f"><label>Pickup and return location</label><input class="tr-in" name="Location"></div>
             <div class="tr-f"><label>Number of occupants</label><select class="tr-in" name="Number of occupants"><option value="">Select</option><option>1</option><option>2</option></select></div>
           </div>
@@ -11768,7 +11754,22 @@ body.theme-night .page .tag{
           <div class="tr-card"><div class="tr-f" style="margin:0"><label>Emergency contact name</label><input class="tr-in" name="Emergency contact name"></div></div>
           <div class="tr-card"><div class="tr-f" style="margin:0"><label>Emergency contact phone</label><input class="tr-in" name="Emergency contact phone"></div></div>
         </div>
+        <div class="tr-card" style="margin-top:16px"><div class="tr-f" style="margin:0"><label>Condition notes at pickup</label><textarea class="tr-in" name="Condition notes at pickup"></textarea></div></div>
         <div class="tr-note g"><b>Note.</b> The rental fee is paid in full before the equipment is released. A rental day is any 24 hour period, or part of one, from the pickup time above.</div>
+      </section>
+
+      <section class="tr-sec">
+        <div class="tr-eyebrow">Section 03</div><h2 class="tr-h2">Equipment and specifications</h2>
+        <p class="tr-sub">JELUCAMP Dome Camping Tent · 1 to 2 Person</p>
+        <div class="tr-card soft">
+          <div class="tr-row"><div class="k">Capacity</div><div class="v"><b>Maximum two (2) occupants</b></div></div>
+          <div class="tr-row"><div class="k">Dimensions (pitched)</div><div class="v">86.6" L × 59.1" W × 43.3" H · approx. 220 × 150 × 110 cm</div></div>
+          <div class="tr-row"><div class="k">Weight</div><div class="v">4.3 lb (approx. 1.95 kg), packed in carry bag</div></div>
+          <div class="tr-row"><div class="k">Fabric</div><div class="v">Polyester with PU3000 waterproof coating</div></div>
+          <div class="tr-row"><div class="k">Frame</div><div class="v">7.9 mm fibreglass poles</div></div>
+          <div class="tr-row"><div class="k">Door</div><div class="v">Double layer · inner insect mesh, outer zippered panel</div></div>
+          <div class="tr-row"><div class="k">Replacement poles</div><div class="v">JELUCAMP set · Amazon ASIN B0CXT2J7S4</div></div>
+        </div>
       </section>
 
       <section class="tr-sec">
@@ -11777,7 +11778,6 @@ body.theme-night .page .tag{
           <li>Both parties inspect the tent together at pickup, and it may be pitched on request. Existing marks, wear or faults are recorded and initialled by both parties.</li>
           <li>Anything not recorded at pickup is treated as having happened during the rental period.</li>
         </ul></div>
-        <div class="tr-card" style="margin-top:14px"><div class="tr-f" style="margin:0"><label>Condition notes at pickup</label><textarea class="tr-in" name="Condition notes at pickup"></textarea></div></div>
       </section>
 
       <section class="tr-sec">
@@ -49222,32 +49222,35 @@ function vtXRStatus(msg){
 <script>
 /* ===== Tent Rental page: signature pad + PDF + submit ===== */
 (function(){
-  var canvas, ctx, drawing=false, hasSig=false, last=null, inited=false;
-  function fit(){
-    canvas=document.getElementById('trSigPad'); if(!canvas) return;
-    var r=canvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
-    if(!r.width) return;
-    var prev=null; try{ if(hasSig) prev=canvas.toDataURL(); }catch(e){}
-    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
-    ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
-    ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#0b2f4a';
-    if(prev){ var im=new Image(); im.onload=function(){ ctx.drawImage(im,0,0,r.width,r.height); }; im.src=prev; }
+  var canvas, ctx, drawing=false, hasSig=false, inited=false, last=null;
+  function ready(){
+    canvas=document.getElementById('trSigPad'); if(!canvas) return false;
+    if(!ctx){
+      var r=canvas.getBoundingClientRect(); if(!r.width) return false;
+      var dpr=window.devicePixelRatio||1;
+      canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+      ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+      ctx.lineWidth=2.3; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#0b2f4a';
+    }
+    return true;
   }
-  function pos(e){ var r=canvas.getBoundingClientRect(); var p=e.touches?e.touches[0]:e; return {x:p.clientX-r.left,y:p.clientY-r.top}; }
-  function start(e){ e.preventDefault(); drawing=true; last=pos(e); }
-  function move(e){ if(!drawing)return; e.preventDefault(); var p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; hasSig=true; }
-  function end(){ drawing=false; }
-  window.trClearSig=function(){ if(ctx&&canvas){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; } };
+  function pt(e){ var r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+  function down(e){ if(!ready()) return; drawing=true; last=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(last.x+0.1,last.y+0.1); ctx.stroke(); hasSig=true; try{canvas.setPointerCapture(e.pointerId);}catch(_){ } e.preventDefault(); }
+  function mv(e){ if(!drawing||!ctx) return; var p=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
+  function up(){ drawing=false; }
+  window.trClearSig=function(){ if(ready()){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; } };
   window.trInitSig=function(){
     canvas=document.getElementById('trSigPad'); if(!canvas) return;
-    fit();
+    ctx=null; hasSig=false; // recompute sizing for the freshly shown page
+    requestAnimationFrame(function(){ requestAnimationFrame(ready); });
     if(!inited){
-      canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
-      canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',move,{passive:false}); canvas.addEventListener('touchend',end);
+      canvas.style.touchAction='none';
+      canvas.addEventListener('pointerdown',down);
+      canvas.addEventListener('pointermove',mv);
+      window.addEventListener('pointerup',up);
       inited=true;
     }
   };
-  window.addEventListener('resize',function(){ if(document.getElementById('p-tent-rental')&&document.getElementById('p-tent-rental').classList.contains('on')) fit(); });
 
   function pdfWorker(){
     var el=document.getElementById('trDoc');
