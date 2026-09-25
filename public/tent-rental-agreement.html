@@ -186,7 +186,7 @@
     <div class="grid2">
       <div class="card">
         <div class="title">Owner<small>Sight Seers Caribbean Adventures</small></div>
-        <div class="row" style="padding:9px 0"><div class="k">Representative</div><div class="v"><b>Daineroy, Managing Director</b></div></div>
+        <div class="row" style="padding:9px 0"><div class="k">Business</div><div class="v"><b>Sight Seers Caribbean Adventures</b></div></div>
         <div class="row" style="padding:9px 0"><div class="k">Phone</div><div class="v"><b>+1 (876) 465-0630</b></div></div>
         <div class="row" style="padding:9px 0"><div class="k">Email</div><div class="v"><b>sightseersjm@gmail.com</b></div></div>
       </div>
@@ -198,10 +198,7 @@
           <div class="f"><label>Email *</label><input class="in" type="email" name="Email" required></div>
         </div>
         <div class="f"><label>Address</label><input class="in" name="Address"></div>
-        <div class="grid2">
-          <div class="f"><label>ID type &amp; last 4 digits</label><input class="in" name="ID"></div>
-          <div class="f"><label>Country of residence</label><input class="in" name="Country of residence"></div>
-        </div>
+        <div class="f"><label>Country of residence</label><input class="in" name="Country of residence"></div>
       </div>
     </div>
   </section>
@@ -498,7 +495,7 @@
     if(!form.checkValidity()){ form.reportValidity(); return false; }
     if(!hasSig){ msgEl.className='msg err'; msgEl.textContent='Please draw your signature in the box above.'; return false; }
 
-    var names=['Full name','Phone','Email','Address','ID','Country of residence','Number of occupants',
+    var names=['Full name','Phone','Email','Address','Country of residence','Number of occupants',
       'Pickup','Return','Location','Rental rate','Total rental fee','Security deposit','Payment method',
       'Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
     var data={};
