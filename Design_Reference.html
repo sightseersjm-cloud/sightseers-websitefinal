@@ -96,7 +96,7 @@ document.addEventListener('click', function(e){
 <link rel="dns-prefetch" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -11924,6 +11924,16 @@ body.theme-night .page .tag{
       </div>
     </div>
   </form>
+
+  <div id="trSuccess" style="display:none">
+    <div class="tr-wrap" style="padding-top:70px;padding-bottom:80px;text-align:center">
+      <div style="width:88px;height:88px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--tr-green),var(--tr-green2));box-shadow:0 16px 34px rgba(79,174,63,.34);color:#fff;font-size:44px;line-height:1">&#10003;</div>
+      <div class="tr-eyebrow" style="text-align:center">Agreement received</div>
+      <h2 class="tr-h2" style="font-size:clamp(30px,4.4vw,44px)">Submitted &mdash; thank you</h2>
+      <p class="tr-sub" style="margin:0 auto 26px">Your signed tent rental agreement has been sent to Sight Seers Caribbean Adventures, and a PDF copy has been downloaded to your device for your records. We will be in touch to confirm your rental.</p>
+      <a href="#" class="tr-btn" onclick="nav('tours');return false;">Back to Tours</a>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════
@@ -49252,42 +49262,93 @@ function vtXRStatus(msg){
     }
   };
 
-  function pdfWorker(){
-    var el=document.getElementById('trDoc');
-    var opt={ margin:[0.4,0.4,0.5,0.4], filename:'Sight-Seers-Tent-Rental-Agreement.pdf',
-      image:{type:'jpeg',quality:0.95}, html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},
-      jsPDF:{unit:'in',format:'letter',orientation:'portrait'}, pagebreak:{mode:['css','legacy']} };
-    return html2pdf().set(opt).from(el);
+  var TR_FIELDS=['Full name','Phone','Email','Address','Country of residence','Number of occupants','Pickup','Return','Location','Rental rate','Total rental fee','Payment method','Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
+  function trData(){ var f=document.getElementById('trForm'), d={}; TR_FIELDS.forEach(function(n){ var el=f?f.querySelector('[name="'+n+'"]'):null; d[n]=el?String(el.value).trim():''; }); return d; }
+
+  var TR_TERMS=[
+    ['Equipment', ['JELUCAMP Dome Camping Tent, 1 to 2 person. Maximum two (2) occupants. Dimensions (pitched) approx. 220 x 150 x 110 cm. Weight 4.3 lb, packed in carry bag. Polyester with PU3000 waterproof coating. 7.9 mm fibreglass poles. Double-layer door with inner insect mesh and outer zippered panel. Replacement poles: JELUCAMP set, Amazon ASIN B0CXT2J7S4.']],
+    ['Condition at handover', ['Both parties inspect the tent together at pickup, and it may be pitched on request. Existing marks, wear or faults are recorded and initialled by both parties.','Anything not recorded at pickup is treated as having happened during the rental period.']],
+    ['Your responsibilities', ['Use the tent only as intended, with no more than two (2) occupants.','Pitch on cleared ground, free of sharp rocks, sticks, coral or glass. A groundsheet or tarp underneath is strongly recommended.','Keep flames, stoves, grills, candles, cigarettes, mosquito coils and other heat sources at least 3 metres (10 feet) away. No cooking, smoking or flames inside.','Assemble and dismantle poles gently. Fully seat each section and never force or bend them past their natural arc.','Open and close zippers slowly, and never pull on the fabric to free a snag.','Keep food out of the tent to avoid animal and insect damage.','Take the tent down in high winds or severe weather. Tropical storm and hurricane conditions are outside its design limits.','Do not machine wash, bleach, use solvents or dry with direct heat.','Do not sublet, lend or transfer the tent to anyone outside your party.','Report damage, loss or theft to Sight Seers within 24 hours.','Return the tent clean, dry and packed in its carry bag with every component.']],
+    ['Normal wear versus damage', ['Normal wear (no charge): light dust or sand that brushes off; minor creasing from packing; slight fading from prior use; light scuffing on stakes.','Damage (chargeable): tears, holes, cuts, burns or melt marks; cracked, splintered, bent or snapped poles; broken zippers, sliders or mesh; failed or peeling waterproof coating; mould, mildew, odour or stains; missing parts or carry bag.']],
+    ['Damage assessment and charges', ['Cleaning: returned wet, muddy, sandy inside or with food residue - flat fee J$ / US$ 1,000.','Minor: puncture or tear under 2.5 cm repairable with a patch, or one missing stake / guy rope - repair cost or an agreed per-item fee.','Moderate: broken or cracked poles, damaged zipper, tear over 2.5 cm, mesh tear, damaged carry bag - actual cost of parts plus delivery; poles replaced with ASIN B0CXT2J7S4.','Severe: burns or melting, several large tears, failed waterproofing, mould, frame and fabric both damaged, no longer weathertight - full replacement cost.','Loss: tent not returned, lost or stolen - full replacement cost plus unpaid rental.','If a repair would cost more than half the replacement cost, or would leave the tent unsafe or no longer waterproof, Sight Seers may replace the tent and charge the full replacement cost instead.']],
+    ['Replacement terms', ['Poles: replaced with the JELUCAMP pole set (ASIN B0CXT2J7S4) or an equal 7.9 mm fibreglass set; you pay the pole set price plus shipping, import duties and local delivery. With written approval you may supply the correct pole set yourself within 14 days.','Full tent: current retail price of a new identical JELUCAMP 1 to 2 person dome tent plus shipping, import duties, taxes and local delivery; nearest equivalent used if discontinued. Any undamaged components returned remain the property of Sight Seers.','Invoicing: an itemised statement with photos and receipts is provided, with any balance due within seven (7) days.']],
+    ['Late return, loss and theft', ['Late return is charged at the daily rate for each day, or part of a day, past the agreed return time.','If not returned within a reasonable period without an agreed extension, the tent is treated as lost and full replacement cost applies, plus late fees to that date.','Theft: report to the police and give Sight Seers the report reference; you remain responsible for the replacement cost.']],
+    ['Assumption of risk and liability', ['Camping carries natural risks including weather, insects, wildlife and uneven terrain. You accept these risks for yourself and the other occupant.','Sight Seers provides the tent in good working order but does not warrant it against extreme weather or misuse.','To the extent permitted by law, Sight Seers is not liable for injury, loss or damage arising from use of the tent, except where caused by its own negligence.','You indemnify Sight Seers against third party claims arising from your use or misuse of the tent.']],
+    ['General', ['This Agreement is governed by the laws of Jamaica.','It is the entire agreement for this rental. Changes are valid only in writing, signed by both parties.','If any term is unenforceable, the remaining terms continue in full effect.']]
+  ];
+
+  function trBuildPdf(){
+    var J=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF; if(!J) return null;
+    var d=trData();
+    var doc=new J({unit:'pt',format:'letter'});
+    var M=48, W=612, PH=792, y=60;
+    var navy=[6,58,99], green=[63,138,49], ink=[23,42,52], mut=[91,107,118];
+    function ensure(h){ if(y+h>PH-52){ doc.addPage(); y=60; } }
+    function h1(t){ doc.setFont('helvetica','bold'); doc.setFontSize(19); doc.setTextColor(navy[0],navy[1],navy[2]); ensure(24); doc.text(t,M,y); y+=24; }
+    function h2(t){ y+=10; ensure(20); doc.setFont('helvetica','bold'); doc.setFontSize(12.5); doc.setTextColor(navy[0],navy[1],navy[2]); doc.text(t,M,y); y+=6; doc.setDrawColor(220,228,222); doc.line(M,y,W-M,y); y+=12; }
+    function para(t){ doc.setFont('helvetica','normal'); doc.setFontSize(9.6); doc.setTextColor(ink[0],ink[1],ink[2]); var ls=doc.splitTextToSize(t,W-2*M); for(var i=0;i<ls.length;i++){ ensure(13); doc.text(ls[i],M,y); y+=13; } y+=2; }
+    function bullet(t){ doc.setFont('helvetica','normal'); doc.setFontSize(9.6); doc.setTextColor(ink[0],ink[1],ink[2]); var ls=doc.splitTextToSize(t,W-2*M-14); for(var i=0;i<ls.length;i++){ ensure(13); if(i===0){ doc.setTextColor(green[0],green[1],green[2]); doc.text('•',M,y); doc.setTextColor(ink[0],ink[1],ink[2]); } doc.text(ls[i],M+14,y); y+=13; } }
+    function kv(k,v){ ensure(14); doc.setFontSize(9.6); doc.setFont('helvetica','bold'); doc.setTextColor(mut[0],mut[1],mut[2]); doc.text(k,M,y); doc.setFont('helvetica','normal'); doc.setTextColor(ink[0],ink[1],ink[2]); var vl=doc.splitTextToSize(String(v||'—'),W-M-(M+150)); doc.text(vl,M+150,y); y+=Math.max(14,vl.length*13); }
+
+    h1('Sight Seers Caribbean Adventures');
+    doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(mut[0],mut[1],mut[2]); doc.text('Two Person Tent Rental Agreement',M,y); y+=18;
+
+    h2('Owner');
+    kv('Business','Sight Seers Caribbean Adventures'); kv('Phone','+1 (876) 465-0630'); kv('Email','info@sightseerscaribbean.com');
+
+    h2('Renter and rental details');
+    kv('Full name', d['Full name']); kv('Phone', d['Phone']); kv('Email', d['Email']); kv('Address', d['Address']); kv('Country of residence', d['Country of residence']);
+    kv('Pickup date', d['Pickup']); kv('Return date', d['Return']); kv('Location', d['Location']); kv('Number of occupants', d['Number of occupants']);
+    kv('Rental rate', d['Rental rate']); kv('Total rental fee', d['Total rental fee']); kv('Payment method', d['Payment method']);
+    kv('Emergency contact', ((d['Emergency contact name']||'')+(d['Emergency contact phone']?(' · '+d['Emergency contact phone']):'')).trim());
+    if(d['Condition notes at pickup']) kv('Condition notes', d['Condition notes at pickup']);
+    para('The rental fee is paid in full before the equipment is released. A rental day is any 24 hour period, or part of one, from the pickup time above.');
+
+    for(var s=0;s<TR_TERMS.length;s++){ h2(TR_TERMS[s][0]); var arr=TR_TERMS[s][1]; for(var i=0;i<arr.length;i++){ bullet(arr[i]); } }
+
+    h2('Signature');
+    para('By signing, both parties accept these terms, including the damage, charge and replacement terms above, and the Renter confirms receipt of the equipment in the condition recorded.');
+    kv('Printed full name', d['Printed full name']); kv('Date', d['Date']); kv('Agreed to all terms','YES');
+    y+=6; ensure(80);
+    doc.setFont('helvetica','bold'); doc.setFontSize(9.6); doc.setTextColor(mut[0],mut[1],mut[2]); doc.text('Signature',M,y); y+=6;
+    try{ var cv=document.getElementById('trSigPad'); if(cv){ var img=cv.toDataURL('image/png'); doc.addImage(img,'PNG',M,y,220,72); } }catch(e){}
+    doc.setDrawColor(200,210,204); doc.line(M,y+74,M+240,y+74); y+=86;
+    doc.setFontSize(8); doc.setTextColor(mut[0],mut[1],mut[2]); doc.text('Submitted '+new Date().toLocaleString()+'  ·  Sight Seers Caribbean Adventures',M,y);
+    return doc;
   }
-  window.trDownloadPdf=function(){ if(window.html2pdf){ pdfWorker().save(); } else { alert('PDF tool still loading, please try again in a moment.'); } };
+
+  window.trDownloadPdf=function(){ var doc=trBuildPdf(); if(doc){ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); } else { alert('PDF tool still loading, please try again in a moment.'); } };
 
   window.trSubmit=function(e){
     e.preventDefault();
     var form=document.getElementById('trForm'), btn=document.getElementById('trSendBtn'), msg=document.getElementById('trMsg');
     if(!form.checkValidity()){ form.reportValidity(); return false; }
     if(!hasSig){ msg.className='tr-msg err'; msg.textContent='Please draw your signature in the box above.'; return false; }
-    if(!window.html2pdf){ msg.className='tr-msg err'; msg.textContent='PDF tool still loading — please try again in a moment.'; return false; }
-    var names=['Full name','Phone','Email','Address','Country of residence','Number of occupants','Pickup','Return','Location','Rental rate','Total rental fee','Payment method','Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
-    var data={}; names.forEach(function(n){ var el=form.querySelector('[name="'+n+'"]'); data[n]=el?String(el.value).trim():''; });
+    var d=trData();
     var lines=['TWO PERSON TENT RENTAL AGREEMENT — signed online',''];
-    names.forEach(function(n){ if(data[n]) lines.push(n+': '+data[n]); });
-    lines.push('','Agreed to all terms including Sections 6 to 8: YES','Signature: drawn (see attached PDF)','Submitted: '+new Date().toLocaleString());
-    btn.disabled=true; btn.textContent='Preparing PDF…'; msg.className='tr-msg'; msg.textContent='';
-    pdfWorker().toPdf().get('pdf').then(function(pdf){
-      var b64=pdf.output('datauristring').split(',')[1];
-      try{ pdf.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){}
-      btn.textContent='Sending…';
-      return fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        action:'send', name:data['Full name'], email:data['Email'], phone:data['Phone'],
-        subject:'Tent Rental Agreement — '+data['Full name'], message:lines.join('\n'),
-        attachmentBase64:b64, attachmentName:'Tent-Rental-Agreement-'+(data['Full name']||'renter').replace(/[^\w]+/g,'-')+'.pdf'
-      })});
-    }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    TR_FIELDS.forEach(function(n){ if(d[n]) lines.push(n+': '+d[n]); });
+    lines.push('','Agreed to all terms including all damage and replacement terms: YES','Signature: drawn (see attached PDF)','Submitted: '+new Date().toLocaleString());
+    btn.disabled=true; btn.textContent='Preparing…'; msg.className='tr-msg'; msg.textContent='';
+
+    var b64=null;
+    try{ var doc=trBuildPdf(); if(doc){ b64=doc.output('datauristring').split(',')[1]; try{ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){} } }catch(e){}
+
+    var payload={ action:'send', name:d['Full name'], email:d['Email'], phone:d['Phone'],
+      subject:'Tent Rental Agreement — '+d['Full name'], message:lines.join('\n') };
+    if(b64){ payload.attachmentBase64=b64; payload.attachmentName='Tent-Rental-Agreement-'+(d['Full name']||'renter').replace(/[^\w]+/g,'-')+'.pdf'; }
+
+    btn.textContent='Sending…';
+    fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){
-        if(res.ok){ msg.className='tr-msg ok'; msg.textContent='✓ Agreement signed and sent, and a PDF copy was downloaded for you. Thank you.'; btn.textContent='Sent ✓'; }
-        else { throw new Error((res.j&&res.j.error)||'Submission failed'); }
+        if(res.ok){
+          var f=document.getElementById('trForm'), sc=document.getElementById('trSuccess');
+          if(f) f.style.display='none';
+          if(sc) sc.style.display='block';
+          try{ smoothScrollToY((document.getElementById('p-tent-rental')||{}).offsetTop||0,700); }catch(e){ window.scrollTo(0,0); }
+        } else { throw new Error((res.j&&res.j.error)||'Submission failed'); }
       })
-      .catch(function(err){ msg.className='tr-msg err'; msg.textContent='Could not send: '+err.message+'. Your PDF was downloaded — please email it to us directly.'; btn.disabled=false; btn.textContent='Sign & Send Agreement'; });
+      .catch(function(err){ msg.className='tr-msg err'; msg.textContent='Could not send: '+err.message+'. Please try again, or use Download PDF and email it to us.'; btn.disabled=false; btn.textContent='Sign & Send Agreement'; });
     return false;
   };
 })();
