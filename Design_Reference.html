@@ -20526,6 +20526,52 @@ vtSessionAction=function(el,type){
 ════════════════════════════════════ -->
 
 <div class="page" id="p-account">
+<style>
+  /* Travel Club profile — Virtual Tours cinematic theme */
+  #p-account{background:linear-gradient(160deg,#042539 0%,#063a63 46%,#0a5772 100%)}
+  #p-account .page-hero{background:linear-gradient(135deg,#063a63 0%,#0d5371 40%,#1a7a9e 100%)!important;position:relative;overflow:hidden}
+  #p-account .page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 72% 82%,rgba(239,135,49,.12),transparent 42%);pointer-events:none}
+  #p-account .ph-title{color:#fff}
+  #p-account .breadcrumb,#p-account .breadcrumb *{color:rgba(255,255,255,.85)!important}
+  #p-account .account-sec{background:transparent!important}
+  #p-account .auth-card,#p-account .account-shell{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 24px 60px rgba(0,0,0,.35)!important;backdrop-filter:blur(12px)}
+  #p-account .account-shell-title h2{color:#fff!important}
+  #p-account .account-shell-title p{color:rgba(255,255,255,.75)!important}
+  #p-account .account-shell-kicker{color:#fff!important;background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.18)!important}
+  #p-account .account-shell-kicker i{color:var(--orange)!important}
+  /* auth (guest) form kept readable */
+  #p-account .field-col label{color:rgba(255,255,255,.82)!important}
+  #p-account .field-col input,#p-account .field-col select{background:rgba(255,255,255,.96)!important;color:#0d2233!important;border:1px solid rgba(255,255,255,.28)!important}
+  #p-account .account-auth-visual{background:linear-gradient(135deg,rgba(239,135,49,.92),rgba(6,58,99,.92))!important;color:#fff!important}
+  #p-account .account-auth-visual *{color:#fff!important}
+  #p-account .auth-toggle-row,#p-account .auth-toggle-row span{color:rgba(255,255,255,.78)!important}
+  /* stat tiles */
+  #p-account .dashboard-stat{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important}
+  #p-account .dashboard-stat strong{color:#fff!important}
+  #p-account .dashboard-stat span{color:rgba(255,255,255,.62)!important}
+  /* quick links */
+  #p-account .dashboard-link{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important}
+  #p-account .dashboard-link h4{color:#fff!important}
+  #p-account .dashboard-link p{color:rgba(255,255,255,.66)!important}
+  #p-account .dashboard-link-icon{background:rgba(255,255,255,.1)!important;color:var(--orange)!important;border-color:rgba(255,255,255,.14)!important}
+  #p-account .dashboard-link-cta{background:rgba(255,255,255,.1)!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important}
+  /* tier + panels + perks */
+  #p-account .club-tier-panel,#p-account .dashboard-panel,#p-account .perk-card{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:none!important}
+  #p-account .dashboard-panel h4,#p-account .perk-card h3,#p-account .club-tier-panel strong,#p-account .club-saved-head .label-eyebrow{color:#fff!important}
+  #p-account .dashboard-panel p,#p-account .dashboard-panel-item span,#p-account .perk-card p,#p-account .perk-card li{color:rgba(255,255,255,.74)!important}
+  #p-account .label-eyebrow,#p-account .club-tier-eyebrow,#p-account .club-tier-style{color:rgba(255,255,255,.82)!important;background:rgba(255,255,255,.08)!important}
+  #p-account .club-tier-style b{color:#fff!important}
+  #p-account .dashboard-panel-item i{color:var(--orange)!important}
+  /* auth panel: make transparent so white labels read on the dark shell */
+  #p-account .account-auth-panel,#p-account .auth-panel{background:transparent!important;box-shadow:none!important;border:none!important}
+  #p-account .account-auth-panel a{color:rgba(255,255,255,.88)!important}
+  #p-account .auth-toggle-link{color:var(--orange)!important}
+  #p-account .inline-status{color:rgba(255,255,255,.85)!important}
+  /* welcome hero: solid dark so white text pops */
+  #p-account .dashboard-hero{background:linear-gradient(135deg,#05304f 0%,#0d5371 48%,#14627f 100%)!important}
+  #p-account .dashboard-hero h3,#p-account .dashboard-hero p,#p-account .dashboard-hero a,#p-account .dashboard-user-meta *{color:#fff!important}
+  #p-account .dashboard-chip{background:rgba(255,255,255,.14)!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important}
+</style>
   <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1600&q=85&auto=format&fit=crop')"><div class="ph-inner"><h1 class="ph-title">Guest Account</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><span>Guest Account</span></div></div></div>
   <section class="account-sec">
     <div class="account-wrap">
