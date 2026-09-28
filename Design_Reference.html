@@ -22135,6 +22135,16 @@ if(!siteSettings.heroImg2 || siteSettings.heroImg2.includes('photo-1436491865332
     localStorage.setItem('ss_site_settings',JSON.stringify(existingSettings));
   }catch(e){}
 }
+/* Force the MBA (slide 3) hero image to the white-party photo, overriding the old boat image saved in settings. */
+const UPDATED_MBA_HERO_IMAGE='/assets/hero/white-party.jpg';
+if(!siteSettings.heroImg3 || siteSettings.heroImg3.indexOf('1122462')>-1 || siteSettings.heroImg3.indexOf('pexels')>-1){
+  siteSettings.heroImg3=UPDATED_MBA_HERO_IMAGE;
+  try{
+    const existingSettings3=JSON.parse(localStorage.getItem('ss_site_settings')||'{}');
+    existingSettings3.heroImg3=UPDATED_MBA_HERO_IMAGE;
+    localStorage.setItem('ss_site_settings',JSON.stringify(existingSettings3));
+  }catch(e){}
+}
 let customerGalleryData=loadCustomerGallery();
 let adminUnlocked=sessionStorage.getItem('ss_admin_unlocked')==='1';
 
@@ -24295,7 +24305,7 @@ function applySiteSettings(){
   const heroSlides=document.querySelectorAll('.hero .slide');
   if(heroSlides[0] && siteSettings.heroImg1) heroSlides[0].style.backgroundImage=`url('${siteSettings.heroImg1.replace(/'/g,"%27")}')`;
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
-  if(heroSlides[2] && siteSettings.heroImg3) heroSlides[2].style.backgroundImage=`url('${siteSettings.heroImg3.replace(/'/g,"%27")}')`;
+  if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('1122462')>-1 || _h3.indexOf('pexels')>-1) _h3='/assets/hero/white-party.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
   const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
   const jamaicaImg=document.querySelector('.jm3d-island-img');
   if(jamaicaImg){
