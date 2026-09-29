@@ -11814,14 +11814,15 @@ body.theme-night .page .tag{
         <div class="tr-eyebrow">Section 02</div><h2 class="tr-h2">Rental period and fees</h2>
         <div class="tr-grid2">
           <div class="tr-card">
-            <div class="tr-f"><label>Pickup date</label><input class="tr-in" type="date" name="Pickup"></div>
-            <div class="tr-f"><label>Return date</label><input class="tr-in" type="date" name="Return"></div>
+            <div class="tr-f"><label>Pickup date</label><input class="tr-in" type="date" name="Pickup" id="trPickup" onchange="trCalcRate()"></div>
+            <div class="tr-f"><label>Return date</label><input class="tr-in" type="date" name="Return" id="trReturn" onchange="trCalcRate()"></div>
             <div class="tr-f"><label>Pickup and return location</label><input class="tr-in" name="Location"></div>
             <div class="tr-f"><label>Number of occupants</label><select class="tr-in" name="Number of occupants"><option value="">Select</option><option>1</option><option>2</option></select></div>
           </div>
           <div class="tr-card">
             <div class="tr-f"><label>Number of tents *</label><input class="tr-in" type="number" min="1" step="1" name="Number of tents" id="trTents" required oninput="trCalcRate()" placeholder="e.g. 2"></div>
-            <div class="tr-f"><label>Rate per tent (J$)</label><input class="tr-in" name="Rental rate" id="trRate" readonly placeholder="Auto-calculated"></div>
+            <div class="tr-f"><label>Nights</label><input class="tr-in" name="Nights" id="trNights" readonly placeholder="From pickup &amp; return dates"></div>
+            <div class="tr-f"><label>Rate per tent / night (J$)</label><input class="tr-in" name="Rental rate" id="trRate" readonly placeholder="Auto-calculated"></div>
             <div class="tr-f"><label>Total rental fee (J$)</label><input class="tr-in" name="Total rental fee" id="trTotal" readonly placeholder="Auto-calculated"></div>
             <div class="tr-f"><label>Payment method</label><select class="tr-in" name="Payment method"><option value="">Select</option><option>Cash</option><option>Card</option><option>Transfer</option><option>Other</option></select></div>
           </div>
@@ -11831,7 +11832,7 @@ body.theme-night .page .tag{
           <div class="tr-card"><div class="tr-f" style="margin:0"><label>Emergency contact phone</label><input class="tr-in" name="Emergency contact phone"></div></div>
         </div>
         <div class="tr-card" style="margin-top:16px"><div class="tr-f" style="margin:0"><label>Condition notes at pickup</label><textarea class="tr-in" name="Condition notes at pickup"></textarea></div></div>
-        <div class="tr-note g"><b>Pricing.</b> Tents are J$2,500 each. Rent 5 or more and the rate drops to J$2,000 each. The total is calculated automatically from the number of tents. The rental fee is paid in full before the equipment is released.</div>
+        <div class="tr-note g"><b>Pricing.</b> Tents are J$2,500 per tent, per night. Rent 5 or more and the rate drops to J$2,000 per tent, per night. The total is calculated automatically from the number of tents and the nights between your pickup and return dates. The rental fee is paid in full before the equipment is released.</div>
       </section>
 
       <section class="tr-sec">
@@ -49379,7 +49380,7 @@ function vtXRStatus(msg){
     }
   };
 
-  var TR_FIELDS=['Full name','Phone','Email','Address','Country of residence','Number of occupants','Pickup','Return','Location','Number of tents','Rental rate','Total rental fee','Payment method','Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
+  var TR_FIELDS=['Full name','Phone','Email','Address','Country of residence','Number of occupants','Pickup','Return','Location','Number of tents','Nights','Rental rate','Total rental fee','Payment method','Emergency contact name','Emergency contact phone','Condition notes at pickup','Printed full name','Date'];
   function trData(){ var f=document.getElementById('trForm'), d={}; TR_FIELDS.forEach(function(n){ var el=f?f.querySelector('[name="'+n+'"]'):null; d[n]=el?String(el.value).trim():''; }); return d; }
 
   var TR_TERMS=[
@@ -49459,7 +49460,7 @@ function vtXRStatus(msg){
     h2('Renter and rental details');
     kv('Full name', d['Full name']); kv('Phone', d['Phone']); kv('Email', d['Email']); kv('Address', d['Address']); kv('Country of residence', d['Country of residence']);
     kv('Pickup date', d['Pickup']); kv('Return date', d['Return']); kv('Location', d['Location']); kv('Number of occupants', d['Number of occupants']);
-    kv('Number of tents', d['Number of tents']); kv('Rate per tent', d['Rental rate']); kv('Total rental fee', d['Total rental fee']); kv('Payment method', d['Payment method']);
+    kv('Number of tents', d['Number of tents']); kv('Nights', d['Nights']); kv('Rate per tent / night', d['Rental rate']); kv('Total rental fee', d['Total rental fee']); kv('Payment method', d['Payment method']);
     kv('Emergency contact', ((d['Emergency contact name']||'')+(d['Emergency contact phone']?(' · '+d['Emergency contact phone']):'')).trim());
     if(d['Condition notes at pickup']) kv('Condition notes', d['Condition notes at pickup']);
     y+=4; para('The rental fee is paid in full before the equipment is released. A rental day is any 24 hour period, or part of one, from the pickup time above.');
@@ -49489,13 +49490,22 @@ function vtXRStatus(msg){
     return doc;
   }
 
-  // Auto-price the tent rental: J$2,500 per tent, J$2,000 per tent for 5 or more.
+  // Auto-price the tent rental: J$2,500 per tent per night, J$2,000 per tent per night for 5 or more.
   window.trCalcRate=function(){
-    var tEl=document.getElementById('trTents'), rEl=document.getElementById('trRate'), sEl=document.getElementById('trTotal');
+    var tEl=document.getElementById('trTents'), rEl=document.getElementById('trRate'), sEl=document.getElementById('trTotal'),
+        nEl=document.getElementById('trNights'), pEl=document.getElementById('trPickup'), qEl=document.getElementById('trReturn');
+    // Nights between pickup and return (a started day counts as a night; minimum 1).
+    var nights=0;
+    if(pEl&&qEl&&pEl.value&&qEl.value){ var p=new Date(pEl.value), q=new Date(qEl.value); var diff=Math.round((q-p)/86400000); nights=diff>0?diff:0; }
+    if(nEl) nEl.value=nights>0?(nights+' night'+(nights>1?'s':'')):'';
     var n=parseInt(tEl&&tEl.value,10); if(!(n>0)){ if(rEl) rEl.value=''; if(sEl) sEl.value=''; return; }
     var rate=n>=5?2000:2500;
-    if(rEl) rEl.value='J$'+rate.toLocaleString()+' per tent'+(n>=5?' (5+ rate)':'');
-    if(sEl) sEl.value='J$'+(rate*n).toLocaleString()+' ('+n+' tent'+(n>1?'s':'')+')';
+    if(rEl) rEl.value='J$'+rate.toLocaleString()+' per tent / night'+(n>=5?' (5+ rate)':'');
+    if(nights>0){
+      if(sEl) sEl.value='J$'+(rate*n*nights).toLocaleString()+' ('+n+' tent'+(n>1?'s':'')+' × '+nights+' night'+(nights>1?'s':'')+')';
+    } else {
+      if(sEl) sEl.value='Select pickup & return dates';
+    }
   };
 
   window.trDownloadPdf=function(){ var doc=trBuildPdf(); if(doc){ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); } else { alert('PDF tool still loading, please try again in a moment.'); } };
