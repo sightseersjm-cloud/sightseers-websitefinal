@@ -18511,7 +18511,7 @@ function vtJoinSession(id){
   });
 }
 
-function vtJoinSessionDirect(id,s){
+function vtJoinSessionDirect(id,s,noScroll){
   /* joined, stop nudging and close the chooser */
   if(typeof vtHideLivePrompt==='function')vtHideLivePrompt(true);
   var lp=document.getElementById('vtLivePanel');if(lp)lp.classList.remove('open');
@@ -18531,7 +18531,9 @@ function vtJoinSessionDirect(id,s){
   el=document.getElementById('vt-viewer-count');if(el)el.textContent=s.viewers;
   el=document.getElementById('vt-chat-viewers');if(el)el.textContent=s.viewers+' watching';
   var sess=document.getElementById('vt-active-session');
-  if(sess)sess.scrollIntoView({behavior:'smooth',block:'center'});
+  /* When we're about to expand into the fullscreen card, skip the scroll — it
+     would animate the page behind the confetti and read as a glitch. */
+  if(sess&&!noScroll)sess.scrollIntoView({behavior:'smooth',block:'center'});
   vtToast('Joined: '+s.title);
   vtStartStream();
 }
@@ -20092,9 +20094,10 @@ function vtJoinLiveNow(name,price){
 function vtJoinLiveDemo(id){
   var s=(typeof vtSessions!=='undefined')?vtSessions[id]:null; if(!s)return;
   try{ vtConfettiCelebrate("You're in! 🎉", (s.title||'')+' — your live experience is starting…'); }catch(e){}
-  // Load the session quietly behind the celebration, then expand into fullscreen.
-  setTimeout(function(){ try{ vtJoinSessionDirect(id,s); }catch(e){} }, 200);
-  setTimeout(function(){ try{ if(typeof vtExpandSession==='function' && !vtSessionExpanded) vtExpandSession(); }catch(e){} }, 2100);
+  // Load the session quietly behind the celebration (no page scroll), then let
+  // the card glide open with the windowed animation while the confetti finishes.
+  setTimeout(function(){ try{ vtJoinSessionDirect(id,s,true); }catch(e){} }, 150);
+  setTimeout(function(){ try{ if(!vtSessionExpanded) vtExpandSessionSmooth(); }catch(e){} }, 1500);
 }
 
 /* Paid live join: everything except the tester takes payment first. Redirect to
@@ -20232,6 +20235,25 @@ function vtExpandSession(){
   }else{
     vtShowSessionOverlay();
   }
+}
+/* Smooth expand for the celebratory join flow: always uses the animated windowed
+   overlay (the vtSessionOpen keyframe) instead of the browser's native
+   fullscreen, which pops abruptly. The card scales up gracefully in place. */
+function vtExpandSessionSmooth(){
+  var session=document.getElementById('vt-active-session');if(!session)return;
+  if(vtSessionExpanded)return;
+  vtSessionExpanded=true;
+  document.body.classList.add('vt-expanding');
+  var frame=session.closest('.vt-dash-frame');
+  if(frame){frame.style.overflow='visible';frame.style.zIndex='10000'}
+  var body=session.closest('.vt-dash-body');if(body)body.style.overflow='visible';
+  var main=session.closest('.vt-dash-main');if(main)main.style.overflow='visible';
+  vtShowSessionOverlay();
+  // Add the class on the next frame so the CSS open animation plays from the start.
+  requestAnimationFrame(function(){
+    session.classList.add('vt-session-fs');
+    document.body.style.overflow='hidden';
+  });
 }
 function vtCollapseSession(){
   if(!vtSessionExpanded)return;
