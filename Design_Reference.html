@@ -19368,14 +19368,31 @@ function vtSwitchScene(scene){
 var vtSceneYT={};
 function vtYTEntry(v){ return (typeof v==='string') ? {id:v} : (v||{}); }
 var vtSceneVideoOn=false;
+/* Force the scene video to play. Some browsers ignore autoplay=1 even when
+   muted, leaving YouTube's paused poster + play button. The IFrame API accepts
+   raw postMessage commands when enablejsapi=1 and the origin param is set, so we
+   push mute + playVideo a few times to cover the player's init timing. */
+function vtYTPlay(){
+  try{
+    var f=document.getElementById('vt-session-yt-iframe');
+    if(f&&f.contentWindow&&f.getAttribute('data-yt')){
+      f.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*');
+      f.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}','*');
+    }
+  }catch(e){}
+}
 function vtShowSceneVideo(v){
   var e=vtYTEntry(v), id=e.id;
   var host=document.getElementById('vt-session-yt'),f=document.getElementById('vt-session-yt-iframe');
   if(!host||!f||!id)return false;
   /* A looped embed restarts at `start`, so the intro is skipped on every pass. */
   var st=e.start?('&start='+e.start):'';
-  var src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+st+'&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1';
-  if(f.getAttribute('data-yt')!==id){f.src=src;f.setAttribute('data-yt',id);}
+  var origin=encodeURIComponent(location.origin);
+  var src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+st+'&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin='+origin+'&widget_referrer='+origin;
+  if(f.getAttribute('data-yt')!==id){
+    f.src=src;f.setAttribute('data-yt',id);
+    f.onload=function(){ vtYTPlay(); setTimeout(vtYTPlay,500); setTimeout(vtYTPlay,1400); };
+  }
   /* Name the video on the toggle, unless that would just repeat the scene tab
      sitting next to it, two identical labels read as a duplicate control. */
   var sceneTitle='';
@@ -20154,6 +20171,9 @@ function vtJoinLiveDemo(id){
   // the card glide open with the windowed animation while the confetti finishes.
   setTimeout(function(){ try{ vtJoinSessionDirect(id,s,true); }catch(e){} }, 150);
   setTimeout(function(){ try{ if(!vtSessionExpanded) vtExpandSessionSmooth(); }catch(e){} }, 1500);
+  // Nudge the video to actually start (covers browsers that ignore muted autoplay).
+  setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 1800);
+  setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 2600);
 }
 
 /* Paid live join: everything except the tester takes payment first. Redirect to
