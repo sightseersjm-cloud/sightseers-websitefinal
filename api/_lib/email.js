@@ -19,8 +19,13 @@ async function sendEmail({ to, subject, html, replyTo, attachments }) {
     });
     const data = await resp.json();
     console.log('EMAIL RESULT:', resp.status, JSON.stringify(data));
+    // Surface delivery failures (e.g. invalid key, unverified sender) instead of
+    // silently returning ok — callers can log/track, and it shows up in monitoring.
+    if (!resp.ok) return { ok: false, status: resp.status, error: data };
+    return { ok: true, id: data && data.id };
   } catch (e) {
     console.error('EMAIL ERROR:', e.message);
+    return { ok: false, error: e.message };
   }
 }
 
