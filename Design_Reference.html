@@ -16085,6 +16085,15 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-session-side{border-left:none;border-top:1px solid rgba(255,255,255,.06)}
 .vt-session-actions{grid-template-columns:repeat(4,1fr);gap:4px}
 .vt-session-video{min-height:220px!important}
+/* Stop grid/flex children from forcing the stage wider than the phone (the
+   533px overflow that cut off the drag hint and let decorative orbs bleed). */
+.vt-dash-main{overflow-x:hidden}
+.vt-dash-main,.vt-session,.vt-session-content,.vt-session-video,.vt-session-side,.vt-session-chat,.vt-live-grid,.vt-dash-stats{min-width:0;max-width:100%}
+.vt-session-content>*{min-width:0;max-width:100%}
+.vt-session-video{width:auto;overflow:hidden}
+.vt-360-drag-hint{font-size:12px;padding:9px 14px;max-width:calc(100% - 24px);white-space:normal;text-align:center;line-height:1.35}
+.vt-360-drag-hint i{font-size:15px}
+.vt-weather-widget,.vt-haptic-toggle{transform:scale(.82);transform-origin:top right}
 .vt-dash-frame.vt-fullscreen{inset:0!important;border-radius:0!important}
 .vt-dash-frame.vt-fullscreen .vt-live-grid{grid-template-columns:1fr}
 .vt-dash-frame.vt-fullscreen .vt-session-video{min-height:280px!important}
