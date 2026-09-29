@@ -46,7 +46,42 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Stripe not configured. Add STRIPE_SECRET_KEY to Vercel environment variables.' });
   }
 
-  const { tourName, priceUsd, playbackId, streamId, successUrl, cancelUrl, items } = req.body || {};
+  const { tourName, priceUsd, playbackId, streamId, successUrl, cancelUrl, items, vtCart } = req.body || {};
+
+  // V-Tours cart: shop items + reserved experiences. Prices are validated here
+  // against api/_data/vtours-products.json, never taken from the browser.
+  if (Array.isArray(vtCart) && vtCart.length) {
+    if (vtCart.length > 30) return res.status(400).json({ error: 'Too many items in one checkout.' });
+    let VT;
+    try { VT = require('../_data/vtours-products.json'); }
+    catch (e) { return res.status(500).json({ error: 'V-Tours price list is missing on the server.' }); }
+    const lines = [];
+    for (const raw of vtCart) {
+      const name = String(raw && raw.name || '').trim();
+      const price = VT[name];
+      if (!(price > 0)) return res.status(400).json({ error: 'Unknown V-Tours item: ' + (name || '(blank)') });
+      const qty = Math.max(1, Math.min(50, parseInt(raw && raw.qty, 10) || 1));
+      lines.push({ name, price, qty });
+    }
+    const origin = req.headers.origin || 'https://sightseerscaribbean.com';
+    const success = successUrl || `${origin}/live-360?vtpaid=1&stripeSession={CHECKOUT_SESSION_ID}`;
+    const cancel  = cancelUrl  || `${origin}/live-360`;
+    const params = {
+      'mode': 'payment', 'success_url': success, 'cancel_url': cancel,
+      'metadata[kind]': 'vtours',
+      'metadata[items]': lines.map(l => l.name + ' x' + l.qty).join(', ').slice(0, 480)
+    };
+    lines.forEach((line, i) => {
+      params['line_items[' + i + '][price_data][currency]'] = 'usd';
+      params['line_items[' + i + '][price_data][unit_amount]'] = String(Math.round(line.price * 100));
+      params['line_items[' + i + '][price_data][product_data][name]'] = line.name.slice(0, 250);
+      params['line_items[' + i + '][price_data][product_data][description]'] = 'Sight Seers Caribbean V-Tours';
+      params['line_items[' + i + '][quantity]'] = String(line.qty);
+    });
+    const r = await stripeRequest('POST', '/v1/checkout/sessions', params);
+    if (r.status !== 200) return res.status(502).json({ error: 'Stripe session creation failed', detail: r.body });
+    return res.status(200).json({ ok: true, url: r.body.url, sessionId: r.body.id });
+  }
 
   // A cart checkout sends { items: [{ id, qty, option }] }. Prices are looked
   // up here, never taken from the browser: otherwise anyone could post a $1

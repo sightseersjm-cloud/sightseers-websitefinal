@@ -16202,6 +16202,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-reserve-go:hover{filter:brightness(1.05)}
 .vt-reserve-go:disabled{opacity:.7;cursor:default}
 .vt-reserve-note{text-align:center;font-size:11px;color:rgba(255,255,255,.5);margin-top:12px}
+.vt-reserve-virtual{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;border-radius:10px;background:rgba(112,194,87,.12);border:1px solid rgba(112,194,87,.3);color:#bfe6a8;font-size:12px;font-weight:600}
 .vt-vision::before{content:'';position:absolute;inset:-40px;background:url('/panos/blue-lagoon.jpg') center 62%/cover no-repeat;filter:blur(22px) brightness(.42) saturate(1.25);transform:scale(1.06)}
 .vt-vision::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(10,22,40,.1) 0%,rgba(6,14,26,.55) 78%)}
 .vt-vision>.vt-wrap{position:relative;z-index:2}
@@ -16567,23 +16568,23 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                 </div>
                 <div class="vt-live-header"><h3><span class="vt-dash-live-dot"></span>Live Right Now</h3><a href="javascript:void(0)" onclick="vtExpNav('browse',document.querySelector('#vt-exp-sidebar a[data-view=browse]'))">See all 19 sessions</a></div>
                 <div class="vt-live-grid">
-                  <div class="vt-live-card" onclick="vtJoinSession('blue-lagoon')">
+                  <div class="vt-live-card" onclick="vtJoinLivePaid('blue-lagoon')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature and Outdoors</div></div>
-                    <div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Marcus Thompson, Portland, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLiveNow('Blue Lagoon Morning Walk',42)">Join Live</div></div></div>
+                    <div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide">Marcus Thompson, Portland, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLivePaid('blue-lagoon')">Join Live</div></div></div>
                   </div>
                   <div class="vt-live-card" onclick="vtJoinLiveDemo('kingston-jerk')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food and Drink</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Jerk Chicken Class</div><div class="vt-live-card-guide">Chef Anita Murray, Kingston, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLiveDemo('kingston-jerk')">Join Live</div></div></div>
                   </div>
-                  <div class="vt-live-card" onclick="vtJoinSession('cooking-tour')">
+                  <div class="vt-live-card" onclick="vtJoinLivePaid('cooking-tour')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#c2185b,#ff6f00)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Cooking</div></div>
-                    <div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide">Chef Donna Gayle, Ocho Rios, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLiveNow('Jamaican Cooking Experience',35)">Join Live</div></div></div>
+                    <div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide">Chef Donna Gayle, Ocho Rios, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLivePaid('cooking-tour')">Join Live</div></div></div>
                   </div>
-                  <div class="vt-live-card" onclick="vtJoinSession('bigship-dj')">
+                  <div class="vt-live-card" onclick="vtJoinLivePaid('bigship-dj')">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#1a1a2e,#e94560)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Music</div></div>
-                    <div class="vt-live-card-body"><div class="vt-live-card-title">Big Ship Records DJ Mixing Session</div><div class="vt-live-card-guide">Stephen McGregor, Kingston, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $40</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLiveNow('Big Ship Records DJ Mixing Session',40)">Join Live</div></div></div>
+                    <div class="vt-live-card-body"><div class="vt-live-card-title">Big Ship Records DJ Mixing Session</div><div class="vt-live-card-guide">Stephen McGregor, Kingston, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $40</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLivePaid('bigship-dj')">Join Live</div></div></div>
                   </div>
-                  <div class="vt-live-card" onclick="vtToast('Session starts at 3:00 PM. Seat reserved!')">
+                  <div class="vt-live-card" onclick="vtOpenReserve('Bridgetown Market Tour','Today 3:00 PM',28)">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><div class="vt-live-card-badge scheduled">3:00 PM</div><div class="vt-live-card-cat">Personal Shopping</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Bridgetown Market Tour</div><div class="vt-live-card-guide">Sandra Browne, Bridgetown, Barbados</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $28</span><div class="vt-live-card-btn alt" onclick="event.stopPropagation();vtOpenReserve('Bridgetown Market Tour','Today 3:00 PM',28)">Reserve Seat</div></div></div>
                   </div>
@@ -19029,23 +19030,23 @@ function vtAddSessionToCart(btn,name,price){
 /* Real checkout: route the cart into the working booking request form, prefilled
    with the selected experiences, so the reservation actually reaches Sight Seers
    (emailed via the booking flow) instead of a fake confirmation. */
+/* Real Stripe checkout: prices are re-validated server-side (api/_data/
+   vtours-products.json), a Stripe Checkout session is created, and we redirect
+   to Stripe's secure hosted page. On success Stripe emails a branded confirmation
+   (see api/stripe-webhook.js). */
 function vtCheckout(){
   if(!vtCart.length)return;
-  var total=0,lines=[],names=[];
-  vtCart.forEach(function(i){ total+=Number(i.price)||0; names.push(i.name); lines.push('• '+i.name+' — USD $'+(Number(i.price)||0).toFixed(2)); });
-  var summary='V-Tours selection:\n'+lines.join('\n')+'\nEstimated total: USD $'+total.toFixed(2);
-  try{vtCloseCart();}catch(e){}
-  vtCart=[];vtUpdateCartBadge();try{vtRenderCart();}catch(e){}
-  if(typeof nav==='function')nav('booking');
-  setTimeout(function(){
-    var pkg=document.getElementById('b_package'); if(pkg)pkg.value=names.join(', ');
-    var notes=document.getElementById('b_notes'); if(notes)notes.value=(notes.value?notes.value+'\n\n':'')+summary;
-    var fs=document.getElementById('b_funnelSource'); if(fs)fs.value='vtours';
-    var fl=document.getElementById('b_funnelLabel'); if(fl)fl.value='V-Tours Cart';
-    var t=document.getElementById('b_type');
-    try{ if(t&&!t.value){ for(var i=0;i<t.options.length;i++){ if(/custom package/i.test(t.options[i].text)){ t.selectedIndex=i; break; } } } }catch(e){}
-    if(typeof vtToast==='function')vtToast('Complete your details below to lock in your experiences.');
-  },380);
+  var btn=document.getElementById('vt-cart-checkout-btn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin" style="margin-right:6px"></i>Opening secure checkout…';}
+  var payload={vtCart:vtCart.map(function(i){return {name:i.name,qty:i.qty||1};})};
+  function reset(){ if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-lock" style="margin-right:6px"></i>Checkout';} }
+  fetch('/api/stripe-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().catch(function(){return {};});})
+    .then(function(d){
+      if(d&&d.ok&&d.url){ window.location.href=d.url; }
+      else { reset(); if(typeof vtToast==='function')vtToast((d&&d.error)||'Could not start checkout. Please try again.'); }
+    })
+    .catch(function(){ reset(); if(typeof vtToast==='function')vtToast('Network error. Please try again.'); });
 }
 
 /* ── Go Live (guide) ── */
@@ -20085,19 +20086,50 @@ function vtJoinLiveNow(name,price){
   try{ vtJoinCelebrate(name); }catch(e){}
 }
 
-/* Working "Join Live" demo for testers: confetti welcome, then the session opens
-   with its guide video playing and auto-expands to fullscreen. */
+/* Open a live session: confetti welcome, then the session loads (with its guide
+   video) and expands smoothly to fullscreen — no page jump. Used by the tester
+   card directly, and by the paid flow after Stripe returns. */
 function vtJoinLiveDemo(id){
   var s=(typeof vtSessions!=='undefined')?vtSessions[id]:null; if(!s)return;
-  try{ vtConfettiCelebrate("You're in! 🎉", (s.title||'')+' — your live class is starting…'); }catch(e){}
-  setTimeout(function(){
-    try{ if(typeof nav==='function') nav('vtours'); }catch(e){}
-    setTimeout(function(){
-      try{ vtJoinSessionDirect(id,s); }catch(e){}
-      setTimeout(function(){ try{ if(typeof vtExpandSession==='function' && !vtSessionExpanded) vtExpandSession(); }catch(e){} }, 950);
-    }, 520);
-  }, 2200);
+  try{ vtConfettiCelebrate("You're in! 🎉", (s.title||'')+' — your live experience is starting…'); }catch(e){}
+  // Load the session quietly behind the celebration, then expand into fullscreen.
+  setTimeout(function(){ try{ vtJoinSessionDirect(id,s); }catch(e){} }, 200);
+  setTimeout(function(){ try{ if(typeof vtExpandSession==='function' && !vtSessionExpanded) vtExpandSession(); }catch(e){} }, 2100);
 }
+
+/* Paid live join: everything except the tester takes payment first. Redirect to
+   Stripe; on return the confetti + video open automatically (see the return
+   handler below). */
+function vtJoinLivePaid(id){
+  var s=(typeof vtSessions!=='undefined')?vtSessions[id]:null; if(!s)return;
+  if(typeof vtToast==='function')vtToast('<i class="fas fa-spinner fa-spin"></i> Opening secure checkout…');
+  var origin=location.origin;
+  fetch('/api/stripe-checkout',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({vtCart:[{name:s.title,qty:1}], successUrl:origin+'/live-360?vtpaid=1&vtsession='+encodeURIComponent(id)})})
+    .then(function(r){return r.json().catch(function(){return{};});})
+    .then(function(d){ if(d&&d.ok&&d.url){ window.location.href=d.url; } else { if(typeof vtToast==='function')vtToast((d&&d.error)||'Could not start checkout. Please try again.'); } })
+    .catch(function(){ if(typeof vtToast==='function')vtToast('Network error. Please try again.'); });
+}
+
+/* After Stripe returns (?vtpaid=1&vtsession=<id>): celebrate + open the live view. */
+(function(){
+  function run(){
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('vtpaid')!=='1') return;
+      var sid=q.get('vtsession')||'';
+      try{ history.replaceState({},'',location.pathname); }catch(e){}
+      setTimeout(function(){
+        try{ if(typeof nav==='function') nav('vtours'); }catch(e){}
+        setTimeout(function(){
+          if(sid && window.vtSessions && vtSessions[sid]){ try{ vtJoinLiveDemo(sid); }catch(e){} }
+          else { try{ vtConfettiCelebrate('Payment received! 🎉','Your virtual tour is confirmed — check your email for details.'); }catch(e){} }
+        }, 700);
+      }, 400);
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+})();
 
 /* ── In-section seat reservation popup (stays in the 360 section) ── */
 function vtBuildReserveModal(){
@@ -20115,8 +20147,8 @@ function vtBuildReserveModal(){
         '<input class="vt-reserve-in" id="vt-res-email" type="email" placeholder="Email *" autocomplete="email">'+
         '<input class="vt-reserve-in" id="vt-res-phone" type="tel" placeholder="Phone / WhatsApp" autocomplete="tel">'+
         '<input class="vt-reserve-in" id="vt-res-date" type="date" aria-label="Preferred date">'+
-        '<select class="vt-reserve-in" id="vt-res-party" aria-label="Party size"><option value="">Party size</option><option>1</option><option>2</option><option>3-5</option><option>6-10</option><option>10+</option></select>'+
       '</div>'+
+      '<div class="vt-reserve-virtual"><i class="fas fa-vr-cardboard"></i> Virtual experience — one personal access per reservation.</div>'+
       '<div class="vt-reserve-msg" id="vt-reserve-msg"></div>'+
       '<button class="vt-reserve-go" id="vt-reserve-go" onclick="vtSubmitReserve()"><i class="fas fa-ticket"></i> Reserve My Seat</button>'+
       '<div class="vt-reserve-note">We’ll confirm your seat and payment details by email.</div>'+
@@ -20129,7 +20161,7 @@ function vtOpenReserve(name,when,price){
   vtBuildReserveModal();
   vtReserveCtx={name:name||'Live Session',price:price||0};
   var el=document.getElementById('vt-reserve-name'); if(el)el.textContent=name||'Live Session';
-  el=document.getElementById('vt-reserve-when'); if(el)el.textContent=(when?when+'  ·  ':'')+(price?('USD $'+price+' per seat'):'');
+  el=document.getElementById('vt-reserve-when'); if(el)el.textContent=(when?when+'  ·  ':'')+(price?('USD $'+price+' · virtual access'):'');
   el=document.getElementById('vt-reserve-msg'); if(el){el.textContent='';el.className='vt-reserve-msg';}
   document.getElementById('vt-reserve-modal').classList.add('open');
 }
@@ -20139,7 +20171,7 @@ function vtSubmitReserve(){
   var email=(document.getElementById('vt-res-email')||{}).value||'';
   var phone=(document.getElementById('vt-res-phone')||{}).value||'';
   var date=(document.getElementById('vt-res-date')||{}).value||'';
-  var party=(document.getElementById('vt-res-party')||{}).value||'';
+  var party='1 (virtual — single access)';
   var msg=document.getElementById('vt-reserve-msg');
   var go=document.getElementById('vt-reserve-go');
   if(!name.trim()||!email.trim()){ if(msg){msg.textContent='Please enter your name and email.';msg.className='vt-reserve-msg err';} return; }
@@ -20148,7 +20180,7 @@ function vtSubmitReserve(){
     subject:'V-Tours Seat Reservation — '+vtReserveCtx.name,
     message:'New V-Tours seat reservation:\n'+
       'Session: '+vtReserveCtx.name+'\n'+
-      (vtReserveCtx.price?('Price: USD $'+vtReserveCtx.price+' per seat\n'):'')+
+      (vtReserveCtx.price?('Price: USD $'+vtReserveCtx.price+' (virtual, single access)\n'):'')+
       'Preferred date: '+(date||'—')+'\n'+
       'Party size: '+(party||'—')+'\n'+
       'Name: '+name+'\nEmail: '+email+'\nPhone: '+(phone||'—')};
