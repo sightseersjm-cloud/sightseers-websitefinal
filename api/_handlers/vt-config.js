@@ -41,6 +41,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
+  // Supabase (V-Tours realtime chat/presence) connected 2026-09.
   const supabaseUrl     = process.env.SUPABASE_URL || '';
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
   const stripePk        = process.env.STRIPE_PUBLISHABLE_KEY || '';
