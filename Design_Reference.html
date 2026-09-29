@@ -21412,6 +21412,10 @@ let pageEditorSettings={};
 const PAGE_EDITOR_BINDINGS={
   adminToursTitle:{selector:'#p-tours .sec-title',mode:'text'},
   adminToursSub:{selector:'#p-tours .sec-sub.center',mode:'text'},
+  adminLeadersSubtitle:{selector:'#p-leaders-jamaica .lj-h1 .sub',mode:'text'},
+  adminLeadersLede:{selector:'#p-leaders-jamaica .lj-lede',mode:'text'},
+  adminTentKicker:{selector:'#p-tent-rental .tr-kicker',mode:'text'},
+  adminTentLede:{selector:'#p-tent-rental .tr-lede',mode:'text'},
   adminShopEyebrow:{selector:'#p-shop .sec-pre',mode:'text'},
   adminShopTitle:{selector:'#p-shop .sec-title',mode:'text'},
   adminShopSub:{selector:'#p-shop .sec-sub.center',mode:'text'},
@@ -21653,6 +21657,14 @@ const ADMIN_SECTION_SCHEMA=[
   {key:'tours',label:'Tours Page',intro:'Top heading and intro for the tours and MBA experiences page.',fields:[
     {id:'adminToursTitle',label:'Tours Page Heading',type:'text',full:true},
     {id:'adminToursSub',label:'Tours Page Intro',type:'textarea',full:true}
+  ]},
+  {key:'leaders',label:'Leaders in Jamaica Page',intro:'Hero subtitle and intro paragraph for the Leaders in Jamaica leadership institute page.',fields:[
+    {id:'adminLeadersSubtitle',label:'Hero Subtitle',type:'text',full:true,help:'The small line beside the “Leaders in Jamaica” heading.'},
+    {id:'adminLeadersLede',label:'Hero Intro Paragraph',type:'textarea',full:true}
+  ]},
+  {key:'tentrental',label:'Tent Rental Page',intro:'Eyebrow and intro paragraph for the Two Person Tent Rental Agreement page. (Pricing is set automatically from the form.)',fields:[
+    {id:'adminTentKicker',label:'Page Eyebrow',type:'text',full:true,help:'The small label above the tent rental heading.'},
+    {id:'adminTentLede',label:'Intro Paragraph',type:'textarea',full:true}
   ]},
   {key:'shop',label:'Shop Page',intro:'Main heading, intro and premium feature block for the shop overview page.',fields:[
     {id:'adminShopEyebrow',label:'Shop Page Eyebrow',type:'text'},
