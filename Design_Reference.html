@@ -2163,6 +2163,27 @@ body.account-clean .account-sec{padding-bottom:112px}
 
 .admin-toolbar{margin-bottom:22px}
 .admin-sections{display:grid;gap:16px}
+/* Live Image Manager */
+.ss-lim{display:grid;gap:16px;margin-bottom:18px}
+.ss-lim-group{border:1px solid rgba(0,0,0,.08);border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ss-lim-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid rgba(0,0,0,.06)}
+.ss-lim-head strong{font-size:14px;font-weight:800;color:#063a63;letter-spacing:-.01em}
+.ss-lim-head span{font-size:12px;color:#8a97a5;font-weight:600}
+.ss-lim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding:18px 20px}
+.ss-lim-card{border:1px solid rgba(0,0,0,.08);border-radius:14px;overflow:hidden;background:#fbfcfd;display:flex;flex-direction:column}
+.ss-lim-thumb{position:relative;width:100%;aspect-ratio:16/10;background:#eef2f5 center/cover no-repeat;display:flex;align-items:center;justify-content:center}
+.ss-lim-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ss-lim-thumb .ss-lim-empty{color:#9fb0bd;font-size:12px;font-weight:600}
+.ss-lim-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.ss-lim-label{font-size:12.5px;font-weight:700;color:#1a2b3a;line-height:1.3}
+.ss-lim-size{font-size:11px;color:#8a97a5}
+.ss-lim-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,#70c257,#4fae3f);color:#fff;font:700 12.5px 'Raleway',sans-serif;cursor:pointer}
+.ss-lim-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.ss-lim-status{font-size:11.5px;font-weight:600;min-height:15px}
+.ss-lim-status.ok{color:#2f9e44}
+.ss-lim-status.err{color:#e03131}
+.ss-lim-status.busy{color:#0a6cff}
+@media(max-width:640px){.ss-lim-grid{grid-template-columns:1fr 1fr;padding:14px}}
 .admin-group{border:1px solid var(--border);border-radius:26px;background:linear-gradient(180deg,#fbfcfd 0%,#fff 100%);overflow:hidden}
 .admin-group[open]{box-shadow:0 16px 34px rgba(12,29,47,.08);border-color:rgba(6,58,99,.14)}
 .admin-group summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;cursor:pointer}
@@ -12007,7 +12028,7 @@ body.theme-night .page .tag{
       <div style="width:88px;height:88px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--tr-green),var(--tr-green2));box-shadow:0 16px 34px rgba(79,174,63,.34);color:#fff;font-size:44px;line-height:1">&#10003;</div>
       <div class="tr-eyebrow" style="text-align:center">Agreement received</div>
       <h2 class="tr-h2" style="font-size:clamp(30px,4.4vw,44px)">Submitted &mdash; thank you</h2>
-      <p class="tr-sub" style="margin:0 auto 26px">Your signed tent rental agreement has been sent to Sight Seers Caribbean Adventures, and a PDF copy has been downloaded to your device for your records. We will be in touch to confirm your rental.</p>
+      <p class="tr-sub" style="margin:0 auto 26px">Your signed tent rental agreement has been sent to Sight Seers Caribbean Adventures. Tap <b>Download PDF copy</b> below to save a copy for your records. We will be in touch to confirm your rental.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
         <button type="button" class="tr-btn" onclick="trDownloadLast()">Download PDF copy</button>
         <a href="#" class="tr-btn ghost" onclick="nav('tours');return false;">Back to Tours</a>
@@ -20773,6 +20794,7 @@ vtSessionAction=function(el,type){
 </header>
 <div class="adm-body">
 <select id="adminSectionJump" class="adm-jump-select" onchange="jumpAdminSection(this.value)"><option value="">Jump to section…</option></select>
+<div id="ssLiveImgMgr" class="ss-lim"></div>
 <div id="adminStructuredEditor" class="admin-sections"></div>
 </div>
 </main>
@@ -22200,6 +22222,7 @@ function startAdminImageUpload(file,targetId,attempt){
 }
 function initAdminEditor(){
   buildStructuredAdminEditor();
+  try{ if(typeof window.renderLiveImageManager==='function') window.renderLiveImageManager(); }catch(e){}
   pageEditorDefaults=capturePageEditorDefaults();
   pageEditorSettings=loadPageEditorSettings();
 }
@@ -22214,7 +22237,7 @@ if(!siteSettings.heroImg2 || siteSettings.heroImg2.includes('photo-1436491865332
 }
 /* Force the MBA (slide 3) hero image to the white-party photo, overriding the old boat image saved in settings. */
 const UPDATED_MBA_HERO_IMAGE='/assets/hero/white-party-v3.jpg';
-if(!siteSettings.heroImg3 || siteSettings.heroImg3.indexOf('white-party-v3')===-1){
+if(!siteSettings.heroImg3 || siteSettings.heroImg3.indexOf('1122462')>-1 || siteSettings.heroImg3.indexOf('pexels')>-1){
   siteSettings.heroImg3=UPDATED_MBA_HERO_IMAGE;
   try{
     const existingSettings3=JSON.parse(localStorage.getItem('ss_site_settings')||'{}');
@@ -24382,7 +24405,7 @@ function applySiteSettings(){
   const heroSlides=document.querySelectorAll('.hero .slide');
   if(heroSlides[0] && siteSettings.heroImg1) heroSlides[0].style.backgroundImage=`url('${siteSettings.heroImg1.replace(/'/g,"%27")}')`;
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
-  if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('white-party-v3')===-1) _h3='/assets/hero/white-party-v3.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
+  if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('1122462')>-1 || _h3.indexOf('pexels')>-1) _h3='/assets/hero/white-party-v3.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
   const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
   const jamaicaImg=document.querySelector('.jm3d-island-img');
   if(jamaicaImg){
@@ -41322,6 +41345,116 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   window.ssEnsureAdminToken=ensureAdminToken;
 
+  /* ─────────────────────────────────────────────────────────────
+     LIVE IMAGE MANAGER — self-contained, reliable image publishing.
+     Lists every image field (grouped by section), shows the current
+     picture, and on upload swaps it live + publishes to the server
+     using the verified /api/auth, /api/images and /api/settings routes.
+     ───────────────────────────────────────────────────────────── */
+  (function(){
+    var SITE_KEYS={adminHeroImg1:'heroImg1',adminHeroImg2:'heroImg2',adminHeroImg3:'heroImg3',adminAboutImage:'aboutImage',adminJamaicaImage:'jamaicaImage'};
+    function jwt(t){ return t && String(t).split('.').length===3; }
+    function limEnsureToken(){
+      try{ var t=localStorage.getItem('ss_auth_token')||''; if(jwt(t)) return Promise.resolve(t); }catch(e){}
+      return fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'passcode',passcode:window.ADMIN_PASSCODE||'SIGHTSEERS94!'})})
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.token){ try{localStorage.setItem('ss_auth_token',d.token); if(d.user) localStorage.setItem('ss_current_user',JSON.stringify(d.user));}catch(e){} return d.token; } return ''; })
+        .catch(function(){ return ''; });
+    }
+    function fileToDataUrl(file){
+      var comp=(window.SS&&window.SS.compressImage)?window.SS.compressImage(file):Promise.resolve(file);
+      return comp.then(function(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){res(e.target.result);}; r.onerror=function(){rej(new Error('read failed'));}; r.readAsDataURL(f||file); }); });
+    }
+    function bindingFor(id){ try{ return window.PAGE_EDITOR_BINDINGS&&window.PAGE_EDITOR_BINDINGS[id]; }catch(e){ return null; } }
+    function currentUrl(id){
+      if(SITE_KEYS[id] && window.siteSettings && window.siteSettings[SITE_KEYS[id]]) return window.siteSettings[SITE_KEYS[id]];
+      var b=bindingFor(id);
+      if(b){ try{ var el=document.querySelector(b.selector); if(el){ if(b.mode==='bg'){ var bg=(el.style.backgroundImage||getComputedStyle(el).backgroundImage||''); var m=/url\(["']?(.*?)["']?\)/.exec(bg); if(m&&m[1]&&m[1]!=='none') return m[1]; } else if(el.getAttribute&&el.getAttribute('src')){ return el.getAttribute('src'); } } }catch(e){} }
+      var inp=document.getElementById(id); return (inp&&inp.value)||'';
+    }
+    function applyLive(id,url){
+      // Mirror into the hidden admin input so the normal save also carries it.
+      var inp=document.getElementById(id); if(inp){ inp.value=url; try{inp.dispatchEvent(new Event('input',{bubbles:true}));}catch(e){} }
+      if(SITE_KEYS[id]){
+        window.siteSettings=window.siteSettings||{}; window.siteSettings[SITE_KEYS[id]]=url;
+        try{ var ls=JSON.parse(localStorage.getItem('ss_site_settings')||'{}'); ls[SITE_KEYS[id]]=url; localStorage.setItem('ss_site_settings',JSON.stringify(ls)); }catch(e){}
+        if(typeof window.applySiteSettings==='function'){ try{ window.applySiteSettings(); }catch(e){} }
+      } else {
+        var b=bindingFor(id);
+        if(b){ try{ var el=document.querySelector(b.selector); if(el){ if(b.mode==='bg') el.style.backgroundImage="url('"+String(url).replace(/'/g,'%27')+"')"; else el.src=url; } }catch(e){} }
+        try{ var key=window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings'; var pe=JSON.parse(localStorage.getItem(key)||'{}'); pe[id]=url; localStorage.setItem(key,JSON.stringify(pe)); if(window.pageEditorSettings) window.pageEditorSettings[id]=url; }catch(e){}
+      }
+    }
+    function publish(id,token){
+      var storeKey, value;
+      if(SITE_KEYS[id]){ storeKey='ss_site_settings'; value=window.siteSettings; }
+      else { storeKey=window.PAGE_EDITOR_STORAGE_KEY||'ss_page_editor_settings'; try{ value=JSON.parse(localStorage.getItem(storeKey)||'{}'); }catch(e){ value={}; } }
+      return fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({key:storeKey,value:value})})
+        .then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ return {ok:r.ok,status:r.status,error:(d&&d.error)||''}; }); })
+        .catch(function(){ return {ok:false,status:0,error:'network'}; });
+    }
+    function handleUpload(id,file,thumb,statusEl){
+      if(!file) return;
+      statusEl.className='ss-lim-status busy'; statusEl.textContent='Signing in…';
+      limEnsureToken().then(function(token){
+        if(!token){ statusEl.className='ss-lim-status err'; statusEl.textContent='Could not sign in with the admin passcode.'; return; }
+        statusEl.textContent='Preparing image…';
+        return fileToDataUrl(file).then(function(dataUrl){
+          statusEl.textContent='Uploading…';
+          return fetch('/api/images',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({data:dataUrl,filename:file.name||'image',type:file.type||'',folder:'site-images'})})
+            .then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ return {ok:r.ok,status:r.status,d:d}; }); })
+            .then(function(res){
+              if(!res.ok || !res.d.url){ statusEl.className='ss-lim-status err'; statusEl.textContent='Upload failed: '+((res.d&&res.d.error)||('HTTP '+res.status)); return; }
+              var url=res.d.url;
+              applyLive(id,url);
+              // update thumbnail immediately
+              thumb.style.backgroundImage="url('"+String(url).replace(/'/g,'%27')+"')"; thumb.innerHTML='';
+              statusEl.textContent='Publishing to live site…';
+              return publish(id,token).then(function(pr){
+                if(pr.ok){ statusEl.className='ss-lim-status ok'; statusEl.textContent='Published live ✓'; }
+                else if(pr.status===401||pr.status===403){ statusEl.className='ss-lim-status err'; statusEl.textContent='Uploaded, but publish was rejected. Re-enter the passcode and try again.'; }
+                else { statusEl.className='ss-lim-status err'; statusEl.textContent='Uploaded, but publish failed: '+(pr.error||('HTTP '+pr.status)); }
+              });
+            });
+        });
+      }).catch(function(err){ statusEl.className='ss-lim-status err'; statusEl.textContent='Error: '+(err&&err.message||'upload failed'); });
+    }
+    window.renderLiveImageManager=function(){
+      var mount=document.getElementById('ssLiveImgMgr'); if(!mount) return;
+      var schema=window.ADMIN_SECTION_SCHEMA||[]; if(!schema.length) return;
+      mount.innerHTML='';
+      var intro=document.createElement('div'); intro.className='ss-lim-group';
+      intro.innerHTML='<div class="ss-lim-head"><strong>Live Images</strong><span>Upload a picture to replace it everywhere on the live site — changes publish instantly.</span></div>';
+      mount.appendChild(intro);
+      schema.forEach(function(section){
+        var imgs=(section.fields||[]).filter(function(f){ return f.type==='image'; });
+        if(!imgs.length) return;
+        var group=document.createElement('div'); group.className='ss-lim-group';
+        var head=document.createElement('div'); head.className='ss-lim-head';
+        head.innerHTML='<strong>'+String(section.label||section.key)+'</strong><span>'+imgs.length+' image'+(imgs.length>1?'s':'')+'</span>';
+        group.appendChild(head);
+        var grid=document.createElement('div'); grid.className='ss-lim-grid';
+        imgs.forEach(function(f){
+          var card=document.createElement('div'); card.className='ss-lim-card';
+          var url=currentUrl(f.id);
+          var thumb=document.createElement('div'); thumb.className='ss-lim-thumb';
+          if(url){ thumb.style.backgroundImage="url('"+String(url).replace(/'/g,'%27')+"')"; } else { thumb.innerHTML='<span class="ss-lim-empty">No image yet</span>'; }
+          var body=document.createElement('div'); body.className='ss-lim-body';
+          var lbl=document.createElement('div'); lbl.className='ss-lim-label'; lbl.textContent=f.label||f.id;
+          var sz=document.createElement('div'); sz.className='ss-lim-size'; sz.textContent=f.size||'';
+          var status=document.createElement('div'); status.className='ss-lim-status';
+          var btn=document.createElement('label'); btn.className='ss-lim-btn'; btn.innerHTML='<i class="fas fa-arrow-up-from-bracket"></i> Change image';
+          var file=document.createElement('input'); file.type='file'; file.accept='image/*';
+          file.addEventListener('change',function(ev){ var fl=ev.target.files&&ev.target.files[0]; if(fl) handleUpload(f.id,fl,thumb,status); ev.target.value=''; });
+          btn.appendChild(file);
+          body.appendChild(lbl); if(f.size) body.appendChild(sz); body.appendChild(btn); body.appendChild(status);
+          card.appendChild(thumb); card.appendChild(body); grid.appendChild(card);
+        });
+        group.appendChild(grid); mount.appendChild(group);
+      });
+    };
+    document.addEventListener('DOMContentLoaded',function(){ try{ window.renderLiveImageManager(); }catch(e){} });
+  })();
+
   async function uploadToServer(dataUrl, originalName){
     const m=/^data:([^;]+);base64,(.*)$/.exec(String(dataUrl||''));
     if(!m) throw new Error('Could not read the processed image.');
@@ -49554,10 +49687,21 @@ function vtXRStatus(msg){
     }
   };
 
-  window.trDownloadPdf=function(){ var doc=trBuildPdf(); if(doc){ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); } else { alert('PDF tool still loading, please try again in a moment.'); } };
+  // Save/open the PDF. Mobile browsers ignore programmatic downloads, so on a
+  // phone/tablet we open the PDF in a new tab (from the tap) where it can be saved.
+  var TR_PDF_NAME='Sight-Seers-Tent-Rental-Agreement.pdf';
+  function trSavePdf(doc){
+    if(!doc) return false;
+    var isMobile=false; try{ isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent); }catch(e){}
+    try{
+      if(isMobile){ var url=doc.output('bloburl'); var w=window.open(url,'_blank'); if(!w){ location.href=url; } return true; }
+      doc.save(TR_PDF_NAME); return true;
+    }catch(e){ try{ doc.save(TR_PDF_NAME); return true; }catch(_){ return false; } }
+  }
+  window.trDownloadPdf=function(){ var doc=trBuildPdf(); if(doc){ trSavePdf(doc); } else { alert('PDF tool still loading, please try again in a moment.'); } };
 
   // Re-download the exact PDF that was submitted (used by the "thank you" panel).
-  window.trDownloadLast=function(){ if(window._trLastDoc){ try{ window._trLastDoc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); return; }catch(e){} } window.trDownloadPdf(); };
+  window.trDownloadLast=function(){ if(window._trLastDoc){ if(trSavePdf(window._trLastDoc)) return; } window.trDownloadPdf(); };
 
   window.trSubmit=function(e){
     e.preventDefault();
@@ -49571,7 +49715,7 @@ function vtXRStatus(msg){
     btn.disabled=true; btn.textContent='Preparing…'; msg.className='tr-msg'; msg.textContent='';
 
     var b64=null;
-    try{ var doc=trBuildPdf(); if(doc){ window._trLastDoc=doc; b64=doc.output('datauristring').split(',')[1]; try{ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){} } }catch(e){}
+    try{ var doc=trBuildPdf(); if(doc){ window._trLastDoc=doc; b64=doc.output('datauristring').split(',')[1]; var _isMob=false; try{_isMob=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);}catch(e){} if(!_isMob){ try{ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){} } } }catch(e){}
 
     var payload={ action:'send', name:d['Full name'], email:d['Email'], phone:d['Phone'],
       subject:'Tent Rental Agreement — '+d['Full name'], message:lines.join('\n') };
