@@ -14576,7 +14576,7 @@ body.vt-expanding .page,body.vt-expanding .reveal,body.vt-expanding .vt-sec,body
 .vt-dash-frame.vt-fullscreen .vt-expand-btn i::before{content:"\f066"}
 @keyframes vtFullIn{from{opacity:0}to{opacity:1}}
 
-.vt-fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);z-index:10000;opacity:0;pointer-events:none;transition:opacity .3s}
+.vt-fs-overlay{position:fixed;inset:0;background:rgba(6,10,18,.82);z-index:10000;opacity:0;pointer-events:none;transition:opacity .3s}
 .vt-fs-overlay.open{opacity:1;pointer-events:auto}
 
 .vt-fs-close{position:fixed;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10003;color:#fff;font-size:16px;transition:all .25s}
@@ -15584,7 +15584,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 /* No backdrop-filter here: Chrome composites child <iframe>s (the YouTube video)
    in a separate layer, and a parent backdrop-filter blurs them. Use a solid
    background so the video stays crisp edge to edge. */
-.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.2)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:#0a0e14!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
+.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.2)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:#0a0e14!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
 .vt-session.vt-session-fs .vt-session-bar{flex-shrink:0}
 .vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important;display:grid!important;grid-template-columns:1fr 340px!important}
 .vt-session.vt-session-fs .vt-session-chat{max-height:none!important;flex:1!important}
