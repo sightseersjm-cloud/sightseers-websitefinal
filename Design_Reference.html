@@ -9609,7 +9609,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 </div></div>
 </div>
 <script>(function(){var b=document.getElementById('bookLoungeExperienceBtn');if(b){b.href='https://booking.vipattractions.com/affiliate/2749';b.target='_blank';b.rel='noopener noreferrer';}})();</script>
-</div><div class="slide" data-duration="8500" style="background-image:url('/assets/hero/white-party-v2.jpg')">
+</div><div class="slide" data-duration="8500" style="background-image:url('/assets/hero/white-party-v3.jpg')">
 <div class="hero-content">
 <div class="hero-reveal hero-reveal--delay1"><span class="hero-small hero-small--down" id="heroSlide3Eyebrow">MBA Graduates &amp; Professional Networking</span></div>
 <div class="hero-reveal hero-reveal--delay2"><h1 class="hero-title hero-title--down"><span id="heroSlide3Title">Lead. Connect.</span><em id="heroSlide3Em">Belong Beautifully</em></h1></div>
@@ -21329,7 +21329,7 @@ const DEFAULT_SITE_SETTINGS={
   customerSub:'A polished look at the joy, connection and unforgettable island moments our guests share with Sight Seers.',
   heroImg1:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1800&q=85&auto=format&fit=crop',
   heroImg2:'/assets/inline/e410947c7e.webp',
-  heroImg3:'/assets/hero/white-party-v2.jpg',
+  heroImg3:'/assets/hero/white-party-v3.jpg',
   aboutImage:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85&auto=format&fit=crop',
   jamaicaImage:'/assets/inline/30d8ac9911.webp',
   jamaicaPins:'',
@@ -22136,8 +22136,8 @@ if(!siteSettings.heroImg2 || siteSettings.heroImg2.includes('photo-1436491865332
   }catch(e){}
 }
 /* Force the MBA (slide 3) hero image to the white-party photo, overriding the old boat image saved in settings. */
-const UPDATED_MBA_HERO_IMAGE='/assets/hero/white-party-v2.jpg';
-if(!siteSettings.heroImg3 || siteSettings.heroImg3.indexOf('white-party-v2')===-1){
+const UPDATED_MBA_HERO_IMAGE='/assets/hero/white-party-v3.jpg';
+if(!siteSettings.heroImg3 || siteSettings.heroImg3.indexOf('white-party-v3')===-1){
   siteSettings.heroImg3=UPDATED_MBA_HERO_IMAGE;
   try{
     const existingSettings3=JSON.parse(localStorage.getItem('ss_site_settings')||'{}');
@@ -24305,7 +24305,7 @@ function applySiteSettings(){
   const heroSlides=document.querySelectorAll('.hero .slide');
   if(heroSlides[0] && siteSettings.heroImg1) heroSlides[0].style.backgroundImage=`url('${siteSettings.heroImg1.replace(/'/g,"%27")}')`;
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
-  if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('white-party-v2')===-1) _h3='/assets/hero/white-party-v2.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
+  if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('white-party-v3')===-1) _h3='/assets/hero/white-party-v3.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
   const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
   const jamaicaImg=document.querySelector('.jm3d-island-img');
   if(jamaicaImg){
