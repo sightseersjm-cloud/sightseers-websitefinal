@@ -7,19 +7,6 @@ module.exports = async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     if (req.method === 'GET') {
-      // TEMPORARY self-test: GET /api/contact?selftest=ss-diag-4821 sends a test
-      // email and returns the raw Resend result so delivery can be verified
-      // server-side. Remove after diagnosis.
-      let qs = '';
-      try { qs = (req.url || '').split('?')[1] || ''; } catch (e) {}
-      if (new URLSearchParams(qs).get('selftest') === 'ss-diag-4821') {
-        const result = await sendEmail({
-          subject: 'Sight Seers email self-test',
-          html: '<p>Server-side email self-test. If this arrives, the website email pipeline is working.</p>'
-        });
-        return res.status(200).json({ selftest: true, result });
-      }
-
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
