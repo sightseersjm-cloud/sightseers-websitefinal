@@ -16845,6 +16845,8 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-pnlm-hs{cursor:pointer}
 .vt-pnlm-hs .vt-hotspot-label{opacity:0}
 .vt-pnlm-hs:hover .vt-hotspot-label{opacity:1;bottom:calc(100% + 12px)}
+.vt-pnlm-hs-nav .vt-hotspot-dot{background:linear-gradient(135deg,#70c257,#4fae3f)!important;color:#fff;animation:vtNavPulse 2s ease-in-out infinite}
+@keyframes vtNavPulse{0%,100%{box-shadow:0 0 0 0 rgba(112,194,87,.55)}50%{box-shadow:0 0 0 14px rgba(112,194,87,0)}}
 .vt-pnlm-hs .vt-hotspot-dot:hover{transform:scale(1.12)}
 #vt-active-session .vt-session-video{min-height:430px!important}
 #vt-active-session .vt-session-content>div:first-child{display:flex;flex-direction:column}
@@ -17108,7 +17110,8 @@ var vtPanoViewer=null,vtPanoScenes={
     hotSpots:[
       {pitch:6,yaw:-118,hs:'hs1',icon:'fa-leaf',action:'identify'},
       {pitch:-14,yaw:62,hs:'hs2',icon:'fa-tshirt',action:'auction'},
-      {pitch:-4,yaw:-12,hs:'hs3',icon:'fa-camera',action:'popup'}
+      {pitch:-4,yaw:-12,hs:'hs3',icon:'fa-camera',action:'popup'},
+      {pitch:-6,yaw:28,hs:'hsNavMarket',icon:'fa-person-walking',action:'scene',target:'market'}
     ]
   },
   market:{
@@ -17121,7 +17124,8 @@ var vtPanoViewer=null,vtPanoScenes={
       {pitch:-24,yaw:-142,hs:'hs4',icon:'fa-shopping-basket',action:'popup'},
       {pitch:8,yaw:168,hs:'hs5',icon:'fa-paint-brush',action:'popup'},
       {pitch:-20,yaw:118,hs:'hs6',icon:'fa-pepper-hot',action:'popup'},
-      {pitch:-13,yaw:-58,hs:'hs7',icon:'fa-gem',action:'popup'}
+      {pitch:-13,yaw:-58,hs:'hs7',icon:'fa-gem',action:'popup'},
+      {pitch:-6,yaw:-20,hs:'hsNavLagoon',icon:'fa-person-walking',action:'scene',target:'lagoon'}
     ]
   }
 };
@@ -17132,9 +17136,11 @@ function vtBuildPanoHotspot(el,args){
     '<div class="vt-hotspot-label">'+d.name+'<small>'+d.price+'</small></div>';
   el.addEventListener('mouseenter',function(e){if(typeof vtShowHotspot==='function')vtShowHotspot(e,args.hs)});
   el.addEventListener('mouseleave',function(){if(typeof vtHideHotspot==='function')vtHideHotspot()});
+  if(args.action==='scene') el.classList.add('vt-pnlm-hs-nav');
   el.addEventListener('click',function(e){
     e.stopPropagation();
-    if(args.action==='identify'){var c=document.getElementById('vt-identify-card');if(c)c.classList.add('show');}
+    if(args.action==='scene'){ if(vtPanoViewer&&args.target){ try{ vtPanoViewer.loadScene(args.target); }catch(err){} } }
+    else if(args.action==='identify'){var c=document.getElementById('vt-identify-card');if(c)c.classList.add('show');}
     else if(args.action==='auction'){var a=document.getElementById('vt-auction-overlay');if(a)a.classList.add('show');}
     else if(typeof vtToggleHotspot==='function'){vtToggleHotspot(e,args.hs);}
   });
@@ -19384,7 +19390,9 @@ var vtHotspotData={
   hs4:{name:'Handwoven Market Basket',desc:'Traditional Jamaican wicker basket handcrafted by local artisans in Falmouth. Each one is unique.',price:'USD $28.00',priceNum:28},
   hs5:{name:'Hand-Painted Canvas Art',desc:'Original acrylic painting by a Falmouth market artist. Caribbean street scene on 16x20 stretched canvas.',price:'USD $85.00',priceNum:85},
   hs6:{name:'Jamaican Spice Collection',desc:'Gift box with jerk seasoning, pimento, allspice, scotch bonnet sauce, and Blue Mountain coffee.',price:'USD $22.00',priceNum:22},
-  hs7:{name:'Larimar Stone Necklace',desc:'Genuine Caribbean larimar pendant on sterling silver chain. Handset by a Jamaican jeweller.',price:'USD $65.00',priceNum:65}
+  hs7:{name:'Larimar Stone Necklace',desc:'Genuine Caribbean larimar pendant on sterling silver chain. Handset by a Jamaican jeweller.',price:'USD $65.00',priceNum:65},
+  hsNavMarket:{name:'Walk to the Craft Market',price:'Falmouth, Trelawny'},
+  hsNavLagoon:{name:'Back to the Blue Lagoon',price:'Port Antonio, Portland'}
 };
 var vtCurrentHotspot=null;
 function vtEnsureHotspotPopup(){
