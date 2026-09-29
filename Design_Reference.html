@@ -15581,7 +15581,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-session-expand{position:absolute;top:12px;right:12px;z-index:16;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1d1d1f;font-size:13px;transition:all .25s;border:none;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .vt-session-expand:hover{background:rgba(255,255,255,.92);transform:scale(1.06);box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .vt-session-expand:active{background:rgba(52,199,89,.1);transform:scale(.95)}
-.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.25),0 0 0 .5px rgba(0,0,0,.08)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:rgba(255,255,255,.95)!important;backdrop-filter:blur(40px) saturate(1.8)!important;-webkit-backdrop-filter:blur(40px) saturate(1.8)!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
+/* No backdrop-filter here: Chrome composites child <iframe>s (the YouTube video)
+   in a separate layer, and a parent backdrop-filter blurs them. Use a solid
+   background so the video stays crisp edge to edge. */
+.vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.2)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:#0a0e14!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
 .vt-session.vt-session-fs .vt-session-bar{flex-shrink:0}
 .vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important;display:grid!important;grid-template-columns:1fr 340px!important}
 .vt-session.vt-session-fs .vt-session-chat{max-height:none!important;flex:1!important}
