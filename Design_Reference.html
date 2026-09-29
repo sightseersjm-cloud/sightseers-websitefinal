@@ -16766,7 +16766,6 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         <div class="vt-caption-overlay"><div class="vt-caption-bar"></div></div>
 
                         <!-- Crowd vote card -->
-                        <div class="vt-viewer-vote"><div class="vt-vote-card"><button class="vt-vote-close" onclick="vtHideVote()"><i class="fas fa-times"></i></button><h4>🗳️ Where should the guide go next?</h4><div class="vt-vote-options"><div class="vt-vote-option" onclick="vtCastVote(this,'The waterfall trail')">The waterfall trail</div><div class="vt-vote-option" onclick="vtCastVote(this,'Local craft market')">Local craft market</div><div class="vt-vote-option" onclick="vtCastVote(this,'Beachside sunset view')">Beachside sunset view</div></div></div></div>
 
                         <!-- Save / Offline panel -->
                         <div class="vt-save-panel"><div class="vt-save-panel-title"><i class="fas fa-arrow-down-to-line"></i>Save This Tour</div><div class="vt-save-opt" onclick="vtDownloadPack()"><div><span class="vt-so-main">Download Highlights</span><span class="vt-so-sub">Save captured moments</span></div></div><div class="vt-save-opt" onclick="vtAddToHomeScreen()"><div><span class="vt-so-main">Add to Home Screen</span><span class="vt-so-sub">Quick access any time</span></div></div><div class="vt-save-opt" onclick="vtShareLink()"><div><span class="vt-so-main">Share Tour Link</span><span class="vt-so-sub">Invite friends to join</span></div></div><div class="vt-save-progress"><div class="vt-save-progress-bar"></div></div></div>
@@ -20791,7 +20790,6 @@ setInterval(function(){
     vid.appendChild(f);setTimeout(function(){f.remove()},2900);
   }
 },4200);
-setTimeout(function(){if(vtStreamActive){var v=document.querySelector('.vt-viewer-vote');if(v)v.classList.add('show');setTimeout(vtHideVote,30000);}},50000);
 
 /* ═══════════════════════════════════════════════════════════════
    FEATURE 9, MOOD-ADAPTIVE UI THEMING (Jamaica timezone)
