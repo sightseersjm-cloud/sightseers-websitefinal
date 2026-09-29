@@ -21,23 +21,6 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    // TEMPORARY diagnostic: GET /api/auth?diag=ss-diag-4821&pc=... reports whether
-    // the passcode login pipeline is healthy (env present, passcode matches, token
-    // creation works) WITHOUT exposing any secret value. Remove after diagnosis.
-    let dq = '';
-    try { dq = (req.url || '').split('?')[1] || ''; } catch (e) {}
-    const dp = new URLSearchParams(dq);
-    if (dp.get('diag') === 'ss-diag-4821') {
-      let tokenOk = false;
-      try { tokenOk = !!createToken({ id: 'x', role: 'editor' }); } catch (e) {}
-      return res.status(200).json({
-        diag: true,
-        adminPasscodeConfigured: !!ADMIN_CODE,
-        passcodeMatches: !!ADMIN_CODE && dp.get('pc') === ADMIN_CODE,
-        tokenCreationWorks: tokenOk
-      });
-    }
-
     const admin = requireAdmin(req, res);
     if (!admin) return;
     const users = await db.getCollection('users');
