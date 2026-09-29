@@ -15661,6 +15661,11 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
 .vt-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.45)}
 .vt-vol-slider::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.45)}
 @media(max-width:768px){.vt-vol-slider,.vt-vol-ctrl:hover .vt-vol-slider{width:70px;opacity:1;margin:0 8px 0 6px}}
+/* Tap-for-sound: browsers only allow audio after a user gesture, so muted
+   autoplay needs one clear tap to bring the sound in. */
+.vt-tap-sound{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:30;background:rgba(0,0,0,.78);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:14px 26px;font-size:15px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.45);transition:opacity .5s ease,transform .2s ease;animation:vtTapPulse 1.8s ease-in-out infinite}
+.vt-tap-sound:hover{transform:translate(-50%,-50%) scale(1.05);background:rgba(0,0,0,.9)}
+@keyframes vtTapPulse{0%,100%{box-shadow:0 10px 40px rgba(0,0,0,.45)}50%{box-shadow:0 10px 46px rgba(112,194,87,.55)}}
 
 /* ======== SESSION CART DRAWER ======== */
 .vt-cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
@@ -18689,6 +18694,18 @@ function vtVolApply(vol){
   if(icon){ icon.className='fas '+(vol===0?'fa-volume-xmark':(vol<50?'fa-volume-low':'fa-volume-high')); }
 }
 function vtVolSet(v){ v=parseInt(v,10)||0; if(v>0)vtVolLast=v; vtVolApply(v); }
+/* One clear tap to unmute — the gesture browsers require to allow audio. */
+function vtShowTapForSound(){
+  var vid=document.getElementById('vt-session-video'); if(!vid)return;
+  if(document.getElementById('vt-tap-sound'))return;
+  var b=document.createElement('button');
+  b.id='vt-tap-sound'; b.type='button'; b.className='vt-tap-sound';
+  b.innerHTML='<i class="fas fa-volume-high"></i> Tap for sound';
+  b.onclick=function(e){ e.stopPropagation(); try{ vtVolSet(70); }catch(_){} try{ vtYTPlay(); }catch(_){} if(b.parentNode)b.parentNode.removeChild(b); };
+  vid.appendChild(b);
+  setTimeout(function(){ if(b.parentNode)b.style.opacity='0'; }, 9000);
+  setTimeout(function(){ if(b.parentNode)b.parentNode.removeChild(b); }, 10000);
+}
 function vtVolToggleMute(){
   var slider=document.getElementById('vt-vol-slider');
   var cur=slider?(parseInt(slider.value,10)||0):0;
@@ -20173,6 +20190,8 @@ function vtJoinLiveDemo(id){
   // Nudge the video to actually start (covers browsers that ignore muted autoplay).
   setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 1800);
   setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 2600);
+  // Offer one tap to bring the sound in (muted autoplay can't unmute on its own).
+  setTimeout(function(){ try{ if(typeof vtShowTapForSound==='function')vtShowTapForSound(); }catch(e){} }, 2400);
 }
 
 /* Paid live join: everything except the tester takes payment first. Redirect to
