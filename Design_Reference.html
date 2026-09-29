@@ -15585,6 +15585,9 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
    in a separate layer, and a parent backdrop-filter blurs them. Use a solid
    background so the video stays crisp edge to edge. */
 .vt-session.vt-session-fs{position:fixed!important;inset:12px!important;z-index:10001!important;border-radius:22px!important;box-shadow:0 40px 120px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.2)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:#0a0e14!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:vtSessionOpen .35s cubic-bezier(.16,1,.3,1) forwards}
+/* Immersive variant used by the celebratory join: edge to edge, fully opaque,
+   no dimming overlay behind it (which Chrome would composite over the iframe). */
+.vt-session.vt-session-fs.vt-imm,.vt-vision .vt-dash-main .vt-session.vt-session-fs.vt-imm{inset:0!important;border-radius:0!important;box-shadow:none!important;background:#0a0e14!important;border:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .vt-session.vt-session-fs .vt-session-bar{flex-shrink:0}
 .vt-session.vt-session-fs .vt-session-content{flex:1!important;min-height:0!important;display:grid!important;grid-template-columns:1fr 340px!important}
 .vt-session.vt-session-fs .vt-session-chat{max-height:none!important;flex:1!important}
@@ -20347,10 +20350,12 @@ function vtExpandSessionSmooth(){
   var body=session.closest('.vt-dash-body');if(body)body.style.overflow='visible';
   var main=session.closest('.vt-dash-main');if(main)main.style.overflow='visible';
   vtFreeFixedAncestors(session);
-  vtShowSessionOverlay();
-  // Add the class on the next frame so the CSS open animation plays from the start.
+  // No dimming overlay here: the card is edge-to-edge and fully opaque, and a
+  // translucent overlay would be composited over the video iframe by Chrome.
+  // Add the classes on the next frame so the CSS open animation plays from start.
   requestAnimationFrame(function(){
     session.classList.add('vt-session-fs');
+    session.classList.add('vt-imm');
     document.body.style.overflow='hidden';
   });
 }
@@ -20364,6 +20369,7 @@ function vtCollapseSession(){
   var session=document.getElementById('vt-active-session');
   if(session){
     session.classList.remove('vt-session-fs');
+    session.classList.remove('vt-imm');
     var frame=session.closest('.vt-dash-frame');
     if(frame){frame.style.overflow='';frame.style.zIndex=''}
     var body=session.closest('.vt-dash-body');if(body)body.style.overflow='';
