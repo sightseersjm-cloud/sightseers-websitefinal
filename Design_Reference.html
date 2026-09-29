@@ -20292,6 +20292,32 @@ function vtExpandSession(){
 /* Smooth expand for the celebratory join flow: always uses the animated windowed
    overlay (the vtSessionOpen keyframe) instead of the browser's native
    fullscreen, which pops abruptly. The card scales up gracefully in place. */
+/* A position:fixed element is positioned relative to the nearest ancestor that
+   has a transform/filter/perspective/backdrop-filter, NOT the viewport. The
+   dashboard has such ancestors, so the windowed fullscreen card would be trapped
+   inside the dashboard box (and the blurred overlay would cover the video).
+   Native browser fullscreen escaped this via the top layer; the windowed card
+   can't, so we temporarily neutralise those properties on every ancestor. */
+var vtFixTrapNodes=[];
+function vtFreeFixedAncestors(el){
+  vtFixTrapNodes=[];
+  var n=el.parentElement;
+  while(n&&n!==document.body&&n!==document.documentElement){
+    var cs=getComputedStyle(n);
+    var bf=cs.backdropFilter||cs.webkitBackdropFilter||'';
+    if((cs.transform&&cs.transform!=='none')||(cs.filter&&cs.filter!=='none')||(cs.perspective&&cs.perspective!=='none')||cs.willChange==='transform'||(bf&&bf!=='none')){
+      vtFixTrapNodes.push({node:n,transform:n.style.transform,filter:n.style.filter,perspective:n.style.perspective,willChange:n.style.willChange,backdropFilter:n.style.backdropFilter,webkitBackdropFilter:n.style.webkitBackdropFilter});
+      n.style.transform='none';n.style.filter='none';n.style.perspective='none';n.style.willChange='auto';n.style.backdropFilter='none';n.style.webkitBackdropFilter='none';
+    }
+    n=n.parentElement;
+  }
+}
+function vtRestoreFixedAncestors(){
+  vtFixTrapNodes.forEach(function(r){
+    r.node.style.transform=r.transform;r.node.style.filter=r.filter;r.node.style.perspective=r.perspective;r.node.style.willChange=r.willChange;r.node.style.backdropFilter=r.backdropFilter;r.node.style.webkitBackdropFilter=r.webkitBackdropFilter;
+  });
+  vtFixTrapNodes=[];
+}
 function vtExpandSessionSmooth(){
   var session=document.getElementById('vt-active-session');if(!session)return;
   if(vtSessionExpanded)return;
@@ -20301,6 +20327,7 @@ function vtExpandSessionSmooth(){
   if(frame){frame.style.overflow='visible';frame.style.zIndex='10000'}
   var body=session.closest('.vt-dash-body');if(body)body.style.overflow='visible';
   var main=session.closest('.vt-dash-main');if(main)main.style.overflow='visible';
+  vtFreeFixedAncestors(session);
   vtShowSessionOverlay();
   // Add the class on the next frame so the CSS open animation plays from the start.
   requestAnimationFrame(function(){
@@ -20323,6 +20350,7 @@ function vtCollapseSession(){
     var body=session.closest('.vt-dash-body');if(body)body.style.overflow='';
     var main=session.closest('.vt-dash-main');if(main)main.style.overflow='';
   }
+  try{ vtRestoreFixedAncestors(); }catch(e){}
   document.body.classList.remove('vt-expanding');
   var ov=document.getElementById('vt-sfs-overlay');if(ov)ov.classList.remove('open');
   document.body.style.overflow='';
