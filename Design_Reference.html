@@ -12006,7 +12006,10 @@ body.theme-night .page .tag{
       <div class="tr-eyebrow" style="text-align:center">Agreement received</div>
       <h2 class="tr-h2" style="font-size:clamp(30px,4.4vw,44px)">Submitted &mdash; thank you</h2>
       <p class="tr-sub" style="margin:0 auto 26px">Your signed tent rental agreement has been sent to Sight Seers Caribbean Adventures, and a PDF copy has been downloaded to your device for your records. We will be in touch to confirm your rental.</p>
-      <a href="#" class="tr-btn" onclick="nav('tours');return false;">Back to Tours</a>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+        <button type="button" class="tr-btn" onclick="trDownloadLast()">Download PDF copy</button>
+        <a href="#" class="tr-btn ghost" onclick="nav('tours');return false;">Back to Tours</a>
+      </div>
     </div>
   </div>
 </div>
@@ -49432,6 +49435,9 @@ function vtXRStatus(msg){
 
   window.trDownloadPdf=function(){ var doc=trBuildPdf(); if(doc){ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); } else { alert('PDF tool still loading, please try again in a moment.'); } };
 
+  // Re-download the exact PDF that was submitted (used by the "thank you" panel).
+  window.trDownloadLast=function(){ if(window._trLastDoc){ try{ window._trLastDoc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); return; }catch(e){} } window.trDownloadPdf(); };
+
   window.trSubmit=function(e){
     e.preventDefault();
     var form=document.getElementById('trForm'), btn=document.getElementById('trSendBtn'), msg=document.getElementById('trMsg');
@@ -49444,7 +49450,7 @@ function vtXRStatus(msg){
     btn.disabled=true; btn.textContent='Preparing…'; msg.className='tr-msg'; msg.textContent='';
 
     var b64=null;
-    try{ var doc=trBuildPdf(); if(doc){ b64=doc.output('datauristring').split(',')[1]; try{ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){} } }catch(e){}
+    try{ var doc=trBuildPdf(); if(doc){ window._trLastDoc=doc; b64=doc.output('datauristring').split(',')[1]; try{ doc.save('Sight-Seers-Tent-Rental-Agreement.pdf'); }catch(e){} } }catch(e){}
 
     var payload={ action:'send', name:d['Full name'], email:d['Email'], phone:d['Phone'],
       subject:'Tent Rental Agreement — '+d['Full name'], message:lines.join('\n') };
