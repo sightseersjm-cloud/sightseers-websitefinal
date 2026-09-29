@@ -49394,9 +49394,14 @@ function vtXRStatus(msg){
     ['General', ['This Agreement is governed by the laws of Jamaica.','It is the entire agreement for this rental. Changes are valid only in writing, signed by both parties.','If any term is unenforceable, the remaining terms continue in full effect.']]
   ];
 
-  // Preload the Sight Seers logo as a PNG data URI so it can be embedded in the PDF synchronously.
+  // Preload the Sight Seers logo as a downscaled PNG data URI so it embeds in the
+  // PDF synchronously and keeps the file small (full-res would bloat the email attachment).
   (function preloadTrLogo(){
-    try{ var im=new Image(); im.onload=function(){ try{ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); window._trLogo=c.toDataURL('image/png'); window._trLogoAR=im.naturalWidth/im.naturalHeight; }catch(e){} };
+    try{ var im=new Image(); im.onload=function(){ try{
+        var TW=440, sc=Math.min(1,TW/im.naturalWidth), cw=Math.round(im.naturalWidth*sc), ch=Math.round(im.naturalHeight*sc);
+        var c=document.createElement('canvas'); c.width=cw; c.height=ch; c.getContext('2d').drawImage(im,0,0,cw,ch);
+        window._trLogo=c.toDataURL('image/png'); window._trLogoAR=im.naturalWidth/im.naturalHeight;
+      }catch(e){} };
       im.onerror=function(){}; im.src='/assets/inline/1ba92aa926.png'; }catch(e){}
   })();
 
