@@ -21365,6 +21365,10 @@ vtSessionAction=function(el,type){
 /* ── DATA ─────────────────────────── */
 
 const ADMIN_PASSCODE='SIGHTSEERS94!';try{window.ADMIN_PASSCODE=ADMIN_PASSCODE;}catch(e){}
+// A real admin/editor token is a JWT (three dot-separated parts). A guest/member
+// token is 'guest_<time>' and cannot publish — treat it as no token so the code
+// exchanges the passcode for a proper editor token instead of failing with 401.
+try{window.ssIsEditorToken=function(t){return !!t && String(t).indexOf('guest_')!==0 && String(t).split('.').length===3;};}catch(e){}
 const DEFAULT_SITE_SETTINGS={
   brandName:'Sight Seers',
   tagline:'Caribbean Adventures',
@@ -22139,8 +22143,10 @@ function startAdminImageUpload(file,targetId,attempt){
   };
 
   /* Hosted upload (Vercel Blob) with a live percentage; retries once on a
-     transient network/storage error, then falls back to an inline image. */
-  if(window.SS&&SS.uploadImageWithProgress&&SS.getToken&&SS.getToken()){
+     transient network/storage error, then falls back to an inline image.
+     First make sure we hold a real editor token (a guest/member token can't
+     publish), exchanging the admin passcode for one when needed. */
+  var _doHostedUpload=function(){
     input.placeholder='Uploading image…';
     showAdminUploadProgress(targetId,2,'Uploading…');
     SS.uploadImageWithProgress(file,'site-images',function(pct){
@@ -22169,6 +22175,13 @@ function startAdminImageUpload(file,targetId,attempt){
       console.warn('Hosted upload failed, embedding compressed image:',err&&err.message);
       fallbackToDataUri();
     });
+  };
+  if(window.SS&&SS.uploadImageWithProgress&&window.ssEnsureAdminToken){
+    showAdminUploadProgress(targetId,1,'Signing in…');
+    window.ssEnsureAdminToken().then(function(tok){
+      if(tok){ _doHostedUpload(); }
+      else { showAdminUploadError(targetId,'Enter the admin passcode above to upload to the live site. Saving to this browser instead…',null); setTimeout(fallbackToDataUri,1200); }
+    }).catch(function(){ fallbackToDataUri(); });
   }else{
     fallbackToDataUri();
   }
@@ -41278,8 +41291,9 @@ document.addEventListener('DOMContentLoaded', function(){
   window.triggerAutoSave=triggerAutoSave;
 
   function getAdminToken(){
-    try{ if(window.SS && typeof window.SS.getToken==='function'){ var t=window.SS.getToken(); if(t) return t; } }catch(e){}
-    try{ return localStorage.getItem('ss_auth_token')||''; }catch(e){ return ''; }
+    var ok=window.ssIsEditorToken||function(t){return !!t;};
+    try{ if(window.SS && typeof window.SS.getToken==='function'){ var t=window.SS.getToken(); if(ok(t)) return t; } }catch(e){}
+    try{ var l=localStorage.getItem('ss_auth_token')||''; return ok(l)?l:''; }catch(e){ return ''; }
   }
 
   // Return a server token, exchanging the (public) admin passcode for one if we
@@ -47424,7 +47438,7 @@ body.theme-night .page .tag{
   }
 
   function getAdminToken(){
-    try{ return localStorage.getItem('ss_auth_token') || ''; }catch(e){ return ''; }
+    try{ var t=localStorage.getItem('ss_auth_token') || ''; return (window.ssIsEditorToken?window.ssIsEditorToken(t):!!t)?t:''; }catch(e){ return ''; }
   }
 
   function publishToServer(key, value){
@@ -47456,23 +47470,43 @@ body.theme-night .page .tag{
     return Promise.resolve('');
   }
 
+  function postBatch(token, settingsMap){
+    return fetch('/api/settings', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({batch:settingsMap})
+    }).then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){
+        return {ok:r.ok, status:r.status, error:(d&&d.error)||''};
+      });
+    }).catch(function(){ return {ok:false, status:0, error:'network'}; });
+  }
+  // Force a fresh editor token from the admin passcode (used to recover from an
+  // expired/stale token that returns 401/403).
+  function forcePublishToken(){
+    if(window.SS && typeof window.SS.passcodeLogin === 'function'){
+      var pass = window.ADMIN_PASSCODE || 'SIGHTSEERS94!';
+      return window.SS.passcodeLogin(pass).then(function(){ return getAdminToken(); }).catch(function(){ return ''; });
+    }
+    return Promise.resolve('');
+  }
   function publishAll(settingsMap){
     var keys = Object.keys(settingsMap);
     if(!keys.length) return Promise.resolve({ok:true});
     return ensurePublishToken().then(function(token){
       if(!token) return {ok:false, status:401, error:'Could not connect to the live website to publish your changes.'};
-      return fetch('/api/settings', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-        body:JSON.stringify({batch:settingsMap})
-      }).then(function(r){
-        return r.json().catch(function(){return {};}).then(function(d){
-          var result = {ok:r.ok, status:r.status, error:(d&&d.error)||''};
-          try{ document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {detail:{key:'batch', ok:r.ok, status:r.status, error:(d&&d.error)||''}})); }catch(e){}
-          return result;
-        });
-      }).catch(function(){
-        return {ok:false, status:0, error:'network'};
+      return postBatch(token, settingsMap).then(function(result){
+        // A 401/403 usually means the token expired — refresh once and retry.
+        if(result.status === 401 || result.status === 403){
+          return forcePublishToken().then(function(fresh){
+            if(!fresh) return result;
+            return postBatch(fresh, settingsMap);
+          });
+        }
+        return result;
+      }).then(function(result){
+        try{ document.dispatchEvent(new CustomEvent('ss-settings-sync-result', {detail:{key:'batch', ok:result.ok, status:result.status, error:result.error||''}})); }catch(e){}
+        return result;
       });
     });
   }
