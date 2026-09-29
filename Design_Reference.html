@@ -9789,17 +9789,31 @@ filter:blur(1px)}
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-14px)}
 }
+/* Mobile landmark list (hidden on desktop; the map pins are used instead) */
+.jm3d-mobile-list{display:none}
+.jm3d-mcard{background:rgba(255,255,255,.97);border:1px solid rgba(6,58,99,.08);border-radius:16px;margin-bottom:10px;box-shadow:0 10px 26px rgba(0,30,56,.08);overflow:hidden}
+.jm3d-mcard-head{width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;background:transparent;border:none;cursor:pointer;text-align:left;font-family:inherit}
+.jm3d-mcard-emoji{font-size:22px;flex:0 0 auto;line-height:1}
+.jm3d-mcard-text{display:flex;flex-direction:column;flex:1 1 auto;min-width:0}
+.jm3d-mcard-name{font-weight:800;color:#063a63;font-size:15px;line-height:1.25}
+.jm3d-mcard-parish{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#70c257;font-weight:700;margin-top:2px}
+.jm3d-mcard-chev{flex:0 0 auto;color:#063a63;font-size:14px;transition:transform .25s ease}
+.jm3d-mcard.open .jm3d-mcard-chev{transform:rotate(180deg)}
+.jm3d-mcard-body{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 16px}
+.jm3d-mcard.open .jm3d-mcard-body{max-height:520px;padding:0 16px 14px}
+.jm3d-mcard-body p{font-size:13px;color:#5a6d7e;line-height:1.6;margin:0 0 10px}
+.jm3d-mcard-hist{font-size:12px;color:#5a6d7e;line-height:1.55;background:rgba(112,194,87,.08);border-radius:10px;padding:10px 12px}
+.jm3d-mcard-hist strong{display:block;color:#063a63;margin-bottom:4px;letter-spacing:.4px}
 /* Responsive */
 @media(max-width:768px){
   .jm3d-pin-label{display:none}
   .jm3d-popup-card{width:min(190px,78vw)}
   .jm3d-sun{width:64px;height:64px;top:4%;right:5%}
   .jm3d-bird{font-size:14px}
-  .jm3d-pin{width:18px;height:28px}
-}
-@media(max-width:480px){
-  .jm3d-pin{width:14px;height:22px}
-  .jm3d-pin-img{filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
+  /* On phones the pins overlap and are too small to tap — use the list instead */
+  .jm3d-pins{display:none}
+  #jm3dPopupLayer{display:none}
+  .jm3d-mobile-list{display:block;max-width:520px;margin:22px auto 0;padding:0 18px}
 }
 
 /* ======== JM3D OVERRIDES ======== */
@@ -10206,6 +10220,8 @@ body.theme-night .page .tag{
       </div>
     </div>
   </div>
+  <!-- Mobile-only tappable landmark list (pins overlap once the map shrinks) -->
+  <div class="jm3d-mobile-list" id="jm3dMobileList" aria-label="Jamaica iconic landmarks"></div>
 <script>
 (function(){
   var DEFAULT_JM_LANDMARKS = [
@@ -10368,8 +10384,39 @@ body.theme-night .page .tag{
     }
   });
 
-  window.renderJamaicaPins = buildPins;
+  function buildMobileList(){
+    var listEl = document.getElementById('jm3dMobileList');
+    if(!listEl) return;
+    listEl.innerHTML = '';
+    getLandmarks().forEach(function(lm){
+      var card = document.createElement('div');
+      card.className = 'jm3d-mcard';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'jm3d-mcard-head';
+      btn.setAttribute('aria-expanded','false');
+      btn.innerHTML =
+        '<span class="jm3d-mcard-emoji" aria-hidden="true">' + lm.emoji + '</span>' +
+        '<span class="jm3d-mcard-text"><span class="jm3d-mcard-name">' + lm.name + '</span>' +
+        '<span class="jm3d-mcard-parish">' + lm.parish + '</span></span>' +
+        '<span class="jm3d-mcard-chev" aria-hidden="true">▾</span>';
+      var body = document.createElement('div');
+      body.className = 'jm3d-mcard-body';
+      body.innerHTML = '<p>' + lm.desc + '</p>' +
+        '<div class="jm3d-mcard-hist"><strong>Historical Note</strong>' + lm.hist + '</div>';
+      btn.addEventListener('click', function(){
+        var open = card.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      card.appendChild(btn);
+      card.appendChild(body);
+      listEl.appendChild(card);
+    });
+  }
+
+  window.renderJamaicaPins = function(){ buildPins(); buildMobileList(); };
   buildPins();
+  buildMobileList();
 })();
 </script>
 </section>
