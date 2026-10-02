@@ -53,7 +53,7 @@ function findPackage(itemsStr) {
 function packageConfirmationHtml(pkg, amount, ref) {
   const slot = s => s ? `<div style="color:#333;font-size:13px;margin:2px 0"><b style="color:#ef8731">${s.when}:</b> ${s.title}${s.place ? ' — <span style="color:#5a6d7e">' + s.place + '</span>' : ''}${s.meta ? ' <span style="color:#8a97a2">· ' + s.meta + '</span>' : ''}</div>` : '';
   const days = (pkg.days || []).map(d =>
-    `<tr><td style="padding:10px 9px;border-bottom:1px solid #eef3f0;vertical-align:top;white-space:nowrap"><b style="color:#063a63">Day ${d.n}</b></td><td style="padding:10px 9px;border-bottom:1px solid #eef3f0">${slot(d.am)}${slot(d.pm)}</td></tr>`
+    `<tr><td style="padding:10px 9px;border-bottom:1px solid #eef3f0;vertical-align:top;white-space:nowrap"><b style="color:#063a63">Day ${d.n}</b></td><td style="padding:10px 9px;border-bottom:1px solid #eef3f0">${slot(d.am)}${slot(d.pm)}${d.food ? '<div style="color:#4a8a2e;font-size:12px;font-weight:bold;margin-top:4px">Food stop: ' + d.food + '</div>' : ''}</td></tr>`
   ).join('');
   return `
   <div style="font-family:sans-serif;max-width:620px;margin:0 auto">
@@ -71,7 +71,7 @@ function packageConfirmationHtml(pkg, amount, ref) {
       </table>
       <h3 style="color:#063a63;margin:0 0 6px;font-size:16px">Your 5-day itinerary</h3>
       <table style="border-collapse:collapse;width:100%">${days}</table>
-      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Hotel pickups are included where noted. Prices shown are per-person "from" guides; final tailoring (dates, group size, transfers and stays) is confirmed by our team, who will be in touch shortly.</p>
+      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Pickups from your stay and local food stops are included where noted. Prices shown are per-person "from" guides; final tailoring (dates, group size, transfers and villa stays) is confirmed by our team, who will be in touch shortly.</p>
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
@@ -115,14 +115,16 @@ async function buildItineraryPdf(pkg, session, amountStr) {
     if (meta) { page.drawText(meta.slice(0,92), { x:108, y, size:8.5, font, color:grey }); y -= 15; } else { y -= 3; }
   };
   (pkg.days || []).forEach(d => {
-    if (y < 96) { page = doc.addPage([W,H]); y = H-60; }
+    if (y < 116) { page = doc.addPage([W,H]); y = H-60; }
     page.drawText('Day ' + d.n, { x:40, y, size:11, font:bold, color:navy }); y -= 15;
-    slotLine(d.am); slotLine(d.pm); y -= 9;
+    slotLine(d.am); slotLine(d.pm);
+    if (d.food) { page.drawText(('Food stop: ' + d.food).slice(0,92), { x:58, y, size:8.5, font:bold, color:rgb(.29,.54,.18) }); y -= 14; }
+    y -= 7;
   });
   if (y < 120) { page = doc.addPage([W,H]); y = H-60; }
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
-  page.drawText('Hotel pickups included where noted. Prices are per-person "from" guides; final tailoring', { x:40, y, size:8.5, font, color:grey }); y -= 12;
-  page.drawText('(dates, group size, transfers and stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
+  page.drawText('Pickups from your stay and food stops included where noted. Prices are per-person "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
+  page.drawText('guides; final tailoring (dates, group size, transfers and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
   page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();
   return Buffer.from(bytes).toString('base64');
