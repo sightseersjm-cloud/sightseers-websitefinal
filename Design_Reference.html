@@ -10672,16 +10672,6 @@ body.theme-night .page .tag{
       <h2 class="sec-title">Low on Hassle. High on Luxury. All Caribbean.</h2>
       <p>No hidden fees. No fine print. Real excursions, real places and stay pickups — ready-made 5-day island packages, priced per person and built for groups of 5+.</p>
     </div>
-    <div class="itin-pills reveal">
-      <button type="button" class="itin-pill on" onclick="filterItin('all',this);return false;">All</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Jamaica',this);return false;">Jamaica</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Barbados',this);return false;">Barbados</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Saint Lucia',this);return false;">St Lucia</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Curaçao',this);return false;">Curaçao</button>
-      <button type="button" class="itin-pill" onclick="filterItin('The Bahamas',this);return false;">Bahamas</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Belize',this);return false;">Belize</button>
-      <button type="button" class="itin-pill" onclick="filterItin('Dominican Republic',this);return false;">Dom. Rep.</button>
-    </div>
     <div class="itin-nav reveal"><button type="button" class="itin-arrow" aria-label="Previous" onclick="scrollItin(this,-1);return false;"><i class="fas fa-arrow-left"></i></button><button type="button" class="itin-arrow" aria-label="Next" onclick="scrollItin(this,1);return false;"><i class="fas fa-arrow-right"></i></button></div>
     <div class="bdos-itin-grid">
         <div class="bdos-itin-card sea reveal" data-itin-country="Jamaica" onclick="openCaribPkg('Jamaica')">
@@ -10897,16 +10887,6 @@ body.theme-night .page .tag{
         <span class="sec-pre">Ready-made across the Caribbean</span>
         <h2 class="sec-title">5-Day Island Packages</h2>
         <p>Pick an island for a ready-made 5-day plan — real excursions, real places and hotel pickups. Click any package for the full day-by-day itinerary.</p>
-      </div>
-      <div class="itin-pills reveal">
-        <button type="button" class="itin-pill on" onclick="filterItin('all',this);return false;">All</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Jamaica',this);return false;">Jamaica</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Barbados',this);return false;">Barbados</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Saint Lucia',this);return false;">St Lucia</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Curaçao',this);return false;">Curaçao</button>
-        <button type="button" class="itin-pill" onclick="filterItin('The Bahamas',this);return false;">Bahamas</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Belize',this);return false;">Belize</button>
-        <button type="button" class="itin-pill" onclick="filterItin('Dominican Republic',this);return false;">Dom. Rep.</button>
       </div>
       <div class="itin-nav reveal"><button type="button" class="itin-arrow" aria-label="Previous" onclick="scrollItin(this,-1);return false;"><i class="fas fa-arrow-left"></i></button><button type="button" class="itin-arrow" aria-label="Next" onclick="scrollItin(this,1);return false;"><i class="fas fa-arrow-right"></i></button></div>
       <div class="bdos-itin-grid">
@@ -50488,33 +50468,40 @@ function vtXRStatus(msg){
 </script>
 
 <style id="jm3d-v23-layout">
-/* Discover Jamaica: video band on top, heading in its white border, glossy history panel tucked under it */
+/* Discover Jamaica: video band on top, heading in its white border, flat-glossy (Apple-style) history panel tucked under it */
 #jm3dSec.jm3d-sec{padding:0 0 64px!important;
-  background:radial-gradient(60% 34% at 12% 58%,rgba(255,255,255,.95),rgba(255,255,255,0) 70%),radial-gradient(55% 36% at 90% 80%,rgba(176,226,244,.55),rgba(176,226,244,0) 70%),linear-gradient(180deg,#fff 0,#f4fbfe 50%,#e1f3fa 100%)!important}
+  background:radial-gradient(60% 34% at 12% 58%,rgba(255,255,255,.95),rgba(255,255,255,0) 70%),radial-gradient(55% 36% at 90% 80%,rgba(176,226,244,.5),rgba(176,226,244,0) 70%),linear-gradient(180deg,#fff 0,#f4fbfe 50%,#e5f4fa 100%)!important}
 #jm3dSec .jm3d-skybox,#jm3dSec .jm3d-stage-outer,#jm3dSec .jm3d-mobile-list{display:none!important}
 #jm3dSec .jm3d-wrap{position:absolute!important;top:clamp(16px,3.6vw,56px);left:0;right:0;z-index:6;padding:0 22px!important;pointer-events:none}
 #jm3dSec .jm3d-head{margin:0!important}
 #jm3dSec .jm3d-head .sec-title{margin:0!important}
 #jm3dSec .jm3d-detail-shell{max-width:1080px!important;margin:clamp(-76px,-5vw,-36px) auto 0!important;position:relative;z-index:5}
-#jm3dSec .jm3d-detail-panel{max-height:none!important;overflow:visible!important;border-radius:30px!important;padding:24px 26px 22px!important;
-  background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(243,250,254,.9) 100%)!important;
-  -webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);
-  border:1px solid rgba(255,255,255,.96)!important;
-  box-shadow:0 40px 80px -20px rgba(6,58,99,.30),0 14px 30px rgba(6,58,99,.10),inset 0 1.5px 0 #fff,inset 0 -1px 0 rgba(6,58,99,.05)!important}
+/* panel: frosted glass, hairline border, one soft shadow */
+#jm3dSec .jm3d-detail-panel{max-height:none!important;overflow:visible!important;border-radius:26px!important;padding:24px 26px 22px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(247,251,254,.84) 100%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);
+  border:1px solid rgba(6,58,99,.07)!important;
+  box-shadow:0 1px 2px rgba(6,58,99,.05),0 18px 40px -22px rgba(6,58,99,.22),inset 0 1px 0 rgba(255,255,255,.95)!important}
 #jm3dSec .jm3d-detail-panel::after{display:none!important}
 #jm3dSec .jm3d-detail-panel::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:radial-gradient(120% 70% at 10% -12%,rgba(255,255,255,.95),rgba(255,255,255,0) 55%),linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0) 30%)}
+  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0) 26%)}
 #jm3dSec .jm3d-detail-panel>*{position:relative;z-index:1}
 #jm3dSec .jm3d-detail-main h3{font-size:1.55rem;letter-spacing:-.3px}
-#jm3dSec .jm3d-detail-history{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(236,246,252,.92));border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 26px rgba(6,58,99,.08),inset 0 1px 0 #fff}
-#jm3dSec .jm3d-detail-kicker,#jm3dSec .jm3d-detail-pill{background:linear-gradient(180deg,#fff,#edf5fa);border:1px solid rgba(6,58,99,.08);box-shadow:inset 0 1px 0 #fff,0 3px 8px rgba(6,58,99,.07)}
-#jm3dSec .jm3d-detail-nav button{background:linear-gradient(180deg,#fff,#e9f2f8);border:1px solid rgba(6,58,99,.1);box-shadow:inset 0 1px 0 #fff,0 4px 10px rgba(6,58,99,.12)}
-#jm3dSec .jm3d-detail-nav button:hover{background:linear-gradient(180deg,#0c4e80,#063a63);color:#fff}
-#jm3dSec .jm3d-detail-actions .btn-primary{border:none;border-radius:999px;background:linear-gradient(180deg,#f9a965 0,#ef8731 55%,#dc6e17 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 24px rgba(239,135,49,.38)}
-#jm3dSec .jm3d-detail-actions .btn-outline{border-radius:999px;background:linear-gradient(180deg,#fff,#edf5fa);box-shadow:inset 0 1px 0 #fff,0 6px 14px rgba(6,58,99,.1)}
+#jm3dSec .jm3d-detail-history{background:rgba(255,255,255,.72);border:1px solid rgba(6,58,99,.07);border-radius:18px;box-shadow:inset 0 1px 0 #fff}
+#jm3dSec .jm3d-detail-kicker,#jm3dSec .jm3d-detail-pill{background:rgba(6,58,99,.05);border:1px solid rgba(6,58,99,.06);box-shadow:none}
+/* buttons: flat + glossy (soft top highlight, hairline border, 1px shadow, no glow) */
+#jm3dSec .jm3d-detail-actions .btn-primary,#jm3dSec .jm3d-detail-actions .btn-outline{border-radius:12px;padding:12px 20px;transition:filter .2s ease,transform .15s ease,background .2s ease}
+#jm3dSec .jm3d-detail-actions .btn-primary{color:#fff;background:linear-gradient(180deg,#f6a05a 0%,#ef8731 100%);border:1px solid rgba(178,86,12,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 2px rgba(150,70,0,.22)}
+#jm3dSec .jm3d-detail-actions .btn-outline{color:#063a63;background:linear-gradient(180deg,#fff,#f1f6fa);border:1px solid rgba(6,58,99,.16);box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(6,58,99,.06)}
+#jm3dSec .jm3d-detail-actions .btn-primary:hover,#jm3dSec .jm3d-detail-actions .btn-outline:hover{filter:brightness(1.04);transform:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 2px rgba(6,58,99,.18)}
+#jm3dSec .jm3d-detail-actions .btn-outline:hover{background:linear-gradient(180deg,#fff,#e9f1f7);color:#063a63}
+#jm3dSec .jm3d-detail-actions .btn-primary:active,#jm3dSec .jm3d-detail-actions .btn-outline:active{transform:translateY(.5px);filter:brightness(.97)}
+#jm3dSec .jm3d-detail-nav button{background:linear-gradient(180deg,#fff,#f1f6fa);border:1px solid rgba(6,58,99,.14);box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(6,58,99,.06)}
+#jm3dSec .jm3d-detail-nav button:hover{background:linear-gradient(180deg,#0e5489,#063a63);color:#fff;border-color:#063a63}
 #jm3dSec .jm3d-detail-chips{display:flex!important;flex-wrap:wrap;overflow:visible!important}
-#jm3dSec .jm3d-detail-chip{background:linear-gradient(180deg,#fff,#e8f1f7);box-shadow:inset 0 1px 0 #fff,0 3px 8px rgba(6,58,99,.08)}
-#jm3dSec .jm3d-detail-chip.active,#jm3dSec .jm3d-detail-chip:hover{background:linear-gradient(180deg,#0e5489,#063a63)!important;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 16px rgba(6,58,99,.3)}
+#jm3dSec .jm3d-detail-chip{background:rgba(6,58,99,.05);border:1px solid rgba(6,58,99,.06);box-shadow:none;transition:background .2s ease,color .2s ease}
+#jm3dSec .jm3d-detail-chip:hover{background:rgba(6,58,99,.1);color:#063a63}
+#jm3dSec .jm3d-detail-chip.active,#jm3dSec .jm3d-detail-chip.active:hover{background:linear-gradient(180deg,#0e5489,#063a63)!important;color:#fff;border-color:#063a63;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
 @media (max-width:768px){#jm3dSec .jm3d-head .sec-title{font-size:clamp(1.5rem,6.6vw,2rem)!important;line-height:1.12}
   #jm3dSec .jm3d-detail-shell{margin-top:-28px!important}#jm3dSec .jm3d-detail-panel{padding:20px 18px 18px!important}}
 </style>
