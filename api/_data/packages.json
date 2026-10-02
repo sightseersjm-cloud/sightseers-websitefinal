@@ -321,10 +321,10 @@
       }
     }
   },
-  "Curaçao": {
-    "label": "Curaçao",
+  "Curacao": {
+    "label": "Curacao",
     "chip": "sea",
-    "title": "Curaçao 5-Day Signature",
+    "title": "Curacao 5-Day Signature",
     "frm": 399,
     "base": "Jan Thiel Coastal Villa",
     "days": [
@@ -382,7 +382,7 @@
         "n": 4,
         "am": {
           "when": "Full day",
-          "title": "Klein Curaçao Full-Day Boat Trip",
+          "title": "Klein Curacao Full-Day Boat Trip",
           "place": "Departs Willemstad",
           "meta": "Full day · from $155",
           "pickup": "Pickup / port transfer"
@@ -393,7 +393,7 @@
           "place": "Willemstad",
           "meta": "At leisure"
         },
-        "food": "Onboard Klein Curaçao BBQ"
+        "food": "Onboard Klein Curacao BBQ"
       },
       {
         "n": 5,
@@ -414,13 +414,13 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Curaçao 5-Day Signature: Private Transfers",
+        "name": "Curacao 5-Day Signature: Private Transfers",
         "price": 229,
         "label": "Private airport & inter-base transfers",
         "per": "per group (up to 6)"
       },
       "driver": {
-        "name": "Curaçao 5-Day Signature: Private Driver Day",
+        "name": "Curacao 5-Day Signature: Private Driver Day",
         "price": 359,
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
