@@ -10664,6 +10664,87 @@ body.theme-night .page .tag{
   </div>
 </section>
 
+<!-- ======== HIDDEN-GEM GROUP ESCAPES (branded slider) ======== -->
+<section class="hg-sec">
+  <style>
+    .hg-sec{padding:72px 0;background:#fff}
+    .hg-wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+    .hg-head{text-align:center;margin-bottom:26px}
+    .hg-logo{height:46px;width:auto;margin:0 auto 14px;display:block}
+    .hg-head .sec-pre{color:var(--orange)}
+    .hg-head p{color:var(--grey);max-width:680px;margin:12px auto 0;line-height:1.6}
+    .hg-track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:10px 2px 20px;-webkit-overflow-scrolling:touch}
+    .hg-track::-webkit-scrollbar{height:8px}
+    .hg-track::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+    .hg-card{flex:0 0 300px;max-width:300px;scroll-snap-align:start;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 14px 34px rgba(6,58,99,.12);display:flex;flex-direction:column;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
+    .hg-card:hover{transform:translateY(-6px);box-shadow:0 22px 48px rgba(6,58,99,.18)}
+    .hg-img{position:relative;height:200px;background-size:cover;background-position:center}
+    .hg-bar{position:absolute;left:0;right:0;bottom:0;background:var(--navy);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 14px;font-size:.76rem;font-weight:600;flex-wrap:wrap}
+    .hg-bar span{display:inline-flex;align-items:center;gap:6px}
+    .hg-bar i{color:var(--orange)}
+    .hg-body{padding:18px 18px 22px;display:flex;flex-direction:column;flex:1}
+    .hg-body h3{font-size:1.2rem;color:var(--dark);margin:0 0 8px;line-height:1.22}
+    .hg-body p{color:var(--grey);font-size:.86rem;line-height:1.55;margin:0 0 16px;flex:1}
+    .hg-price{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);font-size:1.15rem}
+    .hg-price .unit{font-size:.72rem;font-weight:600;color:var(--grey)}
+    .hg-badge{margin-left:auto;background:var(--green);color:#063a1e;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px}
+    .hg-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:6px}
+    .hg-arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:#fff;color:var(--navy);cursor:pointer;transition:background .2s,color .2s}
+    .hg-arrow:hover{background:var(--navy);color:#fff}
+    .hg-dots{display:flex;gap:8px}
+    .hg-dot{width:10px;height:10px;border-radius:50%;background:var(--border);border:none;cursor:pointer;padding:0;transition:background .2s,transform .2s}
+    .hg-dot.on{background:var(--orange);transform:scale(1.25)}
+  </style>
+  <script>
+    window.hgScroll=function(btn,dir){var s=btn.closest('.hg-sec');var t=s.querySelector('.hg-track');var c=t.querySelector('.hg-card');t.scrollBy({left:dir*((c?c.offsetWidth:300)+24),behavior:'smooth'});};
+    window.hgGo=function(dot){var s=dot.closest('.hg-sec');var t=s.querySelector('.hg-track');var c=t.querySelectorAll('.hg-card')[+dot.dataset.i];if(c)t.scrollTo({left:c.offsetLeft-t.offsetLeft,behavior:'smooth'});};
+    window.hgSync=function(t){var s=t.closest('.hg-sec');var cs=t.querySelectorAll('.hg-card');var w=(cs[0]?cs[0].offsetWidth:300)+24;var i=Math.round(t.scrollLeft/w);s.querySelectorAll('.hg-dot').forEach(function(d,j){d.classList.toggle('on',j===i)});};
+  </script>
+  <div class="hg-wrap">
+    <div class="hg-head reveal">
+      <img class="hg-logo" src="/assets/inline/1ba92aa926.png" alt="Sight Seers Caribbean Adventures">
+      <span class="sec-pre">Sight Seers Signature</span>
+      <h2 class="sec-title">Hidden-Gem Group Escapes</h2>
+      <p>Lesser-known, local-led experiences built for groups of five or more — private charters, heritage estates and off-the-beaten-path adventures across the Caribbean.</p>
+    </div>
+    <div class="hg-track" onscroll="hgSync(this)">
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>Full day</span><span><i class="fas fa-user-group"></i>5+ guests</span><span><i class="fas fa-location-dot"></i>Jamaica</span></div></div>
+          <div class="hg-body"><h3>Hampden Rum Estate &amp; Food Trail</h3><p>Skip the crowds at a working heritage rum estate, then a local Montego Bay food trail.</p><div class="hg-price">$121<span class="unit">/ group</span><span class="hg-badge">Hidden gem</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>3 hours</span><span><i class="fas fa-user-group"></i>Up to 8</span><span><i class="fas fa-location-dot"></i>Barbados</span></div></div>
+          <div class="hg-body"><h3>Private Catamaran &amp; Turtle Snorkel</h3><p>Your own local-owned catamaran for turtles and shipwrecks — no shared decks.</p><div class="hg-price">$450<span class="unit">/ group</span><span class="hg-badge">Private</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>6 hours</span><span><i class="fas fa-user-group"></i>Private group</span><span><i class="fas fa-location-dot"></i>Saint Lucia</span></div></div>
+          <div class="hg-body"><h3>Rabot Estate Chocolate &amp; Rainforest</h3><p>Bean-to-bar chocolate making at Hotel Chocolat’s hillside estate, deep in the rainforest.</p><div class="hg-price">$600<span class="unit">/ group</span><span class="hg-badge">Hidden gem</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>Full day</span><span><i class="fas fa-user-group"></i>Private group</span><span><i class="fas fa-location-dot"></i>Curaçao</span></div></div>
+          <div class="hg-body"><h3>Shete Boka Caves &amp; Hidden Beaches</h3><p>A custom 4x4 run to blowhole caves, secret coves and snorkel spots most visitors miss.</p><div class="hg-price">$215<span class="unit">/ person</span><span class="hg-badge">Hidden gem</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>8 hours</span><span><i class="fas fa-user-group"></i>Up to 6</span><span><i class="fas fa-location-dot"></i>The Bahamas</span></div></div>
+          <div class="hg-body"><h3>Private Exuma Powerboat &amp; Pig Beach</h3><p>Your own powerboat to the swimming pigs, sharks and sandbars, with lunch and open bar.</p><div class="hg-price">$700<span class="unit">/ group</span><span class="hg-badge">Private</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1465311440653-ba9b1d9b0f5b?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>7–8 hours</span><span><i class="fas fa-user-group"></i>5+ guests</span><span><i class="fas fa-location-dot"></i>Belize</span></div></div>
+          <div class="hg-body"><h3>Lamanai Maya Ruins &amp; River Safari</h3><p>Jungle river boat to a remote Maya city few tours reach, with lunch included.</p><div class="hg-price">$161<span class="unit">/ person</span><span class="hg-badge">Hidden gem</span></div></div>
+        </article>
+        <article class="hg-card" onclick="openLinkedStartPlanning();return false;">
+          <div class="hg-img" style="background-image:url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=900&q=85&auto=format&fit=crop')"><div class="hg-bar"><span><i class="fas fa-calendar"></i>Full day</span><span><i class="fas fa-user-group"></i>5+ guests</span><span><i class="fas fa-location-dot"></i>Dominican Republic</span></div></div>
+          <div class="hg-body"><h3>Polaris 4x4, Horseback &amp; Waterfall</h3><p>Backcountry villages, a cenote lagoon swim, horseback riding and a hidden waterfall.</p><div class="hg-price">$169<span class="unit">/ person</span><span class="hg-badge">Hidden gem</span></div></div>
+        </article>
+    </div>
+    <div class="hg-nav reveal">
+      <button type="button" class="hg-arrow" aria-label="Previous" onclick="hgScroll(this,-1)"><i class="fas fa-arrow-left"></i></button>
+      <div class="hg-dots"><button type="button" class="hg-dot on" data-i="0" aria-label="Go to slide 1" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="1" aria-label="Go to slide 2" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="2" aria-label="Go to slide 3" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="3" aria-label="Go to slide 4" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="4" aria-label="Go to slide 5" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="5" aria-label="Go to slide 6" onclick="hgGo(this)"></button><button type="button" class="hg-dot" data-i="6" aria-label="Go to slide 7" onclick="hgGo(this)"></button></div>
+      <button type="button" class="hg-arrow" aria-label="Next" onclick="hgScroll(this,1)"><i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
 <!-- ======== CARIBBEAN 5-DAY ITINERARIES ======== -->
 <section class="bdos-itin-sec">
   <style>
