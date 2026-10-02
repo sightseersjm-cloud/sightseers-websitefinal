@@ -209,7 +209,7 @@ module.exports = async function handler(req, res) {
           <h2 style="color:#0a3557">Password reset</h2>
           <p>Hi ${firstName}, use this code to reset your Sight Seers Travel Club password. It expires in 30 minutes.</p>
           <p style="font-size:32px;font-weight:800;letter-spacing:8px;color:#0d6e96;background:#f4f7fa;border-radius:12px;padding:18px;text-align:center">${code}</p>
-          <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email — your password stays the same.</p>
+          <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email. Your password stays the same.</p>
         </div>`
       }).catch(() => {});
     }

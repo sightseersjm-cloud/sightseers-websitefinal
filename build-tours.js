@@ -155,7 +155,7 @@ ${jsonld.map(o => `<script type="application/ld+json">${JSON.stringify(o)}</scri
 </div></header>
 ${inner}
 <footer><div class="wrap foot-in">
-  <div>&copy; ${new Date().getFullYear()} Sight Seers Caribbean &mdash; Jamaica &amp; Caribbean group travel, tours &amp; virtual experiences.</div>
+  <div>&copy; ${new Date().getFullYear()} Sight Seers Caribbean: Jamaica &amp; Caribbean group travel, tours &amp; virtual experiences.</div>
   <div class="foot-links">
     <a href="/">Main Site</a>
     <a href="/virtual-tours/">All Virtual Tours</a>
@@ -214,7 +214,7 @@ function tourPage(t) {
 
   const panoBlock = t.pano ? `
   <section class="sec" id="preview"><div class="wrap">
-    <h2>Step Inside &mdash; Interactive 360&deg; Preview</h2>
+    <h2>Step Inside: Interactive 360&deg; Preview</h2>
     <p style="color:var(--mut);margin-bottom:18px;font-size:14.5px">This is a real 360&deg; scene from the tour. Click and drag (or swipe) to look around; scroll or pinch to zoom.</p>
     <div class="pano-wrap">
       <span class="pano-badge">LIVE 360&deg;</span>
@@ -225,7 +225,7 @@ function tourPage(t) {
   </div></section>` : `
   <section class="sec"><div class="wrap">
     <div class="portal-note">
-      <p><strong>Live 360&deg; preview available.</strong> This experience is toured live inside the Sight Seers V-Tours portal &mdash; join a guided session with live chat, shoppable moments, and a local host on camera.</p>
+      <p><strong>Live 360&deg; preview available.</strong> This experience is toured live inside the Sight Seers V-Tours portal. Join a guided session with live chat, shoppable moments, and a local host on camera.</p>
       <a class="btn btn-primary" href="/#vtours">Enter the 360&deg; Portal</a>
     </div>
   </div></section>`;
@@ -303,7 +303,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <section class="sec" style="padding-top:0"><div class="wrap">
     <div class="cta-band">
       <h2>Ready to make it real?</h2>
-      <p>Tell a Sight Seers planner your dates, group size, and vibe &mdash; we&rsquo;ll build the itinerary around ${esc(t.title)} and handle every transfer.</p>
+      <p>Tell a Sight Seers planner your dates, group size, and vibe. We&rsquo;ll build the itinerary around ${esc(t.title)} and handle every transfer.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="/#booking">Start Planning</a>
         <a class="btn" style="border-color:rgba(255,255,255,.5);color:#fff" href="/#vtours">Watch a Live 360&deg; Session</a>
@@ -313,7 +313,7 @@ window.addEventListener('DOMContentLoaded',function(){
 </main>`;
 
   return chrome(inner, {
-    title: `${t.title} — 360° Virtual Tour & Booking | Sight Seers Caribbean`,
+    title: `${t.title}: 360° Virtual Tour & Booking | Sight Seers Caribbean`,
     desc: t.short + ` From ${money(t.priceFrom)} per person · ${t.duration} · ${t.location}.`,
     canonical: url,
     ogImage: t.ogImage,
@@ -331,7 +331,7 @@ function hubPage() {
     {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      name: 'Caribbean Virtual Tours — Sight Seers Caribbean',
+      name: 'Caribbean Virtual Tours by Sight Seers Caribbean',
       description: 'Explore Jamaica in 360° before you book: interactive panoramic previews and live guided virtual tours of beaches, yacht charters, waterfalls, markets, and food tours.',
       url,
       mainEntity: {
@@ -354,7 +354,7 @@ function hubPage() {
   const cards = TOURS.map(t => {
     const img = t.pano ? t.heroImage : t.heroImage.replace('w=1600&h=900', 'w=640&h=400');
     return `<a class="tour-card" href="/virtual-tours/${t.slug}/">
-      <div class="tc-img"><img src="${img}" alt="${esc(t.title)} — ${esc(t.location)}" loading="lazy">${t.pano ? '<span class="tc-360">INTERACTIVE 360&deg;</span>' : ''}</div>
+      <div class="tc-img"><img src="${img}" alt="${esc(t.title)}, ${esc(t.location)}" loading="lazy">${t.pano ? '<span class="tc-360">INTERACTIVE 360&deg;</span>' : ''}</div>
       <div class="tc-body">
         <h3>${esc(t.title)}</h3>
         <div class="tc-loc">${esc(t.location)} &middot; ${esc(t.duration)}</div>
@@ -372,7 +372,7 @@ function hubPage() {
     <div class="wrap hero-in">
       <div class="crumbs"><a href="/">Home</a> / Virtual Tours</div>
       <h1>Step Inside Jamaica Before You Book</h1>
-      <p style="max-width:640px;color:rgba(255,255,255,.88);font-size:16.5px">Every Sight Seers experience can be previewed before you commit &mdash; interactive 360&deg; scenes you can look around, and live guided sessions with a local host on camera, live chat, and shoppable moments.</p>
+      <p style="max-width:640px;color:rgba(255,255,255,.88);font-size:16.5px">Every Sight Seers experience can be previewed before you commit: interactive 360&deg; scenes you can look around, and live guided sessions with a local host on camera, live chat, and shoppable moments.</p>
       <div class="chips">
         <span class="chip"><b>${TOURS.length}</b> tour pages</span>
         <span class="chip"><b>${TOURS.filter(t => t.pano).length}</b> interactive 360&deg; scenes</span>
@@ -391,7 +391,7 @@ function hubPage() {
 
   <section class="sec" style="padding-top:6px"><div class="wrap">
     <div class="portal-note">
-      <p><strong>Prefer it live?</strong> The V-Tours portal streams guided 360&deg; sessions with real hosts &mdash; ask questions in chat, vote on where the guide goes next, and add finds to your cart mid-tour.</p>
+      <p><strong>Prefer it live?</strong> The V-Tours portal streams guided 360&deg; sessions with real hosts. Ask questions in chat, vote on where the guide goes next, and add finds to your cart mid-tour.</p>
       <a class="btn btn-primary" href="/#vtours">Enter the Live Portal</a>
     </div>
   </div></section>
@@ -399,7 +399,7 @@ function hubPage() {
   <section class="sec" style="padding-top:0"><div class="wrap">
     <div class="cta-band">
       <h2>Not sure which experience fits your group?</h2>
-      <p>Tell us your dates, group size, and occasion. A Sight Seers planner will match the tours, stays, and transport &mdash; usually within a day.</p>
+      <p>Tell us your dates, group size, and occasion. A Sight Seers planner will match the tours, stays, and transport, usually within a day.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="/#booking">Start Planning</a>
         <a class="btn" style="border-color:rgba(255,255,255,.5);color:#fff" href="/#contact">Talk to a Planner</a>
@@ -409,7 +409,7 @@ function hubPage() {
 </main>`;
 
   return chrome(inner, {
-    title: 'Caribbean Virtual Tours — Preview Jamaica in 360° | Sight Seers Caribbean',
+    title: 'Caribbean Virtual Tours: Preview Jamaica in 360° | Sight Seers Caribbean',
     desc: 'Explore Jamaica in 360° before you book. Interactive panoramic previews and live guided virtual tours of Blue Lagoon, yacht charters, Dunn’s River Falls, markets, food tours, and Seven Mile Beach.',
     canonical: url,
     ogImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=630&fit=crop',

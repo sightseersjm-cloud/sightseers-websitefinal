@@ -63,14 +63,14 @@ module.exports = async function handler(req, res) {
     try { await db.addToCollection('passport-requests', rec); } catch (e) { /* logging is best-effort */ }
 
     await sendEmail({
-      subject: `Passport Renewal Request — ${escapeHtml(name)}`,
+      subject: `Passport Renewal Request: ${escapeHtml(name)}`,
       replyTo: email,
       attachments: [
         { filename: bioName, content: cleanB64(bio.b64) },
         { filename: photoName, content: cleanB64(photo.b64) }
       ],
       html: `
-        <h2 style="color:#0d5371">New Passport Renewal Request — Sight Seers Caribbean</h2>
+        <h2 style="color:#0d5371">New Passport Renewal Request: Sight Seers Caribbean</h2>
         <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
           <tr><td style="padding:8px;font-weight:bold;width:190px">Name</td><td style="padding:8px">${escapeHtml(name)}</td></tr>
           <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(email)}</td></tr>

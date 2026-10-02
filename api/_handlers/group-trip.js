@@ -112,7 +112,7 @@ module.exports = async function handler(req, res) {
         'line_items[0][quantity]': '1',
         'line_items[0][price_data][currency]': 'usd',
         'line_items[0][price_data][unit_amount]': String(p.q.deposit.chargeCents),
-        'line_items[0][price_data][product_data][name]': ('Group trip deposit — ' + rec.country + ' (' + rec.guests + ' guests)').slice(0, 250),
+        'line_items[0][price_data][product_data][name]': ('Group trip deposit: ' + rec.country + ' (' + rec.guests + ' guests)').slice(0, 250),
         'line_items[0][price_data][product_data][description]': ('Ref ' + rec.ref + '. Deposit toward an estimated total of ' + trip.money(p.q.subtotal) + ' (includes card processing). Balance and final itinerary are confirmed by our team.').slice(0, 500),
         'metadata[kind]': 'group-trip',
         'metadata[ref]': rec.ref,
@@ -137,7 +137,7 @@ module.exports = async function handler(req, res) {
       const rec = record('preferences', 'PR', p, b, { status: 'saved' });
       await db.addToCollection('trip-preferences', rec);
       await notify(rec, {
-        subject: 'Your trip preferences are saved — ' + rec.ref,
+        subject: 'Your trip preferences are saved: ' + rec.ref,
         heading: 'Preferences saved',
         guestIntro: 'Thank you, ' + trip.esc(rec.contact.name.split(' ')[0]) + '. We have saved your trip preferences. A planner will use them to shape a group itinerary around you. Reply to this email any time to change something, or book a quick consultation.',
         bizIntro: 'A guest saved trip preferences on the group trip builder.'
@@ -159,7 +159,7 @@ module.exports = async function handler(req, res) {
       await db.addToCollection('trip-consultations', rec);
       const extraRows = [['Preferred contact', consult.channel], ['Best times', consult.when], ['What they want to discuss', consult.notes]];
       await notify(rec, {
-        subject: 'Your consultation request — ' + rec.ref,
+        subject: 'Your consultation request: ' + rec.ref,
         heading: 'Consultation requested',
         guestIntro: 'Thank you, ' + trip.esc(rec.contact.name.split(' ')[0]) + '. We have your request and a trip planner will be in touch within one business day to personalise your group trip.',
         bizIntro: 'A guest asked for a consultation to personalise a group trip (' + trip.esc(String(rec.guests)) + ' guests).',

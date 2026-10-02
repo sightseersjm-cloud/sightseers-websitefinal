@@ -205,7 +205,7 @@
             folder: folder || 'site-images'
           }).then(resolve).catch(function (err) {
             if (err && (err.status === 413 || /too large|payload/i.test(err.message))) {
-              err.message = 'Image too large for upload — please use a photo under 3MB.';
+              err.message = 'Image too large for upload. Please use a photo under 3MB.';
             }
             reject(err);
           });
@@ -247,7 +247,7 @@
               resolve(data);
             } else {
               var msg = (data && data.error) || ('Upload failed (' + xhr.status + ')');
-              if (xhr.status === 413) msg = 'Image too large for upload — please use a photo under 3MB.';
+              if (xhr.status === 413) msg = 'Image too large for upload. Please use a photo under 3MB.';
               reject(Object.assign(new Error(msg), { status: xhr.status }));
             }
           };
