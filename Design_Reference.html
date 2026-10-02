@@ -10846,46 +10846,68 @@ body.theme-night .page .tag{
       <span class="sec-pre">Curate Your Experience</span>
       <h2 class="sec-title">Bespoke Caribbean Adventures, Tailored to You</h2>
     </div>
-
-    <div class="curated-shell">
-      <div style="text-align:center;margin-bottom:28px;padding:22px 28px;background:linear-gradient(135deg,rgba(6,58,99,.03),rgba(239,135,49,.04));border:1px solid rgba(6,58,99,.07);border-radius:22px">
-        <p style="font-size:14px;color:var(--grey);line-height:1.8;margin:0 auto 14px;max-width:680px">Most of our trips are tailored for groups of 5 or more. Browse for inspiration, then tell us about your group, interests and pace and we will craft the itinerary around you.</p>
-        <a href="#" class="btn-primary" onclick="openLinkedStartPlanning();return false;" style="display:inline-flex;gap:8px;align-items:center">Build Your Own Experience</a>
-      </div>
-      <div class="tours-grid" id="toursGrid2" style="display:none"></div>
+    <div class="tp-intro reveal">
+      <p>Most of our trips are tailored for groups of 5 or more. Browse for inspiration, then tell us about your group, interests and pace and we will craft the itinerary around you.</p>
+      <a href="#" class="btn-primary" onclick="openLinkedStartPlanning();return false;" style="display:inline-flex;gap:8px;align-items:center">Build Your Own Experience</a>
     </div>
+    <div class="tours-grid" id="toursGrid2" style="display:none"></div>
   </div>
 </section>
+
+  <!-- ======== ON THIS PAGE (sticky) ======== -->
+  <div id="tpSubnavWrap"><nav class="tp-subnav" id="tpSubnav" aria-label="On this page">
+    <div class="tp-subnav-in">
+      <button type="button" data-target="toursExplorer" class="on">Browse experiences</button>
+      <button type="button" data-target="exBuilder">Build a group trip</button>
+      <button type="button" data-target="exMba">MBA Experiences</button>
+      <button type="button" data-target="toursPlan">Talk to a planner</button>
+    </div>
+  </nav></div>
 
     <!-- ======== CARIBBEAN 5-DAY ITINERARIES (Tours page) ======== -->
   <!-- ======== SINGLE EXPERIENCES BY ISLAND ======== -->
   <section class="ex-sec" id="toursExplorer">
     <div class="ex-wrap">
-      <div class="ex-head">
-        <span class="sec-pre">Build it your way</span>
-        <h2 class="sec-title">Single Experiences, Island by Island</h2>
-        <p>Start with an island. Each one has its own water and land experiences and custom packages. We build every trip around your group and your pace, so nothing here is fixed.</p>
-      </div>
-      <div class="ex-controls">
-        <div class="ex-tabs" id="exTabs" role="tablist" aria-label="Choose an island"></div>
-        <div class="ex-seg" id="exType" role="group" aria-label="Experience type">
-          <button type="button" class="on" data-type="all">All</button>
-          <button type="button" data-type="water">Water</button>
-          <button type="button" data-type="land">Land</button>
+      <div class="ex-head tp-head"><span class="tp-hnum">01</span><div class="tp-htext"><span class="sec-pre">Build it your way</span><h2 class="sec-title">Single Experiences, Island by Island</h2><p>Start with an island. Each one has its own water and land experiences and custom packages. We build every trip around your group and your pace, so nothing here is fixed.</p></div></div>
+      <div class="bx" id="bx">
+        <div class="bx-main">
+          <div class="bx-bar">
+            <div class="ex-seg bx-sort" id="bxSort" role="group" aria-label="Sort experiences">
+              <button type="button" class="on" data-sort="featured">Featured</button>
+              <button type="button" data-sort="low">Price low to high</button>
+              <button type="button" data-sort="high">Price high to low</button>
+              <button type="button" data-sort="az">Name A to Z</button>
+            </div>
+            <button type="button" class="bx-toggle" id="bxToggle" aria-expanded="false">Filters</button>
+          </div>
+          <p class="bx-count" id="bxCount" aria-live="polite"></p>
+          <div class="bx-grid" id="bxGrid"></div>
+          <div class="bx-more-wrap" id="bxMoreWrap"></div>
+          <div id="bxPackages"></div>
         </div>
+        <aside class="bx-side" id="bxSide" aria-label="Filter experiences">
+          <h3>Plan Your Trip</h3>
+          <p class="bx-side-sub">Find the right experience for your group.</p>
+          <label class="bx-f"><span>Search</span><input type="search" id="bxQ" placeholder="Boat, waterfall, rum, ATV" autocomplete="off"></label>
+          <label class="bx-f"><span>Where to?</span><select id="bxCountry"></select></label>
+          <label class="bx-f" id="bxAreaWrap" style="display:none"><span>Area</span><select id="bxArea"></select></label>
+          <div class="bx-f"><span>Type</span><div class="ex-seg" id="bxType" role="group" aria-label="Experience type"><button type="button" class="on" data-type="all">All</button><button type="button" data-type="water">Water</button><button type="button" data-type="land">Land</button></div></div>
+          <div class="bx-f"><span>Price <b id="bxPriceVal"></b></span><input type="range" id="bxPrice" min="0" max="500" step="5" value="500"></div>
+          <div class="bx-f"><span>Best for</span><div class="bx-tags" id="bxTags"></div></div>
+          <button type="button" class="bx-reset" id="bxReset">Reset filters</button>
+          <div class="bx-side-cta"><b>Planning for 5 or more?</b><p>Pick experiences, see a live estimate and reserve with a deposit.</p><a href="#" class="btn-primary" onclick="toursGo('exBuilder');return false;">Build a group trip</a></div>
+        </aside>
       </div>
-      <div class="ex-results" id="exResults"></div>
     </div>
   </section>
 
   <!-- ======== GROUP TRIP BUILDER (MBA Lifestyle / Greek Life) ======== -->
   <section class="ex-sec" id="exBuilder">
     <div class="ex-wrap">
-      <div class="ex-head">
-        <span class="sec-pre">Tailored for groups of 5 or more</span>
+      <div class="ex-head tp-head"><span class="tp-hnum">02</span><div class="tp-htext"><span class="sec-pre">Build a group trip</span>
         <h2 class="sec-title">Build Your Group Trip</h2>
         <p>Choose your group and island, tick what you would like and see a live estimate. Prefer to talk it through? You can send an inquiry at any point, with or without choices.</p>
-      </div>
+      </div></div>
       <div class="gb" id="gb">
         <div class="gb-controls">
           <div class="ex-seg" id="gbAud" role="group" aria-label="Group type">
@@ -10911,11 +10933,45 @@ body.theme-night .page .tag{
 
   <section class="ex-sec ex-sec--tint" id="exMba">
     <div class="ex-wrap">
-      <div class="ex-head">
-        <span class="sec-pre">Purpose-led group travel</span>
+      <div class="ex-head tp-head"><span class="tp-hnum">03</span><div class="tp-htext"><span class="sec-pre">Purpose-led group travel</span>
         <h2 class="sec-title">MBA Experiences</h2>
-      </div>
+        <p>Programs for graduate cohorts and alumni, with premium stays, networking dinners and curated island activities. Every program is quoted for your group.</p>
+      </div></div>
       <div class="curated-tours-grid" id="exMbaGrid"></div>
+      <div class="tp-mbacta">
+        <p><b>Want a price for your group?</b> Pick MBA experiences island by island in the trip builder and see a live estimate, or send us an inquiry.</p>
+        <div class="tp-mbacta-actions">
+          <a href="#" class="btn-primary" onclick="gbSetAudience('mba');toursGo('exBuilder');return false;">Build an MBA group trip</a>
+          <a href="#" class="btn-outline" onclick="openLinkedStartPlanning();return false;">Send an inquiry</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TALK TO A PLANNER ======== -->
+  <section class="ex-sec" id="toursPlan">
+    <div class="ex-wrap">
+      <div class="tp-plan">
+        <div class="tp-plan-copy">
+          <span class="tp-hnum">04</span>
+          <div class="tp-htext">
+            <span class="sec-pre">Talk to a planner</span>
+            <h2 class="sec-title">Not sure where to start?</h2>
+            <p>Tell us about your group, your dates and what you want to feel. A planner will shape the trip with you and reply within one business day.</p>
+          </div>
+        </div>
+        <div class="tp-plan-side">
+          <ul class="tp-points">
+            <li>Groups of 5 or more, from 5 to 60 guests</li>
+            <li>Reserve with a deposit, balance confirmed in your itinerary</li>
+            <li>Transfers, villas and local hosts planned for you</li>
+          </ul>
+          <div class="tp-plan-actions">
+            <a href="#" class="btn-primary" onclick="openLinkedStartPlanning();return false;">Start Planning</a>
+            <a href="tel:+18764650630" class="btn-outline">Call +1 (876) 465-0630</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -50600,7 +50656,7 @@ function vtXRStatus(msg){
   var ORDER=['Jamaica','Barbados','Saint Lucia','The Bahamas','Belize','Curaçao','Dominican Republic'];
   var SHORT={'Saint Lucia':'St Lucia','The Bahamas':'Bahamas','Dominican Republic':'Dom. Rep.'};
   var TAG={'Jamaica':'Rivers, waterfalls and Montego Bay thrills','Barbados':'Turtles, caves and rum','Saint Lucia':'The Pitons and volcanic wellness','The Bahamas':'Pigs, reefs and old Nassau','Belize':'Barrier reef, caves and Maya ruins','Curaçao':'Colour, coast and Klein Curaçao','Dominican Republic':'Saona, buggies and cave swims'};
-  var st={country:'Jamaica',type:'all',area:''};
+  var st={country:'Jamaica',type:'all',area:'',more:false};
   var AREAS={
     'Jamaica':['Montego Bay & Falmouth','Negril','Ocho Rios','Portland','Kingston & Blue Mountains','South Coast'],
     'Barbados':['Bridgetown & West Coast','South Coast','East Coast & Interior','North'],
@@ -50668,10 +50724,13 @@ function vtXRStatus(msg){
         +'<button type="button" class="ex-areas-all'+(st.area==='all'?' on':'')+'" data-area="all">All areas<em>'+l.length+'</em></button></div>';
     }
     if(st.area==='all'&&areas.length>1){
+      var left=st.more?1e9:9,hidden=0;
       areas.forEach(function(a){
         var g=l.filter(function(t){return t.area===a;}).sort(byPrice);
-        html+='<h4 class="ex-group-title">'+esc(a)+' <em>'+g.length+'</em></h4><div class="ex-grid">'+g.map(card).join('')+'</div>';
+        var shown=g.slice(0,Math.max(0,left));left-=shown.length;hidden+=g.length-shown.length;
+        if(shown.length)html+='<h4 class="ex-group-title">'+esc(a)+' <em>'+g.length+'</em></h4><div class="ex-grid">'+shown.map(card).join('')+'</div>';
       });
+      if(hidden>0)html+='<div class="ex-more-wrap"><button type="button" class="ex-more" id="exMore">Show all '+l.length+' experiences</button></div>';
     }else{
       var g=l.filter(function(t){return areas.length<2||t.area===st.area;}).sort(byPrice);
       if(g.length)html+='<div class="ex-grid">'+g.map(card).join('')+'</div>';
@@ -50697,7 +50756,7 @@ function vtXRStatus(msg){
   }
   function setCountry(c){
     st.country=(ORDER.indexOf(c)>-1)?c:'Jamaica';
-    st.area='';
+    st.area='';st.more=false;
     render();
   }
   /* keep the nav-menu links and old helpers working */
@@ -50723,9 +50782,10 @@ function vtXRStatus(msg){
     var tab=t.closest('#exTabs button');
     if(tab){setCountry(tab.getAttribute('data-country'));return;}
     var ar=t.closest('#exAreas button');
-    if(ar){st.area=ar.getAttribute('data-area');render();return;}
+    if(ar){st.area=ar.getAttribute('data-area');st.more=false;render();return;}
+    if(t.closest('#exMore')){st.more=true;render();return;}
     var seg=t.closest('#exType button');
-    if(seg){st.type=seg.getAttribute('data-type');render();return;}
+    if(seg){st.type=seg.getAttribute('data-type');st.more=false;render();return;}
     var btn=t.closest('#exResults .ex-btn');
     if(btn){
       var it=ALL[Number(btn.getAttribute('data-i'))];
@@ -51006,6 +51066,7 @@ function vtXRStatus(msg){
   function init(){if($('gb'))render();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
   window.gbRender=init;
+  window.gbSetAudience=function(a){if(!AUD[a])return;readFields();st.aud=a;st.all=false;save();render();};
 })();
 
 /* ===== after checkout: thank-you notice (packages and group-trip deposits) ===== */
@@ -51284,4 +51345,319 @@ html body .ss-pill-navy{display:inline-block;background:#063a63!important;color:
 html body .discover-jm-toggle,html body .tr-sigclear,html body .landmark-back{background:rgba(6,58,99,.05)!important;color:#063a63!important;border:1px solid rgba(6,58,99,.07)!important;box-shadow:none!important}
 html body .transfer-price{background:rgba(6,58,99,.05)!important;color:#063a63!important;border:1px solid rgba(6,58,99,.07)!important}
 html body .stays-filter-btn.on,html body .stays-country-btn.on,html body .tf-btn.on,html body .pd-tab-btn.on{background:#063a63!important;color:#fff!important;border-color:#063a63!important}
+</style>
+
+<style id="tours-structure-style">
+/* ===== Tours page structure: hero, sticky "on this page" bar, four clearly separated sections ===== */
+#p-tours #tourListSection{padding:70px 0 54px;background:linear-gradient(180deg,#f2f7fb 0%,#fff 100%)}
+#p-tours .tp-lead{max-width:680px;margin:12px auto 0;color:var(--grey);font-size:15px;line-height:1.75}
+#p-tours .tp-ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1100px;margin:36px auto 0}
+#p-tours .tp-way{display:flex;flex-direction:column;gap:6px;padding:24px 24px 22px;background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:18px;text-decoration:none;transition:border-color .2s,transform .2s}
+#p-tours .tp-way:hover{border-color:rgba(239,135,49,.55);transform:translateY(-2px)}
+#p-tours .tp-num{font-family:'Playfair Display',serif;font-size:1.7rem;line-height:1;color:#ef8731;margin-bottom:6px}
+#p-tours .tp-way b{color:#063a63;font-size:1.05rem;letter-spacing:-.1px}
+#p-tours .tp-way em{font-style:normal;color:var(--grey);font-size:13.5px;line-height:1.6}
+#p-tours .tp-go{margin-top:12px;font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#063a63}
+#p-tours .tp-go::after{content:"  \203A";color:#ef8731}
+/* sticky bar (pinned by script because html/body set overflow) */
+#p-tours #tpSubnavWrap{height:57px}
+#p-tours .tp-subnav{background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);border-top:1px solid rgba(6,58,99,.07);border-bottom:1px solid rgba(6,58,99,.09);z-index:900}
+#p-tours .tp-subnav.stuck{position:fixed;top:0;left:0;right:0}
+#p-tours .tp-subnav-in{max-width:1180px;margin:0 auto;padding:10px 24px;display:flex;gap:8px;justify-content:center;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#p-tours .tp-subnav-in::-webkit-scrollbar{display:none}
+#p-tours .tp-subnav button{flex:0 0 auto;font-family:'Raleway',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;line-height:1.2;padding:8px 14px;border-radius:999px;border:1px solid rgba(6,58,99,.07);background:rgba(6,58,99,.05);color:#063a63;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+#p-tours .tp-subnav button:hover{background:rgba(6,58,99,.1)}
+#p-tours .tp-subnav button.on{background:#063a63;border-color:#063a63;color:#fff}
+/* sections as bands */
+#p-tours .ex-sec{padding:72px 0 76px;margin:0;scroll-margin-top:64px}
+#p-tours #toursExplorer{background:#fff}
+#p-tours #exBuilder{background:linear-gradient(180deg,#eef4f9,#f6f9fc);border-top:1px solid rgba(6,58,99,.07);border-bottom:1px solid rgba(6,58,99,.07)}
+#p-tours #exMba{background:#fff;margin-top:0}
+#p-tours #toursPlan{background:linear-gradient(180deg,#fff,#fff6ec);border-top:1px solid rgba(239,135,49,.18)}
+#p-tours .ex-wrap{max-width:1180px}
+/* section header: big number left, text right */
+#p-tours .tp-head{display:flex;align-items:flex-start;gap:26px;text-align:left;max-width:none;margin:0 0 34px;padding-bottom:26px;border-bottom:1px solid rgba(6,58,99,.09)}
+#p-tours .tp-hnum{flex:0 0 auto;font-family:'Playfair Display',serif;font-size:4rem;line-height:.85;color:#ef8731;letter-spacing:-2px}
+#p-tours .tp-htext{min-width:0}
+#p-tours .tp-head .sec-pre{display:block;margin:0 0 4px;text-align:left}
+#p-tours .tp-head .sec-title{margin:0 0 8px;text-align:left}
+#p-tours .tp-head p{margin:0;max-width:640px;text-align:left;color:var(--grey);font-size:14.5px;line-height:1.7}
+/* builder sits in a white card on the tinted band */
+#p-tours #exBuilder .gb{background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:22px;padding:28px 28px 32px}
+/* planner panel */
+#p-tours .tp-plan{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center;padding:0}
+#p-tours .tp-plan-copy{display:flex;align-items:flex-start;gap:26px}
+#p-tours .tp-plan-copy .sec-pre{display:block;margin-bottom:4px}
+#p-tours .tp-plan-copy h2{margin:0 0 10px}
+#p-tours .tp-plan-copy p{margin:0;color:var(--grey);font-size:15px;line-height:1.75;max-width:480px}
+#p-tours .tp-plan-side{background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:22px;padding:28px 30px}
+#p-tours .tp-points{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-direction:column;gap:12px}
+#p-tours .tp-points li{position:relative;padding-left:22px;color:#34495c;font-size:13.5px;line-height:1.55}
+#p-tours .tp-points li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;background:#ef8731}
+#p-tours .tp-plan-actions{display:flex;flex-wrap:wrap;gap:12px}
+#p-tours .tp-plan-actions a{text-decoration:none}
+@media (max-width:900px){
+  #p-tours .tp-ways{grid-template-columns:1fr;max-width:560px}
+  #p-tours .tp-plan{grid-template-columns:1fr;gap:24px}
+  #p-tours .tp-subnav-in{justify-content:flex-start;padding:10px 16px}
+  #p-tours .ex-sec{padding:52px 0 56px}
+  #p-tours .tp-head{gap:16px}#p-tours .tp-hnum{font-size:2.8rem}
+  #p-tours #exBuilder .gb{padding:18px 16px 22px}
+}
+</style>
+<script id="tours-structure-script">
+(function(){
+  var wrap,bar;
+  function barH(){return bar?bar.offsetHeight:0;}
+  window.toursGo=function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var y=el.getBoundingClientRect().top+window.pageYOffset-barH()-4;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  };
+  var MAP={browse:'toursExplorer',build:'exBuilder',mba:'exMba',plan:'toursPlan'};
+  function init(){
+    wrap=document.getElementById('tpSubnavWrap');bar=document.getElementById('tpSubnav');if(!wrap||!bar)return;
+    var btns=[].slice.call(bar.querySelectorAll('button'));
+    btns.forEach(function(b){b.addEventListener('click',function(){window.toursGo(b.getAttribute('data-target'));});});
+    function setOn(id){btns.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-target')===id);});}
+    function update(){
+      var page=document.getElementById('p-tours');
+      if(!page||!page.classList.contains('on')){bar.classList.remove('stuck');return;}
+      var top=wrap.getBoundingClientRect().top;
+      bar.classList.toggle('stuck',top<=0);
+      var line=barH()+80,cur=btns[0].getAttribute('data-target');
+      btns.forEach(function(b){var el=document.getElementById(b.getAttribute('data-target'));if(el&&el.getBoundingClientRect().top<=line)cur=b.getAttribute('data-target');});
+      setOn(cur);
+    }
+    var tick=false;
+    function onScroll(){if(tick)return;tick=true;requestAnimationFrame(function(){tick=false;update();});}
+    window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);
+    update();
+    var h=(location.hash||'').replace('#','').toLowerCase();
+    if(MAP[h]&&/^\/tours\/?$/.test(location.pathname))setTimeout(function(){window.toursGo(MAP[h]);},900);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<style id="tours-structure-style-2">
+/* builder controls: group type and size on one row, islands underneath */
+#p-tours #exBuilder .gb-controls{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px;margin-bottom:16px}
+#p-tours #exBuilder .gb-controls #gbAud{order:1}
+#p-tours #exBuilder .gb-controls .gb-guests{order:2;margin-left:auto}
+#p-tours #exBuilder .gb-controls #gbTabs{order:3;flex:1 1 100%;max-width:100%}
+/* explorer: show more */
+#p-tours .ex-more-wrap{display:flex;justify-content:center;margin:26px 0 6px}
+#p-tours .ex-more{font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;line-height:1.2;padding:13px 26px;background:#fff;color:#063a63;border:1px solid rgba(6,58,99,.16);border-radius:0;cursor:pointer;transition:background .2s}
+#p-tours .ex-more:hover{background:#f4f8fb}
+/* MBA: route into the builder */
+#p-tours .tp-mbacta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 28px;margin-top:34px;padding:22px 26px;background:linear-gradient(180deg,#fff,#f6f9fc);border:1px solid rgba(6,58,99,.09);border-radius:18px}
+#p-tours .tp-mbacta p{margin:0;max-width:560px;color:#516b80;font-size:14px;line-height:1.65}
+#p-tours .tp-mbacta p b{color:#063a63}
+#p-tours .tp-mbacta-actions{display:flex;flex-wrap:wrap;gap:12px}
+#p-tours .tp-mbacta-actions a{text-decoration:none}
+</style>
+<style id="tours-structure-style-3">
+html body #p-tours #tpSubnav button{font-size:10.5px!important;padding:8px 14px!important;letter-spacing:.9px!important;line-height:1.2!important;min-height:0!important;height:auto!important;width:auto!important}
+html body #p-tours #tpSubnav{font-size:10.5px}
+</style>
+
+<style id="browse-style">
+/* ===== Browse experiences: sort bar + card grid + "Plan Your Trip" filter panel ===== */
+#p-tours .bx{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:34px;align-items:start}
+#p-tours .bx-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+#p-tours .bx-sort{max-width:100%;overflow-x:auto;scrollbar-width:none}
+#p-tours .bx-sort::-webkit-scrollbar{display:none}
+#p-tours .bx-toggle{display:none;font-family:'Raleway',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;padding:9px 16px;border-radius:999px;background:#063a63;color:#fff;border:1px solid #063a63;cursor:pointer}
+#p-tours .bx-count{margin:0 0 18px;color:#6f8294;font-size:12.5px;font-weight:700}
+#p-tours .bx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+#p-tours .bx-card{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:18px;overflow:hidden;transition:border-color .2s,transform .2s}
+#p-tours .bx-card:hover{border-color:rgba(6,58,99,.2);transform:translateY(-2px)}
+#p-tours .bx-media{position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,#0c4e80,#0e7490);overflow:hidden}
+#p-tours .bx-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#p-tours .bx-chip{position:absolute;top:12px;left:12px;z-index:2;padding:7px 12px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;background:rgba(255,255,255,.82);color:#063a63;border:1px solid rgba(255,255,255,.65);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px)}
+#p-tours .bx-meta{display:flex;flex-wrap:wrap;gap:6px 18px;padding:11px 18px;background:#eef4f9;color:#34495c;font-size:12px;font-weight:700;border-bottom:1px solid rgba(6,58,99,.07)}
+#p-tours .bx-meta span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+#p-tours .bx-meta i{color:#ef8731;font-size:12px}
+#p-tours .bx-body{display:flex;flex-direction:column;flex:1;padding:18px 20px 20px}
+#p-tours .bx-body h3{margin:0 0 4px;font-size:1.08rem;line-height:1.3;color:#063a63;letter-spacing:-.1px}
+#p-tours .bx-hero{margin:0 0 8px;color:#e07a22;font-size:12.5px;font-weight:700}
+#p-tours .bx-desc{margin:0 0 10px;color:#5b6e7e;font-size:13.5px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#p-tours .bx-best{margin:0 0 14px;font-size:12px;color:#6f8294;line-height:1.5}
+#p-tours .bx-best b{color:#4b6075;font-weight:800;margin-right:4px}
+#p-tours .bx-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid rgba(6,58,99,.07)}
+#p-tours .bx-price{font-weight:800;color:#063a63;font-size:15px}
+#p-tours .bx-price small{display:block;color:#8aa0b3;font-weight:700;font-size:11px}
+#p-tours .bx-btn{font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;line-height:1.2;padding:12px 18px;background:#ef8731;color:#fff;border:1px solid #ef8731;border-radius:0;cursor:pointer;transition:background .2s}
+#p-tours .bx-btn:hover{background:#e07a22}
+#p-tours .bx-more-wrap{display:flex;justify-content:center;margin:28px 0 0}
+#p-tours .bx-empty{grid-column:1/-1;padding:40px 24px;text-align:center;border:1px solid rgba(6,58,99,.12);border-radius:18px;color:#6f8294;font-size:14px;background:#fff}
+#p-tours #bxPackages{margin-top:44px}
+#p-tours #bxPackages h4{margin:0 0 16px;font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:#4b6075;font-weight:800}
+/* filter panel */
+#p-tours .bx-side{position:sticky;top:78px;background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:18px;padding:24px 22px 22px}
+#p-tours .bx-side h3{margin:0 0 2px;font-size:1.25rem;color:#063a63;font-family:'Playfair Display',serif}
+#p-tours .bx-side-sub{margin:0 0 18px;color:#6f8294;font-size:13px}
+#p-tours .bx-f{display:block;margin:0 0 16px}
+#p-tours .bx-f>span{display:flex;justify-content:space-between;margin:0 0 7px;color:#4b6075;font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase}
+#p-tours .bx-f>span b{color:#ef8731;letter-spacing:0;font-size:12px}
+#p-tours .bx-f input[type=search],#p-tours .bx-f select{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid rgba(6,58,99,.14);border-radius:0;background:#fff;color:#18334c;font-family:'Raleway',sans-serif;font-size:13.5px;outline:none}
+#p-tours .bx-f input[type=search]:focus,#p-tours .bx-f select:focus{border-color:#0e5489}
+#p-tours .bx-f input[type=range]{width:100%;accent-color:#ef8731}
+#p-tours .bx-tags{display:flex;flex-direction:column;gap:9px}
+#p-tours .bx-tags label{display:flex;align-items:center;gap:10px;color:#34495c;font-size:13.5px;cursor:pointer}
+#p-tours .bx-tags input{accent-color:#ef8731;width:16px;height:16px;margin:0}
+#p-tours .bx-tags em{margin-left:auto;font-style:normal;color:#8aa0b3;font-size:12px}
+#p-tours .bx-reset{width:100%;font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:12px;background:#fff;color:#063a63;border:1px solid rgba(6,58,99,.16);border-radius:0;cursor:pointer}
+#p-tours .bx-reset:hover{background:#f4f8fb}
+#p-tours .bx-side-cta{margin-top:20px;padding-top:18px;border-top:1px solid rgba(6,58,99,.09)}
+#p-tours .bx-side-cta b{color:#063a63;font-size:14px}
+#p-tours .bx-side-cta p{margin:4px 0 12px;color:#6f8294;font-size:12.5px;line-height:1.55}
+#p-tours .bx-side-cta a{display:block;text-align:center;text-decoration:none}
+@media (max-width:980px){
+  #p-tours .bx{grid-template-columns:1fr;gap:18px}
+  #p-tours .bx-side{order:-1;position:static;display:none}
+  #p-tours .bx-side.open{display:block}
+  #p-tours .bx-toggle{display:inline-block}
+}
+@media (max-width:640px){#p-tours .bx-grid{grid-template-columns:1fr}}
+</style>
+<script id="browse-script">
+(function(){
+  var ALL=window.CURATED_TOURS||[];
+  var ORDER=['Jamaica','Barbados','Saint Lucia','The Bahamas','Belize','Cura\u00e7ao','Dominican Republic'];
+  var STEP=12;
+  function esc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function $(id){return document.getElementById(id);}
+  function exps(){return ALL.filter(function(t){return t.type==='water'||t.type==='land';});}
+  function pv(t){return Number(t.priceValue||0);}
+  function best(t){return (typeof window.__exBestFor==='function'?window.__exBestFor(t):'')||'';}
+  function tagsOf(t){return best(t).split(' \u00b7 ').map(function(x){return x.trim();}).filter(function(x){return x&&!/^Groups of 5/i.test(x);});}
+  var st={q:'',country:'all',area:'all',type:'all',max:null,tags:[],sort:'featured',shown:STEP};
+  var MAXP=0;
+  function priceText(t){
+    if(!(pv(t)>0))return {main:'Price on request',sub:''};
+    var grp=/per group/i.test(String(t.priceLabel||'')+(t.per==='group'?' per group':''));
+    return {main:'$'+pv(t).toLocaleString('en-US'),sub:grp?'per group'+(t.cap?' (up to '+t.cap+')':''):'per person'};
+  }
+  function filtered(){
+    var q=st.q.trim().toLowerCase();
+    return exps().filter(function(t){
+      if(st.country!=='all'&&t.country!==st.country)return false;
+      if(st.area!=='all'&&t.area!==st.area)return false;
+      if(st.type!=='all'&&t.type!==st.type)return false;
+      if(st.max!==null&&st.max<MAXP){var p=pv(t);if(!(p>0)||p>st.max)return false;}
+      if(st.tags.length){var tg=tagsOf(t);if(!st.tags.some(function(x){return tg.indexOf(x)>-1;}))return false;}
+      if(q){var hay=(t.title+' '+t.hero+' '+t.desc+' '+t.area+' '+t.country).toLowerCase();if(hay.indexOf(q)<0)return false;}
+      return true;
+    });
+  }
+  function sortList(l){
+    var a=l.slice();
+    function p(t){return pv(t)>0?pv(t):1e9;}
+    if(st.sort==='low')a.sort(function(x,y){return p(x)-p(y);});
+    else if(st.sort==='high')a.sort(function(x,y){var px=pv(x)>0?pv(x):-1,py=pv(y)>0?pv(y):-1;return py-px;});
+    else if(st.sort==='az')a.sort(function(x,y){return x.title.localeCompare(y.title);});
+    else a.sort(function(x,y){var c=ORDER.indexOf(x.country)-ORDER.indexOf(y.country);return c||(p(x)-p(y));});
+    return a;
+  }
+  function card(t){
+    var i=ALL.indexOf(t),isW=t.type==='water',pr=priceText(t);
+    return '<article class="bx-card"><div class="bx-media"><img src="'+esc(t.image)+'" alt="'+esc(t.title)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="bx-chip">'+(isW?'Water':'Land')+'</span></div>'
+      +'<div class="bx-meta"><span><i class="far fa-clock"></i>'+esc(t.duration)+'</span><span><i class="fas fa-map-marker-alt"></i>'+esc(t.country)+(t.area?', '+esc(t.area):'')+'</span></div>'
+      +'<div class="bx-body"><h3>'+esc(t.title)+'</h3><p class="bx-hero">'+esc(t.hero)+'</p><p class="bx-desc">'+esc(t.desc)+'</p>'
+      +'<p class="bx-best"><b>Best for</b>'+esc(best(t))+'</p>'
+      +'<div class="bx-foot"><span class="bx-price">'+esc(pr.main)+(pr.sub?'<small>'+esc(pr.sub)+'</small>':'')+'</span><button type="button" class="bx-btn" data-i="'+i+'">Inquire now</button></div></div></article>';
+  }
+  function fillControls(){
+    var c=$('bxCountry');if(!c||c.options.length)return;
+    var all=exps();
+    c.innerHTML='<option value="all">All islands ('+all.length+')</option>'+ORDER.map(function(k){var n=all.filter(function(t){return t.country===k;}).length;return '<option value="'+esc(k)+'">'+esc(k)+' ('+n+')</option>';}).join('');
+    var prices=all.map(pv).filter(function(n){return n>0;});MAXP=Math.ceil(Math.max.apply(null,prices)/10)*10;
+    var r=$('bxPrice');r.min=Math.floor(Math.min.apply(null,prices)/5)*5;r.max=MAXP;r.value=MAXP;st.max=MAXP;
+    var cnt={};all.forEach(function(t){tagsOf(t).forEach(function(x){cnt[x]=(cnt[x]||0)+1;});});
+    var tg=Object.keys(cnt).filter(function(k){return cnt[k]>=4;}).sort(function(a,b){return cnt[b]-cnt[a];}).slice(0,8);
+    $('bxTags').innerHTML=tg.map(function(k){return '<label><input type="checkbox" value="'+esc(k)+'"><span>'+esc(k)+'</span><em>'+cnt[k]+'</em></label>';}).join('');
+  }
+  function fillAreas(){
+    var w=$('bxAreaWrap'),a=$('bxArea');if(!w||!a)return;
+    if(st.country==='all'){w.style.display='none';st.area='all';return;}
+    var cnt={};exps().filter(function(t){return t.country===st.country;}).forEach(function(t){if(t.area)cnt[t.area]=(cnt[t.area]||0)+1;});
+    var ar=Object.keys(cnt).sort(function(x,y){return cnt[y]-cnt[x];});
+    if(ar.length<2){w.style.display='none';st.area='all';return;}
+    w.style.display='';
+    a.innerHTML='<option value="all">All areas</option>'+ar.map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+' ('+cnt[k]+')</option>';}).join('');
+    a.value=ar.indexOf(st.area)>-1?st.area:'all';st.area=a.value;
+  }
+  function render(){
+    var grid=$('bxGrid');if(!grid)return;
+    fillControls();
+    var list=sortList(filtered()),total=list.length;
+    document.querySelectorAll('#bxSort button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-sort')===st.sort);});
+    document.querySelectorAll('#bxType button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-type')===st.type);});
+    var pvl=$('bxPriceVal');if(pvl)pvl.textContent=(st.max!==null&&st.max<MAXP)?'up to $'+st.max:'any';
+    var shown=list.slice(0,st.shown);
+    grid.innerHTML=shown.length?shown.map(card).join(''):'<div class="bx-empty">No experiences match those filters. Try widening the price or removing a filter, or <a href="#" onclick="openLinkedStartPlanning();return false;" style="text-decoration:underline">tell us what you have in mind</a>.</div>';
+    $('bxCount').textContent=total?('Showing '+shown.length+' of '+total+' experience'+(total===1?'':'s')):'';
+    $('bxMoreWrap').innerHTML=total>shown.length?'<button type="button" class="ex-more" id="bxMore">Show '+Math.min(STEP,total-shown.length)+' more</button>':'';
+    var pk=$('bxPackages'),b=window.__buildCuratedCard;
+    if(pk){
+      var pl=(st.country!=='all'&&typeof b==='function')?ALL.filter(function(t){return t.type==='package'&&t.country===st.country;}):[];
+      pk.innerHTML=pl.length?'<h4 id="exCountryPackages">Custom packages for '+esc(st.country)+' <em>'+pl.length+'</em></h4><div class="curated-tours-grid">'+pl.map(b).join('')+'</div>':'';
+    }
+  }
+  function renderMba(){
+    var b=window.__buildCuratedCard,m=$('exMbaGrid');
+    if(typeof b!=='function'||!m)return;
+    m.innerHTML=ALL.filter(function(t){return t.type==='mba';}).map(b).join('');
+  }
+  function reset(){st.q='';st.country='all';st.area='all';st.type='all';st.max=MAXP;st.tags=[];st.shown=STEP;
+    $('bxQ').value='';$('bxCountry').value='all';$('bxPrice').value=MAXP;document.querySelectorAll('#bxTags input').forEach(function(i){i.checked=false;});fillAreas();render();}
+  function scrollToId(id){var el=$(id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+(window.pageYOffset||0)-70,behavior:'smooth'});}
+  /* keep the nav-menu links and older helpers working */
+  window.setCuratedCountry=function(c){st.country=(ORDER.indexOf(c)>-1)?c:'all';st.area='all';st.shown=STEP;if($('bxCountry'))$('bxCountry').value=st.country;fillAreas();render();};
+  window.setCuratedType=function(type){
+    type=type||'all';
+    if(type==='mba'){scrollToId('exMba');return;}
+    if(type==='package'){if(st.country==='all')st.country='Jamaica';if($('bxCountry'))$('bxCountry').value=st.country;fillAreas();render();scrollToId($('exCountryPackages')?'exCountryPackages':'toursExplorer');return;}
+    st.type=(type==='water'||type==='land')?type:'all';st.shown=STEP;render();scrollToId('toursExplorer');
+  };
+  window.filterT=function(btn,type){window.setCuratedType(type);return false;};
+  window.openToursFilter=function(type){
+    if(typeof nav==='function')nav('tours',{skipScroll:true});
+    window.scrollTo({top:0,left:0,behavior:'instant'});
+    setTimeout(function(){window.setCuratedType(type);},380);
+  };
+  window.renderTours=function(){render();renderMba();};
+
+  document.addEventListener('click',function(e){
+    var t=e.target;if(!t||!t.closest)return;
+    var so=t.closest('#bxSort button');if(so){st.sort=so.getAttribute('data-sort');st.shown=STEP;render();return;}
+    var ty=t.closest('#bxType button');if(ty){st.type=ty.getAttribute('data-type');st.shown=STEP;render();return;}
+    if(t.closest('#bxMore')){st.shown+=STEP;render();return;}
+    if(t.closest('#bxReset')){reset();return;}
+    if(t.closest('#bxToggle')){var sd=$('bxSide'),o=sd.classList.toggle('open');t.closest('#bxToggle').setAttribute('aria-expanded',String(o));return;}
+    var btn=t.closest('#bxGrid .bx-btn');
+    if(btn){var it=ALL[Number(btn.getAttribute('data-i'))];if(it&&typeof openStartPlanning==='function')openStartPlanning(it.country,it.title,it.label||'Experience','Interested in '+it.title+' in '+it.country+'.');}
+  });
+  document.addEventListener('input',function(e){
+    var t=e.target;if(!t||!t.id)return;
+    if(t.id==='bxQ'){st.q=t.value;st.shown=STEP;render();}
+    else if(t.id==='bxPrice'){st.max=Number(t.value);st.shown=STEP;render();}
+  });
+  document.addEventListener('change',function(e){
+    var t=e.target;if(!t)return;
+    if(t.id==='bxCountry'){st.country=t.value;st.area='all';st.shown=STEP;fillAreas();render();}
+    else if(t.id==='bxArea'){st.area=t.value;st.shown=STEP;render();}
+    else if(t.closest&&t.closest('#bxTags')){st.tags=[].slice.call(document.querySelectorAll('#bxTags input:checked')).map(function(i){return i.value;});st.shown=STEP;render();}
+  });
+  function init(){render();renderMba();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<style id="tours-intro-style">
+#p-tours #tourListSection{padding:64px 0 40px}
+#p-tours .tp-intro{max-width:780px;margin:30px auto 0;padding:26px 30px;text-align:center;background:#fff;border:1px solid rgba(6,58,99,.09);border-radius:18px}
+#p-tours .tp-intro p{margin:0 auto 18px;max-width:640px;color:var(--grey);font-size:14.5px;line-height:1.8}
+#p-tours .tp-intro a{text-decoration:none}
 </style>
