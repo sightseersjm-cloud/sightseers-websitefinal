@@ -9492,13 +9492,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
         </div>
       </li>
       <li class="nav-item">
-        <a href="#" onclick="nav('shop')" id="n-shop">Shop ▾</a>
-        <div class="dropdown">
-          <a href="#" onclick="nav('shop')">All Products</a>
-          <a href="#" onclick="nav('giftcards')">Gift Cards</a>
-        </div>
-      </li>
-      <li class="nav-item">
         <a href="#" onclick="nav('about')" id="n-about">About ▾</a>
         <div class="dropdown">
           <a href="#" onclick="nav('about')">About</a>
@@ -9557,8 +9550,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="openStayCountryPage('Curaçao','all');closeMob();return false;">Curaçao</a>
   </div>
 
-  <a href="#" onclick="nav('shop');closeMob()">Shop</a>
-  <a href="#" onclick="nav('giftcards');closeMob()">Gift Cards</a>
 
   <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">More <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
   <div class="mob-group">
@@ -12944,9 +12935,6 @@ body.theme-night .page .tag{
         <button class="tf-btn on" data-shop-filter="all" onclick="filterShop(this,'all')">All Products</button>
       </div>
       <div class="shop-grid reveal" id="shopGrid"></div>
-      <div class="shop-cta-row reveal">
-        <a href="#" class="btn-outline" onclick="nav('giftcards')">Explore Gift Cards <i class="fas fa-arrow-right"></i></a>
-      </div>
     </div>
   </section>
 
@@ -12987,101 +12975,6 @@ body.theme-night .page .tag{
           <div class="pd-tab-content" id="tab-reviews"><p>★★★★★, "Absolutely love this! Perfect for Caribbean travels.", Maria R.<br><br>★★★★★, "Great quality and fast shipping. Will order again!", James T.</p></div>
         </div>
         <div style="margin-top:28px;padding:18px;background:rgba(245,121,59,.07);border-left:4px solid var(--orange);font-size:12px;color:var(--dark);line-height:1.8"><strong style="color:var(--orange)">Note:</strong> For custom orders, bulk purchases, or gift wrapping, please contact us at <a href="mailto:info@sightseerscaribbean.com" style="color:var(--navy)">info@sightseerscaribbean.com</a>.</div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- ════════════════════════════════════
-     GIFT CARDS PAGE
-════════════════════════════════════ -->
-<div class="page" id="p-giftcards">
-  <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1600&q=85&auto=format&fit=crop')"><div class="ph-inner"><h1 class="ph-title">Gift Cards</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><a href="#" onclick="nav('shop')" style="color:var(--orange)">Shop</a><span>/</span><span>Gift Cards</span></div></div></div>
-  <section class="gift-sec" style="padding-top:90px">
-    <div class="gift-wrap">
-      <div class="gift-layout reveal">
-        <div class="gift-feature" style="background-image:url('https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1400&q=85&auto=format&fit=crop')">
-          <div class="gift-feature-top">
-            <div class="gift-over">Sight Seers Gift Cards</div>
-            
-          </div>
-          <div>
-            <h3>Gift a glossy island moment.</h3>
-            <p>A more interactive gifting experience with a luxe card feel, smooth hover highlights and flexible value for elevated Caribbean escapes.</p>
-            <div class="gift-spin-stage">
-              <div class="gift-spin-card">
-                <div class="gift-spin-card-face gift-spin-card-front">
-                  <div class="gift-spin-inner">
-                    <div class="gift-spin-top">
-                      <span class="gift-spin-badge">Tropical Gift Card</span>
-                      <span class="gift-spin-location">Jamaica & Beyond</span>
-                    </div>
-                    <div class="gift-spin-middle">
-                      <strong>Sunlit Escape Pass</strong>
-                      <span>Photo-style tropical gifting for excursions, luxe stays, airport upgrades and celebration travel moments.</span>
-                    </div>
-                    <div class="gift-spin-bottom">
-                      <div>
-                        <div class="gift-spin-emv"></div>
-                        <div class="gift-spin-number">SS • 2026 • TRAVEL</div>
-                      </div>
-                      <div class="gift-spin-amount"><em>Starting at</em><strong>$50</strong></div>
-                    </div>
-                    <div class="gift-spin-brandline">
-                      <div class="gift-spin-brandmark">Sight Seers<em>Caribbean Adventures</em></div>
-                      <div class="gift-spin-signature">Travel in style</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="gift-spin-card-face gift-spin-card-back">
-                  <div class="gift-spin-backcopy">
-                    <div>
-                      <strong>Curated Island Gifting</strong>
-                      <p>Redeem toward elevated Caribbean escapes, private transfers, curated tours, premium stays and celebration-ready travel experiences.</p>
-                    </div>
-                    <div>
-                      <div class="gift-spin-strip"></div>
-                      <div class="gift-spin-backmeta">
-                        <span>Gift card collection<b>Travel credit</b></span>
-                        <span>Redeem online<b>Sight Seers JM</b></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="gift-preview-card">
-              <div class="gift-preview-icon"></div>
-              <div class="gift-preview-copy"><strong>Signature Travel Gift</strong><span>Real-card tropical styling for excursions, airport upgrades, stays and curated island experiences.</span></div>
-              <div class="gift-preview-value">$50+</div>
-            </div>
-            <div class="gift-cta">
-              <button class="btn-primary" onclick="addGiftCardToCart(50)"><i class="fas fa-shopping-bag"></i>Add $50 Card</button>
-              <button class="btn-secondary" onclick="openCart()">View Cart</button>
-            </div>
-            <div class="gift-spotlight">
-              <div class="gift-chip"><strong>Instantly Giftable</strong><span>Great for clients, graduates, bridal parties and celebration groups.</span></div>
-              <div class="gift-chip"><strong>Flexible Value</strong><span>Use it for tours, add-ons, airport upgrades and curated island moments.</span></div>
-              <div class="gift-chip"><strong>Glossy Finish</strong><span>Layered shine, soft glass details and a more premium on-page presentation.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="gift-panel">
-          <span class="sec-pre">Choose A</span>
-          <h2 class="sec-title">Gift Card Amount</h2>
-          <p class="sec-sub">.</p>
-          <div class="gift-options">
-            <div class="gift-option"><div class="gift-option-top"><div class="gift-amount">$50</div><span class="gift-badge">Starter Gift</span></div><p class="gift-copy">A thoughtful starter gift for airport lounge add-ons, travel accessories or light excursion credit.</p><div class="gift-option-meta"><span>Light Luxe</span><span>Instant Add</span></div><button class="gift-add-btn" onclick="window.open('https://buy.stripe.com/bJecN62n0dEHa541QE5kk02','_blank','noopener')"><i class="fas fa-shopping-bag"></i>Buy $50 Card</button></div>
-            <div class="gift-option"><div class="gift-option-top"><div class="gift-amount">$100</div><span class="gift-badge">Popular Pick</span></div><p class="gift-copy">Ideal for couples, premium transfers or surprise vacation extras with flexible redemption value.</p><div class="gift-option-meta"><span>Couples</span><span>Best Seller</span></div><button class="gift-add-btn" onclick="window.open('https://buy.stripe.com/aFadRa0eScAD3GGgLy5kk03','_blank','noopener')"><i class="fas fa-shopping-bag"></i>Buy $100 Card</button></div>
-            <div class="gift-option"><div class="gift-option-top"><div class="gift-amount">$150</div><span class="gift-badge">Adventure</span></div><p class="gift-copy">Perfect for adventure lovers booking rafting, ATV, catamaran or multi-stop island experiences.</p><div class="gift-option-meta"><span>Experiences</span><span>Curated</span></div><button class="gift-add-btn" onclick="window.open('https://buy.stripe.com/28E7sM1iWcAD0uu1QE5kk04','_blank','noopener')"><i class="fas fa-shopping-bag"></i>Buy $150 Card</button></div>
-            <div class="gift-option"><div class="gift-option-top"><div class="gift-amount">$200</div><span class="gift-badge">Premium</span></div><p class="gift-copy">A premium gift tier for curated island memories, elevated experiences and larger celebration trips.</p><div class="gift-option-meta"><span>VIP Feel</span><span>Luxury Escape</span></div><button class="gift-add-btn" onclick="window.open('https://buy.stripe.com/aFa9AU2n0eIL2CC8f25kk05','_blank','noopener')"><i class="fas fa-shopping-bag"></i>Buy $200 Card</button></div>
-          </div>
-          <ul class="gift-perks">
-            <li>Redeemable toward tours, excursions and eligible shop purchases.</li>
-            <li>Great for birthdays, weddings, corporate gifting and travel incentives.</li>
-            <li>Easy to keep updating through the admin portal as your offers and wording evolve.</li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
@@ -21671,7 +21564,7 @@ vtSessionAction=function(el,type){
               <ul>
                 <li>Park entry fees once remitted.</li>
                 <li>Merchant and bank processing fees, usually 2 to 3%, which may be withheld by your issuing bank.</li>
-                <li>Gift cards and promotional vouchers may be transferred, but are never refundable for cash.</li>
+                <li>Sight Seers Caribbean Adventures gift cards and promotional vouchers may be transferred, but are never refundable for cash.</li>
               </ul>
             </div>
           </div>
@@ -22028,7 +21921,6 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('about')"><i class="fas fa-chevron-right"></i>About Us</a></li>
         <li><a href="#" onclick="nav('tours')"><i class="fas fa-chevron-right"></i>Tours &amp; Excursions</a></li>
         <li><a href="#" onclick="nav('destinations')"><i class="fas fa-chevron-right"></i>Destinations</a></li>
-        <li><a href="#" onclick="nav('shop')"><i class="fas fa-chevron-right"></i>Travel Shop</a></li>
         <li><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
         <li><a href="#" onclick="nav('partners')"><i class="fas fa-chevron-right"></i>Our Partners</a></li>
         <li><a href="#" onclick="nav('vtours')"><i class="fas fa-chevron-right"></i>V-Tours</a></li>
@@ -22099,7 +21991,6 @@ vtSessionAction=function(el,type){
     <button type="button" onclick="quickAskSightSeers('Help me renew my Jamaican passport')">Passport</button>
     <button type="button" onclick="quickAskSightSeers('Book Club Mobay or Club Kingston')">VIP Arrivals</button>
     <button type="button" onclick="quickAskSightSeers('Help me plan a group trip')">Group Trip</button>
-    <button type="button" onclick="quickAskSightSeers('How do gift cards work?')">Gift Cards</button>
   </div>
   <div class="ss-bot-input">
     <textarea id="ssBotInput" rows="1" placeholder="Ask about tours, transfers, villas…"></textarea>
@@ -22750,7 +22641,7 @@ function buildAdminSidebarNav(){
   if(!nav) return;
   var cats=[
     {label:'Content & Brand',icon:'fa-pen-nib',keys:['global','home','about','contact','blog','partners','account','adminportal']},
-    {label:'Packages & Listings',icon:'fa-suitcase-rolling',keys:['tours','shop','giftcards','discoverjamaica','destinations','booking','passport','stays','customSchoolTours','customSeniorTours','transfersPlus','yachtPlus']},
+    {label:'Packages & Listings',icon:'fa-suitcase-rolling',keys:['tours','shop','discoverjamaica','destinations','booking','passport','stays','customSchoolTours','customSeniorTours','transfersPlus','yachtPlus']},
     {label:'Images & Media',icon:'fa-image',keys:['gallery']},
     {label:'Layout & Design',icon:'fa-sliders-h',keys:['customBuilder']}
   ];
@@ -23996,7 +23887,7 @@ function filterShop(btn,f){
 
 function openProduct(id){
   const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
-  if(p.type==='gifts'){nav('giftcards');return;}
+  if(p.type==='gifts'){nav('tours');return;}
   currentProduct=p;
   document.getElementById('shopListSection').style.display='none';
   document.getElementById('productDetailSection').style.display='block';
@@ -26246,8 +26137,6 @@ var SS_ROUTES = {
      landing pages under public/virtual-tours/, and Vercel serves static files
      before applying the SPA rewrite, so reloading there would leave the app. */
   'vtours':'/live-360',
-  'shop':'/shop',
-  'giftcards':'/gift-cards',
   'gallery':'/gallery',
   'about':'/about',
   'partners':'/partners',
@@ -26280,7 +26169,6 @@ var SS_META = {
   'landmark':['Landmark Caribbean Experiences | Sight Seers','Signature Caribbean experiences for travellers who want the trip to be the story, not the backdrop.'],
   'vtours':['360 Live Virtual Caribbean Tours & Experiences','Explore Caribbean destinations in 360 with live local guides. Join a session, ask questions in real time, and book the real trip when you are ready.'],
   'shop':['Shop | Sight Seers Caribbean','Sight Seers Caribbean merchandise and travel goods.'],
-  'giftcards':['Caribbean Travel Gift Cards | Sight Seers','Give a Caribbean experience. Gift cards redeemable across tours, transfers, villas and charters.'],
   'gallery':['Gallery | Sight Seers Caribbean','Photographs and video from Caribbean tours, villas, charters and virtual sessions.'],
   'about':['About Sight Seers Caribbean, Our Story & Team','Meet the team behind Sight Seers Caribbean, locally rooted, guest-obsessed, and based in Ocho Rios, Jamaica.'],
   'partners':['Partners & Affiliates | Sight Seers Caribbean','The operators, hotels and transport partners we work with across the Caribbean.'],
@@ -26339,6 +26227,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function nav(id,opts={}){
+  if(id==='shop'||id==='giftcards')id='tours';
   closeBlog();
   closeRhythmTour(true);
   closeSnapshot(true);
@@ -26982,10 +26871,9 @@ try{
 function getSightSeersBotDefaultHistory(){
   return [{
     role:'bot',
-    text:`Hi, I’m the <strong>Sight Seers AI Concierge</strong>, built just for Sight Seers Caribbean Adventures. I can help guests choose tours, open booking pages, point them to gift cards, VIP airport lounge access, transport support and the live Jamaica landmark tour.`,
+    text:`Hi, I’m the <strong>Sight Seers AI Concierge</strong>, built just for Sight Seers Caribbean Adventures. I can help guests choose tours, open booking pages, VIP airport lounge access, transport support and the live Jamaica landmark tour.`,
     actions:[
       {label:'Explore Tours',type:'nav',target:'tours'},
-      {label:'Gift Cards',type:'nav',target:'giftcards'},
       {label:'VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'},
       {label:'Start Planning',type:'nav',target:'booking'}
     ]
@@ -27067,7 +26955,7 @@ function getBotReply(message){
   const school=TOURS.find(t=>t.id===8);
   const mba=TOURS.find(t=>t.id===5);
   if(!q){
-    return {text:'Ask me about tours, pricing, passport renewal, gift cards, VIP lounges, guest accounts, transport or the virtual Caribbean tour with LAM.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'}]};
+    return {text:'Ask me about tours, pricing, passport renewal, VIP lounges, guest accounts, transport or the virtual Caribbean tour with LAM.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'}]};
   }
   if(/hello|hi|hey|good morning|good afternoon|good evening/.test(q)){
     return {text:'Welcome to Sight Seers Caribbean Adventures. Tell me the kind of vibe you want and I will point you to the right experience, adrenaline, scenic, romantic, group, premium or quick gift options.',actions:[{label:'Find My Tour',type:'nav',target:'tours'},{label:'Open Virtual Tour',type:'rhythm',target:'home'}]};
@@ -27094,7 +26982,7 @@ function getBotReply(message){
     return {text:`Sight Seers also supports custom group planning. <strong>${school.title}</strong> is set up for institutions and larger guest groups, and pricing is handled through a quote request so the itinerary can be tailored properly.`,actions:[{label:'Open Group Package',type:'tour',target:String(school.id)},{label:'Request Quote',type:'nav',target:'booking'}]};
   }
   if(/gift|gift card|voucher|present/.test(q)){
-    return {text:'Gift cards live on their own page and are great for birthdays, special surprises and flexible trip planning. Guests can browse them directly from the popup and add them to the cart. ',actions:[{label:'Open Gift Cards',type:'nav',target:'giftcards'},{label:'Open Cart',type:'cart',target:'cart'}]};
+    return {text:'We do not sell gift cards online at the moment. If you would like to give a trip as a gift, tell us about it and we will put something together for you.',actions:[{label:'Start Planning',type:'nav',target:'booking'}]};
   }
   if(/club mobay|club kingston|vip|lounge|airport/.test(q)){
     return {text:'Club Mobay and Club Kingston are both connected to your affiliate booking link on the site. That makes it easy for guests to jump straight into VIP airport lounge booking from the assistant. You can also direct them to the contact page if they need help pairing lounge access with transport.',actions:[{label:'Book VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'},{label:'Contact Team',type:'nav',target:'contact'}]};
@@ -27123,7 +27011,7 @@ function getBotReply(message){
   if(/partner/.test(q)){
     return {text:'Partners now live on their own dedicated page so guests can browse them cleanly without clutter in the main navigation dropdown.',actions:[{label:'Open Partners Page',type:'nav',target:'partners'}]};
   }
-  return {text:'I can help with tours, passport renewal, gift cards, group packages, VIP airport lounges, transport support, booking flow and the LAM virtual Caribbean tour. Tell me the experience you want and I will take you there.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'},{label:'VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'}]};
+  return {text:'I can help with tours, passport renewal, group packages, VIP airport lounges, transport support, booking flow and the LAM virtual Caribbean tour. Tell me the experience you want and I will take you there.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'},{label:'VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'}]};
 }
 function submitSightSeersBot(){
   const input=document.getElementById('ssBotInput'); if(!input) return;
@@ -44141,7 +44029,7 @@ window.handleDashboardCardClick=function(action,e){
   try{
     switch(action){
       case 'tours': nav('tours'); break;
-      case 'cart': if(typeof openCart==='function'){ openCart(); } else { nav('shop'); } break;
+      case 'cart': if(typeof openCart==='function'){ openCart(); } else { nav('tours'); } break;
       case 'booking': if(typeof window.openProfileBookingRequest==='function'){ window.openProfileBookingRequest(); } else { nav('booking'); } break;
       case 'blog': if(typeof window.openBlogRequestComposer==='function'){ window.openBlogRequestComposer(); } else { nav('blogrequest'); } break;
       default: return false;
@@ -44235,7 +44123,7 @@ window.openBlogRequestComposer=function(){
       if(action==='tours'){ nav('tours'); return false; }
       if(action==='cart'){
         if(typeof openCart==='function'){ openCart(); }
-        else{ nav('shop'); }
+        else{ nav('tours'); }
         return false;
       }
       if(action==='booking'){
