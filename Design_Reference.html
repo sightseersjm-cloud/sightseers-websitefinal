@@ -10859,7 +10859,6 @@ body.theme-night .page .tag{
   <!-- ======== SINGLE EXPERIENCES BY ISLAND ======== -->
   <section class="ex-sec" id="toursExplorer">
     <div class="ex-wrap">
-      <div class="ex-head tp-head"><span class="tp-hnum">01</span><div class="tp-htext"><span class="sec-pre">Build it your way</span><h2 class="sec-title">Single Experiences, Island by Island</h2><p>Start with an island. Each one has its own water and land experiences and custom packages. We build every trip around your group and your pace, so nothing here is fixed.</p></div></div>
       <div class="bx" id="bx">
         <div class="bx-main">
           <div class="bx-bar">
@@ -10895,7 +10894,7 @@ body.theme-night .page .tag{
   <!-- ======== GROUP TRIP BUILDER (MBA Lifestyle / Greek Life) ======== -->
   <section class="ex-sec" id="exBuilder">
     <div class="ex-wrap">
-      <div class="ex-head tp-head"><span class="tp-hnum">02</span><div class="tp-htext"><span class="sec-pre">Build a group trip</span>
+      <div class="ex-head tp-head"><div class="tp-htext"><span class="sec-pre">Build a group trip</span>
         <h2 class="sec-title">Build Your Group Trip</h2>
         <p>Choose your group and island, tick what you would like and see a live estimate. Prefer to talk it through? You can send an inquiry at any point, with or without choices.</p>
       </div></div>
@@ -10924,7 +10923,7 @@ body.theme-night .page .tag{
 
   <section class="ex-sec ex-sec--tint" id="exMba">
     <div class="ex-wrap">
-      <div class="ex-head tp-head"><span class="tp-hnum">03</span><div class="tp-htext"><span class="sec-pre">Purpose-led group travel</span>
+      <div class="ex-head tp-head"><div class="tp-htext"><span class="sec-pre">Purpose-led group travel</span>
         <h2 class="sec-title">MBA Experiences</h2>
         <p>Programs for graduate cohorts and alumni, with premium stays, networking dinners and curated island activities. Every program is quoted for your group.</p>
       </div></div>
@@ -10944,7 +10943,7 @@ body.theme-night .page .tag{
     <div class="ex-wrap">
       <div class="tp-plan">
         <div class="tp-plan-copy">
-          <span class="tp-hnum">04</span>
+          
           <div class="tp-htext">
             <span class="sec-pre">Talk to a planner</span>
             <h2 class="sec-title">Not sure where to start?</h2>
@@ -51549,3 +51548,111 @@ html body #p-tours #tpSubnav{font-size:10.5px}
 #p-tours .tp-intro p{margin:0 auto 18px;max-width:640px;color:var(--grey);font-size:14.5px;line-height:1.8}
 #p-tours .tp-intro a{text-decoration:none}
 </style>
+<style id="tours-top-style">
+#p-tours #tourListSection{padding:60px 0 34px}
+#p-tours .tp-intro{max-width:720px;margin:14px auto 0;padding:0;background:none;border:0;border-radius:0}
+#p-tours .tp-intro p{margin:0 auto 22px;max-width:640px;color:var(--grey);font-size:15px;line-height:1.75}
+#p-tours #toursExplorer{padding-top:44px}
+#p-tours .tp-head{gap:0}
+#p-tours .tp-hnum{display:none}
+</style>
+<style id="gallery-showcase-style">
+/* ===== Gallery: countries across the top, large centre photo with photos on both sides ===== */
+#p-gallery #memGrid{display:none!important}
+#p-gallery .mem-shell{padding-top:10px}
+#p-gallery .mem-album-header{margin-bottom:18px}
+#p-gallery .msl{position:relative;max-width:1280px;margin:0 auto 10px;user-select:none}
+#p-gallery .msl-stage{position:relative;height:460px;overflow:hidden;touch-action:pan-y}
+#p-gallery .msl-slide{position:absolute;top:0;left:50%;height:100%;border:0;padding:0;background:#dfe9f1;overflow:hidden;cursor:pointer;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease,filter .45s ease;will-change:transform}
+#p-gallery .msl-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#p-gallery .msl-slide:focus{outline:none}
+#p-gallery .msl-slide:focus-visible{outline:2px solid #ef8731;outline-offset:2px}
+#p-gallery .msl-slide.is-side{filter:saturate(.8) brightness(.92)}
+#p-gallery .msl-slide.is-active{cursor:zoom-in;box-shadow:0 1px 2px rgba(6,58,99,.08)}
+#p-gallery .msl-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding:0 4px}
+#p-gallery .msl-cap{min-width:0}
+#p-gallery .msl-cap b{display:block;color:#063a63;font-size:1.05rem;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-gallery .msl-cap span{color:#6f8294;font-size:12.5px;font-weight:700}
+#p-gallery .msl-nav{display:flex;gap:10px;flex:0 0 auto}
+#p-gallery .msl-btn{width:46px;height:46px;border:1px solid rgba(6,58,99,.16);background:#fff;color:#063a63;border-radius:0;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+#p-gallery .msl-btn:hover{background:#063a63;color:#fff;border-color:#063a63}
+#p-gallery .msl-dots{display:flex;justify-content:center;gap:7px;margin-top:16px;flex-wrap:wrap}
+#p-gallery .msl-dots i{width:22px;height:3px;background:rgba(6,58,99,.16);cursor:pointer;transition:background .2s}
+#p-gallery .msl-dots i.on{background:#ef8731}
+@media (max-width:760px){#p-gallery .msl-stage{height:300px}#p-gallery .msl-btn{width:42px;height:42px}}
+/* compact title so the showcase sits above the fold */
+#p-gallery .mem-hero{padding:44px 24px 22px}
+#p-gallery .mem-hero-title{font-size:clamp(2rem,3.6vw,3rem);margin-bottom:6px}
+#p-gallery .mem-hero-title em{font-size:.42em;margin-top:6px}
+#p-gallery .mem-hero-sub{display:none}
+#p-gallery .mem-country-track{max-width:1180px;justify-content:center;flex-wrap:wrap;padding:12px 20px}
+#p-gallery .mem-shell{padding:26px 24px 70px}
+@media (max-width:760px){#p-gallery .mem-hero{padding:30px 18px 14px}#p-gallery .mem-country-track{flex-wrap:nowrap;justify-content:flex-start}}
+</style>
+<script id="gallery-showcase-script">
+(function(){
+  var st={i:0,n:0,photos:[]};
+  var stage,cap,count,dots,root;
+  function build(){
+    var shell=document.querySelector('#p-gallery .mem-shell'),grid=document.getElementById('memGrid');
+    if(!shell||!grid||document.getElementById('memSlider'))return;
+    root=document.createElement('div');root.id='memSlider';root.className='msl';root.setAttribute('aria-roledescription','carousel');
+    root.innerHTML='<div class="msl-stage" id="mslStage"></div>'
+      +'<div class="msl-bar"><div class="msl-cap"><b id="mslTitle"></b><span id="mslCount"></span></div>'
+      +'<div class="msl-nav"><button type="button" class="msl-btn" id="mslPrev" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button><button type="button" class="msl-btn" id="mslNext" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button></div></div>'
+      +'<div class="msl-dots" id="mslDots"></div>';
+    shell.insertBefore(root,grid);
+    stage=document.getElementById('mslStage');cap=document.getElementById('mslTitle');count=document.getElementById('mslCount');dots=document.getElementById('mslDots');
+    document.getElementById('mslPrev').addEventListener('click',function(){go(st.i-1);});
+    document.getElementById('mslNext').addEventListener('click',function(){go(st.i+1);});
+    // swipe
+    var x0=null;
+    stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+    stage.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)go(st.i+(dx<0?1:-1));});
+    document.addEventListener('keydown',function(e){
+      var pg=document.getElementById('p-gallery'),lb=document.getElementById('memLightbox');
+      if(!pg||!pg.classList.contains('on')||(lb&&lb.classList.contains('open')))return;
+      if(e.key==='ArrowLeft')go(st.i-1);else if(e.key==='ArrowRight')go(st.i+1);
+    });
+    if(window.ResizeObserver)new ResizeObserver(layout).observe(stage);
+    window.addEventListener('resize',layout);
+  }
+  function collect(){
+    var imgs=document.querySelectorAll('#memGrid .mem-photo img');
+    st.photos=[].slice.call(imgs).map(function(im){return {src:im.getAttribute('src'),label:im.getAttribute('alt')||''};});
+    st.n=st.photos.length;st.i=0;
+    stage.innerHTML=st.photos.map(function(p,k){
+      return '<button type="button" class="msl-slide" data-k="'+k+'" aria-label="'+String(p.label).replace(/"/g,'&quot;')+'"><img src="'+p.src+'" alt="" loading="'+(k<4?'eager':'lazy')+'" onerror="this.style.visibility=\'hidden\'"></button>';
+    }).join('');
+    dots.innerHTML=st.photos.map(function(p,k){return '<i data-k="'+k+'"></i>';}).join('');
+    [].forEach.call(stage.querySelectorAll('.msl-slide'),function(b){b.addEventListener('click',function(){var k=+b.getAttribute('data-k');if(k===st.i&&typeof window.openMemoLightbox==='function')window.openMemoLightbox(k);else go(k);});});
+    [].forEach.call(dots.querySelectorAll('i'),function(d){d.addEventListener('click',function(){go(+d.getAttribute('data-k'));});});
+    layout();
+  }
+  function go(k){if(!st.n)return;st.i=((k%st.n)+st.n)%st.n;layout();}
+  function layout(){
+    if(!stage||!st.n)return;
+    var W=stage.clientWidth;if(!W)return;
+    var small=W<760,sw=Math.round(W*(small?.74:.54)),step=small?W*.62:W*.4;
+    [].forEach.call(stage.children,function(el,k){
+      var d=k-st.i,half=st.n/2;if(d>half)d-=st.n;else if(d<-half)d+=st.n;
+      var ad=Math.abs(d),vis=ad<=2;
+      var scale=ad===0?1:ad===1?.84:.7,op=ad===0?1:ad===1?.85:ad===2?.4:0;
+      el.style.width=sw+'px';
+      el.style.transform='translateX(calc(-50% + '+Math.round(d*step)+'px)) scale('+scale+')';
+      el.style.opacity=op;el.style.zIndex=String(10-ad);el.style.pointerEvents=vis?'auto':'none';
+      el.classList.toggle('is-active',ad===0);el.classList.toggle('is-side',ad!==0);
+      el.setAttribute('aria-hidden',ad===0?'false':'true');
+    });
+    var p=st.photos[st.i];cap.textContent=p?p.label:'';count.textContent=(st.i+1)+' of '+st.n+' photos';
+    [].forEach.call(dots.children,function(d,k){d.classList.toggle('on',k===st.i);});
+  }
+  function init(){
+    build();if(!stage)return;
+    var grid=document.getElementById('memGrid');
+    new MutationObserver(function(){collect();}).observe(grid,{childList:true});
+    if(grid.children.length)collect();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
