@@ -49,8 +49,25 @@ function findPackage(itemsStr) {
   return null;
 }
 
+// Pull any purchased add-ons (transfers / driver days) out of the metadata
+// items string, excluding the package line itself.
+function extractAddons(itemsStr, pkg) {
+  if (!itemsStr) return [];
+  return itemsStr.split(',').map(s => s.trim()).filter(Boolean).map(tok => {
+    const m = tok.match(/^(.*?)\s*x(\d+)$/);
+    return { name: m ? m[1].trim() : tok, qty: m ? parseInt(m[2], 10) : 1 };
+  }).filter(it => (!pkg || it.name !== pkg.title) &&
+                  /Private Transfers|Private Driver Day/.test(it.name));
+}
+function addonLabel(name) { return name.replace(/^.*?—\s*/, '').replace(/^.*? - /, ''); }
+
 // Branded, GetYourGuide-style confirmation email for a package booking.
-function packageConfirmationHtml(pkg, amount, ref) {
+function packageConfirmationHtml(pkg, amount, ref, addons) {
+  const addonRows = (addons && addons.length)
+    ? `<h3 style="color:#063a63;margin:4px 0 6px;font-size:16px">Added services</h3>
+       <table style="border-collapse:collapse;width:100%;margin:0 0 16px">` +
+      addons.map((a, i) => `<tr${i % 2 ? ' style="background:#f6faf7"' : ''}><td style="padding:8px 9px;color:#333">${addonLabel(a.name)}${a.qty > 1 ? ' <span style="color:#8a97a2">× ' + a.qty + '</span>' : ''}</td></tr>`).join('') +
+      `</table>` : '';
   const slot = s => s ? `<div style="color:#333;font-size:13px;margin:2px 0"><b style="color:#ef8731">${s.when}:</b> ${s.title}${s.place ? ' — <span style="color:#5a6d7e">' + s.place + '</span>' : ''}${s.meta ? ' <span style="color:#8a97a2">· ' + s.meta + '</span>' : ''}</div>` : '';
   const days = (pkg.days || []).map(d =>
     `<tr><td style="padding:10px 9px;border-bottom:1px solid #eef3f0;vertical-align:top;white-space:nowrap"><b style="color:#063a63">Day ${d.n}</b></td><td style="padding:10px 9px;border-bottom:1px solid #eef3f0">${slot(d.am)}${slot(d.pm)}${d.food ? '<div style="color:#4a8a2e;font-size:12px;font-weight:bold;margin-top:4px">Food stop: ' + d.food + '</div>' : ''}</td></tr>`
@@ -69,9 +86,10 @@ function packageConfirmationHtml(pkg, amount, ref) {
         <tr><td style="padding:8px 9px;font-weight:bold;color:#063a63">Amount paid</td><td style="padding:8px 9px;color:#333"><b>${amount}</b></td></tr>
         <tr style="background:#f6faf7"><td style="padding:8px 9px;font-weight:bold;color:#063a63">Suggested base</td><td style="padding:8px 9px;color:#333">${pkg.base || ''}</td></tr>
       </table>
+      ${addonRows}
       <h3 style="color:#063a63;margin:0 0 6px;font-size:16px">Your 5-day itinerary</h3>
       <table style="border-collapse:collapse;width:100%">${days}</table>
-      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Pickups from your stay and local food stops are included where noted. Prices shown are per-person "from" guides; final tailoring (dates, group size, transfers and villa stays) is confirmed by our team, who will be in touch shortly.</p>
+      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Pickups from your stay and local food stops are included where noted, and any private transfers or driver days you added are included in the amount above. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
@@ -79,7 +97,7 @@ function packageConfirmationHtml(pkg, amount, ref) {
 }
 
 // Branded PDF receipt + itinerary (returned as base64 for a Resend attachment).
-async function buildItineraryPdf(pkg, session, amountStr) {
+async function buildItineraryPdf(pkg, session, amountStr, addons) {
   const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -121,10 +139,19 @@ async function buildItineraryPdf(pkg, session, amountStr) {
     if (d.food) { page.drawText(('Food stop: ' + d.food).slice(0,92), { x:58, y, size:8.5, font:bold, color:rgb(.29,.54,.18) }); y -= 14; }
     y -= 7;
   });
+  if (addons && addons.length) {
+    if (y < 140) { page = doc.addPage([W,H]); y = H-60; }
+    y -= 2; page.drawText('Added services', { x:40, y, size:12, font:bold, color:navy }); y -= 16;
+    addons.forEach(a => {
+      if (y < 90) { page = doc.addPage([W,H]); y = H-60; }
+      page.drawText('• ' + addonLabel(a.name) + (a.qty > 1 ? '  × ' + a.qty : ''), { x:58, y, size:10, font, color:dark }); y -= 15;
+    });
+    y -= 4;
+  }
   if (y < 120) { page = doc.addPage([W,H]); y = H-60; }
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
-  page.drawText('Pickups from your stay and food stops included where noted. Prices are per-person "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
-  page.drawText('guides; final tailoring (dates, group size, transfers and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
+  page.drawText('Pickups, food stops and any transfers/driver days you added are included. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
+  page.drawText('guides; final tailoring (dates, group size and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
   page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();
   return Buffer.from(bytes).toString('base64');
@@ -188,18 +215,19 @@ module.exports = async function handler(req, res) {
       const items = (session.metadata && (session.metadata.items || session.metadata.tours)) || '';
       const title = (session.metadata && session.metadata.title) || items || 'Sight Seers Virtual Tour';
       const pkg = findPackage(items);
+      const addons = extractAddons(items, pkg);
       if (pkg && email) {
         // 5-day package booking: branded receipt + itinerary PDF to the guest.
         const ref = (session.id || '').slice(-10).toUpperCase();
         let attachments = [];
         try {
-          const b64 = await buildItineraryPdf(pkg, session, money(amountPaid));
+          const b64 = await buildItineraryPdf(pkg, session, money(amountPaid), addons);
           attachments = [{ filename: 'SightSeers-' + pkg.title.replace(/[^A-Za-z0-9]+/g, '-') + '.pdf', content: b64 }];
         } catch (e) { console.error('Itinerary PDF build error:', e && e.message); }
         await sendEmail({
           to: email,
           subject: 'Your Sight Seers booking is confirmed — ' + pkg.title,
-          html: packageConfirmationHtml(pkg, money(amountPaid), ref),
+          html: packageConfirmationHtml(pkg, money(amountPaid), ref, addons),
           attachments
         });
       } else if (email) {

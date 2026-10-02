@@ -91,7 +91,21 @@
         },
         "food": "Miss T’s Kitchen, Ocho Rios"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Jamaica 5-Day Signature — Private Transfers",
+        "price": 389,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Jamaica 5-Day Signature — Private Driver Day",
+        "price": 319,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "Barbados": {
     "label": "Barbados",
@@ -185,7 +199,21 @@
         },
         "food": "Chefette, Holetown"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Barbados 5-Day Signature — Private Transfers",
+        "price": 169,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Barbados 5-Day Signature — Private Driver Day",
+        "price": 299,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "Saint Lucia": {
     "label": "St Lucia",
@@ -277,7 +305,21 @@
         },
         "food": "Gros Islet fish fry / KFC Castries"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Saint Lucia 5-Day Signature — Private Transfers",
+        "price": 369,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Saint Lucia 5-Day Signature — Private Driver Day",
+        "price": 279,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "Curaçao": {
     "label": "Curaçao",
@@ -369,7 +411,21 @@
         },
         "food": "Zanzibar, Jan Thiel"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Curaçao 5-Day Signature — Private Transfers",
+        "price": 179,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Curaçao 5-Day Signature — Private Driver Day",
+        "price": 279,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "The Bahamas": {
     "label": "Bahamas",
@@ -463,7 +519,21 @@
         },
         "food": "Twin Brothers, Arawak Cay"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Bahamas 5-Day Signature — Private Transfers",
+        "price": 129,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Bahamas 5-Day Signature — Private Driver Day",
+        "price": 339,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "Belize": {
     "label": "Belize",
@@ -557,7 +627,21 @@
         },
         "food": "San Ignacio market eats"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Belize 5-Day Signature — Private Transfers",
+        "price": 209,
+        "label": "Private airport & inter-base transfers",
+        "per": "per guest (ferry-based)"
+      },
+      "driver": {
+        "name": "Belize 5-Day Signature — Private Driver Day",
+        "price": 239,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   },
   "Dominican Republic": {
     "label": "Dom. Rep.",
@@ -650,6 +734,20 @@
         },
         "food": "Onboard rum & fruit · Little John, Bávaro"
       }
-    ]
+    ],
+    "addons": {
+      "xfer": {
+        "name": "Dominican Republic 5-Day Signature — Private Transfers",
+        "price": 95,
+        "label": "Private airport & inter-base transfers",
+        "per": "per vehicle (up to 4)"
+      },
+      "driver": {
+        "name": "Dominican Republic 5-Day Signature — Private Driver Day",
+        "price": 239,
+        "label": "Private driver day (8–10h)",
+        "per": "per day"
+      }
+    }
   }
 }
