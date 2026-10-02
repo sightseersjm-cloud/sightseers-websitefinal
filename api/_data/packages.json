@@ -95,15 +95,15 @@
     "addons": {
       "xfer": {
         "name": "Jamaica 5-Day Signature — Private Transfers",
-        "price": 389,
+        "price": 499,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Jamaica 5-Day Signature — Private Driver Day",
-        "price": 319,
+        "price": 409,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -203,15 +203,15 @@
     "addons": {
       "xfer": {
         "name": "Barbados 5-Day Signature — Private Transfers",
-        "price": 169,
+        "price": 219,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Barbados 5-Day Signature — Private Driver Day",
-        "price": 299,
+        "price": 389,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -309,15 +309,15 @@
     "addons": {
       "xfer": {
         "name": "Saint Lucia 5-Day Signature — Private Transfers",
-        "price": 369,
+        "price": 479,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Saint Lucia 5-Day Signature — Private Driver Day",
-        "price": 279,
+        "price": 359,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -415,15 +415,15 @@
     "addons": {
       "xfer": {
         "name": "Curaçao 5-Day Signature — Private Transfers",
-        "price": 179,
+        "price": 229,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Curaçao 5-Day Signature — Private Driver Day",
-        "price": 279,
+        "price": 359,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -523,15 +523,15 @@
     "addons": {
       "xfer": {
         "name": "Bahamas 5-Day Signature — Private Transfers",
-        "price": 129,
+        "price": 169,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Bahamas 5-Day Signature — Private Driver Day",
-        "price": 339,
+        "price": 439,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -637,9 +637,9 @@
       },
       "driver": {
         "name": "Belize 5-Day Signature — Private Driver Day",
-        "price": 239,
+        "price": 309,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   },
@@ -738,15 +738,15 @@
     "addons": {
       "xfer": {
         "name": "Dominican Republic 5-Day Signature — Private Transfers",
-        "price": 95,
+        "price": 129,
         "label": "Private airport & inter-base transfers",
-        "per": "per vehicle (up to 4)"
+        "per": "per group (up to 6)"
       },
       "driver": {
         "name": "Dominican Republic 5-Day Signature — Private Driver Day",
-        "price": 239,
+        "price": 309,
         "label": "Private driver day (8–10h)",
-        "per": "per day"
+        "per": "per day (up to 6)"
       }
     }
   }
