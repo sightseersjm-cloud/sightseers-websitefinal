@@ -10624,6 +10624,114 @@ body.theme-night .page .tag{
   </div>
 </section>
 
+<!-- ======== BARBADOS ITINERARIES ======== -->
+<section class="bdos-itin-sec">
+  <style>
+    .bdos-itin-sec{padding:70px 0;background:var(--lightgrey)}
+    .bdos-itin-wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+    .bdos-itin-head{text-align:center;max-width:720px;margin:0 auto 42px}
+    .bdos-itin-head .sec-pre{color:var(--orange)}
+    .bdos-itin-head p{color:var(--grey);margin-top:12px;font-size:1.02rem;line-height:1.6}
+    .bdos-itin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:26px}
+    .bdos-itin-card{background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(6,58,99,.06);transition:transform .25s ease,box-shadow .25s ease}
+    .bdos-itin-card:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(6,58,99,.12)}
+    .bdos-itin-top{padding:24px 24px 18px;background:linear-gradient(135deg,var(--navy),var(--dark));color:#fff}
+    .bdos-itin-chip{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.14);margin-bottom:12px}
+    .bdos-itin-card.sea .bdos-itin-chip{background:var(--green);color:#063a1e}
+    .bdos-itin-card.land .bdos-itin-chip{background:var(--orange);color:#4a2708}
+    .bdos-itin-card.mix .bdos-itin-chip{background:#f4fbf6;color:var(--navy)}
+    .bdos-itin-top h3{font-size:1.32rem;line-height:1.25;margin:0 0 6px}
+    .bdos-itin-top span.dur{font-size:.85rem;opacity:.82}
+    .bdos-itin-body{padding:20px 24px 10px;flex:1}
+    .bdos-itin-day{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed var(--border)}
+    .bdos-itin-day:last-child{border-bottom:none}
+    .bdos-itin-dnum{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem}
+    .bdos-itin-dcopy strong{display:block;color:var(--dark);font-size:.98rem;line-height:1.3}
+    .bdos-itin-dcopy em{display:block;font-style:normal;color:var(--grey);font-size:.82rem;margin-top:3px}
+    .bdos-itin-foot{padding:16px 24px 24px;border-top:1px solid var(--border);margin-top:6px}
+    .bdos-itin-stay{font-size:.82rem;color:var(--grey);margin-bottom:14px}
+    .bdos-itin-stay i{color:var(--orange);margin-right:6px}
+    .bdos-itin-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .bdos-itin-btn{flex:1;min-width:130px;text-align:center;padding:11px 14px;border-radius:999px;font-size:.84rem;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:opacity .2s ease,background .2s ease}
+    .bdos-itin-btn.primary{background:var(--orange);color:#fff}
+    .bdos-itin-btn.primary:hover{opacity:.9}
+    .bdos-itin-btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
+    .bdos-itin-btn.ghost:hover{border-color:var(--navy)}
+    .bdos-itin-note{text-align:center;color:var(--grey);font-size:.82rem;margin-top:30px}
+  </style>
+  <div class="bdos-itin-wrap">
+    <div class="bdos-itin-head reveal">
+      <span class="sec-pre">Ready-made in Barbados</span>
+      <h2 class="sec-title">Barbados Itineraries</h2>
+      <p>Three ways to shape your days in Barbados — each one built from the tours and stays we already run on the island. Pick a vibe, and we’ll tailor the pace, timing and group size around you.</p>
+    </div>
+    <div class="bdos-itin-grid">
+
+      <div class="bdos-itin-card sea reveal">
+        <div class="bdos-itin-top">
+          <span class="bdos-itin-chip">Water &amp; Beach</span>
+          <h3>Sea &amp; Sail Escape</h3>
+          <span class="dur">3 days · from $235 in excursions</span>
+        </div>
+        <div class="bdos-itin-body">
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Carlisle Bay Turtle &amp; Shipwreck Boat Cruise + Beach Day &amp; Turtle Swim</strong><em>1.5 hrs + 6 hrs · from $86</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle &amp; Reef Snorkel Cruise</strong><em>Half day · from $85</em></div></div>
+        </div>
+        <div class="bdos-itin-foot">
+          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div>
+          <div class="bdos-itin-actions">
+            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="bdos-itin-card land reveal">
+        <div class="bdos-itin-top">
+          <span class="bdos-itin-chip">Land &amp; Culture</span>
+          <h3>Island &amp; Heritage Trail</h3>
+          <span class="dur">3 days · from $355 in excursions</span>
+        </div>
+        <div class="bdos-itin-body">
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
+        </div>
+        <div class="bdos-itin-foot">
+          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Speightstown Oceanview Villa</div>
+          <div class="bdos-itin-actions">
+            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="bdos-itin-card mix reveal">
+        <div class="bdos-itin-top">
+          <span class="bdos-itin-chip">Best of Both</span>
+          <h3>Signature Barbados Weekend</h3>
+          <span class="dur">3 days · from $375 in excursions</span>
+        </div>
+        <div class="bdos-itin-body">
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery + Beach Day &amp; Turtle Swim</strong><em>5 hrs + 6 hrs · from $105</em></div></div>
+        </div>
+        <div class="bdos-itin-foot">
+          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Barbados Platinum Coast Villa</div>
+          <div class="bdos-itin-actions">
+            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="bdos-itin-note">Prices are per-person “from” guides for the listed excursions and exclude stays and transfers. Every itinerary is fully customizable — tell us your dates and group and we’ll build the final plan.</p>
+  </div>
+</section>
+
 <!-- NEWSLETTER -->
 <div class="newsletter">
   <div class="nl-wrap">
@@ -10678,6 +10786,82 @@ body.theme-night .page .tag{
     </div>
   </div>
 </section>
+
+  <!-- ======== BARBADOS ITINERARIES (Tours page) ======== -->
+  <section class="bdos-itin-sec" id="barbadosItinerariesTours">
+    <div class="bdos-itin-wrap">
+      <div class="bdos-itin-head reveal">
+        <span class="sec-pre">Ready-made in Barbados</span>
+        <h2 class="sec-title">Barbados Itineraries</h2>
+        <p>Not sure how to combine the excursions above? These three ready-made Barbados plans stitch our island tours into easy day-by-day trips — each one fully customizable around your dates and group.</p>
+      </div>
+      <div class="bdos-itin-grid">
+
+        <div class="bdos-itin-card sea reveal">
+          <div class="bdos-itin-top">
+            <span class="bdos-itin-chip">Water &amp; Beach</span>
+            <h3>Sea &amp; Sail Escape</h3>
+            <span class="dur">3 days · from $235 in excursions</span>
+          </div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Carlisle Bay Turtle &amp; Shipwreck Boat Cruise + Beach Day &amp; Turtle Swim</strong><em>1.5 hrs + 6 hrs · from $86</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle &amp; Reef Snorkel Cruise</strong><em>Half day · from $85</em></div></div>
+          </div>
+          <div class="bdos-itin-foot">
+            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div>
+            <div class="bdos-itin-actions">
+              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bdos-itin-card land reveal">
+          <div class="bdos-itin-top">
+            <span class="bdos-itin-chip">Land &amp; Culture</span>
+            <h3>Island &amp; Heritage Trail</h3>
+            <span class="dur">3 days · from $355 in excursions</span>
+          </div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
+          </div>
+          <div class="bdos-itin-foot">
+            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Speightstown Oceanview Villa</div>
+            <div class="bdos-itin-actions">
+              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bdos-itin-card mix reveal">
+          <div class="bdos-itin-top">
+            <span class="bdos-itin-chip">Best of Both</span>
+            <h3>Signature Barbados Weekend</h3>
+            <span class="dur">3 days · from $375 in excursions</span>
+          </div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery + Beach Day &amp; Turtle Swim</strong><em>5 hrs + 6 hrs · from $105</em></div></div>
+          </div>
+          <div class="bdos-itin-foot">
+            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Barbados Platinum Coast Villa</div>
+            <div class="bdos-itin-actions">
+              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
+              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <p class="bdos-itin-note">Prices are per-person “from” guides for the listed excursions and exclude stays and transfers. Every itinerary is fully customizable — tell us your dates and group and we’ll build the final plan.</p>
+    </div>
+  </section>
+
   <section class="tour-item-detail" id="tourDetailSection" style="display:none">
     <div class="tour-item-hero" id="tourDetailHero" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=85&auto=format&fit=crop')">
       <div class="tour-item-hero-inner">
@@ -16640,10 +16824,6 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#c2185b,#ff6f00)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Cooking</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide">Chef Donna Gayle, Ocho Rios, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLivePaid('cooking-tour')">Join Live</div></div></div>
                   </div>
-                  <div class="vt-live-card" onclick="vtJoinLivePaid('bigship-dj')">
-                    <div class="vt-live-card-img" style="background:linear-gradient(135deg,#1a1a2e,#e94560)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Music</div></div>
-                    <div class="vt-live-card-body"><div class="vt-live-card-title">Big Ship Records DJ Mixing Session</div><div class="vt-live-card-guide">Stephen McGregor, Kingston, Jamaica</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $40</span><div class="vt-live-card-btn" onclick="event.stopPropagation();vtJoinLivePaid('bigship-dj')">Join Live</div></div></div>
-                  </div>
                   <div class="vt-live-card" onclick="vtOpenReserve('Bridgetown Market Tour','Today 3:00 PM',28)">
                     <div class="vt-live-card-img" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><div class="vt-live-card-badge scheduled">3:00 PM</div><div class="vt-live-card-cat">Personal Shopping</div></div>
                     <div class="vt-live-card-body"><div class="vt-live-card-title">Bridgetown Market Tour</div><div class="vt-live-card-guide">Sandra Browne, Bridgetown, Barbados</div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $28</span><div class="vt-live-card-btn alt" onclick="event.stopPropagation();vtOpenReserve('Bridgetown Market Tour','Today 3:00 PM',28)">Reserve Seat</div></div></div>
@@ -17466,7 +17646,6 @@ if(typeof vtInitPanoViewer==='function'){
                       <div class="vt-live-card" data-category="nature" onclick="vtJoinSession('blue-lagoon')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#0b4d3a,#1a8a6e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Nature</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Blue Lagoon Morning Walk</div><div class="vt-live-card-guide"><i class="fas fa-user-circle" style="margin-right:4px;opacity:.5"></i>Marcus Thompson, Portland</div><div class="vt-live-card-meta"><span>45 min</span><span><i class="fas fa-users"></i> 247 watching</span></div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $42</span><div class="vt-live-card-btn">Join Live</div></div></div></div>
                       <div class="vt-live-card" data-category="food" onclick="vtJoinSession('kingston-jerk')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#8b4513,#d2691e)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Food</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Jerk Chicken Class</div><div class="vt-live-card-guide"><i class="fas fa-user-circle" style="margin-right:4px;opacity:.5"></i>Chef Anita Murray, Kingston</div><div class="vt-live-card-meta"><span>60 min</span><span><i class="fas fa-users"></i> 183 watching</span></div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $38</span><div class="vt-live-card-btn">Join Live</div></div></div></div>
                       <div class="vt-live-card" data-category="food" onclick="vtJoinSession('cooking-tour')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#c2185b,#ff6f00)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Cooking</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Jamaican Cooking Experience</div><div class="vt-live-card-guide"><i class="fas fa-user-circle" style="margin-right:4px;opacity:.5"></i>Chef Donna Gayle, Ocho Rios</div><div class="vt-live-card-meta"><span>75 min</span><span><i class="fas fa-users"></i> 156 watching</span></div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $35</span><div class="vt-live-card-btn">Join Live</div></div></div></div>
-                      <div class="vt-live-card" data-category="music" onclick="vtJoinSession('bigship-dj')"><div class="vt-live-card-img" style="background:linear-gradient(135deg,#1a1a2e,#e94560)"><div class="vt-live-card-badge">Live</div><div class="vt-live-card-cat">Music</div></div><div class="vt-live-card-body"><div class="vt-live-card-title">Big Ship Records DJ Mixing</div><div class="vt-live-card-guide"><i class="fas fa-user-circle" style="margin-right:4px;opacity:.5"></i>Stephen McGregor, Kingston</div><div class="vt-live-card-meta"><span>90 min</span><span><i class="fas fa-users"></i> 312 watching</span></div><div class="vt-live-card-foot"><span class="vt-live-card-price">USD $40</span><div class="vt-live-card-btn">Join Live</div></div></div></div>
                     </div>
                   </div>
 
@@ -18531,7 +18710,6 @@ var vtSessions={
   'blue-lagoon':{title:'Blue Lagoon Morning Walk',guide:'Marcus Thompson',loc:'Port Antonio &bull; Portland &bull; Jamaica',viewers:247,price:42,playbackId:'',scene:'lagoon'},
   'kingston-jerk':{title:'Jamaican Jerk Chicken Class',guide:'Chef Anita Murray',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:183,price:38,playbackId:'',scene:'market',yt:'3K3oc2QGWqU'},
   'cooking-tour':{title:'Jamaican Cooking Experience',guide:'Chef Donna Gayle',loc:'Ocho Rios &bull; St Ann &bull; Jamaica',viewers:156,price:35,playbackId:'',scene:'market'},
-  'bigship-dj':{title:'Big Ship Records DJ Mixing Session',guide:'Stephen McGregor',loc:'Kingston &bull; St Andrew &bull; Jamaica',viewers:312,price:40,playbackId:'',scene:'lagoon'}
 };
 function vtJoinSession(id){
   var s=vtSessions[id];if(!s)return;
@@ -21014,6 +21192,38 @@ vtSessionAction=function(el,type){
                 <span class="account-shell-kicker"><i class="fas fa-user-shield"></i> Sight Seers Travel Club</span>
                 <h2>Your travel profile, refined.</h2>
                 <p>Create an account to save your details, return to planning faster, and move between tours, cart review, booking requests, and approved writer submissions in one polished space.</p>
+                <style>
+                  .account-sec .account-wrap{max-width:1120px}
+                  .ss-social-follow{margin-top:18px}
+                  .ss-social-label{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:10px}
+                  .ss-social-cards{display:flex;flex-wrap:wrap;gap:10px}
+                  .ss-social-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:14px;text-decoration:none;background:#fff;transition:transform .2s,box-shadow .2s;min-width:200px;flex:1}
+                  .ss-social-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(6,58,99,.10)}
+                  .ss-social-card i{font-size:22px;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
+                  .ss-social-card.ig i{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+                  .ss-social-card.tt i{background:#111}
+                  .ss-social-meta{display:flex;flex-direction:column;line-height:1.2}
+                  .ss-social-meta strong{color:var(--dark);font-size:14px}
+                  .ss-social-meta span{color:var(--grey);font-size:12px}
+                  .ss-social-go{margin-left:auto;font-size:12px;font-weight:700;color:var(--orange)}
+                  .ss-social-embed:empty{display:none}
+                  .ss-social-embed{margin-top:12px}
+                </style>
+                <div class="ss-social-follow">
+                  <span class="ss-social-label">Follow the journey</span>
+                  <div class="ss-social-cards">
+                    <a class="ss-social-card ig" href="https://www.instagram.com/sightseers.jm" target="_blank" rel="noopener"><i class="fab fa-instagram"></i><div class="ss-social-meta"><strong>@sightseers.jm</strong><span>Instagram</span></div><span class="ss-social-go">Follow</span></a>
+                    <a class="ss-social-card tt" href="https://www.tiktok.com/@sightseers.jm" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i><div class="ss-social-meta"><strong>@sightseers.jm</strong><span>TikTok</span></div><span class="ss-social-go">Follow</span></a>
+                  </div>
+                  <!-- Live TikTok feed (official creator embed). Instagram feed needs post URLs or a widget (behold.so / snapwidget.com) pasted below. -->
+                  <div class="ss-social-embed" id="ssSocialEmbed">
+                    <span class="ss-social-label" style="margin-top:4px">Latest on TikTok</span>
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@sightseers.jm" data-unique-id="sightseers.jm" data-embed-type="creator" style="max-width:100%;min-width:288px">
+                      <section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@sightseers.jm">@sightseers.jm on TikTok</a></section>
+                    </blockquote>
+                    <script async src="https://www.tiktok.com/embed.js"></script>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -22873,7 +23083,7 @@ const DESTINATION_PACKAGE_DATA={
   ],
   'Barbados':[
     {title:'Catamaran Snorkel Cruise with Lunch',tag:'Best Seller',type:'Curated Package',duration:'Half day',price:'from $110',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop',blurb:'A sea-turtle and shipwreck style Barbados day inspired by current popular catamaran listings.',highlights:['Catamaran sail','Lunch included','Open-bar style experience']},
-    {title:'Turtle & Shipwreck Snorkel Cruise',tag:'Sea Escape',type:'Water Excursion',duration:'Half day',price:'from $85',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85&auto=format&fit=crop',blurb:'Great for guests wanting marine life, easy snorkeling and a social cruise feel without overbuilding the day.',highlights:['Turtle stop','Shipwreck snorkeling','Coastal sailing']},
+    {title:'Turtle & Reef Snorkel Cruise',tag:'Sea Escape',type:'Water Excursion',duration:'Half day',price:'from $85',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=85&auto=format&fit=crop',blurb:'Great for guests wanting marine life, easy snorkeling and a social cruise feel without overbuilding the day.',highlights:['Turtle stop','Reef snorkeling','Coastal sailing']},
     {title:'Island Coastal Tour with Lunch',tag:'Land & Sea',type:'Day Tour',duration:'6 hours',price:'from $50',img:'https://images.unsplash.com/photo-1493558103817-58b2924bce98?w=1200&q=85&auto=format&fit=crop',blurb:'A balanced island route combining sightseeing, local flavor and a medium-paced Barbados overview.',highlights:['Scenic coast route','Lunch stop','Great for first-timers']},
     {title:'Private Tours Barbados',tag:'Private Luxury',type:'Custom Excursion',duration:'Flexible',price:'from $94',img:'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=1200&q=85&auto=format&fit=crop',blurb:'For guests who want tailored routing, a private vehicle feel and higher-touch itinerary control.',highlights:['Private setup','Custom route','Couples or small groups']}
   ],
@@ -46914,7 +47124,7 @@ body.theme-night .page .tag{
     {country:'Barbados',type:'water',label:'Water Experience',title:'Catamaran Snorkel Cruise with Lunch',priceLabel:'from $115',priceValue:115,duration:'5 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop',hero:'Sea turtles, lunch, and wide-open water.',desc:'A polished Barbados sea day with everything included, snorkeling, lunch, drinks, and the kind of easy social energy that works whether you\'re coupled up or rolling deep.',highlights:['Popular full sea-day format','Lunch and snorkel included','Strong turtle and shipwreck appeal']},
     {country:'Barbados',type:'water',label:'Water Experience',title:'Carlisle Bay Turtle & Shipwreck Boat Cruise',priceLabel:'from $36',priceValue:36,duration:'1.5 hours',image:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=85&auto=format&fit=crop',hero:'Short on time? Big on wow.',desc:'Turtles and shipwrecks in 90 minutes. A quick, brilliant Barbados water hit for guests who want the highlights without committing to a full day.',highlights:['Lower entry price point','Easy fit for cruise and short-stay guests','Great family-friendly option']},
     {country:'Barbados',type:'water',label:'Water Experience',title:'Beach Day & Turtle Swim Experience',priceLabel:'from $50',priceValue:50,duration:'6 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop',hero:'Sun, sand, and sea turtles. That\'s the whole plan.',desc:'A Barbados beach-and-swim combo that keeps the pace easy and the vibes high. Perfect for families, mixed groups, and anyone who just wants a beautiful, unhurried day.',highlights:['Beach chair and umbrella feel','Great for relaxed vacation pacing','Strong broad-market appeal']},
-    {country:'Barbados',type:'land',label:'Land Experience',title:'Harrison’s Cave & Hunte’s Gardens Escape',priceLabel:'from $155',priceValue:155,duration:'5 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85&auto=format&fit=crop',hero:'Go underground. Come back amazed.',desc:'Trade the beach for Barbados\'s lush interior, crystal caves, botanical gardens, and sightseeing that reminds you why this island is more than coastline.',highlights:['Strong sightseeing value','Good for mixed-interest groups','Comfortable half-day inland flow']},
+    {country:'Barbados',type:'land',label:'Land Experience',title:'Harrison’s Cave & Hunte’s Gardens Escape',priceLabel:'from $155',priceValue:155,duration:'5 hours',image:'https://images.unsplash.com/photo-1465311440653-ba9b1d9b0f5b?w=1200&q=85&auto=format&fit=crop',hero:'Go underground. Come back amazed.',desc:'Trade the beach for Barbados\'s lush interior, crystal caves, botanical gardens, and sightseeing that reminds you why this island is more than coastline.',highlights:['Strong sightseeing value','Good for mixed-interest groups','Comfortable half-day inland flow']},
     {country:'Barbados',type:'land',label:'Land Experience',title:'Mount Gay Rum Distillery Experience',priceLabel:'from $105',priceValue:105,duration:'5 hours',image:'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=85&auto=format&fit=crop',hero:'History, flavour, and a proper pour.',desc:'The world’s oldest rum distillery, plus tastings, culture, and a Barbados story that’s best told with a glass in hand. An adults-only island classic.',highlights:['Great adult-only add-on','Good culture-plus-tasting option','Pairs well with beach itineraries']},
 
     {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Sulphur Springs Mud Bath & Waterfall',priceLabel:'from $100 to $110',priceValue:100,duration:'4-6 hours',image:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85&auto=format&fit=crop',hero:'Volcanic mud. Waterfall rinse. Island wellness at its finest.',desc:'Get covered in volcanic mud, rinse under a waterfall, and drive the scenic Soufrière route. Saint Lucia’s signature wellness day, and it lives up to every photo you’ve seen.',highlights:['Wellness plus sightseeing in one','Very recognizable St. Lucia experience','Great for couples and small groups']},
@@ -46945,7 +47155,7 @@ body.theme-night .page .tag{
     {country:'Jamaica',type:'water',label:'Water Experience',title:'Montego Bay Jet Car & Parasailing Experience',priceLabel:'from $221 to $260',priceValue:221,duration:'2 hours',image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=85&auto=format&fit=crop',hero:'Sports car on water. Sky view above it.',desc:'Jet car speed plus parasailing heights, a high-energy Montego Bay double-hit built for guests who want the look, the thrill, and the content to prove it.',highlights:['Jet car hero package for social content','Strong premium upsell for couples and groups','Easy fit for short Montego Bay stays']},
     {country:'Jamaica',type:'water',label:'Water Experience',title:'Jet Car & Jet Ski Beach Combo',priceLabel:'from $190 to $225',priceValue:190,duration:'1.5-2 hours',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop',hero:'Two rides. One unforgettable water day.',desc:'Jet car excitement followed by jet ski freedom on Montego Bay\'s open water. Short, fast, and the kind of premium action that pairs perfectly with a beach-club afternoon.',highlights:['Excellent for adrenaline travelers','Pairs well with beach-club add-ons','Easy premium half-day option']},
 
-    {country:'Barbados',type:'land',label:'Land Experience',title:'Island Safari Jeep & Scenic Coast Tour',priceLabel:'from $95 to $135',priceValue:95,duration:'5-6 hours',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85&auto=format&fit=crop',hero:'Off-road views. Coastal stories. Real Barbados.',desc:'A scenic inland-and-coast Barbados drive that takes you past the viewpoints, through the villages, and into the stories most tourists never hear. Adventure, the comfortable way.',highlights:['Strong sightseeing package for mixed groups','Good culture and coastline balance','Comfortable alternative to full water days']},
+    {country:'Barbados',type:'land',label:'Land Experience',title:'Island Safari Jeep & Scenic Coast Tour',priceLabel:'from $95 to $135',priceValue:95,duration:'5-6 hours',image:'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1200&q=85&auto=format&fit=crop',hero:'Off-road views. Coastal stories. Real Barbados.',desc:'A scenic inland-and-coast Barbados drive that takes you past the viewpoints, through the villages, and into the stories most tourists never hear. Adventure, the comfortable way.',highlights:['Strong sightseeing package for mixed groups','Good culture and coastline balance','Comfortable alternative to full water days']},
 
     {country:'Saint Lucia',type:'water',label:'Water Experience',title:'Pitons Catamaran Cruise, Snorkel & Lunch',priceLabel:'from $145',priceValue:145,duration:'Full day',image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85&auto=format&fit=crop',hero:'Iconic Pitons. Open water. Premium sea day.',desc:'Catamaran cruise with the Pitons as your backdrop, snorkeling stops, and lunch included. The full Saint Lucia water experience, and the one couples never stop recommending.',highlights:['Excellent honeymoon and couples appeal','Full-day premium water experience','Strong visual pull for the front end of the site']},
 
