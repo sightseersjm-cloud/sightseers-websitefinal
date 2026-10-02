@@ -1,94 +1,101 @@
 {
   "Jamaica": {
     "label": "Jamaica",
+    "chip": "sea",
     "title": "Jamaica 5-Day Signature",
     "frm": 718,
-    "base": "Ocho Rios Seaview Villa",
+    "base": "Montego Bay Hillside Vacation Rentals",
     "days": [
       {
         "n": 1,
         "am": {
           "when": "Morning",
-          "title": "Bamboo Rafting with Limestone Massage",
-          "place": "Martha Brae River, Trelawny",
-          "meta": "Morning · from $80",
-          "pickup": "Hotel pickup included"
+          "title": "Doctor’s Cave Beach morning",
+          "place": "Montego Bay",
+          "meta": "Morning · beach entry"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Rose Hall Great House tour",
           "place": "Montego Bay",
           "meta": "from $60"
-        }
+        },
+        "food": "Pork Pit jerk, Montego Bay"
       },
       {
         "n": 2,
         "am": {
           "when": "Morning",
-          "title": "Doctor’s Cave Beach morning",
-          "place": "Montego Bay",
-          "meta": "Beach entry"
+          "title": "Montego Bay ATV Ride Experience",
+          "place": "Montpelier, St James",
+          "meta": "Morning · from $149",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Afternoon",
+          "title": "Jet Car & Jet Ski Beach Combo",
+          "place": "Montego Bay waterfront",
+          "meta": "from $190",
+          "pickup": "Pickup from your stay"
+        },
+        "food": "Pelican Grill, Montego Bay"
+      },
+      {
+        "n": 3,
+        "am": {
+          "when": "Morning",
+          "title": "Bamboo Rafting with Limestone Massage",
+          "place": "Martha Brae River, Trelawny",
+          "meta": "Morning · from $80",
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Evening",
           "title": "Luminous Lagoon Night Experience",
           "place": "Glistening Waters, Falmouth",
           "meta": "from $70",
-          "pickup": "Hotel pickup included"
-        }
-      },
-      {
-        "n": 3,
-        "am": {
-          "when": "Morning",
-          "title": "Montego Bay ATV Ride Experience",
-          "place": "Montpelier, St James",
-          "meta": "Morning · from $149",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
-        "pm": {
-          "when": "Afternoon",
-          "title": "Craft Market & local lunch",
-          "place": "Harbour Street, Montego Bay",
-          "meta": "At leisure"
-        }
+        "food": "Juici Patties & Scotchies, Falmouth"
       },
       {
         "n": 4,
         "am": {
-          "when": "Morning",
+          "when": "Full day",
           "title": "ATV, River Rafting & Blue Hole Combo",
           "place": "Blue Hole, Ocho Rios",
           "meta": "Full day · from $229",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Evening",
-          "title": "Return & resort dinner",
+          "title": "Ocho Rios dinner & craft stroll",
           "place": "Ocho Rios",
           "meta": "At leisure"
-        }
+        },
+        "food": "Scotchies, Ocho Rios"
       },
       {
         "n": 5,
         "am": {
           "when": "Morning",
-          "title": "Jet Car & Jet Ski Beach Combo",
-          "place": "Montego Bay waterfront",
-          "meta": "Morning · from $190",
-          "pickup": "Hotel pickup included"
+          "title": "Harbour Street craft market & lunch",
+          "place": "Montego Bay",
+          "meta": "At leisure"
         },
         "pm": {
           "when": "Afternoon",
-          "title": "Beach club wind-down",
+          "title": "Beach club & departure",
           "place": "Montego Bay",
           "meta": "At leisure"
-        }
+        },
+        "food": "Father Bull & KFC, Montego Bay"
       }
     ]
   },
   "Barbados": {
     "label": "Barbados",
+    "chip": "mix",
     "title": "Barbados 5-Day Signature",
     "frm": 475,
     "base": "West Coast Beach Vacation Rentals",
@@ -100,46 +107,49 @@
           "title": "Catamaran Snorkel Cruise with Lunch",
           "place": "Carlisle Bay, Bridgetown",
           "meta": "Morning · from $115",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Carlisle Bay & Pebbles Beach",
           "place": "Bridgetown",
           "meta": "At leisure"
-        }
+        },
+        "food": "Cuz’s Fish Shack, Pebbles Beach"
       },
       {
         "n": 2,
         "am": {
           "when": "Morning",
-          "title": "Island Safari Jeep & Scenic Coast Tour",
-          "place": "Scotland District & East Coast",
-          "meta": "Morning · from $95",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Afternoon",
-          "title": "Bathsheba coast & lunch",
-          "place": "Bathsheba",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 3,
-        "am": {
-          "when": "Morning",
           "title": "Harrison’s Cave & Hunte’s Gardens Escape",
           "place": "Allen View, St Thomas",
           "meta": "Morning · from $110",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Hunte’s Gardens stroll",
           "place": "St Joseph",
           "meta": "Included"
-        }
+        },
+        "food": "Local lunch stop, St Thomas"
+      },
+      {
+        "n": 3,
+        "am": {
+          "when": "Morning",
+          "title": "Island Safari Jeep & Scenic Coast Tour",
+          "place": "Scotland District & East Coast",
+          "meta": "Morning · from $95",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Afternoon",
+          "title": "Bathsheba coast & lunch",
+          "place": "Bathsheba",
+          "meta": "At leisure"
+        },
+        "food": "Bathsheba beach lunch"
       },
       {
         "n": 4,
@@ -148,14 +158,15 @@
           "title": "Mount Gay Rum Distillery Experience",
           "place": "Spring Garden, St Michael",
           "meta": "Morning · from $105",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Evening",
           "title": "Oistins Fish Fry",
           "place": "Oistins",
           "meta": "At leisure"
-        }
+        },
+        "food": "Oistins Fish Fry"
       },
       {
         "n": 5,
@@ -164,19 +175,21 @@
           "title": "Beach Day & Turtle Swim Experience",
           "place": "Payne’s Bay, West Coast",
           "meta": "Morning · from $50",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
-          "title": "West Coast sunset & departure prep",
+          "title": "West Coast sunset & departure",
           "place": "Holetown",
           "meta": "At leisure"
-        }
+        },
+        "food": "Chefette, Holetown"
       }
     ]
   },
   "Saint Lucia": {
     "label": "St Lucia",
+    "chip": "land",
     "title": "Saint Lucia 5-Day Signature",
     "frm": 390,
     "base": "Marigot Bay Luxury Residence",
@@ -184,18 +197,19 @@
       {
         "n": 1,
         "am": {
-          "when": "Morning",
+          "when": "Full day",
           "title": "Pitons Catamaran Cruise, Snorkel & Lunch",
           "place": "Soufrière & the Pitons",
           "meta": "Full day · from $145",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Evening",
           "title": "Marigot Bay dinner",
           "place": "Marigot Bay",
           "meta": "At leisure"
-        }
+        },
+        "food": "Catamaran onboard lunch"
       },
       {
         "n": 2,
@@ -204,14 +218,15 @@
           "title": "Sulphur Springs Mud Bath & Waterfall",
           "place": "Soufrière Volcano",
           "meta": "Morning · from $100",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Toraille Waterfall & local lunch",
           "place": "Soufrière",
           "meta": "Included"
-        }
+        },
+        "food": "Creole lunch, Soufrière"
       },
       {
         "n": 3,
@@ -220,14 +235,15 @@
           "title": "Volcanic Wellness, Pitons & Waterfalls",
           "place": "Soufrière",
           "meta": "Morning · from $145",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Sugar Beach swim",
           "place": "Soufrière",
           "meta": "At leisure"
-        }
+        },
+        "food": "Sugar Beach café"
       },
       {
         "n": 4,
@@ -242,7 +258,8 @@
           "title": "Wellness & Romance spa afternoon",
           "place": "Your resort",
           "meta": "Custom quote"
-        }
+        },
+        "food": "Spinnakers, Rodney Bay"
       },
       {
         "n": 5,
@@ -257,12 +274,14 @@
           "title": "Rodney Bay marina & departure",
           "place": "Rodney Bay",
           "meta": "At leisure"
-        }
+        },
+        "food": "Gros Islet fish fry / KFC Castries"
       }
     ]
   },
   "Curaçao": {
     "label": "Curaçao",
+    "chip": "sea",
     "title": "Curaçao 5-Day Signature",
     "frm": 399,
     "base": "Jan Thiel Coastal Villa",
@@ -271,52 +290,21 @@
         "n": 1,
         "am": {
           "when": "Morning",
-          "title": "Klein Curaçao Full-Day Boat Trip",
-          "place": "Departs Willemstad",
-          "meta": "Full day · from $155",
-          "pickup": "Hotel pickup / port transfer"
-        },
-        "pm": {
-          "when": "Evening",
-          "title": "Pietermaai dinner",
-          "place": "Willemstad",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 2,
-        "am": {
-          "when": "Morning",
-          "title": "Off-Road Buggy Tour North Coast Adventure",
-          "place": "Shete Boka & North Coast",
-          "meta": "Morning · from $145",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Afternoon",
-          "title": "Shete Boka blowholes & Playa Kenepa",
-          "place": "North Coast",
-          "meta": "Included"
-        }
-      },
-      {
-        "n": 3,
-        "am": {
-          "when": "Morning",
           "title": "Turtle Bay Snorkel & Blue Room Style Escape",
           "place": "Caracasbaai & Blue Room Cave",
           "meta": "Morning · from $99",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Mambo Beach club",
           "place": "Mambo Beach",
           "meta": "At leisure"
-        }
+        },
+        "food": "Mambo Beach eats"
       },
       {
-        "n": 4,
+        "n": 2,
         "am": {
           "when": "Morning",
           "title": "Willemstad colour & coast walk",
@@ -328,7 +316,42 @@
           "title": "Queen Emma Bridge & Handelskade",
           "place": "Willemstad",
           "meta": "At leisure"
-        }
+        },
+        "food": "Plasa Bieu old market, Punda"
+      },
+      {
+        "n": 3,
+        "am": {
+          "when": "Morning",
+          "title": "Off-Road Buggy Tour North Coast Adventure",
+          "place": "Shete Boka & North Coast",
+          "meta": "Morning · from $145",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Afternoon",
+          "title": "Shete Boka blowholes & Playa Kenepa",
+          "place": "North Coast",
+          "meta": "Included"
+        },
+        "food": "Jaanchie’s, Westpunt"
+      },
+      {
+        "n": 4,
+        "am": {
+          "when": "Full day",
+          "title": "Klein Curaçao Full-Day Boat Trip",
+          "place": "Departs Willemstad",
+          "meta": "Full day · from $155",
+          "pickup": "Pickup / port transfer"
+        },
+        "pm": {
+          "when": "Evening",
+          "title": "Pietermaai dinner",
+          "place": "Willemstad",
+          "meta": "At leisure"
+        },
+        "food": "Onboard Klein Curaçao BBQ"
       },
       {
         "n": 5,
@@ -343,12 +366,14 @@
           "title": "Spanish Water & departure",
           "place": "Jan Thiel",
           "meta": "At leisure"
-        }
+        },
+        "food": "Zanzibar, Jan Thiel"
       }
     ]
   },
   "The Bahamas": {
     "label": "Bahamas",
+    "chip": "mix",
     "title": "Bahamas 5-Day Signature",
     "frm": 594,
     "base": "Paradise Island Modern Suite",
@@ -357,89 +382,95 @@
         "n": 1,
         "am": {
           "when": "Morning",
-          "title": "3 Islands Tour, Snorkel, Pig Beach, Turtles & Lunch",
-          "place": "Rose Island & nearby cays",
-          "meta": "Full day · from $125",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Evening",
-          "title": "Paradise Island dinner",
-          "place": "Paradise Island",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 2,
-        "am": {
-          "when": "Morning",
-          "title": "Reef Snorkeling, Turtles, Lunch & Beach Club",
-          "place": "Nassau reefs",
-          "meta": "Morning · from $129",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Afternoon",
-          "title": "Cable Beach club",
-          "place": "Cable Beach",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 3,
-        "am": {
-          "when": "Morning",
           "title": "Bahamas Culture Tour with Electric Trolley",
           "place": "Downtown Nassau",
           "meta": "Morning · from $55",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Straw Market & Queen’s Staircase",
           "place": "Nassau",
           "meta": "At leisure"
-        }
+        },
+        "food": "Arawak Cay Fish Fry, Nassau"
       },
       {
-        "n": 4,
+        "n": 2,
         "am": {
           "when": "Morning",
           "title": "Historic City Tour with Drink & Food Tasting",
           "place": "Nassau & Paradise Island",
           "meta": "Morning · from $150",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Junkanoo Beach",
           "place": "Nassau",
           "meta": "At leisure"
-        }
+        },
+        "food": "Bamboo Shack, Nassau"
       },
       {
-        "n": 5,
+        "n": 3,
         "am": {
           "when": "Morning",
           "title": "Nassau ATV Island Half-Day City Tour",
           "place": "New Providence",
           "meta": "Morning · from $135",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
-          "title": "Beach & departure prep",
+          "title": "Cable Beach club",
+          "place": "Cable Beach",
+          "meta": "At leisure"
+        },
+        "food": "Cable Beach eats"
+      },
+      {
+        "n": 4,
+        "am": {
+          "when": "Full day",
+          "title": "3 Islands Tour, Snorkel, Pig Beach, Turtles & Lunch",
+          "place": "Rose Island & nearby cays",
+          "meta": "Full day · from $125",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Evening",
+          "title": "Paradise Island dinner",
+          "place": "Paradise Island",
+          "meta": "At leisure"
+        },
+        "food": "Onboard island lunch"
+      },
+      {
+        "n": 5,
+        "am": {
+          "when": "Morning",
+          "title": "Reef Snorkeling, Turtles, Lunch & Beach Club",
+          "place": "Nassau reefs",
+          "meta": "Morning · from $129",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Afternoon",
+          "title": "Beach & departure",
           "place": "Nassau",
           "meta": "At leisure"
-        }
+        },
+        "food": "Twin Brothers, Arawak Cay"
       }
     ]
   },
   "Belize": {
     "label": "Belize",
+    "chip": "land",
     "title": "Belize 5-Day Signature",
     "frm": 614,
-    "base": "Placencia Coast Villa",
+    "base": "Ambergris Caye Stay → San Ignacio Jungle Villa",
     "days": [
       {
         "n": 1,
@@ -448,19 +479,20 @@
           "title": "Hol Chan Marine Reserve Small-Group Tour",
           "place": "Hol Chan & Shark Ray Alley, San Pedro",
           "meta": "Morning · from $129",
-          "pickup": "Hotel / dock pickup"
+          "pickup": "Dock pickup"
         },
         "pm": {
           "when": "Afternoon",
           "title": "San Pedro town & beach",
           "place": "Ambergris Caye",
           "meta": "At leisure"
-        }
+        },
+        "food": "Elvi’s Kitchen, San Pedro"
       },
       {
         "n": 2,
         "am": {
-          "when": "Morning",
+          "when": "Full day",
           "title": "Caye Caulker 7-Stop Snorkeling Reef Experience",
           "place": "Belize Barrier Reef, Caye Caulker",
           "meta": "Full day · from $110",
@@ -471,23 +503,25 @@
           "title": "The Split sunset",
           "place": "Caye Caulker",
           "meta": "At leisure"
-        }
+        },
+        "food": "Caye Caulker grill"
       },
       {
         "n": 3,
         "am": {
-          "when": "Morning",
-          "title": "ATM Cave Full-Day Adventure",
+          "when": "Full day",
+          "title": "Transfer to Cayo + ATM Cave Full-Day Adventure",
           "place": "Actun Tunichil Muknal, Cayo",
           "meta": "Full day · from $140",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Evening",
           "title": "San Ignacio dinner",
           "place": "San Ignacio",
           "meta": "At leisure"
-        }
+        },
+        "food": "Pop’s & local lunch, San Ignacio"
       },
       {
         "n": 4,
@@ -496,14 +530,15 @@
           "title": "Cave Tubing with Optional Zipline",
           "place": "Nohoch Che’en, Cayo",
           "meta": "Morning · from $95",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Jungle lodge & lunch",
           "place": "Cayo",
           "meta": "At leisure"
-        }
+        },
+        "food": "Jungle lodge lunch, Cayo"
       },
       {
         "n": 5,
@@ -512,19 +547,21 @@
           "title": "ATV Expedition to El Pilar Maya Ruins",
           "place": "El Pilar, San Ignacio",
           "meta": "Morning · from $140",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Market & departure",
           "place": "San Ignacio",
           "meta": "At leisure"
-        }
+        },
+        "food": "San Ignacio market eats"
       }
     ]
   },
   "Dominican Republic": {
     "label": "Dom. Rep.",
+    "chip": "sea",
     "title": "Dominican Republic 5-Day Signature",
     "frm": 251,
     "base": "Cap Cana Luxury Villa",
@@ -533,49 +570,51 @@
         "n": 1,
         "am": {
           "when": "Morning",
-          "title": "Saona Island Cruise with Lunch & Open Bar",
-          "place": "Saona Island, from Bayahibe",
-          "meta": "Full day · from $70",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Evening",
-          "title": "Bayahibe village dinner",
-          "place": "Bayahibe",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 2,
-        "am": {
-          "when": "Morning",
-          "title": "Saona Luxury Catamaran Small-Group Escape",
-          "place": "Saona Island",
-          "meta": "Full day · from $89",
-          "pickup": "Hotel pickup included"
-        },
-        "pm": {
-          "when": "Evening",
-          "title": "Cap Cana marina dinner",
-          "place": "Cap Cana",
-          "meta": "At leisure"
-        }
-      },
-      {
-        "n": 3,
-        "am": {
-          "when": "Morning",
           "title": "Punta Cana Buggy, Cave Swim & Macao Beach",
           "place": "Macao Beach & cenote, Punta Cana",
           "meta": "Morning · from $35",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Macao Beach surf & lunch",
           "place": "Macao",
           "meta": "At leisure"
-        }
+        },
+        "food": "Macao Beach seafood shacks"
+      },
+      {
+        "n": 2,
+        "am": {
+          "when": "Morning",
+          "title": "Bávaro Beach leisure day",
+          "place": "Bávaro",
+          "meta": "At leisure"
+        },
+        "pm": {
+          "when": "Evening",
+          "title": "Cap Cana marina dinner",
+          "place": "Cap Cana",
+          "meta": "At leisure"
+        },
+        "food": "La Yola, Cap Cana marina"
+      },
+      {
+        "n": 3,
+        "am": {
+          "when": "Full day",
+          "title": "Saona Island Cruise with Lunch & Open Bar",
+          "place": "Saona Island, from Bayahibe",
+          "meta": "Full day · from $70",
+          "pickup": "Pickup from your stay"
+        },
+        "pm": {
+          "when": "Evening",
+          "title": "Bayahibe village dinner",
+          "place": "Bayahibe",
+          "meta": "At leisure"
+        },
+        "food": "Saona buffet & open bar"
       },
       {
         "n": 4,
@@ -584,29 +623,32 @@
           "title": "Bayahibe ATV Buggy Jungle & Caves",
           "place": "Bayahibe",
           "meta": "Morning · from $57",
-          "pickup": "Hotel pickup included"
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Dominicus Beach club",
           "place": "Bayahibe",
           "meta": "At leisure"
-        }
+        },
+        "food": "Dominicus local comedor"
       },
       {
         "n": 5,
         "am": {
-          "when": "Morning",
-          "title": "Bávaro Beach leisure day",
-          "place": "Bávaro",
-          "meta": "At leisure"
+          "when": "Full day",
+          "title": "Saona Luxury Catamaran Small-Group Escape",
+          "place": "Saona Island",
+          "meta": "Full day · from $89",
+          "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
-          "title": "Resort & departure",
+          "title": "Return & departure",
           "place": "Punta Cana",
           "meta": "At leisure"
-        }
+        },
+        "food": "Catamaran onboard lunch"
       }
     ]
   }
