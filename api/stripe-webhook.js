@@ -62,7 +62,7 @@ async function handleGroupTripPaid(session, email, amountPaid) {
     await sendEmail({
       to: guestEmail,
       replyTo: BUSINESS_EMAIL,
-      subject: 'Your group trip deposit is confirmed — ' + refCode,
+      subject: 'Your group trip deposit is confirmed: ' + refCode,
       html: trip.shell('Deposit received', `<p>Thank you, ${trip.esc(contactName.split(' ')[0])}. Your deposit has been received and your trip is now being planned. Within one business day a trip planner will confirm your dates, the final itinerary and the remaining balance with you.</p>
         ${trip.detailTable(paidRows.concat(rows))}<h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Your selections</h3>${summary}`)
     });
@@ -70,7 +70,7 @@ async function handleGroupTripPaid(session, email, amountPaid) {
   await sendEmail({
     to: BUSINESS_EMAIL,
     replyTo: guestEmail || undefined,
-    subject: '[' + refCode + '] Group trip deposit paid — ' + (md.country || '') + ', ' + (md.guests || '?') + ' guests',
+    subject: '[' + refCode + '] Group trip deposit paid: ' + (md.country || '') + ', ' + (md.guests || '?') + ' guests',
     html: trip.shell('Group trip deposit paid', `<p>A guest paid a deposit through the group trip builder.</p>
       ${trip.detailTable([['Name', rec && rec.contact && rec.contact.name], ['Email', guestEmail], ['Phone / WhatsApp', rec && rec.contact && rec.contact.phone]].concat(paidRows, rows))}
       <h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Selections</h3>${summary}`)
@@ -97,7 +97,7 @@ function extractAddons(itemsStr, pkg) {
   }).filter(it => (!pkg || it.name !== pkg.title) &&
                   /Private Transfers|Private Driver Day/.test(it.name));
 }
-function addonLabel(name) { return name.replace(/^.*?—\s*/, '').replace(/^.*? - /, ''); }
+function addonLabel(name) { return name.replace(/^.*?:\s*/, '').replace(/^.*? - /, ''); }
 
 // Branded, GetYourGuide-style confirmation email for a package booking.
 function packageConfirmationHtml(pkg, amount, ref, addons) {
@@ -106,7 +106,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
        <table style="border-collapse:collapse;width:100%;margin:0 0 16px">` +
       addons.map((a, i) => `<tr${i % 2 ? ' style="background:#f6faf7"' : ''}><td style="padding:8px 9px;color:#333">${addonLabel(a.name)}${a.qty > 1 ? ' <span style="color:#8a97a2">× ' + a.qty + '</span>' : ''}</td></tr>`).join('') +
       `</table>` : '';
-  const slot = s => s ? `<div style="color:#333;font-size:13px;margin:2px 0"><b style="color:#ef8731">${s.when}:</b> ${s.title}${s.place ? ' — <span style="color:#5a6d7e">' + s.place + '</span>' : ''}${s.meta ? ' <span style="color:#8a97a2">· ' + s.meta + '</span>' : ''}</div>` : '';
+  const slot = s => s ? `<div style="color:#333;font-size:13px;margin:2px 0"><b style="color:#ef8731">${s.when}:</b> ${s.title}${s.place ? ', <span style="color:#5a6d7e">' + s.place + '</span>' : ''}${s.meta ? ' <span style="color:#8a97a2">· ' + s.meta + '</span>' : ''}</div>` : '';
   const days = (pkg.days || []).map(d =>
     `<tr><td style="padding:10px 9px;border-bottom:1px solid #eef3f0;vertical-align:top;white-space:nowrap"><b style="color:#063a63">Day ${d.n}</b></td><td style="padding:10px 9px;border-bottom:1px solid #eef3f0">${slot(d.am)}${slot(d.pm)}${d.food ? '<div style="color:#4a8a2e;font-size:12px;font-weight:bold;margin-top:4px">Food stop: ' + d.food + '</div>' : ''}</td></tr>`
   ).join('');
@@ -117,7 +117,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
       <h2 style="margin:8px 0 0;font-size:22px">Booking confirmed 🎉</h2>
     </div>
     <div style="border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:24px">
-      <p style="color:#5a6d7e;font-size:15px;line-height:1.6">Thank you for booking the <b>${pkg.title}</b>. Your payment was received and your trip is confirmed — your full day-by-day itinerary and receipt are attached as a PDF.</p>
+      <p style="color:#5a6d7e;font-size:15px;line-height:1.6">Thank you for booking the <b>${pkg.title}</b>. Your payment was received and your trip is confirmed. Your full day-by-day itinerary and receipt are attached as a PDF.</p>
       <table style="border-collapse:collapse;width:100%;margin:10px 0 16px">
         <tr><td style="padding:8px 9px;font-weight:bold;width:150px;color:#063a63">Package</td><td style="padding:8px 9px;color:#333">${pkg.title}</td></tr>
         <tr style="background:#f6faf7"><td style="padding:8px 9px;font-weight:bold;color:#063a63">Booking reference</td><td style="padding:8px 9px;color:#333">${ref}</td></tr>
@@ -166,7 +166,7 @@ async function buildItineraryPdf(pkg, session, amountStr, addons) {
     if (!s) return;
     if (y < 80) { page = doc.addPage([W,H]); y = H-60; }
     page.drawText(s.when + ':', { x:58, y, size:9, font:bold, color:orange });
-    page.drawText((s.title + (s.place ? '  —  ' + s.place : '')).slice(0,74), { x:108, y, size:10, font, color:dark }); y -= 13;
+    page.drawText((s.title + (s.place ? ', ' + s.place : '')).slice(0,74), { x:108, y, size:10, font, color:dark }); y -= 13;
     const meta = (s.meta || '') + (s.pickup ? '   •   ' + s.pickup : '');
     if (meta) { page.drawText(meta.slice(0,92), { x:108, y, size:8.5, font, color:grey }); y -= 15; } else { y -= 3; }
   };
@@ -271,7 +271,7 @@ module.exports = async function handler(req, res) {
         } catch (e) { console.error('Itinerary PDF build error:', e && e.message); }
         await sendEmail({
           to: email,
-          subject: 'Your Sight Seers booking is confirmed — ' + pkg.title,
+          subject: 'Your Sight Seers booking is confirmed: ' + pkg.title,
           html: packageConfirmationHtml(pkg, money(amountPaid), ref, addons),
           attachments
         });
@@ -285,7 +285,7 @@ module.exports = async function handler(req, res) {
       // Notify the business too.
       await sendEmail({
         to: BUSINESS_EMAIL,
-        subject: 'New booking — ' + (pkg ? pkg.title : (items || title)),
+        subject: 'New booking: ' + (pkg ? pkg.title : (items || title)),
         html: `<div style="font-family:sans-serif"><h3 style="color:#063a63">New booking</h3>
           <p><b>Item:</b> ${pkg ? pkg.title : (items || title)}<br><b>Amount:</b> ${money(amountPaid)}<br><b>Customer:</b> ${email || '(no email)'}<br><b>Type:</b> ${pkg ? 'package' : (kind || 'checkout')}</p></div>`
       });

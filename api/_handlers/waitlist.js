@@ -64,9 +64,9 @@ module.exports = async function handler(req, res) {
 
         await db.addToCollection(COLLECTION, entry);
         await sendEmail({
-          subject: `New V-Tours Waitlist Signup — ${escapeHtml(entry.firstName)} ${escapeHtml(entry.lastName)} (${escapeHtml(acctType)})`,
+          subject: `New V-Tours Waitlist Signup: ${escapeHtml(entry.firstName)} ${escapeHtml(entry.lastName)} (${escapeHtml(acctType)})`,
           html: `
-            <h2 style="color:#0d5371">New V-Tours Waitlist Signup — Sight Seers Caribbean</h2>
+            <h2 style="color:#0d5371">New V-Tours Waitlist Signup: Sight Seers Caribbean</h2>
             <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
               <tr><td style="padding:8px;font-weight:bold;width:140px">Name</td><td style="padding:8px">${escapeHtml(entry.firstName)} ${escapeHtml(entry.lastName)}</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(entry.email)}</td></tr>

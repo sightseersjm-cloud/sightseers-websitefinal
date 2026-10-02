@@ -129,7 +129,7 @@ function summaryTable(q, opts) {
   const tr = q.transfers
     ? `<tr><td style="padding:8px 9px;color:#333">${esc(q.transfers.name)}</td><td style="padding:8px 9px;color:#333;text-align:right;white-space:nowrap">${money(q.transfers.amount)} <span style="color:#8a97a2">(${q.transfers.qty} ${q.transfers.unit}${q.transfers.qty > 1 ? 's' : ''})</span></td></tr>` : '';
   const empty = !q.lines.length && !q.transfers
-    ? '<tr><td style="padding:8px 9px;color:#8a97a2" colspan="2">No experiences chosen yet — we will help you shape this together.</td></tr>' : '';
+    ? '<tr><td style="padding:8px 9px;color:#8a97a2" colspan="2">No experiences chosen yet. We will help you shape this together.</td></tr>' : '';
   return `<table style="border-collapse:collapse;width:100%;margin:8px 0 14px">${rows}${tr}${empty}
     <tr><td style="padding:10px 9px;border-top:2px solid #063a63;font-weight:bold;color:#063a63">Estimated total</td>
     <td style="padding:10px 9px;border-top:2px solid #063a63;text-align:right;font-weight:bold;color:#063a63">${money(q.subtotal)}${q.guests ? ' <span style="color:#8a97a2;font-weight:normal">(≈ ' + money(q.perPerson) + ' per person)</span>' : ''}</td></tr>

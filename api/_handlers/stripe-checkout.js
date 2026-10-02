@@ -149,7 +149,7 @@ module.exports = async function handler(req, res) {
       params['line_items[' + i + '][price_data][unit_amount]'] = String(Math.round(line.price * 100));
       params['line_items[' + i + '][price_data][product_data][name]'] = line.name.slice(0, 250);
       params['line_items[' + i + '][price_data][product_data][description]'] =
-        (line.option ? line.option + ' — ' : '') + 'Sight Seers Caribbean Adventures';
+        (line.option ? line.option + ': ' : '') + 'Sight Seers Caribbean Adventures';
       params['line_items[' + i + '][quantity]'] = String(line.qty);
     });
     params['metadata[kind]'] = 'tour-cart';

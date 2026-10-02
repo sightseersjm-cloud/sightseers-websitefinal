@@ -113,7 +113,7 @@ module.exports = async function handler(req, res) {
     const why = (err && err.message) ? String(err.message).slice(0, 300) : 'no detail returned';
     return res.status(502).json({
       error: 'Storage rejected the upload: ' + why +
-             ' — check that a Blob store is connected to this Vercel project and that BLOB_READ_WRITE_TOKEN matches it, then redeploy.'
+             '. Check that a Blob store is connected to this Vercel project and that BLOB_READ_WRITE_TOKEN matches it, then redeploy.'
     });
   }
 

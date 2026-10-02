@@ -45,9 +45,9 @@ module.exports = async function handler(req, res) {
 
         await db.addToCollection('contact-messages', msg);
         await sendEmail({
-          subject: `New Enquiry from ${escapeHtml(msg.name)}${msg.subject ? ' — ' + escapeHtml(msg.subject) : ''}`,
+          subject: `New Enquiry from ${escapeHtml(msg.name)}${msg.subject ? ': ' + escapeHtml(msg.subject) : ''}`,
           html: `
-            <h2 style="color:#0d5371">New Contact Enquiry — Sight Seers Caribbean</h2>
+            <h2 style="color:#0d5371">New Contact Enquiry: Sight Seers Caribbean</h2>
             <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
               <tr><td style="padding:8px;font-weight:bold;width:130px">Name</td><td style="padding:8px">${escapeHtml(msg.name)}</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(msg.email)}</td></tr>
