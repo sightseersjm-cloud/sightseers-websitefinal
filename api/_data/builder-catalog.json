@@ -176,16 +176,16 @@
       "per": "person",
       "cap": null
     },
-    "Klein Curaçao Full-Day Boat Trip": {
-      "country": "Curaçao",
-      "area": "East Coast & Klein Curaçao",
+    "Klein Curacao Full-Day Boat Trip": {
+      "country": "Curacao",
+      "area": "East Coast & Klein Curacao",
       "type": "water",
       "price": 150,
       "per": "person",
       "cap": null
     },
     "Turtle Bay Snorkel & Blue Room Style Escape": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "West Coast",
       "type": "water",
       "price": 0,
@@ -193,7 +193,7 @@
       "cap": null
     },
     "Offroad UTV / Buggy Adventure": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "North Coast & Parks",
       "type": "land",
       "price": 194,
@@ -281,7 +281,7 @@
       "cap": null
     },
     "Off-Road Buggy Tour North Coast Adventure": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "North Coast & Parks",
       "type": "land",
       "price": 145,
@@ -392,8 +392,8 @@
       "per": "person",
       "cap": null
     },
-    "Willemstad City, Culture & Blue Curaçao Tasting": {
-      "country": "Curaçao",
+    "Willemstad City, Culture & Blue Curacao Tasting": {
+      "country": "Curacao",
       "area": "Willemstad",
       "type": "land",
       "price": 65,
@@ -401,7 +401,7 @@
       "cap": null
     },
     "Sunset Catamaran Cruise with Open Bar": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "Willemstad",
       "type": "water",
       "price": 75,
@@ -409,7 +409,7 @@
       "cap": null
     },
     "Hato Caves, Flamingos & Beach Half-Day": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "Willemstad",
       "type": "land",
       "price": 85,
@@ -713,7 +713,7 @@
       "cap": null
     },
     "West Coast Beach Tour with Snorkeling": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "West Coast",
       "type": "water",
       "price": 175,
@@ -721,7 +721,7 @@
       "cap": null
     },
     "Playa Kenepa Turtle Snorkel": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "West Coast",
       "type": "water",
       "price": 75,
@@ -729,7 +729,7 @@
       "cap": null
     },
     "Shete Boka & Playa Lagun Snorkel Adventure": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "North Coast & Parks",
       "type": "water",
       "price": 102,
@@ -737,7 +737,7 @@
       "cap": null
     },
     "Christoffel Park 4x4 Jeep Safari": {
-      "country": "Curaçao",
+      "country": "Curacao",
       "area": "North Coast & Parks",
       "type": "land",
       "price": 120,
@@ -745,8 +745,8 @@
       "cap": null
     },
     "Caracas Bay Sunset All-Inclusive Party Catamaran": {
-      "country": "Curaçao",
-      "area": "East Coast & Klein Curaçao",
+      "country": "Curacao",
+      "area": "East Coast & Klein Curacao",
       "type": "water",
       "price": 130,
       "per": "person",
@@ -814,7 +814,7 @@
       "price": 479,
       "per": "per group (up to 6)"
     },
-    "Curaçao": {
+    "Curacao": {
       "price": 229,
       "per": "per group (up to 6)"
     },
