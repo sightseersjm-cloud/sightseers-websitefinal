@@ -51166,3 +51166,109 @@ html body .btn-book:hover,html body .btn-secondary:hover,html body .btn-white:ho
 html body .pd-tab-btn{font-family:'Raleway',sans-serif!important;font-size:10.5px!important;font-weight:800!important;letter-spacing:.9px!important;text-transform:uppercase!important;border-radius:999px!important;padding:8px 13px!important;border:1px solid rgba(6,58,99,.1)!important;background:linear-gradient(180deg,#fff,#f1f6fa)!important;color:#063a63!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 1px 1px rgba(6,58,99,.05)!important}
 html body .pd-tab-btn.on{background:linear-gradient(180deg,#0e5489,#063a63)!important;color:#fff!important;border-color:#063a63!important}
 </style>
+
+<style id="vtours-flat-glossy">
+/* ===== 360° V-Tours: flat + glossy finish on the (slightly lighter) dark glass page ===== */
+html body #p-vtours{font-family:'Raleway',sans-serif}
+/* lighter glass: brighter backdrop, frame and tiles */
+html body .vt-vision::before{filter:blur(22px) brightness(.66) saturate(1.2)!important}
+html body .vt-vision::after{background:radial-gradient(ellipse at 50% 0%,rgba(10,22,40,0) 0%,rgba(6,14,26,.32) 80%)!important}
+html body .vt-vision .vt-dash-frame{background:linear-gradient(180deg,rgba(78,104,136,.46),rgba(46,68,98,.42))!important;border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 2px rgba(0,0,0,.2),0 30px 70px -30px rgba(0,0,0,.45)!important}
+html body .vt-vision .vt-dash-topbar{background:rgba(255,255,255,.09)!important}
+html body .vt-vision .vt-dash-sidebar{background:rgba(255,255,255,.06)!important}
+html body .vt-vision .vt-dash-sidebar a.active,html body .vt-vision .vt-dash-sidebar a.act{background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.14))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important}
+html body .vt-vision .vt-dash-tabs{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.24)!important;border-radius:14px!important;padding:4px!important}
+html body .vt-vision .vt-dash-tab{border-radius:10px!important;font-size:12.5px;font-weight:700}
+html body .vt-vision .vt-dash-tab.active{background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.18))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 2px rgba(0,0,0,.2)!important}
+html body .vt-vision-widget{background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.1))!important;border:1px solid rgba(255,255,255,.28)!important;border-radius:16px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.18)!important}
+html body .vt-vision .vt-dash-main .vt-session{background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.07))!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:20px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 2px rgba(0,0,0,.2)!important}
+html body .vt-vision #vt-active-session .vt-session-bar,html body .vt-vision .vt-dash-frame .vt-session-bar{background:rgba(48,70,100,.62)!important}
+html body .vt-vision #vt-active-session .vt-session-side,html body .vt-vision .vt-dash-frame .vt-session-side{background:rgba(48,70,100,.5)!important}
+
+/* surfaces: glossy glass tiles */
+html body #p-vtours .vt-live-card,html body #p-vtours .vt-dash-stat,html body #p-vtours .vt-empty-state,html body #p-vtours .vt-xr-device-card,
+html body #p-vtours .vt-mood-card,html body #p-vtours .vt-splits-card,html body #p-vtours .vt-ai-clone-card,html body #p-vtours .vt-ai-clone-stat,
+html body #p-vtours .vt-multicam-card,html body #p-vtours .vt-group-room,html body #p-vtours .vt-ai-chat,html body #p-vtours .vt-earnings-chart,html body #p-vtours .vt-pricing-ctrl{
+  background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.08))!important;border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.2)!important;border-radius:20px!important}
+html body #p-vtours .vt-dash-stat,html body #p-vtours .vt-ai-clone-stat{border-radius:16px!important}
+html body #p-vtours .vt-multicam-card,html body #p-vtours .vt-group-room{border-radius:14px!important}
+html body #p-vtours .vt-identify-card,html body #p-vtours .vt-auction-card{background:linear-gradient(180deg,rgba(40,64,94,.97),rgba(26,46,72,.97))!important;border:1px solid rgba(255,255,255,.2)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;border-radius:20px!important}
+html body #p-vtours .vt-live-card{overflow:hidden;transition:transform .25s ease,border-color .25s ease}
+html body #p-vtours .vt-live-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.34)!important}
+
+/* buttons: same type + 12px radius as every other button on the site */
+html body #p-vtours .vt-live-card-btn,html body #p-vtours .vt-dash-header-btn,html body #p-vtours .vt-session-bar-btn,html body #p-vtours .vt-create-room-btn,
+html body #p-vtours .vt-identify-buy,html body #p-vtours .vt-auction-bid-btn,html body #p-vtours .vt-live-prompt-join,html body #p-vtours .vt-3d-buy,
+html body #p-vtours .vt-xr-connect-btn,html body #p-vtours .vt-xr-info-btn,html body #p-vtours .vt-xr-enter-btn,html body #p-vtours .vt-ct-btn,
+html body #p-vtours .vt-signup-btn,html body #p-vtours .vt-cta-btn,html body #p-vtours .vt-lang-prompt-skip,html body #p-vtours .vt-lang-prompt-confirm,
+html body #p-vtours .vt-trivia-next-btn,html body #p-vtours .vt-ai-clone-btn,html body #p-vtours .vt-nft-mint-btn,html body #p-vtours .vt-social-post-btn,
+html body #p-vtours .vt-photo-snap-btn,html body #p-vtours .vt-cinema-btn,html body #p-vtours .vt-signup-toggle-btn{
+  font-family:'Raleway',sans-serif!important;font-size:11px!important;font-weight:800!important;letter-spacing:1.3px!important;text-transform:uppercase!important;
+  line-height:1.2!important;border-radius:12px!important;text-shadow:none!important;transition:filter .2s,transform .15s!important}
+/* secondary (frosted glossy) */
+html body #p-vtours .vt-live-card-btn,html body #p-vtours .vt-dash-header-btn,html body #p-vtours .vt-session-bar-btn,html body #p-vtours .vt-xr-info-btn,
+html body #p-vtours .vt-lang-prompt-skip,html body #p-vtours .vt-signup-toggle-btn,html body #p-vtours .vt-cinema-btn,html body #p-vtours .vt-photo-snap-btn,
+html body #p-vtours .vt-social-post-btn,html body #p-vtours .vt-ct-btn.secondary,html body #p-vtours .vt-xr-enter-btn,
+html body .vt-vision #vt-active-session .vt-session-lang,html body .vt-vision #vt-active-session .vt-session-bar-btn:not(.leave),html body .vt-vision #vt-active-session .vt-session-expand-btn{
+  color:#fff!important;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.12))!important;border:1px solid rgba(255,255,255,.3)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 1px rgba(0,0,0,.2)!important;border-radius:12px!important}
+/* primary (orange) */
+html body #p-vtours .vt-dash-header-btn.primary,html body #p-vtours .vt-create-room-btn,html body #p-vtours .vt-identify-buy,html body #p-vtours .vt-auction-bid-btn,
+html body #p-vtours .vt-live-prompt-join,html body #p-vtours .vt-3d-buy,html body #p-vtours .vt-xr-connect-btn,html body #p-vtours .vt-ct-btn.primary,
+html body #p-vtours .vt-signup-btn,html body #p-vtours .vt-lang-prompt-confirm,html body #p-vtours .vt-nft-mint-btn,html body #p-vtours .vt-ai-clone-btn,html body #p-vtours .vt-trivia-next-btn,
+html body .vt-vision .vt-live-card-btn:hover{
+  color:#fff!important;background:linear-gradient(180deg,#f6a05a,#ef8731)!important;border:1px solid rgba(178,86,12,.45)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 2px rgba(150,70,0,.25)!important}
+html body .vt-vision #vt-active-session .vt-session-bar-btn.leave,html body #p-vtours .vt-session-bar-btn.leave{color:#fff!important;background:linear-gradient(180deg,#f2655c,#df3f35)!important;border:1px solid rgba(150,30,25,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(120,20,15,.3)!important}
+html body #p-vtours .vt-cta-btn{color:#063a63!important;background:linear-gradient(180deg,#fff,#f1f6fa)!important;border:1px solid rgba(6,58,99,.16)!important;box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(6,58,99,.06)!important}
+html body #p-vtours :is(.vt-live-card-btn,.vt-dash-header-btn,.vt-session-bar-btn,.vt-signup-btn,.vt-ct-btn,.vt-xr-connect-btn,.vt-cta-btn):hover{filter:brightness(1.06);transform:none}
+
+/* pills, badges, tags, filters: the shared pill shape */
+html body #p-vtours .vt-live-card-badge,html body #p-vtours .vt-live-card-cat,html body #p-vtours .vt-group-room-badge,html body #p-vtours .vt-schedule-tag,
+html body #p-vtours .vt-status,html body #p-vtours .vt-xr-device-tag,html body #p-vtours .vt-3d-tag,html body #p-vtours .vt-nft-badge,html body #p-vtours .vt-ai-chip,
+html body #p-vtours .vt-badge,html body #p-vtours .vt-mood-badge,html body #p-vtours .vt-spatial-badge,html body #p-vtours .vt-device-badge,html body #p-vtours .badge,
+html body #p-vtours .vt-signup-tag,html body #p-vtours .vt-ct-tag-check,html body #p-vtours .vt-scene-btn,html body #p-vtours .vt-path,html body #p-vtours .vt-browse-filter,
+html body #p-vtours .vt-xr-status{
+  font-family:'Raleway',sans-serif!important;font-size:10.5px!important;font-weight:800!important;letter-spacing:.9px!important;text-transform:uppercase!important;
+  line-height:1.2!important;border-radius:999px!important;padding:6px 11px!important;border:1px solid rgba(255,255,255,.26)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important;text-shadow:none!important}
+html body #p-vtours .vt-live-card-cat,html body #p-vtours .vt-ai-chip,html body #p-vtours .vt-badge,html body #p-vtours .vt-mood-badge,html body #p-vtours .vt-spatial-badge,
+html body #p-vtours .vt-scene-btn,html body #p-vtours .vt-path,html body #p-vtours .vt-browse-filter,html body #p-vtours .vt-xr-status,html body #p-vtours .vt-ct-tag-check{
+  color:#fff!important;background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.12))!important;-webkit-backdrop-filter:saturate(1.5) blur(12px);backdrop-filter:saturate(1.5) blur(12px)}
+html body #p-vtours .vt-scene-btn.active,html body #p-vtours .vt-path.on,html body #p-vtours .vt-browse-filter.active,html body #p-vtours .vt-badge.earned,html body #p-vtours .vt-ct-tag-check:has(input:checked){
+  color:#fff!important;background:linear-gradient(180deg,#f6a05a,#ef8731)!important;border-color:rgba(178,86,12,.45)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important}
+html body #p-vtours .vt-live-card-badge{color:#fff!important;background:linear-gradient(180deg,#46d36b,#2fb457)!important;border-color:rgba(20,110,50,.5)!important}
+html body #p-vtours .vt-live-card-badge.scheduled{background:linear-gradient(180deg,#7a78e6,#5856d6)!important;border-color:rgba(50,48,150,.5)!important}
+html body #p-vtours .vt-3d-tag,html body #p-vtours .badge,html body #p-vtours .vt-device-badge,html body #p-vtours .vt-nft-badge{color:#fff!important;background:linear-gradient(180deg,#f6a05a,#ef8731)!important;border-color:rgba(178,86,12,.45)!important}
+html body #p-vtours .vt-schedule-tag.live,html body #p-vtours .vt-group-room-badge.open,html body #p-vtours .vt-status.live,html body #p-vtours .vt-xr-device-tag.glasses{color:#8ff0ae!important;background:rgba(52,199,89,.2)!important;border-color:rgba(52,199,89,.45)!important}
+html body #p-vtours .vt-group-room-badge.live{color:#ffaaa3!important;background:rgba(239,68,68,.22)!important;border-color:rgba(239,68,68,.5)!important}
+html body #p-vtours .vt-schedule-tag.group,html body #p-vtours .vt-status.scheduled{color:#a9cbff!important;background:rgba(59,130,246,.22)!important;border-color:rgba(59,130,246,.47)!important}
+html body #p-vtours .vt-schedule-tag.vip,html body #p-vtours .vt-xr-device-tag.premium{color:#d6b8ff!important;background:rgba(168,85,247,.22)!important;border-color:rgba(168,85,247,.47)!important}
+html body #p-vtours .vt-status.draft{color:#d7dde4!important;background:rgba(156,163,175,.2)!important;border-color:rgba(156,163,175,.4)!important}
+html body #p-vtours .vt-xr-device-tag.vr{color:#ffcc95!important;background:rgba(239,135,49,.22)!important;border-color:rgba(239,135,49,.5)!important}
+/* the signup card is light, so its tags use the site's neutral pill */
+html body #p-vtours .vt-signup-tag{color:#063a63!important;background:linear-gradient(180deg,#fff,#f1f6fa)!important;border-color:rgba(6,58,99,.1)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 1px 1px rgba(6,58,99,.05)!important}
+
+/* legibility + fit fixes on the lighter glass */
+html body .vt-vision .vt-dash-sidebar-label,html body .vt-vision .vt-dash-sidebar .vt-dash-sidebar-label{color:rgba(255,255,255,.6)!important}
+html body .vt-vision .vt-session-chat-title span{color:rgba(255,255,255,.7)!important}
+html body #p-vtours .vt-live-card-cat{font-size:9.5px!important;letter-spacing:.5px!important;padding:4px 9px!important;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body #p-vtours .vt-live-card-btn{padding:8px 12px!important;font-size:10px!important;letter-spacing:1px!important;white-space:nowrap}
+html body #p-vtours .vt-live-card-price{white-space:nowrap}
+/* category pill sits on photos: frosted white, navy text (readable on any image) */
+html body #p-vtours .vt-live-card-cat{color:#063a63!important;background:rgba(255,255,255,.86)!important;border-color:rgba(255,255,255,.7)!important}
+html body #p-vtours .vt-session-chat-title span{color:rgba(255,255,255,.72)!important}
+/* "how it reaches your headset" section: lighter navy, glossy tiles */
+html body #p-vtours #vt-rig-section{background:linear-gradient(180deg,#0d4f82,#0a4272)!important}
+html body #p-vtours #vt-rig-section div[style*="border-radius:18px"]{background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.08))!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)!important;border-radius:20px!important}
+html body #p-vtours #vt-rig-section p[style*="rgba(255,255,255,.55)"]{color:rgba(255,255,255,.78)!important}
+html body #p-vtours #vt-rig-section div[style*="width:44px"]{background:linear-gradient(180deg,#f6a05a,#ef8731)!important;border:1px solid rgba(178,86,12,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important;color:#fff}
+/* fields */
+html body #p-vtours input:not([type=range]):not([type=checkbox]):not([type=radio]),html body #p-vtours select,html body #p-vtours textarea{
+  font-family:'Raleway',sans-serif!important;border-radius:12px!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.18)!important}
+html body #p-vtours .vt-signup-card input,html body #p-vtours .vt-signup-card select{box-shadow:inset 0 1px 1px rgba(6,58,99,.05)!important}
+</style>
+
+
