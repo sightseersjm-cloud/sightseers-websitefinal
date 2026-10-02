@@ -26359,6 +26359,7 @@ function nav(id,opts={}){
   closeRhythmTour(true);
   closeSnapshot(true);
   document.body.classList.toggle('account-clean', id==='account');
+  const prevOnPage=document.querySelector('.page.on');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   const el=document.getElementById('p-'+id);if(el)el.classList.add('on');
   /* Update URL and metadata as soon as the page is shown, so a failure in any
@@ -26368,7 +26369,12 @@ function nav(id,opts={}){
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
   const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
-  if(!opts.skipScroll){ smoothScrollToY(0,900); }
+  /* A different page replaces the content instantly, so jump straight to its top. Animating from the old
+     scroll position made the new page visibly slide past (the "glitch" when opening Tours from deep in Home). */
+  if(!opts.skipScroll){
+    if(prevOnPage && el && prevOnPage!==el){ window.scrollTo({top:0,left:0,behavior:'instant'}); }
+    else { smoothScrollToY(0,900); }
+  }
   if(id==='vtours'){
     // Keep the tour video playing but muted, audio must not auto-play
     try{var ytp=document.getElementById('vt-yt-player');if(ytp)ytp.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*')}catch(e){}
