@@ -4,7 +4,7 @@
     "chip": "sea",
     "title": "Jamaica 5-Day Signature",
     "frm": 718,
-    "base": "Montego Bay Hillside Vacation Rentals",
+    "base": "Montego Bay Villa → Ocho Rios / Drax Hall",
     "days": [
       {
         "n": 1,
@@ -38,7 +38,7 @@
           "meta": "from $190",
           "pickup": "Pickup from your stay"
         },
-        "food": "Pelican Grill, Montego Bay"
+        "food": "Pelican Grill · Father Bull & KFC, Montego Bay"
       },
       {
         "n": 3,
@@ -62,10 +62,10 @@
         "n": 4,
         "am": {
           "when": "Full day",
-          "title": "ATV, River Rafting & Blue Hole Combo",
+          "title": "Transfer to Ocho Rios + ATV, River & Blue Hole Combo",
           "place": "Blue Hole, Ocho Rios",
           "meta": "Full day · from $229",
-          "pickup": "Pickup from your stay"
+          "pickup": "Transfer MoBay → Ocho Rios (luggage)"
         },
         "pm": {
           "when": "Evening",
@@ -79,17 +79,17 @@
         "n": 5,
         "am": {
           "when": "Morning",
-          "title": "Harbour Street craft market & lunch",
-          "place": "Montego Bay",
+          "title": "Dunn’s River Falls & craft market",
+          "place": "Ocho Rios / Drax Hall",
           "meta": "At leisure"
         },
         "pm": {
           "when": "Afternoon",
-          "title": "Beach club & departure",
-          "place": "Montego Bay",
-          "meta": "At leisure"
+          "title": "Departure transfer to Montego Bay airport",
+          "place": "Ocho Rios → MBJ",
+          "meta": "~1.5 hr"
         },
-        "food": "Father Bull & KFC, Montego Bay"
+        "food": "Miss T’s Kitchen, Ocho Rios"
       }
     ]
   },
@@ -192,7 +192,7 @@
     "chip": "land",
     "title": "Saint Lucia 5-Day Signature",
     "frm": 390,
-    "base": "Marigot Bay Luxury Residence",
+    "base": "Soufrière Piton-View Villa → Rodney Bay Residence",
     "days": [
       {
         "n": 1,
@@ -205,8 +205,8 @@
         },
         "pm": {
           "when": "Evening",
-          "title": "Marigot Bay dinner",
-          "place": "Marigot Bay",
+          "title": "Soufrière waterfront dinner",
+          "place": "Soufrière",
           "meta": "At leisure"
         },
         "food": "Catamaran onboard lunch"
@@ -239,8 +239,8 @@
         },
         "pm": {
           "when": "Afternoon",
-          "title": "Sugar Beach swim",
-          "place": "Soufrière",
+          "title": "Sugar Beach swim · transfer north to Rodney Bay",
+          "place": "Soufrière → Rodney Bay",
           "meta": "At leisure"
         },
         "food": "Sugar Beach café"
@@ -637,18 +637,18 @@
         "n": 5,
         "am": {
           "when": "Full day",
-          "title": "Saona Luxury Catamaran Small-Group Escape",
-          "place": "Saona Island",
-          "meta": "Full day · from $89",
+          "title": "Bávaro Catamaran Sail, Snorkel & Natural Pool",
+          "place": "Bávaro / Cortecito",
+          "meta": "Morning · from $89",
           "pickup": "Pickup from your stay"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Return & departure",
-          "place": "Punta Cana",
+          "place": "Punta Cana (afternoon/evening flights)",
           "meta": "At leisure"
         },
-        "food": "Catamaran onboard lunch"
+        "food": "Onboard rum & fruit · Little John, Bávaro"
       }
     ]
   }
