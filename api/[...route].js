@@ -19,6 +19,7 @@ const handlers = {
   'contact':         require('./_handlers/contact'),
   'content':         require('./_handlers/content'),
   'gallery':         require('./_handlers/gallery'),
+  'group-trip':      require('./_handlers/group-trip'),
   'guide-auth':      require('./_handlers/guide-auth'),
   'images':          require('./_handlers/images'),
   'live-token':      require('./_handlers/live-token'),

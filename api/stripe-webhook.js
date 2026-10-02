@@ -11,6 +11,7 @@ const https = require('https');
 const crypto = require('crypto');
 const db = require('./_lib/db');
 const { sendEmail, BUSINESS_EMAIL } = require('./_lib/email');
+const trip = require('./_lib/trip');
 
 function money(cents) { return '$' + ((cents || 0) / 100).toFixed(2); }
 
@@ -38,6 +39,43 @@ function confirmationHtml(title, itemsLine, amount) {
 
 let PACKAGES = {};
 try { PACKAGES = require('./_data/packages.json'); } catch (e) { PACKAGES = {}; }
+
+// A paid group-trip deposit (from the group trip builder): mark it paid, email the guest and the team.
+async function handleGroupTripPaid(session, email, amountPaid) {
+  const md = session.metadata || {};
+  const refCode = md.ref || '';
+  let rec = null;
+  try { rec = (await db.getCollection('group-trips')).find(r => r.ref === refCode) || null; } catch (e) { console.error('group trip lookup error:', e && e.message); }
+  if (rec) {
+    try { await db.updateInCollection('group-trips', rec.id, { status: 'deposit-paid', paidAt: new Date().toISOString(), amountPaid: (amountPaid || 0) / 100, stripeSession: session.id }); }
+    catch (e) { console.error('group trip update error:', e && e.message); }
+  }
+  const guestEmail = email || (rec && rec.contact && rec.contact.email) || '';
+  const est = rec ? rec.quote.subtotal : Number(md.estimate || 0);
+  const dep = rec && rec.deposit ? rec.deposit.amount : Number(md.deposit || 0);
+  const balance = Math.max(0, est - dep);
+  const summary = rec ? trip.summaryTable(rec.quote) : `<p style="color:#333">${trip.esc(md.items || '')}</p>`;
+  const rows = rec ? trip.tripRows(rec) : [['Reference', refCode], ['Island', md.country], ['Guests', md.guests]];
+  const paidRows = [['Deposit received', money(amountPaid)], ['Estimated trip total', trip.money(est)], ['Estimated balance', trip.money(balance)]];
+  const contactName = (rec && rec.contact && rec.contact.name) || (md.contact || '').split(' · ')[0] || 'there';
+  if (guestEmail) {
+    await sendEmail({
+      to: guestEmail,
+      replyTo: BUSINESS_EMAIL,
+      subject: 'Your group trip deposit is confirmed — ' + refCode,
+      html: trip.shell('Deposit received', `<p>Thank you, ${trip.esc(contactName.split(' ')[0])}. Your deposit has been received and your trip is now being planned. Within one business day a trip planner will confirm your dates, the final itinerary and the remaining balance with you.</p>
+        ${trip.detailTable(paidRows.concat(rows))}<h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Your selections</h3>${summary}`)
+    });
+  }
+  await sendEmail({
+    to: BUSINESS_EMAIL,
+    replyTo: guestEmail || undefined,
+    subject: '[' + refCode + '] Group trip deposit paid — ' + (md.country || '') + ', ' + (md.guests || '?') + ' guests',
+    html: trip.shell('Group trip deposit paid', `<p>A guest paid a deposit through the group trip builder.</p>
+      ${trip.detailTable([['Name', rec && rec.contact && rec.contact.name], ['Email', guestEmail], ['Phone / WhatsApp', rec && rec.contact && rec.contact.phone]].concat(paidRows, rows))}
+      <h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Selections</h3>${summary}`)
+  });
+}
 
 // Find which 5-day package (if any) a checkout's item string refers to.
 function findPackage(itemsStr) {
@@ -209,8 +247,15 @@ module.exports = async function handler(req, res) {
       await db.addToCollection('viewer-tokens', record);
     }
 
+    // Group trip deposits get their own confirmation (itemised selections, balance, next steps).
+    const isGroupTrip = !!(session.metadata && session.metadata.kind === 'group-trip');
+    if (isGroupTrip) {
+      try { await handleGroupTripPaid(session, email, amountPaid); }
+      catch (e) { console.error('group trip webhook error:', e && e.message); }
+    }
+
     // Branded confirmation email for any V-Tours / tour purchase.
-    try {
+    if (!isGroupTrip) try {
       const kind = (session.metadata && session.metadata.kind) || '';
       const items = (session.metadata && (session.metadata.items || session.metadata.tours)) || '';
       const title = (session.metadata && session.metadata.title) || items || 'Sight Seers Virtual Tour';

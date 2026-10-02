@@ -80,6 +80,53 @@ function writeTourPrices(source) {
 writeTourPrices(html);
 
 /**
+ * Group trip builder: the server prices a trip from this catalog, never from anything the browser sends.
+ * It is generated from the CURATED_TOURS list in Design_Reference.html (the same list the site shows)
+ * plus the per-island transfer prices in api/_data/packages.json, so the two cannot drift apart.
+ */
+function writeBuilderCatalog(source) {
+  const marker = 'const CURATED_TOURS = [';
+  const start = source.indexOf(marker);
+  if (start === -1) throw new Error('CURATED_TOURS not found - cannot generate builder catalog');
+  const open = start + marker.length - 1;
+  let depth = 0, end = -1, inStr = null, esc = false;
+  for (let i = open; i < source.length; i++) {
+    const c = source[i];
+    if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === inStr) inStr = null; continue; }
+    if (c === "'" || c === '"' || c === '`') { inStr = c; continue; }
+    if (c === '[') depth++;
+    else if (c === ']') { depth--; if (depth === 0) { end = i; break; } }
+  }
+  if (end === -1) throw new Error('CURATED_TOURS is unterminated');
+  let list;
+  try { list = eval(source.slice(open, end + 1)); }
+  catch (e) { throw new Error('CURATED_TOURS could not be parsed: ' + e.message); }
+
+  const items = {};
+  for (const t of list) {
+    if (t.type !== 'water' && t.type !== 'land') continue;
+    if (items[t.title]) throw new Error('Duplicate experience title in CURATED_TOURS: ' + t.title);
+    items[t.title] = {
+      country: t.country, area: t.area || '', type: t.type,
+      price: (typeof t.priceValue === 'number' && t.priceValue > 0) ? t.priceValue : 0,
+      per: t.per === 'group' ? 'group' : 'person',
+      cap: t.cap || null
+    };
+  }
+  const pk = require('./api/_data/packages.json');
+  const transfers = {};
+  for (const k of Object.keys(pk)) {
+    const a = pk[k] && pk[k].addons && pk[k].addons.xfer;
+    if (a) transfers[k] = { price: a.price, per: a.per };
+  }
+  const dir = path.join(__dirname, 'api', '_data');
+  fs.writeFileSync(path.join(dir, 'builder-catalog.json'), JSON.stringify({ items, transfers }, null, 2) + '\n', 'utf8');
+  console.log('\uD83E\uDDF3  Builder catalog: ' + Object.keys(items).length + ' experiences, ' + Object.keys(transfers).length + ' islands');
+}
+
+writeBuilderCatalog(html);
+
+/**
  * The same experience can be priced in two places: the V-Tour session records
  * in Design_Reference.html, and tours-data.json, which generates the static
  * landing pages under public/virtual-tours/. Nothing kept them in step, so a
