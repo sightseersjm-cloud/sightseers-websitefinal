@@ -10664,30 +10664,39 @@ body.theme-night .page .tag{
   </div>
 </section>
 
-<!-- ======== BARBADOS ITINERARIES ======== -->
+<!-- ======== CARIBBEAN 5-DAY ITINERARIES ======== -->
 <section class="bdos-itin-sec">
   <style>
     .bdos-itin-sec{padding:70px 0;background:var(--lightgrey)}
     .bdos-itin-wrap{max-width:1200px;margin:0 auto;padding:0 20px}
-    .bdos-itin-head{text-align:center;max-width:720px;margin:0 auto 42px}
+    .bdos-itin-head{text-align:center;max-width:720px;margin:0 auto 26px}
     .bdos-itin-head .sec-pre{color:var(--orange)}
     .bdos-itin-head p{color:var(--grey);margin-top:12px;font-size:1.02rem;line-height:1.6}
-    .bdos-itin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:26px}
-    .bdos-itin-card{background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(6,58,99,.06);transition:transform .25s ease,box-shadow .25s ease}
+    .itin-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 auto 32px;max-width:860px}
+    .itin-pill{cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--navy);font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;transition:background .2s,color .2s,border-color .2s;white-space:nowrap;line-height:1}
+    .itin-pill:hover{border-color:var(--navy)}
+    .itin-pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .bdos-itin-grid{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
+    .bdos-itin-grid::-webkit-scrollbar{height:8px}
+    .bdos-itin-grid::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+    .itin-nav{display:flex;justify-content:center;gap:12px;margin:0 auto 18px}
+    .itin-arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:#fff;color:var(--navy);cursor:pointer;font-size:.95rem;transition:background .2s,color .2s}
+    .itin-arrow:hover{background:var(--navy);color:#fff}
+    .bdos-itin-card{flex:0 0 330px;max-width:330px;scroll-snap-align:start;background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(6,58,99,.06);transition:transform .25s ease,box-shadow .25s ease}
     .bdos-itin-card:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(6,58,99,.12)}
     .bdos-itin-top{padding:24px 24px 18px;background:linear-gradient(135deg,var(--navy),var(--dark));color:#fff}
     .bdos-itin-chip{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.14);margin-bottom:12px}
     .bdos-itin-card.sea .bdos-itin-chip{background:var(--green);color:#063a1e}
     .bdos-itin-card.land .bdos-itin-chip{background:var(--orange);color:#4a2708}
     .bdos-itin-card.mix .bdos-itin-chip{background:#f4fbf6;color:var(--navy)}
-    .bdos-itin-top h3{font-size:1.32rem;line-height:1.25;margin:0 0 6px}
+    .bdos-itin-top h3{font-size:1.28rem;line-height:1.25;margin:0 0 6px}
     .bdos-itin-top span.dur{font-size:.85rem;opacity:.82}
-    .bdos-itin-body{padding:20px 24px 10px;flex:1}
-    .bdos-itin-day{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed var(--border)}
+    .bdos-itin-body{padding:16px 24px 8px;flex:1}
+    .bdos-itin-day{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border)}
     .bdos-itin-day:last-child{border-bottom:none}
-    .bdos-itin-dnum{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem}
-    .bdos-itin-dcopy strong{display:block;color:var(--dark);font-size:.98rem;line-height:1.3}
-    .bdos-itin-dcopy em{display:block;font-style:normal;color:var(--grey);font-size:.82rem;margin-top:3px}
+    .bdos-itin-dnum{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+    .bdos-itin-dcopy strong{display:block;color:var(--dark);font-size:.95rem;line-height:1.3}
+    .bdos-itin-dcopy em{display:block;font-style:normal;color:var(--grey);font-size:.8rem;margin-top:3px}
     .bdos-itin-foot{padding:16px 24px 24px;border-top:1px solid var(--border);margin-top:6px}
     .bdos-itin-stay{font-size:.82rem;color:var(--grey);margin-bottom:14px}
     .bdos-itin-stay i{color:var(--orange);margin-right:6px}
@@ -10699,74 +10708,107 @@ body.theme-night .page .tag{
     .bdos-itin-btn.ghost:hover{border-color:var(--navy)}
     .bdos-itin-note{text-align:center;color:var(--grey);font-size:.82rem;margin-top:30px}
   </style>
+  <script>
+    window.scrollItin=function(btn,dir){var sec=btn.closest('.bdos-itin-sec');if(!sec)return;var g=sec.querySelector('.bdos-itin-grid');if(!g)return;var card=g.querySelector('.bdos-itin-card');var step=card?card.offsetWidth+22:340;g.scrollBy({left:dir*step,behavior:'smooth'});};
+    window.filterItin=function(c,el){var sec=el.closest('.bdos-itin-sec');if(!sec)return;var g=sec.querySelector('.bdos-itin-grid');if(g)g.scrollLeft=0;
+      sec.querySelectorAll('.itin-pill').forEach(function(p){p.classList.toggle('on',p===el)});
+      sec.querySelectorAll('[data-itin-country]').forEach(function(card){card.style.display=(c==='all'||card.getAttribute('data-itin-country')===c)?'':'none'});};
+  </script>
   <div class="bdos-itin-wrap">
     <div class="bdos-itin-head reveal">
-      <span class="sec-pre">Ready-made in Barbados</span>
-      <h2 class="sec-title">Barbados Itineraries</h2>
-      <p>Three ways to shape your days in Barbados — each one built from the tours and stays we already run on the island. Pick a vibe, and we’ll tailor the pace, timing and group size around you.</p>
+      <span class="sec-pre">Ready-made across the Caribbean</span>
+      <h2 class="sec-title">5-Day Island Packages</h2>
+      <p>Pick an island and follow a ready-made 5-day plan built from the tours we already run there. Every package is fully customizable around your dates and group.</p>
     </div>
-    <div class="bdos-itin-grid">
-
-      <div class="bdos-itin-card sea reveal">
-        <div class="bdos-itin-top">
-          <span class="bdos-itin-chip">Water &amp; Beach</span>
-          <h3>Sea &amp; Sail Escape</h3>
-          <span class="dur">3 days · from $235 in excursions</span>
-        </div>
-        <div class="bdos-itin-body">
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Carlisle Bay Turtle &amp; Shipwreck Boat Cruise + Beach Day &amp; Turtle Swim</strong><em>1.5 hrs + 6 hrs · from $86</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle &amp; Reef Snorkel Cruise</strong><em>Half day · from $85</em></div></div>
-        </div>
-        <div class="bdos-itin-foot">
-          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div>
-          <div class="bdos-itin-actions">
-            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+    <div class="itin-pills reveal">
+      <button type="button" class="itin-pill on" onclick="filterItin('all',this);return false;">All</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Jamaica',this);return false;">Jamaica</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Barbados',this);return false;">Barbados</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Saint Lucia',this);return false;">St Lucia</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Curaçao',this);return false;">Curaçao</button>
+      <button type="button" class="itin-pill" onclick="filterItin('The Bahamas',this);return false;">Bahamas</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Belize',this);return false;">Belize</button>
+      <button type="button" class="itin-pill" onclick="filterItin('Dominican Republic',this);return false;">Dom. Rep.</button>
+    </div>
+    <div class="itin-nav reveal"><button type="button" class="itin-arrow" aria-label="Previous packages" onclick="scrollItin(this,-1);return false;"><i class="fas fa-arrow-left"></i></button><button type="button" class="itin-arrow" aria-label="Next packages" onclick="scrollItin(this,1);return false;"><i class="fas fa-arrow-right"></i></button></div>
+      <div class="bdos-itin-grid">
+        <div class="bdos-itin-card sea reveal" data-itin-country="Jamaica">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Jamaica</span><h3>Jamaica 5-Day Signature</h3><span class="dur">5 days · from $715 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Bamboo Rafting with Limestone Massage</strong><em>3–5 hours · from $80</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Luminous Lagoon Night Experience</strong><em>Evening · from $70</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Montego Bay ATV Ride Experience</strong><em>2 hours · from $149</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>ATV, River Rafting &amp; Blue Hole Combo</strong><em>Half–full day · from $226</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Jet Car &amp; Jet Ski Beach Combo</strong><em>1.5–2 hours · from $190</em></div></div>
           </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Ocho Rios Seaview Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Jamaica');nav('tours');return false;">View tours</a></div></div>
         </div>
-      </div>
-
-      <div class="bdos-itin-card land reveal">
-        <div class="bdos-itin-top">
-          <span class="bdos-itin-chip">Land &amp; Culture</span>
-          <h3>Island &amp; Heritage Trail</h3>
-          <span class="dur">3 days · from $355 in excursions</span>
-        </div>
-        <div class="bdos-itin-body">
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
-        </div>
-        <div class="bdos-itin-foot">
-          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Speightstown Oceanview Villa</div>
-          <div class="bdos-itin-actions">
-            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+        <div class="bdos-itin-card land reveal" data-itin-country="Barbados">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Barbados</span><h3>Barbados 5-Day Signature</h3><span class="dur">5 days · from $520 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach Day &amp; Turtle Swim Experience</strong><em>6 hours · from $50</em></div></div>
           </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');nav('tours');return false;">View tours</a></div></div>
         </div>
-      </div>
-
-      <div class="bdos-itin-card mix reveal">
-        <div class="bdos-itin-top">
-          <span class="bdos-itin-chip">Best of Both</span>
-          <h3>Signature Barbados Weekend</h3>
-          <span class="dur">3 days · from $375 in excursions</span>
-        </div>
-        <div class="bdos-itin-body">
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
-          <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery + Beach Day &amp; Turtle Swim</strong><em>5 hrs + 6 hrs · from $105</em></div></div>
-        </div>
-        <div class="bdos-itin-foot">
-          <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Barbados Platinum Coast Villa</div>
-          <div class="bdos-itin-actions">
-            <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-            <a class="bdos-itin-btn ghost" href="#" onclick="nav('tours');return false;">View tours</a>
+        <div class="bdos-itin-card mix reveal" data-itin-country="Saint Lucia">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">St Lucia</span><h3>Saint Lucia 5-Day Signature</h3><span class="dur">5 days · from $389 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Pitons Catamaran Cruise, Snorkel &amp; Lunch</strong><em>Full day · from $145</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Sulphur Springs Mud Bath &amp; Waterfall</strong><em>4–6 hours · from $100</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Volcanic Wellness, Pitons &amp; Waterfalls</strong><em>6 hours · from $144</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Wellness &amp; Romance spa day</strong><em>Flexible · custom quote</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Leisure &amp; beach day</strong><em>Free day · included</em></div></div>
           </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Marigot Bay Luxury Residence</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Saint Lucia');nav('tours');return false;">View tours</a></div></div>
         </div>
-      </div>
-
+        <div class="bdos-itin-card sea reveal" data-itin-country="Curaçao">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Curaçao</span><h3>Curaçao 5-Day Signature</h3><span class="dur">5 days · from $295 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Klein Curaçao Full-Day Boat Trip</strong><em>9 hours · from $150</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Off-Road Buggy Tour North Coast Adventure</strong><em>2.5–3.5 hours · from $145</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle Bay Snorkel &amp; Blue Room Style Escape</strong><em>Half day · itinerary pricing</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Willemstad colour &amp; coast day</strong><em>Free day · included</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach club &amp; relaxation day</strong><em>Free day · included</em></div></div>
+          </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Jan Thiel Coastal Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Curaçao');nav('tours');return false;">View tours</a></div></div>
+        </div>
+        <div class="bdos-itin-card land reveal" data-itin-country="The Bahamas">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Bahamas</span><h3>Bahamas 5-Day Signature</h3><span class="dur">5 days · from $661 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>3 Islands Tour, Snorkel, Pig Beach, Turtles &amp; Lunch</strong><em>4 hours · from $127</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Reef Snorkeling, Turtles, Lunch &amp; Beach Club</strong><em>4 hours · from $129</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Bahamas Culture Tour with Electric Trolley</strong><em>2.5 hours · from $55</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Historic City Tour with Drink and Food Tasting</strong><em>2.5 hours · from $150</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Nassau ATV Island Half-Day City Tour</strong><em>3–4 hours · from $200</em></div></div>
+          </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Paradise Island Modern Suite</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('The Bahamas');nav('tours');return false;">View tours</a></div></div>
+        </div>
+        <div class="bdos-itin-card mix reveal" data-itin-country="Belize">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Belize</span><h3>Belize 5-Day Signature</h3><span class="dur">5 days · from $614 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Hol Chan Marine Reserve Small-Group Tour</strong><em>5.5 hours · from $129</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Caye Caulker 7-Stop Snorkeling Reef Experience</strong><em>6 hours · from $110</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>ATM Cave Full-Day Adventure</strong><em>7–8 hours · from $140</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Cave Tubing with Optional Zipline</strong><em>7–8 hours · from $95</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>ATV Expedition to El Pilar Maya Ruins</strong><em>4.5 hours · from $140</em></div></div>
+          </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Placencia Coast Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Belize');nav('tours');return false;">View tours</a></div></div>
+        </div>
+        <div class="bdos-itin-card sea reveal" data-itin-country="Dominican Republic">
+          <div class="bdos-itin-top"><span class="bdos-itin-chip">Dom. Rep.</span><h3>Dominican Republic 5-Day Signature</h3><span class="dur">5 days · from $331 in excursions</span></div>
+          <div class="bdos-itin-body">
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Saona Island Cruise with Lunch &amp; Open Bar</strong><em>8–9.5 hours · from $70</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Saona Luxury Catamaran Small-Group Escape</strong><em>10 hours · from $169</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Punta Cana Buggy, Cave Swim &amp; Macao Beach</strong><em>4 hours · from $35</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Bayahibe ATV Buggy Jungle &amp; Caves</strong><em>4 hours · from $57</em></div></div>
+            <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach &amp; resort leisure day</strong><em>Free day · included</em></div></div>
+          </div>
+          <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Cap Cana Luxury Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Dominican Republic');nav('tours');return false;">View tours</a></div></div>
+        </div>
     </div>
     <p class="bdos-itin-note">Prices are per-person “from” guides for the listed excursions and exclude stays and transfers. Every itinerary is fully customizable — tell us your dates and group and we’ll build the final plan.</p>
   </div>
@@ -10827,76 +10869,103 @@ body.theme-night .page .tag{
   </div>
 </section>
 
-  <!-- ======== BARBADOS ITINERARIES (Tours page) ======== -->
-  <section class="bdos-itin-sec" id="barbadosItinerariesTours">
+    <!-- ======== CARIBBEAN 5-DAY ITINERARIES (Tours page) ======== -->
+  <section class="bdos-itin-sec" id="caribbeanItinerariesTours">
     <div class="bdos-itin-wrap">
       <div class="bdos-itin-head reveal">
-        <span class="sec-pre">Ready-made in Barbados</span>
-        <h2 class="sec-title">Barbados Itineraries</h2>
-        <p>Not sure how to combine the excursions above? These three ready-made Barbados plans stitch our island tours into easy day-by-day trips — each one fully customizable around your dates and group.</p>
+        <span class="sec-pre">Ready-made across the Caribbean</span>
+        <h2 class="sec-title">5-Day Island Packages</h2>
+        <p>Not sure how to combine the excursions above? Pick an island below for a ready-made 5-day plan — each one fully customizable around your dates and group.</p>
       </div>
+      <div class="itin-pills reveal">
+        <button type="button" class="itin-pill on" onclick="filterItin('all',this);return false;">All</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Jamaica',this);return false;">Jamaica</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Barbados',this);return false;">Barbados</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Saint Lucia',this);return false;">St Lucia</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Curaçao',this);return false;">Curaçao</button>
+        <button type="button" class="itin-pill" onclick="filterItin('The Bahamas',this);return false;">Bahamas</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Belize',this);return false;">Belize</button>
+        <button type="button" class="itin-pill" onclick="filterItin('Dominican Republic',this);return false;">Dom. Rep.</button>
+      </div>
+      <div class="itin-nav reveal"><button type="button" class="itin-arrow" aria-label="Previous packages" onclick="scrollItin(this,-1);return false;"><i class="fas fa-arrow-left"></i></button><button type="button" class="itin-arrow" aria-label="Next packages" onclick="scrollItin(this,1);return false;"><i class="fas fa-arrow-right"></i></button></div>
       <div class="bdos-itin-grid">
-
-        <div class="bdos-itin-card sea reveal">
-          <div class="bdos-itin-top">
-            <span class="bdos-itin-chip">Water &amp; Beach</span>
-            <h3>Sea &amp; Sail Escape</h3>
-            <span class="dur">3 days · from $235 in excursions</span>
-          </div>
-          <div class="bdos-itin-body">
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Carlisle Bay Turtle &amp; Shipwreck Boat Cruise + Beach Day &amp; Turtle Swim</strong><em>1.5 hrs + 6 hrs · from $86</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle &amp; Reef Snorkel Cruise</strong><em>Half day · from $85</em></div></div>
-          </div>
-          <div class="bdos-itin-foot">
-            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div>
-            <div class="bdos-itin-actions">
-              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+          <div class="bdos-itin-card sea reveal" data-itin-country="Jamaica">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Jamaica</span><h3>Jamaica 5-Day Signature</h3><span class="dur">5 days · from $715 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Bamboo Rafting with Limestone Massage</strong><em>3–5 hours · from $80</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Luminous Lagoon Night Experience</strong><em>Evening · from $70</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Montego Bay ATV Ride Experience</strong><em>2 hours · from $149</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>ATV, River Rafting &amp; Blue Hole Combo</strong><em>Half–full day · from $226</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Jet Car &amp; Jet Ski Beach Combo</strong><em>1.5–2 hours · from $190</em></div></div>
             </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Ocho Rios Seaview Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Jamaica');return false;">View tours</a></div></div>
           </div>
-        </div>
-
-        <div class="bdos-itin-card land reveal">
-          <div class="bdos-itin-top">
-            <span class="bdos-itin-chip">Land &amp; Culture</span>
-            <h3>Island &amp; Heritage Trail</h3>
-            <span class="dur">3 days · from $355 in excursions</span>
-          </div>
-          <div class="bdos-itin-body">
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
-          </div>
-          <div class="bdos-itin-foot">
-            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Speightstown Oceanview Villa</div>
-            <div class="bdos-itin-actions">
-              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+          <div class="bdos-itin-card land reveal" data-itin-country="Barbados">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Barbados</span><h3>Barbados 5-Day Signature</h3><span class="dur">5 days · from $520 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Island Safari Jeep &amp; Scenic Coast Tour</strong><em>5–6 hours · from $95</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery Experience</strong><em>5 hours · from $105</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach Day &amp; Turtle Swim Experience</strong><em>6 hours · from $50</em></div></div>
             </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: West Coast Beach Vacation Rentals</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">View tours</a></div></div>
           </div>
-        </div>
-
-        <div class="bdos-itin-card mix reveal">
-          <div class="bdos-itin-top">
-            <span class="bdos-itin-chip">Best of Both</span>
-            <h3>Signature Barbados Weekend</h3>
-            <span class="dur">3 days · from $375 in excursions</span>
-          </div>
-          <div class="bdos-itin-body">
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Catamaran Snorkel Cruise with Lunch</strong><em>5 hours · from $115</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Harrison’s Cave &amp; Hunte’s Gardens Escape</strong><em>5 hours · from $155</em></div></div>
-            <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Mount Gay Rum Distillery + Beach Day &amp; Turtle Swim</strong><em>5 hrs + 6 hrs · from $105</em></div></div>
-          </div>
-          <div class="bdos-itin-foot">
-            <div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Barbados Platinum Coast Villa</div>
-            <div class="bdos-itin-actions">
-              <a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a>
-              <a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Barbados');return false;">Browse Barbados tours</a>
+          <div class="bdos-itin-card mix reveal" data-itin-country="Saint Lucia">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">St Lucia</span><h3>Saint Lucia 5-Day Signature</h3><span class="dur">5 days · from $389 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Pitons Catamaran Cruise, Snorkel &amp; Lunch</strong><em>Full day · from $145</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Sulphur Springs Mud Bath &amp; Waterfall</strong><em>4–6 hours · from $100</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Volcanic Wellness, Pitons &amp; Waterfalls</strong><em>6 hours · from $144</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Wellness &amp; Romance spa day</strong><em>Flexible · custom quote</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Leisure &amp; beach day</strong><em>Free day · included</em></div></div>
             </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Marigot Bay Luxury Residence</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Saint Lucia');return false;">View tours</a></div></div>
           </div>
-        </div>
-
+          <div class="bdos-itin-card sea reveal" data-itin-country="Curaçao">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Curaçao</span><h3>Curaçao 5-Day Signature</h3><span class="dur">5 days · from $295 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Klein Curaçao Full-Day Boat Trip</strong><em>9 hours · from $150</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Off-Road Buggy Tour North Coast Adventure</strong><em>2.5–3.5 hours · from $145</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Turtle Bay Snorkel &amp; Blue Room Style Escape</strong><em>Half day · itinerary pricing</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Willemstad colour &amp; coast day</strong><em>Free day · included</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach club &amp; relaxation day</strong><em>Free day · included</em></div></div>
+            </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Jan Thiel Coastal Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Curaçao');return false;">View tours</a></div></div>
+          </div>
+          <div class="bdos-itin-card land reveal" data-itin-country="The Bahamas">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Bahamas</span><h3>Bahamas 5-Day Signature</h3><span class="dur">5 days · from $661 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>3 Islands Tour, Snorkel, Pig Beach, Turtles &amp; Lunch</strong><em>4 hours · from $127</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Reef Snorkeling, Turtles, Lunch &amp; Beach Club</strong><em>4 hours · from $129</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Bahamas Culture Tour with Electric Trolley</strong><em>2.5 hours · from $55</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Historic City Tour with Drink and Food Tasting</strong><em>2.5 hours · from $150</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Nassau ATV Island Half-Day City Tour</strong><em>3–4 hours · from $200</em></div></div>
+            </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Paradise Island Modern Suite</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('The Bahamas');return false;">View tours</a></div></div>
+          </div>
+          <div class="bdos-itin-card mix reveal" data-itin-country="Belize">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Belize</span><h3>Belize 5-Day Signature</h3><span class="dur">5 days · from $614 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Hol Chan Marine Reserve Small-Group Tour</strong><em>5.5 hours · from $129</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Caye Caulker 7-Stop Snorkeling Reef Experience</strong><em>6 hours · from $110</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>ATM Cave Full-Day Adventure</strong><em>7–8 hours · from $140</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Cave Tubing with Optional Zipline</strong><em>7–8 hours · from $95</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>ATV Expedition to El Pilar Maya Ruins</strong><em>4.5 hours · from $140</em></div></div>
+            </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Placencia Coast Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Belize');return false;">View tours</a></div></div>
+          </div>
+          <div class="bdos-itin-card sea reveal" data-itin-country="Dominican Republic">
+            <div class="bdos-itin-top"><span class="bdos-itin-chip">Dom. Rep.</span><h3>Dominican Republic 5-Day Signature</h3><span class="dur">5 days · from $331 in excursions</span></div>
+            <div class="bdos-itin-body">
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">1</div><div class="bdos-itin-dcopy"><strong>Saona Island Cruise with Lunch &amp; Open Bar</strong><em>8–9.5 hours · from $70</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">2</div><div class="bdos-itin-dcopy"><strong>Saona Luxury Catamaran Small-Group Escape</strong><em>10 hours · from $169</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">3</div><div class="bdos-itin-dcopy"><strong>Punta Cana Buggy, Cave Swim &amp; Macao Beach</strong><em>4 hours · from $35</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">4</div><div class="bdos-itin-dcopy"><strong>Bayahibe ATV Buggy Jungle &amp; Caves</strong><em>4 hours · from $57</em></div></div>
+              <div class="bdos-itin-day"><div class="bdos-itin-dnum">5</div><div class="bdos-itin-dcopy"><strong>Beach &amp; resort leisure day</strong><em>Free day · included</em></div></div>
+            </div>
+            <div class="bdos-itin-foot"><div class="bdos-itin-stay"><i class="fas fa-bed"></i>Suggested base: Cap Cana Luxury Villa</div><div class="bdos-itin-actions"><a class="bdos-itin-btn primary" href="#" onclick="openLinkedStartPlanning();return false;">Plan this trip</a><a class="bdos-itin-btn ghost" href="#" onclick="setCuratedCountry('Dominican Republic');return false;">View tours</a></div></div>
+          </div>
       </div>
       <p class="bdos-itin-note">Prices are per-person “from” guides for the listed excursions and exclude stays and transfers. Every itinerary is fully customizable — tell us your dates and group and we’ll build the final plan.</p>
     </div>
