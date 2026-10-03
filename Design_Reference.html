@@ -12094,30 +12094,8 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 .mv-lb p{margin:16px 0 0;color:#fff!important;font-weight:700;letter-spacing:.3px;text-align:center}
 .mv-lb button{position:absolute;top:18px;right:20px;width:44px;height:44px;border-radius:0;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff!important;font-size:18px;cursor:pointer}
 
-/* ---------- Seven shores explorer ---------- */
-#p-mba-voyages .mv-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-#p-mba-voyages .mv-tab{font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;padding:11px 18px;border-radius:0;border:1px solid var(--mv-line);background:var(--mv-card);color:var(--mv-head)!important;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .2s}
-#p-mba-voyages .mv-tab:hover{border-color:#ef8731;transform:translateY(-1px)}
-#p-mba-voyages .mv-tab.on{background:#062e4b;border-color:#062e4b;color:#fff!important}
-body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef8731;color:#fff!important}
-#p-mba-voyages .mv-shore{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);background:var(--mv-card);border:1px solid var(--mv-line);border-radius:28px;overflow:hidden;box-shadow:var(--mv-shadow-lg);animation:mvFade .45s ease}
 @keyframes mvFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-#p-mba-voyages .mv-shore-media{position:relative;min-height:440px;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;color:#fff!important}
-#p-mba-voyages .mv-shore-media::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,46,75,.08) 0%,rgba(6,46,75,.2) 45%,rgba(4,31,53,.88) 100%)}
-#p-mba-voyages .mv-shore-no{position:absolute;top:24px;left:26px;z-index:1;font-size:11px;font-weight:800;letter-spacing:2px;color:#fff!important;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:7px 13px;border-radius:0;backdrop-filter:blur(8px)}
-#p-mba-voyages .mv-shore-name{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(30px,4vw,44px);line-height:1.05;color:#fff!important}
-#p-mba-voyages .mv-shore-tag{position:relative;z-index:1;margin-top:8px;font-size:13px;color:rgba(255,255,255,.82)!important}
-#p-mba-voyages .mv-shore-body{padding:36px 38px;display:flex;flex-direction:column}
 #p-mba-voyages .mv-mini{font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--mv-orange)!important;margin:0 0 8px}
-#p-mba-voyages .mv-shore-angle{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(20px,2.3vw,26px);line-height:1.3;color:var(--mv-head)!important;margin:0 0 26px}
-#p-mba-voyages .mv-list{list-style:none;padding:0;margin:0 0 26px}
-#p-mba-voyages .mv-list li{position:relative;padding:11px 0 11px 26px;font-size:15px;color:var(--mv-mut)!important;border-bottom:1px solid var(--mv-line);line-height:1.55}
-#p-mba-voyages .mv-list li:last-child{border-bottom:0}
-#p-mba-voyages .mv-list li::before{content:'';position:absolute;left:0;top:18px;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#70c257,#4fae3f);box-shadow:0 2px 6px rgba(112,194,87,.5)}
-#p-mba-voyages .mv-shore-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--mv-line)}
-#p-mba-voyages .mv-offer{font-size:13px;font-weight:700;color:var(--mv-head)!important}
-#p-mba-voyages .mv-offer em{font-style:normal;color:var(--mv-orange)!important}
-#p-mba-voyages .mv-foot-btns{display:flex;gap:10px;flex-wrap:wrap}
 
 /* ---------- The week ---------- */
 #p-mba-voyages .mv-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
@@ -12197,9 +12175,6 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
   #p-mba-voyages .mv-inc-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:860px){
-  #p-mba-voyages .mv-shore{grid-template-columns:1fr}
-  #p-mba-voyages .mv-shore-media{min-height:280px}
-  #p-mba-voyages .mv-shore-body{padding:28px 24px}
   #p-mba-voyages .mv-moments,#p-mba-voyages .mv-grid3{grid-template-columns:1fr}
 }
 @media(max-width:620px){
@@ -12214,9 +12189,6 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
   #p-mba-voyages .mv-sl-btn{width:42px;height:42px}
   #p-mba-voyages .mv-fact{min-width:calc(50% - 6px);flex:1 1 calc(50% - 6px);padding:12px 12px}
   #p-mba-voyages .mv-cta .mv-btn{width:100%}
-  #p-mba-voyages .mv-tabs{flex-wrap:nowrap;overflow-x:auto;margin-left:-24px;margin-right:-24px;padding:2px 24px 8px;scrollbar-width:none}
-  #p-mba-voyages .mv-tabs::-webkit-scrollbar{display:none}
-  #p-mba-voyages .mv-tab{flex:0 0 auto}
   #p-mba-voyages .mv-included{padding:26px 22px}
   #p-mba-voyages .mv-band{padding:48px 22px;border-radius:26px;margin-bottom:56px}
   #p-mba-voyages .mv-pk-foot{align-items:stretch}
@@ -12280,7 +12252,6 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
 <nav class="mv-jump" aria-label="On this page">
   <button type="button" onclick="mbvGo('mbvProgram')">Overview</button>
-  <button type="button" onclick="mbvGo('mbvShores')">Seven shores</button>
   <button type="button" onclick="mbvGo('mbvWeek')">The week</button>
   <button type="button" onclick="mbvGo('mbvWho')">Who it is for</button>
   <button type="button" onclick="mbvGo('mbvPackages')">Packages</button>
@@ -12320,21 +12291,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   </div>
 </section>
 
-<!-- Seven shores -->
-<section class="mv-sec" id="mbvShores">
-  <div class="mv-wrap">
-    <div class="mv-head">
-      <div class="mv-eyebrow">Seven shores</div>
-      <h2 class="mv-h2">Every shore is a case study</h2>
-      <p class="mv-sub">Each island nation carries its own economy, creative ecosystem and professional landscape. Choose a shore to see what the voyage looks like there.</p>
-    </div>
-    <div class="mv-tabs" id="mbvTabs" role="tablist" aria-label="Choose a shore"></div>
-    <div id="mbvShore" aria-live="polite"></div>
-  </div>
-</section>
-
 <!-- The week -->
-<section class="mv-sec tint" id="mbvWeek">
+<section class="mv-sec" id="mbvWeek">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">The format</div>
@@ -12365,7 +12323,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- Who it is for -->
-<section class="mv-sec" id="mbvWho">
+<section class="mv-sec tint" id="mbvWho">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Who it is for</div>
@@ -12393,7 +12351,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- Packages -->
-<section class="mv-sec tint" id="mbvPackages">
+<section class="mv-sec" id="mbvPackages">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Packages</div>
@@ -12446,16 +12404,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     {src:'/assets/gallery/jamaica-water-cars.webp',label:'Shallow water excursion, Jamaica',sub:'Playful stops between programming'}
   ];
 
-  /* The seven shores. Copy only; images come from the live site data. */
-  var SHORES=[
-    {name:'Jamaica',tag:'Entrepreneurial energy',angle:'Entrepreneurial energy, music industry innovation and agricultural ventures.',items:['Blue Mountain coffee estate tours','Kingston creative economy walks','Montego Bay luxury villa networking dinners','River rafting and waterfall excursions']},
-    {name:'Barbados',tag:'Fintech and rum heritage',angle:'Fintech growth, rum industry heritage and a polished west coast luxury corridor.',items:['Catamaran alumni cruises','Rum distillery leadership tastings','South coast surf culture','West coast sunset strategy sessions']},
-    {name:'Saint Lucia',tag:'Eco tourism leadership',angle:'Dramatic landscape, eco tourism leadership and boutique hospitality models worth studying.',items:['Pitons hiking challenges','Rainforest leadership retreats','Volcanic mud bath team building','Boutique resort case studies']},
-    {name:'The Bahamas',tag:'Marine conservation',angle:'Marine conservation conversations, luxury resort operations and island economy logistics.',items:['Private island day experiences','Marine conservation briefings','Sandbar networking','Luxury resort operations tours']},
-    {name:'Belize',tag:'Reef ecology',angle:'Reef ecology, cultural diversity and frontier market tourism.',items:['Barrier reef snorkel expeditions','Jungle leadership trails','Garifuna cultural immersion','Eco lodge strategy sessions']},
-    {name:'Dominican Republic',tag:'Resort economics',angle:'Large scale resort economics, cacao trade and emerging tech hubs.',items:['Cacao farm business models','Zona Colonial walking workshops','Resort scale hospitality panels','Samana whale watching expeditions']},
-    {name:'Curacao',tag:'Port economics',angle:'Caribbean European fusion, port economics and offshore financial frameworks.',items:['Handelskade waterfront walking sessions','Port economy briefings','European Caribbean fusion dining','Underwater exploration']}
-  ];
+  /* The seven countries offered on every package. */
+  var COUNTRIES=['Jamaica','Barbados','Saint Lucia','The Bahamas','Belize','Dominican Republic','Curacao'];
 
   /* The four packages. Each one is available on all seven shores; the visitor picks the country when they inquire. */
   var PACKAGES=[
@@ -12495,15 +12445,10 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     im.src=p.img;
   });
 
-  var state={shore:0,photos:[],i:0,pk:PACKAGES,pref:[],pick:{k:0,sel:[]},sliderReady:false,tabsReady:false,pickReady:false,loading:false};
+  var state={photos:[],i:0,pk:PACKAGES,pick:{k:0,sel:[]},sliderReady:false,pickReady:false,loading:false};
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function $(id){return document.getElementById(id);}
-  function destImg(name){
-    try{var d=DESTS.filter(function(x){return x.name===name;})[0];if(d&&d.img)return d.img.replace('w=700','w=1200');}catch(e){}
-    return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80&auto=format&fit=crop';
-  }
-
   /* ---------- packages ---------- */
   function renderPackages(){
     var grid=$('mbvGrid');if(!grid)return;
@@ -12529,11 +12474,6 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     openStartPlanning('','MBA Caribbean Voyage','MBA Experience','Interested in planning an MBA voyage across the Caribbean for a cohort, alumni chapter or leadership team.');
     return false;
   };
-  window.mbvPickShore=function(name){
-    state.pref=[name];
-    window.mbvGo('mbvPackages');
-    return false;
-  };
   window.mbvBuilder=function(){
     nav('tours');
     setTimeout(function(){
@@ -12549,14 +12489,13 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     var p=PACKAGES[state.pick.k],sel=state.pick.sel;
     $('mbvPickPkg').textContent=p.title;
     $('mbvPickHint').textContent=p.multi?'This voyage island hops. Choose the shores you would like to visit, two or more if you can.':'Every package is available on all seven shores. Choose where you would like it.';
-    $('mbvPickGrid').innerHTML=SHORES.map(function(c){return '<button type="button" class="mv-cc" data-c="'+esc(c.name)+'" aria-pressed="'+(sel.indexOf(c.name)>-1?'true':'false')+'">'+esc(c.name)+'</button>';}).join('');
+    $('mbvPickGrid').innerHTML=COUNTRIES.map(function(c){return '<button type="button" class="mv-cc" data-c="'+esc(c)+'" aria-pressed="'+(sel.indexOf(c)>-1?'true':'false')+'">'+esc(c)+'</button>';}).join('');
     $('mbvPickCount').textContent=sel.length?(p.multi?sel.length+' selected':sel[0]):'Choose a country';
     $('mbvPickGo').disabled=!sel.length;
   }
   window.mbvInquire=function(k){
     var p=PACKAGES[k];if(!p)return false;
-    var pref=state.pref||[];
-    state.pick={k:k,sel:pref.length?(p.multi?pref.slice():[pref[0]]):[]};
+    state.pick={k:k,sel:[]};
     pickRender();
     $('mbvPick').classList.add('open');
     var first=document.querySelector('#mbvPickGrid .mv-cc[aria-pressed="true"]')||document.querySelector('#mbvPickGrid .mv-cc');
@@ -12584,34 +12523,6 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     });
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pickOpen())window.mbvClosePick();});
     state.pickReady=true;
-  }
-
-  /* ---------- seven shores explorer ---------- */
-  function renderShore(){
-    var s=SHORES[state.shore],box=$('mbvShore');if(!box)return;
-    box.innerHTML='<div class="mv-shore">'
-      +'<div class="mv-shore-media" style="background-image:url(\''+esc(destImg(s.name))+'\')">'
-      +'<span class="mv-shore-no">'+('0'+(state.shore+1))+' / 0'+SHORES.length+'</span>'
-      +'<div class="mv-shore-name">'+esc(s.name)+'</div><div class="mv-shore-tag">'+esc(s.tag)+'</div></div>'
-      +'<div class="mv-shore-body">'
-      +'<div class="mv-mini">The business lens</div><h3 class="mv-shore-angle">'+esc(s.angle)+'</h3>'
-      +'<div class="mv-mini">On the itinerary</div>'
-      +'<ul class="mv-list">'+s.items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
-      +'<div class="mv-shore-foot"><span class="mv-offer">All four packages are available in <em>'+esc(s.name)+'</em></span>'
-      +'<div class="mv-foot-btns"><button type="button" class="mv-btn primary sm" onclick="mbvPickShore(\''+esc(s.name)+'\')">Choose a package</button></div></div>'
-      +'</div></div>';
-    [].forEach.call(document.querySelectorAll('#mbvTabs .mv-tab'),function(b,k){
-      var on=k===state.shore;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');
-    });
-  }
-  function buildTabs(){
-    var tabs=$('mbvTabs');if(!tabs||state.tabsReady)return;
-    tabs.innerHTML=SHORES.map(function(s,k){return '<button type="button" class="mv-tab" role="tab" data-k="'+k+'">'+esc(s.name)+'</button>';}).join('');
-    tabs.addEventListener('click',function(e){
-      var b=e.target.closest?e.target.closest('.mv-tab'):null;if(!b)return;
-      state.shore=+b.getAttribute('data-k');state.pref=[SHORES[state.shore].name];renderShore();
-    });
-    state.tabsReady=true;
   }
 
   /* ---------- photo slider (same coverflow as the Gallery page) ---------- */
@@ -12687,7 +12598,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   }
 
   window.renderMbaVoyages=function(){
-    buildTabs();renderPackages();renderShore();initPick();initSlider();
+    renderPackages();initPick();initSlider();
     if(state.sliderReady)setTimeout(layout,60);
   };
 })();
