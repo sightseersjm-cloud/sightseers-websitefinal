@@ -12205,7 +12205,8 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
 @media(max-width:620px){
   #p-mba-voyages .mv-hero{padding:48px 0 54px;border-radius:0 0 28px 28px}
   #p-mba-voyages .mv-sec{padding:56px 0}
-  #p-mba-voyages .mv-steps,#p-mba-voyages .mv-pkgrid,#p-mba-voyages .mv-inc-grid{grid-template-columns:1fr}
+  #p-mba-voyages .mv-steps,#p-mba-voyages .mv-pkgrid,#p-mba-voyages .mv-pkgrid.cols-2,#p-mba-voyages .mv-inc-grid{grid-template-columns:1fr}
+  #p-mba-voyages .mv-pkgrid.cols-2 .mv-pk-media{height:210px}
   #p-mba-voyages .mv-sl-stage{height:300px}
   #p-mba-voyages .mv-jump{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:22px 24px 4px;scrollbar-width:none}
   #p-mba-voyages .mv-jump::-webkit-scrollbar{display:none}
@@ -12221,6 +12222,28 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
   #p-mba-voyages .mv-pk-foot{align-items:stretch}
 }
 @media(prefers-reduced-motion:reduce){#p-mba-voyages *{animation:none!important;transition:none!important}}
+
+/* ---------- Country picker ---------- */
+#p-mba-voyages .mv-pick{position:fixed;inset:0;z-index:100001;background:rgba(4,20,35,.72);display:none;align-items:center;justify-content:center;padding:20px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#p-mba-voyages .mv-pick.open{display:flex}
+#p-mba-voyages .mv-pick-box{position:relative;width:min(580px,100%);max-height:92vh;overflow:auto;background:var(--mv-card);border:1px solid var(--mv-line);border-radius:22px;padding:34px 34px 28px;box-shadow:var(--mv-shadow-lg);animation:mvFade .3s ease}
+#p-mba-voyages .mv-pick-x{position:absolute;top:12px;right:14px;width:38px;height:38px;border:1px solid var(--mv-line);background:transparent;color:var(--mv-head)!important;border-radius:0;font-size:20px;line-height:1;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+#p-mba-voyages .mv-pick-x:hover{background:#062e4b;color:#fff!important;border-color:#062e4b}
+#p-mba-voyages .mv-pick-box h3{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,28px);margin:2px 0 8px;color:var(--mv-head)!important}
+#p-mba-voyages .mv-pick-box > p{color:var(--mv-mut)!important;font-size:14.5px;line-height:1.65;margin:0 0 20px}
+#p-mba-voyages .mv-pick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#p-mba-voyages .mv-cc{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;font-family:'Raleway',sans-serif;font-size:14px;font-weight:700;padding:14px 16px;border:1px solid var(--mv-line);background:var(--mv-chip);color:var(--mv-head)!important;border-radius:0;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+#p-mba-voyages .mv-cc:last-child{grid-column:1/-1}
+#p-mba-voyages .mv-cc::after{content:'';flex:0 0 18px;width:18px;height:18px;border:1.5px solid var(--mv-mut);opacity:.6}
+#p-mba-voyages .mv-cc:hover{border-color:#ef8731}
+#p-mba-voyages .mv-cc[aria-pressed="true"]{background:#062e4b;border-color:#062e4b;color:#fff!important}
+#p-mba-voyages .mv-cc[aria-pressed="true"]::after{content:'\2713';background:#70c257;border-color:#70c257;color:#062e4b!important;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;opacity:1}
+body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
+#p-mba-voyages .mv-pick-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--mv-line)}
+#p-mba-voyages .mv-pick-foot span{font-size:13px;font-weight:700;color:var(--mv-mut)!important}
+#p-mba-voyages .mv-btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+#p-mba-voyages .mv-note a{color:var(--mv-orange)!important;font-weight:700;text-decoration:underline}
+@media(max-width:620px){#p-mba-voyages .mv-pick-box{padding:28px 20px 22px}#p-mba-voyages .mv-pick-foot .mv-btn{width:100%}}
 /*MV-COLOR-END*/
 </style>
 
@@ -12232,7 +12255,7 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     <p class="mv-lede">Connect with ambitious graduates, alumni and professionals across seven Caribbean shores. Yacht days, villa dinners and curated programming, designed to turn a great week into lasting professional relationships.</p>
     <div class="mv-facts">
       <span class="mv-fact"><b>7</b><span>Caribbean shores</span></span>
-      <span class="mv-fact"><b>4 to 7</b><span>Days, your format</span></span>
+      <span class="mv-fact"><b>4</b><span>Packages, every shore</span></span>
       <span class="mv-fact"><b>12 to 60</b><span>Guests per voyage</span></span>
       <span class="mv-fact"><b>Custom</b><span>Quoted for your group</span></span>
     </div>
@@ -12345,10 +12368,10 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     <div class="mv-head">
       <div class="mv-eyebrow">Packages</div>
       <h2 class="mv-h2">Choose your voyage</h2>
-      <p class="mv-sub">Every package is quoted for your group. Pick a starting point and we shape the rest around your cohort, dates and pace.</p>
+      <p class="mv-sub">Four packages, each available on all seven shores. Choose the energy that fits your group, then pick your country when you inquire. Every package is quoted for your group.</p>
     </div>
     <div class="mv-pkgrid" id="mbvGrid"></div>
-    <p class="mv-note">Prefer a shorter, social weekend? Ask about the Luxury Getaway Weekend format on any package.</p>
+    <p class="mv-note">Not sure which fits your group? <a href="#" onclick="mbvPlan();return false;">Tell us about your group</a> and we will recommend one.</p>
   </div>
 </section>
 
@@ -12368,6 +12391,17 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
 </section>
 
 <div class="mv-lb" id="mbvLb" role="dialog" aria-modal="true" aria-label="Photo viewer"><button type="button" aria-label="Close" onclick="mbvCloseLb(event)">&times;</button><img alt=""><p></p></div>
+
+<div class="mv-pick" id="mbvPick" role="dialog" aria-modal="true" aria-labelledby="mbvPickTitle">
+  <div class="mv-pick-box">
+    <button type="button" class="mv-pick-x" aria-label="Close" onclick="mbvClosePick()">&times;</button>
+    <div class="mv-mini" id="mbvPickPkg"></div>
+    <h3 id="mbvPickTitle">Where would you like to go?</h3>
+    <p id="mbvPickHint"></p>
+    <div class="mv-pick-grid" id="mbvPickGrid"></div>
+    <div class="mv-pick-foot"><span id="mbvPickCount"></span><button type="button" class="mv-btn primary" id="mbvPickGo" onclick="mbvPickContinue()">Continue to inquiry</button></div>
+  </div>
+</div>
 
 <script id="mbv-script">
 (function(){
@@ -12393,53 +12427,50 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     {name:'Curacao',tag:'Port economics',angle:'Caribbean European fusion, port economics and offshore financial frameworks.',items:['Handelskade waterfront walking sessions','Port economy briefings','European Caribbean fusion dining','Underwater exploration']}
   ];
 
-  /* Card presentation for the MBA packages the site already carries (CURATED_TOURS, type "mba").
-     Keyed by package title; anything new that gets added to the data still renders using its own fields. */
-  var CARD={
-    'MBA Lifestyle Voyage':{tag:'Flagship',place:'Multi-island Caribbean',shore:'',blurb:'A five to seven day island hopping voyage with private catamaran flotillas, sunset networking socials and curated dinners.'},
-    'MBA Leadership Escape':{tag:'Signature',place:'Jamaica',shore:'Jamaica',blurb:'Premium stays, networking dinners and curated island activities for graduates and cohorts who want purpose and paradise in one trip.'},
-    'MBA Executive Retreat':{tag:'Refined',place:'Barbados',shore:'Barbados',blurb:'Relationship building meets island luxury, with premium stays, facilitated sessions and downtime that makes professionals better together.'}
-  };
-  var ORDER=['MBA Lifestyle Voyage','MBA Leadership Escape','MBA Executive Retreat'];
+  /* The four packages. Each one is available on all seven shores; the visitor picks the country when they inquire. */
+  var PACKAGES=[
+    {id:'lifestyle',title:'MBA Lifestyle Escape',tag:'Lifestyle',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'3 to 5 days',
+      img:'/assets/experiences/group-travel.jpg',
+      blurb:'High energy days on the water and the island. A yacht day, an island excursion day, beach clubs and sunset socials, with the networking happening naturally.',
+      hl:['Private yacht or catamaran day','Island excursion day for the whole group','Beach club and sunset socials'],
+      theme:'a lifestyle format with yacht and excursion days and a social, high energy feel'},
+    {id:'executive',title:'MBA Executive Retreat',tag:'Formal',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'Weekend or multi-day',
+      img:'/assets/hero/white-party-v3.jpg',
+      blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with time to talk properly.',
+      hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables'],
+      theme:'a formal, polished retreat with hosted dinners and facilitated sessions'},
+    {id:'industry',title:'MBA Industry Immersion',tag:'Educational',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'2 to 4 days',
+      img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85&auto=format&fit=crop',
+      blurb:'Learning and networking come first. Company and factory visits, founder workshops and alumni roundtables with local business leaders.',
+      hl:['Company and factory visits for the group','Founder workshops and industry briefings','Alumni and professional networking sessions'],
+      theme:'an educational, network friendly format built around company visits'},
+    {id:'voyage',title:'MBA Island-Hop Voyage',tag:'Signature',place:'Two or more shores',multi:true,pax:'12 to 60',dur:'5 to 7 days',
+      img:'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=1200&q=85&auto=format&fit=crop',
+      blurb:'The full week across more than one shore. A private catamaran flotilla with a yacht day, a villa dinner, company visits and a capstone excursion.',
+      hl:['Private catamaran flotilla','Island hop across two or more shores','Yacht day, villa dinner and capstone'],
+      theme:'a multi island voyage across more than one shore'}
+  ];
 
-  var state={shore:0,photos:[],i:0,pk:[],sliderReady:false,tabsReady:false,loading:false};
+  var state={shore:0,photos:[],i:0,pk:PACKAGES,pref:[],pick:{k:0,sel:[]},sliderReady:false,tabsReady:false,pickReady:false,loading:false};
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function $(id){return document.getElementById(id);}
-  function trim(s,n){s=String(s||'');if(s.length<=n)return s;var c=s.slice(0,n);return c.slice(0,c.lastIndexOf(' ')).replace(/[,.;:]$/,'')+'.';}
   function destImg(name){
     try{var d=DESTS.filter(function(x){return x.name===name;})[0];if(d&&d.img)return d.img.replace('w=700','w=1200');}catch(e){}
     return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80&auto=format&fit=crop';
   }
 
-  /* ---------- packages: the MBA packages from the Experiences page, plus the Dominican Republic MBA package ---------- */
-  function packageList(){
-    var src=[];
-    try{src=(window.CURATED_TOURS||CURATED_TOURS||[]).filter(function(t){return t.type==='mba';});}catch(e){}
-    var out=src.map(function(t){
-      var c=CARD[t.title]||{};
-      return {title:t.title,tag:c.tag||'MBA',place:c.place||t.country,shore:c.shore!==undefined?c.shore:t.country,country:t.country,
-        img:t.image,blurb:c.blurb||trim(t.desc,140),dur:t.duration,price:t.priceValue>0?t.priceLabel:'',hl:(t.highlights||[]).slice(0,3)};
-    });
-    out.sort(function(a,b){var x=ORDER.indexOf(a.title),y=ORDER.indexOf(b.title);return (x<0?99:x)-(y<0?99:y);});
-    try{
-      var d=(DESTINATION_PACKAGE_DATA['Dominican Republic']||[]).filter(function(p){return p.tag==='MBA Experience';})[0];
-      if(d)out.push({title:d.title,tag:'Resort',place:'Dominican Republic',shore:'Dominican Republic',country:'Dominican Republic',img:d.img,
-        blurb:'Premium resorts, alumni networking and curated dinners in Punta Cana.',dur:d.duration,price:String(d.price).replace(/^from\s*/i,''),hl:(d.highlights||[]).slice(0,3)});
-    }catch(e){}
-    return out;
-  }
+  /* ---------- packages ---------- */
   function renderPackages(){
     var grid=$('mbvGrid');if(!grid)return;
-    state.pk=packageList();
-    grid.className='mv-pkgrid'+(state.pk.length%3===1?' cols-2':'');
-    grid.innerHTML=state.pk.map(function(p,k){
+    grid.className='mv-pkgrid'+(PACKAGES.length%3===1?' cols-2':'');
+    grid.innerHTML=PACKAGES.map(function(p,k){
       return '<article class="mv-pk">'
         +'<div class="mv-pk-media"><img src="'+esc(p.img)+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mv-pk-tag">'+esc(p.tag)+'</span><span class="mv-pk-where">'+esc(p.place)+'</span></div>'
         +'<div class="mv-pk-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.blurb)+'</p>'
-        +'<div class="mv-pk-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span></div>'
+        +'<div class="mv-pk-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span></div>'
         +'<ul class="mv-pk-hl">'+p.hl.map(function(h){return '<li>'+esc(h)+'</li>';}).join('')+'</ul>'
-        +'<div class="mv-pk-foot"><div class="mv-pk-price"><small>'+(p.price?'From':'Pricing')+'</small><b'+(p.price?'':' class="q"')+'>'+esc(p.price||'Custom quote')+'</b></div>'
+        +'<div class="mv-pk-foot"><div class="mv-pk-price"><small>Pricing</small><b class="q">Custom quote</b></div>'
         +'<div class="mv-pk-btns"><button type="button" class="mv-btn primary sm" onclick="mbvInquire('+k+')">Inquire now</button></div></div></div></article>';
     }).join('');
   }
@@ -12450,18 +12481,13 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+(window.pageYOffset||0)-84),behavior:'smooth'});
     return false;
   };
-  window.mbvInquire=function(k){
-    var p=state.pk[k];if(!p)return false;
-    var where=(p.shore&&p.title.indexOf(p.country)<0)?' in '+p.country:'';
-    openStartPlanning(p.country,p.title,'MBA Experience','Interested in '+p.title+where+' for a cohort, alumni chapter or leadership team.');
-    return false;
-  };
   window.mbvPlan=function(){
     openStartPlanning('','MBA Caribbean Voyage','MBA Experience','Interested in planning an MBA voyage across the Caribbean for a cohort, alumni chapter or leadership team.');
     return false;
   };
-  window.mbvPlanShore=function(name){
-    openStartPlanning(name,name+' MBA Voyage','MBA Experience','Interested in an MBA voyage in '+name+' for a cohort, alumni chapter or leadership team.');
+  window.mbvPickShore=function(name){
+    state.pref=[name];
+    window.mbvGo('mbvPackages');
     return false;
   };
   window.mbvBuilder=function(){
@@ -12473,13 +12499,50 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     return false;
   };
 
-  /* ---------- seven shores explorer ---------- */
-  function offerFor(name){
-    var pk=state.pk,i;
-    for(i=0;i<pk.length;i++){if(pk[i].shore===name)return 'Package: <em>'+esc(pk[i].title)+'</em>, '+esc(pk[i].dur);}
-    for(i=0;i<pk.length;i++){if(pk[i].shore==='')return 'Available on the <em>'+esc(pk[i].title)+'</em>';}
-    return 'Quoted for your group';
+  /* ---------- country picker: every package is available on every shore ---------- */
+  function pickOpen(){var el=$('mbvPick');return !!el&&el.classList.contains('open');}
+  function pickRender(){
+    var p=PACKAGES[state.pick.k],sel=state.pick.sel;
+    $('mbvPickPkg').textContent=p.title;
+    $('mbvPickHint').textContent=p.multi?'This voyage island hops. Choose the shores you would like to visit, two or more if you can.':'Every package is available on all seven shores. Choose where you would like it.';
+    $('mbvPickGrid').innerHTML=SHORES.map(function(c){return '<button type="button" class="mv-cc" data-c="'+esc(c.name)+'" aria-pressed="'+(sel.indexOf(c.name)>-1?'true':'false')+'">'+esc(c.name)+'</button>';}).join('');
+    $('mbvPickCount').textContent=sel.length?(p.multi?sel.length+' selected':sel[0]):'Choose a country';
+    $('mbvPickGo').disabled=!sel.length;
   }
+  window.mbvInquire=function(k){
+    var p=PACKAGES[k];if(!p)return false;
+    var pref=state.pref||[];
+    state.pick={k:k,sel:pref.length?(p.multi?pref.slice():[pref[0]]):[]};
+    pickRender();
+    $('mbvPick').classList.add('open');
+    var first=document.querySelector('#mbvPickGrid .mv-cc[aria-pressed="true"]')||document.querySelector('#mbvPickGrid .mv-cc');
+    if(first)first.focus();
+    return false;
+  };
+  window.mbvClosePick=function(){var el=$('mbvPick');if(el)el.classList.remove('open');};
+  window.mbvPickContinue=function(){
+    var p=PACKAGES[state.pick.k],sel=state.pick.sel.slice();
+    if(!p||!sel.length)return false;
+    window.mbvClosePick();
+    var where=sel.length>1?sel.slice(0,-1).join(', ')+' and '+sel[sel.length-1]:sel[0];
+    openStartPlanning(sel[0],p.title,'MBA Experience','Interested in the '+p.title+', '+p.theme+', in '+where+' for a cohort, alumni chapter or leadership team.');
+    return false;
+  };
+  function initPick(){
+    var el=$('mbvPick');if(!el||state.pickReady)return;
+    el.addEventListener('click',function(e){
+      if(e.target===el){window.mbvClosePick();return;}
+      var b=e.target.closest?e.target.closest('.mv-cc'):null;if(!b)return;
+      var c=b.getAttribute('data-c'),p=PACKAGES[state.pick.k],i=state.pick.sel.indexOf(c);
+      if(p.multi){if(i>-1)state.pick.sel.splice(i,1);else state.pick.sel.push(c);}else state.pick.sel=[c];
+      pickRender();
+      var again=document.querySelector('#mbvPickGrid .mv-cc[data-c="'+c+'"]');if(again)again.focus();
+    });
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pickOpen())window.mbvClosePick();});
+    state.pickReady=true;
+  }
+
+  /* ---------- seven shores explorer ---------- */
   function renderShore(){
     var s=SHORES[state.shore],box=$('mbvShore');if(!box)return;
     box.innerHTML='<div class="mv-shore">'
@@ -12490,9 +12553,8 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
       +'<div class="mv-mini">The business lens</div><h3 class="mv-shore-angle">'+esc(s.angle)+'</h3>'
       +'<div class="mv-mini">On the itinerary</div>'
       +'<ul class="mv-list">'+s.items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
-      +'<div class="mv-shore-foot"><span class="mv-offer">'+offerFor(s.name)+'</span>'
-      +'<div class="mv-foot-btns"><button type="button" class="mv-btn line sm" onclick="mbvGo(\'mbvPackages\')">See packages</button>'
-      +'<button type="button" class="mv-btn primary sm" onclick="mbvPlanShore(\''+esc(s.name)+'\')">Plan '+esc(s.name)+'</button></div></div>'
+      +'<div class="mv-shore-foot"><span class="mv-offer">All four packages are available in <em>'+esc(s.name)+'</em></span>'
+      +'<div class="mv-foot-btns"><button type="button" class="mv-btn primary sm" onclick="mbvPickShore(\''+esc(s.name)+'\')">Choose a package</button></div></div>'
       +'</div></div>';
     [].forEach.call(document.querySelectorAll('#mbvTabs .mv-tab'),function(b,k){
       var on=k===state.shore;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');
@@ -12503,7 +12565,7 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     tabs.innerHTML=SHORES.map(function(s,k){return '<button type="button" class="mv-tab" role="tab" data-k="'+k+'">'+esc(s.name)+'</button>';}).join('');
     tabs.addEventListener('click',function(e){
       var b=e.target.closest?e.target.closest('.mv-tab'):null;if(!b)return;
-      state.shore=+b.getAttribute('data-k');renderShore();
+      state.shore=+b.getAttribute('data-k');state.pref=[SHORES[state.shore].name];renderShore();
     });
     state.tabsReady=true;
   }
@@ -12557,7 +12619,7 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
     stage.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)go(state.i+(dx<0?1:-1));});
     document.addEventListener('keydown',function(e){
       var pg=$('p-mba-voyages'),lb=$('mbvLb');
-      if(!pg||!pg.classList.contains('on'))return;
+      if(!pg||!pg.classList.contains('on')||pickOpen())return;
       if(lb&&lb.classList.contains('open')){if(e.key==='Escape')window.mbvCloseLb();return;}
       if(e.key==='ArrowLeft')go(state.i-1);else if(e.key==='ArrowRight')go(state.i+1);
     });
@@ -12581,7 +12643,7 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
   }
 
   window.renderMbaVoyages=function(){
-    buildTabs();renderPackages();renderShore();initSlider();
+    buildTabs();renderPackages();renderShore();initPick();initSlider();
     if(state.sliderReady)setTimeout(layout,60);
   };
 })();
