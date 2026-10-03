@@ -799,6 +799,166 @@
       "price": 800,
       "per": "group",
       "cap": 10
+    },
+    "Sky Ride & Zipline Thrill, Ocho Rios": {
+      "country": "Jamaica",
+      "area": "Ocho Rios",
+      "type": "land",
+      "price": 131,
+      "per": "person",
+      "cap": null
+    },
+    "Dirt Trails & Sea Breeze: ATV and Beach Horseback Day": {
+      "country": "Jamaica",
+      "area": "Ocho Rios",
+      "type": "land",
+      "price": 188,
+      "per": "person",
+      "cap": null
+    },
+    "Dolphin Splash & Waterfall Climb Day": {
+      "country": "Jamaica",
+      "area": "Ocho Rios",
+      "type": "land",
+      "price": 240,
+      "per": "person",
+      "cap": null
+    },
+    "Tiered Falls & Rum Distillery Day": {
+      "country": "Jamaica",
+      "area": "South Coast",
+      "type": "land",
+      "price": 163,
+      "per": "person",
+      "cap": null
+    },
+    "Reggae Roots & Waterfall Day": {
+      "country": "Jamaica",
+      "area": "Ocho Rios",
+      "type": "land",
+      "price": 204,
+      "per": "person",
+      "cap": null
+    },
+    "Family Catamaran Sail to the Falls": {
+      "country": "Jamaica",
+      "area": "Ocho Rios",
+      "type": "water",
+      "price": 141,
+      "per": "person",
+      "cap": null
+    },
+    "Golden Hour Sail & Reef Snorkel": {
+      "country": "Barbados",
+      "area": "Bridgetown & West Coast",
+      "type": "water",
+      "price": 128,
+      "per": "person",
+      "cap": null
+    },
+    "Captain’s Table Catamaran & Snorkel": {
+      "country": "Barbados",
+      "area": "Bridgetown & West Coast",
+      "type": "water",
+      "price": 304,
+      "per": "person",
+      "cap": null
+    },
+    "Cavern Tram & Zipline Adventure, Barbados": {
+      "country": "Barbados",
+      "area": "East Coast & Interior",
+      "type": "land",
+      "price": 160,
+      "per": "person",
+      "cap": null
+    },
+    "Barbados Back-Roads 4x4 Day": {
+      "country": "Barbados",
+      "area": "East Coast & Interior",
+      "type": "land",
+      "price": 245,
+      "per": "person",
+      "cap": null
+    },
+    "Twin Peaks Sunset Sail & Snorkel": {
+      "country": "Saint Lucia",
+      "area": "Soufrière & the Pitons",
+      "type": "water",
+      "price": 120,
+      "per": "person",
+      "cap": null
+    },
+    "Soufrière Coast Sea Adventure": {
+      "country": "Saint Lucia",
+      "area": "Soufrière & the Pitons",
+      "type": "water",
+      "price": 158,
+      "per": "person",
+      "cap": null
+    },
+    "Lagoon Island Dolphin Swim Day": {
+      "country": "The Bahamas",
+      "area": "Nassau & Paradise Island",
+      "type": "water",
+      "price": 321,
+      "per": "person",
+      "cap": null
+    },
+    "Pig Beach Catamaran Day": {
+      "country": "The Bahamas",
+      "area": "Nassau & Paradise Island",
+      "type": "water",
+      "price": 393,
+      "per": "person",
+      "cap": null
+    },
+    "Island Beats Sail & Snorkel": {
+      "country": "The Bahamas",
+      "area": "Nassau & Paradise Island",
+      "type": "water",
+      "price": 169,
+      "per": "person",
+      "cap": null
+    },
+    "Dirt, Sand & Swimming Pigs: ATV Day": {
+      "country": "The Bahamas",
+      "area": "Nassau & Paradise Island",
+      "type": "land",
+      "price": 491,
+      "per": "person",
+      "cap": null
+    },
+    "Little Curacao Sail & Beach Day": {
+      "country": "Curacao",
+      "area": "East Coast & Klein Curacao",
+      "type": "water",
+      "price": 182,
+      "per": "person",
+      "cap": null
+    },
+    "Yacht Beach Escape to the Little Island": {
+      "country": "Curacao",
+      "area": "East Coast & Klein Curacao",
+      "type": "water",
+      "price": 242,
+      "per": "person",
+      "cap": null
+    },
+    "Blue Room & Beach-Hop Catamaran Day": {
+      "country": "Curacao",
+      "area": "West Coast",
+      "type": "water",
+      "price": 186,
+      "per": "person",
+      "cap": null
+    },
+    "Punta Cana Golden Coast Sunset Sail": {
+      "country": "Dominican Republic",
+      "area": "Punta Cana & Bávaro",
+      "type": "water",
+      "price": 77,
+      "per": "person",
+      "cap": null
     }
   },
   "transfers": {
