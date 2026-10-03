@@ -12097,10 +12097,6 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 @keyframes mvFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #p-mba-voyages .mv-mini{font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--mv-orange)!important;margin:0 0 8px}
 
-#p-mba-voyages .mv-card{background:var(--mv-card);border:1px solid var(--mv-line);border-radius:24px;padding:28px;box-shadow:var(--mv-shadow);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
-#p-mba-voyages .mv-card:hover{transform:translateY(-5px);box-shadow:var(--mv-shadow-lg)}
-#p-mba-voyages .mv-card h3,#p-mba-voyages .mv-card h4{font-family:'Raleway',sans-serif;color:var(--mv-head)!important;font-size:18px;font-weight:800;margin:0 0 10px;letter-spacing:-.2px}
-#p-mba-voyages .mv-card p{color:var(--mv-mut)!important;font-size:14.5px;line-height:1.7;margin:0}
 #p-mba-voyages .mv-day{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#fff!important;background:linear-gradient(135deg,#062e4b,#0a4d73);padding:7px 13px;border-radius:0;margin-bottom:16px;box-shadow:0 8px 18px rgba(6,46,75,.24)}
 #p-mba-voyages .mv-moments{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
 #p-mba-voyages .mv-moment{position:relative;overflow:hidden;border-radius:26px;padding:32px;color:#fff!important;box-shadow:var(--mv-shadow-lg)}
@@ -12114,17 +12110,6 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 #p-mba-voyages .mv-tags{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px}
 #p-mba-voyages .mv-tags span{font-size:12px;font-weight:700;color:#fff!important;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);padding:7px 13px;border-radius:0}
 
-/* ---------- Who it's for ---------- */
-#p-mba-voyages .mv-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-#p-mba-voyages .mv-ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff!important;margin-bottom:18px;background:linear-gradient(135deg,#062e4b,#0a4d73);box-shadow:0 10px 22px rgba(6,46,75,.24)}
-#p-mba-voyages .mv-ico.g{background:linear-gradient(135deg,#70c257,#4fae3f);box-shadow:0 10px 22px rgba(112,194,87,.34)}
-#p-mba-voyages .mv-ico.o{background:linear-gradient(135deg,#f5a04b,#ef8731);box-shadow:0 10px 22px rgba(239,135,49,.34)}
-#p-mba-voyages .mv-included{margin-top:22px;border-radius:26px;padding:34px 36px;color:#fff!important;background:radial-gradient(120% 140% at 15% 0%,#0a4d73,#062e4b 60%,#041f35);box-shadow:var(--mv-shadow-lg)}
-#p-mba-voyages .mv-included h3{font-family:'Playfair Display',serif;font-size:24px;color:#fff!important;margin:0 0 6px}
-#p-mba-voyages .mv-included > p{color:rgba(255,255,255,.78)!important;font-size:14.5px;margin:0 0 22px}
-#p-mba-voyages .mv-inc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 26px}
-#p-mba-voyages .mv-inc-grid span{display:flex;align-items:flex-start;gap:11px;font-size:14.5px;line-height:1.5;color:#fff!important}
-#p-mba-voyages .mv-inc-grid span::before{content:'\2713';flex:0 0 22px;height:22px;border-radius:50%;background:#70c257;color:#062e4b!important;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
 
 /* ---------- Packages ---------- */
 #p-mba-voyages .mv-pkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
@@ -12167,15 +12152,14 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 /* ---------- Responsive ---------- */
 @media(max-width:1020px){
   #p-mba-voyages .mv-pkgrid{grid-template-columns:1fr 1fr}
-  #p-mba-voyages .mv-inc-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:860px){
-  #p-mba-voyages .mv-moments,#p-mba-voyages .mv-grid3{grid-template-columns:1fr}
+  #p-mba-voyages .mv-moments{grid-template-columns:1fr}
 }
 @media(max-width:620px){
   #p-mba-voyages .mv-hero{padding:48px 0 54px;border-radius:0 0 28px 28px}
   #p-mba-voyages .mv-sec{padding:56px 0}
-  #p-mba-voyages .mv-pkgrid,#p-mba-voyages .mv-pkgrid.cols-2,#p-mba-voyages .mv-inc-grid{grid-template-columns:1fr}
+  #p-mba-voyages .mv-pkgrid,#p-mba-voyages .mv-pkgrid.cols-2{grid-template-columns:1fr}
   #p-mba-voyages .mv-pkgrid.cols-2 .mv-pk-media{height:210px}
   #p-mba-voyages .mv-sl-stage{height:300px}
   #p-mba-voyages .mv-jump{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:22px 24px 4px;scrollbar-width:none}
@@ -12184,7 +12168,6 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
   #p-mba-voyages .mv-sl-btn{width:42px;height:42px}
   #p-mba-voyages .mv-fact{min-width:calc(50% - 6px);flex:1 1 calc(50% - 6px);padding:12px 12px}
   #p-mba-voyages .mv-cta .mv-btn{width:100%}
-  #p-mba-voyages .mv-included{padding:26px 22px}
   #p-mba-voyages .mv-band{padding:48px 22px;border-radius:26px;margin-bottom:56px}
   #p-mba-voyages .mv-pk-foot{align-items:stretch}
 }
@@ -12283,7 +12266,6 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
 <nav class="mv-jump" aria-label="On this page">
   <button type="button" onclick="mbvGo('mbvProgram')">Overview</button>
-  <button type="button" onclick="mbvGo('mbvWho')">Who it is for</button>
   <button type="button" onclick="mbvGo('mbvPackages')">Packages</button>
   <button type="button" onclick="mbvGo('mbvPlan')">Plan</button>
 </nav>
@@ -12311,7 +12293,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     </div>
     <div class="mv-qa">
       <div class="mv-qa-row"><div class="mv-qa-q">What is it?</div><div class="mv-qa-a">MBA adventure weeks, a new kind of travel from Sight Seers Caribbean Adventures. Curated getaways for graduates and professionals that pair yacht days, luxury villa dinners and cultural deep dives with real professional networking.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Active MBA cohorts planning a class trip, alumni chapters planning a reunion, and corporate leadership teams using travel as a development tool. Groups of 12 to 60.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Active MBA cohorts planning a class trip, alumni chapters planning a reunion, and corporate leadership teams using travel as a development tool. For corporate groups, a voyage can include facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">Where does it run?</div><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">How long is it?</div><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion. Open any package's details to see how its days run.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">What is included?</div><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></div>
@@ -12321,36 +12303,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   </div>
 </section>
 
-<!-- Who it is for -->
-<section class="mv-sec" id="mbvWho">
-  <div class="mv-wrap">
-    <div class="mv-head">
-      <div class="mv-eyebrow">Who it is for</div>
-      <h2 class="mv-h2">Built for your group</h2>
-      <p class="mv-sub">Groups of 12 to 60, supported by a dedicated Sight Seers coordinator, private transport, curated dining and flexible programming.</p>
-    </div>
-    <div class="mv-grid3">
-      <div class="mv-card"><div class="mv-ico"><i class="fas fa-user-graduate"></i></div><h4>MBA cohorts</h4><p>A meaningful class trip. The capstone memory people reference for years after graduation.</p></div>
-      <div class="mv-card"><div class="mv-ico g"><i class="fas fa-users"></i></div><h4>Alumni chapters</h4><p>Reunion style voyages built around reconnection, storytelling and shared adventure.</p></div>
-      <div class="mv-card"><div class="mv-ico o"><i class="fas fa-briefcase"></i></div><h4>Corporate teams</h4><p>Facilitated leadership sessions, team diagnostics and executive coaching layered into the island experience.</p></div>
-    </div>
-    <div class="mv-included">
-      <h3>Every voyage includes</h3>
-      <p>The details are handled, so the group can focus on each other.</p>
-      <div class="mv-inc-grid">
-        <span>Dedicated Sight Seers coordinator</span>
-        <span>Private transport</span>
-        <span>Curated dining</span>
-        <span>Branded welcome kit</span>
-        <span>Professional photography</span>
-        <span>Private group dashboard and post trip content package</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Packages -->
-<section class="mv-sec tint" id="mbvPackages">
+<section class="mv-sec" id="mbvPackages">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Packages</div>
