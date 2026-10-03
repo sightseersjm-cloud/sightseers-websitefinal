@@ -10763,8 +10763,8 @@ body.theme-night .page .tag{
 <section class="featured-blog-sec" style="padding:60px 24px;background:linear-gradient(135deg,#f8fbfd 0%,#eef5fa 100%);position:relative;overflow:hidden">
   <div style="max-width:1080px;margin:0 auto">
     <div class="sec-head center reveal">
-      <span class="sec-pre">From the Blog</span>
-      <h2 class="sec-title">MBA Adventure Weeks in the Caribbean</h2>
+      <span class="sec-pre">MBA Experience</span>
+      <h2 class="sec-title">Seven Shores: MBA Caribbean Voyages</h2>
       <p class="sec-sub center">A new kind of leadership voyage built for graduates, alumni and young professionals who want more than a vacation.</p>
     </div>
     <div class="reveal" style="display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;align-items:center">
@@ -10772,11 +10772,11 @@ body.theme-night .page .tag{
         <img src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=1200&q=85&auto=format&fit=crop" alt="MBA Adventure Weeks Caribbean" style="width:100%;height:320px;object-fit:cover;display:block" loading="lazy">
       </div>
       <div style="flex:1 1 380px;min-width:260px">
-        <span class="ss-pill-navy" style="margin-bottom:14px">MBA EXPERIENCE</span>
+        <span class="ss-pill-navy" style="margin-bottom:14px">SEVEN SHORES</span>
         <p style="font-size:16px;line-height:1.7;color:#444;margin:0 0 18px">Connect with ambitious MBA graduates, alumni and young professionals across Jamaica, Barbados, Saint Lucia and beyond. Private yacht days, luxury villa dinners, catamaran sails, cultural deep dives and curated networking, designed to create real professional relationships on the water and on the island.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy,#0d5371);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Read the Full Article</a>
-          <a href="#" onclick="nav('mba-voyages');return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Explore Seven Shores <i class="fas fa-arrow-right"></i></a>
+          <a href="#" onclick="nav('mba-voyages');return false" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy,#0d5371);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid transparent;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore Seven Shores <i class="fas fa-arrow-right"></i></a>
+          <a href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Read the Full Article</a>
         </div>
       </div>
     </div>
@@ -12244,6 +12244,15 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 #p-mba-voyages .mv-btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
 #p-mba-voyages .mv-note a{color:var(--mv-orange)!important;font-weight:700;text-decoration:underline}
 @media(max-width:620px){#p-mba-voyages .mv-pick-box{padding:28px 20px 22px}#p-mba-voyages .mv-pick-foot .mv-btn{width:100%}}
+
+/* ---------- Program summary (question and answer card) ---------- */
+#p-mba-voyages .mv-qa{background:var(--mv-card);border:1px solid var(--mv-line);border-radius:24px;padding:8px 34px;box-shadow:var(--mv-shadow)}
+#p-mba-voyages .mv-qa-row{display:flex;gap:30px;padding:22px 0;border-bottom:1px solid var(--mv-line);align-items:flex-start}
+#p-mba-voyages .mv-qa-row:last-child{border-bottom:0}
+#p-mba-voyages .mv-qa-q{flex:0 0 190px;font-weight:800;color:var(--mv-head)!important;font-size:15px;position:relative;padding-left:16px}
+#p-mba-voyages .mv-qa-q::before{content:'';position:absolute;left:0;top:.45em;width:7px;height:7px;background:#ef8731}
+#p-mba-voyages .mv-qa-a{flex:1;color:var(--mv-mut)!important;font-size:15.5px;line-height:1.7}
+@media(max-width:860px){#p-mba-voyages .mv-qa-row{flex-direction:column;gap:8px}#p-mba-voyages .mv-qa-q{flex:none}#p-mba-voyages .mv-qa{padding:6px 22px}}
 /*MV-COLOR-END*/
 </style>
 
@@ -12270,6 +12279,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <nav class="mv-jump" aria-label="On this page">
+  <button type="button" onclick="mbvGo('mbvProgram')">Overview</button>
   <button type="button" onclick="mbvGo('mbvShores')">Seven shores</button>
   <button type="button" onclick="mbvGo('mbvWeek')">The week</button>
   <button type="button" onclick="mbvGo('mbvWho')">Who it is for</button>
@@ -12290,8 +12300,28 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   </div>
 </section>
 
+<!-- The program at a glance -->
+<section class="mv-sec tint" id="mbvProgram">
+  <div class="mv-wrap">
+    <div class="mv-head">
+      <div class="mv-eyebrow">The program</div>
+      <h2 class="mv-h2">Seven Shores at a glance</h2>
+      <p class="mv-sub">Everything a cohort, chapter or leadership team needs to know before choosing a voyage.</p>
+    </div>
+    <div class="mv-qa">
+      <div class="mv-qa-row"><div class="mv-qa-q">What is it?</div><div class="mv-qa-a">MBA adventure weeks, a new kind of travel from Sight Seers Caribbean Adventures. Curated getaways for graduates and professionals that pair yacht days, luxury villa dinners and cultural deep dives with real professional networking.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Active MBA cohorts planning a class trip, alumni chapters planning a reunion, and corporate leadership teams using travel as a development tool. Groups of 12 to 60.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">Where does it run?</div><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">How long is it?</div><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">What is included?</div><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">What does it cost?</div><div class="mv-qa-a">Every package is quoted for your group, based on the country, group size, season and format.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">How do we book?</div><div class="mv-qa-a">Choose a package and a country and send an inquiry. A planner replies within one business day, you reserve with a deposit and the balance is confirmed in your itinerary. For peak season and multi island routes, book three to four months ahead.</div></div>
+    </div>
+  </div>
+</section>
+
 <!-- Seven shores -->
-<section class="mv-sec tint" id="mbvShores">
+<section class="mv-sec" id="mbvShores">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Seven shores</div>
@@ -12304,7 +12334,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- The week -->
-<section class="mv-sec" id="mbvWeek">
+<section class="mv-sec tint" id="mbvWeek">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">The format</div>
@@ -12335,7 +12365,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- Who it is for -->
-<section class="mv-sec tint" id="mbvWho">
+<section class="mv-sec" id="mbvWho">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Who it is for</div>
@@ -12363,7 +12393,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- Packages -->
-<section class="mv-sec" id="mbvPackages">
+<section class="mv-sec tint" id="mbvPackages">
   <div class="mv-wrap">
     <div class="mv-head">
       <div class="mv-eyebrow">Packages</div>
