@@ -12159,7 +12159,7 @@ body.theme-night #p-mba-voyages .mv-tab.on{background:#ef8731;border-color:#ef87
 #p-mba-voyages .mv-pk{display:flex;flex-direction:column;background:var(--mv-card);border:1px solid var(--mv-line);border-radius:26px;overflow:hidden;box-shadow:var(--mv-shadow);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
 #p-mba-voyages .mv-pk:hover{transform:translateY(-6px);box-shadow:var(--mv-shadow-lg)}
 #p-mba-voyages .mv-pk-media{position:relative;height:210px;overflow:hidden;background:#dfe9f1}
-#p-mba-voyages .mv-pk-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+#p-mba-voyages .mv-pk-media img{width:100%;height:100%;object-fit:cover;object-position:center 28%;display:block;transition:transform .6s ease}
 #p-mba-voyages .mv-pk:hover .mv-pk-media img{transform:scale(1.06)}
 #p-mba-voyages .mv-pk-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,46,75,.05) 40%,rgba(4,31,53,.55))}
 #p-mba-voyages .mv-pk-tag{position:absolute;top:16px;left:16px;z-index:1;font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#fff!important;background:#ef8731;padding:7px 12px;border-radius:0}
@@ -12409,7 +12409,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   var PHOTOS=[
     {src:'/assets/mba/mba-yacht-raft-up.jpg',label:'Yacht day on open water',sub:'Music, swimming and networking on deck'},
     {src:'/assets/mba/mba-beach-group.jpg',label:'Beach day with the cohort',sub:'Strangers become collaborators by sunset'},
-    {src:'/assets/experiences/group-travel.jpg',label:'Graduates on the island',sub:'Shared adventure, real friendships'},
+    {src:'/assets/mba/mba-beach-cohort.jpg',label:'Graduates on the island',sub:'Shared adventure, real friendships'},
     {src:'/assets/mba/mba-white-party.jpg',label:'White party celebration',sub:'A signature night for the whole group'},
     {src:'/assets/hero/white-party-v3.jpg',label:'Sunset villa evening',sub:'Where the best conversations happen'},
     {src:'/assets/gallery/jamaica-rafting-crew.webp',label:'River rafting, Jamaica',sub:'Teamwork, island style'},
@@ -12430,26 +12430,40 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   /* The four packages. Each one is available on all seven shores; the visitor picks the country when they inquire. */
   var PACKAGES=[
     {id:'lifestyle',title:'MBA Lifestyle Escape',tag:'Lifestyle',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'3 to 5 days',
-      img:'/assets/experiences/group-travel.jpg',
+      img:'/assets/mba/mba-yacht-raft-up.jpg',fb:'/assets/gallery/jamaica-rafting-crew.webp',
       blurb:'High energy days on the water and the island. A yacht day, an island excursion day, beach clubs and sunset socials, with the networking happening naturally.',
       hl:['Private yacht or catamaran day','Island excursion day for the whole group','Beach club and sunset socials'],
       theme:'a lifestyle format with yacht and excursion days and a social, high energy feel'},
     {id:'executive',title:'MBA Executive Retreat',tag:'Formal',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'Weekend or multi-day',
-      img:'/assets/hero/white-party-v3.jpg',
+      img:'/assets/mba/mba-white-party.jpg',
       blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with time to talk properly.',
       hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables'],
       theme:'a formal, polished retreat with hosted dinners and facilitated sessions'},
     {id:'industry',title:'MBA Industry Immersion',tag:'Educational',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'2 to 4 days',
-      img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85&auto=format&fit=crop',
+      img:'/assets/mba/mba-beach-cohort.jpg',
       blurb:'Learning and networking come first. Company and factory visits, founder workshops and alumni roundtables with local business leaders.',
       hl:['Company and factory visits for the group','Founder workshops and industry briefings','Alumni and professional networking sessions'],
       theme:'an educational, network friendly format built around company visits'},
     {id:'voyage',title:'MBA Island-Hop Voyage',tag:'Signature',place:'Two or more shores',multi:true,pax:'12 to 60',dur:'5 to 7 days',
-      img:'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=1200&q=85&auto=format&fit=crop',
+      img:'/assets/mba/mba-beach-group.jpg',
       blurb:'The full week across more than one shore. A private catamaran flotilla with a yacht day, a villa dinner, company visits and a capstone excursion.',
       hl:['Private catamaran flotilla','Island hop across two or more shores','Yacht day, villa dinner and capstone'],
       theme:'a multi island voyage across more than one shore'}
   ];
+
+  /* A package can name a fallback photo (fb). The main photo is probed quietly, so a card never shows the site's grey
+     placeholder, and it switches to the main photo as soon as that file exists. */
+  PACKAGES.forEach(function(p,k){
+    if(!p.fb)return;
+    var im=new Image();
+    im.onload=function(){
+      p.src=p.img;
+      var grid=document.getElementById('mbvGrid'),card=grid&&grid.children[k],el=card&&card.querySelector('.mv-pk-media img');
+      if(el)el.src=p.img;
+    };
+    im.onerror=function(){p.src=p.fb;};
+    im.src=p.img;
+  });
 
   var state={shore:0,photos:[],i:0,pk:PACKAGES,pref:[],pick:{k:0,sel:[]},sliderReady:false,tabsReady:false,pickReady:false,loading:false};
 
@@ -12466,7 +12480,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     grid.className='mv-pkgrid'+(PACKAGES.length%3===1?' cols-2':'');
     grid.innerHTML=PACKAGES.map(function(p,k){
       return '<article class="mv-pk">'
-        +'<div class="mv-pk-media"><img src="'+esc(p.img)+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mv-pk-tag">'+esc(p.tag)+'</span><span class="mv-pk-where">'+esc(p.place)+'</span></div>'
+        +'<div class="mv-pk-media"><img src="'+esc(p.src||p.fb||p.img)+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mv-pk-tag">'+esc(p.tag)+'</span><span class="mv-pk-where">'+esc(p.place)+'</span></div>'
         +'<div class="mv-pk-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.blurb)+'</p>'
         +'<div class="mv-pk-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span></div>'
         +'<ul class="mv-pk-hl">'+p.hl.map(function(h){return '<li>'+esc(h)+'</li>';}).join('')+'</ul>'
