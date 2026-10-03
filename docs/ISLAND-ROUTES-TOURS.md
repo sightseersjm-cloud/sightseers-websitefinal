@@ -17,7 +17,7 @@ Visitors inquire on the site, then the booking is made through our Island Routes
 
 | Sight Seers name | Country | Island Routes tour | Their listed price (per person) | Our "from" price |
 |---|---|---|---|---|
-| Treetop Zipline & Sky Ride Above Ocho Rios | Jamaica | Mystic Mountain Sky Explorer & Zipline Experience | $109.09 | $131 |
+| Sky Ride & Zipline Thrill, Ocho Rios | Jamaica | Mystic Mountain Sky Explorer & Zipline Experience | $109.09 | $131 |
 | Dirt Trails & Sea Breeze: ATV and Beach Horseback Day | Jamaica | ATV Adventure & Horseback Beach Ride Ocho Rios | $156.36 | $188 |
 | Dolphin Splash & Waterfall Climb Day | Jamaica | Dolphin Encounter & Dunn’s River Falls Experience | $200.00 | $240 |
 | Tiered Falls & Rum Distillery Day | Jamaica | YS Falls & Appleton Estate Rum Tour | $135.45 | $163 |
@@ -25,7 +25,7 @@ Visitors inquire on the site, then the booking is made through our Island Routes
 | Family Catamaran Sail to the Falls | Jamaica | Dunn’s River Falls Catamaran Cruise for the Family | $117.27 | $141 |
 | Golden Hour Sail & Reef Snorkel | Barbados | Sunset Catamaran & Snorkeling Cruise at Carlisle Bay | $106.67 | $128 |
 | Captain’s Table Catamaran & Snorkel | Barbados | Luxury Catamaran, Snorkel & Dining Experience | $253.33 | $304 |
-| Cavern Tram & Treetop Zip, Barbados | Barbados | Harrison’s Cave & Zipline Experience | $133.33 | $160 |
+| Cavern Tram & Zipline Adventure, Barbados | Barbados | Harrison’s Cave & Zipline Experience | $133.33 | $160 |
 | Barbados Back-Roads 4x4 Day | Barbados | 4x4 Best of Barbados Jeep Experience | $204.44 | $245 |
 | Twin Peaks Sunset Sail & Snorkel | Saint Lucia | Piton Sunset Snorkel Cruise | $100.00 | $120 |
 | Soufrière Coast Sea Adventure | Saint Lucia | Soufrière Adventure Cruise | $131.82 | $158 |
