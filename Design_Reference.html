@@ -40614,13 +40614,36 @@ function openYachtBooking(title, category, note){
   function defaultCustomSections(){
     return [];
   }
+  /* A browser that saved these cards in the admin portal before the new photos were added still holds the
+     old stock-photo defaults. Swap an untouched old default for its new photo; any image chosen in the admin
+     portal (anything else) is left alone. */
+  const TRANSFER_PHOTO_UPGRADES={
+    'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=85&auto=format&fit=crop':{image:'/assets/transfers/airport-sprinter.jpg'},
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1400&q=85&auto=format&fit=crop':{image:'/assets/transfers/executive-escalade.jpg'}
+  };
+  const YACHT_PHOTO_UPGRADES={
+    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1400&q=85&auto=format&fit=crop':{image:'/assets/yachts/sofisti-kat-exterior.jpg',gallery:'/assets/yachts/sofisti-kat-exterior.jpg,/assets/yachts/sofisti-kat-covered-lounge.jpg,/assets/yachts/sofisti-kat-outdoor-dining.jpg,/assets/yachts/sofisti-kat-dining-salon.jpg'},
+    'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1400&q=85&auto=format&fit=crop':{image:'/assets/yachts/empress-kool-runnings-aerial.jpg',gallery:'/assets/yachts/empress-kool-runnings-aerial.jpg,/assets/yachts/empress-kool-runnings-bow-guests.jpg,/assets/yachts/empress-kool-runnings-salon.jpg,/assets/yachts/empress-kool-runnings-lounge.jpg'}
+  };
+  function upgradeSavedPhotos(rows, upgrades){
+    return rows.map(parts=>{
+      const up=Array.isArray(parts) ? upgrades[String(parts[4]||'').trim()] : null;
+      if(!up) return parts;
+      const next=parts.slice();
+      while(next.length<8) next.push('');
+      next[4]=up.image;
+      if(up.gallery && !String(next[7]||'').trim()) next[7]=up.gallery;
+      return next;
+    });
+  }
+
   function getTransferData(){
     const stored=getStore(TRANSFER_KEY, null);
-    return Array.isArray(stored) && stored.length ? stored : defaultTransferData();
+    return Array.isArray(stored) && stored.length ? upgradeSavedPhotos(stored, TRANSFER_PHOTO_UPGRADES) : defaultTransferData();
   }
   function getYachtData(){
     const stored=getStore(YACHT_KEY, null);
-    return Array.isArray(stored) && stored.length ? stored : defaultYachtData();
+    return Array.isArray(stored) && stored.length ? upgradeSavedPhotos(stored, YACHT_PHOTO_UPGRADES) : defaultYachtData();
   }
   function getCustomSectionsData(){
     const stored=getStore(CUSTOM_SECTION_KEY, null);
