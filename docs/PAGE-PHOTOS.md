@@ -44,5 +44,12 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 
 - **G1** (Greek Life main card composition reference): the supplied photo is only 210 x 118 px. Get the full-size original from the supplier first.
 - **T3 and T4** (Jamaica listing versions of the Escalade and the Sprinter): alternatives to T1 and T2. The handoff says to choose one pair. T1 and T2 were used because they are the preferred 2025 models. Neither pair is verified as the vehicles actually offered, and neither is labelled with a model year on the page.
-- **Sunset charter photo:** no sunset photo of a matching vessel exists yet, so the Sunset card keeps its current photo.
+- **Sunset charter photo from the handoff:** none exists for a matching vessel. The Sunset Escape Charter card uses a photo the owner supplied instead (see below).
 - The handoff lists exteriors only for the two vehicles, so there are no vehicle interior photos yet.
+
+## Photos supplied by the owner
+
+| File | Where | Notes |
+|---|---|---|
+| `transfers/group-coach-53-seater.jpg` | Transfers: Group Transfers card | The 53-seater coach. Cropped from a square 1080 x 1080 original to 1080 x 720 so the whole bus is in frame. |
+| `yachts/sunset-cruise.jpg` | Yacht Charters: Sunset Escape Charter card (and Sunset Private Charter in the static page) | 674 x 446, unmodified. The vessel and the original source are not recorded, and the handoff's vessel match is still pending, so the page does not name a vessel. |
