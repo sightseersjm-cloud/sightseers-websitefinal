@@ -11240,7 +11240,6 @@ body.theme-night .page .tag{
             <span class="transfer-badge">Arrival Ready</span>
             <div class="transfer-meta">
               <div><strong>Airport Pickup &amp; Drop-Off</strong><span>Airport Transfer</span></div>
-              <div class="transfer-price">Custom Quote</div>
             </div>
           </div>
           <div class="transfer-card-body">
@@ -11262,7 +11261,6 @@ body.theme-night .page .tag{
             <span class="transfer-badge">Premium Ride</span>
             <div class="transfer-meta">
               <div><strong>Executive Transfers</strong><span>Private Movement</span></div>
-              <div class="transfer-price">Custom Quote</div>
             </div>
           </div>
           <div class="transfer-card-body">
@@ -11280,11 +11278,10 @@ body.theme-night .page .tag{
 
         <article class="transfer-card transfer-card--premium" data-transfer-category="group">
           <div class="transfer-card-media">
-            <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=1400&q=85&auto=format&fit=crop" alt="Group transfers">
+            <img src="/assets/transfers/group-coach-53-seater.jpg" alt="Group transfers">
             <span class="transfer-badge">Group Ready</span>
             <div class="transfer-meta">
               <div><strong>Group Transfers</strong><span>Coordinated Movement</span></div>
-              <div class="transfer-price">Custom Quote</div>
             </div>
           </div>
           <div class="transfer-card-body">
@@ -40601,7 +40598,7 @@ function openYachtBooking(title, category, note){
     return [
       ['airport','Arrival Ready','Airport Pickup & Drop-Off','Airport Transfer','/assets/transfers/airport-sprinter.jpg','A polished airport transfer option for smooth arrivals, departures and direct movement between the airport, hotel, villa or meeting point.','MBJ and NMIA pickup support;Ideal for couples, families and solo travelers;Easy pairing with tours, stays and arrival day plans'],
       ['executive','Premium Ride','Executive Transfers','Private Movement','/assets/transfers/executive-escalade.jpg','A more polished transport option for VIP guests, professionals, elevated itineraries and premium island movement.','Private point-to-point support;Works for dining, meetings and event movement;Designed for a more refined guest feel'],
-      ['group','Group Ready','Group Transfers','Coordinated Movement','https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=1400&q=85&auto=format&fit=crop','Built for family groups, retreats, celebrations and guest movement that needs timing, structure and less stress.','Coach Buses 53 Seater;37 Seater;Coaster 28 Seater']
+      ['group','Group Ready','Group Transfers','Coordinated Movement','/assets/transfers/group-coach-53-seater.jpg','Built for family groups, retreats, celebrations and guest movement that needs timing, structure and less stress.','Coach Buses 53 Seater;37 Seater;Coaster 28 Seater']
     ];
   }
   function defaultYachtData(){
@@ -40614,13 +40611,37 @@ function openYachtBooking(title, category, note){
   function defaultCustomSections(){
     return [];
   }
+  /* A browser that saved these cards in the admin portal before the new photos were added still holds the
+     old stock-photo defaults. Swap an untouched old default for its new photo; any image chosen in the admin
+     portal (anything else) is left alone. */
+  const TRANSFER_PHOTO_UPGRADES={
+    'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=85&auto=format&fit=crop':{image:'/assets/transfers/airport-sprinter.jpg'},
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1400&q=85&auto=format&fit=crop':{image:'/assets/transfers/executive-escalade.jpg'},
+    'https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=1400&q=85&auto=format&fit=crop':{image:'/assets/transfers/group-coach-53-seater.jpg'}
+  };
+  const YACHT_PHOTO_UPGRADES={
+    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1400&q=85&auto=format&fit=crop':{image:'/assets/yachts/sofisti-kat-exterior.jpg',gallery:'/assets/yachts/sofisti-kat-exterior.jpg,/assets/yachts/sofisti-kat-covered-lounge.jpg,/assets/yachts/sofisti-kat-outdoor-dining.jpg,/assets/yachts/sofisti-kat-dining-salon.jpg'},
+    'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1400&q=85&auto=format&fit=crop':{image:'/assets/yachts/empress-kool-runnings-aerial.jpg',gallery:'/assets/yachts/empress-kool-runnings-aerial.jpg,/assets/yachts/empress-kool-runnings-bow-guests.jpg,/assets/yachts/empress-kool-runnings-salon.jpg,/assets/yachts/empress-kool-runnings-lounge.jpg'}
+  };
+  function upgradeSavedPhotos(rows, upgrades){
+    return rows.map(parts=>{
+      const up=Array.isArray(parts) ? upgrades[String(parts[4]||'').trim()] : null;
+      if(!up) return parts;
+      const next=parts.slice();
+      while(next.length<8) next.push('');
+      next[4]=up.image;
+      if(up.gallery && !String(next[7]||'').trim()) next[7]=up.gallery;
+      return next;
+    });
+  }
+
   function getTransferData(){
     const stored=getStore(TRANSFER_KEY, null);
-    return Array.isArray(stored) && stored.length ? stored : defaultTransferData();
+    return Array.isArray(stored) && stored.length ? upgradeSavedPhotos(stored, TRANSFER_PHOTO_UPGRADES) : defaultTransferData();
   }
   function getYachtData(){
     const stored=getStore(YACHT_KEY, null);
-    return Array.isArray(stored) && stored.length ? stored : defaultYachtData();
+    return Array.isArray(stored) && stored.length ? upgradeSavedPhotos(stored, YACHT_PHOTO_UPGRADES) : defaultYachtData();
   }
   function getCustomSectionsData(){
     const stored=getStore(CUSTOM_SECTION_KEY, null);
@@ -40652,7 +40673,6 @@ function openYachtBooking(title, category, note){
           <span class="transfer-badge">${esc(badge)}</span>
           <div class="transfer-meta">
             <div><strong>${esc(title)}</strong><span>${esc(subtitle)}</span></div>
-            <div class="transfer-price">Custom Quote</div>
           </div>
         </div>
         <div class="transfer-card-body">
