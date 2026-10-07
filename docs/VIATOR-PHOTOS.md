@@ -103,3 +103,19 @@ The supplied files state: *"Source links require internet access. Commercial reu
 
 - Belize: ATV Expedition to El Pilar Maya Ruins has no photo in the files and keeps its stock photo.
 - The files also hold candidate images for custom packages, MBA entries, country pages and broken-image slots. Those are not used on the site yet.
+
+## Replacements for broken image slots
+
+These replaced Unsplash links that the supplied files flagged as broken. The same permission note above applies. Photos wider than 1,400 to 1,600 px were reduced to that width; the rest are unmodified.
+
+| Where it is used | File | Viator listing | Source image | Original size |
+|---|---|---|---|---|
+| ATV Mountain Expedition image map (2 places) | `/assets/site/atv-mountain-expedition.jpg` | [listing](https://www.viator.com/tours/Jamaica/Atv-ride-in-Montego-Bay/d34-5562089P3) | [image](https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/e5/37/79/caption.jpg) | 3240x2160 |
+| Barbados country hero, gallery photo, country card and preview (4 places) | `/assets/site/barbados-west-coast.jpg` | [listing](https://www.viator.com/tours/Barbados/Catamaran-Cruises/d30-46499P1) | [image](https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2f/0f/8d/67/caption.jpg) | 1890x1260 |
+| Club Mobay VIP Lounge article image | `/assets/site/club-mobay-vip-lounge.jpg` | [listing](https://www.viator.com/tours/Montego-Bay/Layover-Lounge-Access-Club-Mobay-at-Sangster-International-Airport/d432-6432MOBAY) | [image](https://media.tacdn.com/media/attractions-splice-spp-720x480/17/12/94/7a.jpg) | 720x480 |
+| School tours promo and Adventure school-tour card backgrounds (2 places) | `/assets/site/jamaica-waterfall-banner.jpg` | [listing](https://www.viator.com/Jamaica/d34) | [image](https://dynamic-media.tacdn.com/media/attractions-content--1x-1/0b/de/4e/de.jpg) | 3200x1120 |
+| MBA "Yacht day on open water" photo (the page already requested this path) | `/assets/mba/mba-yacht-raft-up.jpg` | [listing](https://www.viator.com/tours/Montego-Bay/Private-Yacht-with-snorkelling-from-Montego-Bay/d432-3316P91) | [image](https://media.tacdn.com/media/attractions-splice-spp-720x480/0d/87/02/c5.jpg) | 720x480 |
+| Belize country hero, Great Blue Hole gallery photo, country card and Reef & Rainforest package (4 places) | `/assets/site/belize-great-blue-hole.jpg` | [listing](https://www.viator.com/tours/Belize-City/Great-Blue-Hole-and-Barrier-Reef/d5094-3954P4) | [image](https://media.tacdn.com/media/attractions-splice-spp-720x480/06/71/4f/8e.jpg) | 720x479 |
+| Saint Lucia country hero, Pitons gallery photo, country card and two articles (5 places) | `/assets/site/saint-lucia-pitons.jpg` | [listing](https://www.viator.com/tours/St-Lucia/Speed-Boat-Dash-and-Splash/d38-9298P9) | [image](https://media.tacdn.com/media/attractions-splice-spp-720x480/09/7c/aa/bb.jpg) | 720x480 |
+
+Still open: "Landmark view" (the landmark photo on the Discover page and the Kingston destination), the Quick-Dry Microfiber Towel product photo and the shop product-image fallback. The files had no photo for these, because they need the actual landmark or product.
