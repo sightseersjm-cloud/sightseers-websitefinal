@@ -372,6 +372,8 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .about-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .about-right{position:relative}
 .about-img-main{width:100%;height:460px;object-fit:cover}
+.about-img-small{position:absolute;right:-18px;bottom:-24px;width:36%;aspect-ratio:4/3;object-fit:cover;border:6px solid #fff;box-shadow:0 14px 34px rgba(6,58,99,.22)}
+@media (max-width:900px){.about-img-small{right:12px;bottom:12px;width:38%;border-width:4px}}
 .about-badge{position:absolute;bottom:-20px;left:-20px;background:var(--orange);padding:22px 28px;color:#fff;text-align:center}
 .about-badge strong{display:block;font-size:3rem;font-weight:800;line-height:1}
 .about-badge span{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
@@ -13658,10 +13660,10 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <p class="sec-sub" style="margin-bottom:18px">Through these experiences, it became clear that travel is not just about where you go, but how it makes you feel and who you share it with. Exploring the Caribbean beyond the surface, discovering hidden gems, connecting with people, and experiencing the culture in its most authentic form revealed that these moments were too meaningful not to share.</p>
       <p class="sec-sub" style="margin-bottom:18px">Whether it is an adrenaline filled ATV ride through Jamaica’s mountains, a peaceful catamaran cruise at sunset, or discovering secluded beaches across the Caribbean, we bring these moments to life in a way that feels authentic, seamless, and thoughtfully curated. More importantly, we give travelers the freedom to curate their own group experiences, blending adventure, connection, and luxury to create something truly their own.</p>
       <p class="sec-sub" style="margin-bottom:24px">This is more than a business. It is a vision brought to life through passion, shared experiences, and the belief that travel has the power to transform how people feel, connect, and experience the world.<br><br>, D. Allen</p>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px"><a href="#" class="btn-primary" onclick="toggleAboutReadMore();nav(‘booking’)">Book an Experience</a><button type="button" class="btn-secondary" onclick="toggleAboutReadMore()" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)">Close</button></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px"><a href="#" class="btn-primary" onclick="toggleAboutReadMore();nav('booking')">Book an Experience</a><button type="button" class="btn-secondary" onclick="toggleAboutReadMore()" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)">Close</button></div>
     </div>
   </div>
-  <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Built From Real Journeys, Shared With Purpose</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><div class="about-actions"><button type="button" class="btn-secondary" id="aboutReadMoreBtn" onclick="toggleAboutReadMore()" aria-expanded="false" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)"><span>Read More</span> <i class="fas fa-chevron-down"></i></button><a href="#" class="btn-primary" onclick="nav(‘booking’)">Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="/assets/about/scuba-divers.webp" alt="Sight Seers guests scuba diving"><div class="about-badge"><strong>4</strong><span>Years of<br>Excellence</span></div></div></div></section>
+  <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Built From Real Journeys, Shared With Purpose</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><div class="about-actions"><button type="button" class="btn-secondary" id="aboutReadMoreBtn" onclick="toggleAboutReadMore()" aria-expanded="false" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)"><span>Read More</span> <i class="fas fa-chevron-down"></i></button><a href="#" class="btn-primary" onclick="nav('booking')">Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="/assets/about/about-story.jpg" alt="Smiling Sight Seers guest with a giraffe"><img class="about-img-small" src="/assets/about/scuba-divers.webp" alt="Sight Seers guests scuba diving"><div class="about-badge"><strong>4</strong><span>Years of<br>Excellence</span></div></div></div></section>
 
   <section class="team-gloss-sec" id="aboutGallerySection">
   <div class="team-wrap">
@@ -22611,7 +22613,7 @@ const DEFAULT_SITE_SETTINGS={
   heroImg1:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1800&q=85&auto=format&fit=crop',
   heroImg2:'/assets/inline/e410947c7e.webp',
   heroImg3:'/assets/hero/white-party-v3.jpg',
-  aboutImage:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85&auto=format&fit=crop',
+  aboutImage:'/assets/about/about-story.jpg',
   jamaicaImage:'/assets/inline/30d8ac9911.webp',
   jamaicaPins:'',
   jamaicaPopupMode:'click',
@@ -23281,6 +23283,9 @@ function loadPageEditorSettings(){
     var merged={};
     Object.keys(pageEditorDefaults).forEach(function(k){ merged[k]=pageEditorDefaults[k]; });
     Object.keys(saved).forEach(function(k){ if(saved[k]) merged[k]=saved[k]; });
+    /* The About photo is now the giraffe photo: replace the old scuba photo if it was saved. */
+    var oldAbout=merged.adminAboutStoryImage||'';
+    if(oldAbout && (oldAbout.indexOf('1566073771259')>-1 || oldAbout.indexOf('scuba-divers')>-1) && pageEditorDefaults.adminAboutStoryImage) merged.adminAboutStoryImage=pageEditorDefaults.adminAboutStoryImage;
     return merged;
   }catch(e){return Object.assign({},pageEditorDefaults);}
 }
