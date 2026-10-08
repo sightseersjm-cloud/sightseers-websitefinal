@@ -3,6 +3,9 @@
   "buildCommand": "node build.js",
   "outputDirectory": "public",
   "installCommand": "npm install",
+  "redirects": [
+    { "source": "/senior-tours", "destination": "/school-tours", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/((?!api/|logos/|panos/|models/|assets/|vendor/|virtual-tours(?:$|/)|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ],
