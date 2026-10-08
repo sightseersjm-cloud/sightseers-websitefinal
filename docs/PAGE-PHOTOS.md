@@ -54,3 +54,5 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 |---|---|---|
 | `transfers/group-coach-53-seater.jpg` | Transfers: Group Transfers card | The 53-seater coach. Cropped from a square 1080 x 1080 original to 1080 x 720 so the whole bus is in frame. |
 | `yachts/sunset-cruise.jpg` | Yacht Charters: Sunset Escape Charter card (and Sunset Private Charter in the static page) | 674 x 446, unmodified. The vessel and the original source are not recorded, and the handoff's vessel match is still pending, so the page does not name a vessel. |
+| `mba/seven-shores-feature.jpg` | Home page: "Seven Shores: MBA Caribbean Voyages" feature photo | 1000 x 998, converted from WebP to JPEG, no other edits. Replaces the sailing yacht stock photo in that feature only. The same stock photo is still used in the matching blog gallery and in the MBA Lifestyle Voyage entries. |
+| Greek Life banner | Greek Life page | The photo banner (tag, title, subtitle) above the card description was removed at the owner's request. `/assets/experiences/greek-life-group.jpg` is no longer referenced there. |
