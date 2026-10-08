@@ -13665,7 +13665,29 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   </div>
   <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Built From Real Journeys, Shared With Purpose</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><div class="about-actions"><button type="button" class="btn-secondary" id="aboutReadMoreBtn" onclick="toggleAboutReadMore()" aria-expanded="false" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)"><span>Read More</span> <i class="fas fa-chevron-down"></i></button><a href="#" class="btn-primary" onclick="nav('booking')">Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="/assets/about/about-story.jpg" alt="Smiling Sight Seers guest with a giraffe"><img class="about-img-small" src="/assets/about/scuba-divers.webp" alt="Sight Seers guests scuba diving"><div class="about-badge"><strong>4</strong><span>Years of<br>Excellence</span></div></div></div></section>
 
-  <section class="team-gloss-sec" id="aboutGallerySection">
+  <section class="about-what-sec" id="aboutWhatSection">
+  <div class="about-what-wrap">
+    <div class="sec-head center reveal">
+      <span class="sec-pre">What We Do</span>
+      <h2 class="sec-title">Caribbean Trips for Groups of 5 or More</h2>
+      <p class="sec-sub center">Most of our trips are tailored for groups of 5 or more. Tell us about your group, interests and pace and we will craft the itinerary around you.</p>
+    </div>
+    <div class="about-what-grid reveal">
+      <a class="about-what-card" href="#" onclick="nav('tours');return false;"><span class="about-what-ico"><i class="fas fa-umbrella-beach"></i></span><h3>Tours &amp; Excursions</h3><p>Water and land experiences across the islands, with a live estimate for your group size.</p><span class="about-what-link">Explore tours <i class="fas fa-arrow-right"></i></span></a>
+      <a class="about-what-card" href="#" onclick="nav('transfers');return false;"><span class="about-what-ico"><i class="fas fa-van-shuttle"></i></span><h3>Airport Transfers</h3><p>Private pickups for your whole group, from arrival to departure.</p><span class="about-what-link">See transfers <i class="fas fa-arrow-right"></i></span></a>
+      <a class="about-what-card" href="#" onclick="nav('yacht-charters');return false;"><span class="about-what-ico"><i class="fas fa-sailboat"></i></span><h3>Yacht Charters</h3><p>Private yacht and catamaran days for friends, families and celebrations.</p><span class="about-what-link">See charters <i class="fas fa-arrow-right"></i></span></a>
+      <a class="about-what-card" href="#" onclick="nav('stays');return false;"><span class="about-what-ico"><i class="fas fa-house"></i></span><h3>Villas &amp; Stays</h3><p>Villas and vacation rentals with room for everyone in your group.</p><span class="about-what-link">Browse stays <i class="fas fa-arrow-right"></i></span></a>
+      <a class="about-what-card" href="#" onclick="nav('greek-life');return false;"><span class="about-what-ico"><i class="fas fa-graduation-cap"></i></span><h3>Greek Life &amp; Student Groups</h3><p>Chapter trips, spring break, and school and university group travel.</p><span class="about-what-link">Group travel <i class="fas fa-arrow-right"></i></span></a>
+      <a class="about-what-card" href="#" onclick="nav('mba-voyages');return false;"><span class="about-what-ico"><i class="fas fa-briefcase"></i></span><h3>MBA Seven Shores</h3><p>Leadership voyages for MBA cohorts, alumni and young professionals.</p><span class="about-what-link">See voyages <i class="fas fa-arrow-right"></i></span></a>
+    </div>
+    <div class="about-what-cta reveal">
+      <div><strong>Planning for 5 or more?</strong><span>Tell us about your group and we will plan it with you, from pickup to the last night.</span></div>
+      <div class="about-what-cta-btns"><a class="btn-primary" href="#" onclick="openLinkedStartPlanning();return false;">Start Planning</a><a class="btn-secondary" href="#" onclick="nav('custom-group');return false;">Custom Group Travel</a></div>
+    </div>
+  </div>
+</section>
+
+    <section class="team-gloss-sec" id="aboutGallerySection">
   <div class="team-wrap">
     <div class="sec-head center reveal">
       <span class="sec-pre">Meet the Team</span>
@@ -52674,6 +52696,32 @@ html body #p-vtours .vt-bo-faq details{border-radius:16px!important;overflow:hid
 <style id="ss-blog-hidden-style">
 /* Blog is hidden for now (the data-ss-blog-hidden attribute on the html tag turns this on). */
 html[data-ss-blog-hidden] [data-blog-link]{display:none!important}
+</style>
+<style id="about-what-style">
+/* About page: "What we do" (groups of 5 or more) */
+.about-what-sec{padding:84px 0 70px;background:#fff}
+.about-what-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
+.about-what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:38px}
+@media (max-width:900px){.about-what-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.about-what-grid{grid-template-columns:1fr}}
+.about-what-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid rgba(6,58,99,.1);border-top:3px solid var(--orange);padding:28px 24px 24px;text-decoration:none;color:inherit;box-shadow:0 10px 30px rgba(6,58,99,.06);transition:transform .25s,box-shadow .25s}
+.about-what-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(6,58,99,.12)}
+.about-what-ico{width:46px;height:46px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.about-what-ico i{color:var(--orange);font-size:18px}
+.about-what-card h3{font-size:17px;color:var(--navy);margin:0 0 8px}
+.about-what-card p{font-size:14px;line-height:1.65;color:#5b6b80;margin:0 0 16px}
+.about-what-link{margin-top:auto;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--orange)}
+.about-what-link i{font-size:10px;margin-left:4px}
+.about-what-card:hover .about-what-link{color:var(--navy)}
+.about-what-cta{margin-top:30px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--navy);color:#fff;padding:30px 34px}
+.about-what-cta strong{display:block;font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px}
+.about-what-cta span{font-size:14px;color:rgba(255,255,255,.78);line-height:1.6}
+.about-what-cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+body.theme-night .about-what-sec{background:#062a46}
+body.theme-night .about-what-card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);box-shadow:none}
+body.theme-night .about-what-card h3{color:#fff}
+body.theme-night .about-what-card p{color:rgba(255,255,255,.62)}
+@media (max-width:640px){.about-what-sec{padding:60px 0 50px}.about-what-wrap{padding:0 16px}.about-what-cta{padding:24px 20px}}
 </style>
 <script id="gallery-showcase-script">
 (function(){
