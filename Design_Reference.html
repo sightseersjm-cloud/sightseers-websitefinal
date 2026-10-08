@@ -13665,7 +13665,39 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   </div>
   <section class="about-sec"><div class="about-wrap"><div class="reveal about-copy"><span class="sec-pre">Our Story</span><h2 class="sec-title">Built From Real Journeys, Shared With Purpose</h2><p class="sec-sub" style="margin-bottom:18px">Sight Seers Caribbean Adventures was born from a deep love for travel shaped by real experiences, meaningful connections, and moments that stay with you long after the journey ends. From weekend escapes across the Caribbean during university to traveling internationally for experiences, events, and reconnecting with family, every journey revealed that travel is less about the destination and more about how it makes you feel.</p><p class="sec-sub" style="margin-bottom:18px">Along the way, I experienced both sides of travel, raw, authentic exploration and refined, seamless luxury. That balance became the foundation of what we offer today, experiences that feel effortless, personal, and deeply memorable.</p><p class="sec-sub" style="margin-bottom:18px">At our core, we are people focused. Every tour and every interaction is designed with intention, creating experiences that bring people closer, inspire connection, and leave lasting memories.</p><div class="about-actions"><button type="button" class="btn-secondary" id="aboutReadMoreBtn" onclick="toggleAboutReadMore()" aria-expanded="false" style="background:transparent;color:var(--navy);border-color:rgba(6,58,99,.18)"><span>Read More</span> <i class="fas fa-chevron-down"></i></button><a href="#" class="btn-primary" onclick="nav('booking')">Book an Experience</a></div></div><div class="about-right reveal" style="transition-delay:.15s"><img class="about-img-main" src="/assets/about/about-story.jpg" alt="Smiling Sight Seers guest with a giraffe"><img class="about-img-small" src="/assets/about/scuba-divers.webp" alt="Sight Seers guests scuba diving"><div class="about-badge"><strong>4</strong><span>Years of<br>Excellence</span></div></div></div></section>
 
-  <section class="team-gloss-sec" id="aboutGallerySection">
+  <section class="about-what-sec" id="aboutWhatSection">
+  <div class="about-what-wrap">
+    <div class="sec-head center reveal">
+      <span class="sec-pre">Who We Are</span>
+      <h2 class="sec-title">Welcome to Sight Seers</h2>
+    </div>
+    <div class="about-what-split reveal">
+      <div class="about-what-copy">
+        <p class="about-what-lead">We’re a Caribbean group travel company based in Jamaica, and we specialize in curated packages for groups of 5 or more who want to get away together. You bring the people. We’ll take care of the rest.</p>
+        <p>Whether you’re a family, a group of friends, a Greek chapter, a school or university group, an MBA cohort or a company team, you’re in good hands. One friendly team looks after the whole trip, from the airport pickup to the last night, so whoever’s organizing can relax and enjoy it too. Tell us who’s coming, what everyone loves and how fast you like to go, and we’ll build the trip around your group.</p>
+        <p class="about-what-where">Not sure where to go? We plan trips across Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao and the Dominican Republic, and we’re happy to help you choose.</p>
+      </div>
+      <div class="about-what-panel">
+        <h3>We’ve got you covered</h3>
+        <span class="about-what-size">For groups of 5 to 60 guests</span>
+        <ul>
+          <li><i class="fas fa-check"></i>Airport pickups and rides for the whole group</li>
+          <li><i class="fas fa-check"></i>Villas and vacation rentals with room for everyone</li>
+          <li><i class="fas fa-check"></i>Tours and excursions on land and water</li>
+          <li><i class="fas fa-check"></i>Yacht and catamaran days</li>
+          <li><i class="fas fa-check"></i>Itineraries built around your crew</li>
+          <li><i class="fas fa-check"></i>A live price estimate, then a deposit to lock in your trip</li>
+        </ul>
+      </div>
+    </div>
+    <div class="about-what-cta reveal">
+      <div><strong>Got a crew of 5 or more?</strong><span>Tell us about your group and we’ll take it from there. We can’t wait to meet you.</span></div>
+      <div class="about-what-cta-btns"><a class="btn-primary" href="#" onclick="openLinkedStartPlanning();return false;">Start Planning</a><a class="btn-secondary" href="#" onclick="nav('custom-group');return false;">Custom Group Travel</a></div>
+    </div>
+  </div>
+</section>
+
+    <section class="team-gloss-sec" id="aboutGallerySection">
   <div class="team-wrap">
     <div class="sec-head center reveal">
       <span class="sec-pre">Meet the Team</span>
@@ -52674,6 +52706,33 @@ html body #p-vtours .vt-bo-faq details{border-radius:16px!important;overflow:hid
 <style id="ss-blog-hidden-style">
 /* Blog is hidden for now (the data-ss-blog-hidden attribute on the html tag turns this on). */
 html[data-ss-blog-hidden] [data-blog-link]{display:none!important}
+</style>
+<style id="about-what-style">
+/* About page: what Sight Seers is (groups of 5 or more) */
+.about-what-sec{padding:84px 0 70px;background:#fff}
+.about-what-wrap{max-width:1200px;margin:0 auto;padding:0 30px}
+.about-what-split{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:start;margin-top:40px}
+.about-what-copy p{font-size:15.5px;line-height:1.8;color:#5b6b80;margin:0 0 16px}
+.about-what-copy .about-what-lead{font-family:'Playfair Display',serif;font-size:1.55rem;line-height:1.45;color:var(--navy);margin-bottom:20px}
+.about-what-copy .about-what-where{font-size:13px;letter-spacing:.2px;color:#6f7f93;border-left:3px solid var(--orange);padding-left:14px;margin-top:22px}
+.about-what-panel{background:#f7fbff;border:1px solid rgba(6,58,99,.1);border-top:3px solid var(--orange);padding:28px 28px 24px;box-shadow:0 10px 30px rgba(6,58,99,.05)}
+.about-what-panel h3{font-size:18px;color:var(--navy);margin:0 0 4px}
+.about-what-size{display:block;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--orange);margin-bottom:18px}
+.about-what-panel ul{list-style:none;margin:0;padding:0}
+.about-what-panel li{display:flex;align-items:flex-start;gap:12px;font-size:14.5px;line-height:1.55;color:#33475b;padding:11px 0;border-top:1px solid rgba(6,58,99,.08)}
+.about-what-panel li:first-child{border-top:0}
+.about-what-panel li i{color:var(--orange);font-size:13px;margin-top:5px;flex:none}
+.about-what-cta{margin-top:44px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--navy);color:#fff;padding:30px 34px}
+.about-what-cta strong{display:block;font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px}
+.about-what-cta span{font-size:14px;color:rgba(255,255,255,.78);line-height:1.6}
+.about-what-cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+body.theme-night .about-what-sec{background:#062a46}
+body.theme-night .about-what-copy p{color:rgba(255,255,255,.7)}
+body.theme-night .about-what-copy .about-what-lead,body.theme-night .about-what-panel h3{color:#fff}
+body.theme-night .about-what-panel{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);box-shadow:none}
+body.theme-night .about-what-panel li{color:rgba(255,255,255,.78);border-top-color:rgba(255,255,255,.08)}
+@media (max-width:900px){.about-what-split{grid-template-columns:1fr;gap:30px}}
+@media (max-width:640px){.about-what-sec{padding:60px 0 50px}.about-what-wrap{padding:0 16px}.about-what-cta{padding:24px 20px}.about-what-copy .about-what-lead{font-size:1.3rem}}
 </style>
 <script id="gallery-showcase-script">
 (function(){
