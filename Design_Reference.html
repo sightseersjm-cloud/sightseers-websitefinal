@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ss-blog-hidden>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9494,7 +9494,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           <a href="#" onclick="nav('about')">About</a>
           <a href="#" onclick="openGalleryPage();return false;">Gallery</a>
           <a href="#" onclick="nav('discoverjamaica')">Discover Jamaica</a>
-          <a href="#" onclick="nav('blog')" id="n-blog">Blog</a>
+          <a href="#" data-blog-link onclick="nav('blog')" id="n-blog">Blog</a>
           <a href="#" onclick="nav('partners')" id="n-partners">Partners</a>
         </div>
       </li>
@@ -9553,7 +9553,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('about');closeMob()">About Us</a>
     <a href="#" onclick="openGalleryPage(true);closeMob();return false;">Guest Gallery</a>
     <a href="#" onclick="nav('discoverjamaica');closeMob()">Discover Jamaica</a>
-    <a href="#" onclick="nav('blog');closeMob()">Blog</a>
+    <a href="#" data-blog-link onclick="nav('blog');closeMob()">Blog</a>
     <a href="#" onclick="nav('partners');closeMob()">Partners</a>
     <a href="#" onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
@@ -10773,7 +10773,7 @@ body.theme-night .page .tag{
         <p style="font-size:16px;line-height:1.7;color:#444;margin:0 0 18px">Connect with ambitious MBA graduates, alumni and young professionals across Jamaica, Barbados, Saint Lucia and beyond. Private yacht days, luxury villa dinners, catamaran sails, cultural deep dives and curated networking, designed to create real professional relationships on the water and on the island.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a class="ss-soft-btn" href="#" onclick="nav('mba-voyages');return false" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy,#0d5371);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid transparent;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore Seven Shores <i class="fas fa-arrow-right"></i></a>
-          <a class="ss-soft-btn" href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Read the Full Article</a>
+          <a class="ss-soft-btn" data-blog-link href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Read the Full Article</a>
         </div>
       </div>
     </div>
@@ -22508,7 +22508,7 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('about')"><i class="fas fa-chevron-right"></i>About Us</a></li>
         <li><a href="#" onclick="nav('tours')"><i class="fas fa-chevron-right"></i>Tours &amp; Excursions</a></li>
         <li><a href="#" onclick="nav('destinations')"><i class="fas fa-chevron-right"></i>Destinations</a></li>
-        <li><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
+        <li data-blog-link><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
         <li><a href="#" onclick="nav('partners')"><i class="fas fa-chevron-right"></i>Our Partners</a></li>
         <li><a href="#" onclick="nav('vtours')"><i class="fas fa-chevron-right"></i>V-Tours</a></li>
         <li><a href="/virtual-tours/"><i class="fas fa-chevron-right"></i>Virtual Tour Pages</a></li>
@@ -25053,6 +25053,7 @@ function scrollBlogGallery(dir){
   track.style.transform='translateX('+(current+step*-dir)+'px)';
 }
 function openBlog(id){
+  if(document.documentElement.hasAttribute('data-ss-blog-hidden')) return;  /* Blog is hidden for now */
   const blog=BLOGS.find(b=>b.id===id); if(!blog) return;
   const modal=document.getElementById('blogModal'); if(!modal) return;
   const allText = [blog.title, blog.sub, blog.lead].concat((blog.sections||[]).flat()).join(' ');
@@ -26756,6 +26757,7 @@ function ssPushRoute(id){
 
 function ssIdFromLocation(){
   var p = location.pathname.replace(/\/+$/,'') || '/';
+  if(p==='/blog' && document.documentElement.hasAttribute('data-ss-blog-hidden')) return 'home';  /* Blog is hidden for now */
   if(p==='/senior-tours') return 'school-tours';  /* old Senior Tours address */
   return SS_PATH_TO_ID[p] || SS_PATH_TO_ID[p+'/'] || null;
 }
@@ -26768,12 +26770,14 @@ window.addEventListener('popstate', function(ev){
 /* Boot into whatever page the URL asks for. */
 document.addEventListener('DOMContentLoaded', function(){
   var id = ssIdFromLocation();
+  try{ if(document.documentElement.hasAttribute('data-ss-blog-hidden') && /^\/blog\/?$/.test(location.pathname)) history.replaceState(null,'','/'+location.search); }catch(e){}  /* Blog is hidden for now: show the home address */
   if(id && id !== 'home'){ nav(id, {fromPop:true, skipScroll:true}); }
   else { ssSetMeta('home'); }
   try{ history.replaceState({ssPage: id || 'home'}, '', location.pathname + location.search); }catch(e){}
 });
 
 function nav(id,opts={}){
+  if(id==='blog' && document.documentElement.hasAttribute('data-ss-blog-hidden')) id='home';  /* Blog is hidden for now */
   if(id==='shop'||id==='giftcards')id='tours';
   if(id==='senior-tours')id='school-tours';  /* Senior Tours was merged into School Tours */
   closeBlog();
@@ -52666,6 +52670,10 @@ html body #p-vtours .vt-bo-faq details{border-radius:16px!important;overflow:hid
 #p-discoverjamaica .discover-jm-media picture,#p-discoverjamaica .discover-jm-media img{display:block;width:100%;height:100%}
 #p-discoverjamaica .discover-jm-media img{object-fit:cover;object-position:center}
 @media (max-width:640px){#p-discoverjamaica .discover-jm-media{aspect-ratio:4/3}}
+</style>
+<style id="ss-blog-hidden-style">
+/* Blog is hidden for now (the data-ss-blog-hidden attribute on the html tag turns this on). */
+html[data-ss-blog-hidden] [data-blog-link]{display:none!important}
 </style>
 <script id="gallery-showcase-script">
 (function(){

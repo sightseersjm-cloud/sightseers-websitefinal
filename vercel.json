@@ -4,7 +4,9 @@
   "outputDirectory": "public",
   "installCommand": "npm install",
   "redirects": [
-    { "source": "/senior-tours", "destination": "/school-tours", "permanent": true }
+    { "source": "/senior-tours", "destination": "/school-tours", "permanent": true },
+    { "source": "/blog", "destination": "/", "permanent": false },
+    { "source": "/blog/", "destination": "/", "permanent": false }
   ],
   "rewrites": [
     { "source": "/((?!api/|logos/|panos/|models/|assets/|vendor/|virtual-tours(?:$|/)|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
