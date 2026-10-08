@@ -804,7 +804,7 @@
       "country": "Jamaica",
       "area": "Ocho Rios",
       "type": "land",
-      "price": 131,
+      "price": 141.82,
       "per": "person",
       "cap": null
     },
@@ -812,7 +812,7 @@
       "country": "Jamaica",
       "area": "Ocho Rios",
       "type": "land",
-      "price": 188,
+      "price": 203.27,
       "per": "person",
       "cap": null
     },
@@ -820,7 +820,7 @@
       "country": "Jamaica",
       "area": "Ocho Rios",
       "type": "land",
-      "price": 240,
+      "price": 260,
       "per": "person",
       "cap": null
     },
@@ -828,7 +828,7 @@
       "country": "Jamaica",
       "area": "South Coast",
       "type": "land",
-      "price": 163,
+      "price": 176.09,
       "per": "person",
       "cap": null
     },
@@ -836,7 +836,7 @@
       "country": "Jamaica",
       "area": "Ocho Rios",
       "type": "land",
-      "price": 204,
+      "price": 221,
       "per": "person",
       "cap": null
     },
@@ -844,7 +844,7 @@
       "country": "Jamaica",
       "area": "Ocho Rios",
       "type": "water",
-      "price": 141,
+      "price": 152.45,
       "per": "person",
       "cap": null
     },
@@ -852,7 +852,7 @@
       "country": "Barbados",
       "area": "Bridgetown & West Coast",
       "type": "water",
-      "price": 128,
+      "price": 138.67,
       "per": "person",
       "cap": null
     },
@@ -860,7 +860,7 @@
       "country": "Barbados",
       "area": "Bridgetown & West Coast",
       "type": "water",
-      "price": 304,
+      "price": 329.33,
       "per": "person",
       "cap": null
     },
@@ -868,7 +868,7 @@
       "country": "Barbados",
       "area": "East Coast & Interior",
       "type": "land",
-      "price": 160,
+      "price": 173.33,
       "per": "person",
       "cap": null
     },
@@ -876,7 +876,7 @@
       "country": "Barbados",
       "area": "East Coast & Interior",
       "type": "land",
-      "price": 245,
+      "price": 265.77,
       "per": "person",
       "cap": null
     },
@@ -884,7 +884,7 @@
       "country": "Saint Lucia",
       "area": "Soufrière & the Pitons",
       "type": "water",
-      "price": 120,
+      "price": 130,
       "per": "person",
       "cap": null
     },
@@ -892,7 +892,7 @@
       "country": "Saint Lucia",
       "area": "Soufrière & the Pitons",
       "type": "water",
-      "price": 158,
+      "price": 171.37,
       "per": "person",
       "cap": null
     },
@@ -900,7 +900,7 @@
       "country": "The Bahamas",
       "area": "Nassau & Paradise Island",
       "type": "water",
-      "price": 321,
+      "price": 347.45,
       "per": "person",
       "cap": null
     },
@@ -908,7 +908,7 @@
       "country": "The Bahamas",
       "area": "Nassau & Paradise Island",
       "type": "water",
-      "price": 393,
+      "price": 425.45,
       "per": "person",
       "cap": null
     },
@@ -916,7 +916,7 @@
       "country": "The Bahamas",
       "area": "Nassau & Paradise Island",
       "type": "water",
-      "price": 169,
+      "price": 183.18,
       "per": "person",
       "cap": null
     },
@@ -924,7 +924,7 @@
       "country": "The Bahamas",
       "area": "Nassau & Paradise Island",
       "type": "land",
-      "price": 491,
+      "price": 531.82,
       "per": "person",
       "cap": null
     },
@@ -932,7 +932,7 @@
       "country": "Curacao",
       "area": "East Coast & Klein Curacao",
       "type": "water",
-      "price": 182,
+      "price": 196.79,
       "per": "person",
       "cap": null
     },
@@ -940,7 +940,7 @@
       "country": "Curacao",
       "area": "East Coast & Klein Curacao",
       "type": "water",
-      "price": 242,
+      "price": 262.38,
       "per": "person",
       "cap": null
     },
@@ -948,7 +948,7 @@
       "country": "Curacao",
       "area": "West Coast",
       "type": "water",
-      "price": 186,
+      "price": 201.57,
       "per": "person",
       "cap": null
     },

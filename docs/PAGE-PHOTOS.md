@@ -57,3 +57,35 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 | `mba/seven-shores-feature.jpg` | Home page: "Seven Shores: MBA Caribbean Voyages" feature photo | 1000 x 998, converted from WebP to JPEG, no other edits. Replaces the sailing yacht stock photo in that feature only. The same stock photo is still used in the matching blog gallery and in the MBA Lifestyle Voyage entries. |
 | Greek Life banner | Greek Life page | The photo banner (tag, title, subtitle) above the card description was removed at the owner's request. `/assets/experiences/greek-life-group.jpg` is no longer referenced there. |
 | `about/about-story.jpg` | About page: main "Our Story" photo | Smiling guest with a giraffe, 1284 x 1011 reduced to 1200 wide, no other edits. Replaces the scuba photo as the main image. The scuba photo (`about/scuba-divers.webp`) now sits as a smaller photo in the bottom-right corner of the same block. |
+
+## Discover Jamaica parish photos
+
+Each of the 14 parish cards uses a set of three files in `public/assets/discover-jamaica/`: a desktop WebP (`jamaica-<parish>-desktop.webp`, 2:1),
+a phone WebP (`jamaica-<parish>-mobile-600.webp`, 4:3) and a 600 x 300 JPEG fallback (`jamaica-<parish>-card-600.jpg`). The cards are drawn from
+`DISCOVER_JAMAICA_PARISHES` in `Design_Reference.html`; the `image`, `imageMobile`, `imageCard` and `imageAlt` fields hold the photo set, and the card
+frame is 2:1 on desktop and 4:3 on phones (`discover-jm-photo-fit` style block). Filters, airport distances, links and card text were not changed.
+
+**Reuse permission:** these are reference selections from the sites linked below. They are not a transfer of commercial image rights. Get permission or
+licensed originals from each source before relying on them. Several originals are smaller than 1200 px wide, so their desktop file is at native size and
+was not enlarged (St. Thomas 800 px, Trelawny 700 px, Westmoreland 718 px, Clarendon 940 px, Portland 990 px, St. Mary 1040 px, St. Ann 1024 px); ask the
+source for a larger original to get a sharper result.
+
+Placement notes: the Kingston photo shows Downtown Kingston rather than the wider attractions in its card title; St. Thomas shows Bath Fountain rather than
+Reach Falls; St. Catherine shows Hellshire, which its card already names.
+
+| Parish | Photo | Files | Desktop size | Source page | Original |
+|---|---|---|---|---|---|
+| Kingston | Downtown Kingston mural | `discover-jamaica/jamaica-kingston-*` | 1200x600 (original 2736x1824) | [page](https://www.visitjamaica.com/blog/post/how-to-spend-48-hours-in-kingston/) | [image](https://assets.simpleviewinc.com/simpleview/image/upload/v1/clients/jamaica/016_JTB_Culture_Heritage_Kingston_WaterLane_Downtown_Toots_Mural_3f741eb9-4e3b-49f2-9d18-ac23bddd67f8.jpg) |
+| St. Andrew | Holywell forest trail | `discover-jamaica/jamaica-andrew-*` | 1200x600 (original 1500x1000) | [page](https://www.visitjamaica.com/blog/post/family-friendly-adventures-at-holywell/) | [image](https://assets.simpleviewcms.com/simpleview/image/upload/v1/clients/jamaica/Holywell_ecaa7574-f981-42b8-beb5-864b56c1ac95.jpg) | Joshua Cogan, via Visit Jamaica
+| St. Thomas | Bath Fountain Hotel exterior | `discover-jamaica/jamaica-thomas-*` | 800x400 (original 800x534) | [page](https://exoticexcursion.com/hotel_accomodation/bath-fountain-hotel-spa-jamaica/) | [image](https://exoticexcursion.com/wp-content/uploads/2018/08/Exterior-Bath-Fountain-Spa-Jamaica.jpg) |
+| Portland | Frenchman’s Cove | `discover-jamaica/jamaica-portland-*` | 990x495 (original 990x660) | [page](https://www.visitjamaica.com/blog/post/a-day-at-the-beach-in-port-antonio/) | [image](https://res.cloudinary.com/simpleview/image/upload/v1528394806/clients/jamaica/Frenchman_s_Cove_Beach_54_990x660_201404232313_5d8a8221-a269-4df2-b6e2-70c2e553f3b3.png) |
+| St. Mary | James Bond Beach, Oracabessa | `discover-jamaica/jamaica-mary-*` | 1040x520 (original 1040x580) | [page](https://www.expedia.com.au/James-Bond-Beach-Oracabessa.d6086267.Attraction) | [image](https://a.travel-assets.com/findyours-php/viewfinder/images/res70/60000/60380-James-Bond-Beach.jpg?h=580&impolicy=fcrop&q=mediumHigh&w=1040) |
+| St. Ann | Dunn’s River Falls | `discover-jamaica/jamaica-ann-*` | 1024x512 (original 1024x683) | [page](https://letstravelcaribbean.com/blog/play/dunns-river-adds-nature-walk/) | [image](https://observer-travel.s3.us-east-2.amazonaws.com/2022/03/sm-Dunns-River-Falls-upper-portion-1024x683.jpeg) |
+| Trelawny | Luminous Lagoon, Falmouth | `discover-jamaica/jamaica-trelawny-*` | 700x350 (original 700x470) | [page](https://royalton.nexustours.com/en/services/jamaica/falmouth-laguna-luminosa/2023-06-26/2023-07-02/SGN%C2%A5TKT%C2%A57301%C2%A5108913) | [image](https://www.nexustours.com/images/upload/services/Falmouth_Laguna_Luminosa_/MAIN-Falmouth-Mystic-Lagoon-7301-dncysj.JPG) |
+| St. James | Rose Hall Great House | `discover-jamaica/jamaica-james-*` | 1200x600 (original 4288x2848) | [page](https://www.visitjamaica.com/blog/post/great-house-great-wedding/) | [image](https://res.cloudinary.com/simpleview/image/upload/v1529446098/clients/jamaica/mb_rgh_09_002_b652f6f3-c788-4e7e-871f-c0966c89146b.jpg) |
+| Hanover | Tryall Water Wheel | `discover-jamaica/jamaica-hanover-*` | 1200x600 (original 1600x1200) | [page](https://airial.travel/attractions/jamaica/tryall-water-wheel-eBd25-No) | [image](https://coinventmediastorage.blob.core.windows.net/media-storage-container/gphoto_ChIJRUBLcWiC2Y4RaGFr37ph8KI_0.jpg) |
+| Westmoreland | Seven Mile Beach, Negril | `discover-jamaica/jamaica-westmoreland-*` | 718x359 (original 719x480) | [page](https://www.pelago.com/en-SG/activity/pa3a3i2fw-negril-day-trip-to-seven-mile-beach-rick-s-cafe-with-admission-from-falmouth-trelawny/) | [image](https://www.pelago.com/img/products/JM-Jamaica/negril-day-trip-to-seven-mile-beach-rick-s-cafe-with-admission-from-falmouth/b05f8dd3-6fc3-4165-a75c-ad5602f4b24d_negril-day-trip-to-seven-mile-beach-rick-s-cafe-with-admission-from-falmouth.jpg) |
+| St. Elizabeth | YS Falls | `discover-jamaica/jamaica-elizabeth-*` | 1200x600 (original 1280x853) | [page](https://www.world-of-waterfalls.com/waterfalls/caribbean-ys-falls/) | [image](https://images.world-of-waterfalls.com/YS_Falls_057_12302011.jpg) |
+| Manchester | Mandeville Courthouse | `discover-jamaica/jamaica-manchester-*` | 1200x600 (original 1200x802) | [page](https://jamaica-gleaner.com/article/art-leisure/20251214/mandevilles-oldest-landmark) | [image](https://jamaica-gleaner.com/sites/default/files/media/article_images/2025/12/14/3302881/8415415.jpg) |
+| Clarendon | Milk River Mineral Bath Hotel & Spa | `discover-jamaica/jamaica-clarendon-*` | 940x470 (original 940x788) | [page](https://wellnessinja.com/taxonomy/term/64?page=1) | [image](https://wellnessinja.com/sites/default/files/listings/Pics_4.png) |
+| St. Catherine | Hellshire Bay Beach | `discover-jamaica/jamaica-catherine-*` | 1200x600 (original 1200x900) | [page](https://www.bigupwibeachja.org/beaches/details/15/115-hellshire-bay-beach) | [image](https://www.bigupwibeachja.org/images/beach-photos/YpQcvrtp9kL3.jpg) |
