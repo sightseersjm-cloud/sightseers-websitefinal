@@ -1,4 +1,4 @@
-# Page photos: transfers, yachts, Greek Life and University
+# Page photos: transfers, yachts, Greek Life and School Tours
 
 Reference for the photos on four pages, from the "Sight Seers Caribbean image handoff" file (7 October 2026).
 
@@ -12,7 +12,8 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 - A yacht row has an optional eighth field: gallery image URLs, comma separated. When present, the card shows the same thumbnail row and photo viewer as the Villas and Vacation Rentals page (the `stay-property-thumb` markup).
 - The static five-card yacht section (Sunset Private Charter, Proposal / Special Moment, Island Group Cruise, Luxury Executive Charter, Elite Celebration Charter) is still in the page HTML and has been updated too, but visitors do not see it while the renderer runs.
 - **Saved admin copies.** The admin portal keeps its own copy of the transfer and yacht card lists in each browser it is used in (`ss_admin_transfers_data_v1`, `ss_admin_yacht_data_v1`). That copy wins over the defaults, so a browser that saved the cards before the new photos were added kept showing the old stock photos. `upgradeSavedPhotos()` now swaps an untouched old stock photo for its new one when the lists are read, and leaves any image chosen in the admin portal alone. A browser can also hold per-image replacements made with the admin image tools (`ss_universal_image_admin_fix_v1`); those are kept on purpose, and the admin portal's Reset button on that image removes one.
-- Greek Life and University are static HTML, with the same thumbnail row and viewer added under the card text.
+- Greek Life and School Tours are static HTML, with the same thumbnail row and viewer added under the card text.
+- **Senior Tours was merged into School Tours.** The Senior Tours page, its menu items, its admin editor section, its booking option ("Senior Excursion Package") and its sitemap entry were removed, and its photos now sit on the School Tours cards. `/senior-tours` redirects to `/school-tours` (`vercel.json`), and `nav('senior-tours')`, the `#senior-tours` link and the old address are also sent to School Tours in the page script, so old links and search results keep working. The Senior page wording ("mature guests") was not moved.
 
 ## Photos used
 
@@ -32,10 +33,10 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 | Y1.2 | Yacht Charters | Elite Celebration Charter (static page only): gallery 2 | yachts/fancy-kat-bow-seating.jpg | [image](https://aristokattours.com/wp-content/uploads/2024/07/Fancy-Kat-3-scaled.jpg) | [page](https://aristokattours.com/our-fleet/fancy-kat/) | 1200x802 |
 | Y1.3 | Yacht Charters | Elite Celebration Charter (static page only): gallery 3 | yachts/fancy-kat-forward-deck.jpg | [image](https://aristokattours.com/wp-content/uploads/2024/07/Fancy-Kat-4-scaled.jpg) | [page](https://aristokattours.com/our-fleet/fancy-kat/) | 1200x802 |
 | Y1.4 | Yacht Charters | Elite Celebration Charter (static page only): gallery 4 | yachts/fancy-kat-dining-lounge.jpg | [image](https://aristokattours.com/wp-content/uploads/2024/07/Fancy-Kat-2-scaled.jpg) | [page](https://aristokattours.com/our-fleet/fancy-kat/) | 1200x802 |
-| U1 | University (/senior-tours) | Scenic Leisure Day: card photo and gallery 1 | university/rio-bueno-river-tubing.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/12/27/0c/89.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Jamaica-River-Tubing-Adventure-on-the-Rio-Bueno/d432-5545RIVER) | 670x446 |
-| U2 | University (/senior-tours) | Scenic Leisure Day: gallery 2 | university/rio-bueno-outdoor-experience.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/67/1b/ad.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Jamaica-River-Tubing-Adventure-on-the-Rio-Bueno/d432-5545RIVER) | 670x446 |
-| U3 | University (/senior-tours) | Relaxed Coastal Escape: card photo and gallery 1 | university/bob-marley-museum.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/13/70/63/55.jpg) | [page](https://www.viator.com/tours/Kingston/Bob-Marley-Museum-Devon-House-and-Downtown-Tour-from-Kingston/d22634-434025P1) | 674x446 |
-| U4 | University (/senior-tours) | Relaxed Coastal Escape: gallery 2 | university/national-gallery-of-jamaica.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/12/33/12/22.jpg) | [page](https://www.viator.com/tours/Kingston/Bob-Marley-Museum-Devon-House-and-Downtown-Tour-from-Kingston/d22634-434025P1) | 674x446 |
+| U1 | School Tours | Adventure Escape: card photo and gallery 1 | university/rio-bueno-river-tubing.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/12/27/0c/89.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Jamaica-River-Tubing-Adventure-on-the-Rio-Bueno/d432-5545RIVER) | 670x446 |
+| U2 | School Tours | Adventure Escape: gallery 2 (the existing school group photo is gallery 3) | university/rio-bueno-outdoor-experience.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/67/1b/ad.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Jamaica-River-Tubing-Adventure-on-the-Rio-Bueno/d432-5545RIVER) | 670x446 |
+| U3 | School Tours | Heritage & Discovery: card photo and gallery 1 | university/bob-marley-museum.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/13/70/63/55.jpg) | [page](https://www.viator.com/tours/Kingston/Bob-Marley-Museum-Devon-House-and-Downtown-Tour-from-Kingston/d22634-434025P1) | 674x446 |
+| U4 | School Tours | Heritage & Discovery: gallery 2 | university/national-gallery-of-jamaica.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/12/33/12/22.jpg) | [page](https://www.viator.com/tours/Kingston/Bob-Marley-Museum-Devon-House-and-Downtown-Tour-from-Kingston/d22634-434025P1) | 674x446 |
 | G2 | Greek Life | Gallery 1 under the main card | greek-life/montego-bay-boat-day.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/13/18/41/0c.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Catamaran-cruise-party-and-snorkeling-Montego-Bay/d432-329783P36) | 669x446 |
 | G3 | Greek Life | Gallery 2 under the main card | greek-life/negril-atv-adventure.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/06/e6/af/34.jpg) | [page](https://www.viator.com/tours/Negril/Negril-ATV-and-Zipline-Combo/d433-31073P9) | 674x446 |
 | G4 | Greek Life | Gallery 3 under the main card | greek-life/dunns-river-falls-climb.jpg | [image](https://media.tacdn.com/media/attractions-splice-spp-674x446/11/cc/2a/fd.jpg) | [page](https://www.viator.com/tours/Montego-Bay/Chukka-Island-Experience-Snorkel-and-Party-Cruise-with-Dunns-Climb/d432-3991P67) | 674x446 |
@@ -44,5 +45,12 @@ The handoff says: *"Supplier photos and Viator previews are not a confirmed reus
 
 - **G1** (Greek Life main card composition reference): the supplied photo is only 210 x 118 px. Get the full-size original from the supplier first.
 - **T3 and T4** (Jamaica listing versions of the Escalade and the Sprinter): alternatives to T1 and T2. The handoff says to choose one pair. T1 and T2 were used because they are the preferred 2025 models. Neither pair is verified as the vehicles actually offered, and neither is labelled with a model year on the page.
-- **Sunset charter photo:** no sunset photo of a matching vessel exists yet, so the Sunset card keeps its current photo.
+- **Sunset charter photo from the handoff:** none exists for a matching vessel. The Sunset Escape Charter card uses a photo the owner supplied instead (see below).
 - The handoff lists exteriors only for the two vehicles, so there are no vehicle interior photos yet.
+
+## Photos supplied by the owner
+
+| File | Where | Notes |
+|---|---|---|
+| `transfers/group-coach-53-seater.jpg` | Transfers: Group Transfers card | The 53-seater coach. Cropped from a square 1080 x 1080 original to 1080 x 720 so the whole bus is in frame. |
+| `yachts/sunset-cruise.jpg` | Yacht Charters: Sunset Escape Charter card (and Sunset Private Charter in the static page) | 674 x 446, unmodified. The vessel and the original source are not recorded, and the handoff's vessel match is still pending, so the page does not name a vessel. |
