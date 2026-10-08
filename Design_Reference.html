@@ -17234,6 +17234,10 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
         <span class="sec-pre" style="color:var(--orange)">V-Tours · Spatial</span>
         <h2 class="sec-title" style="color:#fff">Walk the Jamaica Excursion in 360°</h2>
         <p class="sec-sub center" style="color:rgba(255,255,255,.72)">Step inside a Sight Seers excursion before you book. Stroll from the Blue Lagoon to the craft market in full 360°, tap the glowing spots to explore, then reserve your real-life adventure.</p>
+        <div class="vt-bo-hero-cta">
+          <a class="btn-primary" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join the Waitlist</a>
+          <a class="btn-secondary" href="#" onclick="var s=document.getElementById('vt-how-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">See How It Works</a>
+        </div>
       </div>
 
       <!-- Spatial widgets (visionOS 26 style) -->
@@ -18914,7 +18918,75 @@ if(typeof vtInitPanoViewer==='function'){
 
 
 
-<!-- BROADCAST RIG, how live island sessions reach your headset -->
+<style id="vt-buildout-style">
+/* V-Tours page build-out: how it works, who it is for, pricing cards, FAQ */
+.vt-bo-hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.vt-bo-steps,.vt-bo-who,.vt-bo-price{display:grid;gap:20px;margin-top:38px}
+.vt-bo-steps{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.vt-bo-who{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.vt-bo-price{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.vt-bo-card{position:relative;background:#fff;border:1px solid rgba(6,58,99,.1);border-top:3px solid var(--orange);padding:28px 24px 26px;box-shadow:0 10px 30px rgba(6,58,99,.06);display:flex;flex-direction:column}
+.vt-bo-num{position:absolute;top:14px;right:18px;font-family:'Playfair Display',serif;font-size:34px;line-height:1;color:rgba(6,58,99,.1)}
+.vt-bo-ico{width:46px;height:46px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.vt-bo-ico i{color:var(--orange);font-size:18px}
+.vt-bo-card h3{font-size:17px;color:var(--navy);margin:0 0 8px}
+.vt-bo-card p{font-size:14px;line-height:1.65;color:#5b6b80;margin:0}
+.vt-bo-link{margin-top:auto;padding-top:16px;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--orange);text-decoration:none;cursor:pointer}
+.vt-bo-link:hover{color:var(--navy)}
+.vt-bo-price .vt-bo-card{text-align:center;align-items:center;padding:28px 18px 24px}
+.vt-bo-price .vt-bo-card h3{font-size:14px;letter-spacing:.4px;margin-bottom:10px}
+.vt-bo-amt{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy);margin-bottom:10px;line-height:1.1}
+.vt-bo-price .vt-bo-card p{font-size:13px;margin-bottom:18px}
+.vt-bo-price .vt-bo-card .btn-outline{margin-top:auto;padding:11px 18px;font-size:10px;letter-spacing:1.2px;white-space:nowrap}
+.vt-bo-faq{max-width:820px;margin:36px auto 0;display:grid;gap:12px}
+.vt-bo-faq details{background:#fff;border:1px solid rgba(6,58,99,.12);box-shadow:0 6px 20px rgba(6,58,99,.04)}
+.vt-bo-faq summary{list-style:none;cursor:pointer;padding:18px 22px;font-size:15px;font-weight:700;color:var(--navy);display:flex;justify-content:space-between;gap:16px;align-items:center}
+.vt-bo-faq summary::-webkit-details-marker{display:none}
+.vt-bo-faq summary::after{content:"+";font-size:22px;line-height:1;color:var(--orange);flex:none}
+.vt-bo-faq details[open] summary::after{content:"\2212"}
+.vt-bo-faq details[open] summary{border-bottom:1px solid rgba(6,58,99,.08)}
+.vt-bo-faq details p{margin:0;padding:16px 22px 20px;font-size:14px;line-height:1.7;color:#5b6b80}
+body.theme-night .vt-bo-card,body.theme-night .vt-bo-faq details{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);box-shadow:none}
+body.theme-night .vt-bo-card{border-top-color:var(--orange)}
+body.theme-night .vt-bo-card h3,body.theme-night .vt-bo-amt,body.theme-night .vt-bo-faq summary{color:#fff}
+body.theme-night .vt-bo-card p,body.theme-night .vt-bo-faq details p{color:rgba(255,255,255,.62)}
+body.theme-night .vt-bo-num{color:rgba(255,255,255,.1)}
+body.theme-night .vt-bo-link:hover{color:#fff}
+</style>
+<!-- HOW V-TOURS WORKS -->
+  <section class="vt-sec" id="vt-how-section">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">How It Works</span>
+        <h2 class="sec-title">From Your Screen to the Island in Three Steps</h2>
+        <p class="sec-sub center">No flights, no packing. Join a live session led by a local Sight Seers guide, then decide what you want to do in person.</p>
+      </div>
+      <div class="vt-bo-steps reveal">
+        <div class="vt-bo-card"><span class="vt-bo-num">01</span><div class="vt-bo-ico"><i class="fas fa-compass"></i></div><h3>Pick a tour</h3><p>Browse live sessions and scheduled tours from the Explorer Dashboard, from craft markets and beaches to villas and VIP lounges.</p></div>
+        <div class="vt-bo-card"><span class="vt-bo-num">02</span><div class="vt-bo-ico"><i class="fas fa-vr-cardboard"></i></div><h3>Step inside, on any screen</h3><p>Join from a browser, phone, Meta Quest or Apple Vision Pro. Look anywhere in 360° while your guide walks the island live.</p></div>
+        <div class="vt-bo-card"><span class="vt-bo-num">03</span><div class="vt-bo-ico"><i class="fas fa-bag-shopping"></i></div><h3>Ask, shop and reserve</h3><p>Chat with your guide, shop craft items in the session, then reserve the real-life excursion when you are ready.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO V-TOURS IS FOR -->
+  <section class="vt-sec vt-sec--alt" id="vt-who-section">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">Made For</span>
+        <h2 class="sec-title">Who V-Tours Is For</h2>
+        <p class="sec-sub center">One live experience, a few different ways to use it.</p>
+      </div>
+      <div class="vt-bo-who reveal">
+        <div class="vt-bo-card"><div class="vt-bo-ico"><i class="fas fa-suitcase-rolling"></i></div><h3>Travelers planning a trip</h3><p>Preview an excursion in 360° before you book it, then reserve the real thing.</p><a class="vt-bo-link" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join the waitlist &rarr;</a></div>
+        <div class="vt-bo-card"><div class="vt-bo-ico"><i class="fas fa-user-group"></i></div><h3>Friends and family</h3><p>Watch together in a group session of 2 to 10 people.</p><a class="vt-bo-link" onclick="var s=document.getElementById('vt-pricing-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">See pricing &rarr;</a></div>
+        <div class="vt-bo-card"><div class="vt-bo-ico"><i class="fas fa-building"></i></div><h3>Teams and events</h3><p>Live sessions for corporate teams and events.</p><a class="vt-bo-link" onclick="var s=document.getElementById('vt-pricing-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">See pricing &rarr;</a></div>
+        <div class="vt-bo-card"><div class="vt-bo-ico"><i class="fas fa-star"></i></div><h3>Frequent explorers</h3><p>Join the V-Tours Club for $19.99 a month.</p><a class="vt-bo-link" onclick="var s=document.getElementById('vt-pricing-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">See pricing &rarr;</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BROADCAST RIG, how live island sessions reach your headset -->
   <section class="vt-sec vt-sec--dark" id="vt-rig-section" style="padding:56px 0">
     <div class="vt-wrap">
       <div class="sec-head center reveal" style="color:#fff">
@@ -18924,22 +18996,22 @@ if(typeof vtInitPanoViewer==='function'){
       </div>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:36px">
         <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-video" style="color:var(--orange);font-size:18px"></i></div>
           <h3 style="color:#fff;font-size:16px;margin-bottom:6px">8K 360° Camera</h3>
           <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A spherical Insta360 X4 rides on the guide's rig, capturing everything around them, you choose where to look, not the camera.</p>
         </div>
         <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-microphone" style="color:var(--orange);font-size:18px"></i></div>
           <h3 style="color:#fff;font-size:16px;margin-bottom:6px">Wind-Proof Audio</h3>
           <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A wireless clip-on mic with wind muff keeps the guide's voice crisp over market bustle and ocean breeze.</p>
         </div>
         <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-tower-broadcast" style="color:var(--orange);font-size:18px"></i></div>
           <h3 style="color:#fff;font-size:16px;margin-bottom:6px">5G Island Uplink</h3>
           <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">A dedicated 5G hotspot pushes a 25 to 30&nbsp;Mbps stream from Ocho Rios or the Hip Strip to our global delivery network.</p>
         </div>
         <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px 22px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,135,49,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><i class="fas fa-vr-cardboard" style="color:var(--orange);font-size:18px"></i></div>
           <h3 style="color:#fff;font-size:16px;margin-bottom:6px">Any Screen, Any Headset</h3>
           <p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.6">Browser, phone, Meta Quest, or Apple Vision Pro, WebXR detects your device and offers Enter&nbsp;Spatial automatically.</p>
         </div>
@@ -18951,7 +19023,89 @@ if(typeof vtInitPanoViewer==='function'){
     </div>
   </section>
 
-<!-- CREATE ACCOUNT -->
+<!-- DEVICE TIERS -->
+  <section class="vt-sec vt-sec--dark">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre" style="color:#ffe97a">Built for the Future</span>
+        <h2 class="sec-title" style="color:#fff">Three Device Tiers</h2>
+        <p class="sec-sub center" style="color:rgba(255,255,255,.6)">Engineered from day one to support the next generation of consumer hardware, seamlessly upgrading from standard screens to fully spatial computing.</p>
+      </div>
+      <div class="vt-devices reveal">
+        <div class="vt-device">
+          <div class="vt-device-badge">Guide Equipment</div>
+          <h3>Ray-Ban Meta</h3>
+          <div class="vt-device-maker">Smart Glasses by Meta</div>
+          <ul>
+            <li>Hands-free first-person POV streaming</li>
+            <li>Natural walking tours with no handheld camera</li>
+            <li>Built-in spatial audio capture</li>
+            <li>Available now for beta launch</li>
+          </ul>
+        </div>
+        <div class="vt-device">
+          <div class="vt-device-badge">Explorer Headset</div>
+          <h3>Meta Quest</h3>
+          <div class="vt-device-maker">VR Headset by Meta</div>
+          <ul>
+            <li>360-degree live stream inside a VR headset</li>
+            <li>Full spatial awareness of the destination</li>
+            <li>Group sessions share the same virtual space</li>
+            <li>Hand tracking for in-VR purchases</li>
+          </ul>
+        </div>
+        <div class="vt-device">
+          <div class="vt-device-badge">Premium Tier</div>
+          <h3>Apple Vision Pro</h3>
+          <div class="vt-device-maker">Spatial Computing by Apple</div>
+          <ul>
+            <li>Guide's feed fills your physical room as a spatial window</li>
+            <li>Eye tracking replaces clicking to point and direct</li>
+            <li>Natural hand gestures for shopping and interaction</li>
+            <li>Premium-tier pricing for the highest-fidelity sessions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="vt-sec" id="vt-pricing-section">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">Pricing</span>
+        <h2 class="sec-title">Session Pricing</h2>
+        <p class="sec-sub center">Choose the kind of session that fits your trip.</p>
+      </div>
+      <div class="vt-bo-price reveal">
+        <div class="vt-bo-card"><h3>1-on-1 Private Sessions</h3><div class="vt-bo-amt">$35 to $95</div><p>A private live walk with your own guide.</p><a class="btn-outline" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join Waitlist</a></div>
+        <div class="vt-bo-card"><h3>Group Sessions (2 to 10)</h3><div class="vt-bo-amt">$18 to $45</div><p>Share one live session with friends or family.</p><a class="btn-outline" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join Waitlist</a></div>
+        <div class="vt-bo-card"><h3>Corporate and Events</h3><div class="vt-bo-amt">$250 to $800</div><p>Live sessions for teams, events and celebrations.</p><a class="btn-outline" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join Waitlist</a></div>
+        <div class="vt-bo-card"><h3>V-Tours Club Membership</h3><div class="vt-bo-amt">$19.99/mo</div><p>A monthly membership for frequent explorers.</p><a class="btn-outline" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join Waitlist</a></div>
+        <div class="vt-bo-card"><h3>VR Premium Sessions</h3><div class="vt-bo-amt">$55 to $150</div><p>Headset sessions in full spatial quality.</p><a class="btn-outline" href="#" onclick="var s=document.getElementById('vt-signup-section');if(s)s.scrollIntoView({behavior:'smooth'});return false;">Join Waitlist</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="vt-sec vt-sec--alt" id="vt-faq-section">
+    <div class="vt-wrap">
+      <div class="sec-head center reveal">
+        <span class="sec-pre">Questions</span>
+        <h2 class="sec-title">Good to Know Before You Join</h2>
+      </div>
+      <div class="vt-bo-faq reveal">
+        <details><summary>What do I need to join a session?</summary><p>A browser or a phone is enough. If you have a Meta Quest or an Apple Vision Pro, the page offers Enter Spatial automatically for the full 360° experience.</p></details>
+        <details><summary>Are the sessions really live?</summary><p>Yes. Guides carry a 360° camera, a wind-proof mic and a 5G uplink through the island, so you can look wherever you like while they walk.</p></details>
+        <details><summary>Can I reserve the real excursion afterwards?</summary><p>Yes. After you have stepped inside a Sight Seers excursion, you can reserve the real-life adventure.</p></details>
+        <details><summary>When does V-Tours launch?</summary><p>V-Tours is launching in private beta this summer. Join the waitlist and you will be among the first to know as new live experiences roll out.</p></details>
+        <details><summary>How much does it cost?</summary><p>It depends on the kind of session. The pricing section above shows the ranges for private, group, corporate, membership and VR premium sessions.</p></details>
+        <details><summary>Can I host sessions as a guide?</summary><p>Yes. Apply for a Guide Account in the sign-up form below. Applications are reviewed within 48 hours and guides earn 70% of session revenue.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATE ACCOUNT -->
   <section class="vt-sec" id="vt-signup-section" style="padding:40px 0">
     <div class="vt-wrap">
       <div class="sec-head center reveal">
@@ -18966,7 +19120,7 @@ if(typeof vtInitPanoViewer==='function'){
         </div>
         <div class="vt-signup-card" id="vt-signup-explorer">
           <div class="vt-signup-card-header">
-            <div class="vt-signup-icon"></div>
+            <div class="vt-signup-icon"><i class="fas fa-compass"></i></div>
             <h3>Explorer Account</h3>
             <p>Browse and join live virtual tours from anywhere in the world</p>
           </div>
@@ -19019,69 +19173,6 @@ if(typeof vtInitPanoViewer==='function'){
             <p class="vt-signup-note">Applications reviewed within 48 hours. Guides earn 70% of session revenue.</p>
           </form>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DEVICE TIERS -->
-  <section class="vt-sec vt-sec--dark">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre" style="color:#ffe97a">Built for the Future</span>
-        <h2 class="sec-title" style="color:#fff">Three Device Tiers</h2>
-        <p class="sec-sub center" style="color:rgba(255,255,255,.6)">Engineered from day one to support the next generation of consumer hardware, seamlessly upgrading from standard screens to fully spatial computing.</p>
-      </div>
-      <div class="vt-devices reveal">
-        <div class="vt-device">
-          <div class="vt-device-badge">Guide Equipment</div>
-          <h3>Ray-Ban Meta</h3>
-          <div class="vt-device-maker">Smart Glasses by Meta</div>
-          <ul>
-            <li>Hands-free first-person POV streaming</li>
-            <li>Natural walking tours with no handheld camera</li>
-            <li>Built-in spatial audio capture</li>
-            <li>Available now for beta launch</li>
-          </ul>
-        </div>
-        <div class="vt-device">
-          <div class="vt-device-badge">Explorer Headset</div>
-          <h3>Meta Quest</h3>
-          <div class="vt-device-maker">VR Headset by Meta</div>
-          <ul>
-            <li>360-degree live stream inside a VR headset</li>
-            <li>Full spatial awareness of the destination</li>
-            <li>Group sessions share the same virtual space</li>
-            <li>Hand tracking for in-VR purchases</li>
-          </ul>
-        </div>
-        <div class="vt-device">
-          <div class="vt-device-badge">Premium Tier</div>
-          <h3>Apple Vision Pro</h3>
-          <div class="vt-device-maker">Spatial Computing by Apple</div>
-          <ul>
-            <li>Guide's feed fills your physical room as a spatial window</li>
-            <li>Eye tracking replaces clicking to point and direct</li>
-            <li>Natural hand gestures for shopping and interaction</li>
-            <li>Premium-tier pricing for the highest-fidelity sessions</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING SNAPSHOT -->
-  <section class="vt-sec vt-sec--alt">
-    <div class="vt-wrap">
-      <div class="sec-head center reveal">
-        <span class="sec-pre">Pricing</span>
-        <h2 class="sec-title">Session Pricing</h2>
-      </div>
-      <div class="vt-revenue reveal">
-        <div class="vt-rev-card"><strong>$35 to $95</strong><span>1-on-1 Private Sessions</span></div>
-        <div class="vt-rev-card"><strong>$18 to $45</strong><span>Group Sessions (2 to 10)</span></div>
-        <div class="vt-rev-card"><strong>$250 to $800</strong><span>Corporate and Events</span></div>
-        <div class="vt-rev-card"><strong>$19.99/mo</strong><span>V-Tours Club Membership</span></div>
-        <div class="vt-rev-card"><strong>$55 to $150</strong><span>VR Premium Sessions</span></div>
       </div>
     </div>
   </section>
@@ -51579,6 +51670,8 @@ html body .stay-points>span{background:rgba(112,194,87,.14)!important;color:#2f6
 html body .community-chips>span,html body .yacht-luxe-pills>span,html body .sc-meta>span,html body .dest-package-highlights>span,
 html body .dest-explorer-pill,html body .jm3d-detail-chip,html body .jm3d-popup-tag-pill{background:rgba(6,58,99,.05)!important;color:#063a63!important}
 html body .jm3d-detail-chip.active{background:#063a63!important;color:#fff!important;border-color:#063a63!important}
+/* the Travel Club chips sit on the dark blue panel, so they stay white */
+html body .community-chips>span{background:rgba(255,255,255,.16)!important;color:#fff!important;border-color:rgba(255,255,255,.3)!important}
 html body .jm3d-pin-label{padding:5px 10px!important}
 
 /* ---- buttons: identical type, radius and finish ---- */
