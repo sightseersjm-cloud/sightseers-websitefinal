@@ -10770,8 +10770,8 @@ body.theme-night .page .tag{
         <span class="ss-pill-navy" style="margin-bottom:14px">SEVEN SHORES</span>
         <p style="font-size:16px;line-height:1.7;color:#444;margin:0 0 18px">Connect with ambitious MBA graduates, alumni and young professionals across Jamaica, Barbados, Saint Lucia and beyond. Private yacht days, luxury villa dinners, catamaran sails, cultural deep dives and curated networking, designed to create real professional relationships on the water and on the island.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a href="#" onclick="nav('mba-voyages');return false" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy,#0d5371);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid transparent;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore Seven Shores <i class="fas fa-arrow-right"></i></a>
-          <a href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Read the Full Article</a>
+          <a class="ss-soft-btn" href="#" onclick="nav('mba-voyages');return false" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy,#0d5371);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid transparent;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore Seven Shores <i class="fas fa-arrow-right"></i></a>
+          <a class="ss-soft-btn" href="#" onclick="openBlog(7);return false" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy,#0d5371);padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(13,83,113,.2);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(13,83,113,.5)'" onmouseout="this.style.borderColor='rgba(13,83,113,.2)'">Read the Full Article</a>
         </div>
       </div>
     </div>
@@ -49780,7 +49780,7 @@ html{background:#082d48!important}
         style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #dde8df;border-radius:9px;font-size:14px;color:#1a1a2e;outline:none">
     </div>
     <div id="vt-guide-login-error" style="display:none;color:#ef4444;font-size:13px;margin-bottom:14px;padding:10px 14px;background:#fff5f5;border-radius:8px;border:1px solid #fecaca"></div>
-    <button id="vt-guide-login-btn" onclick="vtGuideLoginSubmit()"
+    <button class="ss-soft-btn" id="vt-guide-login-btn" onclick="vtGuideLoginSubmit()"
       style="width:100%;padding:13px;background:linear-gradient(135deg,#063a63,#0d5a9a);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">
       Sign In
     </button>
@@ -49846,11 +49846,11 @@ html{background:#082d48!important}
     </div>
 
     <div style="display:flex;gap:12px">
-      <button id="vt-golive-start-btn" onclick="vtGoLiveStart()"
+      <button class="ss-soft-btn" id="vt-golive-start-btn" onclick="vtGoLiveStart()"
         style="flex:1;padding:14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
         Go Live
       </button>
-      <button id="vt-golive-end-btn" onclick="vtGoLiveEnd()"
+      <button class="ss-soft-btn" id="vt-golive-end-btn" onclick="vtGoLiveEnd()"
         style="display:none;flex:1;padding:14px;background:#1a1a2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">
         End Stream
       </button>
@@ -49874,7 +49874,7 @@ html{background:#082d48!important}
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <button id="vt-webxr-vr-btn" onclick="vtXRToggleVR()" style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.35);color:#a78bfa;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s">
+        <button class="ss-soft-btn" id="vt-webxr-vr-btn" onclick="vtXRToggleVR()" style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.35);color:#a78bfa;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s">
           <span id="vt-webxr-vr-label">Enter VR</span>
         </button>
         <button onclick="vtXRClose()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .2s">
@@ -52684,7 +52684,50 @@ html body #p-tours #tpSubnav{font-size:10.5px}
   html body .vt-vision-widget
 ){border-radius:0!important}
 /* elements that set their corners inline */
-[style*="border-radius"]:not([style*="border-radius:50%"]):not([style*="border-radius: 50%"]):not(#p-admin *):not(.ss-bot-panel *){border-radius:0!important}
+[style*="border-radius"]:not([style*="border-radius:50%"]):not([style*="border-radius: 50%"]):not(.ss-soft-btn):not(#p-admin *):not(.ss-bot-panel *){border-radius:0!important}
+/* Softened buttons: call-to-action buttons are pill-shaped (fully rounded ends). Tags, chips, tabs, filters and icon buttons stay square.
+   To make one kind of button square again, remove its line from this list. The :not(#ss-*) parts only raise the rule's priority above the square-corner rule above. */
+:is(
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-white,
+  .btn-border-white,
+  .btn-book,
+  .auth-submit,
+  .bx-btn,
+  .bx-reset,
+  .ex-more,
+  .ex-btn,
+  .gb-primary,
+  .gb-secondary,
+  .nl-submit,
+  .lj-btn,
+  .lja-btn,
+  .mv-btn,
+  .tr-btn,
+  .trip-planner-btn,
+  .trip-planner-submit,
+  .team-gloss-btn,
+  .checkout-pay-btn,
+  .cart-checkout-btn,
+  .cart-mini-btn,
+  .gift-add-btn,
+  .gform-open-btn,
+  .pd-add-btn,
+  .tour-card-btn,
+  .tour-secondary-btn,
+  .transfers-quick-btn,
+  .bdos-itin-btn,
+  .landmark-back,
+  .ss-dyn-btn,
+  .ss-reset-btn,
+  .vt-cta-btn,
+  .vt-lang-prompt-confirm,
+  .vt-identify-buy,
+  .vt-auction-bid-btn,
+  .ss-soft-btn
+):not(#ss-a):not(#ss-b):not(#ss-c){border-radius:999px!important}
 </style>
 <script id="gallery-showcase-script">
 (function(){
