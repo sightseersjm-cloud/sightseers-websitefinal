@@ -12010,7 +12010,22 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 #p-mba-voyages .mv-add h3{font-family:'Raleway',sans-serif;font-size:19px;font-weight:800;color:var(--mv-head)!important;margin:0 0 8px;line-height:1.25;letter-spacing:-.2px}
 #p-mba-voyages .mv-add p{font-size:14px;line-height:1.65;color:var(--mv-mut)!important;margin:0 0 16px}
 #p-mba-voyages .mv-add-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--mv-line)}
-#p-mba-voyages .mv-add-for{font-size:12.5px;color:var(--mv-mut)!important;line-height:1.5;flex:1 1 180px}
+#p-mba-voyages .mv-add-for{font-size:12.5px;color:var(--mv-mut)!important;line-height:1.5;flex:none}
+#p-mba-voyages .mv-add-pks{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 200px}
+#p-mba-voyages .mv-add-pk{font-family:'Raleway',sans-serif;font-size:12px;font-weight:700;color:var(--mv-head)!important;background:transparent;border:1px solid var(--mv-line);padding:7px 12px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+#p-mba-voyages .mv-add-pk:hover{border-color:#ef8731;color:#ef8731!important}
+#p-mba-voyages .mv-pk-add{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;font-family:'Raleway',sans-serif;font-size:12.5px;line-height:1.5;color:var(--mv-mut)!important;background:var(--mv-chip);border:0;padding:10px 12px;margin:0 0 18px;cursor:pointer;transition:background .2s}
+#p-mba-voyages .mv-pk-add:hover{background:rgba(239,135,49,.12)}
+#p-mba-voyages .mv-pk-add i{color:#ef8731;margin-top:3px;font-size:11px}
+#p-mba-voyages .mv-pk-add b{color:var(--mv-head)!important}
+#p-mba-voyages .mv-det-hint{margin:0 0 12px;font-size:13.5px;color:var(--mv-mut)!important}
+#p-mba-voyages .mv-addopts{display:flex;flex-direction:column;gap:10px}
+#p-mba-voyages .mv-addopt{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border:1px solid var(--mv-line);background:var(--mv-card);cursor:pointer;transition:border-color .2s,background .2s}
+#p-mba-voyages .mv-addopt:hover{border-color:rgba(239,135,49,.55)}
+#p-mba-voyages .mv-addopt.on{border-color:#ef8731;background:rgba(239,135,49,.07)}
+#p-mba-voyages .mv-addopt input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:#ef8731;cursor:pointer}
+#p-mba-voyages .mv-addopt b{display:block;font-size:14.5px;color:var(--mv-head)!important}
+#p-mba-voyages .mv-addopt em{display:block;font-style:normal;font-size:13px;line-height:1.55;color:var(--mv-mut)!important;margin-top:2px}
 #p-mba-voyages .mv-add-for b{color:var(--mv-head)!important}
 #p-mba-voyages .mv-note{margin-top:22px;text-align:center;font-size:13.5px;color:var(--mv-mut)!important;line-height:1.7}
 
@@ -12197,7 +12212,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     <div class="mv-head">
       <div class="mv-eyebrow">Optional add-ons</div>
       <h2 class="mv-h2">Make the week count</h2>
-      <p class="mv-sub">Add any of these to a package. Each one is run with our local host partners, and your planner confirms the hosts, date and details for your chosen shore.</p>
+      <p class="mv-sub">Add these to the package that fits: tick them inside a package&rsquo;s Details, or start here and choose the package. Each one is run with our local host partners, and your planner confirms the hosts, date and details for your chosen shore.</p>
     </div>
     <div class="mv-pkgrid cols-2" id="mbvAddGrid"></div>
     <p class="mv-note">Add-ons are quoted with your package. Rules for foreign property buyers differ by shore, so the Property &amp; Investment Insight Day is information only, not investment, legal or tax advice.</p>
@@ -12298,37 +12313,53 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     im.src=p.img;
   });
 
-  var state={photos:[],i:0,pk:PACKAGES,pick:{k:0,sel:[]},det:0,sliderReady:false,pickReady:false,loading:false};
+  var state={photos:[],i:0,pk:PACKAGES,pick:{k:0,sel:[]},add:{},det:0,sliderReady:false,pickReady:false,loading:false};
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function $(id){return document.getElementById(id);}
-  /* Optional extras. Worded as "can be arranged": the planner confirms hosts and dates for the chosen shore. The property day is for alumni and executive groups only. */
+  /* Optional extras. Each one pairs with specific packages (pk). They are ticked inside a package's Details and carried into the
+     inquiry. Worded as run with local host partners, the planner confirming hosts and dates for the chosen shore. The property day is
+     for alumni and executive groups only. */
   var ADDONS=[
-    {title:'Island Pitch Night',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Any package',
+    {title:'Island Pitch Night',nick:'Pitch Night',pk:['lifestyle','executive','industry','voyage'],tags:['Current MBAs','Recent graduates','Alumni'],
+      short:'Pitch a real company challenge to local founders and investors at the closing dinner.',
       text:'Teams take a real challenge from a local company, work it during the trip, then pitch to local founders and investors at the closing dinner. You leave with a case study, a deck and feedback from people who run businesses here.'},
-    {title:'Caribbean Opportunity Briefing',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Industry Immersion, Executive Retreat, Island-Hop Voyage',
+    {title:'Caribbean Opportunity Briefing',nick:'Opportunity Briefing',pk:['executive','industry','voyage'],tags:['Current MBAs','Recent graduates','Alumni'],
+      short:'A half day on doing business in your chosen shore, led by local business leaders.',
       text:'A half day on doing business in your chosen shore: how foreign investors enter the market, which sectors are growing and what to know before committing capital. Led by local business leaders, with time for questions. Information only, not financial advice.'},
-    {title:'Alumni Mentor Day',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Any package',
+    {title:'Alumni Mentor Day',nick:'Mentor Day',pk:['lifestyle','executive','industry','voyage'],tags:['Current MBAs','Recent graduates','Alumni'],
+      short:'Ask an alum roundtables and speed mentoring for current students and recent graduates.',
       text:'Alumni join current MBAs and recent graduates for Ask an alum roundtables and speed mentoring on careers, startups and stepping into leadership. Works best when a cohort travels with an alumni chapter.'},
-    {title:'Property & Investment Insight Day',who:'an alumni or executive group',tags:['Alumni','Executive groups'],pairs:'Executive Retreat, Island-Hop Voyage',
+    {title:'Property & Investment Insight Day',nick:'Property Day',pk:['executive','voyage'],tags:['Alumni','Executive groups'],
+      short:'Villas and developments with licensed local agents, then a property lawyer. Optional, information only.',
       text:'For guests curious about a second home or income property. Visit villas and developments with licensed local agents, then meet a property lawyer on foreign ownership, taxes and financing. Optional, with no sales pressure and no investment advice.'}
   ];
+  function pkIndex(id){for(var i=0;i<PACKAGES.length;i++){if(PACKAGES[i].id===id)return i;}return -1;}
+  function addonsFor(k){var id=PACKAGES[k]&&PACKAGES[k].id,out=[];ADDONS.forEach(function(a,i){if(a.pk.indexOf(id)>-1)out.push(i);});return out;}
+  function addPicked(k){return (state.add[k]||[]).filter(function(i){return !!ADDONS[i];});}
 
   function renderAddons(){
     var grid=$('mbvAddGrid');if(!grid)return;
-    grid.innerHTML=ADDONS.map(function(a,k){
+    grid.innerHTML=ADDONS.map(function(a,i){
       return '<article class="mv-add">'
         +'<div class="mv-add-tags">'+a.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'
         +'<h3>'+esc(a.title)+'</h3><p>'+esc(a.text)+'</p>'
-        +'<div class="mv-add-foot"><div class="mv-add-for"><b>Add to:</b> '+esc(a.pairs)+'</div>'
-        +'<button type="button" class="mv-btn line sm" onclick="mbvAddon('+k+')">Ask about this</button></div></article>';
+        +'<div class="mv-add-foot"><div class="mv-add-for"><b>Add to:</b></div><div class="mv-add-pks">'
+        +a.pk.map(function(id){var k=pkIndex(id);return '<button type="button" class="mv-add-pk" onclick="mbvDetails('+k+','+i+')">'+esc(PACKAGES[k].title.replace(/^MBA /,''))+'</button>';}).join('')
+        +'</div></div></article>';
     }).join('');
   }
-  window.mbvAddon=function(k){
-    var a=ADDONS[k];if(!a)return false;
-    openStartPlanning('','MBA add-on: '+a.title,'MBA Experience','Interested in adding the '+a.title+' to an MBA voyage ('+a.pairs.toLowerCase()+') for '+a.who+'.');
-    return false;
-  };
+  /* The Add to this package list inside a package's Details. */
+  function addSection(k){
+    var list=addonsFor(k);if(!list.length)return '';
+    var on=addPicked(k);
+    return '<div class="mv-det-sec" id="mbvDetAdd"><div class="mv-mini">Add to this package</div>'
+      +'<p class="mv-det-hint">Optional. Tick any you would like and we include them in your inquiry.</p><div class="mv-addopts">'
+      +list.map(function(i){var a=ADDONS[i],c=on.indexOf(i)>-1;
+        return '<label class="mv-addopt'+(c?' on':'')+'"><input type="checkbox" data-a="'+i+'"'+(c?' checked':'')+'><span><b>'+esc(a.title)+'</b><em>'+esc(a.short)+'</em></span></label>';}).join('')
+      +'</div></div>';
+  }
+  function addGoLabel(k){var n=addPicked(k).length;return n?'Inquire now \u00b7 '+n+' add-on'+(n>1?'s':''):'Inquire now';}
 
   /* ---------- packages ---------- */
   function renderPackages(){
@@ -12340,6 +12371,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
         +'<div class="mv-pk-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.blurb)+'</p>'
         +'<div class="mv-pk-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span></div>'
         +'<ul class="mv-pk-hl">'+p.hl.map(function(h){return '<li>'+esc(h)+'</li>';}).join('')+'</ul>'
+        +(addonsFor(k).length?'<button type="button" class="mv-pk-add" onclick="mbvDetails('+k+',null,true)"><i class="fas fa-plus"></i><span><b>Add-ons:</b> '+addonsFor(k).map(function(i){return esc(ADDONS[i].nick);}).join(', ')+'</span></button>':'')
         +'<div class="mv-pk-foot"><div class="mv-pk-price"><small>Pricing</small><b class="q">Custom quote</b></div>'
         +'<div class="mv-pk-btns"><button type="button" class="mv-btn line sm" aria-haspopup="dialog" onclick="mbvDetails('+k+')">Details</button><button type="button" class="mv-btn primary sm" onclick="mbvInquire('+k+')">Inquire now</button></div></div></div></article>';
     }).join('');
@@ -12370,9 +12402,10 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     villa:{cls:'villa',ico:'fa-utensils',title:'The villa dinner',text:'An evening at a luxury private villa with elevated Caribbean cuisine and an intimate setting for real conversation, hosted around a guest speaker or roundtable.',tags:['Private villa','Caribbean cuisine','Guest speaker']}
   };
   function detOpen(){var el=$('mbvDet');return !!el&&el.classList.contains('open');}
-  window.mbvDetails=function(k){
+  window.mbvDetails=function(k,pre,jump){
     var p=PACKAGES[k],box=$('mbvDetBox');if(!p||!box)return false;
     state.det=k;
+    if(typeof pre==='number'&&ADDONS[pre]){var cur=state.add[k]||[];if(cur.indexOf(pre)<0)cur.push(pre);state.add[k]=cur;jump=true;}
     var mo=(p.moments||[]).map(function(m){var d=MOMENTS[m];
       return '<div class="mv-moment '+d.cls+'"><div class="mv-moment-ico"><i class="fas '+d.ico+'"></i></div><h3>'+esc(d.title)+'</h3><p>'+esc(d.text)+'</p><div class="mv-tags">'+d.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div></div>';}).join('');
     box.innerHTML='<button type="button" class="mv-det-x" aria-label="Close" onclick="mbvCloseDet()">&times;</button>'
@@ -12384,11 +12417,19 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       +p.steps.map(function(x){return '<li class="mv-det-step"><div class="mv-det-when"><span class="mv-day">'+esc(x.when)+'</span></div><div class="mv-det-what"><h4>'+esc(x.title)+'</h4><p>'+esc(x.text)+'</p></div></li>';}).join('')
       +'</ol></div>'
       +(mo?'<div class="mv-det-sec"><div class="mv-mini">Signature '+(p.moments.length>1?'moments':'moment')+'</div><div class="mv-moments">'+mo+'</div></div>':'')
+      +addSection(k)
       +'<div class="mv-det-foot"><div class="mv-pk-price"><small>Pricing</small><b class="q">Custom quote</b></div>'
-      +'<div><button type="button" class="mv-btn line sm" onclick="mbvCloseDet()">Close</button><button type="button" class="mv-btn primary sm" onclick="mbvDetInquire()">Inquire now</button></div></div>';
+      +'<div><button type="button" class="mv-btn line sm" onclick="mbvCloseDet()">Close</button><button type="button" class="mv-btn primary sm" id="mbvDetGo" onclick="mbvDetInquire()">'+addGoLabel(k)+'</button></div></div>';
+    box.onchange=function(e){
+      var t=e.target,i=t&&t.getAttribute&&t.getAttribute('data-a');if(i===null||i===undefined)return;i=Number(i);
+      var cur=(state.add[k]||[]).filter(function(x){return x!==i;});if(t.checked)cur.push(i);state.add[k]=cur;
+      if(t.parentNode)t.parentNode.classList.toggle('on',t.checked);
+      var go=$('mbvDetGo');if(go)go.textContent=addGoLabel(k);
+    };
     box.scrollTop=0;
     $('mbvDet').classList.add('open');
     var x=box.querySelector('.mv-det-x');if(x)x.focus();
+    if(jump){var tgt=$('mbvDetAdd');if(tgt)setTimeout(function(){box.scrollTop=Math.max(0,tgt.offsetTop-24);},60);}
     return false;
   };
   window.mbvCloseDet=function(){var el=$('mbvDet');if(el)el.classList.remove('open');};
@@ -12398,7 +12439,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   function pickOpen(){var el=$('mbvPick');return !!el&&el.classList.contains('open');}
   function pickRender(){
     var p=PACKAGES[state.pick.k],sel=state.pick.sel;
-    $('mbvPickPkg').textContent=p.title;
+    var ad=addPicked(state.pick.k);
+    $('mbvPickPkg').textContent=p.title+(ad.length?' + '+ad.length+' add-on'+(ad.length>1?'s':''):'');
     $('mbvPickHint').textContent=p.multi?'This voyage island hops. Choose the shores you would like to visit, two or more if you can.':'Every package is available on all seven shores. Choose where you would like it.';
     $('mbvPickGrid').innerHTML=COUNTRIES.map(function(c){return '<button type="button" class="mv-cc" data-c="'+esc(c)+'" aria-pressed="'+(sel.indexOf(c)>-1?'true':'false')+'">'+esc(c)+'</button>';}).join('');
     $('mbvPickCount').textContent=sel.length?(p.multi?sel.length+' selected':sel[0]):'Choose a country';
@@ -12419,7 +12461,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     if(!p||!sel.length)return false;
     window.mbvClosePick();
     var where=sel.length>1?sel.slice(0,-1).join(', ')+' and '+sel[sel.length-1]:sel[0];
-    openStartPlanning(sel[0],p.title,'MBA Experience','Interested in the '+p.title+', '+p.theme+', in '+where+' for a cohort, alumni chapter or leadership team.');
+    var ad=addPicked(state.pick.k).map(function(i){return ADDONS[i].title;});
+    openStartPlanning(sel[0],p.title,'MBA Experience','Interested in the '+p.title+', '+p.theme+', in '+where+' for a cohort, alumni chapter or leadership team.'+(ad.length?' Add-ons: '+ad.join(', ')+'.':''));
     return false;
   };
   function initPick(){
