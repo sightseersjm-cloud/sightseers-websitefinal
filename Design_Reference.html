@@ -52186,7 +52186,41 @@ html body #p-vtours :is(.vt-signup-btn,.vt-cta-btn,.btn-primary,.btn-secondary):
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap{gap:8px}
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input{min-width:0;flex:1 1 auto}
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap>:not(.vt-chat-input){flex:0 0 auto}
-@media(prefers-reduced-motion:reduce){html body #p-vtours .vt-vision *{transition:none!important}html body #p-vtours .vt-vision .vt-live-card:hover,html body #p-vtours .vt-vision :is(.vt-path,.vt-session-bar-btn):hover{transform:none}}
+/* Carousel: larger cards with slide-in animations, better spacing */
+html body #p-vtours .vt-vision .vt-live-grid{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;padding-bottom:8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+html body #p-vtours .vt-vision .vt-live-grid::-webkit-scrollbar{display:none}
+html body #p-vtours .vt-vision .vt-live-grid{-ms-overflow-style:none;scrollbar-width:none}
+html body #p-vtours .vt-vision .vt-live-card{flex:0 0 280px;scroll-snap-align:start;min-height:360px;border-radius:18px;overflow:hidden;transition:all .3s cubic-bezier(.25,.46,.45,.94);transform:translateX(-20px);opacity:0;animation:vt-slide-in .5s cubic-bezier(.13,.27,.82,.88) forwards}
+html body #p-vtours .vt-vision .vt-live-card:nth-child(1){animation-delay:.08s}
+html body #p-vtours .vt-vision .vt-live-card:nth-child(2){animation-delay:.14s}
+html body #p-vtours .vt-vision .vt-live-card:nth-child(3){animation-delay:.2s}
+html body #p-vtours .vt-vision .vt-live-card:nth-child(4){animation-delay:.26s}
+html body #p-vtours .vt-vision .vt-live-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 48px rgba(0,0,0,.24)}
+@keyframes vt-slide-in{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+/* Card layout: flex column with flex-grow body */
+html body #p-vtours .vt-vision .vt-live-card{display:flex;flex-direction:column}
+html body #p-vtours .vt-vision .vt-live-card-img{flex:0 0 160px}
+html body #p-vtours .vt-vision .vt-live-card-body{flex:1;display:flex;flex-direction:column;padding:16px}
+html body #p-vtours .vt-vision .vt-live-card-title{font-size:16px;font-weight:600;margin-bottom:4px}
+html body #p-vtours .vt-vision .vt-live-card-guide{font-size:13px;opacity:.7;margin-bottom:8px}
+html body #p-vtours .vt-vision .vt-live-card-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:8px}
+html body #p-vtours .vt-vision .vt-live-card-foot>*{flex:1}
+/* Stats: fade in with stagger */
+html body #p-vtours .vt-vision .vt-dash-stat{transform:translateY(8px);opacity:0;animation:vt-fade-up .4s ease-out forwards}
+html body #p-vtours .vt-vision .vt-dash-stat:nth-child(1){animation-delay:.05s}
+html body #p-vtours .vt-vision .vt-dash-stat:nth-child(2){animation-delay:.1s}
+html body #p-vtours .vt-vision .vt-dash-stat:nth-child(3){animation-delay:.15s}
+html body #p-vtours .vt-vision .vt-dash-stat:nth-child(4){animation-delay:.2s}
+@keyframes vt-fade-up{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* Better spacing: breathe room between all controls */
+html body #p-vtours .vt-vision .vt-session-bar{gap:12px}
+html body #p-vtours .vt-vision .vt-immersion{gap:12px}
+html body #p-vtours .vt-vision .vt-imm-seg{gap:8px}
+html body #p-vtours .vt-vision .vt-scene-btn{margin-right:8px}
+html body #p-vtours .vt-vision .vt-path{margin-right:8px}
+html body #p-vtours .vt-vision .vt-scene-switcher{margin-bottom:16px}
+html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap{margin-top:12px;gap:10px}
+@media(prefers-reduced-motion:reduce){html body #p-vtours .vt-vision *{transition:none!important}html body #p-vtours .vt-vision .vt-live-card:hover,html body #p-vtours .vt-vision :is(.vt-path,.vt-session-bar-btn):hover{transform:none}html body #p-vtours .vt-vision .vt-live-card,html body #p-vtours .vt-vision .vt-dash-stat{animation:none;transform:none;opacity:1}}
 </style>
 
 <style id="pill-unify-style">
