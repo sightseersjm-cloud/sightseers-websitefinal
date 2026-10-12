@@ -9407,8 +9407,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   ]
 }
 </script>
-<!-- Three.js WebXR -->
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.min.js"></script>
 <!-- HLS.js for Mux live streams -->
 <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js"></script>
 <!-- Supabase real-time chat -->
@@ -19380,6 +19378,7 @@ function vtJoinSession(id){
 }
 
 function vtJoinSessionDirect(id,s,noScroll){
+  vtLastSessionId=id;vtHideSessionEnded();
   /* joined, stop nudging and close the chooser */
   if(typeof vtHideLivePrompt==='function')vtHideLivePrompt(true);
   var lp=document.getElementById('vtLivePanel');if(lp)lp.classList.remove('open');
@@ -19726,6 +19725,8 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 else{vtGuideAuthInit();}
 
 function vtStartStream(){
+  vtHideSessionEnded();
+  var cm=document.getElementById('vt-chat-messages');if(cm)cm.scrollTop=cm.scrollHeight;
   vtStreamActive=true;vtAnimateViewers();vtStartTimer();
   var hint=document.getElementById('vt-drag-hint');
   if(hint){hint.classList.add('show');setTimeout(function(){hint.classList.remove('show')},4000)}
@@ -19735,16 +19736,65 @@ function vtStartStream(){
     vtActivateLivePlayer(vtLive.hlsUrl, vtLive.playbackId);
   }
 }
+/* Leaving tears the whole session down, not just the clocks. It used to stop the timers and show a
+   toast but leave the full-screen view open with no video, so the visitor was stuck inside an ended
+   session. The join token also cancels any delayed join steps (auto-expand, sound prompt) that were
+   still waiting to fire when the visitor left. */
+var vtJoinToken=0,vtLastSessionId=null;
 function vtLeaveSession(){
+  vtJoinToken++;
   vtStreamActive=false;
   clearInterval(vtViewerInterval);clearInterval(vtTimerInterval);clearInterval(vtAutoChatInterval);
+  try{ if(typeof vtCollapseSession==='function')vtCollapseSession(); }catch(e){}
+  try{ if(typeof vtCinemaClose==='function'&&vtCinemaOpen)vtCinemaClose(); }catch(e){}
+  try{ if(typeof vtExitXR==='function'&&vtXRSession)vtExitXR(); }catch(e){}
+  try{
+    if(vtMainHls){vtMainHls.destroy();vtMainHls=null;}
+    var lv=document.getElementById('vt-main-live-vid');
+    if(lv){try{lv.pause()}catch(e){} lv.removeAttribute('src');try{lv.load()}catch(e){} lv.style.display='none';}
+  }catch(e){}
   if(typeof vtHideSceneVideo==='function')vtHideSceneVideo();
   if(typeof vtStopAmbientLoop==='function')vtStopAmbientLoop();
+  var ts=document.getElementById('vt-tap-sound');if(ts&&ts.parentNode)ts.parentNode.removeChild(ts);
+  var um=document.getElementById('vt-unmute-btn');if(um)um.style.display='none';
+  try{ if(typeof vtCloseHotspot==='function')vtCloseHotspot(); }catch(e){}
+  try{ if(typeof vtCloseCart==='function')vtCloseCart(); }catch(e){}
+  try{
+    if(vtTriviaOn){
+      vtTriviaOn=false;clearInterval(vtTriviaClock);
+      var tc=document.querySelector('.vt-trivia-card');if(tc)tc.classList.remove('show');
+      var tb=document.querySelector('[onclick*="vtToggleTrivia"]');if(tb)tb.classList.remove('vt-active');
+    }
+  }catch(e){}
   vtSessionAudioOn=false;
   var icon=document.getElementById('vt-audio-toggle-icon');if(icon)icon.className='fas fa-volume-xmark';
   var label=document.getElementById('vt-audio-toggle-label');if(label)label.textContent='Audio Off';
   var btn=document.getElementById('vt-audio-toggle-btn');if(btn)btn.style.background='';
-  vtToast('<i class="fas fa-sign-out-alt"></i> Session ended. Thanks for watching!');
+  vtShowSessionEnded();
+  vtToast('<i class="fas fa-sign-out-alt"></i> You left the session. Thanks for watching!');
+}
+/* After leaving, say so in the player and offer the two obvious next steps. */
+function vtShowSessionEnded(){
+  var host=document.getElementById('vt-session-video');if(!host)return;
+  var el=document.getElementById('vt-session-ended');
+  if(!el){
+    el=document.createElement('div');el.id='vt-session-ended';el.className='vt-session-ended';
+    el.innerHTML='<div class="vt-session-ended-card"><div class="vt-session-ended-ic"><i class="fas fa-circle-check"></i></div><h4>You left the session</h4><p>Thanks for watching. Jump back in, or pick another live session.</p><div class="vt-session-ended-btns"><button type="button" class="vt-se-btn primary" onclick="vtRejoinSession()">Rejoin</button><button type="button" class="vt-se-btn" onclick="vtBrowseSessions()">Browse sessions</button></div></div>';
+    host.appendChild(el);
+  }
+  el.classList.add('show');
+}
+function vtHideSessionEnded(){var el=document.getElementById('vt-session-ended');if(el)el.classList.remove('show')}
+function vtRejoinSession(){
+  var id=vtLastSessionId||'blue-lagoon',s=(typeof vtSessions!=='undefined')?vtSessions[id]:null;if(!s)return;
+  var tok=++vtJoinToken;
+  vtJoinSessionDirect(id,s,true);
+  setTimeout(function(){ try{ if(tok===vtJoinToken&&!vtSessionExpanded)vtExpandSessionSmooth(); }catch(e){} },300);
+}
+function vtBrowseSessions(){
+  var c=[].slice.call(document.querySelectorAll('#p-vtours .vt-live-card')).filter(function(x){return x.offsetParent!==null})[0];
+  var t=c?(c.parentElement||c):null;
+  if(t)t.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 /* ── Auto chat messages ── */
@@ -21035,15 +21085,19 @@ function vtJoinLiveNow(name,price){
 function vtJoinLiveDemo(id){
   var s=(typeof vtSessions!=='undefined')?vtSessions[id]:null; if(!s)return;
   try{ vtConfettiCelebrate("You're in! 🎉", (s.title||'')+': your live experience is starting…'); }catch(e){}
+  /* Every delayed step below checks the join token, so leaving before they fire cancels them
+     instead of re-opening the session behind the visitor. */
+  var tok=++vtJoinToken;
+  var later=function(fn,ms){ setTimeout(function(){ if(tok!==vtJoinToken)return; try{ fn(); }catch(e){} },ms); };
   // Load the session quietly behind the celebration (no page scroll), then let
   // the card glide open with the windowed animation while the confetti finishes.
-  setTimeout(function(){ try{ vtJoinSessionDirect(id,s,true); }catch(e){} }, 150);
-  setTimeout(function(){ try{ if(!vtSessionExpanded) vtExpandSessionSmooth(); }catch(e){} }, 1500);
+  later(function(){ vtJoinSessionDirect(id,s,true); },150);
+  later(function(){ if(!vtSessionExpanded) vtExpandSessionSmooth(); },1500);
   // Nudge the video to actually start (covers browsers that ignore muted autoplay).
-  setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 1800);
-  setTimeout(function(){ try{ if(typeof vtYTPlay==='function')vtYTPlay(); }catch(e){} }, 2600);
+  later(function(){ if(typeof vtYTPlay==='function')vtYTPlay(); },1800);
+  later(function(){ if(typeof vtYTPlay==='function')vtYTPlay(); },2600);
   // Offer one tap to bring the sound in (muted autoplay can't unmute on its own).
-  setTimeout(function(){ try{ if(typeof vtShowTapForSound==='function')vtShowTapForSound(); }catch(e){} }, 2400);
+  later(function(){ if(typeof vtShowTapForSound==='function')vtShowTapForSound(); },2400);
 }
 
 /* Paid live join: everything except the tester takes payment first. Redirect to
@@ -28178,6 +28232,22 @@ function vtToggleHaptic(el){
 }
 
 /* ═══════ WEBXR ENGINE ═══════ */
+/* three.js is only needed to draw the 360 scene inside a headset. The old tag pointed at three@0.169,
+   which no longer ships build/three.min.js, so it failed on every page and the headset view fell back
+   to a blank colour. Load a release that has the file, and only on browsers that have WebXR. */
+function vtLoadThree(cb){
+  if(window.THREE){ if(cb)cb(); return; }
+  var tag=document.getElementById('vt-three-js');
+  if(tag){ if(cb)tag.addEventListener('load',cb); return; }
+  tag=document.createElement('script');tag.id='vt-three-js';
+  tag.src='https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js';
+  if(cb)tag.addEventListener('load',cb);
+  document.head.appendChild(tag);
+}
+(function(){
+  if(!navigator.xr)return;
+  window.addEventListener('load',function(){ (window.requestIdleCallback||function(f){setTimeout(f,2000)})(function(){ vtLoadThree(); }); });
+})();
 var vtXRSession=null;
 var vtXRSupport={vr:false,ar:false};
 var vtXRConnectedDevice=null;
@@ -51921,6 +51991,35 @@ html body #p-vtours #vt-rig-section div[style*="width:44px"]{background:linear-g
 html body #p-vtours input:not([type=range]):not([type=checkbox]):not([type=radio]),html body #p-vtours select,html body #p-vtours textarea{
   font-family:'Raleway',sans-serif!important;border-radius:12px!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.18)!important}
 html body #p-vtours .vt-signup-card input,html body #p-vtours .vt-signup-card select{box-shadow:inset 0 1px 1px rgba(6,58,99,.05)!important}
+</style>
+<style id="vt-flow-fixes">
+/* ===== V-Tours: fixes for controls that sat on the wrong background ===== */
+/* Language sheet is light, so Skip needs dark text (it was white on white) */
+html body #p-vtours .vt-lang-prompt-skip{color:#4a5a6b!important;background:rgba(6,58,99,.07)!important;border:1px solid rgba(6,58,99,.18)!important}
+/* Explorer / Guide switch sits on a light section (it was white text on a white bar) */
+html body #p-vtours .vt-signup-toggle-btn{color:#5b6b80!important;background:transparent!important;border:0!important}
+html body #p-vtours .vt-signup-toggle-btn:hover{color:#063a63!important}
+html body #p-vtours .vt-signup-toggle-btn.active{color:#fff!important;background:#ef8731!important}
+/* Live chat header: viewer count readable on the dark panel, and the preview tag wraps instead of overlapping it */
+html body #vt-active-session .vt-session-chat-title{flex-wrap:wrap;row-gap:6px}
+html body #vt-active-session #vt-chat-viewers{color:rgba(255,255,255,.72)!important}
+html body #vt-active-session #vt-preview-flag{margin-left:0!important;order:3}
+/* Chat gets enough room to show a few messages above the input (it was squeezed to one line) */
+html body #vt-active-session .vt-session-chat{min-height:230px}
+html body #vt-active-session #vt-chat-messages{min-height:110px}
+/* active path button: full-strength white label on the orange pill */
+html body #p-vtours .vt-path.on,html body #p-vtours .vt-path.on span{color:#fff!important}
+/* "You left the session" state shown in the player after Leave Session */
+.vt-session-ended{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(6,20,38,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.vt-session-ended.show{display:flex}
+.vt-session-ended-card{max-width:340px;text-align:center;color:#fff}
+.vt-session-ended-ic{font-size:30px;color:#70c257;margin-bottom:8px}
+.vt-session-ended-card h4{font-size:20px;font-weight:800;margin:0 0 6px;color:#fff}
+.vt-session-ended-card p{font-size:13px;line-height:1.6;margin:0 0 16px;color:rgba(255,255,255,.78)}
+.vt-session-ended-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+html body #p-vtours .vt-se-btn{font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:11px 20px;border-radius:999px!important;cursor:pointer;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4)}
+html body #p-vtours .vt-se-btn.primary{background:#ef8731;border-color:#ef8731}
+html body #p-vtours .vt-se-btn:hover{filter:brightness(1.08)}
 </style>
 
 <style id="pill-unify-style">
