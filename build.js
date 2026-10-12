@@ -86,10 +86,11 @@ writeTourPrices(html);
  * It is generated from the CURATED_TOURS list in Design_Reference.html (the same list the site shows)
  * plus the per-island transfer prices in api/_data/packages.json, so the two cannot drift apart.
  */
-function writeBuilderCatalog(source) {
+/** The CURATED_TOURS list from the source (the All Experiences catalog), parsed once for every generator that needs it. */
+function parseCuratedTours(source) {
   const marker = 'const CURATED_TOURS = [';
   const start = source.indexOf(marker);
-  if (start === -1) throw new Error('CURATED_TOURS not found - cannot generate builder catalog');
+  if (start === -1) throw new Error('CURATED_TOURS not found - cannot read the experience catalog');
   const open = start + marker.length - 1;
   let depth = 0, end = -1, inStr = null, esc = false;
   for (let i = open; i < source.length; i++) {
@@ -100,9 +101,12 @@ function writeBuilderCatalog(source) {
     else if (c === ']') { depth--; if (depth === 0) { end = i; break; } }
   }
   if (end === -1) throw new Error('CURATED_TOURS is unterminated');
-  let list;
-  try { list = eval(source.slice(open, end + 1)); }
+  try { return eval(source.slice(open, end + 1)); }
   catch (e) { throw new Error('CURATED_TOURS could not be parsed: ' + e.message); }
+}
+
+function writeBuilderCatalog(source) {
+  const list = parseCuratedTours(source);
 
   const items = {};
   for (const t of list) {
@@ -188,11 +192,9 @@ const ROUTE_SKIP = new Set(['home', 'vtours']);                    // '/' is the
 const ROUTE_RESERVED = new Set(['api', 'assets', 'logos', 'panos', 'models', 'vendor', 'virtual-tours']);
 const ROUTE_MARKER = '<!-- ss-route-page ';                        // identifies files this step owns (safe to replace or remove)
 
-/** Returns the {...} literal that follows `var NAME =` in the source, scanning past strings and comments. */
-function readObjectLiteral(source, name) {
-  const m = new RegExp('\\bvar\\s+' + name + '\\s*=\\s*\\{').exec(source);
-  if (!m) throw new Error(name + ' not found in the source');
-  const open = m.index + m[0].length - 1;
+/** Index of the bracket that closes the one at `open`, scanning past strings and comments. */
+function scanBalanced(source, open, name) {
+  const up = source[open], down = up === '{' ? '}' : ')';
   let depth = 0, inStr = null, esc = false;
   for (let i = open; i < source.length; i++) {
     const c = source[i], n = source[i + 1];
@@ -200,10 +202,27 @@ function readObjectLiteral(source, name) {
     if (c === '/' && n === '/') { const e = source.indexOf('\n', i); if (e === -1) break; i = e; continue; }
     if (c === '/' && n === '*') { const e = source.indexOf('*/', i + 2); if (e === -1) break; i = e + 1; continue; }
     if (c === "'" || c === '"' || c === '`') { inStr = c; continue; }
-    if (c === '{') depth++;
-    else if (c === '}') { depth--; if (depth === 0) return source.slice(open, i + 1); }
+    if (c === up) depth++;
+    else if (c === down) { depth--; if (depth === 0) return i; }
   }
   throw new Error(name + ' is unterminated');
+}
+
+/** Returns the {...} literal that follows `var NAME =` in the source. */
+function readObjectLiteral(source, name) {
+  const m = new RegExp('\\bvar\\s+' + name + '\\s*=\\s*\\{').exec(source);
+  if (!m) throw new Error(name + ' not found in the source');
+  const open = m.index + m[0].length - 1;
+  return source.slice(open, scanBalanced(source, open, name) + 1);
+}
+
+/** Returns the source text of `function NAME(...) {...}`, so the build can run the very function the app runs. */
+function readFunction(source, name) {
+  const m = new RegExp('\\bfunction\\s+' + name + '\\s*\\(').exec(source);
+  if (!m) throw new Error('function ' + name + ' not found in the source');
+  const params = m.index + m[0].length - 1;
+  const body = source.indexOf('{', scanBalanced(source, params, name));
+  return source.slice(m.index, scanBalanced(source, body, name) + 1);
 }
 
 function parseRoutePages(source) {
@@ -240,6 +259,12 @@ function parseRoutePages(source) {
 }
 
 const routePages = parseRoutePages(html);
+
+/** Experience pages (/tours/<slug>): the slug function is the app's own, read from the source and run here. */
+const tourPages = require('./tour-pages');
+const tourSlug = vm.runInNewContext('(' + readFunction(html, 'ssTourSlug') + ')', Object.create(null));
+const curatedTours = parseCuratedTours(html);
+const tourPlan = tourPages.planTourPages(curatedTours, tourSlug);   // validates every slug before anything is written
 
 const escText = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escAttr = x => escText(x).replace(/"/g, '&quot;');
@@ -343,4 +368,8 @@ console.log(`🖼️  Added lazy loading to ${lazyCount} images`);
   // Outside the try above: a problem here must fail the build, not fall back to an unminified page.
   try { writeRoutePages(routePages, built); }
   catch (err) { console.error(`\n❌  Route pages: ${err.message}\n`); process.exit(1); }
+  try {
+    const r = tourPages.writeTourPages({ curated: curatedTours, slugOf: tourSlug, publicDir, today: new Date().toISOString().slice(0, 10) });
+    console.log(`\uD83E\uDDED  Experience pages: ${r.written} written under public/tours/<slug>/index.html, ${r.written} URLs in public/sitemap.xml` + (r.removed ? `, ${r.removed} stale removed` : ''));
+  } catch (err) { console.error(`\n❌  Experience pages: ${err.message}\n`); process.exit(1); }
 })();

@@ -26851,6 +26851,16 @@ var SS_META = {
   'refund-policy':['Refund & Cancellation Policy | Sight Seers Caribbean','Our cancellation windows, deposit terms and refund process.']
 };
 
+/* /tours/<slug>: every water and land experience in the All Experiences catalog has its own page (written by build.js).
+   The slug is the lowercase words of the title without filler words, e.g. "Bamboo Rafting with Limestone Massage" becomes
+   bamboo-rafting-limestone-massage. build.js evaluates this exact function, so the links in the app and the pages always agree.
+   An experience can pin its URL with a slug field if its title ever changes. */
+function ssTourSlug(t){
+  var skip={with:1,and:1,the:1,of:1,a:1,an:1,in:1,at:1,to:1,for:1,on:1,by:1,from:1};
+  if(t&&t.slug)return String(t.slug);
+  return String((t&&t.title)||'').toLowerCase().replace(/[\u0027\u2019]/g,'').split(/[^a-z0-9]+/).filter(function(w){return w&&!skip[w];}).join('-');
+}
+
 function ssSetMeta(id){
   var m = SS_META[id];
   if(!m) return;
@@ -26882,6 +26892,7 @@ function ssIdFromLocation(){
   if(p==='/blog' && document.documentElement.hasAttribute('data-ss-blog-hidden')) return 'home';  /* Blog is hidden for now */
   if(p==='/senior-tours') return 'school-tours';  /* old Senior Tours address */
   if(p==='/live-360' && document.documentElement.hasAttribute('data-ss-vtours-hidden')) return 'home';  /* V-Tours is hidden until launch */
+  if(/^\/tours\/[^\/]+$/.test(p)) return 'tours';  /* experience pages are static files; an unknown slug lands on the catalog */
   return SS_PATH_TO_ID[p] || SS_PATH_TO_ID[p+'/'] || null;
 }
 
@@ -26897,6 +26908,15 @@ document.addEventListener('DOMContentLoaded', function(){
   if(id && id !== 'home'){ nav(id, {fromPop:true, skipScroll:true}); }
   else { ssSetMeta('home'); }
   try{ history.replaceState({ssPage: id || 'home'}, '', location.pathname + location.search); }catch(e){}
+  /* The Request button on a /tours/<slug> page links to /booking?experience=<slug>: open the enquiry for that experience. */
+  try{
+    var ex=new URLSearchParams(location.search).get('experience');
+    if(ex && id==='booking' && typeof openStartPlanning==='function'){
+      var list=window.CURATED_TOURS||[], hit=null;
+      for(var i=0;i<list.length;i++){ if(ssTourSlug(list[i])===ex){ hit=list[i]; break; } }
+      if(hit) setTimeout(function(){ openStartPlanning(hit.country, hit.title, hit.label||'Experience', 'Interested in '+hit.title+' in '+hit.country+'.'); }, 300);
+    }
+  }catch(e){}
 });
 
 function nav(id,opts={}){
@@ -52348,6 +52368,10 @@ html body #p-tours #tpSubnav{font-size:10.5px}
 #p-tours .bx-desc{margin:0 0 10px;color:#5b6e7e;font-size:13.5px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 #p-tours .bx-best{margin:0 0 14px;font-size:12px;color:#6f8294;line-height:1.5}
 #p-tours .bx-best b{color:#4b6075;font-weight:800;margin-right:4px}
+#p-tours .bx-body h3 a{color:inherit;text-decoration:none}
+#p-tours .bx-body h3 a:hover{color:#ef8731}
+#p-tours .bx-more{align-self:flex-start;margin:0 0 14px;font-size:12px;font-weight:800;letter-spacing:.4px;color:#e07a22;text-decoration:none}
+#p-tours .bx-more:hover{text-decoration:underline}
 #p-tours .bx-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid rgba(6,58,99,.07)}
 #p-tours .bx-price{font-weight:800;color:#063a63;font-size:15px}
 #p-tours .bx-price small{display:block;color:#8aa0b3;font-weight:700;font-size:11px}
@@ -52424,12 +52448,14 @@ html body #p-tours #tpSubnav{font-size:10.5px}
     else a.sort(function(x,y){var c=ORDER.indexOf(x.country)-ORDER.indexOf(y.country);return c||(p(x)-p(y));});
     return a;
   }
+  function page(t){return typeof ssTourSlug==='function'?'/tours/'+ssTourSlug(t):'';}
   function card(t){
-    var i=ALL.indexOf(t),isW=t.type==='water',pr=priceText(t);
+    var i=ALL.indexOf(t),isW=t.type==='water',pr=priceText(t),u=page(t);
     return '<article class="bx-card"><div class="bx-media"><img src="'+esc(t.image)+'" alt="'+esc(t.title)+'" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="bx-chip">'+(isW?'Water':'Land')+'</span></div>'
       +'<div class="bx-meta"><span><i class="far fa-clock"></i>'+esc(t.duration)+'</span><span><i class="fas fa-map-marker-alt"></i>'+esc(t.country)+(t.area?', '+esc(t.area):'')+'</span></div>'
-      +'<div class="bx-body"><h3>'+esc(t.title)+'</h3><p class="bx-hero">'+esc(t.hero)+'</p><p class="bx-desc">'+esc(t.desc)+'</p>'
+      +'<div class="bx-body"><h3>'+(u?'<a href="'+u+'">'+esc(t.title)+'</a>':esc(t.title))+'</h3><p class="bx-hero">'+esc(t.hero)+'</p><p class="bx-desc">'+esc(t.desc)+'</p>'
       +'<p class="bx-best"><b>Best for</b>'+esc(best(t))+'</p>'
+      +(u?'<a class="bx-more" href="'+u+'">View details <span aria-hidden="true">&rarr;</span></a>':'')
       +'<div class="bx-foot"><span class="bx-price">'+esc(pr.main)+(pr.sub?'<small>'+esc(pr.sub)+'</small>':'')+'</span><button type="button" class="bx-btn" data-i="'+i+'">Inquire now</button></div></div></article>';
   }
   function fillControls(){
