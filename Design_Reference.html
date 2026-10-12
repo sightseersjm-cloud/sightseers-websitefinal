@@ -17402,7 +17402,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                 <div class="vt-live-header"><h3>Your Active Session</h3></div>
                 <div class="vt-session" id="vt-active-session">
                   <div class="vt-session-bar">
-                    <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span id="vt-session-title">Blue Lagoon Morning Walk</span><span class="vt-session-byline">, <span id="vt-session-guide">Marcus Thompson</span></span></div>
+                    <div class="vt-session-bar-left"><span class="vt-dash-live-dot"></span><span class="vt-session-name"><span id="vt-session-title">Blue Lagoon Morning Walk</span><span class="vt-session-byline">, <span id="vt-session-guide">Marcus Thompson</span></span></span></div>
                     <div class="vt-session-bar-right"><div class="vt-session-lang" onclick="vtToggleLangDropdown('session')" title="Change audio language"><span class="vt-lang-flag">&#127482;&#127480;</span><span id="vt-session-lang-label">EN</span> <i class="fas fa-chevron-down" style="font-size:8px;opacity:.5"></i><div class="vt-lang-dropdown" id="vt-session-lang-dropdown"><div class="vt-lang-dropdown-title">Language</div><div class="vt-lang-option active" data-lang="en" onclick="vtSelectLang(event,'en','session')"><span class="vt-lang-flag">&#127482;&#127480;</span><span class="vt-lang-name">English</span></div><div class="vt-lang-option" data-lang="es" onclick="vtSelectLang(event,'es','session')"><span class="vt-lang-flag">&#127466;&#127480;</span><span class="vt-lang-name">Espa&ntilde;ol</span></div><div class="vt-lang-option" data-lang="fr" onclick="vtSelectLang(event,'fr','session')"><span class="vt-lang-flag">&#127467;&#127479;</span><span class="vt-lang-name">Fran&ccedil;ais</span></div><div class="vt-lang-option" data-lang="de" onclick="vtSelectLang(event,'de','session')"><span class="vt-lang-flag">&#127465;&#127466;</span><span class="vt-lang-name">Deutsch</span></div><div class="vt-lang-option" data-lang="pt" onclick="vtSelectLang(event,'pt','session')"><span class="vt-lang-flag">&#127463;&#127479;</span><span class="vt-lang-name">Portugu&ecirc;s</span></div><div class="vt-lang-option" data-lang="ja" onclick="vtSelectLang(event,'ja','session')"><span class="vt-lang-flag">&#127471;&#127477;</span><span class="vt-lang-name">&#26085;&#26412;&#35486;</span></div><div class="vt-lang-option" data-lang="zh" onclick="vtSelectLang(event,'zh','session')"><span class="vt-lang-flag">&#127464;&#127475;</span><span class="vt-lang-name">&#20013;&#25991;</span></div><div class="vt-lang-option" data-lang="hi" onclick="vtSelectLang(event,'hi','session')"><span class="vt-lang-flag">&#127470;&#127475;</span><span class="vt-lang-name">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span></div><div class="vt-lang-option" data-lang="ar" onclick="vtSelectLang(event,'ar','session')"><span class="vt-lang-flag">&#127480;&#127462;</span><span class="vt-lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span></div><div class="vt-lang-option" data-lang="it" onclick="vtSelectLang(event,'it','session')"><span class="vt-lang-flag">&#127470;&#127481;</span><span class="vt-lang-name">Italiano</span></div></div></div><div class="vt-session-bar-btn" onclick="vtToggleCaptions(this)" title="Toggle live captions" aria-label="Toggle live captions"><i class="fas fa-closed-captioning" id="vt-cc-icon" style="margin-right:5px;font-size:10px"></i><span id="vt-cc-label">Captions</span></div><div class="vt-session-bar-btn" onclick="vtSessionAction(this,'invite')" title="Share this session"><i class="fas fa-user-plus" style="margin-right:5px;font-size:10px"></i>Invite</div><div class="vt-session-bar-btn" onclick="vtOpenCart()" title="Your cart" style="position:relative"><i class="fas fa-cart-shopping" style="margin-right:5px;font-size:10px"></i>Cart<span class="vt-cart-badge" id="vt-cart-badge">0</span></div><div class="vt-immersion" role="group" aria-label="Immersion"><button type="button" class="vt-imm-seg on" data-imm="window" aria-pressed="true" title="Window" aria-label="Window" onclick="vtSetImmersion('window')"><i class="fas fa-window-maximize"></i></button><button type="button" class="vt-imm-seg" data-imm="theater" aria-pressed="false" title="Theater" aria-label="Theater" onclick="vtSetImmersion('theater')"><i class="fas fa-film"></i></button><button type="button" class="vt-imm-seg" data-imm="full" aria-pressed="false" title="Full immersion" aria-label="Full immersion" onclick="vtSetImmersion('full')"><i class="fas fa-expand"></i></button></div><div class="vt-session-bar-btn leave" onclick="vtLeaveSession()">Leave Session</div></div>
                   </div>
                   <div class="vt-session-content">
@@ -17468,7 +17468,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         </div>
 
                         <!-- Live Indicator -->
-                        <div class="vt-live-indicator" title="You're watching a live session"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-xr-enter-btn" id="vt-xr-enter-btn" title="Enter XR mode" onclick="vtToggleXRMenu()"><div class="vt-xr-mode-menu" id="vt-xr-mode-menu"><div class="vt-xr-mode-menu-title">Select XR Mode</div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-vr')"><div><strong>Immersive VR</strong><span>Full 360&deg; virtual tour</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-ar')"><div><strong>AR Passthrough</strong><span>Overlay tour on your room</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('glasses')"><div><strong>Glasses HUD</strong><span>Ray-Ban Meta heads-up view</span></div></div><div class="vt-xr-mode-divider"></div><div class="vt-xr-mode-status" id="vt-xr-mode-status">Checking device...</div></div></div><div class="vt-session-expand" title="Fullscreen" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
+                        <div class="vt-live-indicator" title="You're watching a live session"><div class="vt-live-indicator-dot"></div>LIVE <span class="vt-live-indicator-time" id="vt-live-timer">12:04</span></div><div class="vt-xr-enter-btn" id="vt-xr-enter-btn" title="Enter XR mode" onclick="vtToggleXRMenu()"><i class="fas fa-vr-cardboard" aria-hidden="true"></i><div class="vt-xr-mode-menu" id="vt-xr-mode-menu"><div class="vt-xr-mode-menu-title">Select XR Mode</div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-vr')"><div><strong>Immersive VR</strong><span>Full 360&deg; virtual tour</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('immersive-ar')"><div><strong>AR Passthrough</strong><span>Overlay tour on your room</span></div></div><div class="vt-xr-mode-option" onclick="event.stopPropagation();vtEnterXR('glasses')"><div><strong>Glasses HUD</strong><span>Ray-Ban Meta heads-up view</span></div></div><div class="vt-xr-mode-divider"></div><div class="vt-xr-mode-status" id="vt-xr-mode-status">Checking device...</div></div></div><div class="vt-session-expand" title="Fullscreen" onclick="vtExpandSession()"><i class="fas fa-expand"></i></div>
 
                         <!-- 360° PANORAMIC SCENES, Pannellum (real equirectangular panoramas) -->
                         <div class="vt-pano-host" id="vt-pano-host" role="application" aria-label="Interactive 360 degree panoramic scene, click and drag to look around"></div>
@@ -17506,7 +17506,7 @@ body.theme-night .vt-dash-avatar-info{color:#fff}
                         </div>
                         <!-- Unified bottom control bar: comfort gear + choose-your-path (one cluster → no overlap with XR/expand) -->
                         <div class="vt-paths" id="vtSetup">
-                          <button class="vt-path vt-path-gear" id="vtSetupToggle" onclick="vtToggleSetup()" aria-expanded="false" aria-label="Comfort &amp; accessibility" title="Comfort &amp; accessibility"></button>
+                          <button class="vt-path vt-path-gear" id="vtSetupToggle" onclick="vtToggleSetup()" aria-expanded="false" aria-label="Comfort &amp; accessibility" title="Comfort &amp; accessibility"><i class="fas fa-sliders" aria-hidden="true"></i></button>
                           <span class="vt-path-div" aria-hidden="true"></span>
                           <button class="vt-path on" data-p="look" onclick="vtChoosePath('look',this)"><span> Look Around</span></button>
                           <button class="vt-path" data-p="live" onclick="vtChoosePath('live',this)"><span> Join Live</span></button>
@@ -19253,6 +19253,26 @@ function vtToast(msg){
 }
 
 /* ── Explorer sidebar nav ── */
+function vtSlideIn(root){
+  try{
+    if(!root||!root.animate)return;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    if(window.vtComfort&&vtComfort.reducedMotion)return;
+    var ease='cubic-bezier(.2,.8,.2,1)',kids=root.children,i;
+    for(i=0;i<kids.length&&i<8;i++)kids[i].animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:380,delay:i*40,easing:ease,fill:'backwards'});
+    var cards=root.querySelectorAll('.vt-live-card');
+    for(i=0;i<cards.length&&i<12;i++)cards[i].animate([{opacity:0,transform:'translateX(48px)'},{opacity:1,transform:'none'}],{duration:480,delay:90+i*60,easing:ease,fill:'backwards'});
+  }catch(e){}
+}
+(function(){
+  function first(){
+    var el=document.getElementById('vt-exp-explore');
+    if(!el||!window.IntersectionObserver)return;
+    var io=new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();vtSlideIn(el)}},{rootMargin:'0px 0px -15% 0px',threshold:0.05});
+    io.observe(el);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',first);else first();
+})();
 function vtExpNav(view,el){
   var sb=document.getElementById('vt-exp-sidebar');
   if(!sb)return;
@@ -19260,7 +19280,7 @@ function vtExpNav(view,el){
   if(el)el.classList.add('active');
   document.querySelectorAll('#vt-exp-main .vt-dash-view').forEach(function(v){v.classList.remove('active')});
   var target=document.getElementById('vt-exp-'+view);
-  if(target)target.classList.add('active');
+  if(target){target.classList.add('active');vtSlideIn(target)}
   var sessionWrap=document.getElementById('vt-exp-session-wrap');
   if(sessionWrap){
     if(view==='explore')sessionWrap.classList.add('active');
@@ -52076,12 +52096,14 @@ html body #p-vtours .vt-vision .vt-vision-sub,html body #p-vtours .vt-vision p{l
 html body #p-vtours .vt-vision .vt-dash-frame:not(.vt-fullscreen){border-radius:38px!important;border:0!important;
   background:var(--vo-glass),rgba(36,58,92,.28)!important;-webkit-backdrop-filter:blur(44px) saturate(1.8)!important;backdrop-filter:blur(44px) saturate(1.8)!important;
   box-shadow:var(--vo-ring),var(--vo-shadow)!important;overflow:hidden}
+/* Theater: a backdrop-filter ancestor traps position:fixed, so drop it while a session is expanded */
+html body.vt-expanding #p-vtours .vt-vision .vt-dash-frame:not(.vt-fullscreen),html body #p-vtours .vt-vision .vt-dash-frame:not(.vt-fullscreen):has(.vt-session-fs){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html body #p-vtours .vt-vision .vt-dash-topbar{background:transparent!important;border-bottom:1px solid rgba(255,255,255,.12)!important;padding:16px 28px!important}
 html body #p-vtours .vt-vision .vt-dash-topbar .vt-logo{font-size:17px;font-weight:700;letter-spacing:-.02em}
 html body #p-vtours .vt-vision .vt-portal-label{font-size:13px!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important;color:rgba(255,255,255,.72)!important}
 /* Sidebar becomes a floating ornament beside the window */
 html body #p-vtours .vt-vision .vt-dash-body{gap:0}
-html body #p-vtours .vt-vision .vt-dash-sidebar{border:0!important;background:var(--vo-glass)!important;box-shadow:var(--vo-ring)!important;-webkit-backdrop-filter:blur(30px) saturate(1.6);backdrop-filter:blur(30px) saturate(1.6)}
+html body #p-vtours .vt-vision .vt-dash-sidebar{border:0!important;background:var(--vo-glass)!important;box-shadow:var(--vo-ring)!important}
 @media(min-width:769px){html body #p-vtours .vt-vision .vt-dash-sidebar{margin:14px 0 14px 14px!important;padding:16px 0!important;border-radius:30px!important;flex:0 0 212px;width:212px}}
 @media(max-width:768px){html body #p-vtours .vt-vision .vt-dash-sidebar{margin:10px!important;border-radius:26px!important}}
 html body #p-vtours .vt-vision .vt-dash-sidebar-label{font-size:11px!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important;color:rgba(255,255,255,.5)!important}
@@ -52091,7 +52113,7 @@ html body #p-vtours .vt-vision .vt-dash-sidebar a.active,html body #p-vtours .vt
 
 /* Cards and panels */
 html body #p-vtours .vt-vision :is(.vt-live-card,.vt-dash-stat,.vt-vision-widget,.vt-empty-state,.vt-xr-device-card,.vt-mood-card,.vt-group-room,.vt-ai-chat,.vt-earnings-chart,.vt-multicam-card,.vt-splits-card,.vt-ai-clone-card){
-  border-radius:26px!important;background:var(--vo-glass)!important;border:0!important;box-shadow:var(--vo-ring),0 14px 34px -18px rgba(0,0,0,.45)!important;-webkit-backdrop-filter:blur(26px) saturate(1.6);backdrop-filter:blur(26px) saturate(1.6)}
+  border-radius:26px!important;background:var(--vo-glass)!important;border:0!important;box-shadow:var(--vo-ring),0 14px 34px -18px rgba(0,0,0,.45)!important;}
 html body #p-vtours .vt-vision .vt-live-card:hover{transform:translateY(-3px) scale(1.012);box-shadow:var(--vo-ring),0 0 0 1px rgba(255,255,255,.32),0 22px 44px -18px rgba(0,0,0,.5)!important}
 html body #p-vtours .vt-vision .vt-live-card-img{border-radius:20px!important;margin:8px 8px 0!important;width:auto}
 html body #p-vtours .vt-vision .vt-live-card-title{font-size:15px;font-weight:600;letter-spacing:-.01em}
@@ -52186,41 +52208,29 @@ html body #p-vtours :is(.vt-signup-btn,.vt-cta-btn,.btn-primary,.btn-secondary):
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap{gap:8px}
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input{min-width:0;flex:1 1 auto}
 html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap>:not(.vt-chat-input){flex:0 0 auto}
-/* Carousel: larger cards with slide-in animations, better spacing */
-html body #p-vtours .vt-vision .vt-live-grid{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;padding-bottom:8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
-html body #p-vtours .vt-vision .vt-live-grid::-webkit-scrollbar{display:none}
-html body #p-vtours .vt-vision .vt-live-grid{-ms-overflow-style:none;scrollbar-width:none}
-html body #p-vtours .vt-vision .vt-live-card{flex:0 0 280px;scroll-snap-align:start;min-height:360px;border-radius:18px;overflow:hidden;transition:all .3s cubic-bezier(.25,.46,.45,.94);transform:translateX(-20px);opacity:0;animation:vt-slide-in .5s cubic-bezier(.13,.27,.82,.88) forwards}
-html body #p-vtours .vt-vision .vt-live-card:nth-child(1){animation-delay:.08s}
-html body #p-vtours .vt-vision .vt-live-card:nth-child(2){animation-delay:.14s}
-html body #p-vtours .vt-vision .vt-live-card:nth-child(3){animation-delay:.2s}
-html body #p-vtours .vt-vision .vt-live-card:nth-child(4){animation-delay:.26s}
-html body #p-vtours .vt-vision .vt-live-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 48px rgba(0,0,0,.24)}
-@keyframes vt-slide-in{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
-/* Card layout: flex column with flex-grow body */
-html body #p-vtours .vt-vision .vt-live-card{display:flex;flex-direction:column}
+/* Live sessions: four cards fill the desktop width, smaller screens scroll sideways with snap. The padding leaves room for the hover lift and shadow so nothing is clipped. */
+html body #p-vtours .vt-vision .vt-live-grid{display:flex!important;gap:18px;overflow-x:auto;padding:14px 0 26px;margin:-14px 0 -12px;scroll-snap-type:x proximity;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent}
+html body #p-vtours .vt-vision .vt-live-grid::-webkit-scrollbar{height:6px}
+html body #p-vtours .vt-vision .vt-live-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.4);border-radius:999px}
+html body #p-vtours .vt-vision .vt-live-card{flex:0 0 clamp(240px,calc((100% - 54px)/4),340px);scroll-snap-align:start;display:flex;flex-direction:column}
 html body #p-vtours .vt-vision .vt-live-card-img{flex:0 0 160px}
 html body #p-vtours .vt-vision .vt-live-card-body{flex:1;display:flex;flex-direction:column;padding:16px}
-html body #p-vtours .vt-vision .vt-live-card-title{font-size:16px;font-weight:600;margin-bottom:4px}
-html body #p-vtours .vt-vision .vt-live-card-guide{font-size:13px;opacity:.7;margin-bottom:8px}
-html body #p-vtours .vt-vision .vt-live-card-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:8px}
-html body #p-vtours .vt-vision .vt-live-card-foot>*{flex:1}
-/* Stats: fade in with stagger */
-html body #p-vtours .vt-vision .vt-dash-stat{transform:translateY(8px);opacity:0;animation:vt-fade-up .4s ease-out forwards}
-html body #p-vtours .vt-vision .vt-dash-stat:nth-child(1){animation-delay:.05s}
-html body #p-vtours .vt-vision .vt-dash-stat:nth-child(2){animation-delay:.1s}
-html body #p-vtours .vt-vision .vt-dash-stat:nth-child(3){animation-delay:.15s}
-html body #p-vtours .vt-vision .vt-dash-stat:nth-child(4){animation-delay:.2s}
-@keyframes vt-fade-up{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
-/* Better spacing: breathe room between all controls */
-html body #p-vtours .vt-vision .vt-session-bar{gap:12px}
-html body #p-vtours .vt-vision .vt-immersion{gap:12px}
-html body #p-vtours .vt-vision .vt-imm-seg{gap:8px}
-html body #p-vtours .vt-vision .vt-scene-btn{margin-right:8px}
-html body #p-vtours .vt-vision .vt-path{margin-right:8px}
-html body #p-vtours .vt-vision .vt-scene-switcher{margin-bottom:16px}
-html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap{margin-top:12px;gap:10px}
-@media(prefers-reduced-motion:reduce){html body #p-vtours .vt-vision *{transition:none!important}html body #p-vtours .vt-vision .vt-live-card:hover,html body #p-vtours .vt-vision :is(.vt-path,.vt-session-bar-btn):hover{transform:none}html body #p-vtours .vt-vision .vt-live-card,html body #p-vtours .vt-vision .vt-dash-stat{animation:none;transform:none;opacity:1}}
+html body #p-vtours .vt-vision .vt-live-card-foot{margin-top:auto}
+/* Theater: the base .vt-session carries margin-bottom:20px, which left the overlay 20px short of the viewport */
+html body .vt-session.vt-session-fs{margin:0!important}
+/* The XR button matches the round fullscreen button next to it, with a clear gap between the two */
+html body #p-vtours .vt-vision #vt-active-session .vt-session-video .vt-xr-enter-btn{width:32px;height:32px;padding:0!important;border-radius:50%!important;background:rgba(20,34,58,.5)!important;color:#fff!important;display:flex;align-items:center;justify-content:center;right:54px!important;font-size:13px!important}
+html body #p-vtours .vt-vision #vt-active-session .vt-session-video .vt-xr-enter-btn:hover{background:rgba(255,255,255,.28)!important}
+/* Title bar: the title and the guide read as one line, with no gap before the comma */
+html body #p-vtours .vt-vision #vt-active-session .vt-session-bar-left{min-width:0;gap:10px}
+html body #p-vtours .vt-vision #vt-active-session .vt-session-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body #p-vtours .vt-vision #vt-active-session .vt-session-byline{font-weight:500;color:rgba(255,255,255,.72)}
+/* Chips on the video and the header button: a little air between stacked chips, and a round expand button to match the language button */
+html body #p-vtours .vt-vision #vt-active-session .vt-mood-badge{margin-top:8px}
+html body #p-vtours .vt-vision .vt-expand-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.14);box-shadow:var(--vo-ring)}
+html body #p-vtours .vt-vision .vt-dash-topbar .vt-lang-btn{flex:0 0 auto!important;box-sizing:border-box!important;min-width:34px!important;width:34px!important;height:34px!important;min-height:34px!important;padding:0!important;line-height:1!important;border-radius:50%!important;display:inline-flex!important;align-items:center;justify-content:center;overflow:visible}
+html body #p-vtours .vt-vision #vt-active-session .vt-chat-input-wrap{gap:10px}
+@media(prefers-reduced-motion:reduce){html body #p-vtours .vt-vision *{transition:none!important}html body #p-vtours .vt-vision .vt-live-card:hover,html body #p-vtours .vt-vision :is(.vt-path,.vt-session-bar-btn):hover{transform:none}}
 </style>
 
 <style id="pill-unify-style">
