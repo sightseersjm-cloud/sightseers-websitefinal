@@ -44,10 +44,11 @@ img{max-width:100%;display:block}
 .btn-ghost{border-color:var(--navy);color:var(--navy);background:transparent}
 .btn-ghost:hover{background:var(--navy);color:#fff}
 .btn-sm{padding:9px 20px;font-size:13px}
-.hero{position:relative;min-height:400px;display:flex;align-items:flex-end;background:var(--navy);overflow:hidden}
+.hero-wrap{padding-top:18px}
+.hero{position:relative;min-height:380px;display:flex;align-items:flex-end;background:var(--navy);overflow:hidden;border-radius:24px}
 .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,52,.18) 28%,rgba(6,30,52,.86))}
-.hero-in{position:relative;z-index:2;padding-top:80px;padding-bottom:34px;color:#fff;width:100%}
+.hero-in{position:relative;z-index:2;padding:80px 34px 34px;color:#fff;width:100%}
 .crumbs{font-size:12.5px;letter-spacing:.3px;opacity:.9;margin-bottom:14px}
 .crumbs a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 .hero h1{color:#fff;font-size:clamp(28px,5vw,46px);margin-bottom:8px}
@@ -100,7 +101,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 40px;font
 .m-cta{display:none}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}.aside{position:static}.topnav .hide-m{display:none}body{padding-bottom:76px}
 .m-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:10px;padding:10px 14px;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(6,58,99,.1)}.m-cta .btn{flex:1;padding:13px 8px;font-size:13px;white-space:nowrap}.m-cta .btn-primary{flex:1.8}}
-@media(max-width:640px){.brand{font-size:15px;white-space:nowrap}.topnav{gap:14px}.topnav a{white-space:nowrap}.topnav .btn{display:none}.hero{min-height:360px}}
+@media(max-width:640px){.brand{font-size:15px;white-space:nowrap}.topnav{gap:14px}.topnav a{white-space:nowrap}.topnav .btn{display:none}.hero-wrap{padding:12px 12px 0}.hero{min-height:340px;border-radius:20px}.hero-in{padding:72px 20px 26px}}
 </style>
 </head>
 <body>
@@ -115,9 +116,9 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 40px;font
 </div></header>
 
 <main>
-  <section class="hero">
+  <div class="wrap hero-wrap"><section class="hero">
     <img class="hero-img" src="/assets/tours/punta-cana-golden-coast-sunset-sail.jpg" alt="Punta Cana Golden Coast Sunset Sail, Punta Cana &amp; Bávaro, Dominican Republic" fetchpriority="high">
-    <div class="wrap hero-in">
+    <div class="hero-in">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/tours">Tours</a> / Punta Cana Golden Coast Sunset Sail</nav>
       <h1>Punta Cana Golden Coast Sunset Sail</h1>
       <p class="tagline">Golden hour along the Punta Cana coast.</p>
@@ -128,7 +129,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 40px;font
         <span class="chip">From <b>$77</b> per person</span>
       </div>
     </div>
-  </section>
+  </section></div>
 
   <section class="sec"><div class="wrap grid2">
     <div>
