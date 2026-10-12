@@ -77,6 +77,60 @@ async function handleGroupTripPaid(session, email, amountPaid) {
   });
 }
 
+// The US$15 "Build My Custom Trip" planning deposit. Paid through a Stripe Payment Link, so the
+// session has no metadata; the site attaches the request's reference as client_reference_id.
+const PLANNING_REF = /^PR-[A-HJ-NP-Z2-9]{6}$/;
+const PLANNING_FOOT = 'Sight Seers Caribbean Adventures · sightseerscaribbean.com';
+function isPlanningDeposit(session) {
+  if (PLANNING_REF.test(String(session.client_reference_id || ''))) return true;
+  // Paid straight from the Payment Link with no request attached (an old tab or a saved link).
+  return !!session.payment_link && session.amount_total === 1500 && String(session.currency || 'usd').toLowerCase() === 'usd'
+    && !(session.metadata && session.metadata.kind);
+}
+async function handlePlanningDeposit(session, email, amountPaid) {
+  const cref = String(session.client_reference_id || '');
+  let rec = null;
+  if (PLANNING_REF.test(cref)) {
+    try { rec = (await db.getCollection('planning-requests')).find(r => r.ref === cref) || null; } catch (e) { console.error('planning lookup error:', e && e.message); }
+  }
+  if (rec && rec.stripeSession === session.id) return; // Stripe re-delivered this event: already handled
+  if (rec) {
+    try { await db.updateInCollection('planning-requests', rec.id, { status: 'deposit-paid', paidAt: new Date().toISOString(), amountPaid: (amountPaid || 0) / 100, stripeSession: session.id }); }
+    catch (e) { console.error('planning update error:', e && e.message); }
+  }
+  const guestEmail = email || (rec && rec.email) || '';
+  const name = (rec && rec.name) || (session.customer_details && session.customer_details.name) || '';
+  const first = String(name).split(' ')[0] || 'there';
+  const rows = [['Reference', rec ? rec.ref : ''], ['Name', name], ['Email', guestEmail], ['Phone / WhatsApp', rec && rec.phone], ['Deposit received', money(amountPaid)], ['Stripe payment', session.payment_intent || session.id]];
+  const prefs = rec
+    ? `<h3 style="color:#063a63;margin:4px 0 6px;font-size:16px">Trip preferences</h3><div style="white-space:pre-wrap;background:#f6faf7;border-radius:10px;padding:12px 14px;color:#333;font-size:13px;line-height:1.7">${trip.esc(rec.summary)}</div>`
+    : '';
+  if (guestEmail) {
+    await sendEmail({
+      to: guestEmail,
+      replyTo: BUSINESS_EMAIL,
+      subject: 'We received your US$15 planning deposit' + (rec ? ': ' + rec.ref : ''),
+      html: trip.shell('Planning deposit received',
+        rec
+          ? `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received and our team is reviewing your preferences to build your custom package. The US$15 is credited toward your booking.</p>${trip.detailTable([['Reference', rec.ref], ['Deposit received', money(amountPaid)]])}${prefs}`
+          : `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received. We do not have your trip preferences yet, so please reply to this email or use the Travel Form on our site and we will start building your custom package. The US$15 is credited toward your booking.</p>${trip.detailTable([['Deposit received', money(amountPaid)]])}`,
+        PLANNING_FOOT)
+    });
+  }
+  await sendEmail({
+    to: BUSINESS_EMAIL,
+    replyTo: guestEmail || undefined,
+    subject: rec
+      ? '[' + rec.ref + '] US$15 deposit PAID, custom trip request: ' + name
+      : 'US$15 deposit PAID with no trip request on file: ' + (guestEmail || '(no email)'),
+    html: trip.shell(rec ? 'US$15 deposit paid' : 'US$15 deposit paid, no preferences yet',
+      (rec
+        ? '<p>This guest paid the US$15 planning deposit. Their trip preferences are below, so you can start building their package.</p>'
+        : '<p>A US$15 planning deposit was paid, but it was not matched to a trip request (it was paid from a saved or older link). Please contact the guest for their preferences.</p>')
+      + trip.detailTable(rows) + prefs, PLANNING_FOOT)
+  });
+}
+
 // Find which 5-day package (if any) a checkout's item string refers to.
 function findPackage(itemsStr) {
   if (!itemsStr) return null;
@@ -254,8 +308,15 @@ module.exports = async function handler(req, res) {
       catch (e) { console.error('group trip webhook error:', e && e.message); }
     }
 
+    // The US$15 planning deposit gets its own emails (not the V-Tours / tour confirmation below).
+    const isPlanning = !isGroupTrip && isPlanningDeposit(session);
+    if (isPlanning) {
+      try { await handlePlanningDeposit(session, email, amountPaid); }
+      catch (e) { console.error('planning webhook error:', e && e.message); }
+    }
+
     // Branded confirmation email for any V-Tours / tour purchase.
-    if (!isGroupTrip) try {
+    if (!isGroupTrip && !isPlanning) try {
       const kind = (session.metadata && session.metadata.kind) || '';
       const items = (session.metadata && (session.metadata.items || session.metadata.tours)) || '';
       const title = (session.metadata && session.metadata.title) || items || 'Sight Seers Virtual Tour';

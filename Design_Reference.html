@@ -14434,8 +14434,9 @@ body.theme-night .page .tag{
         </div>
         <p class="urgency-text" id="urgencyText">High demand this week, limited availability for peak experiences.</p>
         <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitBook()">Start Your Journey</button>
-        <a href="https://buy.stripe.com/cNifZi2n0eIL1yyana5kk06" target="_blank" rel="noopener" class="btn-secondary" style="width:100%;justify-content:center;margin-top:10px;padding:14px 16px;letter-spacing:1.8px;background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important"><i class="fas fa-lock"></i>Build My Custom Trip · US$15</a>
-        <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:8px">Your US$15 covers the research and a package built around your preferences. It is credited toward your booking, and the balance is invoiced once your custom package is finalised.</p>
+        <a href="https://buy.stripe.com/cNifZi2n0eIL1yyana5kk06" target="_blank" rel="noopener" class="btn-secondary" onclick="return ssPlanningDepositPay('start-planning',this)" style="width:100%;justify-content:center;margin-top:10px;padding:14px 16px;letter-spacing:1.8px;background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important"><i class="fas fa-lock"></i>Build My Custom Trip · US$15</a>
+        <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:8px">Your US$15 covers the research and a package built around your preferences, and is credited toward your booking. We send your details to our team, then secure checkout opens in a new tab. The balance is invoiced once your custom package is finalised.</p>
+        <p id="ssPdStatus-start-planning" role="status" style="display:none;font-size:13px;font-weight:700;color:var(--navy);text-align:center;margin:10px 0 0"></p>
         <div style="display:flex;justify-content:center;margin-top:12px">
           <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20am%20on%20the%20Start%20Planning%20page%20and%20would%20like%20help%20with%20my%20booking." target="_blank" class="btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i>Chat on WhatsApp</a>
         </div>
@@ -14506,7 +14507,7 @@ body.theme-night .page .tag{
             <pre id="tripPlannerSummary">Complete the fields above to generate a clean trip summary before submitting the official form.</pre>
           </div>
           <div class="deposit-box trip-planner-note" id="tripPlannerNote"><strong>Booking note:</strong> A non-refundable USD $15 deposit is required to process the request and is applied toward the booking fee if the guest moves forward.</div>
-          <div class="trip-deposit-pay" style="margin-top:14px"><a href="https://buy.stripe.com/cNifZi2n0eIL1yyana5kk06" target="_blank" rel="noopener" class="btn-primary" style="width:100%;justify-content:center"><i class="fas fa-lock"></i>Build My Custom Trip · US$15</a><p style="font-size:12px;color:var(--grey,#777);text-align:center;margin:8px 0 0">Your US$15 covers the research and a package built around your preferences. It is credited toward your booking. Secure checkout opens in a new tab.</p></div>
+          <div class="trip-deposit-pay" style="margin-top:14px"><a href="https://buy.stripe.com/cNifZi2n0eIL1yyana5kk06" target="_blank" rel="noopener" class="btn-primary" style="width:100%;justify-content:center" onclick="return ssPlanningDepositPay('travel-form',this)"><i class="fas fa-lock"></i>Build My Custom Trip · US$15</a><p style="font-size:12px;color:var(--grey,#777);text-align:center;margin:8px 0 0">Your US$15 covers the research and a package built around your preferences, and is credited toward your booking. We send your details to our team, then secure checkout opens in a new tab.</p><p id="ssPdStatus-travel-form" role="status" style="display:none;font-size:13px;font-weight:700;color:var(--navy);text-align:center;margin:10px 0 0"></p></div>
         </div>
         <div class="gform-wrap" id="tripPlannerSubmitSection" style="padding:18px 20px;border:1px solid rgba(6,58,99,.08);border-radius:22px;background:linear-gradient(180deg,#fff 0%,#f8fcfb 100%);margin-top:18px">
           <div class="native-submit-actions" style="margin-top:0;flex-wrap:wrap;justify-content:flex-start;gap:12px">
@@ -27067,6 +27068,44 @@ function copyTripPlannerSummary(){
 function clearTripPlannerFields(){
   ['tpEmail','tpFullName','tpPhone','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
   refreshTripPlannerSummary();
+}
+function ssPlanningDepositPay(source,el){
+  // One step: send the guest's preferences to the team, then open the US$15 Stripe checkout with their email and request reference attached.
+  var w=null,orig='';
+  try{
+    var isBook=source==='start-planning';
+    var val=function(id){var f=document.getElementById(id);return f?String(f.value||'').trim():''};
+    var name,email,phone,summary,emailId;
+    if(isBook){
+      emailId='b_em';name=(val('b_fn')+' '+val('b_ln')).trim();email=val('b_em');phone=val('b_ph');
+      var upsells=[].slice.call(document.querySelectorAll('#p-booking .upsell-section input:checked')).map(function(i){return i.value});
+      summary=[['Destination',val('b_dest')],['Experience type',val('b_type')],['Package',val('b_package')],['Preferred date',val('b_dt')],['Guests',val('b_gs')],['Budget',val('b_budget')],['Add-ons',upsells.join(', ')],['Notes',val('b_notes')]].filter(function(r){return r[1]}).map(function(r){return r[0]+': '+r[1]}).join('\n');
+    }else{
+      emailId='tpEmail';name=val('tpFullName');email=val('tpEmail');phone=val('tpPhone');
+      summary=getTripPlannerSummary();if(!summary||summary.indexOf('Complete the fields above')===0)summary='';
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+      var ef=document.getElementById(emailId);if(ef){ef.style.border='2px solid #e94560';ef.focus();ef.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){ef.style.border=''},3000)}
+      toast('Please add your email so we can send your package.');return false;
+    }
+    if(!summary){toast('Please add a few trip details first.');return false;}
+    // Open the checkout tab now, inside the click, so pop-up blockers allow it; it is pointed at Stripe once the request is saved.
+    try{w=window.open('','_blank');if(w&&w.document)w.document.write('<title>Secure checkout</title><p style="font-family:sans-serif;padding:24px;color:#063a63">Opening secure checkout...</p>')}catch(e){w=null}
+    if(el){orig=el.innerHTML;el.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';el.style.pointerEvents='none'}
+    var done=function(){if(el){el.innerHTML=orig;el.style.pointerEvents=''}};
+    var status=document.getElementById('ssPdStatus-'+source);
+    fetch('/api/planning-request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,source:source,summary:summary})})
+      .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d&&d.error)||'Request failed');return d})})
+      .then(function(d){
+        try{if(typeof ssTrack==='function')ssTrack('generate_lead',{form:source,method:'planning-deposit'})}catch(e){}
+        var opened=false;if(w){try{w.location.href=d.payUrl;opened=true}catch(e){}}
+        if(status){status.style.display='block';status.textContent='Your request '+d.ref+' was sent to our team. '+(opened?'Complete your US$15 deposit in the new tab. ':'')+'If checkout did not open, ';var a=document.createElement('a');a.href=d.payUrl;a.target='_blank';a.rel='noopener';a.style.cssText='color:var(--orange);text-decoration:underline';a.textContent='continue to secure checkout';status.appendChild(a);status.appendChild(document.createTextNode('.'))}
+        done();
+        if(!opened)window.location.href=d.payUrl;
+      })
+      .catch(function(err){try{if(w)w.close()}catch(e){}done();toast((err&&err.message)||'Could not send your request, please try again or use WhatsApp.')});
+    return false;
+  }catch(e){try{if(w)w.close()}catch(x){}if(el){el.innerHTML=orig||el.innerHTML;el.style.pointerEvents=''}return true}
 }
 function submitTripPlannerForm(){
   refreshTripPlannerSummary();

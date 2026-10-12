@@ -139,7 +139,7 @@ function detailTable(rows) {
   return `<table style="border-collapse:collapse;width:100%;margin:8px 0 16px">${rows.filter(r => r[1]).map((r, i) =>
     `<tr${i % 2 ? ' style="background:#f6faf7"' : ''}><td style="padding:8px 9px;font-weight:bold;width:150px;color:#063a63;vertical-align:top">${esc(r[0])}</td><td style="padding:8px 9px;color:#333;white-space:pre-wrap">${esc(r[1])}</td></tr>`).join('')}</table>`;
 }
-function shell(heading, bodyHtml) {
+function shell(heading, bodyHtml, footNote) {
   return `
   <div style="font-family:sans-serif;max-width:620px;margin:0 auto">
     <div style="background:linear-gradient(135deg,#063a63,#0a5678);color:#fff;padding:26px 24px;border-radius:16px 16px 0 0">
@@ -150,7 +150,7 @@ function shell(heading, bodyHtml) {
       ${bodyHtml}
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
-    <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Estimates use “from” prices and are confirmed by our team. Villa stays, meals and gratuities are quoted separately.</p>
+    <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">${footNote == null ? 'Estimates use “from” prices and are confirmed by our team. Villa stays, meals and gratuities are quoted separately.' : esc(footNote)}</p>
   </div>`;
 }
 function tripRows(rec) {
