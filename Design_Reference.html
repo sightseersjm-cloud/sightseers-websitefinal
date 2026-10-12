@@ -12071,12 +12071,17 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
 /* ---------- Program summary (question and answer card) ---------- */
 #p-mba-voyages .mv-qa{background:var(--mv-card);border:1px solid var(--mv-line);border-radius:0;padding:8px 34px;box-shadow:var(--mv-shadow)}
-#p-mba-voyages .mv-qa-row{display:flex;gap:30px;padding:22px 0;border-bottom:1px solid var(--mv-line);align-items:flex-start}
+#p-mba-voyages .mv-qa-row{display:block;border-bottom:1px solid var(--mv-line)}
 #p-mba-voyages .mv-qa-row:last-child{border-bottom:0}
-#p-mba-voyages .mv-qa-q{flex:0 0 190px;font-weight:800;color:var(--mv-head)!important;font-size:15px;position:relative;padding-left:16px}
-#p-mba-voyages .mv-qa-q::before{content:'';position:absolute;left:0;top:.45em;width:7px;height:7px;background:#ef8731}
-#p-mba-voyages .mv-qa-a{flex:1;color:var(--mv-mut)!important;font-size:15.5px;line-height:1.7}
-@media(max-width:860px){#p-mba-voyages .mv-qa-row{flex-direction:column;gap:8px}#p-mba-voyages .mv-qa-q{flex:none}#p-mba-voyages .mv-qa{padding:6px 22px}}
+#p-mba-voyages .mv-qa-q{display:flex;align-items:center;justify-content:space-between;gap:16px;list-style:none;cursor:pointer;font-weight:800;color:var(--mv-head)!important;font-size:16px;position:relative;padding:20px 4px 20px 16px;transition:color .2s}
+#p-mba-voyages .mv-qa-q::-webkit-details-marker{display:none}
+#p-mba-voyages .mv-qa-q::after{content:'';flex:none;width:9px;height:9px;margin-right:6px;border-right:2px solid #ef8731;border-bottom:2px solid #ef8731;transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+#p-mba-voyages .mv-qa-row[open] .mv-qa-q::after{transform:rotate(-135deg) translateY(-2px)}
+#p-mba-voyages .mv-qa-q:hover{color:#ef8731!important}
+#p-mba-voyages .mv-qa-q:focus-visible{outline:2px solid #ef8731;outline-offset:2px}
+#p-mba-voyages .mv-qa-q::before{content:'';position:absolute;left:0;top:50%;margin-top:-3.5px;width:7px;height:7px;background:#ef8731}
+#p-mba-voyages .mv-qa-a{padding:0 44px 24px 16px;color:var(--mv-mut)!important;font-size:15.5px;line-height:1.7;max-width:80ch}
+@media(max-width:860px){#p-mba-voyages .mv-qa{padding:2px 22px}#p-mba-voyages .mv-qa-q{font-size:15px;padding:18px 2px 18px 16px}#p-mba-voyages .mv-qa-a{padding-right:6px}}
 
 /* ---------- Package details dialog ---------- */
 #p-mba-voyages .mv-det{position:fixed;inset:0;z-index:100001;background:rgba(4,20,35,.72);display:none;align-items:center;justify-content:center;padding:20px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
@@ -12162,13 +12167,13 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <p class="mv-sub">Everything a cohort, chapter or leadership team needs to know before choosing a voyage.</p>
     </div>
     <div class="mv-qa">
-      <div class="mv-qa-row"><div class="mv-qa-q">What is it?</div><div class="mv-qa-a">MBA adventure weeks, a new kind of travel from Sight Seers Caribbean Adventures. Curated getaways for graduates and professionals that pair yacht days, luxury villa dinners and cultural deep dives with real professional networking.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Current MBAs planning a class trip, recent graduates building their network, and alumni chapters planning a reunion. Many groups mix all three: alumni mentor current students and recent graduates, and everyone leaves with new contacts. Corporate leadership teams can run a voyage too, with facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">Where does it run?</div><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">How long is it?</div><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">What is included?</div><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">What does it cost?</div><div class="mv-qa-a">Every package is quoted for your group, based on the country, group size, season and format.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">How do we book?</div><div class="mv-qa-a">Choose a package and a country and send an inquiry. A planner replies within one business day. Once your package is finalised, a 30% non-refundable deposit confirms your place. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>. For peak season and multi island routes, book three to four months ahead.</div></div>
+      <details class="mv-qa-row"><summary class="mv-qa-q">What is it?</summary><div class="mv-qa-a">MBA adventure weeks, a new kind of travel from Sight Seers Caribbean Adventures. Curated getaways for graduates and professionals that pair yacht days, luxury villa dinners and cultural deep dives with real professional networking.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">Who is it for?</summary><div class="mv-qa-a">Current MBAs planning a class trip, recent graduates building their network, and alumni chapters planning a reunion. Many groups mix all three: alumni mentor current students and recent graduates, and everyone leaves with new contacts. Corporate leadership teams can run a voyage too, with facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">Where does it run?</summary><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">How long is it?</summary><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">What is included?</summary><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">What does it cost?</summary><div class="mv-qa-a">Every package is quoted for your group, based on the country, group size, season and format.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">How do we book?</summary><div class="mv-qa-a">Choose a package and a country and send an inquiry. A planner replies within one business day. Once your package is finalised, a 30% non-refundable deposit confirms your place. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>. For peak season and multi island routes, book three to four months ahead.</div></details>
     </div>
   </div>
 </section>
