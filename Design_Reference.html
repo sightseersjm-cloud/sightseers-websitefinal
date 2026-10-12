@@ -12003,6 +12003,9 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 #p-mba-voyages .mv-pk-price b{font-family:'Playfair Display',serif;font-size:26px;color:var(--mv-head)!important;line-height:1.1}
 #p-mba-voyages .mv-pk-btns{display:flex;gap:8px}
 #p-mba-voyages .mv-pk-price b.q{font-family:'Raleway',sans-serif;font-size:17px;font-weight:800;letter-spacing:-.2px;line-height:1.5}
+#p-mba-voyages .mv-pk-body p.mv-pk-best{font-size:12.5px;margin:-6px 0 14px;color:var(--mv-mut)!important}
+#p-mba-voyages .mv-pk-best b,#p-mba-voyages .mv-det-best b{color:#ef8731!important;font-weight:800;letter-spacing:.3px;margin-right:4px}
+#p-mba-voyages .mv-det-best{margin:-4px 0 16px;font-size:14px;color:var(--mv-mut)!important}
 #p-mba-voyages .mv-add{display:flex;flex-direction:column;background:var(--mv-card);border:1px solid var(--mv-line);border-radius:0;box-shadow:var(--mv-shadow);padding:26px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
 #p-mba-voyages .mv-add:hover{transform:translateY(-4px);box-shadow:var(--mv-shadow-lg)}
 #p-mba-voyages .mv-add-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
@@ -12269,28 +12272,28 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
   /* The four packages. Each one is available on all seven shores; the visitor picks the country when they inquire. */
   var PACKAGES=[
-    {id:'lifestyle',title:'MBA Lifestyle Escape',tag:'Lifestyle',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'3 to 5 days',
+    {id:'lifestyle',title:'MBA Lifestyle Escape',tag:'Lifestyle',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'3 to 5 days',best:'Current MBAs and recent graduates',
       img:'/assets/mba/mba-yacht-raft-up.jpg',fb:'/assets/gallery/jamaica-rafting-crew.webp',
       blurb:'High energy days on the water and the island. A yacht day, an island excursion day, beach clubs and sunset socials, with the networking happening naturally.',
       hl:['Private yacht or catamaran day','Island excursion day for the whole group','Beach club and sunset socials'],
       theme:'a lifestyle format with yacht and excursion days and a social, high energy feel',
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique hotel.'},{when:'Middle days',title:'On the water and the island',text:'A private yacht or catamaran day, plus an island excursion day for the whole group.'},{when:'Evenings',title:'Beach club and sunset socials',text:'Easy, social evenings where the networking happens naturally.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['yacht']},
-    {id:'executive',title:'MBA Executive Retreat',tag:'Formal',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'Weekend or multi-day',
+    {id:'executive',title:'MBA Executive Retreat',tag:'Formal',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'Weekend or multi-day',best:'Alumni and executive groups',
       img:'/assets/mba/mba-white-party.jpg',
-      blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with time to talk properly.',
-      hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables'],
-      theme:'a formal, polished retreat with hosted dinners and facilitated sessions',
+      blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with yacht days on the water and time to talk properly.',
+      hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables','Private yacht or catamaran days'],
+      theme:'a formal, polished retreat with hosted dinners, facilitated sessions and days on the water',
       steps:[{when:'Day 1',title:'Arrive and settle in',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique resort, with a keynote from a local business leader.'},{when:'Each day',title:'Water and work',text:'Days alternate between the water (private yacht charters, catamaran sails, reef snorkeling) and onshore programming (company visits, alumni roundtables, founder workshops, cultural deep dives), moving between shores.'},{when:'Core days',title:'Facilitated roundtables',text:'Leadership roundtables with alumni and invited professionals, with time built in to talk properly.'},{when:'Evening',title:'The hosted dinner',text:'A hosted evening at a private villa to close the working day.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['villa']},
-    {id:'industry',title:'MBA Industry Immersion',tag:'Educational',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'2 to 4 days',
+    {id:'industry',title:'MBA Industry Immersion',tag:'Educational',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'2 to 4 days',best:'Current MBAs and recent graduates',
       img:'/assets/mba/mba-beach-cohort.jpg',
       blurb:'Learning and networking come first. Company and factory visits, founder workshops and alumni roundtables with local business leaders.',
-      hl:['Company and factory visits for the group','Founder workshops and industry briefings','Alumni and professional networking sessions'],
+      hl:['Hosted company and factory visits','Founder workshops and industry briefings','Alumni and professional networking sessions'],
       theme:'an educational, network friendly format built around company visits',
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner with a keynote from a local business leader.'},{when:'Visit days',title:'Company and factory visits',text:'Visits to local companies and factories, arranged for the group.'},{when:'Learning days',title:'Workshops and roundtables',text:'Founder workshops, industry briefings and alumni and professional networking sessions, plus guided cultural deep dives.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:[]},
-    {id:'voyage',title:'MBA Island-Hop Voyage',tag:'Signature',place:'Two or more shores',multi:true,pax:'12 to 60',dur:'5 to 7 days',
+    {id:'voyage',title:'MBA Island-Hop Voyage',tag:'Signature',place:'Two or more shores',multi:true,pax:'12 to 60',dur:'5 to 7 days',best:'Mixed groups of current MBAs, recent graduates and alumni',
       img:'/assets/mba/mba-beach-group.jpg',
       blurb:'The full week across more than one shore. A private catamaran flotilla with a yacht day, a villa dinner, company visits and a capstone excursion.',
       hl:['Private catamaran flotilla','Island hop across two or more shores','Yacht day, villa dinner and capstone'],
@@ -12369,6 +12372,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       return '<article class="mv-pk">'
         +'<div class="mv-pk-media"><img src="'+esc(p.src||p.fb||p.img)+'" alt="'+esc(p.title)+'" loading="lazy"><span class="mv-pk-tag">'+esc(p.tag)+'</span><span class="mv-pk-where">'+esc(p.place)+'</span></div>'
         +'<div class="mv-pk-body"><h3>'+esc(p.title)+'</h3><p>'+esc(p.blurb)+'</p>'
+        +(p.best?'<p class="mv-pk-best"><b>Best for</b> '+esc(p.best)+'</p>':'')
         +'<div class="mv-pk-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span></div>'
         +'<ul class="mv-pk-hl">'+p.hl.map(function(h){return '<li>'+esc(h)+'</li>';}).join('')+'</ul>'
         +(addonsFor(k).length?'<button type="button" class="mv-pk-add" onclick="mbvDetails('+k+',null,true)"><i class="fas fa-plus"></i><span><b>Add-ons:</b> '+addonsFor(k).map(function(i){return esc(ADDONS[i].nick);}).join(', ')+'</span></button>':'')
@@ -12412,6 +12416,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       +'<div class="mv-mini">'+esc(p.tag)+' package</div>'
       +'<h3 class="mv-det-title" id="mbvDetTitle">'+esc(p.title)+'</h3>'
       +'<p class="mv-det-sum">'+esc(p.blurb)+'</p>'
+      +(p.best?'<p class="mv-det-best"><b>Best for</b> '+esc(p.best)+'</p>':'')
       +'<div class="mv-det-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span><span><i class="fas fa-map-marker-alt"></i>'+esc(p.place)+'</span></div>'
       +'<div class="mv-det-sec"><div class="mv-mini">How the days run</div><ol class="mv-det-steps">'
       +p.steps.map(function(x){return '<li class="mv-det-step"><div class="mv-det-when"><span class="mv-day">'+esc(x.when)+'</span></div><div class="mv-det-what"><h4>'+esc(x.title)+'</h4><p>'+esc(x.text)+'</p></div></li>';}).join('')
