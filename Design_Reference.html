@@ -12462,7 +12462,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     window.mbvClosePick();
     var where=sel.length>1?sel.slice(0,-1).join(', ')+' and '+sel[sel.length-1]:sel[0];
     var ad=addPicked(state.pick.k).map(function(i){return ADDONS[i].title;});
-    openStartPlanning(sel[0],p.title,'MBA Experience','Interested in the '+p.title+', '+p.theme+', in '+where+' for a cohort, alumni chapter or leadership team.'+(ad.length?' Add-ons: '+ad.join(', ')+'.':''));
+    openStartPlanning(sel[0],p.title,'MBA Experience','Interested in the '+p.title+', '+p.theme+', in '+where+' for a cohort, alumni chapter or leadership team.'+(ad.length?' MBA add-ons: '+ad.join(', ')+'.':''));
     return false;
   };
   function initPick(){
