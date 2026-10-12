@@ -1,9 +1,11 @@
 /**
  * build.js — Accepts Design_Reference.html OR site.html
- * Outputs: public/index.html with bridge.js injected + minified
+ * Outputs: public/index.html with bridge.js injected + minified, plus one
+ * public/<path>/index.html per route in SS_ROUTES (same app, route-specific <head>)
  */
 const fs   = require('fs');
 const path = require('path');
+const vm   = require('vm');
 const { minify } = require('html-minifier-terser');
 const DEST = path.join(__dirname, 'public', 'index.html');
 
@@ -166,6 +168,140 @@ function checkPriceAgreement(html) {
 
 checkPriceAgreement(html);
 
+/**
+ * Route pages.
+ *
+ * The site is one document that boots into whatever path it is asked for (vercel.json rewrites every
+ * path to /index.html). Crawlers and link previews read the raw HTML before any script runs, and every
+ * route used to return the homepage's title, description, og tags and canonical.
+ *
+ * For each route in SS_ROUTES this writes public/<path>/index.html: the same built document, with only
+ * the head tags below replaced by that page's SS_META entry (the values ssSetMeta() applies at runtime).
+ * The app is unchanged, so every route behaves exactly as before once the script runs.
+ *
+ * SS_ROUTES and SS_META are read from Design_Reference.html (the way TOURS is), so the table in the
+ * source stays the only place routes and meta are edited. Any problem stops the build instead of
+ * shipping a page with the wrong head.
+ */
+const SITE = 'https://www.sightseerscaribbean.com';
+const ROUTE_SKIP = new Set(['home', 'vtours']);                    // '/' is the main document; V-Tours is hidden until launch
+const ROUTE_RESERVED = new Set(['api', 'assets', 'logos', 'panos', 'models', 'vendor', 'virtual-tours']);
+const ROUTE_MARKER = '<!-- ss-route-page ';                        // identifies files this step owns (safe to replace or remove)
+
+/** Returns the {...} literal that follows `var NAME =` in the source, scanning past strings and comments. */
+function readObjectLiteral(source, name) {
+  const m = new RegExp('\\bvar\\s+' + name + '\\s*=\\s*\\{').exec(source);
+  if (!m) throw new Error(name + ' not found in the source');
+  const open = m.index + m[0].length - 1;
+  let depth = 0, inStr = null, esc = false;
+  for (let i = open; i < source.length; i++) {
+    const c = source[i], n = source[i + 1];
+    if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === inStr) inStr = null; continue; }
+    if (c === '/' && n === '/') { const e = source.indexOf('\n', i); if (e === -1) break; i = e; continue; }
+    if (c === '/' && n === '*') { const e = source.indexOf('*/', i + 2); if (e === -1) break; i = e + 1; continue; }
+    if (c === "'" || c === '"' || c === '`') { inStr = c; continue; }
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) return source.slice(open, i + 1); }
+  }
+  throw new Error(name + ' is unterminated');
+}
+
+function parseRoutePages(source) {
+  let routes, meta;
+  try {
+    routes = vm.runInNewContext('(' + readObjectLiteral(source, 'SS_ROUTES') + ')', Object.create(null));
+    meta   = vm.runInNewContext('(' + readObjectLiteral(source, 'SS_META') + ')', Object.create(null));
+  } catch (e) { throw new Error('Route pages: SS_ROUTES / SS_META could not be read: ' + e.message); }
+
+  // A section hidden with data-ss-<id>-hidden on <html> renders the home page, so a page baked for it would describe something the app does not show.
+  const htmlTag = (/<html\b[^>]*>/i.exec(source) || [''])[0];
+  const hidden = new Set([...htmlTag.matchAll(/\bdata-ss-([a-z0-9-]+)-hidden\b/g)].map(m => m[1]));
+
+  const pages = [], seen = new Map();
+  for (const id of Object.keys(routes)) {
+    const route = routes[id];
+    if (route === '/' || ROUTE_SKIP.has(id) || hidden.has(id)) continue;
+    if (typeof route !== 'string' || !/^\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(route)) {
+      throw new Error(`Route pages: route "${id}" has an unsupported path ${JSON.stringify(route)} (one lowercase segment, e.g. "/greek-life-travel")`);
+    }
+    const dir = route.slice(1);
+    if (ROUTE_RESERVED.has(dir)) throw new Error(`Route pages: route "${id}" (${route}) collides with the static folder /${dir}/`);
+    if (seen.has(route)) throw new Error(`Route pages: "${seen.get(route)}" and "${id}" both use ${route}`);
+    seen.set(route, id);
+    const m = meta[id];
+    if (!Array.isArray(m) || typeof m[0] !== 'string' || typeof m[1] !== 'string' || !m[0].trim() || !m[1].trim()) {
+      throw new Error(`Route pages: SS_META has no title and description for route "${id}" (${route})`);
+    }
+    pages.push({ id, path: route, dir, title: m[0], description: m[1] });
+  }
+  if (!pages.length) throw new Error('Route pages: SS_ROUTES produced no pages');
+  pages.hidden = [...hidden];
+  return pages;
+}
+
+const routePages = parseRoutePages(html);
+
+const escText = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escAttr = x => escText(x).replace(/"/g, '&quot;');
+const headTags = [
+  // [label, pattern, replacement, required]  (twitter tags are not touched by ssSetMeta, but a preview reads them from the raw HTML too)
+  ['title',               /<title>[^<]*<\/title>/g,                                  p => `<title>${escText(p.title)}</title>`, true],
+  ['meta description',    /<meta name="description" content="[^"]*">/g,              p => `<meta name="description" content="${escAttr(p.description)}">`, true],
+  ['og:title',            /<meta property="og:title" content="[^"]*">/g,             p => `<meta property="og:title" content="${escAttr(p.title)}">`, true],
+  ['og:description',      /<meta property="og:description" content="[^"]*">/g,       p => `<meta property="og:description" content="${escAttr(p.description)}">`, true],
+  ['og:url',              /<meta property="og:url" content="[^"]*">/g,               p => `<meta property="og:url" content="${SITE}${p.path}">`, true],
+  ['canonical',           /<link rel="canonical" href="[^"]*">/g,                    p => `<link rel="canonical" href="${SITE}${p.path}">`, true],
+  ['twitter:title',       /<meta name="twitter:title" content="[^"]*">/g,            p => `<meta name="twitter:title" content="${escAttr(p.title)}">`, false],
+  ['twitter:description', /<meta name="twitter:description" content="[^"]*">/g,      p => `<meta name="twitter:description" content="${escAttr(p.description)}">`, false]
+];
+
+function writeRoutePages(pages, built) {
+  const headEnd = built.indexOf('</head>');
+  if (headEnd === -1) throw new Error('no </head> in the built document');
+  if (!/^<!doctype html>/i.test(built)) throw new Error('the built document does not start with a doctype');
+  const head = built.slice(0, headEnd), rest = built.slice(headEnd);
+
+  // Every tag must exist exactly once in the head, or a page could ship with a mix of homepage and route values.
+  for (const [label, re, , required] of headTags) {
+    const n = (head.match(re) || []).length;
+    if (n > 1 || (n === 0 && required)) throw new Error(`expected exactly one ${label} tag in the <head>, found ${n}`);
+  }
+
+  const made = new Set();
+  for (const page of pages) {
+    let h = head;
+    for (const [, re, make] of headTags) h = h.replace(re, () => make(page));
+    const out = (h + rest).replace(/^<!doctype html>/i, m => m + ROUTE_MARKER + page.path + ': generated by build.js from SS_ROUTES and SS_META, do not edit -->');
+    const dir = path.join(publicDir, page.dir), file = path.join(dir, 'index.html');
+    if (fs.existsSync(file) && !isRoutePage(file)) {
+      throw new Error(`${path.relative(__dirname, file)} exists and was not generated by this step; refusing to overwrite it`);
+    }
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(file, out, 'utf8');
+    made.add(page.dir);
+  }
+
+  // A route that was removed or renamed leaves its old page behind and Vercel would keep serving it, so remove pages this step wrote earlier.
+  let removed = 0;
+  for (const ent of fs.readdirSync(publicDir, { withFileTypes: true })) {
+    if (!ent.isDirectory() || made.has(ent.name)) continue;
+    const file = path.join(publicDir, ent.name, 'index.html');
+    if (fs.existsSync(file) && isRoutePage(file)) {
+      fs.unlinkSync(file);
+      if (!fs.readdirSync(path.join(publicDir, ent.name)).length) fs.rmdirSync(path.join(publicDir, ent.name));
+      removed++;
+    }
+  }
+  console.log(`🧭  Route pages: ${made.size} written under public/<path>/index.html` + (removed ? `, ${removed} stale removed` : '') +
+              ` (skipped: ${[...new Set([...ROUTE_SKIP, ...(pages.hidden || [])])].join(', ')})`);
+}
+
+function isRoutePage(file) {
+  const fd = fs.openSync(file, 'r');
+  try { const b = Buffer.alloc(400); const n = fs.readSync(fd, b, 0, 400, 0); return b.toString('utf8', 0, n).includes(ROUTE_MARKER); }
+  finally { fs.closeSync(fd); }
+}
+
 const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
@@ -178,6 +314,7 @@ html = html.replace(/<img\b(?![^>]*loading=)/gi, (match) => {
 console.log(`🖼️  Added lazy loading to ${lazyCount} images`);
 
 (async () => {
+  let built;
   try {
     const minified = await minify(html, {
       collapseWhitespace: true,
@@ -193,11 +330,17 @@ console.log(`🖼️  Added lazy loading to ${lazyCount} images`);
       preserveLineBreaks: false
     });
     fs.writeFileSync(DEST, minified, 'utf8');
+    built = minified;
     const savedPct = ((1 - minified.length / html.length) * 100).toFixed(1);
     console.log(`🚀  Built → public/index.html (${(fs.statSync(DEST).size/1024).toFixed(0)} KB, ${savedPct}% smaller)`);
   } catch (err) {
     console.warn(`⚠️  Minification failed, writing unminified: ${err.message}`);
     fs.writeFileSync(DEST, html, 'utf8');
+    built = html;
     console.log(`🚀  Built → public/index.html (${(fs.statSync(DEST).size/1024).toFixed(0)} KB, unminified)`);
   }
+
+  // Outside the try above: a problem here must fail the build, not fall back to an unminified page.
+  try { writeRoutePages(routePages, built); }
+  catch (err) { console.error(`\n❌  Route pages: ${err.message}\n`); process.exit(1); }
 })();
