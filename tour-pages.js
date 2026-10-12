@@ -34,6 +34,9 @@ const abs = u => (/^https?:\/\//i.test(u) ? u : SITE + (String(u).startsWith('/'
 const LS = new RegExp('\\u2028', 'g'), PS = new RegExp('\\u2029', 'g');   // line separators are legal in JSON but not in a script
 const json = o => JSON.stringify(o).replace(/</g, '\\u003c').replace(LS, '\\u2028').replace(PS, '\\u2029');
 
+/** Most catalog durations are times ("3 to 5 hours", "Evening"); some hold a format instead ("Boat & snorkel", "Private charter, up to 8"). */
+const isTime = v => /(\d|^\s*(evening|morning|afternoon|night|half|full|all day))/i.test(String(v || '')) && !/up to|charter/i.test(String(v || ''));
+
 /** The price as the catalog card shows it: "$80" + "per person" / "per group (up to N)", or on request. */
 function priceInfo(t) {
   const v = Number(t.priceValue || 0);
@@ -184,7 +187,7 @@ function renderPage(t, ctx) {
     ['How much does ' + t.title + ' cost?', price.has
       ? `${price.line}. That is a "from" price: your planner confirms the final price for your date, group size and pickup before you pay anything.`
       : 'This experience is priced on request. Send an inquiry with your dates and group size and a planner will quote it.'],
-    ['How long does it take?', t.duration ? `Plan for ${t.duration}. Your planner confirms the schedule and pickup time for your date.` : 'Your planner confirms the schedule and pickup time for your date.'],
+    ['How long does it take?', isTime(t.duration) ? `Plan for ${t.duration}. Your planner confirms the schedule and pickup time for your date.` : 'Your planner confirms the exact schedule and pickup time for your date.'],
     ['How do I book it?', `Tap "Request this experience", tell us your dates and group size, and a planner replies within one business day. You can also WhatsApp or call ${PHONE.show}.`],
     ['Can I book it for a group?', 'Yes. Sight Seers Caribbean plans trips for groups of 5 to 60 across the Caribbean. Add your group size to the inquiry and your planner confirms availability and pricing.']
   ];
@@ -258,7 +261,7 @@ ${CSS}
       <h2 style="margin-top:30px">Good to know</h2>
       <table class="facts"><tbody>
         <tr><th scope="row">Where</th><td>${esc(where)}</td></tr>
-        ${t.duration ? `<tr><th scope="row">Duration</th><td>${esc(t.duration)}</td></tr>` : ''}
+        ${t.duration ? `<tr><th scope="row">${isTime(t.duration) ? 'Duration' : 'Style'}</th><td>${esc(t.duration)}</td></tr>` : ''}
         <tr><th scope="row">Type</th><td>${esc(kind)}</td></tr>
         <tr><th scope="row">Price</th><td>${esc(price.line)}${price.has ? ' (confirmed for your date and group size)' : ''}</td></tr>
       </tbody></table>
