@@ -44,15 +44,23 @@ function priceInfo(t) {
   return { has: true, value: v, main, unit, line: 'From ' + main + ' ' + unit };
 }
 
-/** Meta description: the experience's own description plus its "from" price, kept to about 160 characters with the price intact. */
+/** Meta description: the experience's own description plus its "from" price, kept to about 160 characters with the price intact.
+ *  Whole sentences are kept where possible so the snippet does not stop mid-thought. */
 function metaDescription(t, price) {
   const tail = price.has ? price.line + '.' : 'Price on request.';
   const text = String(t.desc || t.hero || '').replace(/\s+/g, ' ').trim();
-  const whole = text + ' ' + tail;
-  if (whole.length <= 160) return whole;
-  let cut = text.slice(0, 160 - tail.length - 2);
+  const MAX = 160;
+  if ((text + ' ' + tail).length <= MAX) return text + ' ' + tail;
+  let out = '';
+  for (const s of text.match(/[^.!?]+[.!?]+(?=\s|$)/g) || []) {
+    const next = (out ? out + ' ' : '') + s.trim();
+    if ((next + ' ' + tail).length > MAX) break;
+    out = next;
+  }
+  if (out) return out + ' ' + tail;
+  let cut = text.slice(0, MAX - tail.length - 2);
   cut = cut.slice(0, Math.max(cut.lastIndexOf(' '), 40)).replace(/[\s,;:.\-]+$/, '');
-  return cut + '… ' + tail;
+  return cut + '\u2026 ' + tail;
 }
 
 function related(t, all) {
