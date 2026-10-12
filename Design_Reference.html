@@ -12003,6 +12003,15 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 #p-mba-voyages .mv-pk-price b{font-family:'Playfair Display',serif;font-size:26px;color:var(--mv-head)!important;line-height:1.1}
 #p-mba-voyages .mv-pk-btns{display:flex;gap:8px}
 #p-mba-voyages .mv-pk-price b.q{font-family:'Raleway',sans-serif;font-size:17px;font-weight:800;letter-spacing:-.2px;line-height:1.5}
+#p-mba-voyages .mv-add{display:flex;flex-direction:column;background:var(--mv-card);border:1px solid var(--mv-line);border-radius:0;box-shadow:var(--mv-shadow);padding:26px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+#p-mba-voyages .mv-add:hover{transform:translateY(-4px);box-shadow:var(--mv-shadow-lg)}
+#p-mba-voyages .mv-add-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+#p-mba-voyages .mv-add-tags span{font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--mv-head)!important;background:var(--mv-chip);padding:6px 10px}
+#p-mba-voyages .mv-add h3{font-family:'Raleway',sans-serif;font-size:19px;font-weight:800;color:var(--mv-head)!important;margin:0 0 8px;line-height:1.25;letter-spacing:-.2px}
+#p-mba-voyages .mv-add p{font-size:14px;line-height:1.65;color:var(--mv-mut)!important;margin:0 0 16px}
+#p-mba-voyages .mv-add-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--mv-line)}
+#p-mba-voyages .mv-add-for{font-size:12.5px;color:var(--mv-mut)!important;line-height:1.5;flex:1 1 180px}
+#p-mba-voyages .mv-add-for b{color:var(--mv-head)!important}
 #p-mba-voyages .mv-note{margin-top:22px;text-align:center;font-size:13.5px;color:var(--mv-mut)!important;line-height:1.7}
 
 /* ---------- Plan band ---------- */
@@ -12132,6 +12141,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 <nav class="mv-jump" aria-label="On this page">
   <button type="button" onclick="mbvGo('mbvProgram')">Overview</button>
   <button type="button" onclick="mbvGo('mbvPackages')">Packages</button>
+  <button type="button" onclick="mbvGo('mbvAddons')">Add-ons</button>
   <button type="button" onclick="mbvGo('mbvPlan')">Plan</button>
 </nav>
 
@@ -12153,7 +12163,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     </div>
     <div class="mv-qa">
       <div class="mv-qa-row"><div class="mv-qa-q">What is it?</div><div class="mv-qa-a">MBA adventure weeks, a new kind of travel from Sight Seers Caribbean Adventures. Curated getaways for graduates and professionals that pair yacht days, luxury villa dinners and cultural deep dives with real professional networking.</div></div>
-      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Active MBA cohorts planning a class trip, alumni chapters planning a reunion, and corporate leadership teams using travel as a development tool. For corporate groups, a voyage can include facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></div>
+      <div class="mv-qa-row"><div class="mv-qa-q">Who is it for?</div><div class="mv-qa-a">Current MBAs planning a class trip, recent graduates building their network, and alumni chapters planning a reunion. Many groups mix all three: alumni mentor current students and recent graduates, and everyone leaves with new contacts. Corporate leadership teams can run a voyage too, with facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">Where does it run?</div><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">How long is it?</div><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></div>
       <div class="mv-qa-row"><div class="mv-qa-q">What is included?</div><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></div>
@@ -12173,6 +12183,19 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     </div>
     <div class="mv-pkgrid" id="mbvGrid"></div>
     <p class="mv-note">Not sure which fits your group? <a href="#" onclick="mbvPlan();return false;">Tell us about your group</a> and we will recommend one.</p>
+  </div>
+</section>
+
+<!-- Optional add-ons -->
+<section class="mv-sec" id="mbvAddons">
+  <div class="mv-wrap">
+    <div class="mv-head">
+      <div class="mv-eyebrow">Optional add-ons</div>
+      <h2 class="mv-h2">Make the week count</h2>
+      <p class="mv-sub">Add any of these to a package. Each one can be arranged for your group, and your planner confirms the hosts, date and details for your chosen shore.</p>
+    </div>
+    <div class="mv-pkgrid cols-2" id="mbvAddGrid"></div>
+    <p class="mv-note">Add-ons are quoted with your package. Rules for foreign property buyers differ by shore, so the Property &amp; Investment Insight Day is information only, not investment, legal or tax advice.</p>
   </div>
 </section>
 
@@ -12274,6 +12297,34 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function $(id){return document.getElementById(id);}
+  /* Optional extras. Worded as "can be arranged": the planner confirms hosts and dates for the chosen shore. The property day is for alumni and executive groups only. */
+  var ADDONS=[
+    {title:'Island Pitch Night',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Any package',
+      text:'Teams take a real challenge from a local company, work it during the trip, then pitch to local founders and investors at the closing dinner. You leave with a case study, a deck and feedback from people who run businesses here.'},
+    {title:'Caribbean Opportunity Briefing',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Industry Immersion, Executive Retreat, Island-Hop Voyage',
+      text:'A half day on doing business in your chosen shore: how foreign investors enter the market, which sectors are growing and what to know before committing capital. Led by local business leaders, with time for questions. Information only, not financial advice.'},
+    {title:'Alumni Mentor Day',who:'current MBAs, recent graduates and alumni',tags:['Current MBAs','Recent graduates','Alumni'],pairs:'Any package',
+      text:'Alumni join current MBAs and recent graduates for Ask an alum roundtables and speed mentoring on careers, startups and stepping into leadership. Works best when a cohort travels with an alumni chapter.'},
+    {title:'Property & Investment Insight Day',who:'an alumni or executive group',tags:['Alumni','Executive groups'],pairs:'Executive Retreat, Island-Hop Voyage',
+      text:'For guests curious about a second home or income property. Visit villas and developments with licensed local agents, then meet a property lawyer on foreign ownership, taxes and financing. Optional, with no sales pressure and no investment advice.'}
+  ];
+
+  function renderAddons(){
+    var grid=$('mbvAddGrid');if(!grid)return;
+    grid.innerHTML=ADDONS.map(function(a,k){
+      return '<article class="mv-add">'
+        +'<div class="mv-add-tags">'+a.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'
+        +'<h3>'+esc(a.title)+'</h3><p>'+esc(a.text)+'</p>'
+        +'<div class="mv-add-foot"><div class="mv-add-for"><b>Add to:</b> '+esc(a.pairs)+'</div>'
+        +'<button type="button" class="mv-btn line sm" onclick="mbvAddon('+k+')">Ask about this</button></div></article>';
+    }).join('');
+  }
+  window.mbvAddon=function(k){
+    var a=ADDONS[k];if(!a)return false;
+    openStartPlanning('','MBA add-on: '+a.title,'MBA Experience','Interested in adding the '+a.title+' to an MBA voyage ('+a.pairs.toLowerCase()+') for '+a.who+'.');
+    return false;
+  };
+
   /* ---------- packages ---------- */
   function renderPackages(){
     var grid=$('mbvGrid');if(!grid)return;
@@ -12458,7 +12509,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   }
 
   window.renderMbaVoyages=function(){
-    renderPackages();initPick();initSlider();
+    renderPackages();renderAddons();initPick();initSlider();
     if(state.sliderReady)setTimeout(layout,60);
   };
 })();
