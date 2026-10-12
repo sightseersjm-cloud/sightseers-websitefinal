@@ -113,7 +113,7 @@ async function handlePlanningDeposit(session, email, amountPaid) {
       html: trip.shell('Planning deposit received',
         rec
           ? `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received and our team is reviewing your preferences to build your custom package. The US$15 is credited toward your booking.</p>${trip.detailTable([['Reference', rec.ref], ['Deposit received', money(amountPaid)]])}${prefs}`
-          : `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received. We do not have your trip preferences yet, so please reply to this email or use the Travel Form on our site and we will start building your custom package. The US$15 is credited toward your booking.</p>${trip.detailTable([['Deposit received', money(amountPaid)]])}`,
+          : `<p>Thank you, ${trip.esc(first)}. Your US$15 planning deposit has been received and is credited toward your booking. Your planner will now build your custom package and be in touch. If you have not shared your trip details with us yet, just reply to this email.</p>${trip.detailTable([['Deposit received', money(amountPaid)]])}`,
         PLANNING_FOOT)
     });
   }
@@ -123,10 +123,10 @@ async function handlePlanningDeposit(session, email, amountPaid) {
     subject: rec
       ? '[' + rec.ref + '] US$15 deposit PAID, custom trip request: ' + name
       : 'US$15 deposit PAID with no trip request on file: ' + (guestEmail || '(no email)'),
-    html: trip.shell(rec ? 'US$15 deposit paid' : 'US$15 deposit paid, no preferences yet',
+    html: trip.shell(rec ? 'US$15 deposit paid' : 'US$15 deposit paid',
       (rec
         ? '<p>This guest paid the US$15 planning deposit. Their trip preferences are below, so you can start building their package.</p>'
-        : '<p>A US$15 planning deposit was paid, but it was not matched to a trip request (it was paid from a saved or older link). Please contact the guest for their preferences.</p>')
+        : '<p>A US$15 planning deposit was paid from the planning link, without a website request reference. Match it to the guest you sent the link to and start their custom package.</p>')
       + trip.detailTable(rows) + prefs, PLANNING_FOOT)
   });
 }

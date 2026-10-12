@@ -1,5 +1,13 @@
 # US$15 planning deposit ("Build My Custom Trip")
 
+> **Changed 12 Oct 2026:** sending a trip request is now free. The "Build My Custom Trip · US$15" buttons were
+> removed from the Travel Form and Start Planning pages, and the copy says the request costs nothing. Guests
+> send their details with the free "Start Your Journey" / "Submit Form" buttons. A planner replies, and once the
+> guest is ready for a researched custom package, the team sends them the US$15 Payment Link below. Those
+> payments arrive without a PR- reference, so they use the "no request attached" emails, which were reworded
+> so they no longer tell the guest their preferences are missing. The /api/planning-request endpoint and
+> `ssPlanningDepositPay()` are left in place in case the button comes back.
+
 The button **Build My Custom Trip · US$15** appears on the Travel Form page and the Start Planning page.
 One click does two things: it sends the guest's trip preferences to the team, then opens secure checkout.
 
