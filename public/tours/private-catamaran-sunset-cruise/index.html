@@ -35,8 +35,8 @@ img{max-width:100%;display:block}
 .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
 .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .topbar-in{display:flex;align-items:center;gap:18px;height:62px}
-.brand{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:19px;color:var(--navy);letter-spacing:.4px}
-.brand span{color:var(--orange)}
+.brand{display:flex;align-items:center;flex:none}
+.brand img{height:38px;width:auto;display:block}
 .topnav{margin-left:auto;display:flex;gap:20px;align-items:center;font-size:13.5px;font-weight:700}
 .btn{display:inline-block;padding:13px 26px;border-radius:999px;font-weight:800;font-size:14px;border:2px solid transparent;text-align:center;transition:transform .2s,background .2s}
 .btn-primary{background:var(--orange);color:#fff}
@@ -101,12 +101,12 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 40px;font
 .m-cta{display:none}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}.aside{position:static}.topnav .hide-m{display:none}body{padding-bottom:76px}
 .m-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:10px;padding:10px 14px;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(6,58,99,.1)}.m-cta .btn{flex:1;padding:13px 8px;font-size:13px;white-space:nowrap}.m-cta .btn-primary{flex:1.8}}
-@media(max-width:640px){.brand{font-size:15px;white-space:nowrap}.topnav{gap:14px}.topnav a{white-space:nowrap}.topnav .btn{display:none}.hero-wrap{padding:12px 12px 0}.hero{min-height:340px;border-radius:20px}.hero-in{padding:72px 20px 26px}}
+@media(max-width:640px){.brand img{height:30px}.topnav{gap:14px}.topnav a{white-space:nowrap}.topnav .btn{display:none}.hero-wrap{padding:12px 12px 0}.hero{min-height:340px;border-radius:20px}.hero-in{padding:72px 20px 26px}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-in">
-  <a class="brand" href="/">SIGHT SEERS <span>CARIBBEAN</span></a>
+  <a class="brand" href="/" aria-label="Sight Seers Caribbean Adventures, home"><img src="/assets/logo-wordmark.png" alt="Sight Seers Caribbean Adventures" width="560" height="123"></a>
   <nav class="topnav" aria-label="Main">
     <a href="/tours">All experiences</a>
     <a href="/about" class="hide-m">About</a>
