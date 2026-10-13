@@ -13035,7 +13035,7 @@ body.theme-night #p-seven-shores-society{
     <span class="so-kicker">Sight Seers Caribbean &middot; Flagship residency</span>
     <h1 class="so-h1">Seven Shores Society<span class="sub">Jamaica Residency</span></h1>
     <p class="so-tag">Seven people. A place in nature. Space to connect.</p>
-    <p class="so-lede">A seven-night hosted stay in nature for seven entrepreneurs and independent professionals. Enjoy comfortable cabins or cottages, shared meals, local encounters and island adventures, with time to work, rest or reflect. Meet people through unhurried time together, with a host who helps everyone feel included. Sight Seers handles the details so you can make space for the people and experiences that matter.</p>
+    <p class="so-lede">A seven-night hosted stay in nature for seven entrepreneurs and independent professionals, with a virtual Shore meet and greet and breakout rooms before you arrive, so you land among people you already know. Enjoy comfortable cabins or cottages, shared meals, local encounters and island adventures, with time to work, rest or reflect. Meet people through unhurried time together, with a host who helps everyone feel included. Sight Seers handles the details so you can make space for the people and experiences that matter.</p>
     <div class="so-facts">
       <span class="so-fact"><b>7</b><span>Guests</span></span>
       <span class="so-fact"><b>7</b><span>Nights, 8 days</span></span>
@@ -13096,6 +13096,7 @@ body.theme-night #p-seven-shores-society{
     <h2 class="so-h2">A slower, deeper rhythm</h2>
     <p class="so-sub">Eight days and seven nights: connection, nature and enough space to breathe.</p>
     <ol class="so-week">
+      <li><span class="so-day">Before &middot; Meet online</span><div><h3>The virtual Shore meet and greet</h3><p>A virtual meet and greet with breakout rooms before you arrive, so you meet your circle before day one. It is part of the package.</p></div></li>
       <li><span class="so-day">1 &middot; Settle in</span><div><h3>Arrive and begin</h3><p>Airport pickup and scheduled arrivals, orientation and a family-style welcome dinner.</p></div></li>
       <li><span class="so-day">2 &middot; Meet your circle</span><div><h3>Introductions and intentions</h3><p>Breakfast, introductions and intentions, a gentle nature outing and downtime.</p></div></li>
       <li><span class="so-day">3 &middot; Make space</span><div><h3>Work, quiet or company</h3><p>Optional work or a quiet morning, a peer circle and a local host dinner.</p></div></li>
@@ -13121,7 +13122,7 @@ body.theme-night #p-seven-shores-society{
     <h2 class="so-h2">Connection that continues after you leave</h2>
     <p class="so-sub">Opportunities to connect, created without forcing friendship.</p>
     <div class="so-ba">
-      <div class="so-card"><b>Before</b><p>Your host holds a welcome call and makes three relevant introductions for each guest, with consent.</p></div>
+      <div class="so-card"><b>Before</b><p>Your host holds a virtual Shore meet and greet with breakout rooms before you arrive, and makes three relevant introductions for each guest, with consent. It is part of the package.</p></div>
       <div class="so-card"><b>During</b><p>Rotating dinner seating, optional peer circles and paired walks create chances to talk, without pressure.</p></div>
       <div class="so-card"><b>After</b><p>Your host runs reunion calls around days 14, 45 and 90, and offers introductions based on the interests you expressed.</p></div>
     </div>
@@ -13151,6 +13152,7 @@ body.theme-night #p-seven-shores-society{
       <details class="so-qa-row"><summary class="so-qa-q">Do I need to apply?</summary><div class="so-qa-a">Yes. You tell us a little about your work and what you hope to learn and share, then have a short fit conversation. We select for respectful behavior and a willingness to participate.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Is it a networking event?</summary><div class="so-qa-a">It is a residency built around time together, not a sales event. There is no unsolicited selling, and business introductions are welcome without dominating the conversation.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Can I work while I am there?</summary><div class="so-qa-a">The week protects time to think, with optional work time or a quiet morning. Connectivity details are confirmed with the venue before you book, so you know what to expect.</div></details>
+      <details class="so-qa-row"><summary class="so-qa-q">What happens before I arrive?</summary><div class="so-qa-a">Your host holds a virtual Shore meet and greet with breakout rooms, so you meet your circle before you travel, and makes three relevant introductions for each guest, with consent. It is part of the package.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">What happens after the trip?</summary><div class="so-qa-a">You join a 90-day community. Your host runs reunion calls around days 14, 45 and 90 and offers introductions based on the interests you shared.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Will it lead to clients or investment?</summary><div class="so-qa-a">We promise opportunities for connection and a well-hosted experience. We cannot guarantee friendships, investment, clients, partnerships or business growth.</div></details>
     </div>
@@ -13175,11 +13177,9 @@ body.theme-night #p-seven-shores-society{
     window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+(window.pageYOffset||0)-84),behavior:'smooth'});
     return false;
   };
-  /* The application is the enquiry form with the questions the host needs already in the notes. */
+  /* Apply opens the application popup (same style as the Leaders in Jamaica one); the answers are emailed to Sight Seers. */
   window.ssocApply=function(){
-    openStartPlanning('Jamaica','Seven Shores Society: Jamaica Residency','Seven Shores Society',
-      'I would like to apply for the Seven Shores Society: Jamaica Residency (8 days, 7 nights, 7 guests).\nWhat I do: \nWhy I would like to attend: \nWhat I can share: \nWhat I hope to learn: \nPace, work commitments, room choice, accessibility and dietary needs: ');
-    return false;
+    return openSocietyApply();
   };
 })();
 </script>
@@ -13596,9 +13596,9 @@ body.theme-night #p-flagship-programs{
         <a class="fp-img" href="/seven-shores-society" onclick="nav('seven-shores-society');return false;" tabindex="-1" aria-hidden="true"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="lazy" style="object-position:50% 45%"><span class="fp-tag">Entrepreneurs</span></a>
         <div class="fp-body">
           <h2><a href="/seven-shores-society" onclick="nav('seven-shores-society');return false;">Seven Shores Society</a></h2>
-          <p>A hosted seven-night residency in nature for seven entrepreneurs and independent professionals, with 90 days of connection after.</p>
+          <p>A hosted seven-night residency in nature for seven entrepreneurs and independent professionals. Meet your circle in a virtual meet and greet first, then stay connected for 90 days.</p>
           <ul class="fp-facts"><li>7 guests</li><li>7 nights</li><li>By application</li></ul>
-          <details class="fp-peek"><summary>Quick look</summary><ul><li>Seven guests and seven nights in nature, with a host</li><li>Shared meals, local encounters and time to work, rest or reflect</li><li>Reunion calls at days 14, 45 and 90</li></ul></details>
+          <details class="fp-peek"><summary>Quick look</summary><ul><li>Seven guests and seven nights in nature, with a host</li><li>A virtual meet and greet with breakout rooms before you arrive</li><li>Shared meals, local encounters, and reunion calls at days 14, 45 and 90</li></ul></details>
           <div class="fp-actions">
             <a class="fp-btn" href="/seven-shores-society" onclick="nav('seven-shores-society');return false;">Open program</a>
           </div>
@@ -14597,6 +14597,712 @@ body.theme-night #p-flagship-programs{
   else ready();
 })();
 </script>
+
+<!-- ════════════════════════════════════
+     SEVEN SHORES SOCIETY: APPLICATION POPUP (same style as the Leaders in Jamaica application)
+════════════════════════════════════ -->
+<style>
+#ssApplyModal{
+  --ssa-navy:#063a63;--ssa-navy2:#0a4d73;--ssa-green:#70c257;--ssa-orange:#ef8731;
+  --ssa-ink:#12293d;--ssa-mut:#5c6f82;--ssa-line:rgba(6,58,99,.13);
+  --ssa-spring:cubic-bezier(.2,.8,.2,1);
+  position:fixed;inset:0;z-index:150000;display:flex;align-items:center;justify-content:center;
+  padding:24px;font-family:'Raleway',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ssa-ink);
+  background:rgba(4,26,45,.42);-webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+  opacity:0;visibility:hidden;transition:opacity .34s var(--ssa-spring),visibility 0s linear .34s}
+#ssApplyModal.is-open{opacity:1;visibility:visible;transition:opacity .34s var(--ssa-spring),visibility 0s}
+#ssApplyModal *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+
+#ssApplyModal .ssa-sheet{position:relative;display:flex;flex-direction:column;width:min(640px,100%);max-height:min(88vh,900px);
+  background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(34px) saturate(180%);backdrop-filter:blur(34px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);border-radius:30px;overflow:hidden;
+  box-shadow:0 2px 6px rgba(6,58,99,.08),0 44px 90px rgba(6,58,99,.34);
+  transform:translateY(18px) scale(.94);opacity:0;transition:transform .44s var(--ssa-spring),opacity .3s ease}
+#ssApplyModal.is-open .ssa-sheet{transform:none;opacity:1}
+#ssApplyModal .ssa-grabber{display:none}
+
+#ssApplyModal .ssa-close{position:absolute;top:18px;right:18px;z-index:4;width:34px;height:34px;border:0;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;background:rgba(6,58,99,.07);color:var(--ssa-mut);
+  transition:background .2s,color .2s,transform .2s var(--ssa-spring)}
+#ssApplyModal .ssa-close:hover{background:rgba(6,58,99,.13);color:var(--ssa-navy);transform:scale(1.06)}
+#ssApplyModal .ssa-close svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+
+#ssApplyModal .ssa-head{position:relative;padding:30px 34px 20px;border-bottom:1px solid var(--ssa-line);
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,0))}
+#ssApplyModal .ssa-kicker{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;
+  color:var(--ssa-orange);margin-bottom:10px}
+#ssApplyModal .ssa-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--ssa-navy);
+  font-size:clamp(24px,3.4vw,31px);line-height:1.12;letter-spacing:-.4px;margin:0 0 8px}
+#ssApplyModal .ssa-sub{margin:0;color:var(--ssa-mut);font-size:14px;line-height:1.6;max-width:52ch}
+
+#ssApplyModal .ssa-steps{display:flex;gap:8px;margin-top:20px}
+#ssApplyModal .ssa-steps span{flex:1;display:block;height:3px;border-radius:0;background:rgba(6,58,99,.12);overflow:hidden;position:relative}
+#ssApplyModal .ssa-steps span::after{content:'';position:absolute;inset:0;border-radius:0;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--ssa-green),#4fae3f);transition:transform .45s var(--ssa-spring)}
+#ssApplyModal .ssa-steps span.done::after{transform:scaleX(1)}
+#ssApplyModal .ssa-steps span.now::after{transform:scaleX(1);background:linear-gradient(90deg,#f5a04b,var(--ssa-orange))}
+
+#ssApplyModal .ssa-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:26px 34px 30px;-webkit-overflow-scrolling:touch}
+#ssApplyModal .ssa-step{display:none}
+#ssApplyModal .ssa-step.is-on{display:block;animation:ssaStepIn .42s var(--ssa-spring) both}
+@keyframes ssaStepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#ssApplyModal .ssa-legend{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--ssa-navy2);
+  margin:0 0 16px;opacity:.75}
+#ssApplyModal .ssa-legend+.ssa-legend,#ssApplyModal .ssa-field+.ssa-legend,#ssApplyModal .ssa-row+.ssa-legend,
+#ssApplyModal .ssa-chips+.ssa-legend{margin-top:26px}
+
+#ssApplyModal .ssa-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#ssApplyModal .ssa-field{display:block;margin-bottom:14px}
+#ssApplyModal .ssa-row .ssa-field{margin-bottom:0}
+#ssApplyModal .ssa-row+.ssa-field,#ssApplyModal .ssa-row+.ssa-row{margin-top:14px}
+#ssApplyModal .ssa-label{display:block;font-size:12.5px;font-weight:700;color:var(--ssa-navy);letter-spacing:.1px;margin-bottom:7px}
+#ssApplyModal .ssa-label i{font-style:normal;font-weight:600;color:var(--ssa-mut);opacity:.8}
+
+#ssApplyModal .ssa-input,#ssApplyModal .ssa-select,#ssApplyModal .ssa-area{
+  width:100%;font-family:inherit;font-size:15px;color:var(--ssa-ink);background:rgba(255,255,255,.78);
+  border:1px solid var(--ssa-line);border-radius:14px;padding:13px 15px;outline:0;appearance:none;-webkit-appearance:none;
+  transition:border-color .2s,box-shadow .25s var(--ssa-spring),background .2s}
+#ssApplyModal .ssa-area{min-height:104px;resize:vertical;line-height:1.6}
+#ssApplyModal .ssa-select{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%235c6f82' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center;padding-right:40px;cursor:pointer}
+#ssApplyModal .ssa-input::placeholder,#ssApplyModal .ssa-area::placeholder{color:#9fb0bf}
+#ssApplyModal .ssa-input:focus,#ssApplyModal .ssa-select:focus,#ssApplyModal .ssa-area:focus{
+  background:#fff;border-color:var(--ssa-navy2);box-shadow:0 0 0 4px rgba(10,77,115,.13)}
+#ssApplyModal .ssa-field.has-err .ssa-input,#ssApplyModal .ssa-field.has-err .ssa-select,#ssApplyModal .ssa-field.has-err .ssa-area{
+  border-color:#e0654f;box-shadow:0 0 0 4px rgba(224,101,79,.12)}
+#ssApplyModal .ssa-err{display:none;margin-top:6px;font-size:12px;font-weight:600;color:#c9503a}
+#ssApplyModal .ssa-field.has-err .ssa-err{display:block}
+#ssApplyModal .ssa-field.shake,#ssApplyModal .ssa-check.shake{animation:ssaShake .4s var(--ssa-spring)}
+@keyframes ssaShake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}100%{transform:none}}
+#ssApplyModal .ssa-count{display:block;text-align:right;margin-top:6px;font-size:11.5px;color:var(--ssa-mut);opacity:.75}
+
+#ssApplyModal .ssa-chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+#ssApplyModal .ssa-chips.tri{grid-template-columns:repeat(3,1fr)}
+#ssApplyModal .ssa-chip{position:relative;display:block;cursor:pointer}
+#ssApplyModal .ssa-chip input{position:absolute;opacity:0;width:0;height:0}
+#ssApplyModal .ssa-chip span{display:block;padding:13px 15px;border-radius:15px;background:rgba(255,255,255,.7);
+  border:1.5px solid var(--ssa-line);font-size:14px;font-weight:700;color:var(--ssa-ink);line-height:1.3;
+  transition:border-color .22s,background .22s,box-shadow .28s var(--ssa-spring),transform .28s var(--ssa-spring)}
+#ssApplyModal .ssa-chip span small{display:block;margin-top:4px;font-size:11.5px;font-weight:600;color:var(--ssa-mut)}
+#ssApplyModal .ssa-chip:hover span{border-color:rgba(6,58,99,.26)}
+#ssApplyModal .ssa-chip input:checked+span{background:#fff;border-color:var(--ssa-navy2);
+  box-shadow:0 0 0 3px rgba(10,77,115,.11),0 10px 22px rgba(6,58,99,.1);transform:translateY(-1px)}
+#ssApplyModal .ssa-chip input:focus-visible+span{box-shadow:0 0 0 4px rgba(239,135,49,.3)}
+
+#ssApplyModal .ssa-check{display:flex;gap:12px;align-items:flex-start;padding:14px 15px;border-radius:15px;
+  background:rgba(255,255,255,.62);border:1px solid var(--ssa-line);cursor:pointer;margin-bottom:14px}
+#ssApplyModal .ssa-check input{position:absolute;opacity:0;width:0;height:0}
+#ssApplyModal .ssa-check .box{flex:0 0 20px;width:20px;height:20px;border-radius:7px;border:1.5px solid rgba(6,58,99,.3);
+  background:#fff;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:background .2s,border-color .2s,transform .22s var(--ssa-spring)}
+#ssApplyModal .ssa-check .box svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  opacity:0;transform:scale(.5);transition:opacity .2s,transform .26s var(--ssa-spring)}
+#ssApplyModal .ssa-check input:checked~.box{background:linear-gradient(135deg,var(--ssa-green),#4fae3f);border-color:#4fae3f}
+#ssApplyModal .ssa-check input:checked~.box svg{opacity:1;transform:none}
+#ssApplyModal .ssa-check .txt{font-size:13.5px;line-height:1.55;color:var(--ssa-mut)}
+#ssApplyModal .ssa-check .txt b{color:var(--ssa-ink);font-weight:700}
+#ssApplyModal .ssa-check.has-err{border-color:#e0654f;box-shadow:0 0 0 3px rgba(224,101,79,.1)}
+
+#ssApplyModal .ssa-foot{display:flex;align-items:center;gap:14px;padding:18px 34px 22px;border-top:1px solid var(--ssa-line);
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.7))}
+#ssApplyModal .ssa-foot-note{flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--ssa-mut);letter-spacing:.2px}
+#ssApplyModal .ssa-btn{border:1.5px solid transparent;border-radius:0;padding:13px 28px;font-family:inherit;font-size:14.5px;
+  font-weight:700;cursor:pointer;letter-spacing:.2px;white-space:nowrap;
+  transition:transform .26s var(--ssa-spring),box-shadow .26s,background .22s,opacity .2s}
+#ssApplyModal .ssa-btn.primary{background:linear-gradient(135deg,#f5a04b,var(--ssa-orange));color:#fff;box-shadow:0 10px 24px rgba(239,135,49,.36)}
+#ssApplyModal .ssa-btn.primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(239,135,49,.45)}
+#ssApplyModal .ssa-btn.ghost{background:rgba(6,58,99,.06);color:var(--ssa-navy);border-color:rgba(6,58,99,.12)}
+#ssApplyModal .ssa-btn.ghost:hover{background:rgba(6,58,99,.11)}
+#ssApplyModal .ssa-btn[hidden]{display:none}
+#ssApplyModal .ssa-btn.is-busy{pointer-events:none;opacity:.75}
+#ssApplyModal .ssa-btn .spin{display:none;width:14px;height:14px;margin-right:8px;vertical-align:-2px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.42);border-top-color:#fff;animation:ssaSpin .7s linear infinite}
+#ssApplyModal .ssa-btn.is-busy .spin{display:inline-block}
+@keyframes ssaSpin{to{transform:rotate(360deg)}}
+
+#ssApplyModal .ssa-alert{display:none;margin:0 0 16px;padding:13px 15px;border-radius:14px;font-size:13.5px;line-height:1.6;
+  background:rgba(224,101,79,.09);border:1px solid rgba(224,101,79,.28);color:#a8412c}
+#ssApplyModal .ssa-alert.is-on{display:block}
+#ssApplyModal .ssa-alert a{color:#a8412c;font-weight:700}
+
+#ssApplyModal .ssa-done{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;text-align:center;padding:44px 38px;background:rgba(255,255,255,.96);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  opacity:0;visibility:hidden;transform:scale(.97);transition:opacity .3s ease,transform .42s var(--ssa-spring),visibility 0s linear .3s}
+#ssApplyModal .ssa-done.is-on{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .42s var(--ssa-spring),visibility 0s}
+#ssApplyModal .ssa-done .ring{width:74px;height:74px;margin-bottom:18px}
+#ssApplyModal .ssa-done .ring circle{fill:none;stroke:var(--ssa-green);stroke-width:3;stroke-dasharray:207;stroke-dashoffset:207}
+#ssApplyModal .ssa-done .ring path{fill:none;stroke:var(--ssa-green);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:36;stroke-dashoffset:36}
+#ssApplyModal .ssa-done.is-on .ring circle{animation:ssaDraw .6s var(--ssa-spring) forwards}
+#ssApplyModal .ssa-done.is-on .ring path{animation:ssaDraw .38s var(--ssa-spring) .42s forwards}
+@keyframes ssaDraw{to{stroke-dashoffset:0}}
+#ssApplyModal .ssa-done h3{font-family:'Playfair Display',serif;font-weight:700;color:var(--ssa-navy);font-size:27px;margin:0}
+#ssApplyModal .ssa-done p{color:var(--ssa-mut);font-size:14.5px;line-height:1.65;max-width:42ch;margin:10px 0 22px}
+
+@media(max-width:600px){
+  #ssApplyModal{padding:0;align-items:flex-end}
+  #ssApplyModal .ssa-sheet{width:100%;max-height:93vh;border-radius:28px 28px 0 0;transform:translateY(100%) scale(1)}
+  #ssApplyModal.is-open .ssa-sheet{transform:none}
+  #ssApplyModal .ssa-grabber{display:block;width:38px;height:4px;border-radius:0;background:rgba(6,58,99,.18);margin:10px auto 0}
+  #ssApplyModal .ssa-head{padding:16px 22px 18px}
+  #ssApplyModal .ssa-kicker{padding-right:44px}
+  #ssApplyModal .ssa-close{top:12px;right:14px}
+  #ssApplyModal .ssa-body{padding:22px 22px 26px}
+  #ssApplyModal .ssa-foot{padding:14px 22px calc(16px + env(safe-area-inset-bottom))}
+  #ssApplyModal .ssa-row,#ssApplyModal .ssa-chips,#ssApplyModal .ssa-chips.tri{grid-template-columns:1fr}
+  #ssApplyModal .ssa-foot-note{font-size:11.5px}
+  #ssApplyModal .ssa-btn{padding:13px 20px}
+}
+@media(prefers-reduced-motion:reduce){
+  #ssApplyModal,#ssApplyModal .ssa-sheet,#ssApplyModal .ssa-step,#ssApplyModal .ssa-done,
+  #ssApplyModal .ssa-done .ring circle,#ssApplyModal .ssa-done .ring path{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+
+#ssApplyModal .ssa-q{font-size:13.5px;font-weight:700;color:var(--ssa-navy);margin:24px 0 10px;line-height:1.45}
+#ssApplyModal .ssa-legend+.ssa-q{margin-top:0}
+#ssApplyModal .ssa-q i{font-style:normal;font-weight:600;color:var(--ssa-mut);opacity:.85}
+#ssApplyModal .ssa-hint{display:block;margin-top:6px;font-size:12px;line-height:1.5;color:var(--ssa-mut)}
+#ssApplyModal .ssa-hint-block{margin:6px 0 14px}
+#ssApplyModal .ssa-max{display:none;margin:-4px 0 12px;font-size:12px;font-weight:600;color:#c9503a}
+#ssApplyModal .ssa-max.is-on{display:block}
+#ssApplyModal .ssa-check-tight{margin-top:14px;margin-bottom:6px}
+#ssApplyModal .ssa-field[hidden]{display:none}
+#ssApplyModal .ssa-check .txt a{color:var(--ssa-navy2);font-weight:700}
+#ssApplyModal .ssa-field.has-err .ssa-chip span{border-color:#e0654f}
+#ssApplyModal .ssa-field .ssa-q{margin-top:6px}
+</style>
+
+<div id="ssApplyModal" role="dialog" aria-modal="true" aria-labelledby="ssaTitle" aria-hidden="true">
+  <div class="ssa-sheet">
+    <div class="ssa-grabber"></div>
+    <button type="button" class="ssa-close" onclick="closeSocietyApply()" aria-label="Close application form">
+      <svg viewBox="0 0 14 14"><path d="M1 1l12 12M13 1L1 13"/></svg>
+    </button>
+
+    <header class="ssa-head">
+      <span class="ssa-kicker">Seven Shores Society &middot; Application</span>
+      <h2 class="ssa-title" id="ssaTitle">Welcome to the shore</h2>
+      <p class="ssa-sub">Tell us about yourself, the work you do and what you hope to find in the Society. This helps us shape a circle that fits.</p>
+      <div class="ssa-steps" aria-hidden="true"><span class="now"></span><span></span><span></span></div>
+    </header>
+
+    <form class="ssa-body" id="ssApplyForm" novalidate autocomplete="on">
+      <div class="ssa-alert" id="ssaAlert" role="alert"></div>
+
+      <section class="ssa-step is-on" data-step="1">
+        <p class="ssa-legend">About you</p>
+        <div class="ssa-row">
+          <label class="ssa-field">
+            <span class="ssa-label">First name</span>
+            <input class="ssa-input" type="text" name="firstName" data-label="First name" data-req autocomplete="given-name" placeholder="First name">
+            <span class="ssa-err"></span>
+          </label>
+          <label class="ssa-field">
+            <span class="ssa-label">Last name</span>
+            <input class="ssa-input" type="text" name="lastName" data-label="Last name" data-req autocomplete="family-name" placeholder="Last name">
+            <span class="ssa-err"></span>
+          </label>
+        </div>
+        <label class="ssa-field">
+          <span class="ssa-label">Your best email address</span>
+          <input class="ssa-input" type="email" name="email" data-label="Email" data-req data-email autocomplete="email" placeholder="you@example.com">
+          <span class="ssa-hint">We will use this to contact you about your application and participation.</span>
+          <span class="ssa-err"></span>
+        </label>
+        <div class="ssa-row">
+          <label class="ssa-field">
+            <span class="ssa-label">WhatsApp or phone number</span>
+            <input class="ssa-input" type="tel" name="phone" id="ssaPhone" data-label="Your WhatsApp or phone number" data-req data-phone autocomplete="tel" placeholder="+1 305 000 0000">
+            <span class="ssa-err"></span>
+          </label>
+          <label class="ssa-field">
+            <span class="ssa-label">Personal Instagram <i>(optional)</i></span>
+            <input class="ssa-input" type="text" name="instagram" data-label="Instagram" placeholder="@yourhandle, or N/A">
+            <span class="ssa-err"></span>
+          </label>
+        </div>
+        <label class="ssa-field">
+          <span class="ssa-label">Which age range are you in? <i>(optional)</i></span>
+          <select class="ssa-select" name="ageRange" data-label="Age range">
+            <option value="">Select one</option>
+            <option>18 to 21</option><option>22 to 25</option><option>26 to 30</option><option>31 to 35</option><option>36 to 40</option><option>40 and over</option>
+          </select>
+          <span class="ssa-err"></span>
+        </label>
+        <label class="ssa-field">
+          <span class="ssa-label">Where did you first hear about Seven Shores Society? <i>(optional)</i></span>
+          <select class="ssa-select" name="heardFrom" id="ssaHeard" data-label="Where you heard about us">
+            <option value="">Select one</option>
+            <option>Instagram</option><option>YouTube</option><option>LinkedIn</option><option>Facebook</option><option>Google search</option><option>A newsletter</option><option>A friend or current member</option><option>An event</option><option>Other</option>
+          </select>
+          <span class="ssa-err"></span>
+        </label>
+        <label class="ssa-field" id="ssaReferrerWrap" hidden>
+          <span class="ssa-label">Who referred you? <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="referrer" data-label="Who referred you" placeholder="Their name">
+          <span class="ssa-err"></span>
+        </label>
+        <label class="ssa-field" id="ssaHeardOtherWrap" hidden>
+          <span class="ssa-label">Where did you hear about us? <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="heardOther" data-label="Where you heard about us" placeholder="Tell us where">
+          <span class="ssa-err"></span>
+        </label>
+
+        <p class="ssa-legend">Where you are based</p>
+        <div class="ssa-row">
+          <label class="ssa-field">
+            <span class="ssa-label">Country</span>
+            <input class="ssa-input" type="text" name="country" id="ssaCountry" data-label="Country" autocomplete="country-name" placeholder="e.g. Canada">
+            <span class="ssa-err"></span>
+          </label>
+          <label class="ssa-field">
+            <span class="ssa-label">City</span>
+            <input class="ssa-input" type="text" name="city" id="ssaCity" data-label="City" autocomplete="address-level2" placeholder="e.g. Toronto">
+            <span class="ssa-err"></span>
+          </label>
+        </div>
+        <label class="ssa-check ssa-check-tight">
+          <input type="checkbox" name="noBase" id="ssaNoBase">
+          <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
+          <span class="txt">No fixed home base. I travel frequently.</span>
+        </label>
+        <p class="ssa-hint ssa-hint-block">A general location is enough. Please do not enter a street address.</p>
+      </section>
+
+      <section class="ssa-step" data-step="2">
+        <p class="ssa-legend">Your work</p>
+        <div class="ssa-row">
+          <label class="ssa-field">
+            <span class="ssa-label">Business or practice name</span>
+            <input class="ssa-input" type="text" name="businessName" data-label="Business or practice name" data-req placeholder="What you run or do">
+            <span class="ssa-err"></span>
+          </label>
+          <label class="ssa-field">
+            <span class="ssa-label">Website or link <i>(optional)</i></span>
+            <input class="ssa-input" type="text" name="businessUrl" data-label="Website or link" placeholder="yourbusiness.com">
+            <span class="ssa-err"></span>
+          </label>
+        </div>
+
+        <div class="ssa-field" data-reqgroup="role">
+          <p class="ssa-q">What best describes your role?</p>
+          <div class="ssa-chips" role="radiogroup" aria-label="Your role">
+            <label class="ssa-chip"><input type="radio" name="role" value="Founder or business owner"><span>Founder or business owner</span></label>
+            <label class="ssa-chip"><input type="radio" name="role" value="Co-founder"><span>Co-founder</span></label>
+            <label class="ssa-chip"><input type="radio" name="role" value="Self-employed or freelancer"><span>Self-employed or freelancer</span></label>
+            <label class="ssa-chip"><input type="radio" name="role" value="Independent professional"><span>Independent professional</span></label>
+            <label class="ssa-chip"><input type="radio" name="role" value="Something else"><span>Something else</span></label>
+          </div>
+          <span class="ssa-err"></span>
+        </div>
+
+        <div class="ssa-field" data-reqgroup="operations">
+          <p class="ssa-q">How does your work run?</p>
+          <div class="ssa-chips" role="radiogroup" aria-label="How your work runs">
+            <label class="ssa-chip"><input type="radio" name="operations" value="100% online"><span>100% online</span></label>
+            <label class="ssa-chip"><input type="radio" name="operations" value="Mostly online"><span>Mostly online</span></label>
+            <label class="ssa-chip"><input type="radio" name="operations" value="A mix of online and in person"><span>A mix of online and in person</span></label>
+            <label class="ssa-chip"><input type="radio" name="operations" value="100% in person"><span>100% in person</span></label>
+          </div>
+          <span class="ssa-err"></span>
+        </div>
+
+        <div class="ssa-field" data-reqgroup="availability">
+          <p class="ssa-q">Could you step away from your work, or run it remotely, for the eight days?</p>
+          <div class="ssa-chips" role="radiogroup" aria-label="Stepping away or working remotely">
+            <label class="ssa-chip"><input type="radio" name="availability" value="Yes, I can step away completely"><span>Yes, I can step away completely</span></label>
+            <label class="ssa-chip"><input type="radio" name="availability" value="Yes, I can work remotely around the program"><span>Yes, I can work remotely around the program</span></label>
+            <label class="ssa-chip"><input type="radio" name="availability" value="I would need to arrange cover first"><span>I would need to arrange cover first</span></label>
+            <label class="ssa-chip"><input type="radio" name="availability" value="Not sure yet"><span>Not sure yet</span></label>
+          </div>
+          <span class="ssa-err"></span>
+        </div>
+
+        <p class="ssa-q">Have you owned or run a business before this one? <i>(optional)</i></p>
+        <div class="ssa-chips" role="radiogroup" aria-label="Previous business">
+          <label class="ssa-chip"><input type="radio" name="previousBusiness" value="Yes"><span>Yes</span></label>
+          <label class="ssa-chip"><input type="radio" name="previousBusiness" value="No"><span>No</span></label>
+        </div>
+      </section>
+
+      <section class="ssa-step" data-step="3">
+        <p class="ssa-legend">Your place in the society</p>
+
+        <label class="ssa-field">
+          <span class="ssa-label">What could you bring to the group?</span>
+          <textarea class="ssa-area" name="contribution" data-label="What you could bring" data-req maxlength="700" placeholder="Skills, knowledge, experience, connections or anything else of value."></textarea>
+          <span class="ssa-count" id="ssaCount">0 / 700</span>
+          <span class="ssa-err"></span>
+        </label>
+
+        <label class="ssa-field">
+          <span class="ssa-label">Describe your dream life in one sentence. <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="dreamLife" data-label="Your dream life" maxlength="300" placeholder="One sentence is plenty">
+          <span class="ssa-err"></span>
+        </label>
+
+        <p class="ssa-q">Why would you like to join? <i>Select up to 3.</i></p>
+        <div class="ssa-chips" data-max="3" role="group" aria-label="Why you would like to join">
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Learn from other founders and owners"><span>Learn from other founders and owners</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Make like-minded friends"><span>Make like-minded friends</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Ease the loneliness of running a business"><span>Ease the loneliness of running a business</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Find a trusted space to talk openly"><span>Find a trusted space to talk openly</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Find people to travel and work with"><span>Find people to travel and work with</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Move faster in my business"><span>Move faster in my business</span></label>
+        </div>
+        <p class="ssa-max" role="status"></p>
+
+        <p class="ssa-q">If you are shortlisted, are you willing to have a short fit conversation? <i>(optional)</i></p>
+        <div class="ssa-chips" role="radiogroup" aria-label="Fit conversation">
+          <label class="ssa-chip"><input type="radio" name="fitChat" value="Yes, a short fit conversation is fine"><span>Yes, a short fit conversation is fine</span></label>
+          <label class="ssa-chip"><input type="radio" name="fitChat" value="I would prefer to answer by email"><span>I would prefer to answer by email</span></label>
+        </div>
+
+        <label class="ssa-field">
+          <span class="ssa-label">Is there anything we should plan for? <i>(optional)</i></span>
+          <textarea class="ssa-area" name="needs" data-label="Anything to plan for" maxlength="500" placeholder="For example, accessibility, dietary needs or whether you would prefer a shared or a private room."></textarea>
+          <span class="ssa-hint">Share only practical arrangements you want us to consider. No medical details are needed.</span>
+          <span class="ssa-err"></span>
+        </label>
+
+        <label class="ssa-field">
+          <span class="ssa-label">Is there anything else you would like us to know? <i>(optional)</i></span>
+          <textarea class="ssa-area" name="more" data-label="Anything else" maxlength="900" placeholder="Anything that helps us get to know you"></textarea>
+          <span class="ssa-err"></span>
+        </label>
+
+        <label class="ssa-check" id="ssaAckWrap">
+          <input type="checkbox" name="ack" data-label="Acknowledgement">
+          <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
+          <span class="txt">I understand that submitting this form expresses interest and does not book a place or authorize a payment. Sight Seers Caribbean may contact me about this application. <a href="/privacy-policy" target="_blank" rel="noopener">Privacy policy</a></span>
+        </label>
+      </section>
+    </form>
+
+    <footer class="ssa-foot">
+      <button type="button" class="ssa-btn ghost" id="ssaBack" hidden>Back</button>
+      <span class="ssa-foot-note" id="ssaFootNote">Step 1 of 3</span>
+      <button type="button" class="ssa-btn primary" id="ssaNext"><span class="spin"></span><span id="ssaNextTxt">Continue</span></button>
+    </footer>
+
+    <div class="ssa-done" id="ssaDone" aria-hidden="true">
+      <svg class="ring" viewBox="0 0 80 80" aria-hidden="true">
+        <circle cx="40" cy="40" r="33"/>
+        <path d="M25 41.5l10.5 10.5L56 29"/>
+      </svg>
+      <h3>Application received</h3>
+      <p id="ssaDoneMsg">Thank you. We review every application personally and will be in touch by email or WhatsApp.</p>
+      <button type="button" class="ssa-btn primary" onclick="closeSocietyApply()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STEPS = 3, step = 1, busy = false, lastFocus = null, prevOverflow = '';
+  var APPLY_EMAIL = 'info@sightseerscaribbean.com';
+
+  function el(id){ return document.getElementById(id); }
+  function modal(){ return el('ssApplyModal'); }
+  function form(){ return el('ssApplyForm'); }
+  function steps(){ return form().querySelectorAll('.ssa-step'); }
+  function q(name){ return form().querySelector('[name="' + name + '"]'); }
+
+  function paint(){
+    var bars = modal().querySelectorAll('.ssa-steps span');
+    for (var i = 0; i < bars.length; i++){
+      bars[i].className = (i + 1 < step) ? 'done' : (i + 1 === step ? 'now' : '');
+    }
+    var list = steps();
+    for (var j = 0; j < list.length; j++){
+      list[j].classList.toggle('is-on', Number(list[j].dataset.step) === step);
+    }
+    el('ssaBack').hidden = (step === 1);
+    el('ssaNextTxt').textContent = (step === STEPS) ? 'Send my application' : 'Continue';
+    el('ssaFootNote').textContent = 'Step ' + step + ' of ' + STEPS;
+    form().scrollTop = 0;
+  }
+
+  function wrapOf(field){ return field.closest('.ssa-field') || field.closest('.ssa-check'); }
+  function fail(field, msg){
+    var wrap = wrapOf(field);
+    if (!wrap) return;
+    wrap.classList.add('has-err');
+    var slot = wrap.querySelector('.ssa-err');
+    if (slot) slot.textContent = msg;
+    wrap.classList.remove('shake');
+    void wrap.offsetWidth;
+    wrap.classList.add('shake');
+  }
+  function clearErr(wrap){
+    wrap.classList.remove('has-err');
+    var slot = wrap.querySelector('.ssa-err');
+    if (slot) slot.textContent = '';
+  }
+  function chosen(name){ var r = form().querySelector('input[name="' + name + '"]:checked'); return r ? r.value : ''; }
+
+  function validate(n){
+    var scope = form().querySelector('.ssa-step[data-step="' + n + '"]');
+    var fields = scope.querySelectorAll('[data-req]');
+    var first = null, i, f, wrap, v;
+    for (i = 0; i < fields.length; i++){
+      f = fields[i]; wrap = wrapOf(f); clearErr(wrap);
+      v = (f.value || '').trim();
+      if (!v){ fail(f, (f.dataset.label || 'This field') + ' is required.'); first = first || f; }
+      else if (f.hasAttribute('data-email') && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+        fail(f, 'Please enter a valid email address.'); first = first || f;
+      } else if (f.hasAttribute('data-phone') && v.replace(/\D+/g, '').length < 6){
+        fail(f, 'Please enter a number we can reach you on.'); first = first || f;
+      }
+    }
+    var groups = scope.querySelectorAll('[data-reqgroup]');
+    for (i = 0; i < groups.length; i++){
+      clearErr(groups[i]);
+      if (!groups[i].querySelector('input:checked')){
+        var inp = groups[i].querySelector('input');
+        fail(inp, 'Please choose one.');
+        first = first || inp;
+      }
+    }
+    if (n === 1){
+      var noBase = q('noBase').checked;
+      ['country', 'city'].forEach(function(nm){
+        var fld = q(nm); clearErr(wrapOf(fld));
+        if (!noBase && !(fld.value || '').trim()){ fail(fld, (fld.dataset.label || 'This field') + ' is required, or tick that you have no fixed home base.'); first = first || fld; }
+      });
+    }
+    if (n === STEPS){
+      var ack = q('ack'), aw = wrapOf(ack);
+      aw.classList.remove('has-err');
+      if (!ack.checked){
+        aw.classList.add('has-err'); aw.classList.remove('shake'); void aw.offsetWidth; aw.classList.add('shake');
+        first = first || ack;
+      }
+    }
+    if (first && first.focus){ try { first.focus({ preventScroll: false }); } catch(e){ first.focus(); } }
+    return !first;
+  }
+
+  function list(name){
+    var out = [], boxes = form().querySelectorAll('input[name="' + name + '"]:checked');
+    for (var i = 0; i < boxes.length; i++) out.push(boxes[i].value);
+    return out;
+  }
+  function val(name){ var f = q(name); return f ? (f.value || '').trim() : ''; }
+  function dash(s){ return s && s.length ? s : 'Not given'; }
+  function joined(a){ return a.length ? a.join(', ') : 'Not given'; }
+
+  function summary(){
+    var name = val('firstName') + ' ' + val('lastName');
+    var noBase = q('noBase').checked;
+    var heard = val('heardFrom');
+    if (heard === 'A friend or current member' && val('referrer')) heard += ' (referred by ' + val('referrer') + ')';
+    if (heard === 'Other' && val('heardOther')) heard += ' (' + val('heardOther') + ')';
+    var place = [val('city'), val('country')].filter(Boolean).join(', ');
+    return [
+      'SEVEN SHORES SOCIETY APPLICATION',
+      '',
+      'ABOUT THE APPLICANT',
+      'Name: ' + name,
+      'Email: ' + val('email'),
+      'WhatsApp or phone: ' + val('phone'),
+      'Personal Instagram: ' + dash(val('instagram')),
+      'Age range: ' + dash(val('ageRange')),
+      'Heard about us from: ' + dash(heard),
+      'Based in: ' + (noBase ? 'No fixed home base, travels frequently' + (place ? ' (' + place + ')' : '') : place),
+      '',
+      'THEIR WORK',
+      'Business or practice: ' + val('businessName'),
+      'Website or link: ' + dash(val('businessUrl')),
+      'Role: ' + dash(chosen('role')),
+      'How the work runs: ' + dash(chosen('operations')),
+      'Could step away or run it remotely for the eight days: ' + dash(chosen('availability')),
+      'Has owned or run a business before: ' + dash(chosen('previousBusiness')),
+      '',
+      'THEIR PLACE IN THE SOCIETY',
+      'What they could bring:',
+      dash(val('contribution')),
+      '',
+      'Dream life in one sentence: ' + dash(val('dreamLife')),
+      'Why they would like to join: ' + joined(list('reasons')),
+      'Willing to have a short fit conversation: ' + dash(chosen('fitChat')),
+      'Anything to plan for: ' + dash(val('needs')),
+      '',
+      'ANYTHING ELSE',
+      (val('more') || 'Nothing added'),
+      '',
+      'Acknowledged that this expresses interest and does not book a place or authorize payment: ' + (q('ack').checked ? 'Yes' : 'No'),
+      'Submitted from: ' + (location.origin + '/seven-shores-society')
+    ].join('\n');
+  }
+
+  function busyState(on){
+    busy = on;
+    el('ssaNext').classList.toggle('is-busy', on);
+    el('ssaNextTxt').textContent = on ? 'Sending…' : (step === STEPS ? 'Send my application' : 'Continue');
+  }
+  function alertBox(html){
+    var a = el('ssaAlert');
+    a.innerHTML = html;
+    a.classList.toggle('is-on', !!html);
+    if (html) form().scrollTop = 0;
+  }
+
+  function syncConditional(){
+    var heard = val('heardFrom');
+    el('ssaReferrerWrap').hidden = heard !== 'A friend or current member';
+    el('ssaHeardOtherWrap').hidden = heard !== 'Other';
+  }
+
+  function resetForm(){
+    form().reset();
+    el('ssaCount').textContent = '0 / 700';
+    syncConditional();
+    var errs = form().querySelectorAll('.has-err'); for (var i = 0; i < errs.length; i++) errs[i].classList.remove('has-err');
+  }
+
+  function submit(){
+    if (busy) return;
+    if (!validate(STEPS)) return;
+    var name = (val('firstName') + ' ' + val('lastName')).trim();
+    var body = summary();
+    alertBox('');
+    busyState(true);
+
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'send',
+        name: name,
+        email: val('email'),
+        phone: val('phone'),
+        subject: 'Seven Shores Society application: ' + name,
+        message: body
+      })
+    }).then(function(r){
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json().catch(function(){ return {}; });
+    }).then(function(){
+      busyState(false);
+      var done = el('ssaDone');
+      done.classList.add('is-on');
+      done.setAttribute('aria-hidden', 'false');
+      var btn = done.querySelector('.ssa-btn');
+      if (btn) btn.focus();
+    })['catch'](function(){
+      busyState(false);
+      var href = 'mailto:' + APPLY_EMAIL
+        + '?subject=' + encodeURIComponent('Seven Shores Society application: ' + name)
+        + '&body=' + encodeURIComponent(body);
+      alertBox('We could not send the application just now. <a href="' + href + '">Send it by email instead</a> and everything you typed will be carried across, or message us on WhatsApp.');
+    });
+  }
+
+  window.openSocietyApply = function(){
+    var m = modal();
+    if (!m) return false;
+    lastFocus = document.activeElement;
+    step = 1;
+    alertBox('');
+    var done = el('ssaDone');
+    done.classList.remove('is-on');
+    done.setAttribute('aria-hidden', 'true');
+    syncConditional();
+    paint();
+    prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    m.classList.add('is-open');
+    m.setAttribute('aria-hidden', 'false');
+    setTimeout(function(){
+      var first = form().querySelector('.ssa-step.is-on input, .ssa-step.is-on select');
+      if (first) first.focus();
+    }, 380);
+    return false;
+  };
+
+  window.closeSocietyApply = function(){
+    var m = modal();
+    if (!m) return false;
+    var wasDone = el('ssaDone').classList.contains('is-on');
+    m.classList.remove('is-open');
+    m.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = prevOverflow;
+    if (wasDone) { resetForm(); step = 1; }
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    return false;
+  };
+
+  function ready(){
+    var m = modal();
+    if (!m) return;
+
+    el('ssaNext').addEventListener('click', function(){
+      if (busy) return;
+      if (!validate(step)) return;
+      if (step === STEPS){ submit(); return; }
+      step++;
+      paint();
+    });
+    el('ssaBack').addEventListener('click', function(){
+      if (busy || step === 1) return;
+      step--;
+      paint();
+    });
+    form().addEventListener('submit', function(e){ e.preventDefault(); });
+    form().addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA'){
+        e.preventDefault();
+        el('ssaNext').click();
+      }
+    });
+    form().addEventListener('input', function(e){
+      var wrap = wrapOf(e.target);
+      if (wrap && wrap.classList.contains('has-err')) clearErr(wrap);
+      if (e.target.name === 'contribution') el('ssaCount').textContent = e.target.value.length + ' / 700';
+    });
+    form().addEventListener('change', function(e){
+      var t = e.target;
+      if (t.name === 'ack' && t.checked) wrapOf(t).classList.remove('has-err');
+      var gw = t.closest ? t.closest('[data-reqgroup]') : null;
+      if (gw && t.checked) clearErr(gw);
+      /* "Select up to N": a further tick is not accepted, and the group says why. */
+      var grp = t.closest ? t.closest('.ssa-chips[data-max]') : null;
+      if (grp && t.type === 'checkbox' && t.checked){
+        var max = Number(grp.getAttribute('data-max')), n = grp.querySelectorAll('input:checked').length;
+        var note = grp.nextElementSibling && grp.nextElementSibling.classList.contains('ssa-max') ? grp.nextElementSibling : null;
+        if (n > max){
+          t.checked = false;
+          if (note){ note.textContent = 'You can choose up to ' + max + '. Untick one to choose another.'; note.classList.add('is-on'); }
+        } else if (note){ note.textContent = ''; note.classList.remove('is-on'); }
+      } else if (grp){
+        var nt = grp.nextElementSibling; if (nt && nt.classList.contains('ssa-max')){ nt.textContent = ''; nt.classList.remove('is-on'); }
+      }
+      syncConditional();
+    });
+    m.addEventListener('mousedown', function(e){ if (e.target === m) closeSocietyApply(); });
+    document.addEventListener('keydown', function(e){
+      if (!m.classList.contains('is-open')) return;
+      if (e.key === 'Escape'){ closeSocietyApply(); return; }
+      if (e.key !== 'Tab') return;
+      var f = m.querySelectorAll('a[href], button:not([hidden]), input:not([type="hidden"]), select, textarea');
+      var open = [];
+      for (var i = 0; i < f.length; i++){
+        if (f[i].offsetParent !== null && !f[i].disabled) open.push(f[i]);
+      }
+      if (!open.length) return;
+      var first = open[0], last = open[open.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
+})();
+</script>
+
+
 
 <div class="page" id="p-shop">
   <section class="shop-coming-soon">
@@ -28103,7 +28809,7 @@ var SS_META = {
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
   'flagship-programs':['Flagship Programs | Sight Seers Caribbean','Flagship programs: Seven Shores MBA Voyages, Leaders in Jamaica, Seven Shores Society, Shore Leave and Seven Shores Offsite. Open one to see how it works.'],
   'seven-shores-offsite':['Seven Shores Offsite: Corporate Retreats | Sight Seers','A company offsite in Jamaica or Barbados: a villa stay, a yacht day, culture, excursions, team building and a local business mixer.'],
-  'seven-shores-society':['Seven Shores Society: Jamaica Residency | Sight Seers','A hosted seven-night residency in nature for seven entrepreneurs and independent professionals, plus 90 days of connection. Apply for the Jamaica Residency.'],
+  'seven-shores-society':['Seven Shores Society: Jamaica Residency | Sight Seers','A seven-night residency in nature for seven entrepreneurs, with a virtual meet and greet first and 90 days of connection. Apply for the Jamaica Residency.'],
   'shore-leave':['Shore Leave: Jamaica for Undergraduates | Sight Seers','Adventure, culture and fun in Jamaica for undergraduates from the US, Canada and abroad. Waterfalls, catamaran sails, music and food, planned for your group.'],
   'mba-voyages':['MBA Class Trips & Alumni Voyages, Caribbean | Seven Shores','MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores: yacht days, villa dinners and curated networking for 12 to 60.'],
   'tent-rental':['Tent Rental Agreement | Sight Seers Caribbean','Rent a two-person camping tent from Sight Seers Caribbean Adventures. Complete and sign the rental agreement online.'],
