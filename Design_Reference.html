@@ -12013,6 +12013,7 @@ body.theme-night #p-mba-voyages .mv-btn.line:hover{background:#fff;color:#062e4b
 #p-mba-voyages .mv-add h3{font-family:'Raleway',sans-serif;font-size:19px;font-weight:800;color:var(--mv-head)!important;margin:0 0 8px;line-height:1.25;letter-spacing:-.2px}
 #p-mba-voyages .mv-add p{font-size:14px;line-height:1.65;color:var(--mv-mut)!important;margin:0 0 16px}
 #p-mba-voyages .mv-add-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--mv-line)}
+#p-mba-voyages .mv-add-quote{margin:0 0 12px;font-size:12.5px;font-weight:700;letter-spacing:.2px;color:#ef8731!important}
 #p-mba-voyages .mv-add-for{font-size:12.5px;color:var(--mv-mut)!important;line-height:1.5;flex:none}
 #p-mba-voyages .mv-add-pks{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 200px}
 #p-mba-voyages .mv-add-pk{font-family:'Raleway',sans-serif;font-size:12px;font-weight:700;color:var(--mv-head)!important;background:transparent;border:1px solid var(--mv-line);padding:7px 12px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
@@ -12347,6 +12348,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       return '<article class="mv-add">'
         +'<div class="mv-add-tags">'+a.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'
         +'<h3>'+esc(a.title)+'</h3><p>'+esc(a.text)+'</p>'
+        +'<p class="mv-add-quote">Quoted with your package</p>'
         +'<div class="mv-add-foot"><div class="mv-add-for"><b>Add to:</b></div><div class="mv-add-pks">'
         +a.pk.map(function(id){var k=pkIndex(id);return '<button type="button" class="mv-add-pk" onclick="mbvDetails('+k+','+i+')">'+esc(PACKAGES[k].title.replace(/^MBA /,''))+'</button>';}).join('')
         +'</div></div></article>';
@@ -12357,7 +12359,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     var list=addonsFor(k);if(!list.length)return '';
     var on=addPicked(k);
     return '<div class="mv-det-sec" id="mbvDetAdd"><div class="mv-mini">Add to this package</div>'
-      +'<p class="mv-det-hint">Optional. Tick any you would like and we include them in your inquiry.</p><div class="mv-addopts">'
+      +'<p class="mv-det-hint">Optional. Tick any you would like. They are quoted with your package and included in your inquiry.</p><div class="mv-addopts">'
       +list.map(function(i){var a=ADDONS[i],c=on.indexOf(i)>-1;
         return '<label class="mv-addopt'+(c?' on':'')+'"><input type="checkbox" data-a="'+i+'"'+(c?' checked':'')+'><span><b>'+esc(a.title)+'</b><em>'+esc(a.short)+'</em></span></label>';}).join('')
       +'</div></div>';
@@ -14501,6 +14503,7 @@ body.theme-night .page .tag{
           </div>
           <div class="upsell-totals"><span id="upsellSummary">No add-ons selected yet.</span><span id="upsellTotal">Add-ons: $0</span></div>
         </div>
+        <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore.</p>
         <p class="urgency-text" id="urgencyText">High demand this week, limited availability for peak experiences.</p>
         <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitBook()">Start Your Journey</button>
         <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:10px">Once your planner has talked your trip through with you, a US$15 planning fee gets your fully researched custom package started. It is credited toward your booking.</p>
@@ -25042,6 +25045,7 @@ function bindBookingSelectionSync(){
   const syncAll = function(force){
     syncBookingSelectionFromType(force);
     syncBookingNotesFromType(force);
+    if(typeof calculateUpsells==='function') calculateUpsells();
   };
   typeField.addEventListener('change', function(){
     syncAll(true);
@@ -25494,7 +25498,19 @@ function setGroupSize(size){
   if(gs && map[size]) gs.value=map[size];
   if(notes){ notes.value=messages[size] || notes.value; notes.dataset.autoLinked='0'; }
 }
+/* MBA enquiries use their own add-ons (quoted with the package), so the generic upgrade list is hidden for them and cleared so it cannot reach the notes. */
+function syncMbaUpsells(){
+  var typeField=document.getElementById('b_type');
+  var sec=document.querySelector('.upsell-section');
+  var note=document.getElementById('mbaUpsellNote');
+  if(!typeField||!sec) return;
+  var mba=(typeField.value||'').trim()==='MBA Experience';
+  if(mba) sec.querySelectorAll('input:checked').forEach(function(i){i.checked=false;});
+  sec.style.display=mba?'none':'';
+  if(note) note.style.display=mba?'':'none';
+}
 function calculateUpsells(){
+  syncMbaUpsells();
   const checked=[...document.querySelectorAll('.upsell-section input:checked')];
   const total=checked.reduce((sum,input)=>sum + Number(input.dataset.price||0),0);
   const names=checked.map(input=>input.value);
