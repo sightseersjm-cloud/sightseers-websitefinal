@@ -15043,7 +15043,7 @@ body.theme-night #p-flagship-programs{
       <span class="ssa-kicker">Seven Shores Society &middot; Jamaica Residency</span>
       <h2 class="ssa-title" id="ssaTitle">Apply for the Jamaica Residency</h2>
       <p class="ssa-sub">Welcome to the shore. Tell us about yourself and what you hope to find in the Society, a seven-night residency that comes with a membership. Applications are reviewed as they arrive, and nothing is charged here.</p>
-      <div class="ssa-steps" aria-hidden="true"><span class="now"></span><span></span><span></span></div>
+      <div class="ssa-steps" aria-hidden="true"><span class="now"></span><span></span><span></span><span></span></div>
     </header>
 
     <form class="ssa-body" id="ssApplyForm" novalidate autocomplete="on">
@@ -15103,7 +15103,7 @@ body.theme-night #p-flagship-programs{
           <span class="ssa-label">Where did you first hear about Seven Shores Society? <i>(optional)</i></span>
           <select class="ssa-select" name="heardFrom" id="ssaHeard" data-label="Where you heard about us">
             <option value="">Select one</option>
-            <option>Instagram</option><option>YouTube</option><option>LinkedIn</option><option>Facebook</option><option>Google search</option><option>A newsletter</option><option>A friend or current member</option><option>An event</option><option>Other</option>
+            <option>Instagram</option><option>TikTok</option><option>YouTube</option><option>LinkedIn</option><option>Facebook</option><option>Google search</option><option>A newsletter</option><option>A friend or current member</option><option>An event</option><option>Other</option>
           </select>
           <span class="ssa-err"></span>
         </label>
@@ -15225,6 +15225,92 @@ body.theme-night #p-flagship-programs{
       </section>
 
       <section class="ssa-step" data-step="3">
+        <p class="ssa-legend">Your travel style</p>
+        <p class="ssa-hint ssa-hint-block">This helps us plan the days and match your circle. Nothing here decides whether you are accepted.</p>
+
+        <p class="ssa-q">How do you usually travel and explore new places? <i>Select up to 2. (optional)</i></p>
+        <div class="ssa-chips" data-max="2" role="group" aria-label="How you usually travel">
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="Solo"><span>Solo</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="With a partner"><span>With a partner</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="With friends"><span>With friends</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="With family"><span>With family</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="In an organized group"><span>In an organized group</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="explore" value="I am new to group trips"><span>I am new to group trips</span></label>
+        </div>
+        <p class="ssa-max" role="status"></p>
+
+        <p class="ssa-q">Which experiences interest you most? <i>Select up to 3. (optional)</i></p>
+        <div class="ssa-chips" data-max="3" role="group" aria-label="Experiences that interest you">
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Coast and beaches"><span>Coast and beaches</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Culture and heritage"><span>Culture and heritage</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Food and markets"><span>Food and markets</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Nature and wildlife"><span>Nature and wildlife</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Photography and scenic views"><span>Photography and scenic views</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Art and local communities"><span>Art and local communities</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Gentle adventure"><span>Gentle adventure</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Adventure and thrills"><span>Adventure and thrills</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="interests" value="Sports and games"><span>Sports and games</span></label>
+        </div>
+        <p class="ssa-max" role="status"></p>
+        <label class="ssa-field">
+          <span class="ssa-label">What else interests you? <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="interestsOther" data-label="What else interests you" maxlength="200" placeholder="Anything we missed">
+          <span class="ssa-err"></span>
+        </label>
+
+        <p class="ssa-q">Beyond this residency, what kind of get-togethers would you be most likely to join? <i>Select all that apply. (optional)</i></p>
+        <div class="ssa-chips" role="group" aria-label="Get-togethers you would join">
+            <label class="ssa-chip"><input type="checkbox" name="outings" value="A few hours"><span>A few hours</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="outings" value="A full day"><span>A full day</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="outings" value="A weekend"><span>A weekend</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="outings" value="A trip of 3 to 7 days"><span>A trip of 3 to 7 days</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="outings" value="A longer trip"><span>A longer trip</span></label>
+        </div>
+
+        <label class="ssa-field">
+          <span class="ssa-label">Which places would you love to explore with us? <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="places" data-label="Places you would love to explore" maxlength="200" placeholder="Up to three destinations, or types of places">
+          <span class="ssa-err"></span>
+        </label>
+
+        <div class="ssa-field" data-reqgroup="pace">
+          <p class="ssa-q">What pace feels right for you?</p>
+          <div class="ssa-chips" role="radiogroup" aria-label="Pace">
+            <label class="ssa-chip"><input type="radio" name="pace" value="Relaxed, with plenty of breaks"><span>Relaxed, with plenty of breaks</span></label>
+            <label class="ssa-chip"><input type="radio" name="pace" value="A balanced mix"><span>A balanced mix</span></label>
+            <label class="ssa-chip"><input type="radio" name="pace" value="Active, with lots to see"><span>Active, with lots to see</span></label>
+            <label class="ssa-chip"><input type="radio" name="pace" value="It depends on the day"><span>It depends on the day</span></label>
+          </div>
+          <span class="ssa-err"></span>
+        </div>
+
+        <p class="ssa-q">When are you usually available for calls and get-togethers? <i>Select all that apply. (optional)</i></p>
+        <div class="ssa-chips" role="group" aria-label="When you are available">
+            <label class="ssa-chip"><input type="checkbox" name="available" value="Weekdays"><span>Weekdays</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="available" value="Weekends"><span>Weekends</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="available" value="Public holidays"><span>Public holidays</span></label>
+            <label class="ssa-chip"><input type="checkbox" name="available" value="Flexible or it varies"><span>Flexible or it varies</span></label>
+        </div>
+
+        <p class="ssa-q">How often would you like to join? <i>(optional)</i></p>
+        <div class="ssa-chips tri" role="radiogroup" aria-label="How often you would like to join">
+            <label class="ssa-chip"><input type="radio" name="frequency" value="Monthly"><span>Monthly</span></label>
+            <label class="ssa-chip"><input type="radio" name="frequency" value="Every few months"><span>Every few months</span></label>
+            <label class="ssa-chip"><input type="radio" name="frequency" value="Occasionally"><span>Occasionally</span></label>
+        </div>
+
+        <label class="ssa-field">
+          <span class="ssa-label">What spending range is comfortable for optional extras, such as a day out or an excursion? <i>(optional)</i></span>
+          <select class="ssa-select" name="spending" data-label="Comfortable spending range">
+            <option value="">Select one</option>
+            <option>Under US$50</option><option>US$50 to 100</option><option>US$101 to 200</option><option>Over US$200</option><option>It depends on what is included</option><option>I prefer not to say</option>
+          </select>
+          <span class="ssa-hint">This is for planning only. It does not affect whether you are accepted.</span>
+          <span class="ssa-err"></span>
+        </label>
+      </section>
+
+      <section class="ssa-step" data-step="4">
         <p class="ssa-legend">Your place in the society</p>
 
         <label class="ssa-field">
@@ -15240,6 +15326,12 @@ body.theme-night #p-flagship-programs{
           <span class="ssa-err"></span>
         </label>
 
+        <label class="ssa-field">
+          <span class="ssa-label">Describe your ideal day of exploring in one sentence. <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="idealDay" data-label="Your ideal day of exploring" maxlength="300" placeholder="One sentence is plenty">
+          <span class="ssa-err"></span>
+        </label>
+
         <p class="ssa-q">Why would you like to join? <i>Select up to 3.</i></p>
         <div class="ssa-chips" data-max="3" role="group" aria-label="Why you would like to join">
           <label class="ssa-chip"><input type="checkbox" name="reasons" value="Learn from other founders and owners"><span>Learn from other founders and owners</span></label>
@@ -15250,8 +15342,17 @@ body.theme-night #p-flagship-programs{
           <label class="ssa-chip"><input type="checkbox" name="reasons" value="Move faster in my business"><span>Move faster in my business</span></label>
           <label class="ssa-chip"><input type="checkbox" name="reasons" value="Get honest advice from people who understand running a business"><span>Get honest advice from people who understand running a business</span></label>
           <label class="ssa-chip"><input type="checkbox" name="reasons" value="Rest, reflect and take inspired action"><span>Rest, reflect and take inspired action</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Discover new places"><span>Discover new places</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Learn about local culture and history"><span>Learn about local culture and history</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Enjoy thoughtfully planned experiences"><span>Enjoy thoughtfully planned experiences</span></label>
+          <label class="ssa-chip"><input type="checkbox" name="reasons" value="Spend more time outdoors"><span>Spend more time outdoors</span></label>
         </div>
         <p class="ssa-max" role="status"></p>
+        <label class="ssa-field">
+          <span class="ssa-label">What else brings you here? <i>(optional)</i></span>
+          <input class="ssa-input" type="text" name="reasonsOther" data-label="What else brings you here" maxlength="200" placeholder="Anything else that matters to you">
+          <span class="ssa-err"></span>
+        </label>
 
         <div class="ssa-field" data-reqgroup="investment">
           <p class="ssa-q">Are you willing and able to invest up to US$7,500 in this experience?</p>
@@ -15274,8 +15375,8 @@ body.theme-night #p-flagship-programs{
         </div>
 
         <label class="ssa-field">
-          <span class="ssa-label">Is there anything we should plan for? <i>(optional)</i></span>
-          <textarea class="ssa-area" name="needs" data-label="Anything to plan for" maxlength="500" placeholder="For example, accessibility, dietary needs or whether you would prefer a shared or a private room."></textarea>
+          <span class="ssa-label">What would help you enjoy the experience comfortably? <i>(optional)</i></span>
+          <textarea class="ssa-area" name="needs" data-label="What would help you enjoy the experience" maxlength="500" placeholder="For example, step-free routes, a slower pace, more rest stops, transport support, dietary needs, or a shared or private room."></textarea>
           <span class="ssa-hint">Share only practical arrangements you want us to consider. No medical details are needed.</span>
           <span class="ssa-err"></span>
         </label>
@@ -15314,7 +15415,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 3, step = 1, busy = false, lastFocus = null, prevOverflow = '';
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '';
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -15447,15 +15548,26 @@ body.theme-night #p-flagship-programs{
       'Could step away or run it remotely for the eight days: ' + dash(chosen('availability')),
       'Has owned or run a business before: ' + dash(chosen('previousBusiness')) + exitText,
       '',
+      'THEIR TRAVEL STYLE',
+      'How they usually travel: ' + joined(list('explore')),
+      'Experiences that interest them: ' + joined(list('interests')) + (val('interestsOther') ? ' (also: ' + val('interestsOther') + ')' : ''),
+      'Get-togethers they would join: ' + joined(list('outings')),
+      'Places they would love to explore: ' + dash(val('places')),
+      'Pace: ' + dash(chosen('pace')),
+      'Available for calls and get-togethers: ' + joined(list('available')),
+      'How often they would like to join: ' + dash(chosen('frequency')),
+      'Comfortable spending on optional extras: ' + dash(val('spending')),
+      '',
       'THEIR PLACE IN THE SOCIETY',
       'What they could bring:',
       dash(val('contribution')),
       '',
       'Dream life in one sentence: ' + dash(val('dreamLife')),
-      'Why they would like to join: ' + joined(list('reasons')),
+      'Ideal day of exploring in one sentence: ' + dash(val('idealDay')),
+      'Why they would like to join: ' + joined(list('reasons')) + (val('reasonsOther') ? ' (also: ' + val('reasonsOther') + ')' : ''),
       'Willing and able to invest up to US$7,500 in this experience: ' + dash(chosen('investment')),
       'Willing to have a short Alignment Call: ' + dash(chosen('fitChat')),
-      'Anything to plan for: ' + dash(val('needs')),
+      'What would help them enjoy the experience comfortably: ' + dash(val('needs')),
       '',
       'ANYTHING ELSE',
       (val('more') || 'Nothing added'),
