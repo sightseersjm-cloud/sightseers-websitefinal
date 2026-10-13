@@ -38,7 +38,13 @@
   </url>
   <url>
     <loc>https://www.sightseerscaribbean.com/mba-caribbean-voyages</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sightseerscaribbean.com/mba-jamaica</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

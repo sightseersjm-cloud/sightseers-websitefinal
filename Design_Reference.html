@@ -9447,6 +9447,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
             </div>
           </div>
           <a href="#" onclick="nav('mba-voyages');return false;">Seven Shores MBA Voyages</a>
+          <a href="#" onclick="nav('mba-jamaica');return false;">MBA Trips in Jamaica</a>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
           <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
         </div>
@@ -9494,6 +9495,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
     <a href="#" onclick="nav('mba-voyages');closeMob();return false;">Seven Shores MBA Voyages</a>
+    <a href="#" onclick="nav('mba-jamaica');closeMob();return false;">MBA Trips in Jamaica</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
   </div>
@@ -12161,6 +12163,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <a href="#" class="mv-btn primary" onclick="mbvGo('mbvPackages');return false;">Explore packages</a>
       <a href="#" class="mv-btn ghost" onclick="mbvPlan();return false;">Plan your voyage</a>
     </div>
+    <p style="margin:22px 0 0;font-size:14px"><a href="#" onclick="nav('mba-jamaica');return false;" style="color:#fff;font-weight:700;text-decoration:underline">Planning in Jamaica? See how an MBA voyage works there</a></p>
     <div class="mv-shorelist" aria-label="Destinations">
       <span>Jamaica</span><span>Barbados</span><span>Saint Lucia</span><span>The Bahamas</span><span>Belize</span><span>Dominican Republic</span><span>Curacao</span>
     </div>
@@ -12195,7 +12198,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <details class="mv-qa-row"><summary class="mv-qa-q">Who is it for?</summary><div class="mv-qa-a">Current MBAs planning a class trip, recent graduates building their network, and alumni chapters planning a reunion. Many groups mix all three: alumni mentor current students and recent graduates, and everyone leaves with new contacts. Corporate leadership teams can run a voyage too, with facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">Where does it run?</summary><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">How long is it?</summary><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></details>
-      <details class="mv-qa-row"><summary class="mv-qa-q">What is included?</summary><div class="mv-qa-a">Every package includes a dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard, a post trip content package, airport transfers and a curated gift package. Each package then adds its own program. The Lifestyle Escape adds an adventure day, a yacht or catamaran day and beach club socials. The Executive Retreat adds a luxury villa or boutique resort stay, hosted dinners, facilitated leadership roundtables and yacht days. The Industry Immersion adds company and factory visits, founder workshops and networking sessions. The Island-Hop Voyage adds a private catamaran flotilla across two or more shores, a villa dinner and a capstone excursion. Open any package&rsquo;s Details for its full list.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">What is included?</summary><div class="mv-qa-a">Every package includes a dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard, a post trip content package, airport transfers and a curated gift package. Each package then adds its own program. The Lifestyle Escape adds an adventure day, a yacht or catamaran day and beach club socials. The Executive Retreat adds a luxury villa or boutique resort stay, hosted dinners, facilitated leadership roundtables and yacht days. The Industry Immersion adds company and factory visits chosen around your group&rsquo;s interests, founder workshops and networking sessions. The Island-Hop Voyage adds a private catamaran flotilla across two or more shores, a villa dinner and a capstone excursion. Open any package&rsquo;s Details for its full list.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">What does it cost?</summary><div class="mv-qa-a">Every package is quoted for your group, based on the country, group size, season and format.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">How do we book?</summary><div class="mv-qa-a">Choose a package and a country and send an inquiry. A planner replies within one business day. Once your package is finalised, a 30% non-refundable deposit confirms your place. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>. For peak season and multi island routes, book three to four months ahead.</div></details>
     </div>
@@ -12270,7 +12273,9 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     {src:'/assets/mba/mba-white-party.jpg',label:'White party celebration',sub:'A signature night for the whole group'},
     {src:'/assets/hero/white-party-v3.jpg',label:'Sunset villa evening',sub:'Where the best conversations happen'},
     {src:'/assets/gallery/jamaica-rafting-crew.webp',label:'River rafting, Jamaica',sub:'Teamwork, island style'},
-    {src:'/assets/gallery/jamaica-water-cars.webp',label:'Shallow water excursion, Jamaica',sub:'Playful stops between programming'}
+    {src:'/assets/gallery/jamaica-water-cars.webp',label:'Shallow water excursion, Jamaica',sub:'Playful stops between programming'},
+    {src:'/assets/mba/mba-villa-cohort.jpg',label:'A whole cohort under one roof',sub:'Where the networking turns into friendship'},
+    {src:'/assets/mba/mba-circle-selfie.jpg',label:'Strangers to friends',sub:'It happens faster than you think'}
   ];
 
   /* The seven countries offered on every package. */
@@ -12288,7 +12293,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique hotel.'},{when:'Middle days',title:'Adventure and the water',text:'An adventure day for the whole group, such as ziplining, ATVs, waterfalls or river rafting, plus a private yacht or catamaran day on the water.'},{when:'Evenings',title:'Beach club and sunset socials',text:'Easy, social evenings where the networking happens naturally.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['yacht']},
     {id:'executive',title:'MBA Executive Retreat',tag:'Formal',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'Weekend or multi-day',best:'Alumni and executive groups',
-      img:'/assets/hero/white-party-v3.jpg',
+      img:'/assets/mba/mba-villa-cohort.jpg',
       blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with yacht days on the water and time to talk properly.',
       hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables','Private yacht or catamaran days'],
       inc:['A luxury villa or boutique resort stay','Arrival reception, orientation and a welcome dinner with a keynote from a local business leader','Hosted dinners, including an evening at a private villa','Facilitated leadership roundtables with alumni and invited professionals','Private yacht or catamaran days between the working sessions'],
@@ -12298,10 +12303,10 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
     {id:'industry',title:'MBA Industry Immersion',tag:'Educational',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'2 to 4 days',best:'Current MBAs and recent graduates',
       img:'/assets/tours/blue-mountains-coffee-tasting-and-nature-tour.jpg',
       blurb:'Learning and networking come first. Company and factory visits, founder workshops and alumni roundtables with local business leaders.',
-      hl:['Hosted company and factory visits','Founder workshops and industry briefings','Alumni and professional networking sessions'],
-      inc:['Arrival reception, orientation and a welcome dinner with a keynote from a local business leader','Company and factory visits, arranged for the group','Founder workshops and industry briefings','Alumni and professional networking sessions','Guided cultural deep dives'],
+      hl:['Company visits matched to your interests','Founder workshops and industry briefings','Alumni and professional networking sessions'],
+      inc:['Arrival reception, orientation and a welcome dinner with a keynote from a local business leader','Company and factory visits, chosen to match your group\u2019s interests','Founder workshops and industry briefings','Alumni and professional networking sessions','Guided cultural deep dives'],
       theme:'an educational, network friendly format built around company visits',
-      steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner with a keynote from a local business leader.'},{when:'Visit days',title:'Company and factory visits',text:'Visits to local companies and factories, arranged for the group.'},{when:'Learning days',title:'Workshops and roundtables',text:'Founder workshops, industry briefings and alumni and professional networking sessions, plus guided cultural deep dives.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
+      steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner with a keynote from a local business leader.'},{when:'Visit days',title:'Company and factory visits',text:'Visits to local companies and factories, chosen to match your group\u2019s interests.'},{when:'Learning days',title:'Workshops and roundtables',text:'Founder workshops, industry briefings and alumni and professional networking sessions, plus guided cultural deep dives.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:[]},
     {id:'voyage',title:'MBA Island-Hop Voyage',tag:'Signature',place:'Two or more shores',multi:true,pax:'12 to 60',dur:'5 to 7 days',best:'Mixed groups of current MBAs, recent graduates and alumni',
       img:'/assets/tours/champagne-sunset-sail.jpg',
@@ -12313,6 +12318,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       moments:['yacht','villa']}
   ];
 
+  window.MBV_PACKAGES=PACKAGES;window.MBV_INC_ALL=INC_ALL;  /* the Jamaica page reads the same package data */
   /* A package can name a fallback photo (fb). The main photo is probed quietly, so a card never shows the site's grey
      placeholder, and it switches to the main photo as soon as that file exists. */
   PACKAGES.forEach(function(p,k){
@@ -12414,7 +12420,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
   /* ---------- package details: how the days run ---------- */
   var MOMENTS={
-    yacht:{cls:'yacht',ico:'fa-ship',title:'The yacht day',text:'A full day private charter on open water. Swimming, music and networking on deck, with stops at sandbars and reef spots. The social centerpiece of the week.',tags:['Private charter','Sandbar stops','Deck networking']},
+    yacht:{cls:'yacht',ico:'fa-ship',title:'The yacht day',text:'A full day on the water built for conversation. Swimming, music and snorkel stops, with the group mixing across the deck instead of sitting in rows. Island Pitch Night can be held on board.',tags:['Private charter','Snorkel stops','Pitch Night on board']},
     villa:{cls:'villa',ico:'fa-utensils',title:'The villa dinner',text:'An evening at a luxury private villa with elevated Caribbean cuisine and an intimate setting for real conversation, hosted around a guest speaker or roundtable.',tags:['Private villa','Caribbean cuisine','Guest speaker']}
   };
   function detOpen(){var el=$('mbvDet');return !!el&&el.classList.contains('open');}
@@ -12582,6 +12588,359 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </script>
 </div>
 
+
+<!-- ════════════════════════════════════
+     MBA IN JAMAICA: HOW IT WORKS (page)
+════════════════════════════════════ -->
+<div class="page" id="p-mba-jamaica">
+<style id="mbj-style">
+#p-mba-jamaica{
+  --mj-navy:#062e4b;--mj-blue:#0a4d73;--mj-green:#70c257;--mj-orange:#ef8731;
+  --mj-ink:#12293d;--mj-mut:#5c6f82;--mj-head:#062e4b;--mj-line:rgba(6,46,75,.10);
+  --mj-card:#fff;--mj-bg1:#f7fafc;--mj-bg2:#eef4f8;--mj-chip:rgba(6,46,75,.05);
+  --mj-shadow:0 1px 2px rgba(6,46,75,.05),0 18px 44px rgba(6,46,75,.09);
+  background:var(--mj-bg1);font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--mj-ink)!important;
+}
+body.theme-night #p-mba-jamaica{
+  --mj-ink:#e6eff8;--mj-mut:#b3c5d7;--mj-head:#fff;--mj-line:rgba(255,255,255,.12);
+  --mj-card:#0c2b46;--mj-bg1:#06223a;--mj-bg2:#0a2c48;--mj-chip:rgba(255,255,255,.08);
+  --mj-shadow:0 1px 2px rgba(0,0,0,.2),0 18px 44px rgba(0,0,0,.28);
+}
+#p-mba-jamaica *{-webkit-font-smoothing:antialiased;box-sizing:border-box}
+#p-mba-jamaica p,#p-mba-jamaica li,#p-mba-jamaica span,#p-mba-jamaica strong,#p-mba-jamaica b,#p-mba-jamaica em,#p-mba-jamaica small,#p-mba-jamaica label,#p-mba-jamaica summary{color:inherit!important}
+#p-mba-jamaica h1,#p-mba-jamaica h2,#p-mba-jamaica h3,#p-mba-jamaica h4{color:var(--mj-head)!important}
+#p-mba-jamaica .mj-wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+#p-mba-jamaica .mj-hero{position:relative;overflow:hidden;text-align:center;padding:64px 0 70px;color:#fff!important;background:radial-gradient(120% 120% at 15% 0%,#0a4d73 0%,#062e4b 48%,#041f35 100%)}
+#p-mba-jamaica .mj-hero::before{content:'';position:absolute;top:-28%;left:-10%;width:60%;height:95%;background:radial-gradient(circle,rgba(112,194,87,.42),transparent 62%);filter:blur(22px);pointer-events:none}
+#p-mba-jamaica .mj-hero::after{content:'';position:absolute;bottom:-34%;right:-8%;width:56%;height:100%;background:radial-gradient(circle,rgba(239,135,49,.38),transparent 62%);filter:blur(22px);pointer-events:none}
+#p-mba-jamaica .mj-hero-in{position:relative;z-index:2;max-width:840px;margin:0 auto;padding:0 24px}
+#p-mba-jamaica .mj-kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#eaf6e4!important;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:8px 16px;margin-bottom:22px}
+#p-mba-jamaica .mj-h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(38px,6.4vw,68px);line-height:1.04;margin:0;letter-spacing:-1px;color:#fff!important}
+#p-mba-jamaica .mj-h1 .sub{display:block;margin-top:14px;font-family:'Raleway',sans-serif;font-weight:700;font-size:clamp(12px,1.6vw,16px);letter-spacing:7px;text-transform:uppercase;color:#8ed77e!important}
+#p-mba-jamaica .mj-lede{max-width:60ch;margin:20px auto 26px;color:rgba(255,255,255,.88)!important;font-size:clamp(16px,2vw,19px);line-height:1.65}
+#p-mba-jamaica .mj-facts{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:26px}
+#p-mba-jamaica .mj-fact{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:12px 20px;min-width:128px}
+#p-mba-jamaica .mj-fact b{display:block;font-family:'Playfair Display',serif;font-size:25px;color:#fff!important;line-height:1}
+#p-mba-jamaica .mj-fact span{display:block;margin-top:7px;font-size:12px;letter-spacing:.5px;color:rgba(255,255,255,.74)!important}
+#p-mba-jamaica .mj-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+#p-mba-jamaica .mj-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 30px;font-family:'Raleway',sans-serif;font-weight:700;font-size:15px;cursor:pointer;border:1.5px solid transparent;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s}
+#p-mba-jamaica .mj-btn.primary{background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;box-shadow:0 12px 26px rgba(239,135,49,.38)}
+#p-mba-jamaica .mj-btn.primary:hover{transform:translateY(-2px)}
+#p-mba-jamaica .mj-btn.ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45);color:#fff!important}
+#p-mba-jamaica .mj-btn.ghost:hover{background:#fff;color:#062e4b!important}
+#p-mba-jamaica .mj-btn.line{background:transparent;border-color:var(--mj-line);color:var(--mj-head)!important}
+#p-mba-jamaica .mj-btn.line:hover{background:#062e4b;border-color:#062e4b;color:#fff!important}
+#p-mba-jamaica .mj-btn.sm{padding:11px 20px;font-size:13px}
+#p-mba-jamaica .mj-jump{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:26px 24px 0;max-width:1180px;margin:0 auto}
+#p-mba-jamaica .mj-jump button{font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border:1px solid var(--mj-line);background:var(--mj-card);color:var(--mj-head)!important;cursor:pointer}
+#p-mba-jamaica .mj-jump button:hover{border-color:var(--mj-orange)}
+#p-mba-jamaica .mj-sec{padding:72px 0;scroll-margin-top:90px}
+#p-mba-jamaica .mj-sec.tint{background:var(--mj-bg2);border-top:1px solid var(--mj-line);border-bottom:1px solid var(--mj-line)}
+#p-mba-jamaica .mj-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--mj-orange)!important;margin:0 0 12px}
+#p-mba-jamaica .mj-eyebrow::before{content:'';width:22px;height:3px;border-radius:3px;background:var(--mj-green)}
+#p-mba-jamaica .mj-h2{font-family:'Playfair Display',serif;font-weight:700;color:var(--mj-head)!important;font-size:clamp(28px,4vw,40px);margin:0 0 14px;line-height:1.12;letter-spacing:-.3px}
+#p-mba-jamaica .mj-sub{color:var(--mj-mut)!important;font-size:clamp(15px,1.8vw,17px);line-height:1.75;max-width:66ch;margin:0}
+#p-mba-jamaica .mj-steps{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:mjs}
+#p-mba-jamaica .mj-step{position:relative;background:var(--mj-card);border:1px solid var(--mj-line);box-shadow:var(--mj-shadow);padding:26px 22px 24px;counter-increment:mjs}
+#p-mba-jamaica .mj-step::before{content:counter(mjs);display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--mj-orange);color:#fff!important;font-weight:800;font-size:15px;margin-bottom:14px}
+#p-mba-jamaica .mj-step h3{font-size:17px;margin:0 0 8px;line-height:1.3}
+#p-mba-jamaica .mj-step p{margin:0;font-size:14px;line-height:1.65;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-why{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+#p-mba-jamaica .mj-why-c{background:var(--mj-card);border:1px solid var(--mj-line);border-top:3px solid var(--mj-green);box-shadow:var(--mj-shadow);padding:26px 24px}
+#p-mba-jamaica .mj-why-c h3{font-size:18px;margin:0 0 10px;line-height:1.3}
+#p-mba-jamaica .mj-why-c p{margin:0;font-size:14.5px;line-height:1.7;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-day{list-style:none;margin:30px 0 0;padding:0;max-width:820px}
+#p-mba-jamaica .mj-day li{display:grid;grid-template-columns:130px 1fr;gap:22px;padding:20px 0;border-bottom:1px solid var(--mj-line)}
+#p-mba-jamaica .mj-day li:last-child{border-bottom:0}
+#p-mba-jamaica .mj-when{align-self:start;display:inline-block;background:#0a4d73;color:#fff!important;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:9px 14px;text-align:center}
+#p-mba-jamaica .mj-day h3{font-size:17px;margin:0 0 6px}
+#p-mba-jamaica .mj-day p{margin:0;font-size:14.5px;line-height:1.65;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-note{margin:18px 0 0;font-size:13.5px;color:var(--mj-mut)!important;font-style:italic}
+#p-mba-jamaica .mj-pick{margin-top:30px;background:var(--mj-card);border:1px solid var(--mj-line);box-shadow:var(--mj-shadow);padding:30px;max-width:900px}
+#p-mba-jamaica .mj-pick-step{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--mj-orange)!important}
+#p-mba-jamaica .mj-pick-q{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,28px);margin:0 0 18px;line-height:1.2}
+#p-mba-jamaica .mj-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#p-mba-jamaica .mj-opt{text-align:left;font-family:'Raleway',sans-serif;font-size:15px;font-weight:700;padding:16px 18px;border:1.5px solid var(--mj-line);background:var(--mj-bg1);color:var(--mj-head)!important;cursor:pointer;transition:border-color .2s,background .2s}
+#p-mba-jamaica .mj-opt:hover{border-color:var(--mj-orange);background:rgba(239,135,49,.07)}
+#p-mba-jamaica .mj-back{margin-top:16px;background:none;border:0;padding:0;font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;color:var(--mj-mut)!important;cursor:pointer;text-decoration:underline}
+#p-mba-jamaica .mj-res{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+#p-mba-jamaica .mj-res img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--mj-bg2)}
+#p-mba-jamaica .mj-res h3{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,30px);margin:6px 0 10px;line-height:1.15}
+#p-mba-jamaica .mj-res p{margin:0 0 12px;font-size:14.5px;line-height:1.7;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-res ul{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:7px}
+#p-mba-jamaica .mj-res li{position:relative;padding-left:20px;font-size:14px;line-height:1.5}
+#p-mba-jamaica .mj-res li::before{content:'';position:absolute;left:0;top:.45em;width:8px;height:8px;border-radius:50%;background:var(--mj-green)}
+#p-mba-jamaica .mj-res .mj-fit{font-size:13.5px;padding:12px 14px;background:rgba(239,135,49,.08);border-left:3px solid var(--mj-orange)}
+#p-mba-jamaica .mj-res .mj-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+#p-mba-jamaica .mj-yacht{display:grid;grid-template-columns:1.05fr 1fr;gap:38px;align-items:center}
+#p-mba-jamaica .mj-yacht img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;box-shadow:var(--mj-shadow)}
+#p-mba-jamaica .mj-tags{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+#p-mba-jamaica .mj-tags span{font-size:12px;font-weight:700;padding:7px 12px;background:var(--mj-chip);border:1px solid var(--mj-line)}
+#p-mba-jamaica .mj-pks{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:34px}
+#p-mba-jamaica .mj-pk{background:var(--mj-card);border:1px solid var(--mj-line);box-shadow:var(--mj-shadow);padding:24px}
+#p-mba-jamaica .mj-pk h3{font-size:19px;margin:0 0 4px}
+#p-mba-jamaica .mj-pk .best{margin:0 0 12px;font-size:13px;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-pk .best b{color:var(--mj-orange)!important}
+#p-mba-jamaica .mj-pk ul{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:7px}
+#p-mba-jamaica .mj-pk li{position:relative;padding-left:20px;font-size:14px;line-height:1.5}
+#p-mba-jamaica .mj-pk li::before{content:'';position:absolute;left:0;top:.45em;width:8px;height:8px;border-radius:50%;background:var(--mj-green)}
+#p-mba-jamaica .mj-all{margin:22px 0 0;font-size:13.5px;line-height:1.65;color:var(--mj-mut)!important;max-width:80ch}
+#p-mba-jamaica .mj-all b{color:var(--mj-head)!important}
+#p-mba-jamaica .mj-qa{max-width:860px;margin-top:28px;display:flex;flex-direction:column;gap:10px}
+#p-mba-jamaica .mj-qa-row{background:var(--mj-card);border:1px solid var(--mj-line)}
+#p-mba-jamaica .mj-qa-q{cursor:pointer;list-style:none;padding:18px 22px;font-weight:800;font-size:15.5px;color:var(--mj-head)!important;display:flex;justify-content:space-between;gap:16px;align-items:center}
+#p-mba-jamaica .mj-qa-q::-webkit-details-marker{display:none}
+#p-mba-jamaica .mj-qa-q::after{content:'+';font-size:22px;font-weight:600;color:var(--mj-orange)!important;line-height:1}
+#p-mba-jamaica .mj-qa-row[open] .mj-qa-q::after{content:'\2212'}
+#p-mba-jamaica .mj-qa-a{padding:0 22px 20px;font-size:14.5px;line-height:1.7;color:var(--mj-mut)!important}
+#p-mba-jamaica .mj-band{position:relative;overflow:hidden;padding:64px 32px;text-align:center;color:#fff!important;margin:0 0 84px;background:radial-gradient(120% 140% at 20% 0%,#0a4d73,#062e4b 55%,#041f35);box-shadow:0 34px 70px rgba(6,46,75,.26)}
+#p-mba-jamaica .mj-band h2{font-family:'Playfair Display',serif;color:#fff!important;font-size:clamp(28px,4vw,40px);margin:0 0 14px}
+#p-mba-jamaica .mj-band p{color:rgba(255,255,255,.86)!important;margin:0 auto 28px;font-size:16px;line-height:1.7;max-width:60ch}
+@media (max-width:980px){
+  #p-mba-jamaica .mj-steps{grid-template-columns:repeat(2,1fr)}
+  #p-mba-jamaica .mj-why{grid-template-columns:1fr}
+  #p-mba-jamaica .mj-yacht,#p-mba-jamaica .mj-res{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  #p-mba-jamaica .mj-sec{padding:52px 0}
+  #p-mba-jamaica .mj-steps,#p-mba-jamaica .mj-pks,#p-mba-jamaica .mj-opts{grid-template-columns:1fr}
+  #p-mba-jamaica .mj-day li{grid-template-columns:1fr;gap:10px}
+  #p-mba-jamaica .mj-when{justify-self:start}
+  #p-mba-jamaica .mj-pick{padding:22px 18px}
+  #p-mba-jamaica .mj-wrap{padding:0 16px}
+  #p-mba-jamaica .mj-band{padding:48px 20px}
+}
+</style>
+
+<section class="mj-hero">
+  <div class="mj-hero-in">
+    <span class="mj-kicker">MBA trips &middot; Jamaica</span>
+    <h1 class="mj-h1">Jamaica, your cohort&rsquo;s classroom<span class="sub">How an MBA voyage works</span></h1>
+    <p class="mj-lede">Reggae, rum, coffee, jerk and world famous sprinters all come from one island. For an MBA group that makes Jamaica a live case study in building a global brand from a small place. Here is how a trip comes together.</p>
+    <div class="mj-facts">
+      <span class="mj-fact"><b>12 to 60</b><span>Guests per trip</span></span>
+      <span class="mj-fact"><b>2 to 7</b><span>Days, by package</span></span>
+      <span class="mj-fact"><b>4</b><span>Packages</span></span>
+      <span class="mj-fact"><b>Custom</b><span>Quoted for your group</span></span>
+    </div>
+    <div class="mj-cta">
+      <a href="#" class="mj-btn primary" onclick="return mbjPlan();">Plan my Jamaica trip</a>
+      <a href="#" class="mj-btn ghost" onclick="nav('mba-voyages');return false;">See the four packages</a>
+    </div>
+  </div>
+</section>
+
+<nav class="mj-jump" aria-label="On this page">
+  <button type="button" onclick="mbjGo('mbjHow')">How it works</button>
+  <button type="button" onclick="mbjGo('mbjWhy')">Why Jamaica</button>
+  <button type="button" onclick="mbjGo('mbjDay')">A sample day</button>
+  <button type="button" onclick="mbjGo('mbjPick')">Where to base</button>
+  <button type="button" onclick="mbjGo('mbjYacht')">The yacht day</button>
+  <button type="button" onclick="mbjGo('mbjPkgs')">Packages</button>
+  <button type="button" onclick="mbjGo('mbjFaq')">Questions</button>
+</nav>
+
+<section class="mj-sec" id="mbjHow">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">How it works</div>
+    <h2 class="mj-h2">From first message to a finished plan</h2>
+    <p class="mj-sub">One planner takes your group from an idea to a quote to a confirmed trip.</p>
+    <ol class="mj-steps">
+      <li class="mj-step"><h3>Tell us about your group</h3><p>Share your group size, rough dates and what your group wants from the trip. It is free to send, and a planner replies within one business day.</p></li>
+      <li class="mj-step"><h3>Choose a package and add-ons</h3><p>Pick the format that fits, from the fun and adventure of the Lifestyle Escape to the visit-led Industry Immersion. Add Island Pitch Night, the Opportunity Briefing, Mentor Day or the Property Day if you like.</p></li>
+      <li class="mj-step"><h3>We match the visits to your interests</h3><p>Tell us the industries or kinds of companies your group is curious about. Your planner chooses the company visits around those interests, so the visits fit your group.</p></li>
+      <li class="mj-step"><h3>One quote, then your plan</h3><p>Your planner talks the trip through with you and quotes the package and add-ons together. A US$15 planning fee then gets your fully researched custom package started, and it is credited toward your booking.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="mj-sec tint" id="mbjWhy">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">Why Jamaica</div>
+    <h2 class="mj-h2">A small island with a big story</h2>
+    <div class="mj-why">
+      <div class="mj-why-c"><h3>A brand built from an island</h3><p>Music, rum, coffee, food and sport: Jamaica has built some of the world&rsquo;s best known brands from a small island. For an MBA cohort that is a case study you can walk through, not just read.</p></div>
+      <div class="mj-why-c"><h3>Visits that fit your group</h3><p>Whether your group is curious about food and drink, hospitality, music and media, agriculture or something else, you tell us what to look for and your planner lines up the company visits around it.</p></div>
+      <div class="mj-why-c"><h3>Easy to reach, easy to move</h3><p>Airport transfers from Montego Bay (MBJ) and Kingston (NMIA) are part of the plan, with executive cars and coaches for groups.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="mj-sec" id="mbjDay">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">A sample day</div>
+    <h2 class="mj-h2">What a day in Jamaica can look like</h2>
+    <p class="mj-sub">Work and play in the same day, so the conversations carry from the boardroom to the beach.</p>
+    <ul class="mj-day">
+      <li><span class="mj-when">Morning</span><div><h3>Breakfast, then a company visit</h3><p>A visit matched to your group&rsquo;s interests, with time for questions.</p></div></li>
+      <li><span class="mj-when">Midday</span><div><h3>On the water, or into the hills</h3><p>A catamaran sail along the coast, or a waterfall and river adventure, depending on your package.</p></div></li>
+      <li><span class="mj-when">Afternoon</span><div><h3>A workshop or roundtable</h3><p>Founder workshops, industry briefings or an alumni roundtable, where the day&rsquo;s visit gets talked through.</p></div></li>
+      <li><span class="mj-when">Evening</span><div><h3>A sunset social and a Jamaican dinner</h3><p>Jerk, sunsets and music, with the networking happening naturally.</p></div></li>
+    </ul>
+    <p class="mj-note">A sample day. Your planner builds the real one around your package, your area of Jamaica and your interests.</p>
+  </div>
+</section>
+
+<section class="mj-sec tint" id="mbjPick">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">Where to base</div>
+    <h2 class="mj-h2">Which part of Jamaica fits your group?</h2>
+    <p class="mj-sub">Three quick questions. We will point you to an area and a package, then your planner takes it from there.</p>
+    <div class="mj-pick" id="mbjPickBox" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="mj-sec" id="mbjYacht">
+  <div class="mj-wrap">
+    <div class="mj-yacht">
+      <img src="/assets/yachts/sunset-cruise.jpg" alt="A yacht on the water at sunset" loading="lazy">
+      <div>
+        <div class="mj-eyebrow">The yacht day</div>
+        <h2 class="mj-h2">A day on the water, built for conversation</h2>
+        <p class="mj-sub">The Lifestyle Escape, the Executive Retreat and the Island-Hop Voyage all include time on the water. In Jamaica that means a private yacht or catamaran along the coast, with swimming, music and snorkel stops, and the group mixing across the deck instead of sitting in rows.</p>
+        <div class="mj-tags"><span>Private yacht or catamaran</span><span>Swim and snorkel stops</span><span>Island Pitch Night can be held on board</span></div>
+        <a href="#" class="mj-btn primary sm" onclick="return mbjYacht();">Ask about a yacht day with Pitch Night</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mj-sec tint" id="mbjPkgs">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">What&rsquo;s included</div>
+    <h2 class="mj-h2">Four packages, each with its own program</h2>
+    <p class="mj-sub">All four run in Jamaica. The Island-Hop Voyage is built across two or more shores, so Jamaica can be one stop of it.</p>
+    <div class="mj-pks" id="mbjPkGrid"></div>
+    <p class="mj-all" id="mbjAll"></p>
+  </div>
+</section>
+
+<section class="mj-sec" id="mbjFaq">
+  <div class="mj-wrap">
+    <div class="mj-eyebrow">Questions</div>
+    <h2 class="mj-h2">Good to know</h2>
+    <div class="mj-qa">
+      <details class="mj-qa-row"><summary class="mj-qa-q">Can we choose which companies we visit?</summary><div class="mj-qa-a">You tell us the industries or kinds of companies your group is curious about, and your planner chooses the visits around those interests. Hosts are confirmed for your date.</div></details>
+      <details class="mj-qa-row"><summary class="mj-qa-q">How is the price worked out?</summary><div class="mj-qa-a">Every trip is a custom quote. It depends on your group size, dates, package, add-ons and where in Jamaica you base the trip. Add-ons are quoted with your package.</div></details>
+      <details class="mj-qa-row"><summary class="mj-qa-q">What does the planner do?</summary><div class="mj-qa-a">One planner talks the trip through with you, quotes it, confirms the hosts, dates and details, and your dedicated Sight Seers coordinator looks after the group through the trip.</div></details>
+      <details class="mj-qa-row"><summary class="mj-qa-q">Is the Property Day investment advice?</summary><div class="mj-qa-a">No. Rules for foreign property buyers differ by shore, so the Property &amp; Investment Insight Day is information only, not investment, legal or tax advice.</div></details>
+      <details class="mj-qa-row"><summary class="mj-qa-q">Can we go beyond Jamaica?</summary><div class="mj-qa-a">Yes. Every package is available on all seven Caribbean shores, and the Island-Hop Voyage links two or more of them. See the full Seven Shores page for the others.</div></details>
+    </div>
+  </div>
+</section>
+
+<div class="mj-wrap">
+  <div class="mj-band">
+    <h2>Ready to see Jamaica as a cohort?</h2>
+    <p>Tell us about your group and a planner replies within one business day. It is free to send.</p>
+    <div class="mj-cta">
+      <a href="#" class="mj-btn primary" onclick="return mbjPlan();">Plan my Jamaica trip</a>
+      <a href="#" class="mj-btn ghost" onclick="nav('mba-voyages');return false;">See Seven Shores</a>
+    </div>
+  </div>
+</div>
+
+<script id="mbj-script">
+(function(){
+  function $(i){return document.getElementById(i);}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  window.mbjGo=function(id){
+    var el=$(id);if(!el)return false;
+    window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+(window.pageYOffset||0)-84),behavior:'smooth'});
+    return false;
+  };
+  window.mbjPlan=function(){
+    openStartPlanning('Jamaica','MBA trip in Jamaica','MBA Experience','Interested in an MBA group trip in Jamaica for a cohort, alumni chapter or leadership team.');
+    return false;
+  };
+  window.mbjYacht=function(){
+    openStartPlanning('Jamaica','MBA yacht day in Jamaica','MBA Experience','Interested in an MBA group trip in Jamaica with a private yacht or catamaran day. MBA add-ons: Island Pitch Night.');
+    return false;
+  };
+
+  /* Where to base: three questions, then an area and a package. Areas and highlights are the ones already on the site's tour pages. */
+  var QS=[
+    {k:'goal',q:'What matters most for your group?',o:[['learn','Learning from local businesses'],['adventure','Adventure and fun'],['celebrate','Celebrating and unwinding'],['network','Networking and reuniting']]},
+    {k:'vibe',q:'What feel do you want?',o:[['polished','Polished and upscale'],['energy','High energy'],['scenic','Laid back and scenic']]},
+    {k:'len',q:'How long is the trip?',o:[['short','2 to 3 days'],['mid','4 to 5 days'],['long','6 to 7 days']]}
+  ];
+  var LABEL={learn:'learning from local businesses',adventure:'adventure and fun',celebrate:'celebrating and unwinding',network:'networking and reuniting',polished:'a polished and upscale',energy:'a high energy',scenic:'a laid back and scenic',short:'2 to 3 days',mid:'4 to 5 days',long:'6 to 7 days'};
+  var AREAS={
+    kingston:{name:'Kingston and the Blue Mountains',img:'/assets/university/bob-marley-museum.jpg',why:'Kingston is Jamaica’s capital, where its music, culture and business life sit close together. It suits groups that want company visits and conversation.',hl:['The Bob Marley Museum and the National Gallery of Jamaica','Blue Mountain coffee tasting and a nature day','Music, culture and business in one city'],next:'portland'},
+    ochorios:{name:'Ocho Rios',img:'/assets/tours/dunns-river-falls-and-blue-hole-tour.jpg',why:'Ocho Rios brings waterfalls, ziplines, ATVs and catamaran sails together in one area. It suits groups that want fun and adventure.',hl:['Dunn’s River Falls and the Blue Hole','Ziplines, ATVs and river rafting','Catamaran sails along the north coast'],next:'negril'},
+    negril:{name:'Negril',img:'/assets/tours/reggae-sunset-catamaran-cruise-negril.jpg',why:'Negril is known for Seven Mile Beach and its sunsets. It suits groups that want to celebrate and unwind.',hl:['Seven Mile Beach','Sunset catamaran cruises','Cliffs, cafes and a slower pace'],next:'montegobay'},
+    portland:{name:'Port Antonio and Portland',img:'/assets/tours/blue-lagoon-tour-port-antonio.jpg',why:'Portland is green, scenic and quieter. It suits groups that want a slower trip with real adventure in it.',hl:['The Blue Lagoon','Reach Falls','Green hills, rivers and quiet beaches'],next:'ochorios'},
+    montegobay:{name:'Montego Bay and the North Coast',img:'/assets/tours/reggae-catamaran-and-snorkeling-cruise-montego-bay.jpg',why:'Montego Bay has Jamaica’s main tourism airport (MBJ), so arrival is easy, and it suits groups that want a lively base.',hl:['Catamaran and snorkel cruises','Jet cars and parasailing','Easy arrival through MBJ'],next:'negril'}
+  };
+  var MAP={learn:{polished:'kingston',energy:'kingston',scenic:'kingston'},adventure:{polished:'ochorios',energy:'ochorios',scenic:'portland'},celebrate:{polished:'negril',energy:'montegobay',scenic:'negril'},network:{polished:'montegobay',energy:'montegobay',scenic:'ochorios'}};
+  var PKIDX={learn:2,adventure:0,celebrate:0,network:1};  /* Industry Immersion, Lifestyle Escape, Lifestyle Escape, Executive Retreat */
+  var pk={step:0,a:{}};
+
+  function packages(){return window.MBV_PACKAGES||[];}
+  function lenLine(len,area){
+    if(len==='short')return 'With 2 to 3 days, one base keeps the time for the program.';
+    if(len==='long')return 'With 6 to 7 days you could add a second stop in '+AREAS[area.next].name+'. Your planner confirms travel times between stops.';
+    return 'A 4 to 5 day trip works well from a single base.';
+  }
+  function pickRender(){
+    var box=$('mbjPickBox');if(!box)return;
+    if(pk.step<QS.length){
+      var q=QS[pk.step];
+      box.innerHTML='<p class="mj-pick-step">Question '+(pk.step+1)+' of '+QS.length+'</p><h3 class="mj-pick-q">'+esc(q.q)+'</h3><div class="mj-opts">'
+        +q.o.map(function(o){return '<button type="button" class="mj-opt" data-v="'+o[0]+'">'+esc(o[1])+'</button>';}).join('')+'</div>'
+        +(pk.step?'<button type="button" class="mj-back" data-back="1">Back</button>':'');
+      return;
+    }
+    var key=MAP[pk.a.goal][pk.a.vibe],area=AREAS[key],P=packages()[PKIDX[pk.a.goal]];
+    box.innerHTML='<div class="mj-res"><img src="'+esc(area.img)+'" alt="'+esc(area.name)+'" loading="lazy"><div>'
+      +'<p class="mj-pick-step">Your best fit</p><h3>'+esc(area.name)+'</h3><p>'+esc(area.why)+'</p>'
+      +'<ul>'+area.hl.map(function(h){return '<li>'+esc(h)+'</li>';}).join('')+'</ul>'
+      +'<p class="mj-fit">'+(P?'<b>Package that fits:</b> '+esc(P.title)+'. ':'')+esc(lenLine(pk.a.len,area))+'</p>'
+      +'<div class="mj-actions"><button type="button" class="mj-btn primary sm" data-go="1">Plan this with a planner</button><button type="button" class="mj-btn line sm" data-again="1">Start over</button></div>'
+      +'</div></div>';
+  }
+  function pickGo(){
+    var key=MAP[pk.a.goal][pk.a.vibe],area=AREAS[key],P=packages()[PKIDX[pk.a.goal]];
+    var title=P?P.title:'MBA trip in Jamaica';
+    openStartPlanning('Jamaica',title,'MBA Experience','Interested in the '+title+' in Jamaica, based around '+area.name+'. Our group wants '+LABEL[pk.a.goal]+', with '+LABEL[pk.a.vibe]+' feel, for '+LABEL[pk.a.len]+'.');
+  }
+  function initPick(){
+    var box=$('mbjPickBox');if(!box||box.dataset.bound==='1')return;
+    box.dataset.bound='1';
+    box.addEventListener('click',function(e){
+      var t=e.target.closest?e.target.closest('button'):null;if(!t)return;
+      if(t.hasAttribute('data-v')){pk.a[QS[pk.step].k]=t.getAttribute('data-v');pk.step++;pickRender();return;}
+      if(t.hasAttribute('data-back')){pk.step=Math.max(0,pk.step-1);pickRender();return;}
+      if(t.hasAttribute('data-again')){pk={step:0,a:{}};pickRender();return;}
+      if(t.hasAttribute('data-go')){pickGo();}
+    });
+  }
+  /* The package cards read the same data as the Seven Shores page, so the two never drift apart. */
+  function renderPackages(){
+    var grid=$('mbjPkGrid'),P=packages();if(!grid||!P.length)return;
+    grid.innerHTML=P.map(function(p,k){
+      return '<div class="mj-pk"><h3>'+esc(p.title)+'</h3>'+(p.best?'<p class="best"><b>Best for</b> '+esc(p.best)+'</p>':'')
+        +'<ul>'+(p.inc||[]).slice(0,4).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'
+        +'<button type="button" class="mj-btn line sm" data-k="'+k+'">See the full details</button></div>';
+    }).join('');
+    var all=$('mbjAll');
+    if(all&&window.MBV_INC_ALL)all.innerHTML='<b>Every package also includes</b> '+esc(window.MBV_INC_ALL.charAt(0).toLowerCase()+window.MBV_INC_ALL.slice(1))+'.';
+    if(grid.dataset.bound!=='1'){
+      grid.dataset.bound='1';
+      grid.addEventListener('click',function(e){
+        var b=e.target.closest?e.target.closest('button[data-k]'):null;if(!b)return;
+        var k=Number(b.getAttribute('data-k'));
+        nav('mba-voyages');
+        setTimeout(function(){if(typeof mbvDetails==='function')mbvDetails(k);},400);
+      });
+    }
+  }
+  window.renderMbaJamaica=function(){
+    initPick();renderPackages();pickRender();
+  };
+})();
+</script>
+</div>
 
 <!-- ════════════════════════════════════
      TENT RENTAL AGREEMENT (page)
@@ -14514,7 +14873,7 @@ body.theme-night .page .tag{
           </div>
           <div class="upsell-totals"><span id="upsellSummary">No add-ons selected yet.</span><span id="upsellTotal">Add-ons: $0</span></div>
         </div>
-        <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore.</p>
+        <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore. Tell us in the notes above which industries or kinds of companies your group would like to visit, and your planner matches the visits to your interests.</p>
         <p class="urgency-text" id="urgencyText">High demand this week, limited availability for peak experiences.</p>
         <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitBook()">Start Your Journey</button>
         <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:10px">Once your planner has talked your trip through with you, a US$15 planning fee gets your fully researched custom package started. It is credited toward your booking.</p>
@@ -26929,6 +27288,7 @@ var SS_ROUTES = {
   'greek-life':'/greek-life-travel',
   'leaders-jamaica':'/leaders-in-jamaica',
   'mba-voyages':'/mba-caribbean-voyages',
+  'mba-jamaica':'/mba-jamaica',
   'tent-rental':'/tent-rental',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
@@ -26962,6 +27322,7 @@ var SS_META = {
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Greek Life Trips: Fraternity & Sorority Travel, Caribbean','Spring break, founders, probate and chapter trips to Jamaica and the Caribbean. Villas, transfers, yacht days and nightlife, planned for your whole crew.'],
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
+  'mba-jamaica':['MBA Trips in Jamaica: How It Works | Sight Seers','How an MBA group trip in Jamaica comes together: one quote, company visits matched to your interests, a day on the water and four packages for 12 to 60 guests.'],
   'mba-voyages':['MBA Class Trips & Alumni Voyages, Caribbean | Seven Shores','MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores: yacht days, villa dinners and curated networking for 12 to 60.'],
   'tent-rental':['Tent Rental Agreement | Sight Seers Caribbean','Rent a two-person camping tent from Sight Seers Caribbean Adventures. Complete and sign the rental agreement online.'],
   'destinations':['Caribbean Group Travel Destinations | Sight Seers Caribbean','Plan a group trip to Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao or the Dominican Republic with 5-day packages from US$251 per person.'],
@@ -27067,7 +27428,7 @@ function nav(id,opts={}){
   if(!opts.fromPop){ try{ ssPushRoute(id); }catch(e){} }
   try{ ssSetMeta(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers' || id==='mba-voyages')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
+  const activeId=(id==='giftcards'?'n-shop':((id==='stays' || id==='staycountry' || id==='transfers' || id==='mba-voyages' || id==='mba-jamaica')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id)));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   /* A different page replaces the content instantly, so jump straight to its top. Animating from the old
      scroll position made the new page visibly slide past (the "glitch" when opening Tours from deep in Home). */
@@ -27093,6 +27454,9 @@ function nav(id,opts={}){
   }
   if(id==='mba-voyages'){
     try{ renderMbaVoyages(); }catch(e){ console.error('MBA voyages page',e); }
+  }
+  if(id==='mba-jamaica'){
+    try{ renderMbaJamaica(); }catch(e){ console.error('MBA Jamaica page',e); }
   }
   if(id==='transfers'){
     renderTransfersPage();
