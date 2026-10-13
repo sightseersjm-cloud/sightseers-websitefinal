@@ -9450,7 +9450,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
               <a href="#" onclick="openStayCountryPage('Curacao','all');return false;">Curacao</a>
             </div>
           </div>
-          <a href="#" onclick="nav('mba-jamaica');return false;">MBA Trips in Jamaica</a>
+          <a href="#" onclick="nav('flagship-programs');return false;">Flagship Programs</a>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
           <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
         </div>
@@ -9499,7 +9499,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
     <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
-    <a href="#" onclick="nav('mba-jamaica');closeMob();return false;">MBA Trips in Jamaica</a>
+    <a href="#" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
   </div>
@@ -11691,6 +11691,7 @@ body.theme-night .page .tag{
         <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply / Enquire</a>
         <a href="https://wa.me/18764650630" target="_blank" rel="noopener" class="lj-btn ghost">Talk to the Director</a>
       </div>
+      <p style="margin:22px 0 0;font-size:14px"><a href="#" onclick="nav('flagship-programs');return false;" style="color:#fff;font-weight:700;text-decoration:underline">All flagship programs</a></p>
     </div>
   </section>
 
@@ -12167,7 +12168,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <a href="#" class="mv-btn primary" onclick="mbvGo('mbvPackages');return false;">Explore packages</a>
       <a href="#" class="mv-btn ghost" onclick="mbvPlan();return false;">Plan your voyage</a>
     </div>
-    <p style="margin:22px 0 0;font-size:14px"><a href="#" onclick="nav('mba-jamaica');return false;" style="color:#fff;font-weight:700;text-decoration:underline">Planning in Jamaica? See how an MBA voyage works there</a></p>
+    <p style="margin:22px 0 0;font-size:14px"><a href="#" onclick="nav('flagship-programs');return false;" style="color:#fff;font-weight:700;text-decoration:underline">All flagship programs</a></p>
     <div class="mv-shorelist" aria-label="Destinations">
       <span>Jamaica</span><span>Barbados</span><span>Saint Lucia</span><span>The Bahamas</span><span>Belize</span><span>Dominican Republic</span><span>Curacao</span>
     </div>
@@ -12594,7 +12595,8 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 
 
 <!-- ════════════════════════════════════
-     MBA IN JAMAICA: HOW IT WORKS (page)
+     PARKED: Jamaica "how it works" page. Not routed, linked or indexed. It duplicated the Seven Shores MBA page
+     and is kept as the starting point for the undergraduate flagship program page.
 ════════════════════════════════════ -->
 <div class="page" id="p-mba-jamaica">
 <style id="mbj-style">
@@ -12944,6 +12946,106 @@ body.theme-night #p-mba-jamaica{
   };
 })();
 </script>
+</div>
+
+<!-- ════════════════════════════════════
+     FLAGSHIP PROGRAMS (page)
+════════════════════════════════════ -->
+<div class="page" id="p-flagship-programs">
+<style id="fp-style">
+#p-flagship-programs{
+  --fp-navy:#062e4b;--fp-blue:#0a4d73;--fp-green:#70c257;--fp-orange:#ef8731;
+  --fp-ink:#12293d;--fp-mut:#5c6f82;--fp-head:#062e4b;--fp-line:rgba(6,46,75,.10);
+  --fp-card:#fff;--fp-bg1:#f7fafc;--fp-bg2:#eef4f8;--fp-chip:rgba(6,46,75,.05);
+  --fp-shadow:0 1px 2px rgba(6,46,75,.05),0 18px 44px rgba(6,46,75,.09);
+  background:var(--fp-bg1);font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--fp-ink)!important;
+}
+body.theme-night #p-flagship-programs{
+  --fp-ink:#e6eff8;--fp-mut:#b3c5d7;--fp-head:#fff;--fp-line:rgba(255,255,255,.12);
+  --fp-card:#0c2b46;--fp-bg1:#06223a;--fp-bg2:#0a2c48;--fp-chip:rgba(255,255,255,.08);
+  --fp-shadow:0 1px 2px rgba(0,0,0,.2),0 18px 44px rgba(0,0,0,.28);
+}
+#p-flagship-programs *{-webkit-font-smoothing:antialiased;box-sizing:border-box}
+#p-flagship-programs p,#p-flagship-programs li,#p-flagship-programs span,#p-flagship-programs strong,#p-flagship-programs b{color:inherit!important}
+#p-flagship-programs h1,#p-flagship-programs h2,#p-flagship-programs h3{color:var(--fp-head)!important}
+#p-flagship-programs .fp-wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+#p-flagship-programs .fp-hero{position:relative;overflow:hidden;text-align:center;padding:64px 0 70px;color:#fff!important;background:radial-gradient(120% 120% at 15% 0%,#0a4d73 0%,#062e4b 48%,#041f35 100%)}
+#p-flagship-programs .fp-hero::before{content:'';position:absolute;top:-28%;left:-10%;width:60%;height:95%;background:radial-gradient(circle,rgba(112,194,87,.42),transparent 62%);filter:blur(22px);pointer-events:none}
+#p-flagship-programs .fp-hero::after{content:'';position:absolute;bottom:-34%;right:-8%;width:56%;height:100%;background:radial-gradient(circle,rgba(239,135,49,.38),transparent 62%);filter:blur(22px);pointer-events:none}
+#p-flagship-programs .fp-hero-in{position:relative;z-index:2;max-width:820px;margin:0 auto;padding:0 24px}
+#p-flagship-programs .fp-kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#eaf6e4!important;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:8px 16px;margin-bottom:22px}
+#p-flagship-programs .fp-h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(40px,6.4vw,68px);line-height:1.04;margin:0;letter-spacing:-1px;color:#fff!important}
+#p-flagship-programs .fp-lede{max-width:56ch;margin:20px auto 0;color:rgba(255,255,255,.88)!important;font-size:clamp(16px,2vw,19px);line-height:1.65}
+#p-flagship-programs .fp-sec{padding:64px 0 24px}
+#p-flagship-programs .fp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:26px}
+#p-flagship-programs .fp-card{display:flex;flex-direction:column;background:var(--fp-card);border:1px solid var(--fp-line);box-shadow:var(--fp-shadow);transition:transform .25s,box-shadow .25s}
+#p-flagship-programs .fp-card:hover{transform:translateY(-4px);box-shadow:0 1px 2px rgba(6,46,75,.06),0 30px 64px rgba(6,46,75,.16)}
+#p-flagship-programs .fp-img{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--fp-bg2)}
+#p-flagship-programs .fp-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+#p-flagship-programs .fp-card:hover .fp-img img{transform:scale(1.04)}
+#p-flagship-programs .fp-tag{position:absolute;top:16px;left:16px;background:var(--fp-orange);color:#fff!important;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;padding:7px 12px}
+#p-flagship-programs .fp-body{display:flex;flex-direction:column;flex:1;padding:28px 28px 30px}
+#p-flagship-programs .fp-body h2{font-family:'Playfair Display',serif;font-size:clamp(26px,3vw,34px);margin:0 0 12px;line-height:1.12}
+#p-flagship-programs .fp-body h2 a{color:inherit!important;text-decoration:none}
+#p-flagship-programs .fp-body p{margin:0 0 18px;font-size:15.5px;line-height:1.7;color:var(--fp-mut)!important}
+#p-flagship-programs .fp-facts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px;padding:0;list-style:none}
+#p-flagship-programs .fp-facts li{font-size:12.5px;font-weight:700;padding:8px 12px;background:var(--fp-chip);border:1px solid var(--fp-line)}
+#p-flagship-programs .fp-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:auto}
+#p-flagship-programs .fp-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;font-family:'Raleway',sans-serif;font-weight:700;font-size:14.5px;text-decoration:none;cursor:pointer;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;box-shadow:0 12px 26px rgba(239,135,49,.34);transition:transform .2s,box-shadow .2s}
+#p-flagship-programs .fp-btn:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(239,135,49,.46)}
+#p-flagship-programs .fp-link{font-size:13.5px;font-weight:700;color:var(--fp-head)!important;text-decoration:underline;text-underline-offset:3px}
+#p-flagship-programs .fp-help{max-width:760px;margin:44px auto 84px;text-align:center}
+#p-flagship-programs .fp-help h3{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,28px);margin:0 0 10px}
+#p-flagship-programs .fp-help p{margin:0 0 20px;font-size:15.5px;line-height:1.7;color:var(--fp-mut)!important}
+@media (max-width:640px){
+  #p-flagship-programs .fp-wrap{padding:0 16px}
+  #p-flagship-programs .fp-sec{padding:44px 0 16px}
+  #p-flagship-programs .fp-body{padding:22px 20px 26px}
+}
+</style>
+
+<section class="fp-hero">
+  <div class="fp-hero-in">
+    <span class="fp-kicker">Sight Seers Caribbean</span>
+    <h1 class="fp-h1">Flagship Programs</h1>
+    <p class="fp-lede">The programs we build from the ground up, each with its own format, its own people and its own story. Open one to see how it works.</p>
+  </div>
+</section>
+
+<section class="fp-sec">
+  <div class="fp-wrap">
+    <div class="fp-grid">
+      <!-- To add the next flagship program, copy one of these cards and change its link, photo, text and facts. The grid lays itself out. -->
+      <article class="fp-card">
+        <a class="fp-img" href="/mba-caribbean-voyages" onclick="nav('mba-voyages');return false;" tabindex="-1" aria-hidden="true"><img src="/assets/mba/seven-shores-feature.jpg" alt="" loading="lazy"><span class="fp-tag">MBA &middot; Alumni &middot; Leadership teams</span></a>
+        <div class="fp-body">
+          <h2><a href="/mba-caribbean-voyages" onclick="nav('mba-voyages');return false;">Seven Shores MBA Voyages</a></h2>
+          <p>MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores. Yacht days, villa dinners and curated networking, quoted for your group.</p>
+          <ul class="fp-facts"><li>7 Caribbean shores</li><li>4 packages</li><li>12 to 60 guests</li><li>Custom quote</li></ul>
+          <div class="fp-actions">
+            <a class="fp-btn" href="/mba-caribbean-voyages" onclick="nav('mba-voyages');return false;">Open Seven Shores</a>
+          </div>
+        </div>
+      </article>
+      <article class="fp-card">
+        <a class="fp-img" href="/leaders-in-jamaica" onclick="nav('leaders-jamaica');return false;" tabindex="-1" aria-hidden="true"><img src="/assets/discover-jamaica/jamaica-kingston-desktop.webp" alt="" loading="lazy"><span class="fp-tag">Student leadership institute</span></a>
+        <div class="fp-body">
+          <h2><a href="/leaders-in-jamaica" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a></h2>
+          <p>A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university&rsquo;s student government. Open by application.</p>
+          <ul class="fp-facts"><li>5 days, 4 nights</li><li>Feb 17 to 21, 2027</li><li>$1,195 per delegate</li><li>12 to 15 founding cohort</li></ul>
+          <div class="fp-actions">
+            <a class="fp-btn" href="/leaders-in-jamaica" onclick="nav('leaders-jamaica');return false;">Open Leaders in Jamaica</a>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="fp-help">
+      <h3>Not sure which one fits?</h3>
+      <p>Tell us about your group and a planner will point you to the right program. It is free to send.</p>
+      <a class="fp-btn" href="/booking" onclick="nav('booking');return false;">Start planning</a>
+    </div>
+  </div>
+</section>
 </div>
 
 <!-- ════════════════════════════════════
@@ -23109,6 +23211,7 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('home')"><i class="fas fa-chevron-right"></i>Home</a></li>
         <li><a href="#" onclick="nav('about')"><i class="fas fa-chevron-right"></i>About Us</a></li>
         <li><a href="#" onclick="nav('tours')"><i class="fas fa-chevron-right"></i>Tours &amp; Excursions</a></li>
+        <li><a href="#" onclick="nav('flagship-programs');return false;"><i class="fas fa-chevron-right"></i>Flagship Programs</a></li>
         <li><a href="#" onclick="nav('destinations')"><i class="fas fa-chevron-right"></i>Destinations</a></li>
         <li data-blog-link><a href="#" onclick="nav('blog')"><i class="fas fa-chevron-right"></i>Travel Blog</a></li>
         <li><a href="#" onclick="nav('partners')"><i class="fas fa-chevron-right"></i>Our Partners</a></li>
@@ -27292,7 +27395,7 @@ var SS_ROUTES = {
   'greek-life':'/greek-life-travel',
   'leaders-jamaica':'/leaders-in-jamaica',
   'mba-voyages':'/mba-caribbean-voyages',
-  'mba-jamaica':'/mba-jamaica',
+  'flagship-programs':'/flagship-programs',
   'tent-rental':'/tent-rental',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
@@ -27326,7 +27429,7 @@ var SS_META = {
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Greek Life Trips: Fraternity & Sorority Travel, Caribbean','Spring break, founders, probate and chapter trips to Jamaica and the Caribbean. Villas, transfers, yacht days and nightlife, planned for your whole crew.'],
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
-  'mba-jamaica':['MBA Trips in Jamaica: How It Works | Sight Seers','How an MBA group trip in Jamaica comes together: one quote, company visits matched to your interests, a day on the water and four packages for 12 to 60 guests.'],
+  'flagship-programs':['Flagship Programs | Sight Seers Caribbean','Sight Seers flagship programs: the Seven Shores MBA Voyages across the Caribbean and the Leaders in Jamaica leadership institute. Open one to see how it works.'],
   'mba-voyages':['MBA Class Trips & Alumni Voyages, Caribbean | Seven Shores','MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores: yacht days, villa dinners and curated networking for 12 to 60.'],
   'tent-rental':['Tent Rental Agreement | Sight Seers Caribbean','Rent a two-person camping tent from Sight Seers Caribbean Adventures. Complete and sign the rental agreement online.'],
   'destinations':['Caribbean Group Travel Destinations | Sight Seers Caribbean','Plan a group trip to Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao or the Dominican Republic with 5-day packages from US$251 per person.'],
@@ -27432,7 +27535,7 @@ function nav(id,opts={}){
   if(!opts.fromPop){ try{ ssPushRoute(id); }catch(e){} }
   try{ ssSetMeta(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='mba-voyages' || id==='mba-jamaica')?'n-mba-voyages':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id))));
+  const activeId=(id==='giftcards'?'n-shop':((id==='mba-voyages' || id==='mba-jamaica')?'n-mba-voyages':((id==='stays' || id==='staycountry' || id==='transfers' || id==='flagship-programs')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id))));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   /* A different page replaces the content instantly, so jump straight to its top. Animating from the old
      scroll position made the new page visibly slide past (the "glitch" when opening Tours from deep in Home). */
