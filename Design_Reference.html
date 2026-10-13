@@ -13021,20 +13021,26 @@ body.theme-night #p-seven-shores-society{
   #p-seven-shores-society .so-wk>p{padding-left:0}
   #p-seven-shores-society .so-block{margin-top:48px;padding-top:40px}
 }
-#p-seven-shores-society .so-gl{position:relative;margin-top:30px;user-select:none}
-#p-seven-shores-society .so-gl-view{overflow:hidden;position:relative;touch-action:pan-y}
+#p-seven-shores-society .so-gl{position:relative;max-width:1180px;margin:30px auto 0;user-select:none}
+#p-seven-shores-society .so-gl-view{position:relative;overflow:hidden;touch-action:pan-y}
+/* Without JavaScript the photos are a plain row. */
 #p-seven-shores-society .so-gl-track{display:flex;gap:14px}
-#p-seven-shores-society .so-gl-slide{flex:0 0 calc((100% - 28px)/3);aspect-ratio:3/2;position:relative;overflow:hidden;border:0;padding:0;margin:0;background:var(--so-bg2);cursor:zoom-in;border-radius:0}
-#p-seven-shores-society .so-gl-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#p-seven-shores-society .so-gl-slide{flex:0 0 calc((100% - 28px)/3);aspect-ratio:3/2;position:relative;overflow:hidden;border:0;padding:0;margin:0;background:var(--so-bg2);cursor:pointer;border-radius:0}
+#p-seven-shores-society .so-gl-slide img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;pointer-events:none}
 #p-seven-shores-society .so-gl-slide:focus{outline:none}
-#p-seven-shores-society .so-gl-slide:focus-visible{outline:3px solid var(--so-orange);outline-offset:-3px}
-#p-seven-shores-society .so-gl-cap{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#fff!important;background:linear-gradient(transparent,rgba(4,31,53,.78))}
-#p-seven-shores-society .so-gl.is-js .so-gl-track{display:block;position:relative}
-#p-seven-shores-society .so-gl.is-js .so-gl-slide{position:absolute;top:0;left:0;flex:none;width:var(--gl-w);transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+#p-seven-shores-society .so-gl-slide:focus-visible{outline:3px solid var(--so-orange);outline-offset:3px}
+/* With JavaScript: the same centered glide as the Gallery page, a little smaller. */
+#p-seven-shores-society .so-gl.is-js .so-gl-view{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}
+#p-seven-shores-society .so-gl.is-js .so-gl-track{display:block;position:relative;height:320px}
+#p-seven-shores-society .so-gl.is-js .so-gl-slide{position:absolute;top:0;left:50%;flex:none;aspect-ratio:auto;height:100%;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease,filter .45s ease;will-change:transform}
 #p-seven-shores-society .so-gl.is-js.no-anim .so-gl-slide,#p-seven-shores-society .so-gl.is-js .so-gl-slide.jump{transition:none}
-#p-seven-shores-society .so-gl-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}
-#p-seven-shores-society .so-gl-count{margin:0;font-size:13px;font-weight:700;color:var(--so-mut)!important}
-#p-seven-shores-society .so-gl-nav{display:flex;gap:10px}
+#p-seven-shores-society .so-gl-slide.is-side{filter:saturate(.8) brightness(.92)}
+#p-seven-shores-society .so-gl-slide.is-active{cursor:zoom-in;box-shadow:0 22px 46px rgba(6,46,75,.24)}
+#p-seven-shores-society .so-gl-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding:0 4px}
+#p-seven-shores-society .so-gl-meta{min-width:0}
+#p-seven-shores-society .so-gl-meta b{display:block;color:var(--so-head)!important;font-size:1.05rem;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-seven-shores-society .so-gl-meta span{color:var(--so-mut)!important;font-size:12.5px;font-weight:700}
+#p-seven-shores-society .so-gl-nav{display:flex;gap:10px;flex:0 0 auto}
 #p-seven-shores-society .so-gl-btn{width:46px;height:46px;border:1px solid var(--so-line);background:var(--so-card);color:var(--so-head)!important;border-radius:0;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;transition:background .2s,color .2s,border-color .2s}
 #p-seven-shores-society .so-gl-btn:hover{background:#062e4b;color:#fff!important;border-color:#062e4b}
 #p-seven-shores-society .so-gl-btn:focus-visible{outline:3px solid var(--so-orange);outline-offset:2px}
@@ -13046,19 +13052,17 @@ body.theme-night #p-seven-shores-society{
 #p-seven-shores-society .so-lb img{max-width:min(1100px,100%);max-height:78vh;object-fit:contain;display:block}
 #p-seven-shores-society .so-lb p{margin:0;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.4px}
 #p-seven-shores-society .so-lb-x{position:absolute;top:18px;right:18px;width:44px;height:44px;border:0;background:rgba(255,255,255,.14);color:#fff!important;font-size:26px;line-height:1;cursor:pointer}
+@media (max-width:620px){#p-seven-shores-society .so-gl.is-js .so-gl-track{height:230px}#p-seven-shores-society .so-gl-btn{width:42px;height:42px}}
 @media (max-width:980px){#p-seven-shores-society .so-gl-slide{flex-basis:100%}}
 @media (prefers-reduced-motion:reduce){#p-seven-shores-society .so-gl.is-js .so-gl-slide{transition-duration:.3s}}
 #p-seven-shores-society .so-photoband{padding:44px 0 6px}
 #p-seven-shores-society .so-photoband .so-gl{margin-top:0}
 #p-seven-shores-society .so-photoband .so-note{margin-top:14px}
-#p-seven-shores-society .so-cabins{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
-#p-seven-shores-society .so-cabin{margin:0;aspect-ratio:3/2;position:relative;overflow:hidden}
-#p-seven-shores-society .so-cabin img{width:100%;height:100%;object-fit:cover;display:block}
-#p-seven-shores-society .so-cabin-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px;color:#cfe6dc!important;background:radial-gradient(120% 120% at 20% 0%,#0a4d73 0%,#062e4b 60%,#041f35 100%);border:1px dashed rgba(255,255,255,.35)}
-#p-seven-shores-society .so-cabin-ph svg{color:#8ed77e}
-#p-seven-shores-society .so-cabin-ph b{font-size:15px;color:#fff!important}
-#p-seven-shores-society .so-cabin-ph span{font-size:12.5px;letter-spacing:.4px;color:rgba(255,255,255,.78)!important}
-@media (max-width:980px){#p-seven-shores-society .so-cabins{grid-template-columns:1fr}}
+#p-seven-shores-society .so-gl-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px;color:#cfe6dc!important;background:radial-gradient(120% 120% at 20% 0%,#0a4d73 0%,#062e4b 60%,#041f35 100%);border:1px dashed rgba(255,255,255,.35)}
+#p-seven-shores-society .so-gl-ph svg{color:#8ed77e}
+#p-seven-shores-society .so-gl-ph b{font-size:15px;color:#fff!important}
+#p-seven-shores-society .so-gl-ph span{font-size:12.5px;letter-spacing:.4px;color:rgba(255,255,255,.78)!important}
+#p-seven-shores-society #ssocCabins{margin-top:22px}
 #p-seven-shores-society .so-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
 #p-seven-shores-society .so-photos figure{margin:0;position:relative;overflow:hidden;background:var(--so-bg2)}
 #p-seven-shores-society .so-photos img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
@@ -13120,15 +13124,16 @@ body.theme-night #p-seven-shores-society{
     <div class="so-gl" id="ssocGlide" role="group" aria-roledescription="carousel" aria-label="Illustrative photos of Jamaica">
       <div class="so-gl-view">
         <div class="so-gl-track">
-        <button type="button" class="so-gl-slide" data-full="/assets/mba/mba-circle-selfie.jpg" aria-label="Friends in a circle, illustrative photo"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-portland-desktop.webp" aria-label="A Jamaican beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" aria-label="A waterfall in the hills, illustrative photo"><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-mary-desktop.webp" aria-label="A palm-lined lagoon, illustrative photo"><img src="/assets/discover-jamaica/jamaica-mary-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-trelawny-desktop.webp" aria-label="A glowing bay at night, illustrative photo"><img src="/assets/discover-jamaica/jamaica-trelawny-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-andrew-desktop.webp" aria-label="A hike with a local guide, illustrative photo"><img src="/assets/discover-jamaica/jamaica-andrew-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/mba/mba-circle-selfie.jpg" data-label="Friends in a circle" aria-label="Friends in a circle, illustrative photo"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="eager"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-portland-desktop.webp" data-label="A Jamaican beach" aria-label="A Jamaican beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="eager"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" data-label="A waterfall in the hills" aria-label="A waterfall in the hills, illustrative photo"><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="eager"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-mary-desktop.webp" data-label="A palm-lined lagoon" aria-label="A palm-lined lagoon, illustrative photo"><img src="/assets/discover-jamaica/jamaica-mary-card-600.jpg" alt="" loading="eager"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-trelawny-desktop.webp" data-label="A glowing bay at night" aria-label="A glowing bay at night, illustrative photo"><img src="/assets/discover-jamaica/jamaica-trelawny-card-600.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-andrew-desktop.webp" data-label="A hike with a local guide" aria-label="A hike with a local guide, illustrative photo"><img src="/assets/discover-jamaica/jamaica-andrew-card-600.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-westmoreland-desktop.webp" data-label="A white-sand beach" aria-label="A white-sand beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-westmoreland-card-600.jpg" alt="" loading="lazy"></button>
         </div>
       </div>
-      <div class="so-gl-bar"><p class="so-gl-count" aria-live="polite"></p><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+      <div class="so-gl-bar"><div class="so-gl-meta"><b></b><span></span></div><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photo"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photo"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
       <div class="so-gl-dots" aria-hidden="true"></div>
     </div>
     <p class="so-note">Photos are illustrative. Photos of the confirmed venue and cabins are added once it is booked.</p>
@@ -13296,11 +13301,19 @@ body.theme-night #p-seven-shores-society{
 
     <h3 class="so-h2" style="font-size:clamp(22px,3vw,28px);margin-top:48px">Where you will stay</h3>
     <p class="so-sub">Comfortable cabins or cottages in nature. Photos of the confirmed cabins are added here once the venue is booked.</p>
-    <!-- To use a real photo, replace the whole <div class="so-cabin-ph">...</div> in a tile with <img src="/assets/your-photo.jpg" alt="Describe the cabin" loading="lazy"> -->
-    <div class="so-cabins">
-      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The cabin, outside</span></div></figure>
-      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>Inside the cabin</span></div></figure>
-      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The shared deck and grounds</span></div></figure>
+    <!-- To use a real cabin photo, replace the whole <div class="so-gl-ph">...</div> inside a slide with <img src="/assets/your-photo.jpg" alt="Describe the cabin" loading="lazy"> and add data-full="/assets/your-photo.jpg" to that slide's button. -->
+    <div class="so-gl" id="ssocCabins" data-note="Photo coming soon" role="group" aria-roledescription="carousel" aria-label="Photos of the cabins, coming soon">
+      <div class="so-gl-view">
+        <div class="so-gl-track">
+          <button type="button" class="so-gl-slide" data-label="The cabin, outside" aria-label="The cabin, outside, photo coming soon"><div class="so-gl-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The cabin, outside</span></div></button>
+          <button type="button" class="so-gl-slide" data-label="Inside the cabin" aria-label="Inside the cabin, photo coming soon"><div class="so-gl-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>Inside the cabin</span></div></button>
+          <button type="button" class="so-gl-slide" data-label="The shared deck" aria-label="The shared deck, photo coming soon"><div class="so-gl-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The shared deck</span></div></button>
+          <button type="button" class="so-gl-slide" data-label="The grounds" aria-label="The grounds, photo coming soon"><div class="so-gl-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The grounds</span></div></button>
+          <button type="button" class="so-gl-slide" data-label="The view" aria-label="The view, photo coming soon"><div class="so-gl-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The view</span></div></button>
+        </div>
+      </div>
+      <div class="so-gl-bar"><div class="so-gl-meta"><b></b><span></span></div><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photo"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photo"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+      <div class="so-gl-dots" aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -13354,65 +13367,74 @@ body.theme-night #p-seven-shores-society{
 </script>
 <script id="sso-glide">
 (function(){
-  var root=document.getElementById('ssocGlide');if(!root)return;
-  var view=root.querySelector('.so-gl-view'),track=root.querySelector('.so-gl-track');
-  var slides=[].slice.call(track.querySelectorAll('.so-gl-slide')),n=slides.length;if(n<2)return;
-  var count=root.querySelector('.so-gl-count'),dotsEl=root.querySelector('.so-gl-dots');
-  var gap=14,i=0,v=3,w=0,prevD=[],drag=null,moved=false;
-  slides.forEach(function(_,k){var d=document.createElement('i');d.setAttribute('data-k',k);dotsEl.appendChild(d);});
-  var dots=[].slice.call(dotsEl.children);
-  function measure(){
-    var W=view.clientWidth;if(!W)return false;
-    v=W>=980?3:1;w=v===3?Math.floor((W-2*gap)/3):W;
-    track.style.height=Math.round(w*2/3)+'px';root.style.setProperty('--gl-w',w+'px');return true;
-  }
-  /* Slides sit in a ring: the one that leaves on the left re-enters on the right out of sight, so the strip never runs out. */
-  function layout(){
-    if(!measure())return;
-    slides.forEach(function(el,k){
-      var d=((k-i)%n+n)%n;if(d===n-1)d=-1;
-      var wrapped=prevD[k]!==undefined&&Math.abs(d-prevD[k])>1.01;
-      if(wrapped)el.classList.add('jump');
-      el.style.transform='translateX('+(d*(w+gap))+'px)';
-      el.setAttribute('aria-hidden',d>=0&&d<v?'false':'true');
-      el.tabIndex=d>=0&&d<v?0:-1;
-      prevD[k]=d;
-      if(wrapped){void el.offsetWidth;el.classList.remove('jump');}
-    });
-    var last=(i+v-1)%n;
-    count.textContent=v===1?('Photo '+(i+1)+' of '+n):('Photos '+(i+1)+' to '+(last+1)+' of '+n);
-    dots.forEach(function(d,k){d.classList.toggle('on',k===i);});
-  }
-  function go(k){i=((k%n)+n)%n;layout();}
-  root.classList.add('is-js');
-  root.querySelectorAll('.so-gl-btn').forEach(function(b){b.addEventListener('click',function(){go(i+(+b.getAttribute('data-dir')));});});
-  dotsEl.style.pointerEvents='auto';dotsEl.setAttribute('aria-hidden','false');
-  dotsEl.addEventListener('click',function(e){var k=e.target&&e.target.getAttribute&&e.target.getAttribute('data-k');if(k!==null&&k!==undefined)go(+k);});
-  /* Swipe or drag the strip, as on the Gallery page. */
-  function down(x){drag=x;moved=false;}
-  function up(x){if(drag===null)return;var dx=x-drag;drag=null;if(Math.abs(dx)>40){moved=true;go(i+(dx<0?1:-1));}}
-  view.addEventListener('touchstart',function(e){down(e.touches[0].clientX);},{passive:true});
-  view.addEventListener('touchend',function(e){up(e.changedTouches[0].clientX);});
-  view.addEventListener('mousedown',function(e){down(e.clientX);});
-  window.addEventListener('mouseup',function(e){up(e.clientX);});
-  root.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(i-1);}else if(e.key==='ArrowRight'){go(i+1);}});
-  /* A click on a photo opens it large. */
+  var pg=document.getElementById('p-seven-shores-society');if(!pg)return;
+  /* One large-photo view shared by every glide on the page. */
   var lb=document.createElement('div');lb.className='so-lb';lb.id='ssocLb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Photo');
-  lb.innerHTML='<button type="button" class="so-lb-x" aria-label="Close photo">&times;</button><img alt=""><p>Illustrative photo</p>';
-  document.getElementById('p-seven-shores-society').appendChild(lb);
+  lb.innerHTML='<button type="button" class="so-lb-x" aria-label="Close photo">&times;</button><img alt=""><p></p>';
+  pg.appendChild(lb);
   function closeLb(){lb.classList.remove('open');}
   lb.addEventListener('click',closeLb);
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLb();});
-  track.addEventListener('click',function(e){
-    var b=e.target.closest&&e.target.closest('.so-gl-slide');if(!b||moved){moved=false;return;}
-    lb.querySelector('img').src=b.getAttribute('data-full')||b.querySelector('img').src;lb.classList.add('open');
-  });
-  if(window.ResizeObserver)new ResizeObserver(function(){root.classList.add('no-anim');layout();requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.remove('no-anim');});});}).observe(view);
-  window.addEventListener('resize',layout);
-  layout();
-  /* The page starts hidden, so measure again once it is shown. */
-  var pg=document.getElementById('p-seven-shores-society');
-  if(window.MutationObserver)new MutationObserver(function(){if(pg.classList.contains('on'))layout();}).observe(pg,{attributes:true,attributeFilter:['class']});
+
+  function glide(root){
+    var view=root.querySelector('.so-gl-view'),track=root.querySelector('.so-gl-track');
+    var slides=[].slice.call(track.querySelectorAll('.so-gl-slide')),n=slides.length;if(n<2)return;
+    var note=root.getAttribute('data-note')||'Illustrative photo';
+    var cap=root.querySelector('.so-gl-meta b'),sub=root.querySelector('.so-gl-meta span'),dotsEl=root.querySelector('.so-gl-dots');
+    var i=0,prevD=[],drag=null,moved=false;
+    slides.forEach(function(_,k){var d=document.createElement('i');d.setAttribute('data-k',k);dotsEl.appendChild(d);});
+    var dots=[].slice.call(dotsEl.children);
+    /* The centered glide of the Gallery page: the photo in the middle is the largest, its neighbors sit smaller on each side. */
+    function layout(){
+      var W=view.clientWidth;if(!W)return;
+      var small=W<620,sw=Math.round(W*(small?.7:.44)),step=small?W*.56:W*.33,half=n/2;
+      slides.forEach(function(el,k){
+        var d=k-i;if(d>half)d-=n;else if(d<-half)d+=n;
+        var ad=Math.abs(d),vis=ad<=2;
+        var scale=ad===0?1:ad===1?.84:.7,op=ad===0?1:ad===1?.85:ad===2?.4:0;
+        /* A photo that goes round the back of the ring re-enters without sliding across the stage. */
+        var wrapped=prevD[k]!==undefined&&Math.abs(d-prevD[k])>2.01;
+        if(wrapped)el.classList.add('jump');
+        el.style.width=sw+'px';
+        el.style.transform='translateX(calc(-50% + '+Math.round(d*step)+'px)) scale('+scale+')';
+        el.style.opacity=op;el.style.zIndex=String(10-ad);el.style.pointerEvents=vis?'auto':'none';
+        el.classList.toggle('is-active',ad===0);el.classList.toggle('is-side',ad!==0);
+        el.setAttribute('aria-hidden',ad===0?'false':'true');el.tabIndex=ad===0?0:-1;
+        prevD[k]=d;
+        if(wrapped){void el.offsetWidth;el.classList.remove('jump');}
+      });
+      cap.textContent=slides[i].getAttribute('data-label')||'';
+      sub.textContent=note+' \u00b7 '+(i+1)+' of '+n+' photos';
+      dots.forEach(function(d,k){d.classList.toggle('on',k===i);});
+    }
+    function go(k){i=((k%n)+n)%n;layout();}
+    root.classList.add('is-js');
+    root.querySelectorAll('.so-gl-btn').forEach(function(b){b.addEventListener('click',function(){go(i+(+b.getAttribute('data-dir')));});});
+    dotsEl.style.pointerEvents='auto';dotsEl.setAttribute('aria-hidden','false');
+    dotsEl.addEventListener('click',function(e){var k=e.target&&e.target.getAttribute&&e.target.getAttribute('data-k');if(k!==null&&k!==undefined)go(+k);});
+    /* Swipe or drag, as on the Gallery page. */
+    function down(x){drag=x;moved=false;}
+    function up(x){if(drag===null)return;var dx=x-drag;drag=null;if(Math.abs(dx)>40){moved=true;go(i+(dx<0?1:-1));}}
+    view.addEventListener('touchstart',function(e){down(e.touches[0].clientX);},{passive:true});
+    view.addEventListener('touchend',function(e){up(e.changedTouches[0].clientX);});
+    view.addEventListener('mousedown',function(e){down(e.clientX);});
+    window.addEventListener('mouseup',function(e){up(e.clientX);});
+    root.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(i-1);}else if(e.key==='ArrowRight'){go(i+1);}});
+    /* A side photo brings itself to the middle; the middle photo opens large (placeholders have nothing to open). */
+    track.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('.so-gl-slide');if(!b||moved){moved=false;return;}
+      var k=slides.indexOf(b);if(k!==i){go(k);return;}
+      var full=b.getAttribute('data-full');if(!full)return;
+      lb.querySelector('img').src=full;
+      lb.querySelector('p').textContent=(b.getAttribute('data-label')||'')+' \u00b7 '+note;lb.classList.add('open');
+    });
+    if(window.ResizeObserver)new ResizeObserver(function(){root.classList.add('no-anim');layout();requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.remove('no-anim');});});}).observe(view);
+    window.addEventListener('resize',layout);
+    layout();
+    /* The page starts hidden, so measure again once it is shown. */
+    if(window.MutationObserver)new MutationObserver(function(){if(pg.classList.contains('on'))layout();}).observe(pg,{attributes:true,attributeFilter:['class']});
+  }
+  [].forEach.call(pg.querySelectorAll('.so-gl'),glide);
 })();
 </script>
 
