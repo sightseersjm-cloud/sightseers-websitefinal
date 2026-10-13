@@ -13001,6 +13001,53 @@ body.theme-night #p-seven-shores-society{
 #p-seven-shores-society .so-chips li{padding:9px 15px;background:var(--so-card);border:1px solid var(--so-line);font-size:13.5px;font-weight:700;line-height:1.3}
 #p-seven-shores-society .so-lead{max-width:780px;margin:22px 0 0;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(20px,2.7vw,27px);line-height:1.5;color:var(--so-head)!important}
 #p-seven-shores-society .so-close{max-width:780px;margin:30px 0 0;padding-left:20px;border-left:4px solid var(--so-green);font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(17px,2.1vw,21px);line-height:1.6;color:var(--so-head)!important}
+#p-seven-shores-society .so-block{margin-top:64px;padding-top:56px;border-top:1px solid var(--so-line)}
+#p-seven-shores-society .so-wk{border-bottom:0}
+#p-seven-shores-society .so-week li{display:block;padding:0;border-bottom:1px solid var(--so-line)}
+#p-seven-shores-society .so-wk summary{display:grid;grid-template-columns:210px 1fr 24px;gap:22px;align-items:center;cursor:pointer;list-style:none;padding:16px 0}
+#p-seven-shores-society .so-wk summary::-webkit-details-marker{display:none}
+#p-seven-shores-society .so-wk summary::after{content:'+';font-size:22px;font-weight:600;color:var(--so-orange)!important;line-height:1;text-align:right}
+#p-seven-shores-society .so-wk[open] summary::after{content:'\2212'}
+#p-seven-shores-society .so-wk summary h3{margin:0;font-size:16.5px}
+#p-seven-shores-society .so-wk summary:hover h3{color:var(--so-orange)!important}
+#p-seven-shores-society .so-wk>p{margin:0 0 18px;padding-left:232px;max-width:760px;font-size:14.5px;line-height:1.7;color:var(--so-mut)!important}
+#p-seven-shores-society .so-wk-tools{margin:18px 0 0;max-width:860px}
+#p-seven-shores-society .so-wk-all{font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.4px;color:var(--so-orange)!important;background:none;border:1.5px solid var(--so-orange);padding:9px 16px;cursor:pointer;transition:background .2s,color .2s}
+#p-seven-shores-society .so-wk-all:hover{background:var(--so-orange);color:#fff!important}
+@media (prefers-reduced-motion:no-preference){#p-seven-shores-society .so-wk[open]>p{animation:ssPeek .25s ease}}
+@media (max-width:640px){
+  #p-seven-shores-society .so-wk summary{grid-template-columns:1fr 24px;gap:6px 12px}
+  #p-seven-shores-society .so-wk summary .so-day{grid-column:1/-1;justify-self:start}
+  #p-seven-shores-society .so-wk>p{padding-left:0}
+  #p-seven-shores-society .so-block{margin-top:48px;padding-top:40px}
+}
+#p-seven-shores-society .so-gl{position:relative;margin-top:30px;user-select:none}
+#p-seven-shores-society .so-gl-view{overflow:hidden;position:relative;touch-action:pan-y}
+#p-seven-shores-society .so-gl-track{display:flex;gap:14px}
+#p-seven-shores-society .so-gl-slide{flex:0 0 calc((100% - 28px)/3);aspect-ratio:3/2;position:relative;overflow:hidden;border:0;padding:0;margin:0;background:var(--so-bg2);cursor:zoom-in;border-radius:0}
+#p-seven-shores-society .so-gl-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#p-seven-shores-society .so-gl-slide:focus{outline:none}
+#p-seven-shores-society .so-gl-slide:focus-visible{outline:3px solid var(--so-orange);outline-offset:-3px}
+#p-seven-shores-society .so-gl-cap{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#fff!important;background:linear-gradient(transparent,rgba(4,31,53,.78))}
+#p-seven-shores-society .so-gl.is-js .so-gl-track{display:block;position:relative}
+#p-seven-shores-society .so-gl.is-js .so-gl-slide{position:absolute;top:0;left:0;flex:none;width:var(--gl-w);transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+#p-seven-shores-society .so-gl.is-js.no-anim .so-gl-slide,#p-seven-shores-society .so-gl.is-js .so-gl-slide.jump{transition:none}
+#p-seven-shores-society .so-gl-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}
+#p-seven-shores-society .so-gl-count{margin:0;font-size:13px;font-weight:700;color:var(--so-mut)!important}
+#p-seven-shores-society .so-gl-nav{display:flex;gap:10px}
+#p-seven-shores-society .so-gl-btn{width:46px;height:46px;border:1px solid var(--so-line);background:var(--so-card);color:var(--so-head)!important;border-radius:0;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;transition:background .2s,color .2s,border-color .2s}
+#p-seven-shores-society .so-gl-btn:hover{background:#062e4b;color:#fff!important;border-color:#062e4b}
+#p-seven-shores-society .so-gl-btn:focus-visible{outline:3px solid var(--so-orange);outline-offset:2px}
+#p-seven-shores-society .so-gl-dots{display:flex;justify-content:center;gap:7px;margin-top:16px;flex-wrap:wrap}
+#p-seven-shores-society .so-gl-dots i{width:24px;height:3px;background:var(--so-line);cursor:pointer;transition:background .2s}
+#p-seven-shores-society .so-gl-dots i.on{background:var(--so-orange)}
+#p-seven-shores-society .so-lb{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;background:rgba(4,20,34,.88)}
+#p-seven-shores-society .so-lb.open{display:flex}
+#p-seven-shores-society .so-lb img{max-width:min(1100px,100%);max-height:78vh;object-fit:contain;display:block}
+#p-seven-shores-society .so-lb p{margin:0;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.4px}
+#p-seven-shores-society .so-lb-x{position:absolute;top:18px;right:18px;width:44px;height:44px;border:0;background:rgba(255,255,255,.14);color:#fff!important;font-size:26px;line-height:1;cursor:pointer}
+@media (max-width:980px){#p-seven-shores-society .so-gl-slide{flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){#p-seven-shores-society .so-gl.is-js .so-gl-slide{transition:none}}
 #p-seven-shores-society .so-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
 #p-seven-shores-society .so-photos figure{margin:0;position:relative;overflow:hidden;background:var(--so-bg2)}
 #p-seven-shores-society .so-photos img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
@@ -13057,56 +13104,39 @@ body.theme-night #p-seven-shores-society{
   </div>
 </section>
 
-<section class="so-sec" id="ssocPromise">
-  <div class="so-wrap">
-    <div class="so-eyebrow">The promise</div>
-    <h2 class="so-h2">Arrive as individuals. Leave with a circle of people you want to see again.</h2>
-    <p class="so-sub">Enjoy the Caribbean through its people, food and culture, while Sight Seers handles the trip details.</p>
-    <p class="so-chips-label">What the days hold</p>
-    <ul class="so-chips">
-      <li>Workshops</li>
-      <li>Fun-filled competitions and obstacle courses</li>
-      <li>Pickleball or tennis</li>
-      <li>A soccer evening</li>
-      <li>A yacht day</li>
-      <li>Cooking together</li>
-      <li>Nature outings</li>
-      <li>Time to work, rest or reflect</li>
-    </ul>
-    <div class="so-photos">
-      <figure><img src="/assets/mba/mba-circle-selfie.jpg" alt="Friends smiling down at the camera in a circle" loading="lazy"><figcaption>Illustrative photo</figcaption></figure>
-      <figure><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="lazy"><figcaption>Illustrative photo</figcaption></figure>
-      <figure><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="lazy"><figcaption>Illustrative photo</figcaption></figure>
-    </div>
-    <p class="so-note">Photos are illustrative. Photos of the confirmed venue are added once it is booked.</p>
-  </div>
-</section>
-
-<section class="so-sec tint" id="ssocWhy">
+<section class="so-sec" id="ssocWhy">
   <div class="so-wrap">
     <div class="so-eyebrow">The story behind Seven Shores Society</div>
     <h2 class="so-h2">Step outside your daily bubble</h2>
     <p class="so-lead">Seven Shores Society began with a simple idea: the best thinking happens when founders and entrepreneurs step out of their daily bubble and into a room of people who truly get it.</p>
-    <div class="so-three">
-      <div class="so-moment"><div class="n">1</div><h3>Be understood</h3><p>Friends and family want the best for you, but unless they work in a similar industry, they rarely understand the business problems you carry. Here you sit with fellow founders from across the globe, people with similar interests who know the road, and you get genuine advice back.</p></div>
-      <div class="so-moment"><div class="n">2</div><h3>Rethink and reflect</h3><p>Among people who have lived it, it is easier to rethink things and look honestly at your own motivation, your wins and your losses, and the path that brought you here. You leave clearer on where you are going, and why.</p></div>
-      <div class="so-moment"><div class="n">3</div><h3>Rest, then take action</h3><p>This is a place for action takers and doers. Rest and relax first, then take inspired action, instead of just giving in to the grind mentality. The next step often shows up once you finally slow down.</p></div>
+      <div class="so-three">
+        <div class="so-moment"><div class="n">1</div><h3>Be understood</h3><p>Friends and family want the best for you, but unless they work in a similar industry, they rarely understand the business problems you carry. Here you sit with fellow founders from across the globe, people with similar interests who know the road, and you get genuine advice back.</p></div>
+        <div class="so-moment"><div class="n">2</div><h3>Rethink and reflect</h3><p>Among people who have lived it, it is easier to rethink things and look honestly at your own motivation, your wins and your losses, and the path that brought you here. You leave clearer on where you are going, and why.</p></div>
+        <div class="so-moment"><div class="n">3</div><h3>Rest, then take action</h3><p>This is a place for action takers and doers. Rest and relax first, then take inspired action, instead of just giving in to the grind mentality. The next step often shows up once you finally slow down.</p></div>
+      </div>
+      <p class="so-close">And yes, there will be laughter, the kind you cannot control. Life as a fellow founder is lighter when it is shared.</p>
+    <div class="so-block" id="ssocProgram">
+      <div class="so-eyebrow">How the program runs</div>
+      <h2 class="so-h2">Before you arrive, the seven days, and the 60 days after</h2>
+      <p class="so-sub">Arrive as individuals. Leave with a circle of people you want to see again. The Society starts online, comes together in Jamaica and carries on once you are home.</p>
+      <div class="so-ba">
+        <div class="so-card"><b>Before</b><p>Workshops and virtual conferences with your circle, plus a virtual Shore meet and greet with breakout rooms, so you meet before day one. Your host also makes three relevant introductions for each guest, with consent. It is part of the package.</p></div>
+        <div class="so-card"><b>The 7 days</b><p>Seven nights and eight days. Rotating dinner seating, optional peer circles and paired walks create chances to talk, without pressure. Workshops, fun-filled competitions and obstacle courses, pickleball or tennis, a soccer evening and a yacht day give the group something to do together.</p></div>
+        <div class="so-card"><b>The 60 days after</b><p>Your host runs reunion calls around days 14, 30 and 60 and offers introductions based on the interests you expressed. Your membership keeps the circle together.</p></div>
+      </div>
+      <p class="so-chips-label">What the days hold</p>
+      <ul class="so-chips">
+        <li>Workshops</li>
+        <li>Fun-filled competitions and obstacle courses</li>
+        <li>Pickleball or tennis</li>
+        <li>A soccer evening</li>
+        <li>A yacht day</li>
+        <li>Cooking together</li>
+        <li>Nature outings</li>
+        <li>Time to work, rest or reflect</li>
+      </ul>
+      <p class="so-promise"><b>What we promise.</b> Opportunities for connection and a well-hosted experience. We do not guarantee friendships, investment, clients, partnerships or business growth.</p>
     </div>
-    <p class="so-close">And yes, there will be laughter, the kind you cannot control. Life as a fellow founder is lighter when it is shared.</p>
-  </div>
-</section>
-
-<section class="so-sec" id="ssocConnect">
-  <div class="so-wrap">
-    <div class="so-eyebrow">How the program runs</div>
-    <h2 class="so-h2">Before you arrive, the seven days, and the 60 days after</h2>
-    <p class="so-sub">The Society starts online, comes together in Jamaica and carries on once you are home. Opportunities to connect, created without forcing friendship.</p>
-    <div class="so-ba">
-      <div class="so-card"><b>Before</b><p>Workshops and virtual conferences with your circle, plus a virtual Shore meet and greet with breakout rooms, so you meet before day one. Your host also makes three relevant introductions for each guest, with consent. It is part of the package.</p></div>
-      <div class="so-card"><b>The 7 days</b><p>Seven nights and eight days. Rotating dinner seating, optional peer circles and paired walks create chances to talk, without pressure. Workshops, fun-filled competitions and obstacle courses, pickleball or tennis, a soccer evening and a yacht day give the group something to do together.</p></div>
-      <div class="so-card"><b>The 60 days after</b><p>Your host runs reunion calls around days 14, 30 and 60 and offers introductions based on the interests you expressed. Your membership keeps the circle together.</p></div>
-    </div>
-    <p class="so-promise"><b>What we promise.</b> Opportunities for connection and a well-hosted experience. We do not guarantee friendships, investment, clients, partnerships or business growth.</p>
   </div>
 </section>
 
@@ -13116,17 +13146,18 @@ body.theme-night #p-seven-shores-society{
     <h2 class="so-h2">A slower, deeper rhythm</h2>
     <p class="so-sub">Eight days and seven nights: connection, nature and enough space to breathe. On the days without a hosted dinner, the group cooks breakfast, lunch and dinner together as a team.</p>
     <ol class="so-week">
-      <li><span class="so-day">Before &middot; Meet online</span><div><h3>Workshops, virtual conferences and the meet and greet</h3><p>Before you arrive, your circle meets online for workshops and virtual conferences, plus the virtual Shore meet and greet with breakout rooms, so you meet before day one. It is part of the package.</p></div></li>
-      <li><span class="so-day">1 &middot; Settle in</span><div><h3>Arrive and begin</h3><p>Airport pickup and scheduled arrivals, orientation and a family-style welcome dinner.</p></div></li>
-      <li><span class="so-day">2 &middot; Meet your circle</span><div><h3>Introductions and intentions</h3><p>Breakfast, introductions and intentions, a gentle nature outing and downtime, with pickleball or tennis for anyone who wants a game.</p></div></li>
-      <li><span class="so-day">3 &middot; Make space</span><div><h3>Work, quiet or company</h3><p>Optional work or a quiet morning, a workshop, a peer circle and a local host dinner.</p></div></li>
-      <li><span class="so-day">4 &middot; Experience the island</span><div><h3>Culture and cooking</h3><p>A cultural encounter and a hands-on cooking dinner, with an open afternoon.</p></div></li>
-      <li><span class="so-day">5 &middot; Play and wander</span><div><h3>Competitions, play and an open afternoon</h3><p>Fun-filled team competitions and an obstacle course in the morning, then optional excursions, pickleball or tennis, time in nature or a slow afternoon at the stay, and a soccer evening, with a dinner cooked together as a team.</p></div></li>
-      <li><span class="so-day">6 &middot; Create and connect</span><div><h3>A workshop and a locally hosted evening</h3><p>A hands-on workshop, then a chef-led dinner with local creatives and entrepreneurs, who are paid for their time.</p></div></li>
-      <li><span class="so-day">7 &middot; Carry it forward</span><div><h3>A yacht day, then reflect</h3><p>A day on the water by yacht or catamaran, with swimming, snorkel stops and music, then time to reflect and a closing shared dinner.</p></div></li>
-      <li><span class="so-day">8 &middot; Depart</span><div><h3>Farewells</h3><p>Breakfast, farewells, then transfers to the airport with an airport lounge booking for your departure.</p></div></li>
-    <li><span class="so-day">After &middot; 60 days</span><div><h3>Stay connected</h3><p>Reunion calls around days 14, 30 and 60 and introductions based on the interests you shared, as part of your membership.</p></div></li>
+      <li><details class="so-wk" open><summary><span class="so-day">Before &middot; Meet online</span><h3>Workshops, virtual conferences and the meet and greet</h3></summary><p>Before you arrive, your circle meets online for workshops and virtual conferences, plus the virtual Shore meet and greet with breakout rooms, so you meet before day one. It is part of the package.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">1 &middot; Settle in</span><h3>Arrive and begin</h3></summary><p>Airport pickup and scheduled arrivals, orientation and a family-style welcome dinner.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">2 &middot; Meet your circle</span><h3>Introductions and intentions</h3></summary><p>Breakfast, introductions and intentions, a gentle nature outing and downtime, with pickleball or tennis for anyone who wants a game.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">3 &middot; Make space</span><h3>Work, quiet or company</h3></summary><p>Optional work or a quiet morning, a workshop, a peer circle and a local host dinner.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">4 &middot; Experience the island</span><h3>Culture and cooking</h3></summary><p>A cultural encounter and a hands-on cooking dinner, with an open afternoon.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">5 &middot; Play and wander</span><h3>Competitions, play and an open afternoon</h3></summary><p>Fun-filled team competitions and an obstacle course in the morning, then optional excursions, pickleball or tennis, time in nature or a slow afternoon at the stay, and a soccer evening, with a dinner cooked together as a team.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">6 &middot; Create and connect</span><h3>A workshop and a locally hosted evening</h3></summary><p>A hands-on workshop, then a chef-led dinner with local creatives and entrepreneurs, who are paid for their time.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">7 &middot; Carry it forward</span><h3>A yacht day, then reflect</h3></summary><p>A day on the water by yacht or catamaran, with swimming, snorkel stops and music, then time to reflect and a closing shared dinner.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">8 &middot; Depart</span><h3>Farewells</h3></summary><p>Breakfast, farewells, then transfers to the airport with an airport lounge booking for your departure.</p></details></li>
+      <li><details class="so-wk"><summary><span class="so-day">After &middot; 60 days</span><h3>Stay connected</h3></summary><p>Reunion calls around days 14, 30 and 60 and introductions based on the interests you shared, as part of your membership.</p></details></li>
     </ol>
+    <p class="so-wk-tools"><button type="button" class="so-wk-all" onclick="return ssocWeekAll(this)">Open every day</button></p>
     <p class="so-note">A sample week. Your host confirms the final schedule once the venue and local contributors are set. Experiences are proposals until confirmed.</p>
     <h3 class="so-h2" style="font-size:clamp(22px,3vw,28px);margin-top:44px">Three signature moments</h3>
     <div class="so-three">
@@ -13161,40 +13192,11 @@ body.theme-night #p-seven-shores-society{
   </div>
 </section>
 
-<section class="so-sec tint" id="ssocPeople">
-  <div class="so-wrap">
-    <div class="so-eyebrow">The right people</div>
-    <h2 class="so-h2">Curated for contribution, curiosity and compatible expectations</h2>
-    <p class="so-sub">The Residency is for entrepreneurs, business owners and independent professionals who can step away for a week, enjoy small-group travel and want to contribute to a community. It is a founders residency, not a family vacation or a party trip.</p>
-    <div class="so-grid2">
-      <div class="so-card">
-        <h3>How you join</h3>
-        <ul class="so-list" style="margin-top:0">
-          <li>Tell us what you do, why you want to attend, what you can share and what you hope to learn.</li>
-          <li>Share your preferred pace, work commitments, room choice, accessibility requirements and dietary needs.</li>
-          <li>Have a short Alignment Call so everyone&rsquo;s expectations match. We also talk through your membership tier and what it includes. We select for respectful behavior and a willingness to participate.</li>
-        </ul>
-      </div>
-      <div class="so-card">
-        <h3>How we host</h3>
-        <ul class="so-list" style="margin-top:0">
-          <li>No unsolicited selling. Business introductions are welcome without dominating the conversation.</li>
-          <li>Ask before sharing private discussions or photographs.</li>
-          <li>Respect personal time and different backgrounds. A conduct policy and a clear way to raise a concern with your host are published before you book.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="so-cta" style="margin-top:28px;justify-content:flex-start">
-      <a href="#" class="so-btn primary" onclick="return ssocApply();">Apply for the Jamaica Residency</a>
-    </div>
-  </div>
-</section>
-
-<section class="so-sec" id="ssocFit">
+<section class="so-sec tint" id="ssocFit">
   <div class="so-wrap">
     <div class="so-eyebrow">An honest fit check</div>
     <h2 class="so-h2">Seven places, so we can&rsquo;t say yes to everyone.</h2>
-    <p class="so-sub">Read these as a friendly filter, not a test. If most of the first list sounds like you, we would love to hear from you.</p>
+    <p class="so-sub">The Residency is for entrepreneurs, business owners and independent professionals who can step away for a week, enjoy small-group travel and want to contribute to a community. It is a founders residency, not a family vacation or a party trip. Read these lists as a friendly filter, not a test.</p>
     <div class="so-grid2">
       <div class="so-card so-yes">
         <h3>This is for you if&hellip;</h3>
@@ -13225,13 +13227,32 @@ body.theme-night #p-seven-shores-society{
       </div>
     </div>
     <p class="so-promise"><b>Two questions to ask yourself before you apply.</b> Are you willing to be uncomfortable to grow? Are you willing and able to invest up to US$7,500 in this experience? Your membership tier and what it includes are discussed during your Alignment Call.</p>
+    <h3 class="so-h2" style="font-size:clamp(22px,3vw,28px);margin-top:52px">How you join and how we host</h3>
+    <div class="so-grid2">
+      <div class="so-card">
+        <h3>How you join</h3>
+        <ul class="so-list" style="margin-top:0">
+          <li>Tell us what you do, why you want to attend, what you can share and what you hope to learn.</li>
+          <li>Share your preferred pace, work commitments, room choice, accessibility requirements and dietary needs.</li>
+          <li>Have a short Alignment Call so everyone&rsquo;s expectations match. We also talk through your membership tier and what it includes. We select for respectful behavior and a willingness to participate.</li>
+        </ul>
+      </div>
+      <div class="so-card">
+        <h3>How we host</h3>
+        <ul class="so-list" style="margin-top:0">
+          <li>No unsolicited selling. Business introductions are welcome without dominating the conversation.</li>
+          <li>Ask before sharing private discussions or photographs.</li>
+          <li>Respect personal time and different backgrounds. A conduct policy and a clear way to raise a concern with your host are published before you book.</li>
+        </ul>
+      </div>
+    </div>
     <div class="so-cta" style="margin-top:28px;justify-content:flex-start">
       <a href="#" class="so-btn primary" onclick="return ssocApply();">Apply for the Jamaica Residency</a>
     </div>
   </div>
 </section>
 
-<section class="so-sec tint" id="ssocPlace">
+<section class="so-sec" id="ssocPlace">
   <div class="so-wrap">
     <div class="so-eyebrow">The place and the people</div>
     <h2 class="so-h2">Rooted in Jamaica, comfortable by design</h2>
@@ -13240,25 +13261,36 @@ body.theme-night #p-seven-shores-society{
       <div class="so-card"><h3>Comfort is the standard</h3><p>A green setting with reliable essentials. Any rustic character comes with comfortable beds and bathrooms, and we tell you about steps, paths, room sharing and travel times before you book. Each outdoor activity has a weather alternative.</p></div>
       <div class="so-card"><h3>Your hosts</h3><p>A community host looks after introductions, sessions and follow-through. A local coordinator looks after transport, supplier timing and anything that comes up on site. Sight Seers curates the entire package, from your airport pickup to your departure.</p></div>
     </div>
+    <div class="so-gl" id="ssocGlide" role="group" aria-roledescription="carousel" aria-label="Illustrative photos of Jamaica">
+      <div class="so-gl-view">
+        <div class="so-gl-track">
+        <button type="button" class="so-gl-slide" data-full="/assets/mba/mba-circle-selfie.jpg" aria-label="Friends in a circle, illustrative photo"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-portland-desktop.webp" aria-label="A Jamaican beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" aria-label="A waterfall in the hills, illustrative photo"><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-mary-desktop.webp" aria-label="A palm-lined lagoon, illustrative photo"><img src="/assets/discover-jamaica/jamaica-mary-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-trelawny-desktop.webp" aria-label="A glowing bay at night, illustrative photo"><img src="/assets/discover-jamaica/jamaica-trelawny-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-andrew-desktop.webp" aria-label="A hike with a local guide, illustrative photo"><img src="/assets/discover-jamaica/jamaica-andrew-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        </div>
+      </div>
+      <div class="so-gl-bar"><p class="so-gl-count" aria-live="polite"></p><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+      <div class="so-gl-dots" aria-hidden="true"></div>
+    </div>
+    <p class="so-note">Photos are illustrative. Photos of the confirmed venue are added once it is booked.</p>
   </div>
 </section>
 
-<section class="so-sec" id="ssocFaq">
+<section class="so-sec tint" id="ssocFaq">
   <div class="so-wrap">
     <div class="so-eyebrow">Questions</div>
     <h2 class="so-h2">Good to know</h2>
     <div class="so-qa">
       <details class="so-qa-row"><summary class="so-qa-q">When is it, where is it and what does it cost?</summary><div class="so-qa-a">The first Jamaica Residency is being planned. Dates, venue, room choices, membership details, inclusions and the final price, with payment terms, are published here once they are confirmed. Apply now and we will keep you updated as each detail is confirmed.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">What does the membership include?</summary><div class="so-qa-a">The Residency comes with a membership, so the circle you meet in Jamaica stays together. The program starts online with workshops and virtual conferences, runs for the seven days in Jamaica, and continues for 60 days after with reunion calls around days 14, 30 and 60 and introductions based on the interests you shared. Your membership tier and what it includes are discussed during your Alignment Call, and we confirm the rest with the dates and price.</div></details>
-      <details class="so-qa-row"><summary class="so-qa-q">Who is it for?</summary><div class="so-qa-a">Entrepreneurs, business owners and independent professionals who can step away for a week and want to contribute to a small community. The group is kept to seven so everyone can really meet.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Do all members get the same access?</summary><div class="so-qa-a">Mostly, yes. Everyone joins one circle with the same core access to the Residency and the membership, whichever room category you choose. Your membership tier and what it includes are discussed during your Alignment Call.</div></details>
-      <details class="so-qa-row"><summary class="so-qa-q">What are the requirements to apply?</summary><div class="so-qa-a">In short: you run an online business or independent practice doing at least US$10,000 a month, you can step away from your work for eight days, you care as much about the life as the business, and you are willing to share openly and give without keeping score. The honest fit check above has the full list, for you and not for you.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Do I need to apply?</summary><div class="so-qa-a">Yes. You tell us a little about your work and what you hope to learn and share, then have a short Alignment Call. We select for respectful behavior and a willingness to participate.</div></details>
-      <details class="so-qa-row"><summary class="so-qa-q">Is it a networking event?</summary><div class="so-qa-a">It is a residency built around time together, not a sales event. There is no unsolicited selling, and business introductions are welcome without dominating the conversation.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">What will we do during the days?</summary><div class="so-qa-a">Each day mixes things to do together with time for yourself: fun-filled competitions and obstacle courses, workshops, pickleball or tennis on some days, a soccer evening, a yacht day, nature outings and local encounters, with room to work, rest or reflect. Pickleball and tennis depend on the courts at the venue. On the days without a hosted dinner, the group cooks breakfast, lunch and dinner together as a team. The final schedule is confirmed once the venue and local contributors are set.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Can I work while I am there?</summary><div class="so-qa-a">The week protects time to think, with optional work time or a quiet morning. Connectivity details are confirmed with the venue before you book, so you know what to expect.</div></details>
-      <details class="so-qa-row"><summary class="so-qa-q">What happens before I arrive?</summary><div class="so-qa-a">Your circle meets online first, with workshops and virtual conferences and a virtual Shore meet and greet with breakout rooms, so you meet before you travel. Your host also makes three relevant introductions for each guest, with consent. It is all part of the package.</div></details>
-      <details class="so-qa-row"><summary class="so-qa-q">What happens after the trip?</summary><div class="so-qa-a">The 60 days after are hosted. Your host runs reunion calls around days 14, 30 and 60 and offers introductions based on the interests you shared, and your membership keeps the circle together.</div></details>
+      <details class="so-qa-row"><summary class="so-qa-q">Is it a networking event?</summary><div class="so-qa-a">It is a residency built around time together, not a sales event. There is no unsolicited selling, and business introductions are welcome without dominating the conversation.</div></details>
       <details class="so-qa-row"><summary class="so-qa-q">Will it lead to clients or investment?</summary><div class="so-qa-a">We promise opportunities for connection and a well-hosted experience. We cannot guarantee friendships, investment, clients, partnerships or business growth.</div></details>
     </div>
   </div>
@@ -13277,6 +13309,12 @@ body.theme-night #p-seven-shores-society{
 
 <script id="sso-script">
 (function(){
+  /* Open or close every day of the sample week at once. */
+  window.ssocWeekAll=function(btn){
+    var rows=document.querySelectorAll('#ssocWeek .so-wk');var open=btn.getAttribute('data-open')!=='1';
+    for(var i=0;i<rows.length;i++)rows[i].open=open;
+    btn.setAttribute('data-open',open?'1':'0');btn.textContent=open?'Close every day':'Open every day';return false;
+  };
   window.ssocGo=function(id){
     var el=document.getElementById(id);if(!el)return false;
     window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+(window.pageYOffset||0)-84),behavior:'smooth'});
@@ -13288,6 +13326,70 @@ body.theme-night #p-seven-shores-society{
   };
 })();
 </script>
+<script id="sso-glide">
+(function(){
+  var root=document.getElementById('ssocGlide');if(!root)return;
+  var view=root.querySelector('.so-gl-view'),track=root.querySelector('.so-gl-track');
+  var slides=[].slice.call(track.querySelectorAll('.so-gl-slide')),n=slides.length;if(n<2)return;
+  var count=root.querySelector('.so-gl-count'),dotsEl=root.querySelector('.so-gl-dots');
+  var gap=14,i=0,v=3,w=0,prevD=[],drag=null,moved=false;
+  slides.forEach(function(_,k){var d=document.createElement('i');d.setAttribute('data-k',k);dotsEl.appendChild(d);});
+  var dots=[].slice.call(dotsEl.children);
+  function measure(){
+    var W=view.clientWidth;if(!W)return false;
+    v=W>=980?3:1;w=v===3?Math.floor((W-2*gap)/3):W;
+    track.style.height=Math.round(w*2/3)+'px';root.style.setProperty('--gl-w',w+'px');return true;
+  }
+  /* Slides sit in a ring: the one that leaves on the left re-enters on the right out of sight, so the strip never runs out. */
+  function layout(){
+    if(!measure())return;
+    slides.forEach(function(el,k){
+      var d=((k-i)%n+n)%n;if(d===n-1)d=-1;
+      var wrapped=prevD[k]!==undefined&&Math.abs(d-prevD[k])>1.01;
+      if(wrapped)el.classList.add('jump');
+      el.style.transform='translateX('+(d*(w+gap))+'px)';
+      el.setAttribute('aria-hidden',d>=0&&d<v?'false':'true');
+      el.tabIndex=d>=0&&d<v?0:-1;
+      prevD[k]=d;
+      if(wrapped){void el.offsetWidth;el.classList.remove('jump');}
+    });
+    var last=(i+v-1)%n;
+    count.textContent=v===1?('Photo '+(i+1)+' of '+n):('Photos '+(i+1)+' to '+(last+1)+' of '+n);
+    dots.forEach(function(d,k){d.classList.toggle('on',k===i);});
+  }
+  function go(k){i=((k%n)+n)%n;layout();}
+  root.classList.add('is-js');
+  root.querySelectorAll('.so-gl-btn').forEach(function(b){b.addEventListener('click',function(){go(i+(+b.getAttribute('data-dir')));});});
+  dotsEl.style.pointerEvents='auto';dotsEl.setAttribute('aria-hidden','false');
+  dotsEl.addEventListener('click',function(e){var k=e.target&&e.target.getAttribute&&e.target.getAttribute('data-k');if(k!==null&&k!==undefined)go(+k);});
+  /* Swipe or drag the strip, as on the Gallery page. */
+  function down(x){drag=x;moved=false;}
+  function up(x){if(drag===null)return;var dx=x-drag;drag=null;if(Math.abs(dx)>40){moved=true;go(i+(dx<0?1:-1));}}
+  view.addEventListener('touchstart',function(e){down(e.touches[0].clientX);},{passive:true});
+  view.addEventListener('touchend',function(e){up(e.changedTouches[0].clientX);});
+  view.addEventListener('mousedown',function(e){down(e.clientX);});
+  window.addEventListener('mouseup',function(e){up(e.clientX);});
+  root.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(i-1);}else if(e.key==='ArrowRight'){go(i+1);}});
+  /* A click on a photo opens it large. */
+  var lb=document.createElement('div');lb.className='so-lb';lb.id='ssocLb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Photo');
+  lb.innerHTML='<button type="button" class="so-lb-x" aria-label="Close photo">&times;</button><img alt=""><p>Illustrative photo</p>';
+  document.getElementById('p-seven-shores-society').appendChild(lb);
+  function closeLb(){lb.classList.remove('open');}
+  lb.addEventListener('click',closeLb);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLb();});
+  track.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.so-gl-slide');if(!b||moved){moved=false;return;}
+    lb.querySelector('img').src=b.getAttribute('data-full')||b.querySelector('img').src;lb.classList.add('open');
+  });
+  if(window.ResizeObserver)new ResizeObserver(function(){root.classList.add('no-anim');layout();requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.remove('no-anim');});});}).observe(view);
+  window.addEventListener('resize',layout);
+  layout();
+  /* The page starts hidden, so measure again once it is shown. */
+  var pg=document.getElementById('p-seven-shores-society');
+  if(window.MutationObserver)new MutationObserver(function(){if(pg.classList.contains('on'))layout();}).observe(pg,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+
 </div>
 
 <!-- ════════════════════════════════════
