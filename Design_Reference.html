@@ -12114,6 +12114,11 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 #p-mba-voyages .mv-det-meta span{display:inline-flex;align-items:center;gap:7px}
 #p-mba-voyages .mv-det-meta i{color:var(--mv-orange)!important;font-size:12px}
 #p-mba-voyages .mv-det-sec{margin-top:26px}
+#p-mba-voyages .mv-inc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+#p-mba-voyages .mv-inc li{position:relative;padding-left:26px;font-size:14px;line-height:1.5;color:var(--mv-head)!important}
+#p-mba-voyages .mv-inc li::before{content:'\2713';position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:rgba(112,194,87,.18);color:#4f9a38;font-size:11px;font-weight:800;line-height:18px;text-align:center}
+#p-mba-voyages .mv-inc-all{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--mv-line);font-size:13px;line-height:1.55;color:var(--mv-mut)!important}
+#p-mba-voyages .mv-inc-all b{color:var(--mv-head)!important}
 #p-mba-voyages .mv-det-steps{list-style:none;margin:0;padding:0}
 #p-mba-voyages .mv-det-step{display:flex;gap:20px;padding:16px 0;border-bottom:1px solid var(--mv-line);align-items:flex-start}
 #p-mba-voyages .mv-det-step:last-child{border-bottom:0}
@@ -12190,7 +12195,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       <details class="mv-qa-row"><summary class="mv-qa-q">Who is it for?</summary><div class="mv-qa-a">Current MBAs planning a class trip, recent graduates building their network, and alumni chapters planning a reunion. Many groups mix all three: alumni mentor current students and recent graduates, and everyone leaves with new contacts. Corporate leadership teams can run a voyage too, with facilitated leadership sessions, team diagnostics and executive coaching. Groups of 12 to 60.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">Where does it run?</summary><div class="mv-qa-a">Seven shores: Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic and Curacao. Every package is available on all seven, and the Island-Hop Voyage can combine several.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">How long is it?</summary><div class="mv-qa-a">Four to seven days. A four day intensive in one country, or a seven day voyage across several. A typical week opens with an arrival dinner, alternates water days with company visits and roundtables, and closes with a capstone excursion.</div></details>
-      <details class="mv-qa-row"><summary class="mv-qa-q">What is included?</summary><div class="mv-qa-a">A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard and a post trip content package.</div></details>
+      <details class="mv-qa-row"><summary class="mv-qa-q">What is included?</summary><div class="mv-qa-a">Every package includes a dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard, a post trip content package, airport transfers and a curated gift package. Each package then adds its own program. The Lifestyle Escape adds a yacht or catamaran day, an island excursion day and beach club socials. The Executive Retreat adds a luxury villa or boutique resort stay, hosted dinners, facilitated leadership roundtables and yacht days. The Industry Immersion adds company and factory visits, founder workshops and networking sessions. The Island-Hop Voyage adds a private catamaran flotilla across two or more shores, a villa dinner and a capstone excursion. Open any package&rsquo;s Details for its full list.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">What does it cost?</summary><div class="mv-qa-a">Every package is quoted for your group, based on the country, group size, season and format.</div></details>
       <details class="mv-qa-row"><summary class="mv-qa-q">How do we book?</summary><div class="mv-qa-a">Choose a package and a country and send an inquiry. A planner replies within one business day. Once your package is finalised, a 30% non-refundable deposit confirms your place. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>. For peak season and multi island routes, book three to four months ahead.</div></details>
     </div>
@@ -12272,11 +12277,13 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
   var COUNTRIES=['Jamaica','Barbados','Saint Lucia','The Bahamas','Belize','Dominican Republic','Curacao'];
 
   /* The four packages. Each one is available on all seven shores; the visitor picks the country when they inquire. */
+  var INC_ALL='A dedicated Sight Seers coordinator, private transport, curated dining, a branded welcome kit, professional photography, a private group dashboard, a post trip content package, airport transfers and a curated gift package';
   var PACKAGES=[
     {id:'lifestyle',title:'MBA Lifestyle Escape',tag:'Lifestyle',place:'Any of the seven shores',multi:false,pax:'12 to 60',dur:'3 to 5 days',best:'Current MBAs and recent graduates',
       img:'/assets/mba/mba-yacht-raft-up.jpg',fb:'/assets/gallery/jamaica-rafting-crew.webp',
       blurb:'High energy days on the water and the island. A yacht day, an island excursion day, beach clubs and sunset socials, with the networking happening naturally.',
       hl:['Private yacht or catamaran day','Island excursion day for the whole group','Beach club and sunset socials'],
+      inc:['Arrival reception, group orientation and a welcome dinner at a luxury villa or boutique hotel','A private yacht or catamaran day on the water','An island excursion day for the whole group','Beach club and sunset socials, with the networking happening naturally'],
       theme:'a lifestyle format with yacht and excursion days and a social, high energy feel',
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique hotel.'},{when:'Middle days',title:'On the water and the island',text:'A private yacht or catamaran day, plus an island excursion day for the whole group.'},{when:'Evenings',title:'Beach club and sunset socials',text:'Easy, social evenings where the networking happens naturally.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['yacht']},
@@ -12284,6 +12291,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       img:'/assets/mba/mba-white-party.jpg',
       blurb:'A more formal, polished format. A luxury villa or boutique resort, hosted dinners and facilitated roundtables, with yacht days on the water and time to talk properly.',
       hl:['Luxury villa or boutique resort stay','Hosted dinners with a keynote speaker','Facilitated leadership roundtables','Private yacht or catamaran days'],
+      inc:['A luxury villa or boutique resort stay','Arrival reception, orientation and a welcome dinner with a keynote from a local business leader','Hosted dinners, including an evening at a private villa','Facilitated leadership roundtables with alumni and invited professionals','Private yacht or catamaran days between the working sessions'],
       theme:'a formal, polished retreat with hosted dinners, facilitated sessions and days on the water',
       steps:[{when:'Day 1',title:'Arrive and settle in',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique resort, with a keynote from a local business leader.'},{when:'Each day',title:'Water and work',text:'Days alternate between the water (private yacht charters, catamaran sails, reef snorkeling) and onshore programming (company visits, alumni roundtables, founder workshops, cultural deep dives), moving between shores.'},{when:'Core days',title:'Facilitated roundtables',text:'Leadership roundtables with alumni and invited professionals, with time built in to talk properly.'},{when:'Evening',title:'The hosted dinner',text:'A hosted evening at a private villa to close the working day.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['villa']},
@@ -12291,6 +12299,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       img:'/assets/mba/mba-beach-cohort.jpg',
       blurb:'Learning and networking come first. Company and factory visits, founder workshops and alumni roundtables with local business leaders.',
       hl:['Hosted company and factory visits','Founder workshops and industry briefings','Alumni and professional networking sessions'],
+      inc:['Arrival reception, orientation and a welcome dinner with a keynote from a local business leader','Company and factory visits, arranged for the group','Founder workshops and industry briefings','Alumni and professional networking sessions','Guided cultural deep dives'],
       theme:'an educational, network friendly format built around company visits',
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner with a keynote from a local business leader.'},{when:'Visit days',title:'Company and factory visits',text:'Visits to local companies and factories, arranged for the group.'},{when:'Learning days',title:'Workshops and roundtables',text:'Founder workshops, industry briefings and alumni and professional networking sessions, plus guided cultural deep dives.'},{when:'Final day',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:[]},
@@ -12298,6 +12307,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       img:'/assets/mba/mba-beach-group.jpg',
       blurb:'The full week across more than one shore. A private catamaran flotilla with a yacht day, a villa dinner, company visits and a capstone excursion.',
       hl:['Private catamaran flotilla','Island hop across two or more shores','Yacht day, villa dinner and capstone'],
+      inc:['A private catamaran flotilla and an island hop across two or more shores','A welcome dinner at a luxury villa or boutique hotel, with a keynote from a local business leader','Private yacht charter and catamaran days, with reef snorkeling and a villa dinner','Company visits, alumni roundtables, founder workshops and cultural deep dives','A capstone island excursion, ending with a signature dinner under the stars'],
       theme:'a multi island voyage across more than one shore',
       steps:[{when:'Day 1',title:'Arrive and connect',text:'An arrival reception, group orientation and a welcome dinner at a luxury villa or boutique hotel, with a keynote from a local business leader.'},{when:'Days 2 to 5',title:'Water and work',text:'Days alternate between the water (private yacht charters, catamaran sails, reef snorkeling) and onshore programming (company visits, alumni roundtables, founder workshops, cultural deep dives), moving between shores.'},{when:'Day 6',title:'The capstone',text:'A full day island excursion that ties the week together, ending with a signature dinner under the stars.'},{when:'Day 7',title:'Reflect and depart',text:'Group reflections, airport transfers and a curated gift package to take home.'}],
       moments:['yacht','villa']}
@@ -12420,6 +12430,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       +'<p class="mv-det-sum">'+esc(p.blurb)+'</p>'
       +(p.best?'<p class="mv-det-best"><b>Best for</b> '+esc(p.best)+'</p>':'')
       +'<div class="mv-det-meta"><span><i class="far fa-clock"></i>'+esc(p.dur)+'</span><span><i class="fas fa-user-friends"></i>'+esc(p.pax)+' guests</span><span><i class="fas fa-map-marker-alt"></i>'+esc(p.place)+'</span></div>'
+      +(p.inc?'<div class="mv-det-sec mv-inc-sec"><div class="mv-mini">What\u2019s included</div><ul class="mv-inc">'+p.inc.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><p class="mv-inc-all"><b>Every package also includes</b> '+esc(INC_ALL.charAt(0).toLowerCase()+INC_ALL.slice(1))+'.</p></div>':'')
       +'<div class="mv-det-sec"><div class="mv-mini">How the days run</div><ol class="mv-det-steps">'
       +p.steps.map(function(x){return '<li class="mv-det-step"><div class="mv-det-when"><span class="mv-day">'+esc(x.when)+'</span></div><div class="mv-det-what"><h4>'+esc(x.title)+'</h4><p>'+esc(x.text)+'</p></div></li>';}).join('')
       +'</ol></div>'
