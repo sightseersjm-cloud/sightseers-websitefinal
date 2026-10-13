@@ -13047,7 +13047,18 @@ body.theme-night #p-seven-shores-society{
 #p-seven-shores-society .so-lb p{margin:0;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.4px}
 #p-seven-shores-society .so-lb-x{position:absolute;top:18px;right:18px;width:44px;height:44px;border:0;background:rgba(255,255,255,.14);color:#fff!important;font-size:26px;line-height:1;cursor:pointer}
 @media (max-width:980px){#p-seven-shores-society .so-gl-slide{flex-basis:100%}}
-@media (prefers-reduced-motion:reduce){#p-seven-shores-society .so-gl.is-js .so-gl-slide{transition:none}}
+@media (prefers-reduced-motion:reduce){#p-seven-shores-society .so-gl.is-js .so-gl-slide{transition-duration:.3s}}
+#p-seven-shores-society .so-photoband{padding:44px 0 6px}
+#p-seven-shores-society .so-photoband .so-gl{margin-top:0}
+#p-seven-shores-society .so-photoband .so-note{margin-top:14px}
+#p-seven-shores-society .so-cabins{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+#p-seven-shores-society .so-cabin{margin:0;aspect-ratio:3/2;position:relative;overflow:hidden}
+#p-seven-shores-society .so-cabin img{width:100%;height:100%;object-fit:cover;display:block}
+#p-seven-shores-society .so-cabin-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px;color:#cfe6dc!important;background:radial-gradient(120% 120% at 20% 0%,#0a4d73 0%,#062e4b 60%,#041f35 100%);border:1px dashed rgba(255,255,255,.35)}
+#p-seven-shores-society .so-cabin-ph svg{color:#8ed77e}
+#p-seven-shores-society .so-cabin-ph b{font-size:15px;color:#fff!important}
+#p-seven-shores-society .so-cabin-ph span{font-size:12.5px;letter-spacing:.4px;color:rgba(255,255,255,.78)!important}
+@media (max-width:980px){#p-seven-shores-society .so-cabins{grid-template-columns:1fr}}
 #p-seven-shores-society .so-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
 #p-seven-shores-society .so-photos figure{margin:0;position:relative;overflow:hidden;background:var(--so-bg2)}
 #p-seven-shores-society .so-photos img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
@@ -13103,6 +13114,27 @@ body.theme-night #p-seven-shores-society{
     <p class="so-status"><b>A new program.</b> Dates, venue, room choices, membership details, inclusions and price are published here once they are confirmed. Apply now and we will keep you updated.</p>
   </div>
 </section>
+
+<div class="so-photoband">
+  <div class="so-wrap">
+    <div class="so-gl" id="ssocGlide" role="group" aria-roledescription="carousel" aria-label="Illustrative photos of Jamaica">
+      <div class="so-gl-view">
+        <div class="so-gl-track">
+        <button type="button" class="so-gl-slide" data-full="/assets/mba/mba-circle-selfie.jpg" aria-label="Friends in a circle, illustrative photo"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-portland-desktop.webp" aria-label="A Jamaican beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" aria-label="A waterfall in the hills, illustrative photo"><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-mary-desktop.webp" aria-label="A palm-lined lagoon, illustrative photo"><img src="/assets/discover-jamaica/jamaica-mary-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-trelawny-desktop.webp" aria-label="A glowing bay at night, illustrative photo"><img src="/assets/discover-jamaica/jamaica-trelawny-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-andrew-desktop.webp" aria-label="A hike with a local guide, illustrative photo"><img src="/assets/discover-jamaica/jamaica-andrew-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
+        </div>
+      </div>
+      <div class="so-gl-bar"><p class="so-gl-count" aria-live="polite"></p><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+      <div class="so-gl-dots" aria-hidden="true"></div>
+    </div>
+    <p class="so-note">Photos are illustrative. Photos of the confirmed venue and cabins are added once it is booked.</p>
+  </div>
+</div>
+
 
 <section class="so-sec" id="ssocWhy">
   <div class="so-wrap">
@@ -13261,21 +13293,15 @@ body.theme-night #p-seven-shores-society{
       <div class="so-card"><h3>Comfort is the standard</h3><p>A green setting with reliable essentials. Any rustic character comes with comfortable beds and bathrooms, and we tell you about steps, paths, room sharing and travel times before you book. Each outdoor activity has a weather alternative.</p></div>
       <div class="so-card"><h3>Your hosts</h3><p>A community host looks after introductions, sessions and follow-through. A local coordinator looks after transport, supplier timing and anything that comes up on site. Sight Seers curates the entire package, from your airport pickup to your departure.</p></div>
     </div>
-    <div class="so-gl" id="ssocGlide" role="group" aria-roledescription="carousel" aria-label="Illustrative photos of Jamaica">
-      <div class="so-gl-view">
-        <div class="so-gl-track">
-        <button type="button" class="so-gl-slide" data-full="/assets/mba/mba-circle-selfie.jpg" aria-label="Friends in a circle, illustrative photo"><img src="/assets/mba/mba-circle-selfie.jpg" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-portland-desktop.webp" aria-label="A Jamaican beach, illustrative photo"><img src="/assets/discover-jamaica/jamaica-portland-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" aria-label="A waterfall in the hills, illustrative photo"><img src="/assets/discover-jamaica/jamaica-elizabeth-desktop.webp" alt="" loading="eager"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-mary-desktop.webp" aria-label="A palm-lined lagoon, illustrative photo"><img src="/assets/discover-jamaica/jamaica-mary-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-trelawny-desktop.webp" aria-label="A glowing bay at night, illustrative photo"><img src="/assets/discover-jamaica/jamaica-trelawny-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
-        <button type="button" class="so-gl-slide" data-full="/assets/discover-jamaica/jamaica-andrew-desktop.webp" aria-label="A hike with a local guide, illustrative photo"><img src="/assets/discover-jamaica/jamaica-andrew-card-600.jpg" alt="" loading="lazy"><span class="so-gl-cap">Illustrative photo</span></button>
-        </div>
-      </div>
-      <div class="so-gl-bar"><p class="so-gl-count" aria-live="polite"></p><div class="so-gl-nav"><button type="button" class="so-gl-btn" data-dir="-1" aria-label="Previous photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M8 1.5 3.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="so-gl-btn" data-dir="1" aria-label="Next photos"><svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true"><path d="M4 1.5 8.5 6 4 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
-      <div class="so-gl-dots" aria-hidden="true"></div>
+
+    <h3 class="so-h2" style="font-size:clamp(22px,3vw,28px);margin-top:48px">Where you will stay</h3>
+    <p class="so-sub">Comfortable cabins or cottages in nature. Photos of the confirmed cabins are added here once the venue is booked.</p>
+    <!-- To use a real photo, replace the whole <div class="so-cabin-ph">...</div> in a tile with <img src="/assets/your-photo.jpg" alt="Describe the cabin" loading="lazy"> -->
+    <div class="so-cabins">
+      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The cabin, outside</span></div></figure>
+      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>Inside the cabin</span></div></figure>
+      <figure class="so-cabin"><div class="so-cabin-ph"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M8 32 32 12l24 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v24h36V28" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 52V38h10v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><b>Cabin photo coming soon</b><span>The shared deck and grounds</span></div></figure>
     </div>
-    <p class="so-note">Photos are illustrative. Photos of the confirmed venue are added once it is booked.</p>
   </div>
 </section>
 
