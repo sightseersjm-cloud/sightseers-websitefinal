@@ -55801,15 +55801,18 @@ html body .mv-pk,html body .dest-package-card,html body .bx-card:has(.bx-more){c
 </script>
 
 <style id="ss-back-style">
-/* The Back button in the phone and tablet header. It only shows on inner pages, and it matches the round buttons
-   beside it: a slim circle with a chevron. */
+/* The Back button in the phone header. It only shows on inner pages, and it matches the round buttons beside it: a
+   slim circle with a chevron. Phones only: a narrow screen, or a phone held sideways (a touch screen that is short). */
 .nav-back{display:none}
-@media (max-width:1024px){
+@media (max-width:767px),(pointer:coarse) and (max-height:480px) and (max-width:1024px){
   body.ss-has-back .nav-back{display:inline-flex}
   body.ss-has-back .nav-wrap{grid-template-columns:auto minmax(0,1fr) auto!important}
-  .nav-back{position:relative;z-index:4;align-items:center;justify-content:center;width:40px;height:40px;padding:0;margin-right:4px;border-radius:50%;border:1px solid rgba(6,58,99,.12);background:linear-gradient(135deg,#eef6ff,#fff7ef);color:#063a63;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,color .2s,transform .15s}
-  .nav-back svg{width:20px;height:20px;flex:none;display:block}
+  .nav-back{position:relative;z-index:4;align-items:center;justify-content:center;width:32px;height:32px;min-width:0;min-height:0;padding:0;margin-right:6px;border-radius:50%;border:1px solid rgba(6,58,99,.12);background:linear-gradient(135deg,#eef6ff,#fff7ef);color:#063a63;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,color .2s,transform .15s}
+  .nav-back svg{width:16px;height:16px;flex:none;display:block}
+  /* The circle looks small, but the area that answers a tap stays 44px square. */
+  .nav-back::after{content:'';position:absolute;top:-8px;right:-8px;bottom:-8px;left:-8px}
   .nav-back .nb-chev{margin-left:-1px}
+  .nav-back .nb-chev path{stroke-width:2.6}
   .nav-back .nb-home{display:none}
   .nav-back.is-home .nb-chev{display:none}
   .nav-back.is-home .nb-home{display:block}
