@@ -1119,7 +1119,7 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .mob-close{position:absolute;top:20px;right:20px;color:#fff;font-size:22px;cursor:pointer}
 .mob-nav a{display:block;color:rgba(255,255,255,.85);font-size:1.2rem;font-weight:700;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1)}
 .mob-nav a:hover{color:var(--orange)}
-.mob-nav a.mob-feature{color:#8ed77e;border-left:3px solid var(--green);padding-left:14px}
+.mob-nav a.mob-feature{color:#8ed77e;border-left:3px solid var(--green);padding-left:14px;text-transform:uppercase;letter-spacing:1.5px}
 .mob-group-toggle{position:relative}
 .mob-group-toggle.open i{transform:rotate(180deg)}
 .mob-group{max-height:0;overflow:hidden;transition:max-height .35s ease}
@@ -9452,12 +9452,11 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
               <a href="#" onclick="openStayCountryPage('Curacao','all');return false;">Curacao</a>
             </div>
           </div>
-          <a href="#" onclick="nav('flagship-programs');return false;">Flagship Programs</a>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
           <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
         </div>
       </li>
-      <li class="nav-item nav-feature"><a href="#" onclick="nav('mba-voyages');return false;" id="n-mba-voyages">MBA Voyages</a></li>
+      <li class="nav-item nav-feature"><a href="#" onclick="nav('flagship-programs');return false;" id="n-flagship-programs">Flagship Programs</a></li>
       <li class="nav-item">
         <a href="#" onclick="nav('about')" id="n-about">About ▾</a>
         <div class="dropdown">
@@ -9490,7 +9489,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <div class="mob-nav" id="mobNav">
   <span class="mob-close" onclick="closeMob()"><i class="fas fa-times"></i></span>
   <a href="#" onclick="nav('home');closeMob()">Home</a>
-  <a href="#" class="mob-feature" onclick="nav('mba-voyages');closeMob();return false;">MBA Voyages</a>
+  <a href="#" class="mob-feature" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
 
   <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Tours & Excursions <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
   <div class="mob-group">
@@ -9501,7 +9500,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
     <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
-    <a href="#" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
   </div>
@@ -29361,7 +29359,7 @@ function nav(id,opts={}){
   if(!opts.fromPop){ try{ ssPushRoute(id); }catch(e){} }
   try{ ssSetMeta(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='mba-voyages')?'n-mba-voyages':((id==='stays' || id==='staycountry' || id==='transfers' || id==='flagship-programs' || id==='seven-shores-society' || id==='shore-leave' || id==='seven-shores-offsite')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id))));
+  const activeId=(id==='giftcards'?'n-shop':((id==='flagship-programs' || id==='mba-voyages' || id==='leaders-jamaica' || id==='seven-shores-society' || id==='shore-leave' || id==='seven-shores-offsite')?'n-flagship-programs':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id))));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   /* A different page replaces the content instantly, so jump straight to its top. Animating from the old
      scroll position made the new page visibly slide past (the "glitch" when opening Tours from deep in Home). */
