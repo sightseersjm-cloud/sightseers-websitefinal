@@ -9596,12 +9596,12 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <a class="btn-secondary" href="#" onclick="nav('contact');return false;">Get In Touch</a>
 </div></div>
 </div>
-</div><div class="harrow ha-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></div>
-<div class="harrow ha-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></div>
+</div><button type="button" class="harrow ha-prev" onclick="prevSlide()" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+<button type="button" class="harrow ha-next" onclick="nextSlide()" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
 <div class="hero-dots" id="heroDots">
-<div class="hdot on" onclick="goSlide(0)"></div>
-<div class="hdot" onclick="goSlide(1)"></div>
-<div class="hdot" onclick="goSlide(2)"></div>
+<button type="button" class="hdot on" onclick="goSlide(0)" aria-label="Show slide 1"></button>
+<button type="button" class="hdot" onclick="goSlide(1)" aria-label="Show slide 2"></button>
+<button type="button" class="hdot" onclick="goSlide(2)" aria-label="Show slide 3"></button>
 </div>
 </section>
 
@@ -55758,5 +55758,42 @@ html body .mv-pk,html body .dest-package-card,html body .bx-card:has(.bx-more){c
     /* Any other tap closes whatever is open: a menu link (which then goes to its page), or anywhere outside the menu. */
     if(e.target.closest('.nav-menu a')||!e.target.closest('.nav-menu'))closeAll();
   },true);
+})();
+</script>
+
+<style id="ss-hero-controls-style">
+/* Banner controls. The arrows and dots are buttons now, so they work with a keyboard and a screen reader. */
+.harrow{padding:0;font-family:inherit}
+.hdot{border:0;padding:0;display:block}
+.harrow:focus-visible,.hdot:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* Phones and tablets: the arrows sit in a row with the dots at the bottom of the banner, where they never cover the
+   slide text and are easy to reach with a thumb. */
+@media (max-width:1024px){
+  #hero .harrow{display:flex!important;top:auto!important;bottom:12px!important;transform:none!important;width:44px;height:44px;z-index:6;
+    background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.6);-webkit-tap-highlight-color:transparent}
+  #hero .ha-prev{left:calc(50% - 116px)!important;right:auto!important}
+  #hero .ha-next{right:calc(50% - 116px)!important;left:auto!important}
+  #hero .harrow:hover{background:rgba(0,0,0,.38);border-color:rgba(255,255,255,.6);transform:none!important}
+  #hero .harrow:active{background:var(--orange);border-color:var(--orange);transform:scale(.94)!important}
+  #hero .hero-dots{bottom:32px!important;z-index:6}
+  /* Leave room under the slide text for the row of controls. */
+  #hero .hero-content{padding-bottom:72px!important}
+  /* A global touch rule makes every button 44px square, which would turn the dots into blocks. They stay thin bars. */
+  #hero .hdot{min-width:0;min-height:0}
+  /* Tapping a dot used to mean hitting a 3px bar. The tap area is much larger now. */
+  #hero .hdot{position:relative}
+  #hero .hdot::after{content:'';position:absolute;left:-5px;right:-5px;top:-18px;bottom:-18px}
+}
+</style>
+<script id="ss-hero-swipe-script">
+(function(){
+  /* On a touch screen, swiping the banner left or right moves between slides. */
+  var hero=document.getElementById('hero');if(!hero)return;
+  var sx=0,sy=0,st=0;
+  hero.addEventListener('touchstart',function(e){var p=e.touches[0];sx=p.clientX;sy=p.clientY;st=Date.now()},{passive:true});
+  hero.addEventListener('touchend',function(e){
+    var p=e.changedTouches[0],dx=p.clientX-sx,dy=p.clientY-sy;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5&&Date.now()-st<800){if(dx<0)nextSlide();else prevSlide();}
+  },{passive:true});
 })();
 </script>
