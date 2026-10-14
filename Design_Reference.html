@@ -24257,166 +24257,292 @@ vtSessionAction=function(el,type){
   <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1600&q=85&auto=format&fit=crop')"><div class="ph-inner"><h1 class="ph-title">Guest Account</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><span>Guest Account</span></div></div></div>
   <section class="account-sec">
     <div class="account-wrap">
-      <div class="account-layout">
-        <div class="auth-card reveal">
-          <div class="account-shell">
-            <div class="account-shell-head">
-              <div class="account-shell-title">
-                <span class="account-shell-kicker"><i class="fas fa-user-shield"></i> Sight Seers Travel Club</span>
-                <h2>Your travel profile, refined.</h2>
-                <p>Create an account to save your details, return to planning faster, and move between tours, cart review, booking requests, and approved writer submissions in one polished space.</p>
-                <style>
-                  .account-sec .account-wrap{max-width:1120px}
-                  .ss-social-follow{margin-top:18px}
-                  .ss-social-label{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:10px}
-                  .ss-social-cards{display:flex;flex-wrap:wrap;gap:10px}
-                  .ss-social-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:14px;text-decoration:none;background:#fff;transition:transform .2s,box-shadow .2s;min-width:200px;flex:1}
-                  .ss-social-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(6,58,99,.10)}
-                  .ss-social-card i{font-size:22px;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
-                  .ss-social-card.ig i{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
-                  .ss-social-card.tt i{background:#111}
-                  .ss-social-meta{display:flex;flex-direction:column;line-height:1.2}
-                  .ss-social-meta strong{color:var(--dark);font-size:14px}
-                  .ss-social-meta span{color:var(--grey);font-size:12px}
-                  .ss-social-go{margin-left:auto;font-size:12px;font-weight:700;color:var(--orange)}
-                  .ss-social-embed:empty{display:none}
-                  .ss-social-embed{margin-top:12px}
-                </style>
-                <div class="ss-social-follow">
-                  <span class="ss-social-label">Follow the journey</span>
-                  <div class="ss-social-cards">
-                    <a class="ss-social-card ig" href="https://www.instagram.com/sightseers.jm" target="_blank" rel="noopener"><i class="fab fa-instagram"></i><div class="ss-social-meta"><strong>@sightseers.jm</strong><span>Instagram</span></div><span class="ss-social-go">Follow</span></a>
-                    <a class="ss-social-card tt" href="https://www.tiktok.com/@sightseers.jm" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i><div class="ss-social-meta"><strong>@sightseers.jm</strong><span>TikTok</span></div><span class="ss-social-go">Follow</span></a>
-                  </div>
-                  <!-- Live TikTok feed (official creator embed). Instagram feed needs post URLs or a widget (behold.so / snapwidget.com) pasted below. -->
-                  <div class="ss-social-embed" id="ssSocialEmbed">
-                    <span class="ss-social-label" style="margin-top:4px">Latest on TikTok</span>
-                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@sightseers.jm" data-unique-id="sightseers.jm" data-embed-type="creator" style="max-width:100%;min-width:288px">
-                      <section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@sightseers.jm">@sightseers.jm on TikTok</a></section>
-                    </blockquote>
-                    <script async src="https://www.tiktok.com/embed.js"></script>
-                  </div>
-                </div>
+      <div class="ac" id="acRoot">
+
+        <!-- ═══ SIGNED OUT: sign in or create an account ═══ -->
+        <div id="accountGuestView" class="ac-guest">
+          <div class="ac-scene" id="acScene" data-mode="signin">
+            <div class="ac-head account-shell-title">
+              <span class="ac-eyebrow">Join the Sight Seers Travel Club</span>
+              <h2>Your travel profile, refined.</h2>
+              <p>Create an account to save your details, return to planning faster, and move between tours, cart review, booking requests, and approved writer submissions in one polished space.</p>
+              <span class="ac-bonus"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="currentColor"/></svg>100 Travel Points welcome bonus</span>
+            </div>
+
+            <div class="ac-tiles">
+              <div class="ac-tile" tabindex="0">
+                <span class="ac-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></span>
+                <strong>Earn Travel Points</strong>
+                <p>Earn Travel Points on every booking.</p>
+              </div>
+              <div class="ac-tile" tabindex="0">
+                <span class="ac-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-8.6C1 9.2 2.6 5.5 6 5.5c2 0 3.2 1.1 4 2.3.8-1.2 2-2.3 4-2.3 3.4 0 5 3.7 3.3 6.9C19 16.6 12 21 12 21z"/></svg></span>
+                <strong>Save your favorites</strong>
+                <p>Save tours and return to planning faster.</p>
+              </div>
+              <div class="ac-tile" tabindex="0">
+                <span class="ac-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h2V5a1 1 0 0 1 1-1zM9 12h6M9 16h4"/></svg></span>
+                <strong>Track your bookings</strong>
+                <p>Track bookings from your personal dashboard.</p>
+              </div>
+              <div class="ac-tile" tabindex="0">
+                <span class="ac-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg></span>
+                <strong>Member-only experiences</strong>
+                <p>Unlock exclusive member-only experiences.</p>
               </div>
             </div>
 
-            <div id="accountGuestView">
-              <div class="account-auth-grid">
-                <div class="account-auth-panel">
-                  <div class="auth-panel on" id="auth-unified">
-                    <div class="form-grid">
-                      <div class="field-col full auth-extra-fields" id="authExtraFields" style="display:none"><label for="signupName">Full Name</label><input type="text" id="signupName"></div>
-                      <div class="field-col full"><label for="unifiedEmail">Email Address</label><input type="email" id="unifiedEmail"></div>
-                      <div class="field-col full"><label for="unifiedPassword">Password</label><input type="password" id="unifiedPassword"></div>
-                      <div class="field-col auth-extra-fields" style="display:none"><label for="signupPhone">Phone Number</label><input type="text" id="signupPhone"></div>
-                      <div class="field-col full auth-extra-fields" style="display:none"><label for="signupStyle">Travel Style</label><select id="signupStyle"><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group">Group Charter</option></select></div>
-                    </div>
-                    <div class="admin-actions" style="margin-top:22px">
-                      <button class="auth-submit" id="authMainBtn" onclick="handleUnifiedAuth()"><i class="fas fa-right-to-bracket"></i>Sign In</button>
-                    </div>
-                    <div class="inline-status" id="authStatus"></div>
-                    <input type="hidden" id="signupEmail"><input type="hidden" id="signupPassword"><input type="hidden" id="signinEmail"><input type="hidden" id="signinPassword">
-                    <div class="auth-toggle-row">
-                      <span id="authToggleText">Don't have an account?</span>
-                      <button type="button" class="auth-toggle-link" id="authToggleBtn" onclick="toggleAuthMode()">Create Account</button>
-                    </div>
+            <div class="ac-panel">
+              <div class="auth-panel on" id="auth-unified">
+                <div class="ac-seg" role="tablist" aria-label="Sign in or create an account">
+                  <span class="ac-seg-thumb" aria-hidden="true"></span>
+                  <button type="button" role="tab" id="acTabSignin" aria-selected="true" onclick="switchAuthTab('signin')">Sign in</button>
+                  <button type="button" role="tab" id="acTabSignup" aria-selected="false" onclick="switchAuthTab('signup')">Create account</button>
+                </div>
+                <h3 class="ac-panel-title" id="acPanelTitle">Welcome back</h3>
+                <p class="ac-panel-sub" id="acPanelSub">Sign in to see your points, saved tours and booking history.</p>
+
+                <form id="acAuthForm" novalidate>
+                  <div class="ac-field auth-extra-fields" id="authExtraFields" style="display:none">
+                    <label for="signupName">Full name</label>
+                    <div class="ac-input"><input type="text" id="signupName" autocomplete="name" placeholder="Alex Morgan"></div>
                   </div>
-                </div>
-
-                <div class="account-auth-visual">
-                  <span class="account-auth-badge">Free to join</span>
-                  <div class="account-auth-visual-inner">
-                    <h3>Your next adventure starts here</h3>
-                    <p>Join travelers exploring the Caribbean's best-kept secrets with Sight Seers.</p>
-                    <div class="account-auth-visual-perks">
-                      <span>Earn Travel Points on every booking</span>
-                      <span>Save tours and return to planning faster</span>
-                      <span>Track bookings from your personal dashboard</span>
-                      <span>Unlock exclusive member-only experiences</span>
-                    </div>
+                  <div class="ac-field">
+                    <label for="unifiedEmail">Email address</label>
+                    <div class="ac-input"><input type="email" id="unifiedEmail" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
                   </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="account-dashboard" id="accountDashboard">
-              <div class="dashboard-shell">
-                <div class="dashboard-hero">
-                  <div class="dashboard-user">
-                    <h3 id="dashName">Welcome back</h3>
-                    <p id="dashEmail"><a href="mailto:info@sightseerscaribbean.com" class="email-link">info@sightseerscaribbean.com</a></p>
-                    <div class="dashboard-user-meta">
-                      <span class="dashboard-chip">member dashboard</span>
-                      <span class="dashboard-chip">browser-saved profile</span>
+                  <div class="ac-field">
+                    <div class="ac-label-row">
+                      <label for="unifiedPassword">Password</label>
+                      <span id="ssForgotRow"><button type="button" class="ac-forgot" onclick="ssOpenForgotPassword()">Forgot password?</button></span>
                     </div>
+                    <div class="ac-input">
+                      <input type="password" id="unifiedPassword" autocomplete="current-password" placeholder="Your password" data-ss-eye="1">
+                      <button type="button" class="ac-eye" id="acEye" aria-label="Show password"><svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c6.4 0 10 6 10 6a17 17 0 0 1-3.1 3.9M6.5 7.5A17 17 0 0 0 2 12s3.6 6 10 6a9.6 9.6 0 0 0 4.2-.9M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button>
+                    </div>
+                    <div class="ac-meter" id="acMeter" data-s="0"><i></i><i></i><i></i><i></i></div>
+                    <div class="ac-rules" id="acRules"><span data-r="len">8+ characters</span><span data-r="up">Uppercase</span><span data-r="low">Lowercase</span><span data-r="num">Number</span></div>
                   </div>
-                  <button class="auth-submit secondary" type="button" onclick="logoutGuest()"><i class="fas fa-sign-out-alt"></i>Sign Out</button>
-                </div>
-
-                <div class="dashboard-stats">
-                  <div class="dashboard-stat"><strong id="dashPoints">0</strong><span>Travel Points</span></div>
-                  <div class="dashboard-stat"><strong id="dashSavedCount">0</strong><span>Saved Tours</span></div>
-                  <div class="dashboard-stat"><strong id="dashCartCount">0</strong><span>Items in Cart</span></div>
-                  <div class="dashboard-stat"><strong id="dashMemberSince">2026</strong><span>Member Since</span></div>
-                </div>
-
-                <div class="dashboard-grid">
-                  <div class="dashboard-links">
-                    <button type="button" class="dashboard-link dashboard-link--live" aria-label="Browse Tours" data-action="tours" onclick="return forceAccountAction('tours', event)"><div class="dashboard-link-icon"></div><h4>Browse Tours</h4><p>Open curated tours fast.</p><span class="dashboard-link-cta">Explore <i class="fas fa-arrow-right"></i></span></button>
-                    <button type="button" class="dashboard-link dashboard-link--live" aria-label="Review Cart" data-action="cart" onclick="return forceAccountAction('cart', event)"><div class="dashboard-link-icon"><i class="fas fa-cart-shopping"></i></div><h4>Review Cart</h4><p>Check your saved selections.</p><span class="dashboard-link-cta">Open cart <i class="fas fa-arrow-right"></i></span></button>
-                    <button type="button" class="dashboard-link dashboard-link--live" aria-label="Start a Booking Request" data-action="booking" onclick="return forceAccountAction('booking', event)"><div class="dashboard-link-icon"></div><h4>Start Booking</h4><p>Open your booking form.</p><span class="dashboard-link-cta">Start now <i class="fas fa-arrow-right"></i></span></button>
-                    <button type="button" class="dashboard-link dashboard-link--live" aria-label="Create a Blog" data-action="blog" onclick="return forceAccountAction('blog', event)"><div class="dashboard-link-icon"></div><h4>Create a Blog</h4><p>Open your writer page.</p><span class="dashboard-link-cta">Write now <i class="fas fa-arrow-right"></i></span></button>
+                  <div class="ac-field auth-extra-fields" style="display:none">
+                    <label for="signupPhone">Phone number <small>(optional)</small></label>
+                    <div class="ac-input"><input type="tel" id="signupPhone" autocomplete="tel" placeholder="+1 555 000 0000"></div>
+                  </div>
+                  <div class="ac-field auth-extra-fields" style="display:none">
+                    <label id="acStyleLabel">Travel style</label>
+                    <div class="ac-chips" id="acStyleChips" role="radiogroup" aria-labelledby="acStyleLabel"></div>
+                    <select id="signupStyle" hidden><option value="Adventure">Adventure</option><option value="Luxury">Luxury</option><option value="Family">Family</option><option value="Romantic">Romantic</option><option value="Group Charter">Group Charter</option></select>
                   </div>
 
-                  <div class="dashboard-side dashboard-side--premium">
-                    <div class="club-tier-panel">
-                      <div class="club-tier-head">
-                        <div class="club-tier-badge"></div>
-                        <div>
-                          <span class="club-tier-eyebrow">Membership tier</span>
-                          <strong id="dashTierName">Explorer</strong>
-                        </div>
-                        <span class="club-tier-style">Travel style<br><b id="dashStyle">Adventure</b></span>
-                      </div>
-                      <div class="club-tier-bar"><div class="club-tier-bar-fill" id="dashTierBar" style="width:0%"></div></div>
-                      <span class="club-tier-progress" id="dashTierProgress">Earn points to reach the next tier</span>
-                    </div>
-                    <div class="dashboard-panel reveal dashboard-panel--wide">
-                      <span class="label-eyebrow">Member flow</span>
-                      <div class="dashboard-panel-inline">
-                        <div class="dashboard-panel-item"><span>Earn Travel Points when you save tours and book experiences.</span></div>
-                        <div class="dashboard-panel-item"><span>Your profile details stay ready to carry into booking requests.</span></div>
-                        <div class="dashboard-panel-item"><span>Blog submissions still go to admin approval before they show on the website.</span></div>
-                      </div>
-                    </div>
+                  <button type="submit" id="authMainBtn" class="ac-btn"><span class="ac-btn-label">Sign in</span><svg class="ac-btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="ac-spin" aria-hidden="true"></span></button>
+                  <div class="inline-status" id="authStatus" role="status" aria-live="polite"></div>
+                  <input type="hidden" id="signupEmail"><input type="hidden" id="signupPassword"><input type="hidden" id="signinEmail"><input type="hidden" id="signinPassword">
+                  <div class="ac-switch">
+                    <span id="authToggleText">Don't have an account?</span>
+                    <button type="button" class="ac-switch-link" id="authToggleBtn" onclick="toggleAuthMode()">Create Account</button>
                   </div>
-                </div>
-
-                <div class="club-saved-section">
-                  <div class="club-saved-head"><span class="label-eyebrow">Saved Tours</span></div>
-                  <div class="club-saved-grid" id="dashSavedTours"></div>
-                </div>
-
-                <div class="club-saved-section" id="dashBookingsSection" style="display:none">
-                  <div class="club-saved-head"><span class="label-eyebrow">My Booking Requests</span></div>
-                  <div class="dashboard-bookings" id="dashBookings"></div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="account-side">
-          <div class="perk-card reveal perk-card--compact">
-            <h3>Why create an account?</h3>
-            <ul class="perk-list">
-              <li><span>Save your profile for faster return visits.</span></li>
-              <li><span>Jump back to tours, cart and booking requests.</span></li>
-              <li><span>Send blog ideas for admin approval.</span></li>
-            </ul>
+        <!-- ═══ SIGNED IN: the member area ═══ -->
+        <div id="accountDashboard" class="ac-dash" style="display:none">
+          <div class="dashboard-shell ac-dash-shell">
+
+            <div class="ac-hero">
+              <div class="ac-hero-main">
+                <span class="ac-eyebrow">Sight Seers Travel Club</span>
+                <h3 id="dashName">Welcome back</h3>
+                <p id="dashEmail" class="ac-hero-mail"></p>
+                <div class="ac-chips-row">
+                  <span class="ac-chip" id="acTierChip">Explorer tier</span>
+                  <span class="ac-chip">Travel style · <b id="dashStyle">Adventure</b></span>
+                  <span class="ac-chip">Member since <b id="acSinceChip">2026</b></span>
+                </div>
+                <button type="button" class="ac-signout" id="acSignOut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M15 8l4 4-4 4M19 12H9"/></svg>Sign out</button>
+              </div>
+              <div class="ac-club ac-tile">
+                <div class="ac-club-top">
+                  <span class="ac-tier-badge" id="acTierBadge" aria-hidden="true"></span>
+                  <div class="ac-club-name"><span class="ac-mini">Membership tier</span><strong id="dashTierName">Explorer</strong></div>
+                  <span class="ac-club-pts"><b id="acHeroPts">0</b><small>points</small></span>
+                </div>
+                <i id="dashTierIcon" hidden></i>
+                <div class="ac-bar" role="progressbar" aria-label="Progress to the next tier"><div class="ac-bar-fill" id="dashTierBar" style="width:0%"></div></div>
+                <span class="ac-bar-note" id="dashTierProgress">Earn points to reach the next tier</span>
+                <ol class="ac-ladder" id="acLadder">
+                  <li data-tier="Explorer"><i></i><b>Explorer</b><span>0+</span></li>
+                  <li data-tier="Voyager"><i></i><b>Voyager</b><span>250+</span></li>
+                  <li data-tier="Pioneer"><i></i><b>Pioneer</b><span>750+</span></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="ac-tabs" role="tablist" aria-label="Your account">
+              <button type="button" role="tab" class="on" id="acTab-overview" data-tab="overview" aria-selected="true" aria-controls="acPane-overview"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></svg>Overview</button>
+              <button type="button" role="tab" id="acTab-trips" data-tab="trips" aria-selected="false" aria-controls="acPane-trips"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Trips &amp; history</button>
+              <button type="button" role="tab" id="acTab-club" data-tab="club" aria-selected="false" aria-controls="acPane-club"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Travel Club</button>
+              <button type="button" role="tab" id="acTab-saved" data-tab="saved" aria-selected="false" aria-controls="acPane-saved"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-8.6C1 9.2 2.6 5.5 6 5.5c2 0 3.2 1.1 4 2.3.8-1.2 2-2.3 4-2.3 3.4 0 5 3.7 3.3 6.9C19 16.6 12 21 12 21z"/></svg>Saved</button>
+              <button type="button" role="tab" id="acTab-profile" data-tab="profile" aria-selected="false" aria-controls="acPane-profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.2 4-6 8-6s7 1.8 8 6"/></svg>Profile</button>
+            </div>
+
+            <!-- Overview -->
+            <div class="ac-pane on" id="acPane-overview" role="tabpanel" aria-labelledby="acTab-overview">
+              <div class="ac-stats">
+                <button type="button" class="ac-stat" data-tab-go="club">
+                  <span class="ac-stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></span>
+                  <strong id="dashPoints">0</strong><span class="ac-stat-lab">Travel Points</span>
+                </button>
+                <button type="button" class="ac-stat" data-tab-go="saved">
+                  <span class="ac-stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-8.6C1 9.2 2.6 5.5 6 5.5c2 0 3.2 1.1 4 2.3.8-1.2 2-2.3 4-2.3 3.4 0 5 3.7 3.3 6.9C19 16.6 12 21 12 21z"/></svg></span>
+                  <strong id="dashSavedCount">0</strong><span class="ac-stat-lab">Saved Tours</span>
+                </button>
+                <button type="button" class="ac-stat" onclick="return forceAccountAction('cart', event)">
+                  <span class="ac-stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L20 8H6.2M10 20h.01M17 20h.01"/></svg></span>
+                  <strong id="dashCartCount">0</strong><span class="ac-stat-lab">Items in Cart</span>
+                </button>
+                <button type="button" class="ac-stat" data-tab-go="trips">
+                  <span class="ac-stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>
+                  <strong id="acTripCount">0</strong><span class="ac-stat-lab">Trip Requests</span>
+                </button>
+                <span id="dashMemberSince" hidden>2026</span>
+              </div>
+
+              <div class="ac-actions">
+                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Browse Tours" data-action="tours" onclick="return forceAccountAction('tours', event)"><span class="ac-action-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><h4>Browse Tours</h4><p>Open curated tours fast.</p><span class="dashboard-link-cta">Explore <i class="fas fa-arrow-right"></i></span></button>
+                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Review Cart" data-action="cart" onclick="return forceAccountAction('cart', event)"><span class="ac-action-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L20 8H6.2M10 20h.01M17 20h.01"/></svg></span><h4>Review Cart</h4><p>Check your saved selections.</p><span class="dashboard-link-cta">Open cart <i class="fas fa-arrow-right"></i></span></button>
+                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Start a Booking Request" data-action="booking" onclick="return forceAccountAction('booking', event)"><span class="ac-action-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><h4>Start Booking</h4><p>Open your booking form.</p><span class="dashboard-link-cta">Start now <i class="fas fa-arrow-right"></i></span></button>
+                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Create a Blog" data-action="blog" onclick="return forceAccountAction('blog', event)"><span class="ac-action-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></span><h4>Create a Blog</h4><p>Open your writer page.</p><span class="dashboard-link-cta">Write now <i class="fas fa-arrow-right"></i></span></button>
+              </div>
+
+              <div class="ac-section">
+                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Picked for you</span><h4 id="acPickTitle">Experiences to explore</h4><p id="acPickSub">Based on your travel style.</p></div><button type="button" class="ac-link" onclick="nav('tours')">See all tours</button></div>
+                <div class="ac-picks" id="acPicks"></div>
+              </div>
+
+              <div class="ac-section" id="acLatestSec">
+                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Latest request</span><h4>Where your last request stands</h4></div><button type="button" class="ac-link" data-tab-go="trips">See all trips</button></div>
+                <div id="acLatest"></div>
+              </div>
+
+              <div id="acSubsSlot"></div>
+
+              <div class="ac-section">
+                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">More from Sight Seers</span><h4>Plan the rest of your trip</h4></div></div>
+                <div class="ac-more">
+                  <button type="button" class="ac-more-tile" onclick="nav('stays')"><strong>Stays &amp; Villas</strong><span>Places to stay across the Caribbean.</span></button>
+                  <button type="button" class="ac-more-tile" onclick="nav('flagship-programs')"><strong>Flagship Programs</strong><span>Seven Shores, Leaders in Jamaica and more.</span></button>
+                  <button type="button" class="ac-more-tile" onclick="nav('transfers')"><strong>Airport Transfers</strong><span>Getting there and back, sorted.</span></button>
+                  <button type="button" class="ac-more-tile" onclick="nav('passport')"><strong>Passport Renewal</strong><span>Help with Jamaican passport renewal.</span></button>
+                </div>
+                <div class="ac-help">
+                  <div><strong>Questions about a trip?</strong><span>Our team is happy to help.</span></div>
+                  <div class="ac-help-links">
+                    <a href="tel:+18764650630">+1 (876) 465-0630</a>
+                    <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>
+                    <button type="button" class="ac-cta" onclick="nav('contact')">Travel Form</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trips and history -->
+            <div class="ac-pane" id="acPane-trips" role="tabpanel" aria-labelledby="acTab-trips" hidden>
+              <div class="ac-section ac-history" id="dashBookingsSection">
+                <div class="ac-sec-head">
+                  <div>
+                    <span class="ac-eyebrow ac-eyebrow--dark">Purchase &amp; booking history</span>
+                    <h4>Your trips and requests</h4>
+                    <p>Every request you send us, with its latest status.</p>
+                  </div>
+                  <div class="ac-filters" id="acHistFilters" role="group" aria-label="Filter your history"></div>
+                </div>
+                <div class="ac-hist" id="dashBookings" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <!-- Travel Club -->
+            <div class="ac-pane" id="acPane-club" role="tabpanel" aria-labelledby="acTab-club" hidden>
+              <div class="ac-duo">
+                <div class="ac-section ac-club-big">
+                  <span class="ac-eyebrow ac-eyebrow--dark">Your Travel Club</span>
+                  <h4 id="acClubHeadline">Explorer</h4>
+                  <p class="ac-club-lede" id="acClubLede">Earn Travel Points to move up through the tiers.</p>
+                  <div class="ac-bar ac-bar--dark"><div class="ac-bar-fill" id="acClubBar" style="width:0%"></div></div>
+                  <div class="ac-steps" id="acSteps">
+                    <div class="ac-step" data-tier="Explorer"><span class="ac-step-ico"></span><strong>Explorer</strong><small>Starts at 0 points</small></div>
+                    <div class="ac-step" data-tier="Voyager"><span class="ac-step-ico"></span><strong>Voyager</strong><small>From 250 points</small></div>
+                    <div class="ac-step" data-tier="Pioneer"><span class="ac-step-ico"></span><strong>Pioneer</strong><small>From 750 points</small></div>
+                  </div>
+                  <p class="ac-note">Your Travel Points and saved tours are kept in this browser for now, so they stay with you on this device.</p>
+                </div>
+                <div class="ac-earn" id="acEarn">
+                  <span class="ac-eyebrow">The Travel Club</span>
+                  <h4>Ways to earn Travel Points</h4>
+                  <ul class="ac-earn-list">
+                    <li><span class="ac-plus">+100</span><div><strong>Welcome bonus</strong><span>Added when you first open your dashboard.</span></div></li>
+                    <li><span class="ac-plus">+10</span><div><strong>Save a tour</strong><span>Tap the heart on any tour.</span></div></li>
+                    <li><span class="ac-plus">+25</span><div><strong>Add an experience to your cart</strong><span>Every time you add one.</span></div></li>
+                    <li><span class="ac-plus">+25</span><div><strong>Send a booking request</strong><span>Once your request is sent.</span></div></li>
+                  </ul>
+                  <div class="ac-earn-cta"><button type="button" class="ac-cta" onclick="nav('tours')">Browse tours</button><button type="button" class="ac-cta ac-cta--ghost" onclick="nav('booking')">Start booking</button></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Saved tours -->
+            <div class="ac-pane" id="acPane-saved" role="tabpanel" aria-labelledby="acTab-saved" hidden>
+              <div class="ac-section" id="acSaved">
+                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Saved tours</span><h4>Your shortlist</h4><p>Tours you have saved with the heart.</p></div><button type="button" class="ac-link" onclick="nav('tours')">Browse more tours</button></div>
+                <div class="ac-saved-grid" id="dashSavedTours"></div>
+              </div>
+            </div>
+
+            <!-- Profile -->
+            <div class="ac-pane" id="acPane-profile" role="tabpanel" aria-labelledby="acTab-profile" hidden>
+              <div class="ac-profile">
+                <form class="ac-section ac-form" id="acProfileForm" novalidate>
+                  <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Your details</span><h4>Profile</h4></div></div>
+                  <div class="ac-lfield"><label for="acPName">Full name</label><input type="text" id="acPName" autocomplete="name"></div>
+                  <div class="ac-lfield"><label for="acPEmail">Email address</label><input type="email" id="acPEmail" autocomplete="email" readonly><small>Your email is how you sign in. To change it, contact us.</small></div>
+                  <div class="ac-lfield"><label for="acPPhone">Phone number <span>(optional)</span></label><input type="tel" id="acPPhone" autocomplete="tel"></div>
+                  <div class="ac-lfield"><label id="acPStyleLabel">Travel style</label><div class="ac-lchips" id="acPStyle" role="radiogroup" aria-labelledby="acPStyleLabel"></div></div>
+                  <button type="submit" class="ac-cta ac-cta--wide">Save changes</button>
+                  <div class="ac-fstatus" id="acProfileStatus" role="status" aria-live="polite"></div>
+                </form>
+
+                <form class="ac-section ac-form" id="acPassForm" novalidate>
+                  <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Security</span><h4>Change password</h4></div></div>
+                  <div class="ac-lfield"><label for="acPCur">Current password</label><input type="password" id="acPCur" autocomplete="current-password"></div>
+                  <div class="ac-lfield"><label for="acPNew">New password</label><input type="password" id="acPNew" autocomplete="new-password"></div>
+                  <div class="ac-rules ac-rules--dark" id="acPRules"><span data-r="len">8+ characters</span><span data-r="up">Uppercase</span><span data-r="low">Lowercase</span><span data-r="num">Number</span></div>
+                  <div class="ac-lfield"><label for="acPNew2">Confirm new password</label><input type="password" id="acPNew2" autocomplete="new-password"></div>
+                  <button type="submit" class="ac-cta ac-cta--wide">Update password</button>
+                  <div class="ac-fstatus" id="acPassStatus" role="status" aria-live="polite"></div>
+                </form>
+
+                <div class="ac-section ac-signout-card">
+                  <span class="ac-eyebrow ac-eyebrow--dark">Session</span>
+                  <h4>Sign out</h4>
+                  <p>Signing out ends your session on this device. Your Travel Points and saved tours stay here for next time you sign in.</p>
+                  <button type="button" class="ac-cta ac-cta--ghost-dark" id="acSignOut2">Sign out</button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <!-- ═══ Follow the journey (the live TikTok feed was removed: it kept failing with a rate-limit error) ═══ -->
+        <div class="ac-follow">
+          <span class="ac-eyebrow ac-eyebrow--dark">Follow the journey</span>
+          <div class="ac-follow-cards">
+            <a class="ac-follow-card" href="https://www.instagram.com/sightseers.jm" target="_blank" rel="noopener"><span class="ac-follow-ico ig"><i class="fab fa-instagram"></i></span><span class="ac-follow-meta"><strong>@sightseers.jm</strong><small>Instagram</small></span><em>Follow</em></a>
+            <a class="ac-follow-card" href="https://www.tiktok.com/@sightseers.jm" target="_blank" rel="noopener"><span class="ac-follow-ico tt"><i class="fab fa-tiktok"></i></span><span class="ac-follow-meta"><strong>@sightseers.jm</strong><small>TikTok</small></span><em>Follow</em></a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -28788,7 +28914,6 @@ function signinGuest(){
 function logoutGuest(){
   if(window.SS&&window.SS.signout) window.SS.signout();
   localStorage.removeItem('ss_auth_token');
-  localStorage.removeItem('ss_travel_points');
   setCurrentUser(null);
 }
 function updateAccountUI(){
@@ -28812,7 +28937,7 @@ function updateAccountUI(){
     document.getElementById('dashCartCount').textContent=String(cart.reduce((s,i)=>s+i.qty,0));
     document.getElementById('dashMemberSince').textContent=new Date(user.createdAt||Date.now()).getFullYear();
     document.getElementById('dashStyle').textContent=user.style||'Adventure';
-    if(localStorage.getItem('ss_travel_points')===null) setTravelPoints(100); /* welcome bonus */
+    if(!hasTravelPoints()) setTravelPoints(100); /* welcome bonus */
     refreshTravelClub();
     if(blogPanel) blogPanel.classList.add('on');
     if(accountIcon) accountIcon.innerHTML='<i class="fas fa-user-check"></i>';
@@ -28826,8 +28951,17 @@ function updateAccountUI(){
 }
 
 /* ── TRAVEL CLUB: Points, Tiers & Saved Tours ───────────── */
-function getTravelPoints(){try{return parseInt(localStorage.getItem('ss_travel_points')||'0',10)||0;}catch(e){return 0;}}
-function setTravelPoints(n){try{localStorage.setItem('ss_travel_points',String(Math.max(0,n|0)));}catch(e){}}
+/* Points, saved tours and request records belong to one member: each is kept under that member's email. The first
+   member to sign in on a browser inherits anything saved there before this change. */
+function ssUserKey(base){
+  var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(e){}
+  var k=(u&&u.email)?base+':'+String(u.email).toLowerCase():base;
+  if(k!==base){try{if(localStorage.getItem(k)===null&&localStorage.getItem(base)!==null){localStorage.setItem(k,localStorage.getItem(base));localStorage.removeItem(base);}}catch(e){}}
+  return k;
+}
+function getTravelPoints(){try{return parseInt(localStorage.getItem(ssUserKey('ss_travel_points'))||'0',10)||0;}catch(e){return 0;}}
+function setTravelPoints(n){try{localStorage.setItem(ssUserKey('ss_travel_points'),String(Math.max(0,n|0)));}catch(e){}}
+function hasTravelPoints(){try{return localStorage.getItem(ssUserKey('ss_travel_points'))!==null;}catch(e){return false;}}
 function awardPoints(n){
   if(!getCurrentUser())return;
   setTravelPoints(getTravelPoints()+(n|0));
@@ -28838,8 +28972,8 @@ function getTravelTier(points){
   if(points>=250)return {name:'Voyager',min:250,next:750,icon:'fa-compass'};
   return {name:'Explorer',min:0,next:250,icon:'fa-map'};
 }
-function getSavedTours(){try{return JSON.parse(localStorage.getItem('ss_saved_tours')||'[]');}catch(e){return [];}}
-function setSavedTours(arr){try{localStorage.setItem('ss_saved_tours',JSON.stringify(arr||[]));}catch(e){}}
+function getSavedTours(){try{return JSON.parse(localStorage.getItem(ssUserKey('ss_saved_tours'))||'[]');}catch(e){return [];}}
+function setSavedTours(arr){try{localStorage.setItem(ssUserKey('ss_saved_tours'),JSON.stringify(arr||[]));}catch(e){}}
 function isTourSaved(id){return getSavedTours().some(function(t){return String(t.id)===String(id);});}
 function toggleSavedTour(id,ev){
   if(ev&&ev.stopPropagation)ev.stopPropagation();
@@ -28883,8 +29017,8 @@ function renderSavedTours(){
       '</div></div>';
   }).join('');
 }
-function getMemberBookings(){try{return JSON.parse(localStorage.getItem('ss_member_bookings')||'[]');}catch(e){return [];}}
-function recordMemberBooking(b){try{var a=getMemberBookings();a.unshift(b);localStorage.setItem('ss_member_bookings',JSON.stringify(a.slice(0,20)));}catch(e){}}
+function getMemberBookings(){try{return JSON.parse(localStorage.getItem(ssUserKey('ss_member_bookings'))||'[]');}catch(e){return [];}}
+function recordMemberBooking(b){try{var a=getMemberBookings();a.unshift(b);localStorage.setItem(ssUserKey('ss_member_bookings'),JSON.stringify(a.slice(0,20)));}catch(e){}}
 function renderMemberBookings(){
   var sec=document.getElementById('dashBookingsSection'), wrap=document.getElementById('dashBookings');
   if(!wrap||!sec) return;
@@ -55630,7 +55764,7 @@ html body .mv-pk,html body .dest-package-card,html body .bx-card:has(.bx-more){c
 (function(){
   /* Cards on the site get the same tilt, glow and lift as the Flagship Programs cards. The listed classes are always included.
      Any other box that holds information (a bordered or shadowed panel with some text, at least 110 by 50 pixels, and no form fields) is picked up automatically. */
-  var SEL='.tour-card,.bx-card,.dest-package-card,.dest-explorer-card,.discover-jm-card,.bdos-itin-card,.mv-pk,.mv-add,.sl-pk,.sl-step,.sl-why-c,.off-pk,.off-step,.off-ed,.transfer-card,.yacht-card,.yacht-luxe-card,.stay-card,.ss-dyn-card,.shop-card,.blog-card,.lj-card,.lj-price-card,.so-card,.so-moment,.team-gloss-card,.passport-card';
+  var SEL='.tour-card,.bx-card,.dest-package-card,.dest-explorer-card,.discover-jm-card,.bdos-itin-card,.mv-pk,.mv-add,.sl-pk,.sl-step,.sl-why-c,.off-pk,.off-step,.off-ed,.transfer-card,.yacht-card,.yacht-luxe-card,.stay-card,.ss-dyn-card,.shop-card,.blog-card,.lj-card,.lj-price-card,.so-card,.so-moment,.team-gloss-card,.passport-card,.community-point';
   /* Places where boxes stay still: legal text, the admin and V-Tours areas, account and booking forms, menus, pop-ups and side panels. */
   var STILL='#p-privacy-policy,#p-terms-of-service,#p-refund-policy,#p-admin,#p-vtours,#p-account,#p-booking,#p-blogrequest,#p-tent-rental,header,nav,footer,aside,details,form,table,[role="dialog"],[aria-modal="true"],#mobNav,.ss-bot-panel,.fp-card';
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -55837,5 +55971,802 @@ html body .mv-pk,html body .dest-package-card,html body .bx-card:has(.bx-more){c
   window.ssGoBack=function(){
     if(depth()>=1){history.back();}else{nav('home');}
   };
+})();
+</script>
+
+<style id="ss-account-style">
+/* ═════════ Sign in and the Travel Club account page ═════════
+   The look of the Travel Club section on the home page: a deep navy scene with a green glow top left and a warm
+   orange glow bottom right, glass tiles, square corners, pill buttons. */
+#p-account{--ac-ink:#0a3557;--ac-mut:#5b7083;--ac-card:#fff;--ac-line:rgba(6,58,99,.12);--ac-soft:#f2f7fb;--ac-o:#ef8731;--ac-o2:#f5a04b;--ac-g:#70c257}
+body.theme-night #p-account{--ac-ink:#eaf3fa;--ac-mut:#9db3c6;--ac-card:#0f3550;--ac-line:rgba(255,255,255,.14);--ac-soft:#0b2c44}
+/* An admin layout-scale script freezes the height of every <section> in this page, so the cards here are <div>s and the outer section stays automatic. */
+#p-account section.account-sec{height:auto!important;min-height:0!important}
+#p-account .ac{max-width:1180px;margin:0 auto;font-family:'Raleway',sans-serif;color:var(--ac-ink)}
+#p-account .ac *{box-sizing:border-box}
+#p-account .ac svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#p-account .ac button{font-family:inherit}
+
+/* the scene (guest) and the hero (member) share one background */
+#p-account .ac-scene,#p-account .ac-hero,#p-account .ac-earn{position:relative;overflow:hidden;color:#fff;border:1px solid rgba(255,255,255,.14);
+  background:radial-gradient(60% 75% at 3% 0%,rgba(112,194,87,.32),transparent 62%),radial-gradient(70% 85% at 100% 100%,rgba(239,135,49,.44),transparent 60%),linear-gradient(135deg,#0b3b60 0%,#0c4a70 52%,#0a3550 100%);
+  box-shadow:0 30px 70px rgba(6,46,75,.26)}
+
+#p-account .ac-eyebrow{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#fff}
+#p-account .ac-eyebrow--dark{color:var(--ac-o)}
+
+/* ─── signed out ─── */
+#p-account .ac-scene{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);grid-template-areas:"head panel" "tiles panel";column-gap:clamp(24px,4vw,56px);row-gap:30px;align-items:start;padding:clamp(24px,4.2vw,52px)}
+#p-account .ac-head{grid-area:head;position:relative;z-index:1}
+#p-account .ac-tiles{grid-area:tiles;position:relative;z-index:1}
+#p-account .ac-panel{grid-area:panel;position:relative;z-index:1}
+#p-account .ac-head h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(32px,4.6vw,56px);line-height:1.04;letter-spacing:-.5px;margin:14px 0 0;color:#fff!important}
+#p-account .ac-head.account-shell-title p{margin:16px 0 0!important;max-width:52ch!important;font-size:16px!important;line-height:1.7!important;color:rgba(255,255,255,.88)!important}
+#p-account .ac-bonus{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:9px 16px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:rgba(112,194,87,.2);border:1px solid rgba(142,215,126,.55)}
+#p-account .ac-bonus svg{fill:#8ed77e;stroke:none}
+
+#p-account .ac-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#p-account .ac-tile{position:relative;overflow:hidden;padding:20px 20px 22px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);outline:0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .25s,background .25s,box-shadow .3s}
+#p-account .ac-tile::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(230px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.22),transparent 62%)}
+#p-account .ac-tile:hover,#p-account .ac-tile:focus-visible{transform:translateY(-5px);border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.14);box-shadow:0 20px 44px rgba(0,0,0,.28)}
+#p-account .ac-tile:hover::after,#p-account .ac-tile:focus-visible::after{opacity:1}
+#p-account .ac-ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;margin-bottom:14px;color:#fff;background:linear-gradient(135deg,rgba(142,215,126,.9),rgba(24,140,150,.9));transition:transform .3s}
+#p-account .ac-tile:hover .ac-ico{transform:scale(1.1) rotate(-4deg)}
+#p-account .ac-ico svg{width:21px;height:21px}
+#p-account .ac-tile strong{display:block;font-size:16px;line-height:1.25;color:#fff}
+#p-account .ac-tile p{margin:7px 0 0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82)}
+
+/* the form panel */
+#p-account .ac-panel{padding:clamp(22px,3vw,34px);background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.26);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 60px rgba(2,20,36,.35)}
+#p-account .auth-panel{display:block}
+#p-account .ac-seg{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;margin-bottom:22px;border-radius:999px;background:rgba(2,20,36,.32);border:1px solid rgba(255,255,255,.2)}
+#p-account .ac-seg-thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));box-shadow:0 8px 20px rgba(239,135,49,.4);transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+#p-account .ac-scene[data-mode="signup"] .ac-seg-thumb{transform:translateX(100%)}
+#p-account .ac-seg button{position:relative;z-index:1;height:42px;border:0;background:transparent;color:rgba(255,255,255,.78);font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:999px;transition:color .25s}
+#p-account .ac-seg button[aria-selected="true"]{color:#fff}
+#p-account .ac-seg button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+#p-account .ac-panel-title{margin:0;font-family:'Playfair Display',serif;font-size:clamp(24px,2.6vw,30px);line-height:1.15;color:#fff!important}
+#p-account .ac-panel-sub{margin:8px 0 22px;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.82)}
+#p-account .ac-field{margin:0 0 16px}
+#p-account .ac-field>label,#p-account .ac-label-row label,#p-account .ac-field>#acStyleLabel{display:block;margin:0 0 8px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+#p-account .ac-field small{font-weight:600;letter-spacing:.04em;text-transform:none;opacity:.8}
+#p-account .ac-label-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+#p-account .ac-label-row label{margin-bottom:8px}
+#p-account .ac-forgot{border:0;background:none;padding:0;font-size:12.5px;font-weight:700;color:#bfe8ff;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#p-account .ac-forgot:hover{color:#fff}
+#p-account .ac-input{position:relative}
+#p-account .ac-input input{width:100%;height:52px;padding:0 16px;font:500 16px 'Raleway',sans-serif;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:0;outline:0;transition:border-color .2s,background .2s,box-shadow .2s}
+#p-account .ac-input input::placeholder{color:rgba(255,255,255,.5)}
+#p-account .ac-input input:hover{border-color:rgba(255,255,255,.5)}
+#p-account .ac-input input:focus{border-color:#8ed77e;background:rgba(255,255,255,.15);box-shadow:0 0 0 4px rgba(142,215,126,.25)}
+#p-account .ac-input input:-webkit-autofill{-webkit-text-fill-color:#fff;caret-color:#fff;box-shadow:0 0 0 1000px #14577f inset;border-color:rgba(255,255,255,.4)}
+#p-account .ac-input input[type="password"],#p-account .ac-input input[data-ss-eye]{padding-right:50px}
+#p-account .ac-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:0;background:none;color:rgba(255,255,255,.72);cursor:pointer;transition:color .2s}
+#p-account .ac-eye:hover{color:#fff}
+#p-account .ac-eye svg{width:20px;height:20px}
+#p-account .ac-eye .eye-off{display:none}
+#p-account .ac-eye.on .eye-on{display:none}
+#p-account .ac-eye.on .eye-off{display:block}
+#p-account .ac-meter{display:none;align-items:center;gap:6px;margin-top:10px}
+#p-account .ac-scene[data-mode="signup"] .ac-meter{display:flex}
+#p-account .ac-meter i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.2);transition:background .3s}
+#p-account .ac-meter[data-s="1"] i:nth-child(-n+1){background:#ff8a7a}
+#p-account .ac-meter[data-s="2"] i:nth-child(-n+2){background:#f5c04b}
+#p-account .ac-meter[data-s="3"] i:nth-child(-n+3){background:#b6e06a}
+#p-account .ac-meter[data-s="4"] i:nth-child(-n+4){background:#6fdc7c}
+#p-account .ac-chips{display:flex;flex-wrap:wrap;gap:8px}
+#p-account .ac-chips button{height:38px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.08);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+#p-account .ac-chips button:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+#p-account .ac-chips button[aria-checked="true"]{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;box-shadow:0 8px 20px rgba(239,135,49,.35)}
+#p-account .ac-chips button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* the fields that only a new account needs ease in */
+#p-account .ac-scene[data-mode="signup"] .auth-extra-fields{animation:acIn .4s cubic-bezier(.2,.8,.2,1) both}
+#p-account .ac-scene[data-mode="signup"] #ssForgotRow{display:none}
+@keyframes acIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+#p-account .ac-btn{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:54px;margin-top:6px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));color:#fff;font-size:13.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;box-shadow:0 16px 34px rgba(239,135,49,.42);transition:transform .2s,box-shadow .2s,filter .2s}
+#p-account .ac-btn:hover{transform:translateY(-2px);box-shadow:0 22px 44px rgba(239,135,49,.52)}
+#p-account .ac-btn:active{transform:translateY(0) scale(.98)}
+#p-account .ac-btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#p-account .ac-btn-arrow{width:18px;height:18px;transition:transform .25s}
+#p-account .ac-btn:hover .ac-btn-arrow{transform:translateX(4px)}
+#p-account .ac-spin{display:none;width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;animation:acSpin .7s linear infinite}
+#p-account .ac-btn.ac-busy{pointer-events:none;filter:saturate(.85)}
+#p-account .ac-btn.ac-busy .ac-btn-label,#p-account .ac-btn.ac-busy .ac-btn-arrow{display:none}
+#p-account .ac-btn.ac-busy .ac-spin{display:block}
+@keyframes acSpin{to{transform:rotate(360deg)}}
+#p-account #authStatus{min-height:22px;margin:14px 0 0;padding:0;font-size:13.5px;font-weight:700;line-height:1.5;text-align:center;color:rgba(255,255,255,.85);background:none;border:0}
+#p-account #authStatus.ok{color:#9be37f}
+#p-account #authStatus.err{color:#ffb4a8}
+#p-account .ac-switch{margin-top:10px;text-align:center;font-size:14px;color:rgba(255,255,255,.84)}
+#p-account .ac-switch-link{margin-left:6px;border:0;background:none;padding:0;font-size:14px;font-weight:800;color:#ffc98f;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#p-account .ac-switch-link:hover{color:#fff}
+
+/* ─── signed in ─── */
+#p-account .ac-dash-shell{display:flex!important;flex-direction:column;flex-wrap:nowrap;align-content:flex-start;gap:22px!important}
+#p-account .ac-dash-shell>*{flex:0 0 auto;min-width:0}
+#p-account .ac-pane{display:flex;flex-direction:column;flex-wrap:nowrap;align-content:flex-start;align-items:stretch;gap:22px;animation:acPane .45s cubic-bezier(.2,.8,.2,1) both}
+#p-account .ac-pane>*{flex:0 0 auto;min-width:0}
+#p-account .ac-pane[hidden]{display:none}
+@keyframes acPane{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#p-account .ac-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(20px,3vw,40px);align-items:center;padding:clamp(24px,4vw,44px)}
+#p-account .ac-hero-main{position:relative;z-index:1}
+#p-account .ac-hero h3{margin:12px 0 0;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(30px,4vw,48px);line-height:1.08;color:#fff!important}
+#p-account .ac-hero-mail{margin:10px 0 0;font-size:15px;color:rgba(255,255,255,.85)}
+#p-account .ac-chips-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+#p-account .ac-chip{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;font-size:12.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:999px}
+#p-account .ac-chip b{font-weight:800}
+#p-account #acTierChip{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;box-shadow:0 8px 18px rgba(239,135,49,.35)}
+#p-account .ac-signout{display:inline-flex;align-items:center;gap:8px;margin-top:22px;height:42px;padding:0 20px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.08);color:#fff;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .2s}
+#p-account .ac-signout:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
+#p-account .ac-signout svg{width:16px;height:16px}
+#p-account .ac-club{padding:22px;position:relative;z-index:1}
+#p-account .ac-club-top{display:flex;align-items:center;gap:14px}
+#p-account .ac-tier-badge{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:50px;height:50px;color:#fff;background:linear-gradient(135deg,var(--ac-g),#1a8f9a);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+#p-account .ac-tier-badge svg{width:26px;height:26px}
+#p-account .ac-club-name{display:flex;flex-direction:column;min-width:0}
+#p-account .ac-mini{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+#p-account .ac-club-name strong{font-family:'Playfair Display',serif;font-size:26px;line-height:1.1;color:#fff}
+#p-account .ac-club-pts{margin-left:auto;text-align:right;display:flex;flex-direction:column;line-height:1}
+#p-account .ac-club-pts b{font-family:'Playfair Display',serif;font-size:30px;color:#fff}
+#p-account .ac-club-pts small{margin-top:4px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+#p-account .ac-bar{height:10px;margin:18px 0 8px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+#p-account .ac-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#8ed77e,var(--ac-o2));box-shadow:0 0 14px rgba(142,215,126,.6);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+#p-account .ac-bar-note{display:block;font-size:13px;font-weight:700;color:rgba(255,255,255,.88)}
+#p-account .ac-ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0;padding:0;list-style:none}
+#p-account .ac-ladder li{display:flex;flex-direction:column;gap:2px;padding:10px 10px 10px;font-size:12px;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);transition:background .25s,border-color .25s,color .25s}
+#p-account .ac-ladder i{display:block;width:8px;height:8px;border-radius:50%;margin-bottom:6px;background:rgba(255,255,255,.35)}
+#p-account .ac-ladder b{font-size:13px;color:#fff}
+#p-account .ac-ladder li.done i{background:#8ed77e}
+#p-account .ac-ladder li.on{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.55)}
+#p-account .ac-ladder li.on i{background:var(--ac-o2);box-shadow:0 0 0 4px rgba(245,160,75,.3)}
+
+#p-account .ac-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+#p-account .ac-stat{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:20px 20px 18px;text-align:left;background:var(--ac-card);border:1px solid var(--ac-line);box-shadow:0 10px 30px rgba(6,46,75,.07);color:var(--ac-ink);cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .25s}
+#p-account .ac-stat--static{cursor:default}
+#p-account .ac-stat::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--ac-o),var(--ac-g));transform:scaleX(0);transform-origin:left;transition:transform .35s}
+#p-account .ac-stat::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(200px circle at var(--mx,50%) var(--my,30%),rgba(239,135,49,.12),transparent 62%)}
+#p-account .ac-stat:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(6,46,75,.15);border-color:rgba(239,135,49,.45)}
+#p-account .ac-stat:hover::before{transform:scaleX(1)}
+#p-account .ac-stat:hover::after{opacity:1}
+#p-account .ac-stat:focus-visible{outline:3px solid var(--ac-o);outline-offset:2px}
+#p-account .ac-stat-ico{display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin-bottom:12px;color:var(--ac-o);background:rgba(239,135,49,.12);transition:transform .3s,background .25s,color .25s}
+#p-account .ac-stat:hover .ac-stat-ico{transform:scale(1.08);background:var(--ac-o);color:#fff}
+#p-account .ac-stat-ico svg{width:20px;height:20px}
+#p-account .ac-stat strong{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,38px);line-height:1.05;color:var(--ac-ink)}
+#p-account .ac-stat-lab{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-mut)}
+
+#p-account .ac-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:22px;align-items:stretch}
+#p-account .ac-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1000px){#p-account .ac-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#p-account .ac-action{all:unset;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:22px 22px 20px;background:var(--ac-card);border:1px solid var(--ac-line);box-shadow:0 10px 30px rgba(6,46,75,.07);color:var(--ac-ink);cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .25s;font-family:'Raleway',sans-serif}
+#p-account .ac-action::before{content:none!important;display:none!important}
+#p-account .ac-action::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(220px circle at var(--mx,50%) var(--my,30%),rgba(239,135,49,.13),transparent 62%)}
+#p-account .ac-action:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(6,46,75,.15);border-color:rgba(239,135,49,.45)}
+#p-account .ac-action:hover::after{opacity:1}
+#p-account .ac-action:focus-visible{outline:3px solid var(--ac-o);outline-offset:2px}
+#p-account .ac-action-ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;margin-bottom:10px;color:#fff;background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));box-shadow:0 8px 18px rgba(239,135,49,.3);transition:transform .3s}
+#p-account .ac-action:hover .ac-action-ico{transform:scale(1.1) rotate(-4deg)}
+#p-account .ac-action-ico svg{width:21px;height:21px}
+#p-account .ac-action h4{margin:0;font-size:17px;font-weight:800;color:var(--ac-ink)}
+#p-account .ac-action p{margin:2px 0 0;font-size:13.5px;line-height:1.5;color:var(--ac-mut)}
+#p-account .ac-action .dashboard-link-cta{all:unset;box-sizing:border-box;font-family:'Raleway',sans-serif;display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-o);transition:gap .25s}
+#p-account .ac-action:hover .dashboard-link-cta{gap:11px}
+
+#p-account .ac-earn{padding:26px 26px 22px}
+#p-account .ac-earn>*{position:relative;z-index:1}
+#p-account .ac-earn h4{margin:10px 0 16px;font-family:'Playfair Display',serif;font-size:24px;line-height:1.15;color:#fff!important}
+#p-account .ac-earn-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+#p-account .ac-earn-list li{display:flex;align-items:center;gap:14px;padding:12px 14px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);transition:transform .25s,background .25s,border-color .25s}
+#p-account .ac-earn-list li:hover{transform:translateX(4px);background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.45)}
+#p-account .ac-plus{flex:0 0 auto;min-width:52px;text-align:center;padding:6px 0;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-radius:999px}
+#p-account .ac-earn-list strong{display:block;font-size:14px;color:#fff}
+#p-account .ac-earn-list li span:not(.ac-plus){display:block;font-size:12.5px;color:rgba(255,255,255,.78);margin-top:1px}
+#p-account .ac-earn-note{margin:14px 0 0;font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.8)}
+
+#p-account .ac-section{padding:26px;background:var(--ac-card);border:1px solid var(--ac-line);box-shadow:0 10px 30px rgba(6,46,75,.06)}
+#p-account .ac-sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+#p-account .ac-sec-head h4{margin:8px 0 0;font-family:'Playfair Display',serif;font-size:26px;line-height:1.15;color:var(--ac-ink)}
+#p-account .ac-sec-head p{margin:6px 0 0;font-size:14px;color:var(--ac-mut)}
+#p-account .ac-filters{display:flex;flex-wrap:wrap;gap:8px}
+#p-account .ac-filters button{height:36px;padding:0 15px;border-radius:999px;border:1px solid var(--ac-line);background:var(--ac-soft);color:var(--ac-ink);font-size:12.5px;font-weight:700;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .15s}
+#p-account .ac-filters button:hover{transform:translateY(-1px);border-color:rgba(239,135,49,.5)}
+#p-account .ac-filters button[aria-pressed="true"]{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;color:#fff}
+
+/* history */
+#p-account .ac-hist{display:flex;flex-direction:column;gap:10px}
+#p-account .ac-hrow{border:1px solid var(--ac-line);background:var(--ac-soft);transition:border-color .25s,box-shadow .25s,background .25s}
+#p-account .ac-hrow:hover{border-color:rgba(239,135,49,.45)}
+#p-account .ac-hrow.open{background:var(--ac-card);border-color:rgba(239,135,49,.55);box-shadow:0 14px 34px rgba(6,46,75,.1)}
+#p-account .ac-hhead{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;cursor:pointer;color:var(--ac-ink);font-family:'Raleway',sans-serif}
+#p-account .ac-hhead:focus-visible{outline:3px solid var(--ac-o);outline-offset:-3px}
+#p-account .ac-hico{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:40px;height:40px;color:var(--ac-o);background:rgba(239,135,49,.13)}
+#p-account .ac-hico svg{width:20px;height:20px}
+#p-account .ac-hmain{min-width:0;flex:1}
+#p-account .ac-hmain strong{display:block;font-size:15px;line-height:1.3;color:var(--ac-ink)}
+#p-account .ac-hmain span{display:block;margin-top:3px;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-status{flex:0 0 auto;padding:6px 12px;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;white-space:nowrap}
+#p-account .ac-status.pending{color:#9a6212;background:#fdf1dc}
+#p-account .ac-status.confirmed,#p-account .ac-status.completed{color:#1f7a3a;background:#e2f4e8}
+#p-account .ac-status.cancelled{color:#a63a2d;background:#fbe6e2}
+#p-account .ac-status.other{color:#35566f;background:#e4eef6}
+body.theme-night #p-account .ac-status.pending{background:rgba(245,192,75,.18);color:#f5d28a}
+body.theme-night #p-account .ac-status.confirmed,body.theme-night #p-account .ac-status.completed{background:rgba(111,220,124,.16);color:#9be8a8}
+body.theme-night #p-account .ac-status.cancelled{background:rgba(255,138,122,.16);color:#ffb4a8}
+body.theme-night #p-account .ac-status.other{background:rgba(160,200,230,.16);color:#bcd8ee}
+#p-account .ac-chev{flex:0 0 auto;width:18px;height:18px;color:var(--ac-mut);transition:transform .3s}
+#p-account .ac-hrow.open .ac-chev{transform:rotate(180deg)}
+#p-account .ac-hbody{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.2,.8,.2,1)}
+#p-account .ac-hrow.open .ac-hbody{grid-template-rows:1fr}
+#p-account .ac-hbody>div{overflow:hidden}
+#p-account .ac-hdetails{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 18px;margin:0 16px;padding:14px 0 6px;border-top:1px dashed var(--ac-line)}
+#p-account .ac-hdetails div span{display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-mut)}
+#p-account .ac-hdetails div b{display:block;margin-top:3px;font-size:14px;color:var(--ac-ink);word-break:break-word}
+#p-account .ac-hnote{margin:6px 16px 0;font-size:13.5px;line-height:1.6;color:var(--ac-ink)}
+#p-account .ac-hhelp{margin:10px 16px 16px;font-size:13px;color:var(--ac-mut)}
+#p-account .ac-hhelp button{all:unset;cursor:pointer;font-weight:800;color:var(--ac-o);text-decoration:underline;text-underline-offset:3px}
+#p-account .ac-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:34px 18px;border:1px dashed var(--ac-line);background:var(--ac-soft)}
+#p-account .ac-empty .ac-hico{width:52px;height:52px}
+#p-account .ac-empty strong{font-size:16px;color:var(--ac-ink)}
+#p-account .ac-empty p{margin:0;max-width:46ch;font-size:14px;line-height:1.6;color:var(--ac-mut)}
+#p-account .ac-empty .ac-cta{margin-top:10px}
+#p-account .ac-cta{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 24px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));color:#fff;font:800 12.5px 'Raleway',sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 12px 26px rgba(239,135,49,.34);transition:transform .2s,box-shadow .2s}
+#p-account .ac-cta:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(239,135,49,.45)}
+#p-account .ac-skel{height:68px;border:1px solid var(--ac-line);background:linear-gradient(100deg,var(--ac-soft) 30%,rgba(255,255,255,.7) 50%,var(--ac-soft) 70%);background-size:220% 100%;animation:acShim 1.2s linear infinite}
+@keyframes acShim{from{background-position:120% 0}to{background-position:-100% 0}}
+
+/* saved tours */
+#p-account .ac-saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+#p-account .ac-saved{position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--ac-card);border:1px solid var(--ac-line);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .25s}
+#p-account .ac-saved:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(6,46,75,.15);border-color:rgba(239,135,49,.45)}
+#p-account .ac-saved img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--ac-soft);transition:transform .5s}
+#p-account .ac-saved:hover img{transform:scale(1.05)}
+#p-account .ac-saved-img{overflow:hidden}
+#p-account .ac-saved-body{display:flex;flex-direction:column;gap:4px;padding:14px 16px 4px}
+#p-account .ac-saved-body strong{font-size:15px;line-height:1.3;color:var(--ac-ink)}
+#p-account .ac-saved-body span{font-size:13px;color:var(--ac-mut)}
+#p-account .ac-saved-act{display:flex;gap:8px;padding:12px 16px 16px;margin-top:auto}
+#p-account .ac-saved-act button{flex:1;height:38px;border-radius:999px;border:1px solid var(--ac-line);background:var(--ac-soft);color:var(--ac-ink);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+#p-account .ac-saved-act button:first-child{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;color:#fff}
+#p-account .ac-saved-act button:hover{border-color:rgba(239,135,49,.5)}
+#p-account .ac-saved-empty{grid-column:1/-1}
+
+/* blog submissions (added by another script) */
+#p-account .ss-mysubs{margin:0!important;padding:26px;background:var(--ac-card);border:1px solid var(--ac-line);box-shadow:0 10px 30px rgba(6,46,75,.06)}
+#p-account .ss-mysubs .label-eyebrow{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--ac-o)}
+#p-account .ss-sub-row{border-radius:0!important;background:var(--ac-soft)!important;border-color:var(--ac-line)!important}
+#p-account .ss-sub-row strong{color:var(--ac-ink)!important}
+
+/* follow the journey */
+#p-account .ac-follow{margin-top:28px}
+#p-account .ac-follow-cards{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+#p-account .ac-follow-card{flex:1 1 260px;max-width:360px;display:flex;align-items:center;gap:14px;padding:12px 16px;text-decoration:none;background:var(--ac-card);border:1px solid var(--ac-line);color:var(--ac-ink);transition:transform .25s,box-shadow .25s,border-color .25s}
+#p-account .ac-follow-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(6,46,75,.13);border-color:rgba(239,135,49,.45)}
+#p-account .ac-follow-ico{display:flex;align-items:center;justify-content:center;width:40px;height:40px;color:#fff;font-size:20px}
+#p-account .ac-follow-ico.ig{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}
+#p-account .ac-follow-ico.tt{background:#111}
+#p-account .ac-follow-meta{display:flex;flex-direction:column;line-height:1.25}
+#p-account .ac-follow-meta strong{font-size:14px}
+#p-account .ac-follow-meta small{font-size:12px;color:var(--ac-mut)}
+#p-account .ac-follow-card em{margin-left:auto;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ac-o)}
+
+/* the forgot-password window matches */
+.ss-reset-modal{border-radius:0!important;border-top:4px solid var(--orange,#ef8731);font-family:'Raleway',sans-serif}
+.ss-reset-modal h3{font-family:'Playfair Display',serif}
+.ss-reset-modal input{border-radius:0!important;font-size:16px!important;height:48px}
+.ss-reset-btn{border-radius:999px!important;background:linear-gradient(135deg,#f5a04b,#ef8731)!important;letter-spacing:.1em;text-transform:uppercase;font-size:13px!important}
+.ss-reset-close{border-radius:50%!important}
+
+@media (max-width:900px){
+  #p-account .ac-scene{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "panel" "tiles"}
+  #p-account .ac-hero{grid-template-columns:minmax(0,1fr)}
+  #p-account .ac-duo{grid-template-columns:minmax(0,1fr)}
+  #p-account .ac-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  #p-account .ac-seg button{font-size:11px;letter-spacing:.05em;white-space:nowrap;padding:0 6px}
+  #p-account .ac-tiles{grid-template-columns:minmax(0,1fr)}
+  #p-account .ac-actions{gap:12px}
+  #p-account .ac-action{padding:18px 16px 16px}
+  #p-account .ac-action p{display:none}
+  #p-account .ac-stat{padding:16px 16px 14px}
+  #p-account .ac-section,#p-account .ss-mysubs{padding:18px}
+  #p-account .ac-hhead{gap:10px;padding:12px}
+  #p-account .ac-status{padding:5px 9px;font-size:9.5px}
+  #p-account .ac-hico{width:34px;height:34px}
+  #p-account .ac-club{padding:18px}
+  #p-account .ac-earn{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  #p-account .ac *,#p-account .ac *::before,#p-account .ac *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ─── the rules a password has to meet ─── */
+#p-account .ac-rules{display:none;flex-wrap:wrap;gap:6px;margin-top:10px}
+#p-account .ac-scene[data-mode="signup"] .ac-rules{display:flex}
+#p-account .ac-rules--dark{display:flex;margin:-4px 0 14px}
+#p-account .ac-rules span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;font-size:11.5px;font-weight:700;border-radius:999px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);transition:background .25s,color .25s,border-color .25s}
+#p-account .ac-rules span::before{content:'';width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .25s}
+#p-account .ac-rules span.ok{color:#fff;background:rgba(111,220,124,.22);border-color:rgba(142,215,126,.7)}
+#p-account .ac-rules span.ok::before{background:#8ed77e}
+#p-account .ac-rules--dark span{color:var(--ac-mut);background:var(--ac-soft);border-color:var(--ac-line)}
+#p-account .ac-rules--dark span::before{background:rgba(120,140,160,.5)}
+#p-account .ac-rules--dark span.ok{color:#1f7a3a;background:#e2f4e8;border-color:rgba(31,122,58,.35)}
+#p-account .ac-rules--dark span.ok::before{background:#2fa653}
+body.theme-night #p-account .ac-rules--dark span.ok{color:#9be8a8;background:rgba(111,220,124,.16)}
+
+/* ─── tabs ─── */
+#p-account .ac-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:-4px 0 -2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#p-account .ac-tabs::-webkit-scrollbar{display:none}
+#p-account .ac-tabs button{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;border:1px solid var(--ac-line);background:var(--ac-card);color:var(--ac-ink);font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;box-shadow:0 6px 16px rgba(6,46,75,.05);transition:transform .2s,box-shadow .2s,border-color .2s,background .2s,color .2s}
+#p-account .ac-tabs button svg{width:17px;height:17px}
+#p-account .ac-tabs button:hover{transform:translateY(-2px);border-color:rgba(239,135,49,.5)}
+#p-account .ac-tabs button[aria-selected="true"]{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;color:#fff;box-shadow:0 12px 26px rgba(239,135,49,.4)}
+#p-account .ac-tabs button:focus-visible{outline:3px solid var(--ac-o);outline-offset:2px}
+
+#p-account .ac-link{border:0;background:none;padding:6px 2px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-o);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+#p-account .ac-link:hover{color:var(--ac-ink)}
+#p-account .ac-cta--ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.5);box-shadow:none}
+#p-account .ac-cta--ghost-dark{background:transparent;border:1.5px solid var(--ac-line);color:var(--ac-ink);box-shadow:none}
+#p-account .ac-cta--ghost-dark:hover{border-color:var(--ac-o);color:var(--ac-o);box-shadow:none}
+#p-account .ac-cta--wide{width:100%;margin-top:6px;height:50px}
+#p-account .ac-cta:focus-visible{outline:3px solid var(--ac-ink);outline-offset:3px}
+
+/* overview: picks, latest request, more from the site, help */
+#p-account .ac-picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+#p-account .ac-pick{position:relative;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;background:var(--ac-card);border:1px solid var(--ac-line);color:var(--ac-ink);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .25s}
+#p-account .ac-pick:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(6,46,75,.15);border-color:rgba(239,135,49,.45)}
+#p-account .ac-pick-img{overflow:hidden;aspect-ratio:16/10;background:var(--ac-soft)}
+#p-account .ac-pick img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+#p-account .ac-pick:hover img{transform:scale(1.06)}
+#p-account .ac-pick-body{display:flex;flex-direction:column;gap:3px;padding:14px 16px 16px}
+#p-account .ac-pick-body em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-o)}
+#p-account .ac-pick-body strong{font-size:15px;line-height:1.3}
+#p-account .ac-pick-body span{font-size:13px;color:var(--ac-mut)}
+#p-account .ac-more{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+#p-account .ac-more-tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:var(--ac-soft);border:1px solid var(--ac-line);color:var(--ac-ink);cursor:pointer;font-family:'Raleway',sans-serif;transition:transform .25s,border-color .25s,background .25s,box-shadow .25s}
+#p-account .ac-more-tile:hover{transform:translateY(-3px);border-color:rgba(239,135,49,.5);background:var(--ac-card);box-shadow:0 14px 30px rgba(6,46,75,.1)}
+#p-account .ac-more-tile:focus-visible{outline:3px solid var(--ac-o);outline-offset:2px}
+#p-account .ac-more-tile strong{font-size:15px}
+#p-account .ac-more-tile span{font-size:13px;color:var(--ac-mut);line-height:1.5}
+#p-account .ac-help{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin-top:18px;padding:18px 20px;background:var(--ac-soft);border:1px dashed var(--ac-line)}
+#p-account .ac-help strong{display:block;font-size:15px}
+#p-account .ac-help span{font-size:13px;color:var(--ac-mut)}
+#p-account .ac-help-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+#p-account .ac-help-links a{font-size:14px;font-weight:700;color:var(--ac-ink);text-decoration:underline;text-underline-offset:3px}
+#p-account .ac-help-links a:hover{color:var(--ac-o)}
+
+/* the Travel Club tab */
+#p-account .ac-club-big h4{margin:8px 0 0;font-family:'Playfair Display',serif;font-size:34px;color:var(--ac-ink)}
+#p-account .ac-club-lede{margin:8px 0 16px;font-size:15px;line-height:1.6;color:var(--ac-mut)}
+#p-account .ac-bar--dark{background:var(--ac-soft);border:1px solid var(--ac-line)}
+#p-account .ac-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+#p-account .ac-step{position:relative;padding:16px;background:var(--ac-soft);border:1px solid var(--ac-line);transition:transform .25s,border-color .25s,background .25s}
+#p-account .ac-step:hover{transform:translateY(-3px)}
+#p-account .ac-step.on{background:var(--ac-card);border-color:var(--ac-o);box-shadow:0 14px 30px rgba(239,135,49,.18)}
+#p-account .ac-step.done{border-color:rgba(47,166,83,.5)}
+#p-account .ac-step-ico{display:flex;align-items:center;justify-content:center;width:36px;height:36px;margin-bottom:10px;color:#fff;background:linear-gradient(135deg,var(--ac-g),#1a8f9a)}
+#p-account .ac-step-ico svg{width:19px;height:19px}
+#p-account .ac-step strong{display:block;font-size:15px;color:var(--ac-ink)}
+#p-account .ac-step small{display:block;margin-top:2px;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-step.on::after{content:'You are here';position:absolute;top:10px;right:10px;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ac-o)}
+#p-account .ac-note{margin:18px 0 0;padding-top:14px;border-top:1px dashed var(--ac-line);font-size:13px;line-height:1.6;color:var(--ac-mut)}
+#p-account .ac-earn-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+
+/* profile */
+#p-account .ac-profile{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}
+#p-account .ac-signout-card{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+#p-account .ac-signout-card h4{margin:0;font-family:'Playfair Display',serif;font-size:24px;color:var(--ac-ink)}
+#p-account .ac-signout-card p{margin:0 0 6px;max-width:60ch;font-size:14px;line-height:1.6;color:var(--ac-mut)}
+#p-account .ac-lfield{margin:0 0 16px}
+#p-account .ac-lfield label{display:block;margin:0 0 7px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-mut)}
+#p-account .ac-lfield label span{font-weight:600;letter-spacing:.04em;text-transform:none}
+#p-account .ac-lfield input{width:100%;height:50px;padding:0 14px;font:500 16px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0;transition:border-color .2s,box-shadow .2s,background .2s}
+#p-account .ac-lfield input:focus{border-color:var(--ac-o);background:var(--ac-card);box-shadow:0 0 0 4px rgba(239,135,49,.18)}
+#p-account .ac-lfield input[readonly]{opacity:.75;cursor:not-allowed}
+#p-account .ac-lfield small{display:block;margin-top:6px;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-lchips{display:flex;flex-wrap:wrap;gap:8px}
+#p-account .ac-lchips button{height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--ac-line);background:var(--ac-soft);color:var(--ac-ink);font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+#p-account .ac-lchips button:hover{transform:translateY(-1px);border-color:rgba(239,135,49,.5)}
+#p-account .ac-lchips button[aria-checked="true"]{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent;color:#fff;box-shadow:0 8px 18px rgba(239,135,49,.3)}
+#p-account .ac-fstatus{min-height:20px;margin-top:12px;font-size:13.5px;font-weight:700;color:var(--ac-mut)}
+#p-account .ac-fstatus.ok{color:#2a8a47}
+#p-account .ac-fstatus.err{color:#c0392b}
+body.theme-night #p-account .ac-fstatus.ok{color:#9be8a8}
+body.theme-night #p-account .ac-fstatus.err{color:#ffb4a8}
+
+@media (max-width:900px){
+  #p-account .ac-profile{grid-template-columns:minmax(0,1fr)}
+  #p-account .ac-steps{grid-template-columns:minmax(0,1fr)}
+  #p-account .ac-step.on::after{top:12px}
+}
+@media (max-width:560px){
+  #p-account .ac-tabs button{height:42px;padding:0 16px;font-size:11.5px}
+  #p-account .ac-picks{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+<script id="ss-account-script">
+(function(){
+  /* Sign in to sign out: the Travel Club account area. The sign-in, sign-up, points and booking code stays where it
+     was; this adds the interactions, the member tabs, the profile, and the purchase history on top. */
+  var $=function(id){return document.getElementById(id);};
+  var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function setSt(id,msg,type){if(typeof setStatus==='function')setStatus(id,msg,type);else{var e=$(id);if(e){e.textContent=msg;e.className='inline-status'+(type?' '+type:'');}}}
+  function apiAccount(){var t=localStorage.getItem('ss_auth_token')||'';return !!(window.SS&&typeof SS.updateProfile==='function'&&t&&t.indexOf('guest_')!==0);}
+  var ARROW='<svg class="ac-btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  var TIER={
+    Explorer:'<svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+    Voyager:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
+    Pioneer:'<svg viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>'
+  };
+  var STYLES=['Adventure','Luxury','Family','Romantic','Group Charter'];
+
+  /* ═════ SIGN IN / CREATE ACCOUNT ═════ */
+  function mode(){return window._authMode==='signup'?'signup':'signin';}
+  function syncMode(){
+    var m=mode(),sc=$('acScene');if(!sc)return;
+    sc.setAttribute('data-mode',m);
+    var si=$('acTabSignin'),su=$('acTabSignup');
+    if(si)si.setAttribute('aria-selected',String(m==='signin'));
+    if(su)su.setAttribute('aria-selected',String(m==='signup'));
+    var t=$('acPanelTitle'),s=$('acPanelSub');
+    if(t)t.textContent=m==='signup'?'Create your account':'Welcome back';
+    if(s)s.textContent=m==='signup'?'Join free and start with 100 Travel Points.':'Sign in to see your points, saved tours and booking history.';
+    var b=$('authMainBtn');
+    if(b){b.classList.remove('ac-busy');b.disabled=false;b.innerHTML='<span class="ac-btn-label">'+(m==='signup'?'Create account':'Sign in')+'</span>'+ARROW+'<span class="ac-spin" aria-hidden="true"></span>';}
+    var pw=$('unifiedPassword');
+    if(pw){pw.setAttribute('autocomplete',m==='signup'?'new-password':'current-password');pw.setAttribute('placeholder',m==='signup'?'Create a password':'Your password');}
+    rules();
+  }
+  if(typeof window.toggleAuthMode==='function'){
+    var _tog=window.toggleAuthMode;
+    window.toggleAuthMode=function(){var r=_tog.apply(this,arguments);try{syncMode();}catch(e){}return r;};
+  }
+  var st=$('authStatus');
+  if(st&&window.MutationObserver){
+    new MutationObserver(function(){
+      var busy=/^(Signing in|Creating account)\.\.\.$/.test((st.textContent||'').trim());
+      var b=$('authMainBtn');if(b){b.classList.toggle('ac-busy',busy);b.disabled=busy;}
+    }).observe(st,{childList:true,characterData:true,subtree:true});
+  }
+  var eye=$('acEye'),pw=$('unifiedPassword');
+  if(eye&&pw){
+    eye.addEventListener('click',function(){
+      var show=pw.type==='password';pw.type=show?'text':'password';
+      eye.classList.toggle('on',show);eye.setAttribute('aria-label',show?'Hide password':'Show password');
+    });
+  }
+
+  /* the same rules the server checks: 8 characters, an uppercase letter, a lowercase letter and a number */
+  function ruleState(p){p=p||'';return {len:p.length>=8,up:/[A-Z]/.test(p),low:/[a-z]/.test(p),num:/[0-9]/.test(p)};}
+  function allOk(r){return r.len&&r.up&&r.low&&r.num;}
+  function paintRules(box,p){
+    if(!box)return 0;var r=ruleState(p),n=0;
+    [].forEach.call(box.querySelectorAll('[data-r]'),function(el){var ok=!!r[el.getAttribute('data-r')];el.classList.toggle('ok',ok);if(ok)n++;});
+    return n;
+  }
+  function rules(){
+    var p=pw?pw.value:'';var n=paintRules($('acRules'),p),m=$('acMeter');
+    if(m)m.setAttribute('data-s',String(p?Math.max(1,n):0));
+  }
+  if(pw)pw.addEventListener('input',rules);
+  var pn=$('acPNew');if(pn)pn.addEventListener('input',function(){paintRules($('acPRules'),pn.value);});
+
+  function buildChips(box,sel,onPick){
+    if(!box||box.children.length)return;
+    STYLES.forEach(function(name){
+      var b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.textContent=name;b.dataset.v=name;
+      b.setAttribute('aria-checked',String(name===(sel&&sel.value)));
+      b.addEventListener('click',function(){onPick(name);[].forEach.call(box.children,function(c){c.setAttribute('aria-checked',String(c===b));});});
+      box.appendChild(b);
+    });
+  }
+  var selStyle=$('signupStyle');
+  buildChips($('acStyleChips'),selStyle,function(v){if(selStyle)selStyle.value=v;});
+
+  var form=$('acAuthForm');
+  if(form){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var email=($('unifiedEmail').value||'').trim(),pass=$('unifiedPassword').value||'',m=mode();
+      if(m==='signup'&&!($('signupName').value||'').trim()){setSt('authStatus','Please add your name.','err');$('signupName').focus();return;}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){setSt('authStatus','Please enter a valid email address.','err');$('unifiedEmail').focus();return;}
+      if(!pass){setSt('authStatus','Please enter your password.','err');$('unifiedPassword').focus();return;}
+      if(m==='signup'&&!allOk(ruleState(pass))){setSt('authStatus','Your password needs 8 or more characters, an uppercase letter, a lowercase letter and a number.','err');$('unifiedPassword').focus();return;}
+      if(typeof handleUnifiedAuth==='function')handleUnifiedAuth();
+    });
+  }
+
+  /* ═════ glow that follows the pointer ═════ */
+  document.addEventListener('pointermove',function(e){
+    var t=e.target&&e.target.closest&&e.target.closest('#p-account .ac-tile,#p-account .ac-stat,#p-account .ac-action');
+    if(!t)return;var r=t.getBoundingClientRect();
+    t.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    t.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+  },{passive:true});
+
+  /* ═════ MEMBER TABS ═════ */
+  var tabs=[].slice.call(document.querySelectorAll('#accountDashboard .ac-tabs [data-tab]'));
+  function showTab(name,scroll){
+    var found=false;
+    tabs.forEach(function(b){var on=b.getAttribute('data-tab')===name;if(on)found=true;b.setAttribute('aria-selected',String(on));b.classList.toggle('on',on);});
+    if(!found)return;
+    [].forEach.call(document.querySelectorAll('#accountDashboard .ac-pane'),function(p){p.hidden=(p.id!=='acPane-'+name);});
+    try{sessionStorage.setItem('ac_tab',name);}catch(e){}
+    if(name==='profile')fillProfile();
+    if(name==='trips'||name==='overview')renderHistory();
+    if(scroll){var tb=document.querySelector('#accountDashboard .ac-tabs');if(tb)tb.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});}
+  }
+  tabs.forEach(function(b,i){
+    b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'));b.scrollIntoView({inline:'center',block:'nearest'});});
+    b.addEventListener('keydown',function(e){
+      var k=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!k)return;e.preventDefault();
+      var n=tabs[(i+k+tabs.length)%tabs.length];n.focus();n.click();
+    });
+  });
+  document.addEventListener('click',function(e){
+    var g=e.target.closest&&e.target.closest('#p-account [data-tab-go]');if(g)showTab(g.getAttribute('data-tab-go'),true);
+  });
+
+  /* ═════ TRAVEL CLUB ═════ */
+  var shown={},cur={},anim={};
+  function countUp(id,to){
+    var el=$(id);if(!el||isNaN(to))return;
+    if(anim[id]){el.textContent=(cur[id]||0).toLocaleString();return;}
+    var from=shown[id]===undefined?0:shown[id];
+    if(from===to||reduced){shown[id]=to;el.textContent=to.toLocaleString();return;}
+    shown[id]=to;anim[id]=true;var t0=performance.now(),dur=750;
+    (function step(t){
+      var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+      cur[id]=Math.round(from+(to-from)*e);el.textContent=cur[id].toLocaleString();
+      if(k<1)requestAnimationFrame(step);else{anim[id]=false;el.textContent=to.toLocaleString();}
+    })(t0);
+  }
+  function afterRefresh(){
+    var pts=typeof getTravelPoints==='function'?getTravelPoints():0;
+    countUp('dashPoints',pts);countUp('acHeroPts',pts);
+    var sv=$('dashSavedCount');if(sv)countUp('dashSavedCount',parseInt(String(sv.textContent).replace(/[^\d]/g,''),10));
+    var tier=typeof getTravelTier==='function'?getTravelTier(pts):{name:'Explorer',min:0,next:250};
+    var name=tier.name;
+    var badge=$('acTierBadge');if(badge)badge.innerHTML=TIER[name]||TIER.Explorer;
+    var chip=$('acTierChip');if(chip)chip.textContent=name+' tier';
+    var idx=['Explorer','Voyager','Pioneer'].indexOf(name);
+    [].forEach.call(document.querySelectorAll('#acLadder li'),function(li,i){li.classList.toggle('on',i===idx);li.classList.toggle('done',i<idx);});
+    [].forEach.call(document.querySelectorAll('#acSteps .ac-step'),function(s,i){s.classList.toggle('on',i===idx);s.classList.toggle('done',i<idx);var ico=s.querySelector('.ac-step-ico');if(ico&&!ico.firstChild)ico.innerHTML=TIER[s.getAttribute('data-tier')];});
+    var head=$('acClubHeadline');if(head)head.textContent=name+' · '+pts.toLocaleString()+' points';
+    var lede=$('acClubLede'),bar=$('acClubBar');
+    if(tier.next){
+      var span=tier.next-tier.min,prog=Math.min(100,Math.max(4,Math.round(((pts-tier.min)/span)*100)));
+      var nextName=typeof getTravelTier==='function'?getTravelTier(tier.next).name:'the next tier';
+      if(lede)lede.textContent=(tier.next-pts)+' more points to reach '+nextName+'.';
+      if(bar)bar.style.width=prog+'%';
+    }else{
+      if(lede)lede.textContent='You have reached the top tier. Thank you for exploring with us.';
+      if(bar)bar.style.width='100%';
+    }
+    var since=$('acSinceChip'),ms=$('dashMemberSince');if(since&&ms)since.textContent=ms.textContent;
+    renderPicks();
+  }
+  if(typeof window.refreshTravelClub==='function'){
+    var _rtc=window.refreshTravelClub;
+    window.refreshTravelClub=function(){var r=_rtc.apply(this,arguments);try{afterRefresh();}catch(e){}return r;};
+  }
+
+  /* ═════ picks for the member's travel style, from the site's own tours ═════ */
+  var STYLE_RE={
+    'Adventure':/atv|zip|raft|horse|dune|buggy|hike|cave|waterfall|cliff|blue hole|rapids/i,
+    'Luxury':/yacht|catamaran|villa|luxury|private|champagne|spa|helicopter/i,
+    'Family':/family|beach|snorkel|glass|dolphin|park|farm|kids/i,
+    'Romantic':/sunset|couple|romantic|dinner|luminous|massage|spa/i,
+    'Group Charter':/group|charter|party|catamaran|yacht/i
+  };
+  function renderPicks(){
+    var box=$('acPicks');if(!box)return;
+    var all=(window.CURATED_TOURS||[]).filter(function(t){return t&&t.title;});
+    var u=typeof getCurrentUser==='function'?getCurrentUser():null,style=(u&&u.style)||'Adventure';
+    var re=STYLE_RE[style],hit=re?all.filter(function(t){return re.test((t.title||'')+' '+(t.label||''));}):[];
+    var seen={},out=[];
+    hit.concat(all).forEach(function(t){if(!seen[t.title]&&out.length<3){seen[t.title]=1;out.push(t);}});
+    var tt=$('acPickTitle'),ts=$('acPickSub');
+    if(tt)tt.textContent=hit.length?'Experiences for your style':'Experiences to explore';
+    if(ts)ts.textContent=hit.length?'Based on your travel style: '+style+'.':'A few experiences to start with.';
+    if(!out.length){box.innerHTML='<div class="ac-empty"><strong>Tours are loading</strong><p>Open the tours page to browse everything we offer.</p><button type="button" class="ac-cta" onclick="nav(\'tours\')">Browse tours</button></div>';return;}
+    box.innerHTML=out.map(function(t){
+      var slug=typeof ssTourSlug==='function'?ssTourSlug(t):'';
+      return '<a class="ac-pick" href="'+(slug?'/tours/'+esc(slug):'/tours')+'"><span class="ac-pick-img"><img src="'+esc(t.image||'')+'" alt="'+esc(t.title)+'" loading="lazy"></span><span class="ac-pick-body"><em>'+esc(t.label||'Experience')+'</em><strong>'+esc(t.title)+'</strong><span>'+esc([t.area||t.country,t.priceLabel].filter(Boolean).join(' · '))+'</span></span></a>';
+    }).join('');
+  }
+
+  /* ═════ SAVED TOURS ═════ */
+  window.renderSavedTours=function(){
+    var wrap=$('dashSavedTours');if(!wrap)return;
+    var saved=typeof getSavedTours==='function'?getSavedTours():[];
+    if(!saved.length){
+      wrap.innerHTML='<div class="ac-empty ac-saved-empty"><span class="ac-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-8.6C1 9.2 2.6 5.5 6 5.5c2 0 3.2 1.1 4 2.3.8-1.2 2-2.3 4-2.3 3.4 0 5 3.7 3.3 6.9C19 16.6 12 21 12 21z"/></svg></span><strong>No saved tours yet</strong><p>Tap the heart on any tour to keep it here, and earn 10 Travel Points each time.</p><button type="button" class="ac-cta" onclick="nav(\'tours\')">Browse tours</button></div>';
+      return;
+    }
+    wrap.innerHTML=saved.map(function(t,i){
+      return '<div class="ac-saved"><div class="ac-saved-img"><img src="'+esc(t.img||'')+'" alt="'+esc(t.title||'Saved tour')+'" loading="lazy"></div>'+
+        '<div class="ac-saved-body"><strong>'+esc(t.title||'Saved tour')+'</strong><span>'+esc(t.price||'')+'</span></div>'+
+        '<div class="ac-saved-act"><button type="button" data-ac-open="'+i+'">View</button><button type="button" data-ac-remove="'+i+'" aria-label="Remove from saved">Remove</button></div></div>';
+    }).join('');
+  };
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#dashSavedTours [data-ac-open],#dashSavedTours [data-ac-remove]');if(!b)return;
+    var saved=typeof getSavedTours==='function'?getSavedTours():[];
+    var open=b.hasAttribute('data-ac-open'),t=saved[parseInt(b.getAttribute(open?'data-ac-open':'data-ac-remove'),10)];if(!t)return;
+    if(open&&typeof openTour==='function')openTour(t.id);
+    else if(!open&&typeof toggleSavedTour==='function')toggleSavedTour(t.id,e);
+  });
+
+  /* ═════ PURCHASE AND BOOKING HISTORY ═════ */
+  var H={items:[],filter:'all',started:0,loading:false};
+  function fmtDate(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
+  function guestsText(g){
+    if(g===''||g==null)return '';var s=String(g);
+    if(/[a-z]/i.test(s))return s;
+    return s+' guest'+(s==='1'?'':'s');
+  }
+  function statusInfo(s){
+    var m={pending:['pending','Request received'],confirmed:['confirmed','Confirmed'],completed:['completed','Completed'],cancelled:['cancelled','Cancelled'],canceled:['cancelled','Cancelled']};
+    return m[s]||['other',s?s.charAt(0).toUpperCase()+s.slice(1):'Update'];
+  }
+  function fromApi(b){
+    var stay=b.type==='stay';
+    return {id:b.id||'',title:b.tourName||b.stayName||'Booking request',kind:stay?'stay':'tour',
+      when:stay?[b.checkIn,b.checkOut].filter(Boolean).join(' to '):(b.date||''),guests:b.guests||'',
+      status:String(b.status||'pending').toLowerCase(),created:b.createdAt||'',notes:b.notes||''};
+  }
+  function fromLocal(){
+    try{return (typeof getMemberBookings==='function'?getMemberBookings():[]).map(function(b){
+      return {id:'',title:b.tour||'Booking request',kind:'tour',when:b.date||'',guests:b.guests||'',status:'pending',created:b.at||'',notes:''};
+    });}catch(e){return [];}
+  }
+  function getBookingList(){
+    var tok=localStorage.getItem('ss_auth_token')||'';
+    if(window.SS&&typeof SS.getBookings==='function'&&tok&&tok.indexOf('guest_')!==0){
+      return SS.getBookings().then(function(r){return ((r&&r.bookings)||[]).map(fromApi);}).catch(function(){return fromLocal();});
+    }
+    return Promise.resolve(fromLocal());
+  }
+  function rowHtml(b,i){
+    var si=statusInfo(b.status),req=fmtDate(b.created),g=guestsText(b.guests),meta=[];
+    if(b.when)meta.push((b.kind==='stay'?'Stay: ':'Travel date: ')+esc(b.when));
+    if(g)meta.push(esc(g));if(req)meta.push('Requested '+req);
+    var det=['<div><span>Status</span><b>'+esc(si[1])+'</b></div>'];
+    if(b.when)det.push('<div><span>'+(b.kind==='stay'?'Stay dates':'Travel date')+'</span><b>'+esc(b.when)+'</b></div>');
+    if(g)det.push('<div><span>Guests</span><b>'+esc(g)+'</b></div>');
+    if(req)det.push('<div><span>Requested on</span><b>'+esc(req)+'</b></div>');
+    if(b.id)det.push('<div><span>Reference</span><b>'+esc(String(b.id).slice(-6).toUpperCase())+'</b></div>');
+    return '<div class="ac-hrow"><button type="button" class="ac-hhead" aria-expanded="false">'+
+      '<span class="ac-hico"><svg viewBox="0 0 24 24" aria-hidden="true">'+(b.kind==='stay'?'<path d="M3 20V9l9-5 9 5v11M9 20v-6h6v6"/>':'<rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/>')+'</svg></span>'+
+      '<span class="ac-hmain"><strong>'+esc(b.title)+'</strong><span>'+meta.join(' · ')+'</span></span>'+
+      '<span class="ac-status '+si[0]+'">'+esc(si[1])+'</span>'+
+      '<svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>'+
+      '<div class="ac-hbody"><div><div class="ac-hdetails">'+det.join('')+'</div>'+
+      (b.notes?'<p class="ac-hnote">'+esc(b.notes)+'</p>':'')+
+      '<p class="ac-hhelp">Need to change something? <button type="button" onclick="nav(\'contact\')">Contact us</button></p></div></div></div>';
+  }
+  var EMPTY_TRIPS='<div class="ac-empty"><span class="ac-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><strong>No trips or requests yet</strong><p>When you send a booking request, it shows up here with its status, so you can see where it stands any time.</p><button type="button" class="ac-cta" onclick="nav(\'booking\')">Start planning</button></div>';
+  function renderHistory(){
+    var wrap=$('dashBookings'),fl=$('acHistFilters'),lt=$('acLatest');
+    countUp('acTripCount',H.items.length);
+    if(lt)lt.innerHTML=H.items.length?rowHtml(H.items[0]):'<div class="ac-empty"><strong>Nothing sent yet</strong><p>Your most recent request will appear here once you send one.</p><button type="button" class="ac-cta" onclick="nav(\'booking\')">Start planning</button></div>';
+    if(!wrap)return;
+    var groups={};H.items.forEach(function(b){var k=statusInfo(b.status)[0];groups[k]=(groups[k]||0)+1;});
+    var keys=Object.keys(groups);
+    if(fl){
+      fl.innerHTML=keys.length>1?('<button type="button" data-f="all" aria-pressed="'+(H.filter==='all')+'">All ('+H.items.length+')</button>'+keys.map(function(k){
+        var lab=k==='pending'?'Requested':statusInfo(k==='other'?'':k)[1];
+        return '<button type="button" data-f="'+k+'" aria-pressed="'+(H.filter===k)+'">'+lab+' ('+groups[k]+')</button>';
+      }).join('')):'';
+    }
+    if(H.loading&&!H.items.length){wrap.innerHTML='<div class="ac-skel"></div><div class="ac-skel"></div>';return;}
+    if(!H.items.length){wrap.innerHTML=EMPTY_TRIPS;return;}
+    var list=H.items.filter(function(b){return H.filter==='all'||statusInfo(b.status)[0]===H.filter;});
+    wrap.innerHTML=list.map(rowHtml).join('');
+  }
+  function loadHistory(){
+    if(H.loading)return;H.loading=true;H.started=Date.now();renderHistory();
+    getBookingList().then(function(list){
+      list.sort(function(a,b){return String(b.created).localeCompare(String(a.created));});
+      H.items=list;H.loading=false;renderHistory();
+    });
+  }
+  document.addEventListener('click',function(e){
+    var h=e.target.closest&&e.target.closest('#p-account .ac-hhead');
+    if(h){var row=h.parentElement,open=!row.classList.contains('open');row.classList.toggle('open',open);h.setAttribute('aria-expanded',String(open));return;}
+    var f=e.target.closest&&e.target.closest('#acHistFilters [data-f]');
+    if(f){H.filter=f.getAttribute('data-f');renderHistory();}
+  });
+  window.renderMemberBookings=function(){
+    var sec=$('dashBookingsSection');if(sec)sec.style.display='';
+    if(!H.started||Date.now()-H.started>4000)loadHistory();else renderHistory();
+  };
+
+  /* ═════ PROFILE AND PASSWORD ═════ */
+  var pStyle='Adventure';
+  function fillProfile(){
+    var u=typeof getCurrentUser==='function'?getCurrentUser():null;if(!u)return;
+    if($('acPName'))$('acPName').value=u.name||'';
+    if($('acPEmail'))$('acPEmail').value=u.email||'';
+    if($('acPPhone'))$('acPPhone').value=u.phone||'';
+    pStyle=u.style||'Adventure';
+    var box=$('acPStyle');
+    if(box){buildChips(box,{value:pStyle},function(v){pStyle=v;});[].forEach.call(box.children,function(c){c.setAttribute('aria-checked',String(c.dataset.v===pStyle));});}
+  }
+  function fstat(id,msg,type){var e=$(id);if(!e)return;e.textContent=msg;e.className='ac-fstatus'+(type?' '+type:'');}
+  var pf=$('acProfileForm');
+  if(pf)pf.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=($('acPName').value||'').trim(),phone=($('acPPhone').value||'').trim();
+    if(!name){fstat('acProfileStatus','Please add your name.','err');$('acPName').focus();return;}
+    fstat('acProfileStatus','Saving...','');
+    var done=function(){if(typeof updateAccountUI==='function')updateAccountUI();fstat('acProfileStatus','Your details are saved.','ok');};
+    if(apiAccount()){
+      SS.updateProfile({name:name,phone:phone,style:pStyle}).then(done).catch(function(err){fstat('acProfileStatus',(err&&err.message)||'We could not save that. Please try again.','err');});
+    }else{
+      try{
+        var u=getCurrentUser(),users=getUsers(),i=users.findIndex(function(x){return x.email===u.email;});
+        var next=Object.assign({},u,{name:name,phone:phone,style:pStyle});
+        if(i>-1){users[i]=Object.assign({},users[i],{name:name,phone:phone,style:pStyle});setUsers(users);}
+        setCurrentUser(next);done();
+      }catch(err){fstat('acProfileStatus','We could not save that. Please try again.','err');}
+    }
+  });
+  var pp=$('acPassForm');
+  if(pp)pp.addEventListener('submit',function(e){
+    e.preventDefault();
+    var cur=$('acPCur').value,nw=$('acPNew').value,n2=$('acPNew2').value;
+    if(!cur||!nw){fstat('acPassStatus','Enter your current password and a new one.','err');return;}
+    if(!allOk(ruleState(nw))){fstat('acPassStatus','Your new password needs 8 or more characters, an uppercase letter, a lowercase letter and a number.','err');return;}
+    if(nw!==n2){fstat('acPassStatus','The new passwords do not match.','err');return;}
+    fstat('acPassStatus','Updating...','');
+    var ok=function(){pp.reset();paintRules($('acPRules'),'');fstat('acPassStatus','Your password is updated.','ok');};
+    if(apiAccount()&&typeof SS.updatePassword==='function'){
+      SS.updatePassword(cur,nw).then(ok).catch(function(err){fstat('acPassStatus',(err&&err.message)||'We could not update your password.','err');});
+    }else{
+      try{
+        var u=getCurrentUser(),users=getUsers(),i=users.findIndex(function(x){return x.email===u.email&&x.password===cur;});
+        if(i<0){fstat('acPassStatus','Your current password is not right.','err');return;}
+        users[i].password=nw;setUsers(users);ok();
+      }catch(err){fstat('acPassStatus','We could not update your password.','err');}
+    }
+  });
+
+  /* ═════ SIGN OUT ═════ */
+  function signOut(){
+    try{logoutGuest();}catch(e){}
+    try{sessionStorage.removeItem('ac_tab');}catch(e){}
+    ['unifiedEmail','unifiedPassword','signupName','signupPhone'].forEach(function(id){var el=$(id);if(el)el.value='';});
+    if(pw){pw.type='password';if(eye){eye.classList.remove('on');eye.setAttribute('aria-label','Show password');}}
+    if(mode()==='signup'&&typeof toggleAuthMode==='function')toggleAuthMode();   /* someone who just signed out wants to sign in */
+    rules();showTab('overview');
+    if(typeof toast==='function')toast('You have been signed out.');
+    setTimeout(function(){setSt('authStatus','You have been signed out. See you soon!','ok');window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});},60);
+  }
+  ['acSignOut','acSignOut2'].forEach(function(id){var b=$(id);if(b)b.addEventListener('click',signOut);});
+
+  /* ═════ housekeeping ═════ */
+  function placeSubs(){var slot=$('acSubsSlot'),subs=$('ssMySubs');if(slot&&subs&&subs.parentNode!==slot)slot.appendChild(subs);}
+  [400,1200,2600,5000].forEach(function(ms){setTimeout(placeSubs,ms);});
+  document.addEventListener('ss-account-updated',function(){
+    shown={};cur={};anim={};H.items=[];H.started=0;H.filter='all';setTimeout(placeSubs,300);
+  });
+  if(typeof window.nav==='function'){
+    var _nav=window.nav;
+    window.nav=function(id){
+      var r=_nav.apply(this,arguments);
+      try{if(id==='account'){
+        setTimeout(placeSubs,400);
+        if(typeof getCurrentUser==='function'&&getCurrentUser()){setTimeout(function(){H.started=0;loadHistory();},300);}
+      }}catch(e){}
+      return r;
+    };
+  }
+  syncMode();
+  try{var t0=sessionStorage.getItem('ac_tab');if(t0)showTab(t0);}catch(e){}
 })();
 </script>
