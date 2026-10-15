@@ -10773,7 +10773,8 @@ body.theme-night .page .tag{
     <div class="tch-copy">
       <span class="tch-eyebrow" data-home-club="eyebrow">The Sight Seers Travel Club</span>
       <h3 class="tch-title" data-home-club="title">Lead a trip with your community.</h3>
-      <p class="tch-body" data-home-club="body">Bring your own group and lead a trip with us. We manage the bookings and run the delivery.</p>
+      <p class="tch-tagline" data-home-club="tagline">You Plan It. We Elevate It.</p>
+      <p class="tch-body" data-home-club="body">Bring your own group and lead a trip with us. As the group leader you bring the people; we manage the bookings and run the delivery. Group leaders earn rewards, including cash rewards, agreed with you in writing before anything is promoted.</p>
       <div class="tch-actions">
         <a class="tch-btn" href="/travel-club#lead" onclick="return ssClubGo('lead');"><span data-home-club="primaryBtn">Lead a trip</span></a>
       </div>
@@ -40351,13 +40352,14 @@ body.theme-night .page .tag{
 
 <script id="home-travel-club-section-fix">
 (function(){
-  const HOME_TRAVEL_CLUB_KEY='ss_home_travel_club_content_v1';
+  const HOME_TRAVEL_CLUB_KEY='ss_home_travel_club_content_v2';
 
   function defaults(){
     return {
       eyebrow:'The Sight Seers Travel Club',
       title:'Lead a trip with your community.',
-      body:'Bring your own group and lead a trip with us. We manage the bookings and run the delivery.',
+      tagline:'You Plan It. We Elevate It.',
+      body:'Bring your own group and lead a trip with us. As the group leader you bring the people; we manage the bookings and run the delivery. Group leaders earn rewards, including cash rewards, agreed with you in writing before anything is promoted.',
       primaryBtn:'Lead a trip'
     };
   }
@@ -40381,6 +40383,7 @@ body.theme-night .page .tag{
     const set = (k, v) => { const e = sec.querySelector('[data-home-club="' + k + '"]'); if(e) e.textContent = v; };
     set('eyebrow', s.eyebrow);
     set('title', s.title);
+    set('tagline', s.tagline);
     set('body', s.body);
     set('primaryBtn', s.primaryBtn);
   }
@@ -40406,6 +40409,7 @@ body.theme-night .page .tag{
           <div class="admin-package-grid">
             <div class="field-col"><label for="homeClubEyebrow">Eyebrow</label><input type="text" id="homeClubEyebrow" value="${s.eyebrow.replace(/"/g,'&quot;')}"></div>
             <div class="field-col full"><label for="homeClubTitle">Title</label><input type="text" id="homeClubTitle" value="${s.title.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col full"><label for="homeClubTagline">Tagline</label><input type="text" id="homeClubTagline" value="${s.tagline.replace(/"/g,'&quot;')}"></div>
             <div class="field-col full"><label for="homeClubBody">Body</label><textarea id="homeClubBody">${s.body}</textarea></div>
             <div class="field-col"><label for="homeClubPrimaryBtn">Button (opens the apply panel)</label><input type="text" id="homeClubPrimaryBtn" value="${s.primaryBtn.replace(/"/g,'&quot;')}"></div>
           </div>
@@ -40423,6 +40427,7 @@ body.theme-night .page .tag{
     const data = {
       eyebrow: document.getElementById('homeClubEyebrow')?.value || defaults().eyebrow,
       title: document.getElementById('homeClubTitle')?.value || defaults().title,
+      tagline: document.getElementById('homeClubTagline')?.value || defaults().tagline,
       body: document.getElementById('homeClubBody')?.value || defaults().body,
       primaryBtn: document.getElementById('homeClubPrimaryBtn')?.value || defaults().primaryBtn
     };
@@ -57322,6 +57327,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tch-photo:hover .tch-img::after{opacity:1}
 .tch-eyebrow{display:block;margin:0 0 14px;font:800 12px 'Raleway',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#ef8731}
 .tch-title{margin:0 0 14px;font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.06;letter-spacing:-.01em;color:#063a63}
+.tch-tagline{margin:-2px 0 14px;font:italic 700 clamp(1.05rem,1.7vw,1.3rem)/1.3 'Playfair Display',serif;color:#c9651a}
 .tch-body{margin:0 0 24px;max-width:44ch;font-size:15.5px;line-height:1.7;color:#4d6275}
 .tch-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
 .tch-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border:2px solid #063a63;background:rgba(255,255,255,.65);text-decoration:none;transform:perspective(700px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s;will-change:transform}
