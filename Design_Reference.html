@@ -56985,6 +56985,11 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
 /* Travel Club admin page */
+#p-account .tca-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:0 0 16px;padding:16px 20px;background:linear-gradient(135deg,#0b5078 0%,#07324f 100%);color:#fff;border-left:5px solid #ef8731;box-shadow:0 16px 36px rgba(4,31,53,.25)}
+#p-account .tca-banner strong{display:block;font:700 18px 'Playfair Display',serif;color:#fff}
+#p-account .tca-banner span{display:block;margin-top:3px;font-size:14px;color:rgba(255,255,255,.85)}
+#p-account .tca-banner .tca-link{border-color:#fff;color:#fff!important}
+#p-account .tca-banner .tca-link:hover{background:#fff;color:#063a63!important}
 #p-club-admin{background:linear-gradient(180deg,#eef5fa 0%,#f8fbff 100%)}
 .tca-sec{padding:120px 0 90px;min-height:70vh}
 .tca-wrap{max-width:1080px;margin:0 auto;padding:0 24px}
@@ -58595,8 +58600,24 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(!isAdmin())return;
     box.insertAdjacentHTML('beforeend','<button type="button" class="ac-bchip ac-admchip" data-tca-go="club-admin">Travel Club admin</button><button type="button" class="ac-bchip ac-admchip" data-tca-go="admin">Website admin</button>');
   }
-  document.addEventListener('ss-account-updated',function(){setTimeout(adminChips,400);});
-  [800,2500].forEach(function(ms){setTimeout(adminChips,ms);});
+  /* and a banner on the Group trips tab, with the number of applications waiting for the owner */
+  function adminBanner(){
+    var pane=document.getElementById('acPane-groups');
+    if(!pane||!isAdmin())return;
+    var b=document.getElementById('tcaBanner');
+    if(!b){
+      b=document.createElement('div');b.id='tcaBanner';b.className='tca-banner';
+      b.innerHTML='<div><strong>You are the Travel Club admin</strong><span id="tcaBannerTxt">Approve group leaders, open trips and follow every traveler.</span></div><button type="button" class="tca-link" data-tca-go="club-admin">Open Travel Club admin</button>';
+      pane.insertBefore(b,pane.firstChild);
+    }
+    SS.api('trips?admin=1').then(function(d){
+      var n=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,t=document.getElementById('tcaBannerTxt');
+      if(t)t.textContent=n?n+' group leader application'+(n===1?'':'s')+' waiting for your approval.':'No applications waiting. Approve group leaders, open trips and follow every traveler.';
+    }).catch(function(){});
+  }
+  document.addEventListener('ss-account-updated',function(){setTimeout(adminChips,400);setTimeout(adminBanner,600);});
+  [800,2500].forEach(function(ms){setTimeout(adminChips,ms);setTimeout(adminBanner,ms+200);});
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#acTab-groups'))setTimeout(adminBanner,200);});
   window.ssClubAdmin={inject:inject,load:load};
 })();
 </script>
