@@ -57027,8 +57027,8 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #tcNotice .tcn-list li span{font-size:13px;color:#5b7288}
 /* Approved departures: a schedule panel on a photo, in the site's navy, orange and green */
 .tcd{position:relative;overflow:hidden;isolation:isolate;margin:18px 0 22px;color:#fff;background:#06223a;box-shadow:0 34px 80px rgba(4,31,53,.35)}
-.tcd-bg{position:absolute;inset:-30px;z-index:-2;background:url('/assets/flagship/shore-leave-beach-group.jpg') center/cover no-repeat;transform:translate(var(--px,0px),var(--py,0px)) scale(1.04);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.tcd::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(4,31,53,.94) 0%,rgba(7,50,79,.88) 55%,rgba(7,50,79,.8) 100%)}
+.tcd-bg{position:absolute;inset:-30px;z-index:-2;background:url('/assets/flagship/shore-leave-beach-group.jpg') center/cover no-repeat;filter:blur(8px);transform:translate(var(--px,0px),var(--py,0px)) scale(1.04);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.tcd::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(4,31,53,.85) 0%,rgba(7,50,79,.7) 55%,rgba(7,50,79,.6) 100%)}
 .tcd::after{content:'';position:absolute;z-index:-1;right:-120px;top:-140px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.28),transparent 66%);pointer-events:none}
 .tcd-in{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.5fr);gap:44px;padding:clamp(26px,4vw,52px)}
 .tcd-logo{display:block;width:auto;height:44px;margin:0 0 22px;filter:brightness(0) invert(1);opacity:.95}
