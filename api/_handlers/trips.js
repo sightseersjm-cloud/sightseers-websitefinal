@@ -12,7 +12,7 @@
  *   GET  /api/trips?partners=1         public: the travel insurance and eSIM referral links (as the admin set them)
  *   POST { action:'partners-save' }    admin: set the referral links, titles and notes
  *   POST { action:'trip-save' }        admin: create or update a trip
- *   POST { action:'trip-delete' }      admin: delete a trip that never opened
+ *   POST { action:'trip-delete' }      admin: delete a trip, its requests and the leader application it was drafted from
  *   POST { action:'application-review' } admin: approve, decline or ask for more information (optionally drafts the trip)
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
  *   POST { action:'trip-group-link' }  signed in (the trip's leader): add the WhatsApp group or channel link; joiners are emailed it
@@ -675,10 +675,15 @@ module.exports = async function handler(req, res) {
         const apps = await db.getCollection(APPS), a = apps.find(x => x.id === str(body.id, 80));
         if (!a) return res.status(404).json({ error: 'Application not found.' });
         await db.removeFromCollection(APPS, a.id);
-        /* a trip drafted from it stays, but no longer points back at the deleted application */
-        for (const t of (await db.getCollection(TRIPS)).filter(x => x.applicationId === a.id)) await db.updateInCollection(TRIPS, t.id, { applicationId: null });
-        await log('application-deleted', 'Application deleted: ' + a.communityName + ' (' + a.name + ')', a.ref);
-        return res.status(200).json({ ok: true });
+        /* a draft that never opened and has no requests goes with it; a trip that is live (or has travelers) stays, no longer pointing back at the application */
+        const allInterests = await db.getCollection(INTERESTS);
+        let tripsRemoved = 0;
+        for (const t of (await db.getCollection(TRIPS)).filter(x => x.applicationId === a.id || x.id === a.tripId)) {
+          if (t.status === 'draft' && !allInterests.some(i => i.tripId === t.id)) { await db.removeFromCollection(TRIPS, t.id); tripsRemoved++; }
+          else await db.updateInCollection(TRIPS, t.id, { applicationId: null });
+        }
+        await log('application-deleted', 'Application deleted: ' + a.communityName + ' (' + a.name + ')' + (tripsRemoved ? ' and its draft trip' : ''), a.ref);
+        return res.status(200).json({ ok: true, tripsRemoved });
       }
 
       if (action === 'activity-delete') {
@@ -713,15 +718,12 @@ module.exports = async function handler(req, res) {
         const theirs = interests.filter(i => i.tripId === t.id);
         if (theirs.length && !body.force) return res.status(409).json({ error: 'This trip has traveler requests. Close it instead, or delete it together with its requests.', requests: theirs.length });
         for (const i of theirs) await db.removeFromCollection(INTERESTS, i.id);
-        /* also clear tripId from any applications that reference this trip */
-        const apps = await db.getCollection(APPS);
-        const linkedApps = apps.filter(a => a.tripId === t.id);
-        for (const a of linkedApps) {
-          await db.updateInCollection(APPS, a.id, { tripId: null });
-        }
+        /* the leader's application card ("Trip page being set up") is what their account shows for this trip, so it goes with it */
+        const linkedApps = (await db.getCollection(APPS)).filter(a => a.tripId === t.id || (t.applicationId && a.id === t.applicationId));
+        for (const a of linkedApps) await db.removeFromCollection(APPS, a.id);
         await db.removeFromCollection(TRIPS, t.id);
-        await log('trip-deleted', 'Trip deleted: ' + t.title + (theirs.length ? ' (with ' + theirs.length + ' request' + (theirs.length === 1 ? '' : 's') + ')' : ''), t.id);
-        return res.status(200).json({ ok: true });
+        await log('trip-deleted', 'Trip deleted: ' + t.title + (theirs.length ? ' (with ' + theirs.length + ' request' + (theirs.length === 1 ? '' : 's') + ')' : '') + (linkedApps.length ? ' and the leader application it came from' : ''), t.id);
+        return res.status(200).json({ ok: true, applicationsRemoved: linkedApps.length });
       }
 
       if (action === 'application-review') {
