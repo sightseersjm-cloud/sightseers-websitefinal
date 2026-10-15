@@ -13940,68 +13940,16 @@ body.theme-night #p-flagship-programs{
 <div class="tc">
   <div class="tc-band"><div class="tc-band-in">
     <span class="tc-kicker">Sight Seers Travel Club</span>
-    <h1 class="tc-h1">Join a trip. Or lead one.</h1>
-    <p class="tc-lede">Travel with an approved group to the Caribbean, or bring your own community and lead a trip with us. Sight Seers approves every trip, manages the bookings and runs the delivery.</p>
+    <h1 class="tc-h1">Lead a trip with your community.</h1>
+    <p class="tc-lede">Bring your own group to the Caribbean and lead a trip with us. Sight Seers approves every trip, manages the bookings and runs the delivery.</p>
     <div class="tc-cta-row">
-      <a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>
-      <button type="button" class="tc-fbtn tc-fbtn--ghost" data-tc-apply>Apply to lead a trip</button>
+      <button type="button" class="tc-fbtn" data-tc-apply>Apply to lead a trip</button>
+      <a class="tc-fbtn tc-fbtn--ghost" href="/travel-club#how" data-tc-go="how">How it works</a>
+      <a class="tc-fbtn tc-fbtn--ghost" href="/travel-club#departures" data-tc-go="departures" data-tc-join hidden>See departures</a>
     </div>
   </div></div>
 
   <div class="tc-wrap">
-    <div class="tc-paths">
-      <article class="tc-card tc-path" data-tc-card="departures">
-        <span class="tc-tag">Join a trip</span>
-        <h2>Travel with an approved group</h2>
-        <p>Browse the departures we have approved, read the package and ask to join. We confirm availability and payment terms before anything is charged.</p>
-        <ul class="tc-facts"><li>Approved by Sight Seers</li><li>Booked and run by us</li><li>Terms confirmed first</li></ul>
-        <details class="tc-peek"><summary>Quick look</summary><ul>
-          <li>Open a departure to see its dates, what is included and who is leading it</li>
-          <li>Ask to join and tell us how many are travelling</li>
-          <li>We email you to confirm availability and payment terms</li>
-          <li>Once that is agreed, we book you in and look after the trip</li>
-        </ul></details>
-        <div class="tc-actions"><a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a></div>
-      </article>
-      <article class="tc-card tc-path" data-tc-card="apply">
-        <span class="tc-tag">Lead a trip</span>
-        <h2>Bring your community</h2>
-        <p>Already have people who follow, trust or travel with you? Apply to lead a trip. We approve the offer, support your recruitment, manage the bookings and coordinate the delivery.</p>
-        <ul class="tc-facts"><li>By application</li><li>Reward agreed per trip</li><li>Your own trip page</li></ul>
-        <details class="tc-peek"><summary>Quick look</summary><ul>
-          <li>Apply with a few details about your group and the trip you have in mind</li>
-          <li>We review it and talk it through with you</li>
-          <li>We agree the package, the dates and your reward in writing</li>
-          <li>You get a personal trip page to share with your community</li>
-          <li>We manage the bookings and run the trip</li>
-        </ul></details>
-        <div class="tc-actions"><button type="button" class="tc-fbtn" data-tc-apply>Apply to lead</button></div>
-      </article>
-    </div>
-
-    <div class="tc-sec" id="departures">
-      <span class="tc-eyebrow">Join a trip</span>
-      <h2 class="tc-h2">Approved departures</h2>
-      <p class="tc-sub">Every departure here has been approved by Sight Seers. Open one to see the full package and ask to join.</p>
-      <div class="tc-grid" id="tcDepartures" aria-live="polite"></div>
-
-      <div class="tc-card tc-alert" id="tcAlertCard">
-        <div class="tc-alert-copy">
-          <h3>Do not see the right trip?</h3>
-          <p>Tell us you are interested and we will email you when a departure opens. Nothing is charged. Or <a class="tc-inl" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">follow our WhatsApp Channel</a> to see new departures as they are announced.</p>
-        </div>
-        <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
-          <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
-          <div class="tc-field"><label for="tcAlEmail">Email</label><input id="tcAlEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
-          <div class="tc-field tc-field--sm"><label for="tcAlParty">Travelers</label><input id="tcAlParty" type="number" min="1" max="60" value="2" inputmode="numeric"></div>
-          <label class="tc-check"><input id="tcAlConsent" type="checkbox"><span>Email me about Travel Club departures</span></label>
-          <input class="tc-hp" id="tcAlHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me when one opens</button>
-          <div class="tc-status" id="tcAlStatus" role="status" aria-live="polite"></div>
-        </form>
-      </div>
-    </div>
-
     <div class="tc-sec" id="how">
       <span class="tc-eyebrow">Lead a trip</span>
       <h2 class="tc-h2">How leading a trip works</h2>
@@ -14035,6 +13983,29 @@ body.theme-night #p-flagship-programs{
       <p class="tc-asidenote">Questions first? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>.</p>
     </div>
 
+    <div class="tc-sec" id="departures" data-tc-join hidden>
+      <span class="tc-eyebrow">Join a trip</span>
+      <h2 class="tc-h2">Approved departures</h2>
+      <p class="tc-sub">Every departure here has been approved by Sight Seers. Open one to see the full package and ask to join.</p>
+      <div class="tc-grid" id="tcDepartures" aria-live="polite"></div>
+
+      <div class="tc-card tc-alert" id="tcAlertCard">
+        <div class="tc-alert-copy">
+          <h3>Do not see the right trip?</h3>
+          <p>Tell us you are interested and we will email you when a departure opens. Nothing is charged. Or <a class="tc-inl" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">follow our WhatsApp Channel</a> to see new departures as they are announced.</p>
+        </div>
+        <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
+          <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
+          <div class="tc-field"><label for="tcAlEmail">Email</label><input id="tcAlEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
+          <div class="tc-field tc-field--sm"><label for="tcAlParty">Travelers</label><input id="tcAlParty" type="number" min="1" max="60" value="2" inputmode="numeric"></div>
+          <label class="tc-check"><input id="tcAlConsent" type="checkbox"><span>Email me about Travel Club departures</span></label>
+          <input class="tc-hp" id="tcAlHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me when one opens</button>
+          <div class="tc-status" id="tcAlStatus" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+
     <div class="tc-sec" id="faq">
       <span class="tc-eyebrow">Good to know</span>
       <h2 class="tc-h2">Questions</h2>
@@ -14042,8 +14013,8 @@ body.theme-night #p-flagship-programs{
         <details class="tc-faq"><summary>Can anyone publish a trip?</summary><p>No. Every trip is reviewed and approved by Sight Seers before it opens to travelers. If you would like to lead one, apply above.</p></details>
         <details class="tc-faq"><summary>What does Sight Seers do on a trip someone leads?</summary><p>We approve the offer, support the organizer&rsquo;s recruitment, manage the bookings and coordinate delivery.</p></details>
         <details class="tc-faq"><summary>How is an organizer&rsquo;s reward decided?</summary><p>It is agreed in writing for each trip, before the trip page goes live. It is not the same for every organizer or every trip. Trip pages say when the organizer receives a reward.</p></details>
-        <details class="tc-faq"><summary>Is a traveler charged when they ask to join?</summary><p>No. Asking to join takes no payment. We confirm availability and payment terms with the traveler by email first.</p></details>
-        <details class="tc-faq"><summary>What if a trip is full?</summary><p>You can ask to join the waitlist, and our team will be in touch if a place opens.</p></details>
+        <details class="tc-faq" data-tc-join hidden><summary>Is a traveler charged when they ask to join?</summary><p>No. Asking to join takes no payment. We confirm availability and payment terms with the traveler by email first.</p></details>
+        <details class="tc-faq" data-tc-join hidden><summary>What if a trip is full?</summary><p>You can ask to join the waitlist, and our team will be in touch if a place opens.</p></details>
         <details class="tc-faq"><summary>I already have an account. Where do I see my trips?</summary><p>Open your account and choose Group trips. Travelers see their requests there, and organizers see their trip pages, their recruits and the reward they agreed.</p></details>
       </div>
       <div class="tc-member"><span>Already a member?</span><button type="button" class="tc-fbtn tc-fbtn--ghost-dark" onclick="nav('account');return false;">Open my account</button></div>
@@ -29582,7 +29553,7 @@ var SS_META = {
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Greek Life Trips: Fraternity & Sorority Travel, Caribbean','Spring break, founders, probate and chapter trips to Jamaica and the Caribbean. Villas, transfers, yacht days and nightlife, planned for your whole crew.'],
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
-  'travel-club':['Travel Club: Join or Lead a Caribbean Group Trip | Sight Seers','Join an approved Sight Seers group trip, or apply to lead one with your own community. We approve every trip, manage the bookings and run the delivery.'],
+  'travel-club':['Travel Club: Lead a Caribbean Group Trip | Sight Seers','Apply to lead a Caribbean group trip with your own community. We approve every trip, manage the bookings and run the delivery.'],
   'trip':['Travel Club trip | Sight Seers Caribbean','An approved Sight Seers Travel Club trip. Ask to join and we confirm availability and payment terms before anything is charged.'],
   'flagship-programs':['Flagship Programs | Sight Seers Caribbean','Flagship programs: Seven Shores MBA Voyages, Leaders in Jamaica, Seven Shores Society, Shore Leave and Seven Shores Offsite. Open one to see how it works.'],
   'seven-shores-offsite':['Seven Shores Offsite: Corporate Retreats | Sight Seers','A company offsite in Jamaica or Barbados: a villa stay, a yacht day, culture, excursions, team building and a local business mixer.'],
@@ -57118,6 +57089,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert{margin-top:16px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:18px;align-items:center;padding:16px 20px}
 .tc-alert h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:21px;color:var(--tc-head)!important}
 .tc-alert p{margin:0;font-size:14px;line-height:1.55;color:var(--tc-mut)}
+#p-travel-club [data-tc-join][hidden]{display:none!important}
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
 /* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
 .tch{position:relative;padding:34px 0 90px;background:#fff}
@@ -57720,6 +57692,7 @@ body.theme-night #tcApplyModal .tla-alert{background:rgba(224,101,79,.14);color:
   /* ═════ the program page ═════ */
   function go(target){
     var el=$(target);
+    if(el&&el.hasAttribute('data-tc-join')&&el.hidden){target='lead';el=$(target);}
     if(!document.getElementById('p-travel-club').classList.contains('on')){
       nav('travel-club');
       setTimeout(function(){var e2=$(target);if(e2)e2.scrollIntoView({behavior:'auto',block:'start'});},180);
@@ -57765,6 +57738,7 @@ body.theme-night #tcApplyModal .tla-alert{background:rgba(224,101,79,.14);color:
       var list=(res&&res.trips)||[];
       dep.at=Date.now();
       g.classList.remove('tc-anim');
+      [].forEach.call(document.querySelectorAll('#p-travel-club [data-tc-join]'),function(e){e.hidden=!list.length;});
       g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tc-empty"><strong>No departures are open right now</strong><p>New trips are added as soon as we approve them. Leave your email below and we will tell you when one opens.</p></div>';
       if(list.length)reveal(g);
     }).catch(function(){
