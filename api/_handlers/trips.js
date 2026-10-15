@@ -20,6 +20,8 @@
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
  *   POST { action:'trip-group-link' }  signed in (the trip's leader): add the WhatsApp group or channel link; joiners are emailed it
  *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
+ *   POST { action:'automation-save' }  admin: switch the automatic emails (waitlist promotion, reminders, leader digest) on or off
+ *   POST { action:'automation-run' }   admin: preview what would send today ({dryRun:true}), or run the daily job now
  *
  * Nothing here invents a price, a seat count, a reward or a departure: a trip only exists when an admin enters it,
  * seats are only shown when an admin sets them, and an organizer's reward is private text an admin writes per trip.
@@ -33,6 +35,7 @@ const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
 const inboxLib = require('../_lib/inbox');
 const { geo } = require('../_lib/geo');
+const auto = require('../_lib/club-auto');
 
 const TRIPS = 'club-trips';
 const APPS = 'club-applications';
@@ -126,6 +129,11 @@ async function log(type, text, ref) {
 }
 function joinedPeople(list) {
   return list.filter(i => i.status !== 'cancelled' && i.status !== 'waitlist').reduce((n, i) => n + (i.partySize || 1), 0);
+}
+/* a place may have opened: let the automatic waitlist step run (it checks the owner's switch itself, and never breaks the request) */
+async function promoteSafe(tripId) {
+  if (!tripId) return [];
+  try { return await auto.promoteWaitlist(tripId); } catch (e) { console.error('club waitlist', e && e.message); return []; }
 }
 function activeJoiners(list) { return list.filter(i => i.status !== 'cancelled' && i.status !== 'waitlist'); }
 function hasGroupLink(t) { return !!(t && t.groupLink); }
@@ -381,7 +389,7 @@ module.exports = async function handler(req, res) {
           return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
             country: u.country || '', city: u.city || '', basedIn: latest ? (latest.city || '') : '', applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
         }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -711,7 +719,7 @@ module.exports = async function handler(req, res) {
       await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
-    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -731,6 +739,7 @@ module.exports = async function handler(req, res) {
           await log('trip-' + saved.status, saved.title + ' is now ' + saved.status, saved.id);
           await tripLiveMail(saved);
         }
+        if (existing && (existing.seatsTotal !== saved.seatsTotal || existing.status !== saved.status)) await promoteSafe(saved.id);
         return res.status(200).json({ ok: true, trip: saved });
       }
 
@@ -759,6 +768,7 @@ module.exports = async function handler(req, res) {
         if (!i) return res.status(404).json({ error: 'Request not found.' });
         await db.removeFromCollection(INTERESTS, i.id);
         await log('request-deleted', 'Request deleted: ' + i.name + (i.tripTitle ? ' on ' + i.tripTitle : ''), i.ref);
+        await promoteSafe(i.tripId);
         return res.status(200).json({ ok: true });
       }
 
@@ -771,6 +781,7 @@ module.exports = async function handler(req, res) {
         if ((status === 'open' || status === 'full') && !t.dateText && !t.startDate) return res.status(400).json({ error: 'Add the dates to the trip before it opens.' });
         const saved = await db.updateInCollection(TRIPS, t.id, { status });
         if (t.status !== status && ['open', 'full', 'closed'].indexOf(status) > -1) { await log('trip-' + status, saved.title + ' is now ' + status, saved.id); if (body.notify !== false) await tripLiveMail(saved); }
+        if (t.status !== status) await promoteSafe(t.id);
         return res.status(200).json({ ok: true, trip: saved });
       }
 
@@ -836,6 +847,18 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ ok: true, partners: publicPartners(saved), partnersRaw: saved });
       }
 
+      if (action === 'automation-save') {
+        const settings = await auto.saveSettings({ waitlist: body.waitlist, reminders: body.reminders, digest: body.digest }, admin.email || admin.id);
+        await log('automation', 'Automatic emails: waitlist ' + (settings.waitlist ? 'on' : 'off') + ', reminders ' + (settings.reminders ? 'on' : 'off') + ', leader digest ' + (settings.digest ? 'on' : 'off'), '');
+        return res.status(200).json({ ok: true, automation: settings });
+      }
+
+      if (action === 'automation-run') {
+        /* a preview lists what would go out today (even with a switch off); a real run follows the switches, as the daily job does */
+        const summary = await auto.runDaily({ dryRun: !!body.dryRun, force: !!body.dryRun });
+        return res.status(200).json({ ok: true, summary, automation: await auto.getSettings() });
+      }
+
       if (action === 'interest-update') {
         const interests = await db.getCollection(INTERESTS), i = interests.find(x => x.id === body.id);
         if (!i) return res.status(404).json({ error: 'Request not found.' });
@@ -845,6 +868,7 @@ module.exports = async function handler(req, res) {
         if (status !== i.status) {
           await log('traveler', i.name + ' is now ' + status + ' on ' + (i.tripTitle || 'a departure alert'), i.ref);
           if (body.notify !== false) { const tt = i.tripId ? (await db.getCollection(TRIPS)).find(x => x.id === i.tripId) : null; await interestStatusMails(saved, tt); }
+          await promoteSafe(i.tripId);
         }
         return res.status(200).json({ ok: true, interest: saved });
       }

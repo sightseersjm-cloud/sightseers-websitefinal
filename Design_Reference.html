@@ -57605,6 +57605,14 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #adminTravelClubTrips .tcA-kv span{color:#5b7083;font-weight:700}
 #adminTravelClubTrips .tcA-kv div{color:#12293d;white-space:pre-wrap;word-break:break-word}
 #adminTravelClubTrips textarea{min-height:70px}
+#adminTravelClubTrips .tcA-sw{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin:0 0 10px;background:#fff;border:1px solid rgba(6,58,99,.14);cursor:pointer}
+#adminTravelClubTrips .tcA-sw input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:#ef8731}
+#adminTravelClubTrips .tcA-sw b{display:block;font-size:14.5px;color:#062e4b}
+#adminTravelClubTrips .tcA-sw small{display:block;margin-top:3px;font-size:12.5px;line-height:1.55;color:#5c6f82}
+#adminTravelClubTrips .tcA-prev{margin:16px 0 0;padding:0;list-style:none;border:1px solid rgba(6,58,99,.12);background:#fff}
+#adminTravelClubTrips .tcA-prev li{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;font-size:13px;color:#33505f;border-top:1px solid rgba(6,58,99,.08)}
+#adminTravelClubTrips .tcA-prev li:first-child{border-top:0;background:#f4f8fb;font-weight:800;color:#062e4b;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px}
+#adminTravelClubTrips .tcA-prev li small{color:#7a8895}
 #adminTravelClubTrips .tcA-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 #adminTravelClubTrips .tcA-msg{min-height:20px;margin-top:10px;font-size:13px;font-weight:700;color:#5b7083}
 #adminTravelClubTrips .tcA-msg.ok{color:#2a8a47}#adminTravelClubTrips .tcA-msg.err{color:#c0392b}
@@ -58766,13 +58774,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var body=$('tcAdminBody');if(!body||!S.data)return;
     var d=S.data,newReq=((d.inbox||{}).counts||{}).new||0,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
     body.innerHTML='<div class="tcA-tabs" role="tablist">'+
-      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
-      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
+      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
+      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
   }
 
 
   /* ── overview: what needs you, every leader and their group, and what happened lately ── */
-  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset'};
+  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails'};
   function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(isNaN(m))return '';if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';return dt(iso);}
   function overview(){
     var d=S.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),
@@ -58857,6 +58865,28 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ── partner links: travel insurance and eSIM referrals shown on every member's Group trips tab ── */
+  /* ── automatic emails: the three switches, a preview of what would go out, and the last run ── */
+  function autoTab(){
+    var a=S.data.automation||{waitlist:true,reminders:false,digest:false},p=S.autoPreview,t=S.data.trips||[];
+    function sw(id,label,help,on){return '<label class="tcA-sw"><input type="checkbox" id="'+id+'"'+(on?' checked':'')+'><span><b>'+esc(label)+'</b><small>'+esc(help)+'</small></span></label>';}
+    var undated=t.filter(function(x){return (x.status==='open'||x.status==='full'||x.status==='closed')&&!/^\d{4}-\d{2}-\d{2}$/.test(x.startDate||'');});
+    var out='<p class="tcA-note">These emails go out by themselves, so nobody has to remember. The daily job runs at 8am Jamaica time. <b>Reminders and the leader digest start switched off</b>: use the preview to see exactly who would get what, then switch them on.</p>'+
+      '<div class="tcA-body">'+
+      sw('tcAU_w','Waitlist: tell people when a place opens','When a seat frees up (a cancellation, a deleted request, more seats, a trip reopened), the person who has waited longest moves up and is emailed. Our team still confirms and agrees payment with them.',a.waitlist)+
+      sw('tcAU_r','Countdown reminders to travelers','Confirmed and booked travelers get one email at 14 days and one at 3 days before departure, with the trip details and the group chat link. Needs a start date on the trip.',a.reminders)+
+      sw('tcAU_d','Monday digest to each leader','Every Monday each leader of a live trip gets: new people this week, total joined, progress to their invite goal, places left and days to departure, with a nudge to use their invite kit.',a.digest)+
+      '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcaautosave>Save switches</button><button type="button" class="admin-inline-btn alt" data-tcaautoprev>Preview what would send today</button><button type="button" class="admin-inline-btn alt" data-tcaautorun>Run today\'s emails now</button></div></div>';
+    if(undated.length)out+='<p class="tcA-note warn"><b>No start date, so no countdown reminders:</b> '+undated.map(function(x){return esc(x.title);}).join('; ')+'. Add the start date under Trips.</p>';
+    if(p){
+      var rows=[];
+      (p.waitlist||[]).forEach(function(x){rows.push('<li><span>Waitlist: '+esc(x.name)+' moves up on '+esc(x.trip)+'</span><small>'+esc(x.email)+'</small></li>');});
+      (p.reminders||[]).forEach(function(x){rows.push('<li><span>Reminder: '+esc(x.name)+' for '+esc(x.trip)+' ('+x.days+' day'+(x.days===1?'':'s')+' to go)</span><small>'+esc(x.email)+'</small></li>');});
+      (p.digests||[]).forEach(function(x){rows.push('<li><span>Digest: '+esc(x.trip)+' ('+x.newPeople+' new this week)'+(x.alreadySent?' - already sent this week':'')+'</span><small>'+esc(x.to)+'</small></li>');});
+      out+='<h4 class="tcA-h">Preview for today</h4>'+(rows.length?'<ul class="tcA-prev"><li><span>What would send</span><small>'+rows.length+' email'+(rows.length===1?'':'s')+'</small></li>'+rows.join('')+'</ul><p class="tcA-note" style="margin-top:10px">Nothing was sent. The preview shows everything as if all three switches were on.</p>':'<p class="tcA-note">Nothing would be sent today.</p>');
+    }
+    if(a.lastRun)out+='<p class="tcA-note">Last run: '+esc(ago(a.lastRun.at))+' - '+(a.lastRun.counts?a.lastRun.counts.waitlist+' waitlist, '+a.lastRun.counts.reminders+' reminders, '+a.lastRun.counts.digests+' digests':'')+'.</p>';
+    return out;
+  }
   function links(){
     var raw=(S.data&&S.data.partnersRaw)||{},ins=raw.insurance||{},es=raw.esim||{};
     return '<p class="tcA-note">These two cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'+
@@ -59017,6 +59047,25 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       }).catch(function(err){rv.disabled=false;say(err.message,'err');});
       return;
     }
+    var asv=e.target.closest('[data-tcaautosave]');
+    if(asv){
+      asv.disabled=true;say('Saving...','');
+      call('automation-save',{waitlist:$('tcAU_w').checked,reminders:$('tcAU_r').checked,digest:$('tcAU_d').checked}).then(function(res){S.data.automation=res.automation;S.autoPreview=null;render();say('Saved. '+(res.automation.reminders||res.automation.digest?'The daily job will send what is switched on.':'Only the waitlist email will go out by itself.'),'ok');}).catch(function(err){asv.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var apv=e.target.closest('[data-tcaautoprev]');
+    if(apv){
+      apv.disabled=true;say('Checking...','');
+      call('automation-run',{dryRun:true}).then(function(res){S.autoPreview=res.summary;S.data.automation=res.automation;render();say('Preview ready. Nothing was sent.','ok');}).catch(function(err){apv.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var arn=e.target.closest('[data-tcaautorun]');
+    if(arn){
+      if(!confirm('Run the daily emails now?\n\nThis sends today\'s real emails for the switches that are on, exactly as the daily job would. Use Preview first to see who gets what.'))return;
+      arn.disabled=true;say('Sending...','');
+      call('automation-run',{dryRun:false}).then(function(res){S.autoPreview=null;S.data.automation=res.automation;render();var c=res.summary.counts||{};say('Done: '+(c.waitlist||0)+' waitlist, '+(c.reminders||0)+' reminders, '+(c.digests||0)+' digests sent.','ok');}).catch(function(err){arn.disabled=false;say(err.message,'err');});
+      return;
+    }
     var pl=e.target.closest('[data-tcalinks]');
     if(pl){
       pl.disabled=true;say('Saving...','');
@@ -59065,7 +59114,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     window.nav=function(id){
       var r=_nav.apply(this,arguments);
       if(id==='club-admin'){
-        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links'].indexOf(hm[1])>-1)S.tab=hm[1];
+        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links','auto'].indexOf(hm[1])>-1)S.tab=hm[1];
         try{var rb=document.querySelector('meta[name="robots"]');if(!rb){rb=document.createElement('meta');rb.name='robots';document.head.appendChild(rb);}rb.content='noindex,nofollow';}catch(e){}
         try{history.replaceState(history.state,'','/club-admin#tab='+S.tab);}catch(x){}
         setTimeout(function(){load(true);},60);

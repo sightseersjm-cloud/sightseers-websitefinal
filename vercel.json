@@ -2,6 +2,12 @@
   "version": 2,
   "buildCommand": "node build.js",
   "outputDirectory": "public",
+  "crons": [
+    {
+      "path": "/api/club-cron",
+      "schedule": "0 13 * * *"
+    }
+  ],
   "installCommand": "npm install",
   "redirects": [
     {
