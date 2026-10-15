@@ -57027,6 +57027,9 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-chatbtn{position:relative;overflow:hidden;isolation:isolate}
 #p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
+/* dashboard cards: a soft gradient and a glossy highlight, never a flat fill */
+#p-account .ac-stat,#p-account .ac-action,#p-account .ac-saved,#p-account .ac-pick,#p-account .ac-app,#p-account .ac-otrip,#p-account .ac-ref,#p-account .ac-grow,#p-account .ac-otrav li,#p-account .ac-ostat{background:linear-gradient(160deg,#ffffff 0%,#f3f8fc 100%);box-shadow:inset 0 1px 0 #fff,var(--ac-shadow,0 10px 26px rgba(6,58,99,.08))}
+body.theme-night #p-account .ac-stat,body.theme-night #p-account .ac-action,body.theme-night #p-account .ac-saved,body.theme-night #p-account .ac-pick,body.theme-night #p-account .ac-app,body.theme-night #p-account .ac-otrip,body.theme-night #p-account .ac-ref,body.theme-night #p-account .ac-grow,body.theme-night #p-account .ac-otrav li,body.theme-night #p-account .ac-ostat{background:linear-gradient(160deg,#103a5e 0%,#0a2a45 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 12px 28px rgba(0,0,0,.35)}
 /* dashboard: smaller, sleeker call-to-action buttons (Start planning and the like) */
 #p-account .ac-cta{height:36px;padding:0 18px;font-size:12.5px!important;letter-spacing:.02em;box-shadow:0 8px 18px rgba(239,135,49,.3)}
 #p-account .ac-empty .ac-cta{margin-top:8px}
