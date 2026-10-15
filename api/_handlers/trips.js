@@ -20,6 +20,9 @@
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
  *   POST { action:'trip-group-link' }  signed in (the trip's leader): add the WhatsApp group or channel link; joiners are emailed it
  *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
+ *   POST { action:'trip-update-post' } signed in (the trip's leader, or the owner): post an update on a trip; everyone who joined is emailed and sees it on their dashboard
+ *   POST { action:'trip-update-delete' } signed in: take an update down (its author, or the owner)
+ *   POST { action:'advisory-post' }    admin: preview ({dryRun:true}) or send an advisory to every upcoming trip set to a country
  *   POST { action:'automation-save' }  admin: switch the automatic emails (waitlist promotion, reminders, leader digest) on or off
  *   POST { action:'automation-run' }   admin: preview what would send today ({dryRun:true}), or run the daily job now
  *
@@ -36,6 +39,7 @@ const trip = require('../_lib/trip');
 const inboxLib = require('../_lib/inbox');
 const { geo } = require('../_lib/geo');
 const auto = require('../_lib/club-auto');
+const updates = require('../_lib/club-updates');
 
 const TRIPS = 'club-trips';
 const APPS = 'club-applications';
@@ -389,7 +393,7 @@ module.exports = async function handler(req, res) {
           return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
             country: u.country || '', city: u.city || '', basedIn: latest ? (latest.city || '') : '', applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
         }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), updates: (await db.getCollection('club-updates')).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 150), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -403,6 +407,8 @@ module.exports = async function handler(req, res) {
             communityType: a.communityType || '', city: a.city || '', link: a.link || '', audienceSize: a.audienceSize || '', channels: a.channels || [], experience: a.experience || '',
             inviteCount: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '', styles: a.styles || [], timing: a.timing || '', message: a.message || '', notes: a.notes || ''
           }));
+        const allUpdates = await db.getCollection('club-updates');
+        const updatesOf = id => allUpdates.filter(u => u.tripId === id).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 20).map(updates.publicUpdate);
         const myTrips = trips.filter(t => ownsTrip(t, user)).map(t => {
           const list = interests.filter(i => i.tripId === t.id);
           return {
@@ -410,7 +416,7 @@ module.exports = async function handler(req, res) {
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
-            groupLink: t.groupLink || '', joined: joinedPeople(list),
+            groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
@@ -421,7 +427,8 @@ module.exports = async function handler(req, res) {
             const t = trips.find(x => x.id === i.tripId);
             const open = i.status !== 'cancelled' && i.status !== 'waitlist';
             return { guests: i.guests || [], ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
-              leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact };
+              leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact,
+              updates: i.tripId && ['new', 'contacted', 'confirmed', 'booked'].indexOf(i.status) > -1 ? updatesOf(i.tripId).slice(0, 8) : [] };
           });
         /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application and new website requests */
         const notices = [];
@@ -621,13 +628,36 @@ module.exports = async function handler(req, res) {
       if (ints.some(i => ledIds.indexOf(i.tripId) > -1 && i.status === 'booked')) return res.status(409).json({ error: 'This trip has booked travelers, so it cannot be deleted here. Please contact Sight Seers and we will sort it out together.' });
       const gone = ints.filter(i => ledIds.indexOf(i.tripId) > -1);
       for (const i of gone) await db.removeFromCollection(INTERESTS, i.id);
-      for (const t of led) await db.removeFromCollection(TRIPS, t.id);
+      for (const t of led) { await db.removeFromCollection(TRIPS, t.id); await updates.removeForTrip(t.id); }
       if (app) await db.removeFromCollection(APPS, app.id);
       for (const t of led) await tripRemovedMails(t, gone.filter(i => i.tripId === t.id && i.status !== 'cancelled' && i.email), user);
       if (!led.length && app) await safe('application withdrawn', adminMail('Application withdrawn: ' + app.communityName, 'A leader withdrew their application', `<p><b>${trip.esc(app.name)}</b> (${trip.esc(app.communityName)}) deleted their application ${trip.esc(app.ref)} from their dashboard.</p>`));
       if (led.length) await log('trip-deleted', 'Trip deleted by its leader: ' + led.map(t => t.title).join(', ') + (gone.length ? ' (with ' + gone.length + ' request' + (gone.length === 1 ? '' : 's') + ')' : '') + (app ? ' and the application it came from' : ''), ledIds[0]);
       else await log('application-deleted', 'Application deleted by its leader: ' + app.communityName + ' (' + app.name + ')', app.ref);
       return res.status(200).json({ ok: true, tripsRemoved: led.length, applicationRemoved: !!app });
+    }
+
+    /* ===== signed in: post an update on a trip (its leader, or the owner), or take one down ===== */
+    if (action === 'trip-update-post' || action === 'trip-update-delete') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const isOwner = user.role === 'admin';
+      if (action === 'trip-update-post') {
+        if (!allow('update:' + user.id, 12, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of updates in an hour. Please wait a little before posting another.' });
+        const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.tripId, 80));
+        if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
+        if (t.status === 'draft') return res.status(400).json({ error: 'The trip is not live yet, so nobody has joined to send an update to.' });
+        const r = await updates.postTripUpdate(t, user, { title: body.title, body: body.body, notify: body.notify });
+        if (r.error) return res.status(400).json({ error: r.error });
+        return res.status(200).json({ ok: true, update: updates.publicUpdate(r.update), emailed: r.update.emailed });
+      }
+      const u = (await db.getCollection('club-updates')).find(x => x.id === str(body.id, 80));
+      if (!u) return res.status(404).json({ error: 'We could not find that update.' });
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === u.tripId);
+      const mine = u.authorRole === 'leader' && (u.authorId === user.id || (t && ownsTrip(t, user)));
+      if (!isOwner && !mine) return res.status(404).json({ error: 'We could not find that update.' });
+      await db.removeFromCollection('club-updates', u.id);
+      return res.status(200).json({ ok: true });
     }
 
     /* ===== signed in: the leader adds their WhatsApp group or channel link; joiners are emailed it ===== */
@@ -713,13 +743,13 @@ module.exports = async function handler(req, res) {
       const own = ints.filter(i => i.email === em || (i.userId && i.userId === u.id));
       const reqIds = new Set(own.filter(i => i.status !== 'booked').concat(ints.filter(i => ledIds.indexOf(i.tripId) > -1)).map(i => i.id));
       for (const id of reqIds) await db.removeFromCollection(INTERESTS, id);
-      for (const t of led) await db.removeFromCollection(TRIPS, t.id);
+      for (const t of led) { await db.removeFromCollection(TRIPS, t.id); await updates.removeForTrip(t.id); }
       for (const a of theirApps) await db.removeFromCollection(APPS, a.id);
       const keptBooked = own.filter(i => i.status === 'booked').length;
       await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
-    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run') {
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -796,6 +826,7 @@ module.exports = async function handler(req, res) {
         const linkedApps = (await db.getCollection(APPS)).filter(a => a.tripId === t.id || (t.applicationId && a.id === t.applicationId));
         for (const a of linkedApps) await db.removeFromCollection(APPS, a.id);
         await db.removeFromCollection(TRIPS, t.id);
+        await updates.removeForTrip(t.id);
         await log('trip-deleted', 'Trip deleted: ' + t.title + (theirs.length ? ' (with ' + theirs.length + ' request' + (theirs.length === 1 ? '' : 's') + ')' : '') + (linkedApps.length ? ' and the leader application it came from' : ''), t.id);
         return res.status(200).json({ ok: true, applicationsRemoved: linkedApps.length });
       }
@@ -845,6 +876,13 @@ module.exports = async function handler(req, res) {
         const cur = await getPartnersDoc();
         const saved = cur ? await db.updateInCollection(SETTINGS, 'partners', doc) : await db.addToCollection(SETTINGS, Object.assign({ createdAt: new Date().toISOString() }, doc));
         return res.status(200).json({ ok: true, partners: publicPartners(saved), partnersRaw: saved });
+      }
+
+      if (action === 'advisory-post') {
+        /* the preview names every trip and person an advisory would reach; sending is a second, deliberate call */
+        const r = await updates.postAdvisory(admin, { country: body.country, title: body.title, body: body.body, dryRun: !!body.dryRun, notify: body.notify });
+        if (r.error) return res.status(400).json({ error: r.error });
+        return res.status(200).json(Object.assign({ ok: true }, r));
       }
 
       if (action === 'automation-save') {

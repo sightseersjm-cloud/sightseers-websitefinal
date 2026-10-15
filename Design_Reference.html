@@ -57524,6 +57524,27 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-kitqr .ac-sbtn{margin-top:10px;height:38px;width:100%}
 #p-account .ac-kitqr small{display:block;margin-top:8px;font-size:12px;color:var(--ac-mut)}
 @media(max-width:720px){#p-account .ac-kitbody{grid-template-columns:1fr}#p-account .ac-kitqr{order:-1}}
+#p-account .ac-upds{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+#p-account .ac-upds li{position:relative;padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
+#p-account .ac-upds li.is-advisory{border-left-color:var(--ac-o)}
+#p-account .ac-uhead{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;padding-right:62px}
+#p-account .ac-uhead b{font-size:14.5px;color:var(--ac-head)}
+#p-account .ac-uhead small{font-size:12px;color:var(--ac-mut)}
+#p-account .ac-upds p{margin:6px 0 0;font-size:13.5px;line-height:1.6;color:var(--ac-ink);white-space:pre-wrap}
+#p-account .ac-upds .ac-updel{position:absolute;top:8px;right:10px;padding:2px 6px;border:0;background:none;font:700 12px 'Raleway',sans-serif;color:#c0392b;cursor:pointer;text-decoration:underline}
+#p-account .ac-greqitem{display:flex;flex-direction:column}
+#p-account .ac-greqitem>.ac-upds{margin:-1px 0 0;padding:0 0 0 18px}
+#p-account .ac-updbox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-o)}
+#p-account .ac-updbox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-updbox>summary::-webkit-details-marker{display:none}
+#p-account .ac-updbox>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-updbox>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-updbox[open]>summary::after{content:'\2212'}
+#p-account .ac-updform{display:flex;flex-direction:column;gap:8px;padding:2px 16px 16px}
+#p-account .ac-updform input[type=text],#p-account .ac-updform textarea{width:100%;padding:10px 12px;font:500 13.5px/1.55 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0}
+#p-account .ac-updform textarea{min-height:96px;resize:vertical}
+#p-account .ac-updform label.ac-updchk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ac-mut)}
+#p-account .ac-updbox .ac-upds{padding:0 16px 16px;margin:0}
 #p-account .ac-ostats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
 #p-account .ac-ostat{padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line)}
 #p-account .ac-ostat b{display:block;font-family:'Playfair Display',serif;font-size:26px;line-height:1.05;color:var(--ac-head)}
@@ -57613,6 +57634,12 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #adminTravelClubTrips .tcA-prev li{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;font-size:13px;color:#33505f;border-top:1px solid rgba(6,58,99,.08)}
 #adminTravelClubTrips .tcA-prev li:first-child{border-top:0;background:#f4f8fb;font-weight:800;color:#062e4b;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px}
 #adminTravelClubTrips .tcA-prev li small{color:#7a8895}
+#adminTravelClubTrips .tcA-ulist{list-style:none;margin:10px 0 0;padding:0;border:1px solid rgba(6,58,99,.12);background:#fff}
+#adminTravelClubTrips .tcA-ulist li{padding:12px 14px;border-top:1px solid rgba(6,58,99,.08);font-size:13px;color:#33505f}
+#adminTravelClubTrips .tcA-ulist li:first-child{border-top:0}
+#adminTravelClubTrips .tcA-ulist b{display:block;color:#062e4b;font-size:14px}
+#adminTravelClubTrips .tcA-ulist small{display:block;margin-top:2px;color:#7a8895}
+#adminTravelClubTrips .tcA-ulist p{margin:6px 0 0;white-space:pre-wrap}
 #adminTravelClubTrips .tcA-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 #adminTravelClubTrips .tcA-msg{min-height:20px;margin-top:10px;font-size:13px;font-weight:700;color:#5b7083}
 #adminTravelClubTrips .tcA-msg.ok{color:#2a8a47}#adminTravelClubTrips .tcA-msg.err{color:#c0392b}
@@ -58370,7 +58397,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<div class="ac-greq">'+list.map(function(i){
       var title=i.tripSlug?'<a href="/trip/'+esc(i.tripSlug)+'" data-trip="'+esc(i.tripSlug)+'">'+esc(i.tripTitle||'Travel Club trip')+'</a>':'Travel Club departure alert';
       var chat=i.groupLink?'<a class="ac-chatbtn" href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Join the group chat</a>':(i.tripSlug&&i.status!=='cancelled'&&i.status!=='waitlist'?'<span class="ac-chatsoon">Group chat link coming from '+esc(i.leaderName||'your leader')+'</span>':'');
-      return '<div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>';
+      return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+'</div>';
     }).join('')+'</div>';
   }
   function goalBar(t){
@@ -58385,6 +58412,20 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<form class="ac-ogroup" data-grp-form data-grp-id="'+esc(t.id)+'" data-travel-club-bound="1" novalidate><label for="acGrp'+esc(t.id)+'">Your WhatsApp group or channel link</label>'+
       '<div class="ac-ogrow"><input id="acGrp'+esc(t.id)+'" type="url" inputmode="url" placeholder="https://chat.whatsapp.com/..." value="'+esc(t.groupLink||'')+'"><button type="submit" class="ac-sbtn">'+(t.groupLink?'Update link':'Save link')+'</button></div>'+
       '<small>Create the group or channel in WhatsApp, copy its invite link and paste it here. Everyone who joined is emailed the link and sees it on their dashboard, and new travelers see it straight away.</small><span class="ac-invmsg" role="status"></span></form>';
+  }
+  /* trip updates: a leader posts to everyone who joined; travelers read them under their request */
+  function updItem(u,del){
+    return '<li class="'+(u.kind==='advisory'?'is-advisory':'')+'" data-upd="'+esc(u.id)+'"><div class="ac-uhead"><b>'+esc(u.title)+'</b><small>'+(u.kind==='advisory'?'Travel update &middot; ':'')+esc(u.authorName)+' &middot; '+esc(dt(u.createdAt))+'</small></div><p>'+esc(u.body)+'</p>'+(del&&u.authorRole==='leader'?'<button type="button" class="ac-updel" data-upd-del="'+esc(u.id)+'">Delete</button>':'')+'</li>';
+  }
+  function updList(list,del){return list&&list.length?'<ul class="ac-upds">'+list.map(function(u){return updItem(u,del);}).join('')+'</ul>':'';}
+  function updBox(t,idx){
+    var n=(t.travelers||[]).filter(function(x){return x.status!=='waitlist';}).length,ups=t.updates||[];
+    return '<details class="ac-updbox" data-upd-box><summary><span>Trip updates<small>'+(ups.length?ups.length+' posted':'tell everyone who joined')+'</small></span></summary>'+
+      '<form class="ac-updform" data-upd-form data-upd-trip="'+esc(t.id)+'" data-travel-club-bound="1" novalidate><input type="text" maxlength="120" placeholder="Title, e.g. Meet at the lobby at 7am" aria-label="Update title" data-upd-title>'+
+      '<textarea maxlength="3000" placeholder="Write the update. Everyone who joined sees it on their dashboard." aria-label="Update" data-upd-body></textarea>'+
+      '<label class="ac-updchk"><input type="checkbox" checked data-upd-notify> Also email it to everyone who joined'+(n?' ('+n+' '+(n===1?'person':'people')+')':'')+'</label>'+
+      '<div class="ac-kitbtns"><button type="submit" class="ac-sbtn">Post update</button><span class="ac-invmsg" role="status"></span></div></form>'+
+      '<ul class="ac-upds" data-upd-list'+(ups.length?'':' hidden')+'>'+ups.map(function(u){return updItem(u,true);}).join('')+'</ul></details>';
   }
   /* invite kit: a ready message, WhatsApp share, QR code and a share card, all built from the trip link */
   function inviteKit(idx){
@@ -58404,7 +58445,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         :'<p class="ac-onote"><b>Your trip page is not live yet.</b> Sight Seers will open it once the package, the dates and your reward are agreed.</p>')+
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
-      groupForm(t)+
+      groupForm(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
@@ -58572,6 +58613,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     document.addEventListener('ss-account-updated',function(){grp.at=0;if(!gp.hidden)fillGroups(true);});
     gp.addEventListener('toggle',function(e){var k=e.target;if(!k.matches||!k.matches('[data-kit]')||!k.open)return;var b=kitBox(k);kitSync(b);kitQR(b);},true);
     gp.addEventListener('click',function(e){
+      var ud=e.target.closest('[data-upd-del]');
+      if(ud){
+        if(!confirm('Delete this update?\n\nAnyone who was emailed keeps their copy, but it disappears from the dashboards.'))return;
+        ud.disabled=true;
+        api('trips','POST',{action:'trip-update-delete',id:ud.getAttribute('data-upd-del')}).then(function(){var li=ud.closest('li');if(li)li.remove();}).catch(function(){ud.disabled=false;});
+        return;
+      }
       var kc=e.target.closest('[data-kit-copy]');
       if(kc){var kb=kitBox(kc);copyText(kb.querySelector('[data-kit-msg]').value,kc,'Copied');return;}
       var kw=e.target.closest('[data-kit-wa]');
@@ -58612,6 +58660,20 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       if(cn){var iv2=cn.closest('.ac-invite');iv2.querySelector('[data-inv-form]').hidden=true;iv2.querySelector('[data-inv-edit]').hidden=false;iv2.querySelector('.ac-invmsg').textContent='';return;}
     });
     gp.addEventListener('submit',function(e){
+      var uf=e.target.closest('[data-upd-form]');
+      if(uf){
+        e.preventDefault();
+        var ut=uf.querySelector('[data-upd-title]'),ub=uf.querySelector('[data-upd-body]'),um=uf.querySelector('.ac-invmsg'),us=uf.querySelector('[type=submit]');
+        um.className='ac-invmsg';
+        if((ut.value||'').trim().length<3){um.className='ac-invmsg err';um.textContent='Give the update a short title.';ut.focus();return;}
+        if((ub.value||'').trim().length<5){um.className='ac-invmsg err';um.textContent='Write the update.';ub.focus();return;}
+        us.disabled=true;um.textContent='Posting...';
+        api('trips','POST',{action:'trip-update-post',tripId:uf.getAttribute('data-upd-trip'),title:ut.value,body:ub.value,notify:uf.querySelector('[data-upd-notify]').checked}).then(function(r){
+          us.disabled=false;var ul=uf.parentNode.querySelector('[data-upd-list]');ul.hidden=false;ul.insertAdjacentHTML('afterbegin',updItem(r.update,true));
+          ut.value='';ub.value='';um.className='ac-invmsg ok';um.textContent=r.emailed?'Posted. Emailed '+r.emailed+' '+(r.emailed===1?'person':'people')+'.':'Posted. It shows on their dashboards.';
+        }).catch(function(err){us.disabled=false;um.className='ac-invmsg err';um.textContent=err.message||'We could not post that. Please try again.';});
+        return;
+      }
       var gf=e.target.closest('[data-grp-form]');
       if(gf){
         e.preventDefault();
@@ -58774,13 +58836,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var body=$('tcAdminBody');if(!body||!S.data)return;
     var d=S.data,newReq=((d.inbox||{}).counts||{}).new||0,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
     body.innerHTML='<div class="tcA-tabs" role="tablist">'+
-      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
-      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
+      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['updates','Updates'],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
+      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():S.tab==='updates'?updatesTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
   }
 
 
   /* ── overview: what needs you, every leader and their group, and what happened lately ── */
-  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails'};
+  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails',update:'Trip update',advisory:'Advisory'};
   function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(isNaN(m))return '';if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';return dt(iso);}
   function overview(){
     var d=S.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),
@@ -58865,6 +58927,34 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ── partner links: travel insurance and eSIM referrals shown on every member's Group trips tab ── */
+  /* ── updates: an advisory to every upcoming trip in a country, a note on one trip, and what has been posted ── */
+  function updatesTab(){
+    var d=S.data,all=d.trips||[],live=all.filter(function(t){return t.status==='open'||t.status==='full'||t.status==='closed';}),F=S.advForm||{},P=S.adv&&S.adv.preview,T=S.updForm||{};
+    var countries=[];live.forEach(function(t){if(t.country&&countries.indexOf(t.country)<0)countries.push(t.country);});
+    var nocountry=live.filter(function(t){return !t.country;});
+    var out='<p class="tcA-note">Updates belong to <b>one trip</b>: the leader or you post them, and everyone who joined sees them on their dashboard and gets an email. An <b>advisory</b> is the same message sent to every upcoming trip set to one country, once per person, so you can warn travelers about something that affects a whole destination.</p>';
+    out+='<h4 class="tcA-h">Send an advisory to a country</h4><div class="tcA-body"><div class="admin-package-grid">'+
+      '<div class="field-col"><label for="tcAV_country">Country</label><input type="text" id="tcAV_country" list="tcAV_countries" value="'+esc(F.country||'')+'" placeholder="e.g. Jamaica"><datalist id="tcAV_countries">'+countries.map(function(c){return '<option value="'+esc(c)+'">';}).join('')+'</datalist><small>Matches the country set on each trip under Trips.</small></div>'+
+      fld('Title','tcAV_title',F.title||'',{ph:'e.g. Entry form now required before you fly'})+
+      fld('Message','tcAV_body',F.body||'',{type:'textarea',ph:'What changed, what travelers need to do, and where to read more.'})+
+      '</div><div class="tcA-actions"><button type="button" class="admin-inline-btn alt" data-tcaadvprev>Preview who would get it</button>'+(P&&S.adv.key===[F.country,F.title,F.body].join('|')?'<button type="button" class="admin-inline-btn" data-tcaadvsend>Send to '+P.people.length+' '+(P.people.length===1?'person':'people')+'</button>':'')+'</div>';
+    if(P){
+      out+='<h4 class="tcA-h" style="margin-top:18px">It would reach</h4><ul class="tcA-ulist">'+P.trips.map(function(t){return '<li><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'')+'</small></li>';}).join('')+'</ul>'+
+        '<p class="tcA-note" style="margin-top:10px">'+P.people.length+' '+(P.people.length===1?'person':'people')+' (travelers and leaders, one email each): '+esc(P.people.map(function(p){return p.name||p.email;}).slice(0,12).join(', '))+(P.people.length>12?' and '+(P.people.length-12)+' more':'')+'. Nothing has been sent.</p>';
+    }
+    out+='</div>';
+    if(nocountry.length)out+='<p class="tcA-note warn"><b>No country set, so an advisory cannot reach:</b> '+nocountry.map(function(t){return esc(t.title);}).join('; ')+'. Set the country under Trips.</p>';
+    out+='<h4 class="tcA-h">Post an update on one trip</h4><div class="tcA-body"><div class="admin-package-grid">'+
+      '<div class="field-col"><label for="tcAU2_trip">Trip</label><select id="tcAU2_trip">'+live.map(function(t){return '<option value="'+esc(t.id)+'"'+(T.trip===t.id?' selected':'')+'>'+esc(t.title)+'</option>';}).join('')+'</select></div>'+
+      fld('Title','tcAU2_title',T.title||'',{})+fld('Message','tcAU2_body',T.body||'',{type:'textarea'})+
+      '<div class="field-col"><label style="display:flex;gap:8px;align-items:center;text-transform:none;letter-spacing:0"><input type="checkbox" id="tcAU2_notify" checked> Email it to everyone who joined</label></div></div>'+
+      '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcaupdpost'+(live.length?'':' disabled')+'>Post update</button></div></div>';
+    var ups=(d.updates||[]);
+    out+='<h4 class="tcA-h">Posted so far ('+ups.length+')</h4>'+(ups.length?'<ul class="tcA-ulist">'+ups.map(function(u){
+      return '<li><b>'+esc(u.title)+'</b><small>'+(u.kind==='advisory'?'Advisory for '+esc(u.country)+' &middot; ':'')+esc(u.tripTitle||'')+' &middot; '+esc(u.authorName)+' &middot; '+esc(dt(u.createdAt))+(u.emailed?' &middot; emailed '+u.emailed:'')+'</small><p>'+esc(u.body)+'</p><div class="tcA-actions" style="margin-top:6px"><button type="button" class="tcA-del" data-tcaupddel="'+esc(u.id)+'">Delete</button></div></li>';
+    }).join('')+'</ul>':'<p class="tcA-note">Nothing posted yet.</p>');
+    return out;
+  }
   /* ── automatic emails: the three switches, a preview of what would go out, and the last run ── */
   function autoTab(){
     var a=S.data.automation||{waitlist:true,reminders:false,digest:false},p=S.autoPreview,t=S.data.trips||[];
@@ -59047,6 +59137,35 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       }).catch(function(err){rv.disabled=false;say(err.message,'err');});
       return;
     }
+    var avp=e.target.closest('[data-tcaadvprev]');
+    if(avp){
+      var AF={country:$('tcAV_country').value,title:$('tcAV_title').value,body:$('tcAV_body').value};S.advForm=AF;
+      avp.disabled=true;say('Checking...','');
+      call('advisory-post',{dryRun:true,country:AF.country,title:AF.title,body:AF.body}).then(function(res){S.adv={preview:res.preview,key:[AF.country,AF.title,AF.body].join('|')};render();say('Preview ready. Nothing was sent.','ok');}).catch(function(err){avp.disabled=false;S.adv=null;render();say(err.message,'err');});
+      return;
+    }
+    var avs=e.target.closest('[data-tcaadvsend]');
+    if(avs){
+      var SF={country:$('tcAV_country').value,title:$('tcAV_title').value,body:$('tcAV_body').value};
+      if(!S.adv||S.adv.key!==[SF.country,SF.title,SF.body].join('|')){S.adv=null;S.advForm=SF;render();say('You changed the advisory after the preview. Preview it again so you send exactly what you checked.','err');return;}
+      if(!confirm('Send this advisory for '+SF.country+'?\n\n'+S.adv.preview.people.length+' people on '+S.adv.preview.trips.length+' trip'+(S.adv.preview.trips.length===1?'':'s')+' will get it by email and on their dashboards. This cannot be taken back.'))return;
+      avs.disabled=true;say('Sending...','');
+      call('advisory-post',{country:SF.country,title:SF.title,body:SF.body}).then(function(res){S.adv=null;S.advForm=null;S.data=null;load(true);setTimeout(function(){say('Sent to '+res.sent.people+' '+(res.sent.people===1?'person':'people')+' across '+res.sent.trips+' trip'+(res.sent.trips===1?'':'s')+'.','ok');},500);}).catch(function(err){avs.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var upp=e.target.closest('[data-tcaupdpost]');
+    if(upp){
+      var UF={trip:$('tcAU2_trip').value,title:$('tcAU2_title').value,body:$('tcAU2_body').value};S.updForm=UF;
+      upp.disabled=true;say('Posting...','');
+      call('trip-update-post',{tripId:UF.trip,title:UF.title,body:UF.body,notify:$('tcAU2_notify').checked}).then(function(res){S.updForm=null;S.data=null;load(true);setTimeout(function(){say('Posted'+(res.emailed?' and emailed to '+res.emailed+' '+(res.emailed===1?'person':'people'):'')+'.','ok');},500);}).catch(function(err){upp.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var upd=e.target.closest('[data-tcaupddel]');
+    if(upd){
+      if(!confirm('Delete this update?\n\nIt disappears from the dashboards. Anyone who was emailed keeps their copy.'))return;
+      call('trip-update-delete',{id:upd.getAttribute('data-tcaupddel')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Update deleted.','ok');},400);}).catch(function(err){say(err.message,'err');});
+      return;
+    }
     var asv=e.target.closest('[data-tcaautosave]');
     if(asv){
       asv.disabled=true;say('Saving...','');
@@ -59114,7 +59233,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     window.nav=function(id){
       var r=_nav.apply(this,arguments);
       if(id==='club-admin'){
-        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links','auto'].indexOf(hm[1])>-1)S.tab=hm[1];
+        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links','auto','updates'].indexOf(hm[1])>-1)S.tab=hm[1];
         try{var rb=document.querySelector('meta[name="robots"]');if(!rb){rb=document.createElement('meta');rb.name='robots';document.head.appendChild(rb);}rb.content='noindex,nofollow';}catch(e){}
         try{history.replaceState(history.state,'','/club-admin#tab='+S.tab);}catch(x){}
         setTimeout(function(){load(true);},60);

@@ -206,4 +206,4 @@ async function runDaily(opts) {
   return summary;
 }
 
-module.exports = { DEFAULTS, MILESTONES, getSettings, saveSettings, promoteWaitlist, runDaily, daysUntil, milestoneFor, isoWeek, seatsFree };
+module.exports = { helpers: { mail, button, first, safe, log, SITE }, DEFAULTS, MILESTONES, getSettings, saveSettings, promoteWaitlist, runDaily, daysUntil, milestoneFor, isoWeek, seatsFree };
