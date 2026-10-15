@@ -24414,9 +24414,9 @@ vtSessionAction=function(el,type){
                 <span class="ac-eyebrow">The Travel Club</span>
                 <h2 class="ac-h2">Lead a trip. Keep it all in one place.</h2>
                 <ul class="ac-perks">
-                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-users" aria-hidden="true"></i></span><div><h3>Lead a trip</h3><p>Bring your community. We approve every trip and run the bookings and delivery.</p></div></li>
-                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-star" aria-hidden="true"></i></span><div><h3>Earn Travel Points</h3><p>100 points to start, and more on every booking.</p></div></li>
-                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-compass" aria-hidden="true"></i></span><div><h3>Track everything</h3><p>Requests, bookings and your group chat on one dashboard.</p></div></li>
+                  <li class="ac-perk"><span class="ac-perk-i" aria-hidden="true">1</span><div><h3>Lead a trip</h3><p>Bring your community. We approve every trip and run the bookings and delivery.</p></div></li>
+                  <li class="ac-perk"><span class="ac-perk-i" aria-hidden="true">2</span><div><h3>Earn Travel Points</h3><p>100 points to start, and more on every booking.</p></div></li>
+                  <li class="ac-perk"><span class="ac-perk-i" aria-hidden="true">3</span><div><h3>Track everything</h3><p>Requests, bookings and your group chat on one dashboard.</p></div></li>
                 </ul>
                 <button type="button" class="ac-perk-cta" data-tc-apply>Apply to lead a trip <span aria-hidden="true">&rarr;</span></button>
               </div>
@@ -24471,10 +24471,10 @@ vtSessionAction=function(el,type){
                   </div>
                 </form>
                 <div class="ac-social" id="acSocial" hidden>
-                  <div class="ac-or"><span>or continue with</span></div>
+                  <div class="ac-or"><span>or</span></div>
                   <div class="ac-socialrow">
-                    <button type="button" class="ac-soc" data-social="google" hidden><svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span>Google</span></button>
-                    <button type="button" class="ac-soc" data-social="microsoft" hidden><svg viewBox="0 0 23 23" width="19" height="19" aria-hidden="true"><path fill="#f25022" d="M1 1h10v10H1z"/><path fill="#7fba00" d="M12 1h10v10H12z"/><path fill="#00a4ef" d="M1 12h10v10H1z"/><path fill="#ffb900" d="M12 12h10v10H12z"/></svg><span>Microsoft</span></button>
+                    <button type="button" class="ac-soc" data-social="google" hidden><span>Continue with Google</span></button>
+                    <button type="button" class="ac-soc" data-social="microsoft" hidden><span>Continue with Microsoft</span></button>
                   </div>
                   <p class="ac-socnote">Hotmail, Outlook and Live accounts work with Microsoft.</p>
                 </div>
@@ -56996,7 +56996,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
 .tcn-card:hover{box-shadow:0 40px 90px rgba(6,58,99,.5)}
 .tcn-card::before{content:'';position:absolute;left:0;right:0;top:-5px;height:5px;z-index:2;background:linear-gradient(90deg,#70c257,#ef8731,#70c257);background-size:200% 100%;animation:tcnShine 4s linear infinite}
 .tcn-body{max-height:52vh;overflow:auto}
-.tcn-ico{display:grid;place-items:center;width:54px;height:54px;margin:0 0 14px;border-radius:50%;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font-size:21px;box-shadow:0 12px 26px rgba(239,135,49,.45);animation:tcnIco .6s cubic-bezier(.2,.9,.3,1.4) .15s backwards,tcnRing 2.6s ease-out 1s infinite}
+.tcn-ico{display:block;width:16px;height:16px;margin:0 0 16px;border-radius:50%;background:linear-gradient(135deg,#f5a04b,#ef8731);box-shadow:0 6px 14px rgba(239,135,49,.45);animation:tcnIco .6s cubic-bezier(.2,.9,.3,1.4) .15s backwards,tcnRing 2.6s ease-out 1s infinite}
 .tcn-steps li{padding:10px 12px;margin-bottom:8px;list-style-position:inside;background:#f4f8fb;border-left:3px solid #ef8731;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s;animation:tcnUp .5s cubic-bezier(.2,.8,.2,1) backwards}
 .tcn-steps{padding-left:0;list-style:none;counter-reset:s}
 .tcn-steps li{counter-increment:s;list-style:none}
@@ -57013,7 +57013,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
 .tcn-copy:hover{background:#ef8731}
 @keyframes tcnShine{to{background-position:-200% 0}}
 @keyframes tcnIco{from{opacity:0;transform:scale(.3) rotate(-30deg)}to{opacity:1;transform:none}}
-@keyframes tcnRing{0%{box-shadow:0 12px 26px rgba(239,135,49,.45),0 0 0 0 rgba(239,135,49,.45)}70%,100%{box-shadow:0 12px 26px rgba(239,135,49,.45),0 0 0 16px rgba(239,135,49,0)}}
+@keyframes tcnRing{0%{box-shadow:0 6px 14px rgba(239,135,49,.45),0 0 0 0 rgba(239,135,49,.5)}70%,100%{box-shadow:0 6px 14px rgba(239,135,49,.45),0 0 0 14px rgba(239,135,49,0)}}
 @keyframes tcnUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 body.theme-night .tcn-steps li{background:#0a2740;border-left-color:#ef8731}
 body.theme-night .tcn-steps li:hover{background:#0e3050}
@@ -57039,7 +57039,7 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-perks{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:12px}
 #p-account .ac-perk{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.22);backdrop-filter:blur(6px);transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .28s,background .28s}
 #p-account .ac-perk:hover{transform:translateY(-3px) translateX(3px);border-color:rgba(245,160,75,.7);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08))}
-#p-account .ac-perk-i{flex:0 0 auto;display:grid;place-items:center;width:42px;height:42px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font-size:16px;box-shadow:0 10px 22px rgba(239,135,49,.4)}
+#p-account .ac-perk-i{flex:0 0 auto;display:grid;place-items:center;width:42px;height:42px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font:800 17px 'Playfair Display',serif;box-shadow:0 10px 22px rgba(239,135,49,.4)}
 #p-account .ac-perk h3{margin:0 0 3px;font-family:'Playfair Display',serif;font-size:19px;line-height:1.2;color:#fff!important}
 #p-account .ac-perk p{margin:0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82)}
 #p-account .ac-perk-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border:0;background:#fff;color:#063a63!important;font:800 13.5px 'Raleway',sans-serif;letter-spacing:.06em;cursor:pointer;border-radius:0;transition:transform .25s,box-shadow .25s}
@@ -58345,7 +58345,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function ntShow(n){
     var m=ntEl(),tag=$('tcnTag'),ti=$('tcnTitle'),bd=$('tcnBody'),ac=$('tcnActions'),ic=$('tcnIco');
     NT.cur=n;
-    ic.innerHTML='<i class="fas '+(n.kind==='approved'?'fa-check':n.kind==='live'?'fa-link':'fa-comments')+'"></i>';
+    ic.innerHTML='';
     if(n.kind==='approved'){
       tag.textContent='Approved';ti.textContent='You are approved to lead a trip';
       bd.innerHTML='<p>Congratulations. <b>'+esc(n.community||'Your group')+'</b> is approved to lead a trip with Sight Seers.</p><ol class="tcn-steps"><li>We agree the package, dates and your reward with you in writing.</li><li>We open your trip page and email you your link.</li><li>You share it. Everyone who joins is counted on your dashboard, with an easy place to add your WhatsApp group or channel.</li></ol>';
