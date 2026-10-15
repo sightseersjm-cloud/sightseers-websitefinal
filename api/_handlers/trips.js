@@ -24,7 +24,8 @@
  */
 
 const db = require('../_lib/db');
-const { getUser, requireAdmin, uid } = require('../_lib/auth');
+const { getUser, requireAdmin, uid, hashPassword, validatePassword, createToken } = require('../_lib/auth');
+const crypto = require('crypto');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
 
@@ -355,8 +356,18 @@ module.exports = async function handler(req, res) {
       if (get('admin')) {
         const admin = requireAdmin(req, res);
         if (!admin) return;
-        const [trips, applications, interests, partnersDoc, activity] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS), getPartnersDoc(), db.getCollection(ACTIVITY)]);
-        return res.status(200).json({ ok: true, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        const [trips, applications, interests, partnersDoc, activity, users] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS), getPartnersDoc(), db.getCollection(ACTIVITY), db.getCollection('users')]);
+        /* every account, with what we hold on it (never the password): the owner's contact list for the Travel Club */
+        const accounts = users.map(u => {
+          const e = lower(u.email, 120);
+          const apps = applications.filter(a => a.email === e || (a.userId && a.userId === u.id));
+          const led = trips.filter(t => (t.organizerUserId && t.organizerUserId === u.id) || (t.organizerEmail && t.organizerEmail === e));
+          const joined = interests.filter(i => i.email === e || (i.userId && i.userId === u.id));
+          const latest = apps.slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+          return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
+            applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
+        }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -390,8 +401,12 @@ module.exports = async function handler(req, res) {
             return { ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact };
           });
-        /* popups for the dashboard: an approval, a trip going live, a group chat ready to join */
+        /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application */
         const notices = [];
+        if (user.role === 'admin' && user.id !== 'admin-passcode') {
+          applications.filter(a => (a.status === 'pending') && !a.adminSeen).sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)))
+            .forEach(a => notices.push({ key: 'adm:' + a.ref, kind: 'adminapp', name: a.name, community: a.communityName, ref: a.ref, invite: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '' }));
+        }
         myApps.forEach(a => { if (a.status === 'approved' && !a.seenApproved) notices.push({ key: 'app:' + a.ref, kind: 'approved', community: a.communityName, ref: a.ref }); });
         trips.filter(t => ownsTrip(t, user) && (t.status === 'open' || t.status === 'full') && !t.liveSeen).forEach(t => notices.push({ key: 'trip:' + t.id, kind: 'live', title: t.title, url: '/trip/' + t.slug, slug: t.slug }));
         interests.filter(i => (i.email === mailAddr || (i.userId && i.userId === user.id)) && i.status !== 'cancelled' && i.status !== 'waitlist' && !i.linkSeen).forEach(i => {
@@ -496,10 +511,40 @@ module.exports = async function handler(req, res) {
         userId: user && user.id !== 'admin-passcode' ? user.id : null,
         status: 'pending', reply: '', note: '', tripId: null, createdAt: new Date().toISOString()
       };
+      /* applying also opens a Sight Seers account for that email (if there is none) and signs the applicant in, so they
+         land on their dashboard with the application pending. They choose the password on the form. An applicant who
+         is already signed in, or who already has an account, keeps theirs. */
+      let newAccount = false, session = null;
+      const pw = typeof body.password === 'string' ? body.password : '';
+      if (!rec.userId) {
+        try {
+          const users = await db.getCollection('users');
+          const found = users.find(u => u.email === rec.email);
+          if (found) rec.userId = found.id;
+          else {
+            if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }
+            const acct = { id: uid(), name: rec.name, email: rec.email, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: rec.phone || '', style: 'Adventure', role: 'guest', provider: pw ? 'application' : 'application-link', createdAt: new Date().toISOString() };
+            await db.addToCollection('users', acct);
+            rec.userId = acct.id;
+            newAccount = true;
+            if (pw) {
+              const tokenStr = createToken({ id: acct.id, email: acct.email, name: acct.name, role: acct.role });
+              if (tokenStr) { const { passwordHash, ...safeUser } = acct; session = { token: tokenStr, user: safeUser }; }
+            }
+          }
+        } catch (e) { console.error('club apply account', e && e.message); }
+      }
       await db.addToCollection(APPS, rec);
+      if (newAccount) {
+        const how = session
+          ? '<p><b>To sign in later,</b> use this email address and the password you chose.</p>'
+          : `<p><b>To sign in, set your password first:</b> open the sign-in page, choose <b>Forgot password</b>, and enter <b>${trip.esc(rec.email)}</b>. We will email you a code.</p>`;
+        await safe('apply account', mail(rec.email, 'Your Sight Seers account is ready', 'Your account is ready',
+          `<p>Hi ${trip.esc(firstName(rec.name))},</p><p>We opened a Sight Seers account for you with this email address, so you can follow your application to lead a trip. A member of the team is reviewing it now.</p>${how}${button(SITE + '/account', 'Open my account')}`));
+      }
       await log('application', rec.name + ' applied to lead a trip: ' + rec.communityName, rec.ref);
       try { await applicationMails(rec); } catch (e) { console.error('club application email', e && e.message); }
-      return res.status(200).json({ ok: true, ref: rec.ref });
+      return res.status(200).json(Object.assign({ ok: true, ref: rec.ref, account: newAccount ? 'created' : 'existing' }, session ? { token: session.token, user: session.user } : {}));
     }
 
     /* ===== signed in: the applicant changes the number of people they would invite ===== */
@@ -542,7 +587,12 @@ module.exports = async function handler(req, res) {
       const user = getUser(req);
       if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in required' });
       const key = str(body.key, 80), mailAddr = lower(user.email, 120);
-      if (key.indexOf('app:') === 0) {
+      if (key.indexOf('adm:') === 0) {
+        if (user.role === 'admin') {
+          const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4));
+          if (a) await db.updateInCollection(APPS, a.id, { adminSeen: true });
+        }
+      } else if (key.indexOf('app:') === 0) {
         const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4) && (x.email === mailAddr || (x.userId && x.userId === user.id)));
         if (a) await db.updateInCollection(APPS, a.id, { seenApproved: true });
       } else if (key.indexOf('trip:') === 0) {

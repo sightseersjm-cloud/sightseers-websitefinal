@@ -130,3 +130,14 @@ Four JSON documents in the existing Vercel Blob store: `club-trips`, `club-appli
 
 - `api/_handlers/trips.js`: 106 checks against an in memory store and a recording mailer. Permissions, validation, privacy of the public and organizer views, seats, waitlists, duplicates, the approval flow and email content.
 - The whole flow in a browser, against that same handler: the program page, departures, trip pages (including opening an address directly), every form and its error messages, every step of the application sheet (validation, Back, the option boxes, the confirmation, closing it, phones), the organizer and traveler account views, the admin section, no icons or emoji, light and night themes, and widths from 320 to 1280.
+
+
+## Update: account on apply, departures schedule, separate admin
+
+- **Applying creates an account.** Step 1 of the application asks signed-out applicants to choose a password. When the full application is submitted, an account is created for that email (if there is none) and the applicant is signed in and taken to Account > Group trips, where the application shows as pending. An email address that already has an account keeps its own password and is not signed in by the application. An incomplete application creates nothing. (An API caller that sends no password gets an account with an unknown password and an email telling them to use Forgot password.)
+- **Forgot password** works for every account: Sign in > Forgot password > enter the email > a 6-digit code is emailed (valid 30 minutes) > choose a new password.
+- **You are told about every application.** You get an email, and the next time you open your account or the Travel Club admin you get a popup per new application with a "Review application" button.
+- **Travel Club admin** is its own page (sign in with the owner email and password through the regular Sign in button; the website admin keeps its passcode). Tabs: Overview, Applications, Accounts, Trips, Requests, Partner links. **Accounts** lists every account with name, email, phone, source, join date, Travel Club status and trips led or joined, with search and a CSV download. Passwords are never shown.
+- **Approved departures** is a schedule panel on the Travel Club page: one row per open trip (date, title, leader, places left or waitlist) with live totals. When no trip is open it says the next departures are being announced and offers the notify form.
+- **Start Planning and the Travel Form are one page.** `/contact` redirects to `/booking`.
+- Night mode was removed.
