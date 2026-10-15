@@ -62,12 +62,11 @@
       setToken(res.token);
       try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
-      /* an admin account signing in with the regular button lands in the admin portal, already unlocked */
+      /* an admin account signing in with the regular button lands in the Travel Club admin (the website admin keeps its own passcode) */
       if (res.user && res.user.role === 'admin') {
         setTimeout(function () {
           try {
-            if (typeof window.nav === 'function') window.nav('admin');
-            if (typeof window.unlockAdminPortal === 'function') window.unlockAdminPortal();
+            if (typeof window.nav === 'function') window.nav('club-admin');
           } catch (e) {}
         }, 350);
       }
@@ -542,7 +541,7 @@
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
       if (typeof window.nav === 'function') window.nav('account');
       if (res.user && res.user.role === 'admin') {
-        setTimeout(function () { try { window.nav('admin'); if (typeof window.unlockAdminPortal === 'function') window.unlockAdminPortal(); } catch (e) {} }, 350);
+        setTimeout(function () { try { window.nav('club-admin'); } catch (e) {} }, 350);
       }
     }).catch(function () { setToken(''); say('We could not finish signing you in. Please try again.', false); });
   }

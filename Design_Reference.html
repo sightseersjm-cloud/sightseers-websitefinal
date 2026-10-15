@@ -9478,7 +9478,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
       <a href="#" class="utility-link utility-pill" id="n-passport" onclick="nav('passport');return false;" title="Jamaican Passport Renewal"><span>Passport Renewal</span></a>
       <a href="#" class="utility-link" id="n-account" onclick="nav('account');return false;" title="Guest Account"><i class="far fa-user"></i></a>
       <a href="#" class="utility-link admin" id="n-admin" onclick="nav('admin');return false;" title="Admin Portal"></a>
-      <button type="button" class="utility-link theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeMode()" title="Switch day and night mode" aria-label="Toggle day and night mode"></button>
       <div class="cart-icon" onclick="openCart()" title="View Cart">
         <i class="fas fa-shopping-bag"></i>
         <span class="cart-count" id="cartCount">0</span>
@@ -16938,6 +16937,23 @@ body.theme-night .page .tag{
 <!-- ════════════════════════════════════
      CONTACT PAGE (Google Form)
 ════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     TRAVEL CLUB ADMIN (separate from the website admin; opens for admin accounts)
+════════════════════════════════════ -->
+<div class="page" id="p-club-admin">
+  <section class="tca-sec">
+    <div class="tca-wrap">
+      <div class="tca-head">
+        <span class="tca-kicker">Sight Seers</span>
+        <h1>Travel Club Admin</h1>
+        <p>Approve leaders, open trips, and follow every traveler. <span class="tcA-badge" id="tcaBadge" hidden></span></p>
+        <div class="tca-links"><button type="button" class="tca-link" data-tca-go="admin">Website admin</button><button type="button" class="tca-link" data-tca-go="account">My account</button></div>
+      </div>
+      <div id="adminTravelClubTrips" class="tca-card"><div id="tcAdminBody"><p class="tcA-note">Loading...</p></div></div>
+    </div>
+  </section>
+</div>
+
 <div class="page" id="p-passport">
   <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1600&q=85&auto=format&fit=crop')"><div class="ph-inner"><h1 class="ph-title">Jamaican Passport Renewal</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><span>Passport Renewal</span></div><div class="passport-hero-meta"><span>Upload your documents</span><span>Passport-size photo check</span><span>Sight Seers support desk</span></div></div></div>
   <section class="passport-sec">
@@ -30533,7 +30549,8 @@ function initSightSeersBot(){
 }
 
 function applyThemeMode(mode='day'){
-  document.body.classList.toggle('theme-night', mode==='night');
+  mode='day';  /* night mode was removed: the site is always in day mode */
+  document.body.classList.toggle('theme-night', false);
   document.body.setAttribute('data-theme-mode', mode==='night' ? 'night' : 'day');
   const btn=document.getElementById('themeToggleBtn');
   if(btn){
@@ -30550,8 +30567,8 @@ function toggleThemeMode(){
 }
 function initThemeMode(){
   let saved='day';
-  try{saved=localStorage.getItem('ss_theme_mode') || 'day';}catch(e){}
-  applyThemeMode(saved==='night'?'night':'day');
+  try{localStorage.removeItem('ss_theme_mode');}catch(e){}
+  applyThemeMode('day');
 }
 function bootSightSeersSite(){
   try{initThemeMode();}catch(e){}
@@ -56970,6 +56987,24 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-chatbtn{position:relative;overflow:hidden;isolation:isolate}
 #p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
+/* Travel Club admin page */
+#p-club-admin{background:linear-gradient(180deg,#eef5fa 0%,#f8fbff 100%)}
+.tca-sec{padding:120px 0 90px;min-height:70vh}
+.tca-wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.tca-head{margin-bottom:22px}
+.tca-kicker{display:block;font:800 12px 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#ef8731}
+.tca-head h1{margin:8px 0 8px;font:900 clamp(30px,4.4vw,44px)/1.05 'Playfair Display',serif;color:#063a63}
+.tca-head p{margin:0 0 14px;font-size:15px;color:#4d6275}
+.tca-links{display:flex;flex-wrap:wrap;gap:10px}
+.tca-link{padding:9px 18px;border:1.5px solid #063a63;background:transparent;color:#063a63!important;font:800 12.5px 'Raleway',sans-serif;letter-spacing:.06em;cursor:pointer;border-radius:0;transition:background .2s,color .2s,transform .2s}
+.tca-link:hover{background:#063a63;color:#fff!important;transform:translateY(-2px)}
+.tca-card{padding:clamp(16px,3vw,28px);background:linear-gradient(160deg,#fff 0%,#f3f8fc 100%);border:1px solid rgba(6,58,99,.1);box-shadow:0 26px 60px rgba(6,58,99,.12),inset 0 1px 0 #fff}
+#p-account .ac-admchip{cursor:pointer;font:inherit;font-weight:700;border-color:rgba(245,160,75,.7);background:rgba(239,135,49,.22)}
+body.theme-night #p-club-admin{background:linear-gradient(180deg,#06223a 0%,#082b47 100%)}
+body.theme-night .tca-head h1{color:#fff}
+body.theme-night .tca-head p{color:#b3c5d7}
+body.theme-night .tca-link{border-color:rgba(255,255,255,.4);color:#fff!important}
+body.theme-night .tca-card{background:linear-gradient(160deg,#103a5e 0%,#0a2a45 100%);border-color:rgba(255,255,255,.12)}
 /* Start Planning: a more compact footer so the added questions fit */
 #p-booking .urgency-text{margin:6px 0 10px!important;padding:7px 12px!important;font-size:12px!important;line-height:1.4!important}
 #p-booking .form-wrap>.btn-primary{padding:11px 18px!important;font-size:12px!important;letter-spacing:1.2px!important;min-height:0!important}
@@ -58376,7 +58411,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 
   function load(force){
     var body=$('tcAdminBody');if(!body)return;
-    if(!isAdmin()){body.innerHTML='<p class="tcA-note warn"><b>Sign in with an admin account to manage Travel Club trips.</b> Open the Account page and sign in with your admin email. The admin passcode on its own cannot open traveler details.</p>';return;}
+    if(!isAdmin()){body.innerHTML='<p class="tcA-note warn"><b>Sign in with your admin account to manage the Travel Club.</b> Use the regular Sign in button on the Account page with your admin email. The website admin passcode does not open this page.</p>';return;}
     if(S.loading)return;
     if(S.data&&!force){render();return;}
     S.loading=true;body.innerHTML='<p class="tcA-note">Loading Travel Club trips...</p>';
@@ -58384,9 +58419,9 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   function badge(){
-    var sm=document.querySelector('#adminTravelClubTrips>summary strong');if(!sm||!S.data)return;
+    var bd=$('tcaBadge');if(!bd||!S.data)return;
     var n=S.data.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length;
-    sm.innerHTML='Travel Club trips'+(n?' <span class="tcA-badge">'+n+' to review</span>':'');
+    bd.hidden=!n;bd.textContent=n+' to review';
   }
   function render(){
     var body=$('tcAdminBody');if(!body||!S.data)return;
@@ -58545,35 +58580,26 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(e.target&&e.target.id==='tcAFilter'){S.filter=e.target.value;render();}
   });
 
-  /* ── put the manager in the admin portal ── */
-  function inject(){
-    var root=$('adminStructuredEditor');
-    if(!root||$('adminTravelClubTrips'))return;
-    var d=document.createElement('details');d.className='admin-group';d.id='adminTravelClubTrips';
-    d.innerHTML='<summary><span><strong>Travel Club trips</strong><small>Approve organizers, publish approved departures, and follow every traveler request.</small></span><i class="fas fa-chevron-down"></i></summary><div class="admin-group-body"><div id="tcAdminBody"><p class="tcA-note">Open this section to load the Travel Club trips.</p></div></div>';
-    root.appendChild(d);
-    d.addEventListener('toggle',function(){if(d.open)load(false);});
-    if(isAdmin())SS.api('trips?admin=1').then(function(x){S.data=S.data||x;badge();}).catch(function(){});
+  /* ── the Travel Club admin is its own page, separate from the website admin ── */
+  function inject(){load(true);}
+  var _nav=window.nav;
+  if(typeof _nav==='function'&&!window.__tcAdminNavPatched){
+    window.__tcAdminNavPatched=true;
+    window.nav=function(id){var r=_nav.apply(this,arguments);if(id==='club-admin')setTimeout(function(){load(true);},60);return r;};
   }
-  var _unlock=window.unlockAdminPortal;
-  if(typeof _unlock==='function'&&!window.__tcAdminUnlockPatched){
-    window.__tcAdminUnlockPatched=true;
-    window.unlockAdminPortal=function(){var r=_unlock.apply(this,arguments);setTimeout(inject,120);setTimeout(inject,900);return r;};
+  document.addEventListener('click',function(e){
+    var g=e.target.closest&&e.target.closest('[data-tca-go]');
+    if(g){e.preventDefault();nav(g.getAttribute('data-tca-go'));}
+  });
+  /* admins get two shortcuts on their account page */
+  function adminChips(){
+    var box=document.querySelector('#accountDashboard .ac-bchips');
+    if(!box||box.querySelector('[data-tca-go]'))return;
+    if(!isAdmin())return;
+    box.insertAdjacentHTML('beforeend','<button type="button" class="ac-bchip ac-admchip" data-tca-go="club-admin">Travel Club admin</button><button type="button" class="ac-bchip ac-admchip" data-tca-go="admin">Website admin</button>');
   }
-  var _reset=window.resetAdminPortal;
-  if(typeof _reset==='function'&&!window.__tcAdminResetPatched){
-    window.__tcAdminResetPatched=true;
-    window.resetAdminPortal=function(){var r=_reset.apply(this,arguments);setTimeout(function(){var old=$('adminTravelClubTrips');if(old)old.remove();inject();},150);return r;};
-  }
-  [300,1200,3000].forEach(function(ms){setTimeout(inject,ms);});
-  /* a later script can rebuild the editor and wipe this section: put it back */
-  if(window.MutationObserver){
-    var rt;
-    new MutationObserver(function(){
-      clearTimeout(rt);
-      rt=setTimeout(function(){var pa=$('p-admin');if(pa&&pa.classList.contains('on')&&!$('adminTravelClubTrips'))inject();},60);
-    }).observe(document.body,{childList:true,subtree:true});
-  }
+  document.addEventListener('ss-account-updated',function(){setTimeout(adminChips,400);});
+  [800,2500].forEach(function(ms){setTimeout(adminChips,ms);});
   window.ssClubAdmin={inject:inject,load:load};
 })();
 </script>
