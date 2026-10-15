@@ -56987,6 +56987,46 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
 
 
 <style id="ss-club-style">
+
+/* popups: tilt and glow with the pointer like the site's cards, staggered steps, buttons that fill */
+.tcn-card{transform:perspective(1000px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;animation:tcnPop .45s cubic-bezier(.2,.9,.3,1.15) backwards;overflow:hidden;will-change:transform}
+.tcn-card>*{position:relative;z-index:1}
+.tcn-card::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(300px circle at var(--mx,50%) var(--my,30%),rgba(239,135,49,.16),transparent 62%)}
+.tcn-card:hover::after{opacity:1}
+.tcn-card:hover{box-shadow:0 40px 90px rgba(6,58,99,.5)}
+.tcn-card::before{content:'';position:absolute;left:0;right:0;top:-5px;height:5px;z-index:2;background:linear-gradient(90deg,#70c257,#ef8731,#70c257);background-size:200% 100%;animation:tcnShine 4s linear infinite}
+.tcn-body{max-height:52vh;overflow:auto}
+.tcn-ico{display:grid;place-items:center;width:54px;height:54px;margin:0 0 14px;border-radius:50%;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font-size:21px;box-shadow:0 12px 26px rgba(239,135,49,.45);animation:tcnIco .6s cubic-bezier(.2,.9,.3,1.4) .15s backwards,tcnRing 2.6s ease-out 1s infinite}
+.tcn-steps li{padding:10px 12px;margin-bottom:8px;list-style-position:inside;background:#f4f8fb;border-left:3px solid #ef8731;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s;animation:tcnUp .5s cubic-bezier(.2,.8,.2,1) backwards}
+.tcn-steps{padding-left:0;list-style:none;counter-reset:s}
+.tcn-steps li{counter-increment:s;list-style:none}
+.tcn-steps li::before{content:counter(s);display:inline-grid;place-items:center;width:22px;height:22px;margin-right:10px;background:#ef8731;color:#fff;font:800 12px 'Raleway',sans-serif}
+.tcn-steps li:nth-child(1){animation-delay:.3s}.tcn-steps li:nth-child(2){animation-delay:.42s}.tcn-steps li:nth-child(3){animation-delay:.54s}
+.tcn-steps li:hover{transform:translateX(6px);background:#fff;box-shadow:0 10px 22px rgba(6,58,99,.14)}
+.tcn-btn{position:relative;overflow:hidden;isolation:isolate;transform:perspective(700px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.tcn-btn::before{content:'';position:absolute;inset:0;z-index:-1;background:#063a63;transform:scaleX(0);transform-origin:left;transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.tcn-btn:hover::before{transform:scaleX(1)}
+.tcn-btn.tcn-ghost::before{background:#063a63}
+.tcn-btn.tcn-ghost:hover{color:#fff!important}
+.tcn-btn:hover{--ty:-3px}
+.tcn-link input,.tcn-copy{transition:box-shadow .25s,background .25s}
+.tcn-copy:hover{background:#ef8731}
+@keyframes tcnShine{to{background-position:-200% 0}}
+@keyframes tcnIco{from{opacity:0;transform:scale(.3) rotate(-30deg)}to{opacity:1;transform:none}}
+@keyframes tcnRing{0%{box-shadow:0 12px 26px rgba(239,135,49,.45),0 0 0 0 rgba(239,135,49,.45)}70%,100%{box-shadow:0 12px 26px rgba(239,135,49,.45),0 0 0 16px rgba(239,135,49,0)}}
+@keyframes tcnUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+body.theme-night .tcn-steps li{background:#0a2740;border-left-color:#ef8731}
+body.theme-night .tcn-steps li:hover{background:#0e3050}
+@media(prefers-reduced-motion:reduce){.tcn-card::before,.tcn-ico,.tcn-steps li{animation:none}.tcn-card{transform:none}}
+/* dashboard: the roster, the group-link box and the trip cards lift and glow like the other cards */
+#p-account .ac-otrip,#p-account .ac-ogroup,#p-account .ac-otrav li{position:relative;transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,border-color .28s,background .28s}
+#p-account .ac-otrip::after,#p-account .ac-ogroup::after,#p-account .ac-otrav li::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(239,135,49,.12),transparent 62%)}
+#p-account .ac-otrip:hover::after,#p-account .ac-ogroup:hover::after,#p-account .ac-otrav li:hover::after{opacity:1}
+#p-account .ac-otrav li:hover{transform:translateX(5px);border-color:rgba(239,135,49,.55);box-shadow:0 10px 22px rgba(6,58,99,.1)}
+#p-account .ac-ogroup:hover{border-color:rgba(239,135,49,.55);box-shadow:0 14px 30px rgba(6,58,99,.1)}
+#p-account .ac-chatbtn{position:relative;overflow:hidden;isolation:isolate}
+#p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+#p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
 /* Sign-in page: a glossy side card, a frosted sign-in card, one simple set of perks */
 #p-account .ac-band{padding:34px 0 38px}
 #p-account .ac-scene{padding:44px 0 20px;gap:26px 34px;grid-template-columns:minmax(0,.92fr) minmax(0,1fr);grid-template-areas:"side panel" "help help";align-items:stretch}
@@ -57772,7 +57812,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ═════ pointer: a soft tilt and glow on the cards, as on Flagship Programs ═════ */
-  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply,.tch-photo,.tch-btn';
+  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply,.tch-photo,.tch-btn,.tcn-card,.tcn-btn,#p-account .ac-otrip,#p-account .ac-ogroup,#p-account .ac-otrav li,#p-account .ac-app';
   document.addEventListener('pointermove',function(e){
     var t=e.target&&e.target.closest&&e.target.closest(CARD);if(!t)return;
     var r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
@@ -58286,7 +58326,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function ntEl(){
     var m=$('tcNotice');if(m)return m;
     m=document.createElement('div');m.id='tcNotice';m.className='tcn';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','tcnTitle');m.hidden=true;
-    m.innerHTML='<div class="tcn-card"><button type="button" class="tcn-x" aria-label="Close" data-tcn-close>&times;</button><span class="tcn-tag" id="tcnTag"></span><h3 id="tcnTitle"></h3><div class="tcn-body" id="tcnBody"></div><div class="tcn-actions" id="tcnActions"></div></div>';
+    m.innerHTML='<div class="tcn-card"><button type="button" class="tcn-x" aria-label="Close" data-tcn-close>&times;</button><span class="tcn-ico" id="tcnIco" aria-hidden="true"></span><span class="tcn-tag" id="tcnTag"></span><h3 id="tcnTitle"></h3><div class="tcn-body" id="tcnBody"></div><div class="tcn-actions" id="tcnActions"></div></div>';
     document.body.appendChild(m);
     m.addEventListener('click',function(e){if(e.target===m||e.target.closest('[data-tcn-close]'))ntClose();});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)ntClose();});
@@ -58303,8 +58343,9 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     setTimeout(function(){var g=$('acPane-groups');if(g&&g.scrollIntoView)g.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});},120);
   }
   function ntShow(n){
-    var m=ntEl(),tag=$('tcnTag'),ti=$('tcnTitle'),bd=$('tcnBody'),ac=$('tcnActions');
+    var m=ntEl(),tag=$('tcnTag'),ti=$('tcnTitle'),bd=$('tcnBody'),ac=$('tcnActions'),ic=$('tcnIco');
     NT.cur=n;
+    ic.innerHTML='<i class="fas '+(n.kind==='approved'?'fa-check':n.kind==='live'?'fa-link':'fa-comments')+'"></i>';
     if(n.kind==='approved'){
       tag.textContent='Approved';ti.textContent='You are approved to lead a trip';
       bd.innerHTML='<p>Congratulations. <b>'+esc(n.community||'Your group')+'</b> is approved to lead a trip with Sight Seers.</p><ol class="tcn-steps"><li>We agree the package, dates and your reward with you in writing.</li><li>We open your trip page and email you your link.</li><li>You share it. Everyone who joins is counted on your dashboard, with an easy place to add your WhatsApp group or channel.</li></ol>';
