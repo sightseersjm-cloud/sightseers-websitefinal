@@ -29,6 +29,7 @@ const crypto = require('crypto');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
 const inboxLib = require('../_lib/inbox');
+const { geo } = require('../_lib/geo');
 
 const TRIPS = 'club-trips';
 const APPS = 'club-applications';
@@ -366,7 +367,7 @@ module.exports = async function handler(req, res) {
           const joined = interests.filter(i => i.email === e || (i.userId && i.userId === u.id));
           const latest = apps.slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))[0];
           return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
-            applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
+            country: u.country || '', city: u.city || '', basedIn: latest ? (latest.city || '') : '', applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
         }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
         return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
@@ -414,8 +415,10 @@ module.exports = async function handler(req, res) {
           } catch (e) { console.error('inbox notice', e && e.message); }
         }
         if (user.role === 'admin' && user.id !== 'admin-passcode') {
-          applications.filter(a => (a.status === 'pending') && !a.adminSeen).sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)))
-            .forEach(a => notices.push({ key: 'adm:' + a.ref, kind: 'adminapp', name: a.name, community: a.communityName, ref: a.ref, invite: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '' }));
+          /* one popup for all the applications waiting, never one per application */
+          const waiting = applications.filter(a => (a.status === 'pending') && !a.adminSeen).sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
+          if (waiting.length) notices.push({ key: 'adm:' + waiting.slice(0, 50).map(a => a.ref).join(','), kind: 'adminapps', count: waiting.length,
+            items: waiting.slice(0, 6).map(a => ({ name: a.name, community: a.communityName, ref: a.ref, invite: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '' })) });
         }
         myApps.forEach(a => { if (a.status === 'approved' && !a.seenApproved) notices.push({ key: 'app:' + a.ref, kind: 'approved', community: a.communityName, ref: a.ref }); });
         trips.filter(t => ownsTrip(t, user) && (t.status === 'open' || t.status === 'full') && !t.liveSeen).forEach(t => notices.push({ key: 'trip:' + t.id, kind: 'live', title: t.title, url: '/trip/' + t.slug, slug: t.slug }));
@@ -423,6 +426,7 @@ module.exports = async function handler(req, res) {
           const t = trips.find(x => x.id === i.tripId);
           if (t && t.groupLink) notices.push({ key: 'join:' + i.ref, kind: 'group', title: t.title, groupLink: t.groupLink, leaderName: t.organizerName || '' });
         });
+        notices.sort((x, y) => (y.kind === 'adminapps' ? 1 : 0) - (x.kind === 'adminapps' ? 1 : 0));   /* the owner's applications come first */
         return res.status(200).json({ ok: true, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
@@ -533,7 +537,7 @@ module.exports = async function handler(req, res) {
           if (found) rec.userId = found.id;
           else {
             if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }
-            const acct = { id: uid(), name: rec.name, email: rec.email, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: rec.phone || '', style: 'Adventure', role: 'guest', provider: pw ? 'application' : 'application-link', createdAt: new Date().toISOString() };
+            const acct = { id: uid(), name: rec.name, email: rec.email, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: rec.phone || '', style: 'Adventure', role: 'guest', provider: pw ? 'application' : 'application-link', country: geo(req).country, city: geo(req).city, createdAt: new Date().toISOString() };
             await db.addToCollection('users', acct);
             rec.userId = acct.id;
             newAccount = true;
@@ -605,8 +609,8 @@ module.exports = async function handler(req, res) {
         }
       } else if (key.indexOf('adm:') === 0) {
         if (user.role === 'admin') {
-          const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4));
-          if (a) await db.updateInCollection(APPS, a.id, { adminSeen: true });
+          const refs = key.slice(4).split(',').slice(0, 50), all = await db.getCollection(APPS);
+          for (const a of all.filter(x => refs.indexOf(x.ref) > -1)) await db.updateInCollection(APPS, a.id, { adminSeen: true });
         }
       } else if (key.indexOf('app:') === 0) {
         const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4) && (x.email === mailAddr || (x.userId && x.userId === user.id)));
@@ -622,7 +626,26 @@ module.exports = async function handler(req, res) {
     }
 
     /* ===== admin ===== */
-    if (action === 'trip-save' || action === 'trip-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
+    if (action === 'account-delete') {
+      const admin = requireAdmin(req, res);
+      if (!admin) return;
+      const users = await db.getCollection('users');
+      const u = users.find(x => x.id === str(body.id, 80));
+      if (!u) return res.status(404).json({ error: 'Account not found.' });
+      if (u.role === 'admin') return res.status(400).json({ error: 'Admin accounts cannot be deleted here.' });
+      const em = lower(u.email, 120);
+      const [tripsAll, apps, ints] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS)]);
+      if (tripsAll.some(t => (t.organizerUserId && t.organizerUserId === u.id) || (t.organizerEmail && t.organizerEmail === em))) return res.status(409).json({ error: 'This account leads a trip. Close or reassign the trip first.' });
+      const theirApps = apps.filter(a => a.email === em || (a.userId && a.userId === u.id));
+      const keepApps = theirApps.filter(a => a.status === 'approved');
+      /* an approved leader application is kept on record; everything else of theirs goes with the account */
+      for (const a of theirApps) { if (a.status !== 'approved') await db.removeFromCollection(APPS, a.id); }
+      for (const i of ints.filter(i => (i.email === em || (i.userId && i.userId === u.id)) && i.status !== 'booked')) await db.removeFromCollection(INTERESTS, i.id);
+      await db.setCollection('users', users.filter(x => x.id !== u.id));
+      await log('account-deleted', 'Account removed: ' + (u.name || u.email), u.id);
+      return res.status(200).json({ ok: true, keptApplications: keepApps.length });
+    }
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -642,6 +665,18 @@ module.exports = async function handler(req, res) {
           await log('trip-' + saved.status, saved.title + ' is now ' + saved.status, saved.id);
           await tripLiveMail(saved);
         }
+        return res.status(200).json({ ok: true, trip: saved });
+      }
+
+      if (action === 'trip-status') {
+        const trips = await db.getCollection(TRIPS), t = trips.find(x => x.id === str(body.id, 80));
+        if (!t) return res.status(404).json({ error: 'Trip not found.' });
+        const status = oneOf(body.status, TRIP_STATUS, null);
+        if (!status) return res.status(400).json({ error: 'Choose a status.' });
+        if ((status === 'open' || status === 'full') && !t.summary) return res.status(400).json({ error: 'Add a short summary to the trip before it opens.' });
+        if ((status === 'open' || status === 'full') && !t.dateText && !t.startDate) return res.status(400).json({ error: 'Add the dates to the trip before it opens.' });
+        const saved = await db.updateInCollection(TRIPS, t.id, { status });
+        if (t.status !== status && ['open', 'full', 'closed'].indexOf(status) > -1) { await log('trip-' + status, saved.title + ' is now ' + status, saved.id); if (body.notify !== false) await tripLiveMail(saved); }
         return res.status(200).json({ ok: true, trip: saved });
       }
 
@@ -666,10 +701,14 @@ module.exports = async function handler(req, res) {
           let slug = slugify(app.communityName + '-' + (app.destination || 'trip')) || 'trip';
           let n = 2, base = slug;
           while (trips.some(t => t.slug === slug)) slug = base + '-' + n++;
+          /* the draft starts from what the leader wrote, so it can go straight on the departure board */
+          const draftSummary = str(app.message, 240).replace(/\s+/g, ' ');
+          const draftDates = str(app.timing, 80) || 'Dates to be announced';
+          const goLive = !!body.publish && draftSummary.length >= 10;
           drafted = {
-            id: uid(), createdAt: new Date().toISOString(), applicationId: app.id, slug, status: 'draft',
-            title: (app.communityName + (app.destination ? ': ' + app.destination : '')).slice(0, 120), destination: app.destination || '', country: '', dateText: '', startDate: '', endDate: '',
-            summary: '', description: '', included: [], image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
+            id: uid(), createdAt: new Date().toISOString(), applicationId: app.id, slug, status: goLive ? 'open' : 'draft',
+            title: (app.communityName + (app.destination ? ': ' + app.destination : '')).slice(0, 120), destination: app.destination || '', country: '', dateText: draftDates, startDate: '', endDate: '',
+            summary: draftSummary, description: '', included: [], image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
             organizerName: app.name, organizerCommunity: app.communityName, organizerBio: '', organizerEmail: app.email, organizerUserId: app.userId || null, showOrganizer: true,
             reward: '', rewardStatus: 'not_set', internalNote: 'Drafted from application ' + app.ref
           };
@@ -677,6 +716,7 @@ module.exports = async function handler(req, res) {
           updates.tripId = drafted.id;
         }
         const saved = await db.updateInCollection(APPS, app.id, updates);
+        if (drafted && drafted.status === 'open') { await log('trip-open', drafted.title + ' is now open', drafted.id); if (body.notify !== false) await tripLiveMail(drafted); }
         await log('decision', app.communityName + ' (' + app.name + ') ' + status.replace('_', ' '), app.ref);
         if (body.notify !== false) { try { await decisionMail(saved); } catch (e) { console.error('club decision email', e && e.message); } }
         return res.status(200).json({ ok: true, application: saved, trip: drafted });

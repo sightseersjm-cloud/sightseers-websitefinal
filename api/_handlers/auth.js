@@ -2,6 +2,7 @@ const db = require('../_lib/db');
 const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, uid, ADMIN_CODE } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const social = require('../_lib/social');
+const { geo } = require('../_lib/geo');
 
 const loginAttempts = new Map();
 const RATE_WINDOW = 15 * 60 * 1000;
@@ -34,7 +35,7 @@ module.exports = async function handler(req, res) {
     const sm = gurl.pathname.match(/\/auth\/(google|microsoft)\/(start|callback)\/?$/);
     if (sm) {
       if (sm[2] === 'start') return social.start(sm[1], res);
-      return social.callback(sm[1], req, res, gq, { db, createToken, hashPassword, uid, sendEmail, BUSINESS_EMAIL, escapeHtml: require('../_lib/auth').escapeHtml });
+      return social.callback(sm[1], req, res, gq, { geo, db, createToken, hashPassword, uid, sendEmail, BUSINESS_EMAIL, escapeHtml: require('../_lib/auth').escapeHtml });
     }
     const admin = requireAdmin(req, res);
     if (!admin) return;
@@ -80,6 +81,7 @@ module.exports = async function handler(req, res) {
       phone: String(phone || '').trim().slice(0, 30),
       style: String(style || 'Adventure').slice(0, 50),
       role: isAdmin ? 'admin' : 'guest',
+      country: geo(req).country, city: geo(req).city,
       createdAt: new Date().toISOString()
     };
 
@@ -135,6 +137,8 @@ module.exports = async function handler(req, res) {
     if (!user || !verifyPassword(String(password), user.passwordHash)) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
+    /* accounts made before countries were recorded get the country they sign in from */
+    if (!user.country) { const g = geo(req); if (g.country) { user.country = g.country; user.city = user.city || g.city; try { await db.setCollection('users', users); } catch (e) { /* best effort */ } } }
 
     const token = createToken({ id: user.id, email: user.email, name: user.name, role: user.role });
     const { passwordHash, ...safe } = user;

@@ -96,7 +96,7 @@ async function callback(name, req, res, q, deps) {
     user = {
       id: uid(), name: String((claims && claims.name) || email.split('@')[0]).trim().slice(0, 100), email,
       passwordHash: hashPassword(crypto.randomBytes(18).toString('hex') + 'Aa1'), phone: '', style: 'Adventure', role: 'guest',
-      provider: name, createdAt: new Date().toISOString()
+      provider: name, country: deps.geo ? deps.geo(req).country : '', city: deps.geo ? deps.geo(req).city : '', createdAt: new Date().toISOString()
     };
     users.push(user);
     await db.setCollection('users', users);
