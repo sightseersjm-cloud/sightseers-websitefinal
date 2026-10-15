@@ -22,6 +22,7 @@ const handlers = {
   'group-trip':      require('./_handlers/group-trip'),
   'guide-auth':      require('./_handlers/guide-auth'),
   'images':          require('./_handlers/images'),
+  'inbox':           require('./_handlers/inbox'),
   'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
   'passport':        require('./_handlers/passport'),

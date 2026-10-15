@@ -28,6 +28,7 @@ const { getUser, requireAdmin, uid, hashPassword, validatePassword, createToken 
 const crypto = require('crypto');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
+const inboxLib = require('../_lib/inbox');
 
 const TRIPS = 'club-trips';
 const APPS = 'club-applications';
@@ -401,8 +402,17 @@ module.exports = async function handler(req, res) {
             return { ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact };
           });
-        /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application */
+        /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application and new website requests */
         const notices = [];
+        if (user.role === 'admin' && user.id !== 'admin-passcode') {
+          try {
+            const items = (await inboxLib.collect(db)).filter(i => i.status === 'new');
+            const seenDoc = (await db.getCollection(SETTINGS)).find(x => x.id === 'inboxSeen');
+            const since = seenDoc ? String(seenDoc.at || '') : '';
+            const fresh = items.filter(i => String(i.createdAt) > since);
+            if (fresh.length) notices.push({ key: 'inbox:' + fresh[0].createdAt, kind: 'inbox', count: fresh.length, types: Object.keys(fresh.reduce((m, i) => { m[i.type] = 1; return m; }, {})).slice(0, 4) });
+          } catch (e) { console.error('inbox notice', e && e.message); }
+        }
         if (user.role === 'admin' && user.id !== 'admin-passcode') {
           applications.filter(a => (a.status === 'pending') && !a.adminSeen).sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)))
             .forEach(a => notices.push({ key: 'adm:' + a.ref, kind: 'adminapp', name: a.name, community: a.communityName, ref: a.ref, invite: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '' }));
@@ -587,7 +597,13 @@ module.exports = async function handler(req, res) {
       const user = getUser(req);
       if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in required' });
       const key = str(body.key, 80), mailAddr = lower(user.email, 120);
-      if (key.indexOf('adm:') === 0) {
+      if (key.indexOf('inbox:') === 0) {
+        if (user.role === 'admin') {
+          const at = key.slice(6), doc = (await db.getCollection(SETTINGS)).find(x => x.id === 'inboxSeen');
+          if (doc) await db.updateInCollection(SETTINGS, 'inboxSeen', { at });
+          else await db.addToCollection(SETTINGS, { id: 'inboxSeen', at });
+        }
+      } else if (key.indexOf('adm:') === 0) {
         if (user.role === 'admin') {
           const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4));
           if (a) await db.updateInCollection(APPS, a.id, { adminSeen: true });

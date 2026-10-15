@@ -16957,8 +16957,8 @@ body.theme-night .page .tag{
     <div class="tca-wrap">
       <div class="tca-head">
         <span class="tca-kicker">Sight Seers</span>
-        <h1>Travel Club Admin</h1>
-        <p>Approve leaders, open trips, and follow every traveler. <span class="tcA-badge" id="tcaBadge" hidden></span></p>
+        <h1>Master Admin</h1>
+        <p>Travel Club leaders, trips and travelers, plus every request that comes in through the website. <span class="tcA-badge" id="tcaBadge" hidden></span></p>
         <div class="tca-links"><button type="button" class="tca-link" data-tca-go="admin">Website admin</button><button type="button" class="tca-link" data-tca-go="account">My account</button></div>
       </div>
       <div id="adminTravelClubTrips" class="tca-card"><div id="tcAdminBody"><p class="tcA-note">Loading...</p></div></div>
@@ -57051,6 +57051,8 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 @keyframes tcdSk{to{background-position:-200% 0}}
 @media(max-width:900px){.tcd-in{grid-template-columns:1fr;gap:28px}.tcd-row{grid-template-columns:12px 64px minmax(0,1fr);gap:12px 14px;padding:16px 8px}.tcd-tag,.tcd-go{grid-column:3}.tcd-tag{justify-self:start}.tcd-go{display:none}.tcd-row:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){.tcd-row{animation:none}.tcd-bg{transform:scale(1.04)}}
+#adminTravelClubTrips .tcA-msgbox{margin:10px 0;padding:12px 14px;background:#f4f8fb;border-left:4px solid #ef8731;white-space:pre-wrap;font-size:14px;line-height:1.55;max-height:280px;overflow:auto}
+#adminTravelClubTrips .tcA-acchead select{height:44px;padding:0 12px;border:1px solid rgba(6,58,99,.2);background:#fff;font:600 13.5px 'Raleway',sans-serif;border-radius:0}
 /* Travel Club admin: accounts */
 #adminTravelClubTrips .tcA-acchead{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
 #adminTravelClubTrips .tcA-acchead input{flex:1 1 260px;min-width:0;height:44px;padding:0 14px;border:1px solid rgba(6,58,99,.2);background:#fff;font:500 14px 'Raleway',sans-serif;border-radius:0}
@@ -58456,6 +58458,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       tag.textContent='Approved';ti.textContent='You are approved to lead a trip';
       bd.innerHTML='<p>Congratulations. <b>'+esc(n.community||'Your group')+'</b> is approved to lead a trip with Sight Seers.</p><ol class="tcn-steps"><li>We agree the package, dates and your reward with you in writing.</li><li>We open your trip page and email you your link.</li><li>You share it. Everyone who joins is counted on your dashboard, with an easy place to add your WhatsApp group or channel.</li></ol>';
       ac.innerHTML='<button type="button" class="tcn-btn" data-tcn-groups>Open my dashboard</button><button type="button" class="tcn-btn tcn-ghost" data-tcn-close>Later</button>';
+    }else if(n.kind==='inbox'){
+      tag.textContent='New requests';ti.textContent=n.count+(n.count===1?' new request':' new requests')+' on the website';
+      bd.innerHTML='<p>'+esc((n.types||[]).join(', '))+(n.count>(n.types||[]).length?' and more':'')+'. They are waiting in your inbox.</p>';
+      ac.innerHTML='<button type="button" class="tcn-btn" data-tcn-inbox>Open inbox</button><button type="button" class="tcn-btn tcn-ghost" data-tcn-close>Later</button>';
     }else if(n.kind==='adminapp'){
       tag.textContent='New application';ti.textContent=(n.community||'A group')+' wants to lead a trip';
       bd.innerHTML='<p><b>'+esc(n.name||'An applicant')+'</b> applied to lead a trip'+(n.destination?' to '+esc(n.destination):'')+(n.invite?' and plans to invite <b>'+esc(n.invite)+'</b> '+(n.invite===1?'person':'people'):'')+'. Their account is created and the application is waiting for your approval.</p><p class="tcn-small">Reference '+esc(n.ref)+'</p>';
@@ -58485,6 +58491,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   document.addEventListener('click',function(e){
     var m=$('tcNotice');if(!m)return;
     if(e.target.closest('[data-tcn-groups]')){e.preventDefault();ntGoGroups();return;}
+    if(e.target.closest('[data-tcn-inbox]')){e.preventDefault();ntClose();try{if(window.ssClubAdmin&&ssClubAdmin.setTab)ssClubAdmin.setTab('inbox');}catch(x){}nav('club-admin');return;}
     if(e.target.closest('[data-tcn-review]')){e.preventDefault();ntClose();try{if(window.ssClubAdmin&&ssClubAdmin.setTab)ssClubAdmin.setTab('apps');}catch(x){}nav('club-admin');return;}
     var c=e.target.closest('[data-tcn-copy]');
     if(c){copyText(m.querySelector('.tcn-link input').value,c,'Copied');}
@@ -58530,20 +58537,21 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(S.loading)return;
     if(S.data&&!force){render();return;}
     S.loading=true;body.innerHTML='<p class="tcA-note">Loading Travel Club trips...</p>';
-    SS.api('trips?admin=1').then(function(d){S.data=d;S.loading=false;badge();render();}).catch(function(err){S.loading=false;body.innerHTML='<p class="tcA-note warn"><b>We could not load the trips.</b> '+esc(err.message)+'</p>';});
+    Promise.all([SS.api('trips?admin=1'),SS.api('inbox').catch(function(){return {items:[],counts:{new:0,in_progress:0,done:0,total:0,byType:{}}};})]).then(function(rs){var d=rs[0];d.inbox=rs[1];S.data=d;S.loading=false;badge();render();}).catch(function(err){S.loading=false;body.innerHTML='<p class="tcA-note warn"><b>We could not load the trips.</b> '+esc(err.message)+'</p>';});
   }
 
   function badge(){
     var bd=$('tcaBadge');if(!bd||!S.data)return;
     var n=S.data.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length;
-    bd.hidden=!n;bd.textContent=n+' to review';
+    var r=((S.data.inbox||{}).counts||{}).new||0,parts=[];if(n)parts.push(n+' application'+(n===1?'':'s')+' to review');if(r)parts.push(r+' new request'+(r===1?'':'s'));
+    bd.hidden=!parts.length;bd.textContent=parts.join(' · ');
   }
   function render(){
     var body=$('tcAdminBody');if(!body||!S.data)return;
-    var d=S.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
+    var d=S.data,newReq=((d.inbox||{}).counts||{}).new||0,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
     body.innerHTML='<div class="tcA-tabs" role="tablist">'+
-      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
-      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
+      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
+      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
   }
 
 
@@ -58557,7 +58565,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         drafts=d.trips.filter(function(t){return t.status==='draft';}),
         leaders=d.applications.filter(function(a){return a.status==='approved';});
     function todo(n,label,tab,tone){return '<button type="button" class="tcA-todo'+(n?' has '+(tone||''):'')+'" data-tcatab="'+tab+'"><b>'+n+'</b><span>'+esc(label)+'</span></button>';}
-    var out='<div class="tcA-todos">'+todo(pend.length,'Applications to review','apps','warn')+todo(fresh.length,'New traveler requests','reqs','warn')+todo(drafts.length,'Draft trips to finish','trips','')+todo(wait.length,'On a waitlist','reqs','')+'</div>';
+    var nr=((d.inbox||{}).counts||{}).new||0;
+    var out='<div class="tcA-todos">'+todo(pend.length,'Applications to review','apps','warn')+todo(nr,'New website requests','inbox','warn')+todo(fresh.length,'New traveler requests','reqs','warn')+todo(drafts.length,'Draft trips to finish','trips','')+todo(wait.length,'On a waitlist','reqs','')+'</div>';
     out+='<h4 class="tcA-h">Group leaders ('+leaders.length+')</h4>';
     if(!leaders.length)out+='<p class="tcA-note">No approved leaders yet. Approve an application and it shows here with its trip, its joiners and its group chat.</p>';
     else out+='<div class="tcA-table"><div class="tcA-tr tcA-th"><span>Leader</span><span>Trip</span><span>Joined</span><span>Group chat</span></div>'+leaders.map(function(a){
@@ -58570,6 +58579,37 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return out;
   }
 
+
+
+  /* ── inbox: every website request (bookings, contact, tent rentals, planning, passport, waitlist) in one list ── */
+  var IST={new:'New',in_progress:'In progress',done:'Done'},ICHIP={new:'warn',in_progress:'',done:'good'};
+  function inboxTab(){
+    var ib=S.data.inbox||{items:[],counts:{}},c=ib.counts||{},items=ib.items||[];
+    var types={};items.forEach(function(i){types[i.type]=1;});
+    var f=S.ifilter||'open',tp=S.itype||'all',q=(S.iq||'').toLowerCase();
+    var rows=items.filter(function(i){
+      if(f==='open'&&i.status==='done')return false;if(f!=='open'&&f!=='all'&&i.status!==f)return false;
+      if(tp!=='all'&&i.type!==tp)return false;
+      return !q||[i.name,i.email,i.phone,i.title,i.summary,i.details,i.ref].join(' ').toLowerCase().indexOf(q)>-1;
+    });
+    var out='<div class="tcA-todos">'+
+      '<button type="button" class="tcA-todo'+(c.new?' has warn':'')+'" data-tcaif="new"><b>'+(c.new||0)+'</b><span>New</span></button>'+
+      '<button type="button" class="tcA-todo" data-tcaif="in_progress"><b>'+(c.in_progress||0)+'</b><span>In progress</span></button>'+
+      '<button type="button" class="tcA-todo" data-tcaif="done"><b>'+(c.done||0)+'</b><span>Done</span></button>'+
+      '<button type="button" class="tcA-todo" data-tcaif="all"><b>'+(c.total||0)+'</b><span>All requests</span></button></div>'+
+      '<div class="tcA-acchead"><input type="search" id="tcAIQ" placeholder="Search name, email, phone or request" value="'+esc(S.iq||'')+'" aria-label="Search requests">'+
+      '<select id="tcAIT" aria-label="Request type"><option value="all">All types</option>'+Object.keys(types).sort().map(function(t){return '<option'+(tp===t?' selected':'')+'>'+esc(t)+'</option>';}).join('')+'</select>'+
+      '<select id="tcAIF" aria-label="Status"><option value="open"'+(f==='open'?' selected':'')+'>Open (new and in progress)</option><option value="all"'+(f==='all'?' selected':'')+'>Everything</option><option value="new"'+(f==='new'?' selected':'')+'>New</option><option value="in_progress"'+(f==='in_progress'?' selected':'')+'>In progress</option><option value="done"'+(f==='done'?' selected':'')+'>Done</option></select></div>';
+    if(!rows.length)return out+'<p class="tcA-note">'+(items.length?'Nothing matches. Try another filter.':'No website requests yet. Bookings, contact messages, tent rentals, planning requests and passport renewals appear here, and you get an email for each.')+'</p>';
+    return out+'<div class="tcA-list">'+rows.slice(0,200).map(function(i){
+      return '<details class="tcA-row" data-ikey="'+esc(i.key)+'"><summary><b>'+esc(i.name||'(no name)')+' · '+esc(i.type)+'</b><small>'+esc(i.title&&i.title!==i.type?i.title+' · ':'')+esc(dt(i.createdAt))+'</small>'+chip(ICHIP,i.status).replace(esc(lab(i.status)),esc(IST[i.status]))+'</summary><div class="tcA-body">'+
+        '<div class="tcA-kv"><span>Email</span><div><a href="mailto:'+esc(i.email)+'">'+esc(i.email)+'</a></div><span>Phone</span><div>'+(i.phone?'<a href="tel:'+esc(String(i.phone).replace(/[^0-9+]/g,''))+'">'+esc(i.phone)+'</a>':'')+'</div>'+(i.summary?'<span>Details</span><div>'+esc(i.summary)+'</div>':'')+(i.ref?'<span>Reference</span><div>'+esc(i.ref)+'</div>':'')+'</div>'+
+        (i.details?'<p class="tcA-msgbox">'+esc(i.details)+'</p>':'')+
+        '<div class="admin-package-grid"><div class="field-col"><label for="tcAIS_'+esc(i.key)+'">Status</label><select id="tcAIS_'+esc(i.key)+'">'+['new','in_progress','done'].map(function(x){return '<option value="'+x+'"'+(i.status===x?' selected':'')+'>'+IST[x]+'</option>';}).join('')+'</select></div>'+
+        '<div class="field-col"><label for="tcAIN_'+esc(i.key)+'">Private note</label><input type="text" id="tcAIN_'+esc(i.key)+'" value="'+esc(i.note||'')+'"></div></div>'+
+        '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcaisave="'+esc(i.key)+'">Save</button><a class="admin-inline-btn alt" href="mailto:'+esc(i.email)+'" style="text-decoration:none">Reply by email</a></div></div></details>';
+    }).join('')+'</div>';
+  }
 
   /* ── accounts: every member and leader, with the contact details we hold ── */
   var SRC={'sign-up':'Sign-up','application':'Application','application-link':'Application','google':'Google','microsoft':'Microsoft'};
@@ -58679,6 +58719,18 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   /* ── actions ── */
   document.addEventListener('click',function(e){
     var root=$('adminTravelClubTrips');if(!root||!root.contains(e.target))return;
+    var iff=e.target.closest('[data-tcaif]');
+    if(iff){S.ifilter=iff.getAttribute('data-tcaif');S.itype='all';S.iq='';render();return;}
+    var isv=e.target.closest('[data-tcaisave]');
+    if(isv){
+      var ik=isv.getAttribute('data-tcaisave'),parts=ik.split(':');isv.disabled=true;say('Saving...','');
+      SS.api('inbox','POST',{action:'update',source:parts[0],id:parts.slice(1).join(':'),status:$('tcAIS_'+ik).value,note:$('tcAIN_'+ik).value}).then(function(res){
+        var arr=S.data.inbox.items,k=arr.findIndex(function(x){return x.key===ik;});if(k>-1)arr[k]=res.item;
+        var cc={total:arr.length,new:0,in_progress:0,done:0,byType:{}};arr.forEach(function(x){cc[x.status]++;});S.data.inbox.counts=cc;
+        badge();render();say('Saved.','ok');
+      }).catch(function(err){isv.disabled=false;say(err.message,'err');});
+      return;
+    }
     var cv=e.target.closest('[data-tcacsv]');
     if(cv){try{var blob=new Blob([accountsCsv()],{type:'text/csv'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='sight-seers-accounts.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},500);}catch(x){}return;}
     var t=e.target.closest('[data-tcatab]');
@@ -58721,10 +58773,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
   });
   document.addEventListener('input',function(e){
+    if(e.target&&e.target.id==='tcAIQ'){S.iq=e.target.value;var p2=e.target.selectionStart;render();var n2=$('tcAIQ');if(n2){n2.focus();try{n2.setSelectionRange(p2,p2);}catch(x){}}}
     if(e.target&&e.target.id==='tcAQ'){S.q=e.target.value;var pos=e.target.selectionStart;render();var n=$('tcAQ');if(n){n.focus();try{n.setSelectionRange(pos,pos);}catch(x){}}}
   });
   document.addEventListener('change',function(e){
     if(e.target&&e.target.id==='tcAFilter'){S.filter=e.target.value;render();}
+    if(e.target&&e.target.id==='tcAIT'){S.itype=e.target.value;render();}
+    if(e.target&&e.target.id==='tcAIF'){S.ifilter=e.target.value;render();}
   });
 
   /* ── the Travel Club admin is its own page, separate from the website admin ── */
@@ -58755,9 +58810,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       b.innerHTML='<div><strong>You are the Travel Club admin</strong><span id="tcaBannerTxt">Approve group leaders, open trips and follow every traveler.</span></div><button type="button" class="tca-link" data-tca-go="club-admin">Open Travel Club admin</button>';
       pane.insertBefore(b,pane.firstChild);
     }
-    SS.api('trips?admin=1').then(function(d){
-      var n=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,t=document.getElementById('tcaBannerTxt');
-      if(t)t.textContent=n?n+' group leader application'+(n===1?'':'s')+' waiting for your approval.':'No applications waiting. Approve group leaders, open trips and follow every traveler.';
+    Promise.all([SS.api('trips?admin=1'),SS.api('inbox?count=1').catch(function(){return {counts:{new:0}};})]).then(function(rs){
+      var d=rs[0],n=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,r=(rs[1].counts||{}).new||0,t=document.getElementById('tcaBannerTxt'),parts=[];
+      if(n)parts.push(n+' group leader application'+(n===1?'':'s')+' waiting for your approval');if(r)parts.push(r+' new website request'+(r===1?'':'s'));
+      if(t)t.textContent=parts.length?parts.join(' and ')+'.':'Nothing waiting. Approve group leaders, open trips and follow every request.';
     }).catch(function(){});
   }
   document.addEventListener('ss-account-updated',function(){setTimeout(adminChips,400);setTimeout(adminBanner,600);});
