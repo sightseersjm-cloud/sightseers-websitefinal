@@ -24406,32 +24406,19 @@ vtSessionAction=function(el,type){
           <div class="ac-band"><div class="ac-band-in account-shell-title">
             <span class="ac-kicker">Sight Seers Travel Club</span>
             <h1 class="ac-h1">Your travel profile, refined.</h1>
-            <p class="ac-lede">Create an account to join approved group trips, lead one with your community, earn Travel Points, and keep your trip requests and bookings in one place.</p>
-            <div class="ac-bchips"><span class="ac-bchip">100 Travel Points welcome bonus</span></div>
+            <p class="ac-lede">Lead a trip with your community, earn Travel Points, and keep every request and booking in one place.</p>
           </div></div>
           <div class="ac-wrap">
             <div class="ac-scene" id="acScene" data-mode="signin">
               <div class="ac-side">
                 <span class="ac-eyebrow">The Travel Club</span>
-                <h2 class="ac-h2">Join a trip. Or lead one.</h2>
-                <div class="ac-blist">
-                  <article class="ac-bcard ac-brow">
-                    <div class="ac-bbody"><span class="ac-tag">Join a trip</span><h3>Travel with an approved group</h3><p>Browse approved departures and ask to join.</p></div>
-                    <div class="ac-bact"><button type="button" class="ac-fbtn" data-club-go="departures">See departures</button></div>
-                  </article>
-                  <article class="ac-bcard ac-brow">
-                    <div class="ac-bbody"><span class="ac-tag">Lead a trip</span><h3>Bring your community</h3><p>Apply to lead a trip. We handle the bookings and delivery.</p></div>
-                    <div class="ac-bact"><button type="button" class="ac-fbtn" data-tc-apply>Apply to lead</button></div>
-                  </article>
-                  <article class="ac-bcard ac-brow">
-                    <div class="ac-bbody"><span class="ac-tag">Travel Points</span><h3>Earn Travel Points</h3><p>Earn Travel Points on every booking.</p></div>
-                    <div class="ac-bact"><button type="button" class="ac-fbtn" data-join>Start earning</button></div>
-                  </article>
-                  <article class="ac-bcard ac-brow">
-                    <div class="ac-bbody"><span class="ac-tag">Your trips</span><h3>Track every request</h3><p>Track bookings and trip requests from your personal dashboard.</p></div>
-                    <div class="ac-bact"><button type="button" class="ac-fbtn" data-join>Start tracking</button></div>
-                  </article>
-                </div>
+                <h2 class="ac-h2">Lead a trip. Keep it all in one place.</h2>
+                <ul class="ac-perks">
+                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-users" aria-hidden="true"></i></span><div><h3>Lead a trip</h3><p>Bring your community. We approve every trip and run the bookings and delivery.</p></div></li>
+                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-star" aria-hidden="true"></i></span><div><h3>Earn Travel Points</h3><p>100 points to start, and more on every booking.</p></div></li>
+                  <li class="ac-perk"><span class="ac-perk-i"><i class="fas fa-compass" aria-hidden="true"></i></span><div><h3>Track everything</h3><p>Requests, bookings and your group chat on one dashboard.</p></div></li>
+                </ul>
+                <button type="button" class="ac-perk-cta" data-tc-apply>Apply to lead a trip <span aria-hidden="true">&rarr;</span></button>
               </div>
 
             <div class="ac-panel">
@@ -24493,8 +24480,6 @@ vtSessionAction=function(el,type){
                 </div>
               </div>
             </div>
-
-              <div class="ac-air"><b>100 Travel Points to start.</b> They are added when you first open your dashboard.</div>
               <div class="ac-helpbox">
                 <h3>Questions before you join?</h3>
                 <p>Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or <a href="tel:+13472916868">+1 (347) 291-6868</a>, email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>, or send us the Travel Form.</p>
@@ -57002,6 +56987,33 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
 
 
 <style id="ss-club-style">
+/* Sign-in page: a glossy side card, a frosted sign-in card, one simple set of perks */
+#p-account .ac-band{padding:34px 0 38px}
+#p-account .ac-scene{padding:44px 0 20px;gap:26px 34px;grid-template-columns:minmax(0,.92fr) minmax(0,1fr);grid-template-areas:"side panel" "help help";align-items:stretch}
+#p-account .ac-side{position:relative;overflow:hidden;padding:clamp(26px,3.4vw,40px);color:#fff;border-radius:0;background:radial-gradient(120% 110% at 0% 0%,#0b5078 0%,#07324f 52%,#041f35 100%);box-shadow:0 30px 70px rgba(4,31,53,.34),inset 0 1px 0 rgba(255,255,255,.18)}
+#p-account .ac-side::before{content:'';position:absolute;top:-30%;left:-20%;width:70%;height:80%;background:radial-gradient(circle,rgba(112,194,87,.4),transparent 62%);filter:blur(24px);pointer-events:none}
+#p-account .ac-side::after{content:'';position:absolute;bottom:-40%;right:-20%;width:70%;height:90%;background:radial-gradient(circle,rgba(239,135,49,.34),transparent 62%);filter:blur(24px);pointer-events:none}
+#p-account .ac-side>*{position:relative;z-index:1}
+#p-account .ac-side .ac-eyebrow{color:#f5a04b}
+#p-account .ac-side .ac-h2{margin:10px 0 24px;color:#fff!important;font-size:clamp(26px,3vw,36px);line-height:1.1}
+#p-account .ac-perks{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:12px}
+#p-account .ac-perk{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.22);backdrop-filter:blur(6px);transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .28s,background .28s}
+#p-account .ac-perk:hover{transform:translateY(-3px) translateX(3px);border-color:rgba(245,160,75,.7);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08))}
+#p-account .ac-perk-i{flex:0 0 auto;display:grid;place-items:center;width:42px;height:42px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font-size:16px;box-shadow:0 10px 22px rgba(239,135,49,.4)}
+#p-account .ac-perk h3{margin:0 0 3px;font-family:'Playfair Display',serif;font-size:19px;line-height:1.2;color:#fff!important}
+#p-account .ac-perk p{margin:0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82)}
+#p-account .ac-perk-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border:0;background:#fff;color:#063a63!important;font:800 13.5px 'Raleway',sans-serif;letter-spacing:.06em;cursor:pointer;border-radius:0;transition:transform .25s,box-shadow .25s}
+#p-account .ac-perk-cta:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(0,0,0,.3)}
+#p-account .ac-perk-cta span{color:#ef8731;transition:transform .25s}
+#p-account .ac-perk-cta:hover span{transform:translateX(4px)}
+#p-account .ac-panel{position:relative;top:auto;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#f6fafc 100%);border:1px solid rgba(6,58,99,.1);box-shadow:0 30px 70px rgba(6,58,99,.16),inset 0 1px 0 #fff}
+#p-account .ac-panel::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#70c257,#ef8731)}
+#p-account .ac-panel::after{content:'';position:absolute;top:-90px;right:-90px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.14),transparent 68%);pointer-events:none}
+#p-account .ac-panel>*{position:relative;z-index:1}
+#p-account .ac-helpbox{margin-top:6px}
+@media(max-width:900px){#p-account .ac-scene{grid-template-columns:1fr;grid-template-areas:"panel" "side" "help"}#p-account .ac-panel{order:-1}}
+body.theme-night #p-account .ac-panel{background:linear-gradient(180deg,#0e3050 0%,#0a2740 100%);border-color:rgba(255,255,255,.12);box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+
 
 /* ═════════ Travel Club: the program page, a trip page, the organizer space and the admin manager ═════════
    The Flagship Programs look: a dark title band with a boxed kicker and a Playfair heading, then a light page of white
