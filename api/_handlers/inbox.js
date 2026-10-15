@@ -3,6 +3,7 @@
  *   GET  /api/inbox            admin: every website request in one list, newest first, with counts
  *   GET  /api/inbox?count=1    admin: only the counts (for the notification badges)
  *   POST { action:'update', source, id, status, note }   admin: set a request's status (new, in_progress, done) and private note
+ *   POST { action:'delete', source, id }                admin: delete a request for good
  * The forms still save to their own collections and still email the team; this is the one place to work through them.
  */
 const db = require('../_lib/db');
@@ -34,6 +35,14 @@ module.exports = async function handler(req, res) {
       if (!rec) return res.status(404).json({ error: 'Request not found.' });
       const saved = await db.updateInCollection(src.collection, rec.id, { inboxStatus: b.status, inboxNote: String(b.note || '').trim().slice(0, 1000), inboxAt: new Date().toISOString(), inboxBy: admin.email || admin.id });
       return res.status(200).json({ ok: true, item: inbox.toItem(String(b.source), saved) });
+    }
+    if (b.action === 'delete') {
+      const src = inbox.SOURCES[String(b.source || '')];
+      if (!src) return res.status(400).json({ error: 'Unknown request type.' });
+      const list = await db.getCollection(src.collection);
+      if (!list.some(x => x.id === String(b.id || ''))) return res.status(404).json({ error: 'Request not found.' });
+      await db.removeFromCollection(src.collection, String(b.id));
+      return res.status(200).json({ ok: true });
     }
     return res.status(400).json({ error: 'Unknown action' });
   } catch (e) {

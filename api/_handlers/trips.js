@@ -455,12 +455,9 @@ module.exports = async function handler(req, res) {
       const contact = trip.cleanContact({ name: body.name, email: body.email, phone: body.phone });
       if (contact.error) return res.status(400).json({ error: contact.error });
       if (!body.consent) return res.status(400).json({ error: 'Please agree to be contacted about this trip.' });
-      const partySize = int(body.partySize, 1, 60, 1);
-      /* more than one traveler: the full name of each person after the first, so the leader and the team know who is coming */
-      const guests = (Array.isArray(body.guests) ? body.guests : []).map(g => str(g, 80)).filter(Boolean).slice(0, 59);
-      if (str(body.tripSlug, 80) && partySize > 1) {
-        if (guests.length !== partySize - 1 || guests.some(g => !/\S+\s+\S+/.test(g))) return res.status(400).json({ error: 'Add the full name (first and last) of each of the other ' + (partySize - 1) + ' traveler' + (partySize === 2 ? '' : 's') + '.' });
-      }
+      /* one person per request: friends and teammates each join for themselves through the same trip page */
+      const partySize = 1;
+      const guests = [];
       const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
       let t = null;
       const slug = str(body.tripSlug, 80);
@@ -651,7 +648,7 @@ module.exports = async function handler(req, res) {
       await log('account-deleted', 'Account removed: ' + (u.name || u.email), u.id);
       return res.status(200).json({ ok: true, keptApplications: keepApps.length });
     }
-    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -674,6 +671,29 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ ok: true, trip: saved });
       }
 
+      if (action === 'application-delete') {
+        const apps = await db.getCollection(APPS), a = apps.find(x => x.id === str(body.id, 80));
+        if (!a) return res.status(404).json({ error: 'Application not found.' });
+        await db.removeFromCollection(APPS, a.id);
+        /* a trip drafted from it stays, but no longer points back at the deleted application */
+        for (const t of (await db.getCollection(TRIPS)).filter(x => x.applicationId === a.id)) await db.updateInCollection(TRIPS, t.id, { applicationId: null });
+        await log('application-deleted', 'Application deleted: ' + a.communityName + ' (' + a.name + ')', a.ref);
+        return res.status(200).json({ ok: true });
+      }
+
+      if (action === 'activity-delete') {
+        await db.removeFromCollection(ACTIVITY, str(body.id, 80));
+        return res.status(200).json({ ok: true });
+      }
+
+      if (action === 'interest-delete') {
+        const ints = await db.getCollection(INTERESTS), i = ints.find(x => x.id === str(body.id, 80));
+        if (!i) return res.status(404).json({ error: 'Request not found.' });
+        await db.removeFromCollection(INTERESTS, i.id);
+        await log('request-deleted', 'Request deleted: ' + i.name + (i.tripTitle ? ' on ' + i.tripTitle : ''), i.ref);
+        return res.status(200).json({ ok: true });
+      }
+
       if (action === 'trip-status') {
         const trips = await db.getCollection(TRIPS), t = trips.find(x => x.id === str(body.id, 80));
         if (!t) return res.status(404).json({ error: 'Trip not found.' });
@@ -690,8 +710,11 @@ module.exports = async function handler(req, res) {
         const trips = await db.getCollection(TRIPS), t = trips.find(x => x.id === body.id);
         if (!t) return res.status(404).json({ error: 'Trip not found.' });
         const interests = await db.getCollection(INTERESTS);
-        if (interests.some(i => i.tripId === t.id)) return res.status(409).json({ error: 'This trip has traveler requests. Close it instead of deleting it.' });
+        const theirs = interests.filter(i => i.tripId === t.id);
+        if (theirs.length && !body.force) return res.status(409).json({ error: 'This trip has traveler requests. Close it instead, or delete it together with its requests.', requests: theirs.length });
+        for (const i of theirs) await db.removeFromCollection(INTERESTS, i.id);
         await db.removeFromCollection(TRIPS, t.id);
+        await log('trip-deleted', 'Trip deleted: ' + t.title + (theirs.length ? ' (with ' + theirs.length + ' request' + (theirs.length === 1 ? '' : 's') + ')' : ''), t.id);
         return res.status(200).json({ ok: true });
       }
 
