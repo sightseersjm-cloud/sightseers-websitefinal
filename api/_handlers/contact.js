@@ -44,7 +44,8 @@ module.exports = async function handler(req, res) {
         };
 
         await db.addToCollection('contact-messages', msg);
-        await sendEmail({
+        const sent = await sendEmail({
+          replyTo: msg.email,
           subject: `New Enquiry from ${escapeHtml(msg.name)}${msg.subject ? ': ' + escapeHtml(msg.subject) : ''}`,
           html: `
             <h2 style="color:#0d5371">New Contact Enquiry: Sight Seers Caribbean</h2>
@@ -60,6 +61,11 @@ module.exports = async function handler(req, res) {
             <p style="color:#888;font-size:12px;margin-top:20px">This message was submitted via sightseerscaribbean.com</p>`,
           attachments
         });
+        // Forms that must reach the inbox (like the Seven Shores Society application) ask us to confirm the email left.
+        // The message is already saved, so the visitor is told to use the email fallback rather than shown a false success.
+        if (req.body && req.body.requireEmail === true && !(sent && sent.ok)) {
+          return res.status(502).json({ error: 'Saved, but the email could not be sent', saved: true, id: msg.id });
+        }
         return res.status(201).json({ ok: true, id: msg.id });
       }
 
