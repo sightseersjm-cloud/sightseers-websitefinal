@@ -713,6 +713,12 @@ module.exports = async function handler(req, res) {
         const theirs = interests.filter(i => i.tripId === t.id);
         if (theirs.length && !body.force) return res.status(409).json({ error: 'This trip has traveler requests. Close it instead, or delete it together with its requests.', requests: theirs.length });
         for (const i of theirs) await db.removeFromCollection(INTERESTS, i.id);
+        /* also clear tripId from any applications that reference this trip */
+        const apps = await db.getCollection(APPS);
+        const linkedApps = apps.filter(a => a.tripId === t.id);
+        for (const a of linkedApps) {
+          await db.updateInCollection(APPS, a.id, { tripId: null });
+        }
         await db.removeFromCollection(TRIPS, t.id);
         await log('trip-deleted', 'Trip deleted: ' + t.title + (theirs.length ? ' (with ' + theirs.length + ' request' + (theirs.length === 1 ? '' : 's') + ')' : ''), t.id);
         return res.status(200).json({ ok: true });
