@@ -215,17 +215,18 @@ function ownsTrip(t, user) {
 /* ---------- emails ---------- */
 function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || 'there'; }
 function rosterLine(rec) {
-  return rec.shareContact
+  const withGuests = (rec.guests && rec.guests.length) ? [['Also travelling', rec.guests.join(', ')]] : [];
+  return (rec.shareContact
     ? [['Name', rec.name], ['Email', rec.email], ['Phone / WhatsApp', rec.phone], ['Travelers', String(rec.partySize)]]
-    : [['Name', firstName(rec.name)], ['Travelers', String(rec.partySize)]];
+    : [['Name', firstName(rec.name)], ['Travelers', String(rec.partySize)]]).concat(withGuests);
 }
 function interestMails(rec, t, extra) {
   extra = extra || {};
   const rows = [['Reference', rec.ref], ['Trip', rec.tripTitle || 'No trip chosen yet: wants to hear when one opens'], ['Name', rec.name], ['Email', rec.email], ['Phone / WhatsApp', rec.phone],
-    ['Travelers', String(rec.partySize)], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName], ['Shares contact with leader', t ? (rec.shareContact ? 'Yes' : 'No') : '']];
+    ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName], ['Shares contact with leader', t ? (rec.shareContact ? 'Yes' : 'No') : '']];
   const led = t && t.organizerName ? ' It is led by ' + trip.esc(t.organizerName) + '.' : '';
   const guestBody = t
-    ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
+    ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
     : `<p>Thanks, ${trip.esc(firstName(rec.name))}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
   const jobs = [
     safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
@@ -392,7 +393,7 @@ module.exports = async function handler(req, res) {
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
             groupLink: t.groupLink || '', joined: joinedPeople(list),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
-              .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
+              .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });
@@ -400,7 +401,7 @@ module.exports = async function handler(req, res) {
           .map(i => {
             const t = trips.find(x => x.id === i.tripId);
             const open = i.status !== 'cancelled' && i.status !== 'waitlist';
-            return { ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
+            return { guests: i.guests || [], ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact };
           });
         /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application and new website requests */
@@ -455,6 +456,11 @@ module.exports = async function handler(req, res) {
       if (contact.error) return res.status(400).json({ error: contact.error });
       if (!body.consent) return res.status(400).json({ error: 'Please agree to be contacted about this trip.' });
       const partySize = int(body.partySize, 1, 60, 1);
+      /* more than one traveler: the full name of each person after the first, so the leader and the team know who is coming */
+      const guests = (Array.isArray(body.guests) ? body.guests : []).map(g => str(g, 80)).filter(Boolean).slice(0, 59);
+      if (str(body.tripSlug, 80) && partySize > 1) {
+        if (guests.length !== partySize - 1 || guests.some(g => !/\S+\s+\S+/.test(g))) return res.status(400).json({ error: 'Add the full name (first and last) of each of the other ' + (partySize - 1) + ' traveler' + (partySize === 2 ? '' : 's') + '.' });
+      }
       const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
       let t = null;
       const slug = str(body.tripSlug, 80);
@@ -469,7 +475,7 @@ module.exports = async function handler(req, res) {
       const rec = {
         id: uid(), ref: trip.ref('TC'), kind: t ? 'trip' : 'alert',
         tripId: t ? t.id : null, tripSlug: t ? t.slug : '', tripTitle: t ? t.title : '',
-        name: contact.name, email: contact.email, phone: contact.phone, partySize,
+        name: contact.name, email: contact.email, phone: contact.phone, partySize, guests: partySize > 1 ? guests : [],
         message: str(body.message, 1200), source: str(body.source, 40), shareContact: !!body.shareContact,
         userId: user && user.id !== 'admin-passcode' ? user.id : null,
         status: full ? 'waitlist' : 'new', note: '', createdAt: new Date().toISOString()
