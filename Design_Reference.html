@@ -16910,17 +16910,6 @@ body.theme-night .page .tag{
           <input type="hidden" id="tpEmail"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhone"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
         </div>
         
-        <div class="upsell-section">
-          <h3>Enhance Your Experience</h3>
-          <p>Add the upgrades that make the day feel even better, clear options, no guesswork.</p>
-          <div class="upsell-list">
-            <label class="upsell-option"><input type="checkbox" value="ATV Adventure" data-price="80"> Add ATV Adventure <strong>+$80</strong></label>
-            <label class="upsell-option"><input type="checkbox" value="Zipline Experience" data-price="70"> Add Zipline Experience <strong>+$70</strong></label>
-            <label class="upsell-option"><input type="checkbox" value="Bamboo Rafting" data-price="75"> Add Bamboo Rafting <strong>+$75</strong></label>
-            <label class="upsell-option"><input type="checkbox" value="Private Yacht Upgrade" data-price="300"> Photo & Video <strong>+$200</strong></label>
-          </div>
-          <div class="upsell-totals"><span id="upsellSummary">No add-ons selected yet.</span><span id="upsellTotal">Add-ons: $0</span></div>
-        </div>
         <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore. Tell us in the notes above which industries or kinds of companies your group would like to visit, and your planner matches the visits to your interests.</p>
         <p class="mba-upsell-note" id="societyNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Applications for the Seven Shores Society are reviewed by your host, with a short Alignment Call. There is no payment to apply. Dates, venue and price are shared as they are confirmed.</p>
         <p class="mba-upsell-note" id="offsiteNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Seven Shores Offsites are quoted for your team. Tell us your team size, preferred country and dates, and what you want the offsite to achieve, and your planner replies within one business day.</p>
@@ -28019,11 +28008,10 @@ function syncMbaUpsells(){
   var note=document.getElementById('mbaUpsellNote');
   var socNote=document.getElementById('societyNote');
   var offNote=document.getElementById('offsiteNote');
-  if(!typeField||!sec) return;
+  if(!typeField) return;
   var t=(typeField.value||'').trim();
   var mba=t==='MBA Experience', soc=t==='Seven Shores Society', off=t==='Seven Shores Offsite';
-  if(mba||soc||off) sec.querySelectorAll('input:checked').forEach(function(i){i.checked=false;});
-  sec.style.display=(mba||soc||off)?'none':'';
+  if(sec){ if(mba||soc||off) sec.querySelectorAll('input:checked').forEach(function(i){i.checked=false;}); sec.style.display=(mba||soc||off)?'none':''; }
   if(note) note.style.display=mba?'':'none';
   if(socNote) socNote.style.display=soc?'':'none';
   if(offNote) offNote.style.display=off?'':'none';
@@ -56982,6 +56970,12 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-chatbtn{position:relative;overflow:hidden;isolation:isolate}
 #p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
+/* Start Planning: a more compact footer so the added questions fit */
+#p-booking .urgency-text{margin:6px 0 10px!important;padding:7px 12px!important;font-size:12px!important;line-height:1.4!important}
+#p-booking .form-wrap>.btn-primary{padding:11px 18px!important;font-size:12px!important;letter-spacing:1.2px!important;min-height:0!important}
+#p-booking .form-wrap>p[style*="text-align:center"]{margin-top:8px!important;font-size:11px!important;line-height:1.45!important}
+#p-booking .form-wrap>div[style*="justify-content:center"]{margin-top:8px!important}
+#p-booking .form-wrap>div[style*="justify-content:center"] .btn-primary{padding:9px 16px!important;font-size:11.5px!important;letter-spacing:1px!important;width:auto!important}
 /* Start Planning: the extra trip details that came from the old Travel Form */
 #p-booking .sp-more{margin:18px 0 6px;padding:18px 18px 8px;border:1px solid rgba(6,58,99,.1);background:linear-gradient(160deg,#fff 0%,#f3f8fc 100%);box-shadow:inset 0 1px 0 #fff}
 #p-booking .sp-more h3{margin:0 0 12px;font:700 19px 'Playfair Display',serif;color:var(--navy)}
