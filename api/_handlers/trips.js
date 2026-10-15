@@ -312,7 +312,7 @@ function decisionMail(app) {
 /* ---------- referral links (travel insurance, eSIM): written by an admin, never invented ---------- */
 const PARTNER_DEFAULTS = {
   insurance: { title: 'Travel insurance', note: 'Cover for cancellations, delays and medical care while you travel.', cta: 'Get a quote', url: '', logo: '' },
-  esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://saily.com/', logo: '/logos/saily.png' }
+  esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://go.saily.site/aff_c?offer_id=101&aff_id=14170', logo: '/logos/saily.png' }
 };
 const DEFAULT_DISCLOSURE = 'These are referral links. Sight Seers may receive a reward if you sign up through them.';
 function cleanPartner(src) {

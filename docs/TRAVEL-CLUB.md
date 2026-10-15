@@ -50,7 +50,7 @@ Applicants never see the team's private notes, who reviewed the application, or 
 The two cards under **Before you go** are written by an admin, not by code. In the admin portal, open **Travel Club trips**, then **Partner links**:
 
 - Paste your referral link for each partner. It must start with `https://`. Anything else is refused.
-- **eSIM is Saily** by default (`https://saily.com/`, shown with the Saily logo from `public/logos/saily.png`; Saily is also on the Partners page). Paste your own Saily referral link to replace the plain address, or leave the box empty to fall back to https://saily.com/.
+- **eSIM is Saily** by default (`https://go.saily.site/aff_c?offer_id=101&aff_id=14170`, shown with the Saily logo from `public/logos/saily.png`; Saily is also on the Partners page). Paste your own Saily referral link to replace the plain address, or leave the box empty to fall back to https://saily.com/.
 - Optionally change the title and the short note on each card. Without them the cards say "Travel insurance: Cover for cancellations, delays and medical care while you travel." and "eSIM: Land connected, without swapping your SIM or paying roaming." These are general descriptions, not claims about any partner.
 - Until an insurance link is set, that card says **Link coming soon** and has no button.
 - The line under the cards says, by default: "These are referral links. Sight Seers may receive a reward if you sign up through them." Replace it in the **Disclosure** box so it matches your agreement with each partner.
