@@ -1,6 +1,7 @@
 const db = require('../_lib/db');
 const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, uid, ADMIN_CODE } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
+const social = require('../_lib/social');
 
 const loginAttempts = new Map();
 const RATE_WINDOW = 15 * 60 * 1000;
@@ -17,10 +18,24 @@ function checkRate(key) {
   return record.count <= MAX_ATTEMPTS;
 }
 
+function sameSecret(a, b) {
+  const x = Buffer.from(a), y = Buffer.from(b);
+  return x.length === y.length && require('crypto').timingSafeEqual(x, y);
+}
+
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
+    /* Continue with Google / Microsoft */
+    const gurl = new URL(req.url || '/', 'http://x');
+    const gq = Object.assign(Object.fromEntries(gurl.searchParams), req.query || {});
+    if (gq.providers) return res.status(200).json({ ok: true, providers: social.providers() });
+    const sm = gurl.pathname.match(/\/auth\/(google|microsoft)\/(start|callback)\/?$/);
+    if (sm) {
+      if (sm[2] === 'start') return social.start(sm[1], res);
+      return social.callback(sm[1], req, res, gq, { db, createToken, hashPassword, uid, sendEmail, BUSINESS_EMAIL, escapeHtml: require('../_lib/auth').escapeHtml });
+    }
     const admin = requireAdmin(req, res);
     if (!admin) return;
     const users = await db.getCollection('users');
@@ -99,7 +114,24 @@ module.exports = async function handler(req, res) {
     }
 
     const users = await db.getCollection('users');
-    const user = users.find(u => u.email === String(email).trim().toLowerCase());
+    const cleanIn = String(email).trim().toLowerCase();
+    /* Owner sign-in: the owner's email and password live in the host's environment (OWNER_EMAIL / OWNER_PASSWORD),
+       never in the code. Signing in with them creates or repairs the owner's admin account. */
+    const ownerEmail = String(process.env.OWNER_EMAIL || '').trim().toLowerCase();
+    const ownerPass = String(process.env.OWNER_PASSWORD || '');
+    if (ownerEmail && ownerPass && cleanIn === ownerEmail && sameSecret(String(password), ownerPass)) {
+      let owner = users.find(u => u.email === ownerEmail);
+      if (!owner) {
+        owner = { id: uid(), name: 'Sight Seers Admin', email: ownerEmail, passwordHash: hashPassword(ownerPass), phone: '', style: 'Adventure', role: 'admin', createdAt: new Date().toISOString() };
+        users.push(owner);
+        await db.setCollection('users', users);
+      } else if (owner.role !== 'admin' || !verifyPassword(ownerPass, owner.passwordHash)) {
+        owner.role = 'admin';
+        owner.passwordHash = hashPassword(ownerPass);
+        await db.setCollection('users', users);
+      }
+    }
+    const user = users.find(u => u.email === cleanIn);
     if (!user || !verifyPassword(String(password), user.passwordHash)) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }

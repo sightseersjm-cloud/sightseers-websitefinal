@@ -62,6 +62,15 @@
       setToken(res.token);
       try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
+      /* an admin account signing in with the regular button lands in the admin portal, already unlocked */
+      if (res.user && res.user.role === 'admin') {
+        setTimeout(function () {
+          try {
+            if (typeof window.nav === 'function') window.nav('admin');
+            if (typeof window.unlockAdminPortal === 'function') window.unlockAdminPortal();
+          } catch (e) {}
+        }, 350);
+      }
       return res;
     });
   }
@@ -515,4 +524,28 @@
     syncFromServer: syncFromServer
   };
 
+
+  /* ── Continue with Google / Microsoft: the server sends the visitor back to /account#sso=<token> ── */
+  function finishSocial() {
+    var h = String(location.hash || '');
+    var err = h.match(/^#sso_error=(.*)$/), ok = h.match(/^#sso=([\w\-.]+)$/);
+    if (!err && !ok) return;
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    function say(msg, good) {
+      var el = document.getElementById('authStatus');
+      if (el) { el.textContent = msg; el.className = 'inline-status ' + (good ? 'ok' : 'err'); }
+    }
+    if (err) { var m = 'Sign-in did not finish.'; try { m = decodeURIComponent(err[1]); } catch (e) {} setTimeout(function () { say(m, false); }, 400); return; }
+    setToken(ok[1]);
+    api('auth', 'POST', { action: 'me' }).then(function (res) {
+      try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
+      document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
+      if (typeof window.nav === 'function') window.nav('account');
+      if (res.user && res.user.role === 'admin') {
+        setTimeout(function () { try { window.nav('admin'); if (typeof window.unlockAdminPortal === 'function') window.unlockAdminPortal(); } catch (e) {} }, 350);
+      }
+    }).catch(function () { setToken(''); say('We could not finish signing you in. Please try again.', false); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(finishSocial, 300); });
+  else setTimeout(finishSocial, 300);
 })();

@@ -15,6 +15,8 @@
  *   POST { action:'trip-delete' }      admin: delete a trip that never opened
  *   POST { action:'application-review' } admin: approve, decline or ask for more information (optionally drafts the trip)
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
+ *   POST { action:'trip-group-link' }  signed in (the trip's leader): add the WhatsApp group or channel link; joiners are emailed it
+ *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
  *
  * Nothing here invents a price, a seat count, a reward or a departure: a trip only exists when an admin enters it,
  * seats are only shown when an admin sets them, and an organizer's reward is private text an admin writes per trip.
@@ -30,6 +32,8 @@ const TRIPS = 'club-trips';
 const APPS = 'club-applications';
 const INTERESTS = 'club-interests';
 const SETTINGS = 'club-settings';
+const ACTIVITY = 'club-activity';
+const SITE = (process.env.SITE_URL || 'https://www.sightseerscaribbean.com').replace(/\/+$/, '');
 
 const TRIP_STATUS = ['draft', 'open', 'full', 'closed'];
 const APP_STATUS = ['pending', 'needs_info', 'approved', 'declined'];
@@ -75,6 +79,11 @@ function safeUrl(v) {
   if (/^https:\/\/[^\s"'<>]+$/.test(u)) return u;
   return '';
 }
+function groupLinkOf(v) {
+  const u = str(v, 400);
+  if (!u) return '';
+  try { const x = new URL(u); return x.protocol === 'https:' && x.hostname.indexOf('.') > 0 ? x.toString() : ''; } catch (e) { return ''; }
+}
 function isoDate(v) {
   const s = str(v, 10);
   return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : '';
@@ -95,6 +104,25 @@ function allow(key, max, windowMs) {
 function mail(to, subject, heading, body) {
   return sendEmail({ to, replyTo: BUSINESS_EMAIL, subject, html: trip.shell(heading, body, ' ') });
 }
+/* an email must never break the request that caused it */
+async function safe(label, p) { try { await p; } catch (e) { console.error('club ' + label + ' email', e && e.message); } }
+function button(url, label) {
+  return '<p style="margin:18px 0"><a href="' + trip.esc(url) + '" style="display:inline-block;background:#063a63;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px">' + trip.esc(label) + '</a></p>';
+}
+function adminMail(subject, heading, body, replyTo) {
+  return sendEmail({ replyTo: replyTo || undefined, subject, html: trip.shell(heading, body, ' ') });
+}
+/* a running log the admin overview reads: who did what, and when */
+async function log(type, text, ref) {
+  try {
+    await db.addToCollection(ACTIVITY, { id: uid(), type, text: str(text, 300), ref: str(ref, 40), at: new Date().toISOString() });
+  } catch (e) { console.error('club activity', e && e.message); }
+}
+function joinedPeople(list) {
+  return list.filter(i => i.status !== 'cancelled' && i.status !== 'waitlist').reduce((n, i) => n + (i.partySize || 1), 0);
+}
+function activeJoiners(list) { return list.filter(i => i.status !== 'cancelled' && i.status !== 'waitlist'); }
+function hasGroupLink(t) { return !!(t && t.groupLink); }
 
 /* ---------- shaping ---------- */
 function travelersCounted(interests, tripId) {
@@ -157,8 +185,10 @@ function cleanTrip(b, existing, all) {
     showOrganizer: !!b.showOrganizer,
     reward: str(b.reward, 600),
     rewardStatus: oneOf(b.rewardStatus, REWARD_STATUS, 'not_set'),
-    internalNote: str(b.internalNote, 1000)
+    internalNote: str(b.internalNote, 1000),
+    groupLink: groupLinkOf(b.groupLink)
   };
+  if (b.groupLink && !out.groupLink) return { error: 'The group link must start with https://, for example your WhatsApp invite link.' };
   if (out.organizerEmail && !isEmail(out.organizerEmail)) return { error: 'The organizer email is not a valid address.' };
   if (status === 'open' || status === 'full') {
     if (!out.summary) return { error: 'Add a short summary before the trip opens.' };
@@ -180,16 +210,77 @@ function ownsTrip(t, user) {
 }
 
 /* ---------- emails ---------- */
-function interestMails(rec, t) {
+function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || 'there'; }
+function rosterLine(rec) {
+  return rec.shareContact
+    ? [['Name', rec.name], ['Email', rec.email], ['Phone / WhatsApp', rec.phone], ['Travelers', String(rec.partySize)]]
+    : [['Name', firstName(rec.name)], ['Travelers', String(rec.partySize)]];
+}
+function interestMails(rec, t, extra) {
+  extra = extra || {};
   const rows = [['Reference', rec.ref], ['Trip', rec.tripTitle || 'No trip chosen yet: wants to hear when one opens'], ['Name', rec.name], ['Email', rec.email], ['Phone / WhatsApp', rec.phone],
-    ['Travelers', String(rec.partySize)], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName]];
+    ['Travelers', String(rec.partySize)], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName], ['Shares contact with leader', t ? (rec.shareContact ? 'Yes' : 'No') : '']];
+  const led = t && t.organizerName ? ' It is led by ' + trip.esc(t.organizerName) + '.' : '';
   const guestBody = t
-    ? `<p>Thanks, ${trip.esc(rec.name.split(' ')[0])}. We have your request for <b>${trip.esc(t.title)}</b>. ${trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable(rows.slice(0, 1).concat([['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)]]))}`
-    : `<p>Thanks, ${trip.esc(rec.name.split(' ')[0])}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
-  return Promise.all([
-    mail(rec.email, t ? 'We have your request: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody),
-    sendEmail({ replyTo: rec.email, subject: '[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), html: trip.shell('New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, ' ') })
-  ]);
+    ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
+    : `<p>Thanks, ${trip.esc(firstName(rec.name))}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
+  const jobs = [
+    safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
+    safe('interest admin', adminMail('[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), 'New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, rec.email))
+  ];
+  if (t && t.organizerEmail && t.organizerEmail !== rec.email) {
+    jobs.push(safe('interest leader', mail(t.organizerEmail, 'New traveler on ' + t.title, 'Someone joined your trip',
+      `<p>${trip.esc(firstName(rec.name))} ${rec.status === 'waitlist' ? 'joined the waitlist for' : 'joined'} <b>${trip.esc(t.title)}</b>${rec.source ? ' (from your link tagged <b>' + trip.esc(rec.source) + '</b>)' : ''}.</p>${trip.detailTable(rosterLine(rec).concat(extra.goalLine ? [['Your goal', extra.goalLine]] : []))}${rec.shareContact ? '' : '<p style="color:#555">This traveler chose not to share contact details. Add your group chat link in your dashboard so they can join it.</p>'}${button(SITE + '/account', 'Open my dashboard')}`)));
+  }
+  return Promise.all(jobs);
+}
+
+function goalMails(t, goal, asked) {
+  const body = `<p>Your group has reached its goal: <b>${asked}</b> of <b>${goal}</b> people have joined <b>${trip.esc(t.title)}</b>.</p>${button(SITE + '/account', 'Open my dashboard')}`;
+  const jobs = [safe('goal admin', adminMail('Goal reached: ' + t.title, 'Invite goal reached', `<p><b>${trip.esc(t.organizerName || 'A leader')}</b> reached their invite goal on <b>${trip.esc(t.title)}</b> (${asked} of ${goal}).</p>`))];
+  if (t.organizerEmail) jobs.push(safe('goal leader', mail(t.organizerEmail, 'Your group reached its goal', 'Goal reached', body)));
+  return Promise.all(jobs);
+}
+
+function groupLinkMails(t, joiners) {
+  const jobs = joiners.map(i => safe('group link', mail(i.email, 'Join the group chat for ' + t.title, 'Your group chat is ready',
+    `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${t.organizerName ? trip.esc(t.organizerName) + ' has set up' : 'The group chat is ready for'} <b>${trip.esc(t.title)}</b>. Join to meet the group and get every update in one place.</p>${button(t.groupLink, 'Join the group chat')}<p style="color:#555">You can also find it on your dashboard.</p>`)));
+  jobs.push(safe('group link admin', adminMail('Group chat added: ' + t.title, 'Group chat added', `<p>${trip.esc(t.organizerName || 'The leader')} added a group chat link to <b>${trip.esc(t.title)}</b>. ${joiners.length} traveler${joiners.length === 1 ? ' was' : 's were'} emailed.</p>${trip.detailTable([['Link', t.groupLink]])}`)));
+  if (t.organizerEmail) jobs.push(safe('group link leader', mail(t.organizerEmail, 'Your group chat link is saved', 'Group chat saved', `<p>Your link is saved on <b>${trip.esc(t.title)}</b> and ${joiners.length} traveler${joiners.length === 1 ? ' has' : 's have'} been emailed it. New travelers see it as soon as they join.</p>`)));
+  return Promise.all(jobs);
+}
+
+const INTEREST_COPY = {
+  contacted: ['We are following up on your trip', 'A member of our team has started on your request and will be in touch with the details.'],
+  confirmed: ['Your place is confirmed', 'Your place on this trip is confirmed. We will email you the next steps and payment details. Nothing has been charged yet.'],
+  booked: ['Your trip is booked', 'You are booked. Everything for the trip will be shared with you by email and on your dashboard.'],
+  cancelled: ['Your trip request was cancelled', 'Your request for this trip has been cancelled. If this is a surprise, just reply to this email and we will sort it out.'],
+  waitlist: ['You are on the waitlist', 'The trip is full right now. You are on the waitlist and we will email you the moment a place opens.']
+};
+function interestStatusMails(i, t) {
+  const c = INTEREST_COPY[i.status];
+  if (!c) return Promise.resolve();
+  const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${c[1]}</p>${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
+  if (i.status === 'booked' && t && t.organizerEmail && t.organizerEmail !== i.email) {
+    jobs.push(safe('booked leader', mail(t.organizerEmail, 'A traveler booked: ' + t.title, 'A traveler booked', `<p>${trip.esc(firstName(i.name))} is now booked on <b>${trip.esc(t.title)}</b>.</p>${trip.detailTable([['Travelers', String(i.partySize)]])}`)));
+  }
+  return Promise.all(jobs);
+}
+
+function tripLiveMail(t) {
+  if (!t.organizerEmail) return Promise.resolve();
+  const link = SITE + '/trip/' + t.slug;
+  if (t.status === 'open') {
+    return safe('trip live', mail(t.organizerEmail, 'Your trip page is live: ' + t.title, 'Your trip is live',
+      `<p>Good news${t.organizerName ? ', ' + trip.esc(firstName(t.organizerName)) : ''}. Your trip page is open and ready to share.</p>${trip.detailTable([['Trip', t.title], ['Dates', t.dateText], ['Your link', link]])}${button(link, 'Open my trip page')}<p>Share the link with your community. Travelers who join are counted on your dashboard, where you can also add your WhatsApp group or channel link so everyone lands in the same place.</p>${button(SITE + '/account', 'Open my dashboard')}`));
+  }
+  if (t.status === 'full') {
+    return safe('trip full', mail(t.organizerEmail, 'Your trip is full: ' + t.title, 'Your trip is full', `<p><b>${trip.esc(t.title)}</b> is full. New travelers join the waitlist.</p>${button(SITE + '/account', 'Open my dashboard')}`));
+  }
+  if (t.status === 'closed') {
+    return safe('trip closed', mail(t.organizerEmail, 'Your trip has closed: ' + t.title, 'Your trip has closed', `<p><b>${trip.esc(t.title)}</b> is closed to new travelers. Thank you for leading it with us.</p>`));
+  }
+  return Promise.resolve();
 }
 
 function applicationMails(rec) {
@@ -212,7 +303,10 @@ function decisionMail(app) {
   const copy = DECISION_COPY[app.status];
   if (!copy) return Promise.resolve();
   const reply = app.reply ? `<p style="white-space:pre-wrap;background:#f6faf7;border-left:4px solid #70c257;padding:10px 14px">${trip.esc(app.reply)}</p>` : '';
-  return mail(app.email, copy[0], 'Your application', `<p>Hi ${trip.esc(app.name.split(' ')[0])},</p><p>${copy[1]}</p>${reply}${trip.detailTable([['Reference', app.ref]])}`);
+  const next = app.status === 'approved'
+    ? '<p>Sign in to your dashboard to see your approval. Your trip page and your link to share will appear there once the package, dates and reward are agreed. From the dashboard you will also be able to see everyone who joins and add your WhatsApp group or channel link.</p>' + button(SITE + '/account', 'Open my dashboard')
+    : (app.status === 'needs_info' ? button(SITE + '/account', 'Open my dashboard') : '');
+  return mail(app.email, copy[0], 'Your application', `<p>Hi ${trip.esc(app.name.split(' ')[0])},</p><p>${copy[1]}</p>${reply}${trip.detailTable([['Reference', app.ref]])}${next}`);
 }
 
 /* ---------- referral links (travel insurance, eSIM): written by an admin, never invented ---------- */
@@ -261,8 +355,8 @@ module.exports = async function handler(req, res) {
       if (get('admin')) {
         const admin = requireAdmin(req, res);
         if (!admin) return;
-        const [trips, applications, interests, partnersDoc] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS), getPartnersDoc()]);
-        return res.status(200).json({ ok: true, trips, applications, interests, partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        const [trips, applications, interests, partnersDoc, activity] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS), getPartnersDoc(), db.getCollection(ACTIVITY)]);
+        return res.status(200).json({ ok: true, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -272,7 +366,7 @@ module.exports = async function handler(req, res) {
         const [trips, applications, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS)]);
         const myApps = applications.filter(a => a.email === mailAddr || (a.userId && a.userId === user.id))
           .map(a => ({
-            ref: a.ref, status: a.status, communityName: a.communityName, reply: a.status === 'pending' ? '' : (a.reply || ''), createdAt: a.createdAt,
+            ref: a.ref, status: a.status, communityName: a.communityName, reply: a.status === 'pending' ? '' : (a.reply || ''), createdAt: a.createdAt, seenApproved: !!a.seenApproved,
             communityType: a.communityType || '', city: a.city || '', link: a.link || '', audienceSize: a.audienceSize || '', channels: a.channels || [], experience: a.experience || '',
             inviteCount: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '', styles: a.styles || [], timing: a.timing || '', message: a.message || '', notes: a.notes || ''
           }));
@@ -283,13 +377,28 @@ module.exports = async function handler(req, res) {
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
+            groupLink: t.groupLink || '', joined: joinedPeople(list),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
-              .map(i => ({ firstName: i.name.split(' ')[0], partySize: i.partySize, status: i.status, source: i.source || '', createdAt: i.createdAt }))
+              .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
+                i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });
         const myInterests = interests.filter(i => i.email === mailAddr || (i.userId && i.userId === user.id))
-          .map(i => ({ ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt }));
-        return res.status(200).json({ ok: true, applications: myApps, trips: myTrips, interests: myInterests, partners: publicPartners(await getPartnersDoc()) });
+          .map(i => {
+            const t = trips.find(x => x.id === i.tripId);
+            const open = i.status !== 'cancelled' && i.status !== 'waitlist';
+            return { ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
+              leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact };
+          });
+        /* popups for the dashboard: an approval, a trip going live, a group chat ready to join */
+        const notices = [];
+        myApps.forEach(a => { if (a.status === 'approved' && !a.seenApproved) notices.push({ key: 'app:' + a.ref, kind: 'approved', community: a.communityName, ref: a.ref }); });
+        trips.filter(t => ownsTrip(t, user) && (t.status === 'open' || t.status === 'full') && !t.liveSeen).forEach(t => notices.push({ key: 'trip:' + t.id, kind: 'live', title: t.title, url: '/trip/' + t.slug, slug: t.slug }));
+        interests.filter(i => (i.email === mailAddr || (i.userId && i.userId === user.id)) && i.status !== 'cancelled' && i.status !== 'waitlist' && !i.linkSeen).forEach(i => {
+          const t = trips.find(x => x.id === i.tripId);
+          if (t && t.groupLink) notices.push({ key: 'join:' + i.ref, kind: 'group', title: t.title, groupLink: t.groupLink, leaderName: t.organizerName || '' });
+        });
+        return res.status(200).json({ ok: true, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
       const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
@@ -332,12 +441,26 @@ module.exports = async function handler(req, res) {
         id: uid(), ref: trip.ref('TC'), kind: t ? 'trip' : 'alert',
         tripId: t ? t.id : null, tripSlug: t ? t.slug : '', tripTitle: t ? t.title : '',
         name: contact.name, email: contact.email, phone: contact.phone, partySize,
-        message: str(body.message, 1200), source: str(body.source, 40),
+        message: str(body.message, 1200), source: str(body.source, 40), shareContact: !!body.shareContact,
         userId: user && user.id !== 'admin-passcode' ? user.id : null,
         status: full ? 'waitlist' : 'new', note: '', createdAt: new Date().toISOString()
       };
       await db.addToCollection(INTERESTS, rec);
-      try { await interestMails(rec, t); } catch (e) { console.error('club interest email', e && e.message); }
+      let goalLine = '', goalHit = null;
+      if (t) {
+        const all = interests.concat([rec]).filter(i => i.tripId === t.id);
+        const asked = joinedPeople(all);
+        const apps = t.applicationId ? await db.getCollection(APPS) : [];
+        const app = t.applicationId ? apps.find(x => x.id === t.applicationId) : null;
+        const goal = app && app.inviteCount != null ? app.inviteCount : null;
+        if (goal) {
+          goalLine = asked + ' of ' + goal;
+          if (asked >= goal && !t.goalNotified && rec.status !== 'waitlist') { goalHit = { asked, goal }; await db.updateInCollection(TRIPS, t.id, { goalNotified: true }); }
+        }
+      }
+      await log('joined', rec.name + ' ' + (rec.status === 'waitlist' ? 'joined the waitlist for ' : 'joined ') + (t ? t.title : 'the departure alert list') + (rec.partySize > 1 ? ' (' + rec.partySize + ' travelers)' : ''), rec.ref);
+      await interestMails(rec, t, { goalLine });
+      if (goalHit) { await log('goal', (t.organizerName || 'A leader') + ' reached the invite goal on ' + t.title, rec.ref); await goalMails(t, goalHit.goal, goalHit.asked); }
       return res.status(200).json({ ok: true, ref: rec.ref, waitlist: rec.status === 'waitlist' });
     }
 
@@ -374,6 +497,7 @@ module.exports = async function handler(req, res) {
         status: 'pending', reply: '', note: '', tripId: null, createdAt: new Date().toISOString()
       };
       await db.addToCollection(APPS, rec);
+      await log('application', rec.name + ' applied to lead a trip: ' + rec.communityName, rec.ref);
       try { await applicationMails(rec); } catch (e) { console.error('club application email', e && e.message); }
       return res.status(200).json({ ok: true, ref: rec.ref });
     }
@@ -394,6 +518,43 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, inviteCount: saved.inviteCount });
     }
 
+    /* ===== signed in: the leader adds their WhatsApp group or channel link; joiners are emailed it ===== */
+    if (action === 'trip-group-link') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const link = groupLinkOf(body.groupLink);
+      if (str(body.groupLink, 400) && !link) return res.status(400).json({ error: 'Paste the full invite link, starting with https://' });
+      const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
+      const t = trips.find(x => x.id === str(body.id, 60));
+      if (!t || !ownsTrip(t, user)) return res.status(404).json({ error: 'We could not find that trip.' });
+      const changed = link !== (t.groupLink || '');
+      const saved = await db.updateInCollection(TRIPS, t.id, { groupLink: link, groupLinkAt: new Date().toISOString() });
+      if (changed && link) {
+        const joiners = activeJoiners(interests.filter(i => i.tripId === t.id));
+        await log('group-link', (t.organizerName || 'A leader') + ' added the group chat for ' + t.title, t.id);
+        await groupLinkMails(saved, joiners);
+      }
+      return res.status(200).json({ ok: true, groupLink: saved.groupLink || '' });
+    }
+
+    /* ===== signed in: mark a dashboard popup as seen ===== */
+    if (action === 'notice-seen') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in required' });
+      const key = str(body.key, 80), mailAddr = lower(user.email, 120);
+      if (key.indexOf('app:') === 0) {
+        const a = (await db.getCollection(APPS)).find(x => x.ref === key.slice(4) && (x.email === mailAddr || (x.userId && x.userId === user.id)));
+        if (a) await db.updateInCollection(APPS, a.id, { seenApproved: true });
+      } else if (key.indexOf('trip:') === 0) {
+        const t = (await db.getCollection(TRIPS)).find(x => x.id === key.slice(5));
+        if (t && ownsTrip(t, user)) await db.updateInCollection(TRIPS, t.id, { liveSeen: true });
+      } else if (key.indexOf('join:') === 0) {
+        const i = (await db.getCollection(INTERESTS)).find(x => x.ref === key.slice(5) && (x.email === mailAddr || (x.userId && x.userId === user.id)));
+        if (i) await db.updateInCollection(INTERESTS, i.id, { linkSeen: true });
+      }
+      return res.status(200).json({ ok: true });
+    }
+
     /* ===== admin ===== */
     if (action === 'trip-save' || action === 'trip-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
       const admin = requireAdmin(req, res);
@@ -410,6 +571,10 @@ module.exports = async function handler(req, res) {
         else {
           saved = Object.assign({ id: uid(), createdAt: new Date().toISOString(), applicationId: str(body.applicationId, 60) || null }, c.value);
           await db.addToCollection(TRIPS, saved);
+        }
+        if ((!existing || existing.status !== saved.status) && ['open', 'full', 'closed'].indexOf(saved.status) > -1 && body.notify !== false) {
+          await log('trip-' + saved.status, saved.title + ' is now ' + saved.status, saved.id);
+          await tripLiveMail(saved);
         }
         return res.status(200).json({ ok: true, trip: saved });
       }
@@ -446,6 +611,7 @@ module.exports = async function handler(req, res) {
           updates.tripId = drafted.id;
         }
         const saved = await db.updateInCollection(APPS, app.id, updates);
+        await log('decision', app.communityName + ' (' + app.name + ') ' + status.replace('_', ' '), app.ref);
         if (body.notify !== false) { try { await decisionMail(saved); } catch (e) { console.error('club decision email', e && e.message); } }
         return res.status(200).json({ ok: true, application: saved, trip: drafted });
       }
@@ -470,6 +636,10 @@ module.exports = async function handler(req, res) {
         const status = oneOf(body.status, INTEREST_STATUS, null);
         if (!status) return res.status(400).json({ error: 'Choose a status.' });
         const saved = await db.updateInCollection(INTERESTS, i.id, { status, note: str(body.note, 1000) });
+        if (status !== i.status) {
+          await log('traveler', i.name + ' is now ' + status + ' on ' + (i.tripTitle || 'a departure alert'), i.ref);
+          if (body.notify !== false) { const tt = i.tripId ? (await db.getCollection(TRIPS)).find(x => x.id === i.tripId) : null; await interestStatusMails(saved, tt); }
+        }
         return res.status(200).json({ ok: true, interest: saved });
       }
     }
