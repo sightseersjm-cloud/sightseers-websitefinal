@@ -217,8 +217,8 @@ function decisionMail(app) {
 
 /* ---------- referral links (travel insurance, eSIM): written by an admin, never invented ---------- */
 const PARTNER_DEFAULTS = {
-  insurance: { title: 'Travel insurance', note: 'Cover for cancellations, delays and medical care while you travel.', cta: 'Get a quote' },
-  esim: { title: 'eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM' }
+  insurance: { title: 'Travel insurance', note: 'Cover for cancellations, delays and medical care while you travel.', cta: 'Get a quote', url: '', logo: '' },
+  esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://saily.com/', logo: '/logos/saily.png' }
 };
 const DEFAULT_DISCLOSURE = 'These are referral links. Sight Seers may receive a reward if you sign up through them.';
 function cleanPartner(src) {
@@ -236,7 +236,7 @@ function publicPartners(doc) {
   const out = {};
   ['insurance', 'esim'].forEach(k => {
     const d = doc[k] || {}, f = PARTNER_DEFAULTS[k];
-    out[k] = { url: d.url || '', title: d.title || f.title, note: d.note || f.note, cta: f.cta };
+    out[k] = { url: d.url || f.url, title: d.title || f.title, note: d.note || f.note, cta: f.cta, logo: f.logo };
   });
   out.disclosure = doc.disclosure || DEFAULT_DISCLOSURE;
   return out;

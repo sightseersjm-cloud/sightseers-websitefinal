@@ -10756,31 +10756,17 @@ body.theme-night .page .tag{
 
 <!-- COMMUNITY -->
 <hr class="sec-shimmer">
-<section class="community-sec" style="position:relative;overflow:hidden">
-  <div class="depth-orb depth-orb--green" style="top:-60px;right:-100px"></div>
-  <div class="community-wrap">
-    <div class="community-panel reveal">
-      <div class="community-grid">
-        <div class="community-copy">
-          <span>The Sight Seers Travel Club</span>
-          <h3>Join a trip. Or lead one.</h3>
-          <p>Travel with an approved group, or bring your own community and lead a trip with us. We approve every trip, manage the bookings and run the delivery. Members also earn Travel Points.</p>
-          <div class="community-chips">
-            <span>Approved group trips</span>
-            <span>Lead with your community</span>
-            <span>Earn Travel Points</span>
-          </div>
-          <div class="community-actions">
-            <a href="/travel-club#departures" class="btn-white" onclick="return ssClubGo('departures');">Join a trip</a>
-            <a href="/travel-club#lead" class="btn-border-white" onclick="return ssClubGo('lead');">Lead a trip <i class="fas fa-arrow-right"></i></a>
-          </div>
-        </div>
-        <div class="community-points">
-          <div class="community-point"><strong>Join an approved trip</strong><p>Browse the departures we have approved and ask to join. We confirm availability and payment terms before anything is charged.</p></div>
-          <div class="community-point"><strong>Lead a trip</strong><p>Apply with your community. We agree the package, the dates and your reward in writing, then give you a personal trip page.</p></div>
-          <div class="community-point"><strong>We handle the rest</strong><p>Sight Seers supports recruitment, manages the bookings and coordinates delivery on the ground.</p></div>
-          <div class="community-point"><strong>Earn Travel Points</strong><p>Members build Travel Points through account sign-up, bookings and featured experiences.</p></div>
-        </div>
+<section class="tch" id="homeTravelClub">
+  <div class="tch-wrap reveal">
+    <figure class="tch-photo">
+      <div class="tch-img"><img src="/assets/flagship/shore-leave-beach-group.jpg" alt="A group of Sight Seers travelers together on a Caribbean beach" width="1600" height="1200" loading="lazy" decoding="async"></div>
+    </figure>
+    <div class="tch-copy">
+      <span class="tch-eyebrow" data-home-club="eyebrow">The Sight Seers Travel Club</span>
+      <h3 class="tch-title" data-home-club="title">Lead a trip with your community.</h3>
+      <p class="tch-body" data-home-club="body">Bring your own group and lead a trip with us. We approve every trip, manage the bookings and run the delivery.</p>
+      <div class="tch-actions">
+        <a class="tch-btn" href="/travel-club#lead" onclick="return ssClubGo('lead');"><span data-home-club="primaryBtn">Lead a trip</span></a>
       </div>
     </div>
   </div>
@@ -17420,6 +17406,14 @@ body.theme-night .page .tag{
           <div class="partner-placeholder" style="display:none">Viator</div>
           <div class="partner-name">Viator</div>
           <div class="partner-note">A trusted global platform for booking tours and experiences, connecting travelers with top-rated activities in the Caribbean and beyond.</div>
+          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a class="partner-item" href="https://saily.com/" target="_blank" rel="noopener sponsored" title="Saily eSIM">
+          <img class="partner-logo" src="/logos/saily.png" alt="Saily" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="partner-placeholder" style="display:none">Saily</div>
+          <div class="partner-name">Saily</div>
+          <div class="partner-note">Our eSIM partner. Travel data plans so guests can land connected, without swapping a SIM card or paying roaming fees.</div>
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
 
@@ -40410,21 +40404,9 @@ body.theme-night .page .tag{
   function defaults(){
     return {
       eyebrow:'The Sight Seers Travel Club',
-      title:'Join a trip. Or lead one.',
-      body:'Travel with an approved group, or bring your own community and lead a trip with us. We approve every trip, manage the bookings and run the delivery. Members also earn Travel Points.',
-      chip1:'Approved group trips',
-      chip2:'Lead with your community',
-      chip3:'Earn Travel Points',
-      point1Title:'Join an approved trip',
-      point1Body:'Browse the departures we have approved and ask to join. We confirm availability and payment terms before anything is charged.',
-      point2Title:'Lead a trip',
-      point2Body:'Apply with your community. We agree the package, the dates and your reward in writing, then give you a personal trip page.',
-      point3Title:'We handle the rest',
-      point3Body:'Sight Seers supports recruitment, manages the bookings and coordinates delivery on the ground.',
-      point4Title:'Earn Travel Points',
-      point4Body:'Members build Travel Points through account sign-up, bookings and featured experiences.',
-      primaryBtn:'Join a trip',
-      secondaryBtn:'Lead a trip'
+      title:'Lead a trip with your community.',
+      body:'Bring your own group and lead a trip with us. We approve every trip, manage the bookings and run the delivery.',
+      primaryBtn:'Lead a trip'
     };
   }
 
@@ -40442,36 +40424,13 @@ body.theme-night .page .tag{
 
   function applyHomeTravelClub(){
     const s = readSettings();
-    const sec = document.querySelector('.community-sec');
+    const sec = document.querySelector('.tch');
     if(!sec) return;
-
-    const copy = sec.querySelector('.community-copy');
-    if(copy){
-      copy.innerHTML = `
-        <span data-home-club="eyebrow">${s.eyebrow}</span>
-        <h3 data-home-club="title">${s.title}</h3>
-        <p data-home-club="body">${s.body}</p>
-        <div class="community-chips">
-          <span data-home-club="chip1">${s.chip1}</span>
-          <span data-home-club="chip2">${s.chip2}</span>
-          <span data-home-club="chip3">${s.chip3}</span>
-        </div>
-        <div class="community-actions">
-          <a class="btn-white" href="#" onclick="return ssClubGo('departures');"><span data-home-club="primaryBtn">${s.primaryBtn}</span></a>
-          <a class="btn-border-white" href="#" onclick="return ssClubGo('lead');"><span data-home-club="secondaryBtn">${s.secondaryBtn}</span> <i class="fas fa-arrow-right"></i></a>
-        </div>
-      `;
-    }
-
-    const points = sec.querySelector('.community-points');
-    if(points){
-      points.innerHTML = `
-        <div class="community-point"><strong data-home-club="point1Title">${s.point1Title}</strong><p data-home-club="point1Body">${s.point1Body}</p></div>
-        <div class="community-point"><strong data-home-club="point2Title">${s.point2Title}</strong><p data-home-club="point2Body">${s.point2Body}</p></div>
-        <div class="community-point"><strong data-home-club="point3Title">${s.point3Title}</strong><p data-home-club="point3Body">${s.point3Body}</p></div>
-        <div class="community-point"><strong data-home-club="point4Title">${s.point4Title}</strong><p data-home-club="point4Body">${s.point4Body}</p></div>
-      `;
-    }
+    const set = (k, v) => { const e = sec.querySelector('[data-home-club="' + k + '"]'); if(e) e.textContent = v; };
+    set('eyebrow', s.eyebrow);
+    set('title', s.title);
+    set('body', s.body);
+    set('primaryBtn', s.primaryBtn);
   }
 
   function injectAdmin(){
@@ -40486,7 +40445,7 @@ body.theme-night .page .tag{
       <summary>
         <span>
           <strong>Home Travel Club Section</strong>
-          <small>Edit the home page travel club section that replaced the join community block.</small>
+          <small>Edit the words in the home page Travel Club section (the photo, then the heading, text and two links).</small>
         </span>
         <i class="fas fa-chevron-down"></i>
       </summary>
@@ -40496,24 +40455,7 @@ body.theme-night .page .tag{
             <div class="field-col"><label for="homeClubEyebrow">Eyebrow</label><input type="text" id="homeClubEyebrow" value="${s.eyebrow.replace(/"/g,'&quot;')}"></div>
             <div class="field-col full"><label for="homeClubTitle">Title</label><input type="text" id="homeClubTitle" value="${s.title.replace(/"/g,'&quot;')}"></div>
             <div class="field-col full"><label for="homeClubBody">Body</label><textarea id="homeClubBody">${s.body}</textarea></div>
-            <div class="field-col"><label for="homeClubChip1">Chip 1</label><input type="text" id="homeClubChip1" value="${s.chip1.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label for="homeClubChip2">Chip 2</label><input type="text" id="homeClubChip2" value="${s.chip2.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label for="homeClubChip3">Chip 3</label><input type="text" id="homeClubChip3" value="${s.chip3.replace(/"/g,'&quot;')}"></div>
-
-            <div class="field-col"><label for="homeClubPoint1Title">Point 1 Title</label><input type="text" id="homeClubPoint1Title" value="${s.point1Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label for="homeClubPoint1Body">Point 1 Body</label><textarea id="homeClubPoint1Body">${s.point1Body}</textarea></div>
-
-            <div class="field-col"><label for="homeClubPoint2Title">Point 2 Title</label><input type="text" id="homeClubPoint2Title" value="${s.point2Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label for="homeClubPoint2Body">Point 2 Body</label><textarea id="homeClubPoint2Body">${s.point2Body}</textarea></div>
-
-            <div class="field-col"><label for="homeClubPoint3Title">Point 3 Title</label><input type="text" id="homeClubPoint3Title" value="${s.point3Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label for="homeClubPoint3Body">Point 3 Body</label><textarea id="homeClubPoint3Body">${s.point3Body}</textarea></div>
-
-            <div class="field-col"><label for="homeClubPoint4Title">Point 4 Title</label><input type="text" id="homeClubPoint4Title" value="${s.point4Title.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col full"><label for="homeClubPoint4Body">Point 4 Body</label><textarea id="homeClubPoint4Body">${s.point4Body}</textarea></div>
-
-            <div class="field-col"><label for="homeClubPrimaryBtn">Primary Button</label><input type="text" id="homeClubPrimaryBtn" value="${s.primaryBtn.replace(/"/g,'&quot;')}"></div>
-            <div class="field-col"><label for="homeClubSecondaryBtn">Secondary Button</label><input type="text" id="homeClubSecondaryBtn" value="${s.secondaryBtn.replace(/"/g,'&quot;')}"></div>
+            <div class="field-col"><label for="homeClubPrimaryBtn">Button (opens the apply panel)</label><input type="text" id="homeClubPrimaryBtn" value="${s.primaryBtn.replace(/"/g,'&quot;')}"></div>
           </div>
           <div class="admin-package-actions">
             <button type="button" class="admin-inline-btn" onclick="saveHomeTravelClubSection()">Save Home Travel Club</button>
@@ -40530,19 +40472,7 @@ body.theme-night .page .tag{
       eyebrow: document.getElementById('homeClubEyebrow')?.value || defaults().eyebrow,
       title: document.getElementById('homeClubTitle')?.value || defaults().title,
       body: document.getElementById('homeClubBody')?.value || defaults().body,
-      chip1: document.getElementById('homeClubChip1')?.value || defaults().chip1,
-      chip2: document.getElementById('homeClubChip2')?.value || defaults().chip2,
-      chip3: document.getElementById('homeClubChip3')?.value || defaults().chip3,
-      point1Title: document.getElementById('homeClubPoint1Title')?.value || defaults().point1Title,
-      point1Body: document.getElementById('homeClubPoint1Body')?.value || defaults().point1Body,
-      point2Title: document.getElementById('homeClubPoint2Title')?.value || defaults().point2Title,
-      point2Body: document.getElementById('homeClubPoint2Body')?.value || defaults().point2Body,
-      point3Title: document.getElementById('homeClubPoint3Title')?.value || defaults().point3Title,
-      point3Body: document.getElementById('homeClubPoint3Body')?.value || defaults().point3Body,
-      point4Title: document.getElementById('homeClubPoint4Title')?.value || defaults().point4Title,
-      point4Body: document.getElementById('homeClubPoint4Body')?.value || defaults().point4Body,
-      primaryBtn: document.getElementById('homeClubPrimaryBtn')?.value || defaults().primaryBtn,
-      secondaryBtn: document.getElementById('homeClubSecondaryBtn')?.value || defaults().secondaryBtn
+      primaryBtn: document.getElementById('homeClubPrimaryBtn')?.value || defaults().primaryBtn
     };
     saveSettings(data);
     applyHomeTravelClub();
@@ -42711,7 +42641,7 @@ body.theme-night .page .tag{
     { key:'home-testimonials', label:'Home Testimonials Section', help:'Adjust testimonial wording and statistics.', selectors:['#p-home .testi-sec'] },
     { key:'home-promo', label:'Home Promo Cards Section', help:'Adjust promo card titles and labels.', selectors:['#p-home .promo-sec'] },
     { key:'home-gallery', label:'Home Gallery / Media Showcase', help:'Adjust gallery heading, copy, and button text on the home page.', selectors:['#p-home .customer-sec'] },
-    { key:'home-community', label:'Home Travel Club Section', help:'Adjust travel club wording on the home page.', selectors:['#p-home .community-sec'] },
+    { key:'home-community', label:'Home Travel Club Section', help:'Adjust travel club wording on the home page.', selectors:['#p-home .tch'] },
     { key:'about-page', label:'About Page', help:'Adjust the About page text.', selectors:['#p-about'] },
     { key:'gallery-page', label:'Gallery / Media Page', help:'Adjust the dedicated gallery page wording.', selectors:['#p-gallery'] },
     { key:'destinations-page', label:'Destinations Page', help:'Adjust text on the destinations page.', selectors:['#p-destinations'] },
@@ -57187,6 +57117,51 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:21px;color:var(--tc-head)!important}
 .tc-alert p{margin:0;font-size:14px;line-height:1.55;color:var(--tc-mut)}
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+/* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
+.tch{padding:78px 0;background:#f1f7f4}
+.tch-wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:72px;align-items:center;max-width:1120px;margin:0 auto;padding:0 30px}
+.tch-photo{position:relative;margin:0;isolation:isolate;transform:perspective(1100px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .35s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.tch-photo::before{content:'';position:absolute;inset:22px -22px -22px 22px;z-index:-1;border:2px solid rgba(239,135,49,.7);transition:inset .4s cubic-bezier(.2,.8,.2,1),border-color .3s}
+.tch-img{position:relative;overflow:hidden;aspect-ratio:6/5;background:#d9e7ee;box-shadow:0 2px 6px rgba(6,58,99,.1),0 26px 60px rgba(6,58,99,.22);transition:box-shadow .4s cubic-bezier(.2,.8,.2,1)}
+.tch-img img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.001);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.tch-img::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,40%),rgba(255,255,255,.3),transparent 62%)}
+.tch-photo:hover{--ty:-10px}
+.tch-photo:hover::before{inset:14px -14px -14px 14px;border-color:#ef8731}
+.tch-photo:hover .tch-img{box-shadow:0 4px 10px rgba(6,58,99,.12),0 44px 90px rgba(6,58,99,.32)}
+.tch-photo:hover .tch-img img{transform:scale(1.06)}
+.tch-photo:hover .tch-img::after{opacity:1}
+.tch-eyebrow{display:block;margin:0 0 14px;font:800 12px 'Raleway',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#ef8731}
+.tch-title{margin:0 0 16px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2.1rem,3.6vw,3.1rem);line-height:1.05;color:#063a63}
+.tch-body{margin:0 0 30px;max-width:46ch;font-size:16px;line-height:1.75;color:#4d6275}
+.tch-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
+.tch-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border:2px solid #063a63;background:rgba(255,255,255,.65);text-decoration:none;transform:perspective(700px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s;will-change:transform}
+.tch-btn::before{content:'';position:absolute;inset:0;background:#063a63;transform:scaleX(0);transform-origin:left;transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.tch-btn::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(120px circle at var(--mx,50%) var(--my,50%),rgba(239,135,49,.35),transparent 62%)}
+.tch-btn span{position:relative;z-index:1;font:800 13px 'Raleway',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#063a63;transition:color .25s}
+.tch-btn:hover{--ty:-3px;box-shadow:0 16px 30px rgba(6,58,99,.22)}
+.tch-btn:hover::before{transform:scaleX(1)}
+.tch-btn:hover::after{opacity:1}
+.tch-btn:hover span{color:#fff}
+.tch-link{position:relative;padding-bottom:5px;text-decoration:none}
+.tch-link span{font:800 13px 'Raleway',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#063a63;transition:color .2s}
+.tch-link span::after{content:' \2192';color:#ef8731;display:inline-block;transition:transform .25s}
+.tch-link::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:#ef8731;transform:scaleX(.3);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.tch-link:hover::after{transform:scaleX(1)}
+.tch-link:hover span::after{transform:translateX(4px)}
+.tch-btn:focus-visible,.tch-link:focus-visible{outline:3px solid #ef8731;outline-offset:4px}
+body.theme-night .tch{background:#06223a}
+body.theme-night .tch-title{color:#f5fbff}
+body.theme-night .tch-body{color:#b7c8d8}
+body.theme-night .tch-img{box-shadow:0 2px 6px rgba(0,0,0,.3),0 26px 60px rgba(0,0,0,.5)}
+html body.theme-night .page .tch .tch-btn:not(#ss-x){border-color:#fff;background:rgba(255,255,255,.06)}
+html body.theme-night .page .tch .tch-btn:not(#ss-x)::before{background:#fff}
+html body.theme-night .page .tch .tch-btn:not(#ss-x) span{color:#fff!important}
+html body.theme-night .page .tch .tch-btn:not(#ss-x):hover span{color:#063a63!important}
+html body.theme-night .page .tch .tch-link:not(#ss-x) span{color:#fff!important}
+@media(max-width:900px){.tch{padding:56px 0}.tch-wrap{grid-template-columns:1fr;gap:48px;padding:0 26px}.tch-photo::before{inset:14px -10px -14px 14px}.tch-photo:hover{--ty:-6px}}
+@media(max-width:560px){.tch-btn{width:100%}.tch-actions{gap:18px}}
+@media (prefers-reduced-motion:reduce){.tch-photo,.tch-btn,.tch-img img,.tch-photo::before{transition:none!important}}
+
 .tc-form--alert{display:grid;grid-template-columns:1fr 1fr 110px;gap:12px;align-items:end}
 .tc-form--alert .tc-check,.tc-form--alert .tc-fbtn,.tc-form--alert .tc-status{grid-column:1/-1}
 .tc-form--alert .tc-fbtn{justify-self:start}
@@ -57291,7 +57266,10 @@ body.theme-night .tc-status.ok{color:#9be8a8}body.theme-night .tc-status.err{col
 #p-account .ac-grow span.ac-gmeta{display:block;margin-top:3px;font-size:12.5px;color:var(--ac-mut)}
 #p-account .ac-refgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 #p-account .ac-ref{display:flex;flex-direction:column;align-items:flex-start;padding:18px 20px;background:var(--ac-card);border:1px solid var(--ac-line);text-decoration:none!important;color:inherit}
-#p-account .ac-reftag{display:inline-block;margin-bottom:10px;padding:3px 8px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ef8731;border:1px solid rgba(239,135,49,.45);background:rgba(239,135,49,.08)}
+#p-account .ac-refhead{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-bottom:10px}
+#p-account .ac-reflogo{display:block;height:30px;width:auto;max-width:110px;object-fit:contain}
+body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
+#p-account .ac-reftag{display:inline-block;margin-bottom:0;padding:3px 8px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ef8731;border:1px solid rgba(239,135,49,.45);background:rgba(239,135,49,.08)}
 #p-account .ac-ref h5{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:19px;line-height:1.2;color:var(--ac-head)!important}
 #p-account .ac-ref p{margin:0 0 14px;font-size:13.5px;line-height:1.55;color:var(--ac-mut)!important}
 #p-account .ac-refgo{margin-top:auto;display:inline-flex;align-items:center;height:40px;padding:0 18px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font:700 13px 'Raleway',sans-serif;box-shadow:0 10px 22px rgba(239,135,49,.3);transition:transform .2s,box-shadow .2s}
@@ -57693,7 +57671,7 @@ body.theme-night #tcApplyModal .tla-alert{background:rgba(224,101,79,.14);color:
   }
 
   /* ═════ pointer: a soft tilt and glow on the cards, as on Flagship Programs ═════ */
-  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply';
+  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply,.tch-photo,.tch-btn';
   document.addEventListener('pointermove',function(e){
     var t=e.target&&e.target.closest&&e.target.closest(CARD);if(!t)return;
     var r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
@@ -58074,7 +58052,8 @@ body.theme-night #tcApplyModal .tla-alert{background:rgba(224,101,79,.14);color:
   }
   var PTAG={insurance:'Protection',esim:'Connectivity'};
   function partnerCard(k,p){
-    var inner='<span class="ac-reftag">'+PTAG[k]+'</span><h5>'+esc(p.title)+'</h5><p>'+esc(p.note)+'</p>'+(p.url?'<span class="ac-refgo">'+esc(p.cta)+'</span>':'<span class="ac-refsoon">Link coming soon</span>');
+    var logo=p.logo?'<img class="ac-reflogo" src="'+esc(p.logo)+'" alt="'+esc(p.title)+'" loading="lazy">':'';
+    var inner='<span class="ac-refhead"><span class="ac-reftag">'+PTAG[k]+'</span>'+logo+'</span><h5>'+esc(p.title)+'</h5><p>'+esc(p.note)+'</p>'+(p.url?'<span class="ac-refgo">'+esc(p.cta)+'</span>':'<span class="ac-refsoon">Link coming soon</span>');
     return p.url?'<a class="ac-ref" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored" data-partner="'+k+'">'+inner+'</a>':'<div class="ac-ref is-soon" data-partner="'+k+'">'+inner+'</div>';
   }
   function partnersHtml(pt){
@@ -58223,13 +58202,13 @@ body.theme-night #tcApplyModal .tla-alert{background:rgba(224,101,79,.14);color:
   /* ── partner links: travel insurance and eSIM referrals shown on every member's Group trips tab ── */
   function links(){
     var raw=(S.data&&S.data.partnersRaw)||{},ins=raw.insurance||{},es=raw.esim||{};
-    return '<p class="tcA-note">These two cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. Until a link is set, the card shows <b>Link coming soon</b> with no button.</p>'+
+    return '<p class="tcA-note">These two cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'+
       '<div class="tcA-body"><div class="admin-package-grid">'+
       fld('Travel insurance: your referral link','tcAL_ins_url',ins.url||'',{full:true,type:'url',ph:'https://...',help:'Must start with https://. Leave empty to show Link coming soon.'})+
       fld('Travel insurance: title (optional)','tcAL_ins_title',ins.title||'',{ph:'Travel insurance'})+
       fld('Travel insurance: short note (optional)','tcAL_ins_note',ins.note||'',{ph:'Cover for cancellations, delays and medical care while you travel.'})+
-      fld('eSIM: your referral link','tcAL_esim_url',es.url||'',{full:true,type:'url',ph:'https://...',help:'Must start with https://. Leave empty to show Link coming soon.'})+
-      fld('eSIM: title (optional)','tcAL_esim_title',es.title||'',{ph:'eSIM'})+
+      fld('eSIM: your referral link','tcAL_esim_url',es.url||'',{full:true,type:'url',ph:'https://saily.com/',help:'Must start with https://. Leave empty to use https://saily.com/.'})+
+      fld('eSIM: title (optional)','tcAL_esim_title',es.title||'',{ph:'Saily eSIM'})+
       fld('eSIM: short note (optional)','tcAL_esim_note',es.note||'',{ph:'Land connected, without swapping your SIM or paying roaming.'})+
       fld('Disclosure shown under the cards (optional)','tcAL_disc',raw.disclosure||'',{type:'textarea',ph:'These are referral links. Sight Seers may receive a reward if you sign up through them.',help:'Leave empty to use the standard sentence shown above. Check it matches your agreement with each partner.'})+
       '</div><div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcalinks>Save partner links</button></div></div>';
