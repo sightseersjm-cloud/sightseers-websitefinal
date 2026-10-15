@@ -13991,11 +13991,11 @@ body.theme-night #p-flagship-programs{
               <div><dt id="tcdN2">0</dt><dd>Destinations</dd></div>
               <div><dt id="tcdN3">0</dt><dd>Places left</dd></div>
             </dl>
-            <button type="button" class="tcd-cta" data-tc-go="tcAlertCard">Tell me when one opens <span aria-hidden="true">&rarr;</span></button>
+            <a class="tcd-cta" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">Follow our WhatsApp Channel <span aria-hidden="true">&rarr;</span></a>
           </aside>
           <div class="tcd-list" id="tcDepartures" aria-live="polite"></div>
         </div>
-        <div class="tcd-foot"><span>Green means places are open, orange means a waitlist. Nothing is charged until we confirm with you.</span><button type="button" class="tcd-lead" data-tc-apply>Lead your own trip <span aria-hidden="true">&rarr;</span></button></div>
+        <div class="tcd-foot"><span>Green means places are open, orange means a waitlist. Nothing is charged until we confirm with you.</span><button type="button" class="tcd-cta" data-tc-apply>Lead your own trip <span aria-hidden="true">&rarr;</span></button></div>
       </div>
 
       <div class="tc-card tc-alert" id="tcAlertCard">
@@ -57040,6 +57040,7 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-stats dd{margin:0;font:800 11px 'Raleway',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#70c257}
 .tcd-cta{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border:0;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font:800 12px 'Raleway',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border-radius:0;transform:perspective(700px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s,box-shadow .25s}
 .tcd-cta::before{content:'';position:absolute;inset:0;z-index:-1;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.tcd a.tcd-cta{text-decoration:none}
 .tcd-cta:hover{--ty:-3px;color:#063a63!important;box-shadow:0 16px 32px rgba(0,0,0,.35)}
 .tcd-cta:hover::before{transform:scaleX(1)}
 .tcd-side>*{animation:tcdUp .7s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--k,0)*80ms)}
@@ -57074,15 +57075,13 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-empty p{margin:0 0 16px;max-width:52ch;font-size:14px;line-height:1.6;color:rgba(255,255,255,.78)}
 .tcd-empty a{color:#f5a04b}
 .tcd-skel{height:74px;border-bottom:1px solid rgba(255,255,255,.14);background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.12),rgba(255,255,255,.04));background-size:200% 100%;animation:tcdSk 1.4s linear infinite}
-.tcd-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:24px max(clamp(26px,4vw,52px),calc((100% - 1132px)/2 + 52px));border-top:2px solid rgba(255,255,255,.28);font-size:12.5px;color:rgba(255,255,255,.7)}
-.tcd-lead{padding:0;border:0;background:none;color:#70c257!important;font:800 12px 'Raleway',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border-radius:0}
-.tcd-lead span{display:inline-block;transition:transform .25s}
-.tcd-lead:hover span{transform:translateX(5px)}
-.tcd .tcd-cta,.tcd .tcd-lead{font-size:12px!important}
+.tcd-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:16px max(clamp(26px,4vw,52px),calc((100% - 1132px)/2 + 52px));border-top:2px solid rgba(255,255,255,.28);font-size:12.5px;color:rgba(255,255,255,.7)}
+.tcd .tcd-cta{font-size:12px!important}
 @keyframes tcdIn{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
 @keyframes tcdSk{to{background-position:-200% 0}}
 @media(max-width:900px){.tcd{min-height:0}.tcd-in{grid-template-columns:1fr;gap:28px;padding-top:48px;padding-bottom:36px}.tcd-row{grid-template-columns:12px 64px minmax(0,1fr);gap:12px 14px;padding:16px 8px}.tcd-end{grid-column:3;align-items:flex-start}.tcd-go{display:none}.tcd-row:hover{transform:none}}
 @media(max-width:900px){.tcd{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 36px rgba(255,255,255,.95),0 22px 50px rgba(6,58,99,.2)}}
+@media(min-width:701px){.tcd-foot{padding-right:max(clamp(26px,4vw,52px),calc((100% - 1132px)/2 + 52px),96px)}}
 @media(prefers-reduced-motion:reduce){.tcd-row,.tcd-side>*{animation:none}.tcd-bg{transform:scale(1.06)}}
 #adminTravelClubTrips .tcA-msgbox{margin:10px 0;padding:12px 14px;background:#f4f8fb;border-left:4px solid #ef8731;white-space:pre-wrap;font-size:14px;line-height:1.55;max-height:280px;overflow:auto}
 #adminTravelClubTrips .tcA-acchead select{height:44px;padding:0 12px;border:1px solid rgba(6,58,99,.2);background:#fff;font:600 13.5px 'Raleway',sans-serif;border-radius:0}
@@ -58048,7 +58047,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var list=(res&&res.trips)||[];
       dep.at=Date.now();
       depStats(list);
-      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Leave your email and we will tell you when one opens.</p><button type="button" class="tcd-cta" data-tc-go="tcAlertCard">Tell me when one opens <span aria-hidden="true">&rarr;</span></button></div>';
+      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Follow our WhatsApp Channel to be first to see each new departure.</p></div>';
       g.scrollTop=0;depMore();
     }).catch(function(){
       g.innerHTML='<div class="tcd-empty"><strong>We could not load the departures</strong><p>Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.</p><button type="button" class="tcd-cta" id="tcRetry">Try again</button></div>';
