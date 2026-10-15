@@ -5,6 +5,16 @@
   "installCommand": "npm install",
   "redirects": [
     {
+      "source": "/contact",
+      "destination": "/booking",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "/booking",
+      "permanent": true
+    },
+    {
       "source": "/senior-tours",
       "destination": "/school-tours",
       "permanent": true

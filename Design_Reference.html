@@ -9472,7 +9472,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
         </div>
       </li>
       <li class="nav-item" data-vtours-link><a href="#" onclick="nav('vtours')" id="n-vtours">360° V-Tours</a></li>
-      <li class="nav-item"><a href="#" onclick="nav('contact')" id="n-contact">Travel Form</a></li>
       <li class="nav-item"><a href="#" onclick="nav('booking')" class="btn-book">Start Planning</a></li>
     </ul>
     <div class="nav-actions">
@@ -9532,7 +9531,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" data-vtours-link onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
 
-  <a href="#" onclick="nav('contact');closeMob()">Travel Form</a>
   <a href="#" onclick="nav('account');closeMob()">Guest Account</a>
   <a href="#" id="n-admin-mobile" class="admin-hidden-link" onclick="nav('admin');closeMob()">Admin Portal</a>
   <a href="#" onclick="nav('booking');closeMob()" style="color:var(--orange);margin-top:20px;font-size:1.1em">Start Planning →</a>
@@ -11499,7 +11497,7 @@ body.theme-night .page .tag{
           <p class="yacht-luxe-sub">Designed for friend groups, families and social circles of 5 or more who want an easy, elevated getaway with the right balance of fun, comfort, flexibility and shared moments.</p>
           <div class="yacht-luxe-actions">
             <a href="#" onclick="openLinkedStartPlanning();" class="btn-primary">Start Planning</a>
-            <a href="#" onclick="nav('contact');return false;" class="btn-secondary"><i class="fas fa-envelope"></i>Travel Form</a>
+            
           </div>
         </div>
         <div class="yacht-luxe-summary">
@@ -11542,7 +11540,7 @@ body.theme-night .page .tag{
             </ul>
             <div class="yacht-luxe-card-actions">
               <button type="button" class="btn-primary" onclick="openLinkedStartPlanning('Custom Group Travel','Custom Package','Interested in planning a custom group travel experience for 5 or more with Sight Seers.');">Start Planning</button>
-              <button type="button" class="btn-secondary" onclick="nav('contact');return false;">Travel Form</button>
+              
             </div>
           </div>
         </article>
@@ -16871,10 +16869,12 @@ body.theme-night .page .tag{
           <div class="cb-item"><div class="cb-icon"><i class="fas fa-phone"></i></div><div><div class="cb-label">Phone / WhatsApp</div><div class="cb-val"><a href="tel:+18764650630">+1 (876) 465-0630</a> · <a href="tel:+13472916868">+1 (347) 291-6868</a></div></div></div>
           <div class="cb-item"><div class="cb-icon"><i class="fas fa-envelope"></i></div><div><div class="cb-label">Email</div><div class="cb-val"><a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a></div></div></div>
           <div class="cb-item"><div class="cb-icon"><i class="fab fa-instagram"></i></div><div><div class="cb-label">Instagram</div><div class="cb-val"><a href="https://www.instagram.com/sightseers.jm" target="_blank">@sightseers.jm</a></div></div></div>
+          <div class="cb-item"><div class="cb-icon"><i class="fab fa-tiktok"></i></div><div><div class="cb-label">TikTok</div><div class="cb-val"><a href="https://www.tiktok.com/@sightseers.jm" target="_blank" rel="noopener">@sightseers.jm</a></div></div></div>
+          <div class="cb-item"><div class="cb-icon"><i class="fab fa-whatsapp"></i></div><div><div class="cb-label">WhatsApp Channel</div><div class="cb-val"><a href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">Follow Sight Seers updates</a></div></div></div>
           <div class="cb-item"><div class="cb-icon"></div><div><div class="cb-label">Location</div><div class="cb-val">Turtle Beach Road, Ocho Rios, Jamaica</div></div></div>
         </div>
         <div class="deposit-box"><strong>Free to send:</strong> Tell us about your group and a planner replies within one business day. No payment is needed to get started.</div>
-        <div style="margin-top:16px;background:rgba(26,45,75,.05);border-left:4px solid var(--navy);padding:16px 18px;font-size:13px;color:var(--dark);line-height:1.8"><strong style="color:var(--navy)">Office Hours:</strong> Monday to Sunday, 10:00 AM to 6:00 PM<br><strong style="color:var(--navy)">Office Location:</strong> Turtle Beach Road, Ocho Rios, Jamaica</div>
+        <div style="margin-top:16px;background:rgba(26,45,75,.05);border-left:4px solid var(--navy);padding:16px 18px;font-size:13px;color:var(--dark);line-height:1.8"><strong style="color:var(--navy)">Office Hours:</strong> Monday to Sunday, 10:00 AM to 6:00 PM (WhatsApp available outside office hours)<br><strong style="color:var(--navy)">Office Location:</strong> Turtle Beach Road, Ocho Rios, Jamaica</div>
       </div>
       <div class="form-wrap reveal" id="experience-request" style="transition-delay:.15s">
         <div class="fw-title">Tell Us About Your Ideal Experience</div>
@@ -16899,6 +16899,16 @@ body.theme-night .page .tag{
         <div class="form-row"><div class="fg"><label for="b_dt">Travel Date *</label><input type="date" id="b_dt"></div><div class="fg"><label for="b_gs">Travel Party *</label><select id="b_gs"><option value="">Select</option><option>5 to 10 Persons</option><option>11 to 20 Persons</option><option>21 to 40 Persons</option><option>41+ Persons</option></select></div></div>
         <div class="form-row"><div class="fg"><label for="b_budget">Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 to $1,000</option><option>$1,000 to $2,500</option><option>$2,500 to $5,000</option><option>$5,000 to $10,000</option><option>$10,000+</option></select></div></div>
         <div class="fg"><label for="b_notes">Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
+        <div class="sp-more">
+          <h3>More about your trip <small>(optional, helps your planner)</small></h3>
+          <div class="form-row"><div class="fg"><label for="tpJamaican">Are you a Jamaican national?</label><select id="tpJamaican"><option value="">Select one</option><option>Yes</option><option>No</option></select></div><div class="fg"><label for="tpGroupJamaican">Is anyone in your group a Jamaican national?</label><select id="tpGroupJamaican"><option value="">Select one</option><option>Yes</option><option>No</option><option>N/A</option></select></div></div>
+          <div class="form-row"><div class="fg"><label for="tpLength">Length of trip</label><input type="text" id="tpLength"></div><div class="fg"><label for="tpSeeking">What are you seeking for your trip?</label><select id="tpSeeking"><option value="">Select one</option><option>Land Adventure</option><option>Water Adventure</option><option>Both</option></select></div></div>
+          <div class="form-row"><div class="fg"><label for="tpTransport">Do you require transportation?</label><select id="tpTransport"><option value="">Select one</option><option>Yes</option><option>No</option><option>Maybe</option></select></div><div class="fg"><label for="tpPickup">Desired pickup location</label><input type="text" id="tpPickup"></div></div>
+          <div class="form-row"><div class="fg"><label for="tpHousing">Do you require housing accommodations?</label><select id="tpHousing"><option value="">Select one</option><option>Villa</option><option>Vacation Rentals</option><option>Hotel</option><option>No</option></select></div><div class="fg"><label for="tpFood">Would you like Sight Seers to provide food for your trip?</label><select id="tpFood"><option value="">Select one</option><option>Yes</option><option>No</option></select></div></div>
+          <div class="fg"><label for="tpExcursions">What excursions do you have in mind?</label><textarea id="tpExcursions"></textarea></div>
+          <div class="fg"><label for="tpCall">Availability for a discovery call</label><input type="text" id="tpCall" placeholder="Days and times that suit you"></div>
+          <input type="hidden" id="tpEmail"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhone"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
+        </div>
         
         <div class="upsell-section">
           <h3>Enhance Your Experience</h3>
@@ -16915,88 +16925,12 @@ body.theme-night .page .tag{
         <p class="mba-upsell-note" id="societyNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Applications for the Seven Shores Society are reviewed by your host, with a short Alignment Call. There is no payment to apply. Dates, venue and price are shared as they are confirmed.</p>
         <p class="mba-upsell-note" id="offsiteNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Seven Shores Offsites are quoted for your team. Tell us your team size, preferred country and dates, and what you want the offsite to achieve, and your planner replies within one business day.</p>
         <p class="urgency-text" id="urgencyText">High demand this week, limited availability for peak experiences.</p>
-        <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitBook()">Start Your Journey</button>
+        <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitStartPlanning()">Start Your Journey</button>
         <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:10px">Once your planner has talked your trip through with you, a US$15 planning fee gets your fully researched custom package started. It is credited toward your booking.</p>
 
         <p id="ssPdStatus-start-planning" role="status" style="display:none;font-size:13px;font-weight:700;color:var(--navy);text-align:center;margin:10px 0 0"></p>
         <div style="display:flex;justify-content:center;margin-top:12px">
           <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20am%20on%20the%20Start%20Planning%20page%20and%20would%20like%20help%20with%20my%20booking." target="_blank" class="btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i>Chat on WhatsApp</a>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- ════════════════════════════════════
-     CONTACT PAGE (Google Form)
-════════════════════════════════════ -->
-<div class="page" id="p-contact">
-  <section class="contact-page">
-    <div class="contact-wrap">
-      <div class="reveal">
-        <span class="sec-pre">Travel Details</span>
-        <h2 class="sec-title">Travel Form</h2>
-        <p class="sec-sub contact-info" style="margin-bottom:28px">Whether you are planning a solo reset, a family escape, a group celebration or a custom island experience, our team is here to listen, guide and make the process feel easy.</p>
-        <div class="ci-box">
-          <div class="ci-item"><div class="ci-icon"><i class="fas fa-phone"></i></div><div><div class="ci-label">Phone &amp; WhatsApp</div><div class="ci-val"><a href="tel:+18764650630">+1 (876) 465-0630</a><br><a href="tel:+13472916868">+1 (347) 291-6868</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"><i class="fas fa-envelope"></i></div><div><div class="ci-label">Email</div><div class="ci-val"><a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"><i class="fab fa-instagram"></i></div><div><div class="ci-label">Instagram</div><div class="ci-val"><a href="https://www.instagram.com/sightseers.jm" target="_blank">@sightseers.jm</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"><i class="fab fa-tiktok"></i></div><div><div class="ci-label">TikTok</div><div class="ci-val"><a href="https://www.tiktok.com/@sightseers.jm" target="_blank">@sightseers.jm</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"><i class="fab fa-whatsapp"></i></div><div><div class="ci-label">WhatsApp</div><div class="ci-val"><a href="https://wa.me/18764650630" target="_blank">Chat Now on WhatsApp</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"><i class="fab fa-whatsapp"></i></div><div><div class="ci-label">WhatsApp Channel</div><div class="ci-val"><a href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">Follow Sight Seers updates</a></div></div></div>
-          <div class="ci-item"><div class="ci-icon"></div><div><div class="ci-label">Location</div><div class="ci-val">Turtle Beach Road, Ocho Rios, Jamaica</div></div></div>
-        </div>
-        <div style="margin-top:24px;background:rgba(26,45,75,.05);border-left:4px solid var(--navy);padding:16px 18px;font-size:13px;color:var(--dark);line-height:1.8">
-          <strong style="color:var(--navy)">Office Hours:</strong><br>
-          Monday to Sunday: 10:00 AM to 6:00 PM<br>
-          <strong style="color:var(--navy)">Office Location:</strong> Turtle Beach Road, Ocho Rios, Jamaica<br>
-          <em style="color:var(--grey)">WhatsApp available outside office hours.</em>
-        </div>
-        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:12px">
-          <a href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20would%20like%20help%20with%20my%20travel%20plans." target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i>Chat on WhatsApp</a>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay:.15s">
-        <div class="trip-planner-card">
-          <span class="sec-pre trip-planner-kicker">Trip Details Input</span>
-          <h3 class="sec-title" style="font-size:clamp(1.45rem,2.4vw,2rem);margin-bottom:10px" id="tripPlannerHeading">Fill out your trip details before submitting</h3>
-          <p class="contact-form-copy trip-planner-copy">This section reflects the live Travel Information form so guests can organize the same details here first, then use the submit button to continue to the official form below.</p>
-          <div class="trip-planner-grid">
-            <div class="trip-planner-field"><label for="tpEmail">Email address</label><input type="email" id="tpEmail"></div>
-            <div class="trip-planner-field"><label for="tpFullName">Full name</label><input type="text" id="tpFullName"></div>
-            <div class="trip-planner-field"><label for="tpPhone">Telephone number</label><input type="text" id="tpPhone"></div>
-            <div class="trip-planner-field"><label for="tpJamaican">Are you a Jamaican national?</label><select id="tpJamaican"><option value="">Select one</option><option>Yes</option><option>No</option></select></div>
-            <div class="trip-planner-field"><label for="tpGroupJamaican">Is anyone in your group a Jamaican national?</label><select id="tpGroupJamaican"><option value="">Select one</option><option>Yes</option><option>No</option><option>N/A</option></select></div>
-            <div class="trip-planner-field"><label for="tpArrival">Arrival date</label><input type="date" id="tpArrival"></div>
-            <div class="trip-planner-field"><label for="tpLength">Length of trip</label><input type="text" id="tpLength"></div>
-            <div class="trip-planner-field"><label for="tpTravelers">Number of travelers</label><input type="text" id="tpTravelers"></div>
-            <div class="trip-planner-field"><label for="tpSeeking">What are you seeking for your trip?</label><select id="tpSeeking"><option value="">Select one</option><option>Land Adventure</option><option>Water Adventure</option><option>Both</option></select></div>
-            <div class="trip-planner-field"><label for="tpTransport">Do you require transportation?</label><select id="tpTransport"><option value="">Select one</option><option>Yes</option><option>No</option><option>Maybe</option></select></div>
-            <div class="trip-planner-field full"><label for="tpExcursions">What excursions do you have in mind?</label><textarea id="tpExcursions"></textarea></div>
-            <div class="trip-planner-field full"><label for="tpPickup">Desired pickup location</label><input type="text" id="tpPickup"></div>
-            <div class="trip-planner-field"><label for="tpHousing">Do you require housing accommodations?</label><select id="tpHousing"><option value="">Select one</option><option>Villa</option><option>Vacation Rentals</option><option>Hotel</option><option>No</option></select></div>
-            <div class="trip-planner-field"><label for="tpFood">Would you like Sight Seers to provide food for your trip?</label><select id="tpFood"><option value="">Select one</option><option>Yes</option><option>No</option></select></div>
-            <div class="trip-planner-field"><label for="tpBudget">What is your budget?</label><input type="text" id="tpBudget"></div>
-            <div class="trip-planner-field"><label for="tpCall">Availability for discovery call</label><input type="text" id="tpCall"></div>
-            <div class="trip-planner-field full"><label for="tpAdditional">Additional requests / additional information</label><textarea id="tpAdditional"></textarea></div>
-          </div>
-          <div class="trip-planner-actions">
-            <button class="trip-planner-btn secondary" type="button" onclick="copyTripPlannerSummary()"><i class="fas fa-copy"></i>Copy Summary</button>
-            <button class="trip-planner-btn secondary" type="button" onclick="clearTripPlannerFields()">Clear</button>
-            <button class="trip-planner-btn" type="button" onclick="submitTripPlannerForm()"><span id="tripPlannerSubmitLabel">Submit Form</span></button>
-          </div>
-          <div class="trip-planner-summary">
-            <h3>Trip summary preview</h3>
-            <pre id="tripPlannerSummary">Complete the fields above to generate a clean trip summary before submitting the official form.</pre>
-          </div>
-          <div class="deposit-box trip-planner-note" id="tripPlannerNote"><strong>Free to send:</strong> Submitting this form costs nothing. A planner replies within one business day, and a US$15 planning fee (credited toward your booking) only applies once you are ready for a fully researched custom package.</div>
-          <p id="ssPdStatus-travel-form" role="status" style="display:none"></p>
-        </div>
-        <div class="gform-wrap" id="tripPlannerSubmitSection" style="padding:18px 20px;border:1px solid rgba(6,58,99,.08);border-radius:22px;background:linear-gradient(180deg,#fff 0%,#f8fcfb 100%);margin-top:18px">
-          <div class="native-submit-actions" style="margin-top:0;flex-wrap:wrap;justify-content:flex-start;gap:12px">
-            <button class="trip-planner-btn" type="button" onclick="sendTripPlannerRequest()"><i class="fas fa-envelope"></i>Send by Email</button>
-            <a class="trip-planner-btn secondary" href="https://wa.me/18764650630?text=Hi%20Sight%20Seers%2C%20I%20am%20on%20the%20Start%20Planning%20page%20and%20would%20like%20help%20with%20my%20booking." target="_blank" style="text-decoration:none;display:inline-flex"><i class="fab fa-whatsapp"></i>Chat on WhatsApp</a>
-          </div>
         </div>
       </div>
     </div>
@@ -17009,8 +16943,12 @@ body.theme-night .page .tag{
   </a>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px" class="reveal"><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">Is a deposit required to book?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">No. Sending your trip request is free, and a planner replies within one business day. When you are ready for a fully researched custom package, a US$15 planning fee gets it started and is credited toward your booking. Group bookings are confirmed with a 30% deposit.</div></div><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">What is your cancellation policy?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">Refunds depend on the type of booking. Individual tours follow our Individual Tours policy, and groups of 5 or more follow our Group Bookings policy. Please see our <a href="#" onclick="nav('refund-policy');return false;" style="color:var(--orange);font-weight:700;text-decoration:underline">Refund &amp; Cancellation Policy</a> for full details.</div></div><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">Do you offer group discounts?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">Yes! We offer discounted rates for larger groups. Contact us directly for a custom quote for groups of 10 or more travelers.</div></div><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">Can I reach you on WhatsApp?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">Absolutely! Message us at +1 (876) 465-0630 on WhatsApp and we'll respond as quickly as possible.</div></div><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">What destinations do you serve?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">Jamaica (islandwide), Barbados, Belize, The Bahamas, Saint Lucia, Curacao, and the Dominican Republic.</div></div><div style="background:var(--lightgrey);padding:22px;border-top:4px solid transparent;transition:border-color .3s" onmouseenter="this.style.borderColor='var(--orange)'" onmouseleave="this.style.borderColor='transparent'"><div style="font-weight:800;font-size:14px;color:var(--navy);margin-bottom:8px">How do I book airport shuttle service?</div><div style="font-size:13px;color:var(--grey);line-height:1.7">Shuttle services to NMIA (Kingston) and MBJ (Montego Bay) are available for groups of 5 or more. Contact us with your travel details.</div></div></div></div></section>
+
 </div>
 
+<!-- ════════════════════════════════════
+     CONTACT PAGE (Google Form)
+════════════════════════════════════ -->
 <div class="page" id="p-passport">
   <div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1600&q=85&auto=format&fit=crop')"><div class="ph-inner"><h1 class="ph-title">Jamaican Passport Renewal</h1><div class="breadcrumb"><a href="#" onclick="nav('home')">Home</a><span>/</span><span>Passport Renewal</span></div><div class="passport-hero-meta"><span>Upload your documents</span><span>Passport-size photo check</span><span>Sight Seers support desk</span></div></div></div>
   <section class="passport-sec">
@@ -24482,8 +24420,7 @@ vtSessionAction=function(el,type){
             </div>
               <div class="ac-helpbox">
                 <h3>Questions before you join?</h3>
-                <p>Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or <a href="tel:+13472916868">+1 (347) 291-6868</a>, email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>, or send us the Travel Form.</p>
-                <button type="button" class="ac-fbtn" onclick="nav('contact')">Open the Travel Form</button>
+                <p>Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or <a href="tel:+13472916868">+1 (347) 291-6868</a>, email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>, or use Start planning.</p>
               </div>
             </div>
           </div>
@@ -24579,7 +24516,6 @@ vtSessionAction=function(el,type){
                   <div class="ac-help-links">
                     <a href="tel:+18764650630">+1 (876) 465-0630</a>
                     <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>
-                    <button type="button" class="ac-cta" onclick="nav('contact')">Travel Form</button>
                   </div>
                 </div>
               </div>
@@ -29647,6 +29583,7 @@ function nav(id,opts={}){
   if(id==='vtours' && document.documentElement.hasAttribute('data-ss-vtours-hidden')) id='home';  /* V-Tours is hidden until launch */
   if(id==='shop'||id==='giftcards')id='tours';
   if(id==='senior-tours')id='school-tours';  /* Senior Tours was merged into School Tours */
+  if(id==='contact')id='booking';  /* the Travel Form was merged into Start Planning */
   closeBlog();
   closeRhythmTour(true);
   closeSnapshot(true);
@@ -29959,6 +29896,24 @@ function sendTripPlannerWhatsapp(){
   window.open('https://wa.me/18764650630?text='+message,'_blank');
 }
 document.addEventListener('input',e=>{if(e.target && e.target.closest('.trip-planner-card')) refreshTripPlannerSummary();});
+function submitStartPlanning(){
+  /* Start Planning and the old Travel Form are one form now: the booking request goes out as before, and when the
+     extra trip details are filled in, the Travel Form enquiry goes to the team too. */
+  var v=function(id){var e=document.getElementById(id);return e?String(e.value||'').trim():''};
+  var set=function(id,x){var e=document.getElementById(id);if(e)e.value=x||''};
+  var email=v('b_em');
+  if(!email){submitBook();return;}   /* submitBook highlights the email field */
+  set('tpEmail',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhone',v('b_ph'));set('tpArrival',v('b_dt'));
+  set('tpTravelers',v('b_gs'));set('tpBudget',v('b_budget'));set('tpAdditional',v('b_notes'));
+  var extras=['tpJamaican','tpGroupJamaican','tpLength','tpSeeking','tpTransport','tpPickup','tpHousing','tpFood','tpExcursions','tpCall'].some(function(id){return v(id)});
+  var summary=extras?getTripPlannerSummary():'';
+  var notes=document.getElementById('b_notes');
+  if(extras&&notes&&notes.value.indexOf('Trip details:')===-1)notes.value=(notes.value?notes.value.trim()+'\n\n':'')+'Trip details:\n'+summary;
+  submitBook();
+  if(extras&&window.SS&&typeof SS.sendContactMessage==='function'){
+    SS.sendContactMessage({name:v('tpFullName')||'Trip Planner Request',email:email,phone:v('tpPhone'),subject:'Travel Form Enquiry',message:summary}).catch(function(){});
+  }
+}
 function submitBook(){
   calculateUpsells();
   var upsells=[].slice.call(document.querySelectorAll('.upsell-section input:checked')).map(function(i){return i.value});
@@ -57027,6 +56982,12 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #p-account .ac-chatbtn{position:relative;overflow:hidden;isolation:isolate}
 #p-account .ac-chatbtn::before{content:'';position:absolute;inset:0;z-index:-1;background:#1b8a4b;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #p-account .ac-chatbtn:hover::before{transform:scaleX(1)}
+/* Start Planning: the extra trip details that came from the old Travel Form */
+#p-booking .sp-more{margin:18px 0 6px;padding:18px 18px 8px;border:1px solid rgba(6,58,99,.1);background:linear-gradient(160deg,#fff 0%,#f3f8fc 100%);box-shadow:inset 0 1px 0 #fff}
+#p-booking .sp-more h3{margin:0 0 12px;font:700 19px 'Playfair Display',serif;color:var(--navy)}
+#p-booking .sp-more h3 small{font:600 12.5px 'Raleway',sans-serif;color:var(--grey,#6b7c8c)}
+body.theme-night #p-booking .sp-more{background:linear-gradient(160deg,#103a5e 0%,#0a2a45 100%);border-color:rgba(255,255,255,.12)}
+body.theme-night #p-booking .sp-more h3{color:#fff}
 /* dashboard cards: a soft gradient and a glossy highlight, never a flat fill */
 #p-account .ac-stat,#p-account .ac-action,#p-account .ac-saved,#p-account .ac-pick,#p-account .ac-app,#p-account .ac-otrip,#p-account .ac-ref,#p-account .ac-grow,#p-account .ac-otrav li,#p-account .ac-ostat{background:linear-gradient(160deg,#ffffff 0%,#f3f8fc 100%);box-shadow:inset 0 1px 0 #fff,var(--ac-shadow,0 10px 26px rgba(6,58,99,.08))}
 body.theme-night #p-account .ac-stat,body.theme-night #p-account .ac-action,body.theme-night #p-account .ac-saved,body.theme-night #p-account .ac-pick,body.theme-night #p-account .ac-app,body.theme-night #p-account .ac-otrip,body.theme-night #p-account .ac-ref,body.theme-night #p-account .ac-grow,body.theme-night #p-account .ac-otrav li,body.theme-night #p-account .ac-ostat{background:linear-gradient(160deg,#103a5e 0%,#0a2a45 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 12px 28px rgba(0,0,0,.35)}
@@ -57160,7 +57121,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
 /* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
 .tch{position:relative;padding:56px 0 84px;background:linear-gradient(180deg,#eef5fa 0%,#f8fbff 100%)}
-.tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:56px;align-items:center;max-width:960px;margin:0 auto;padding:24px 28px;border:0;background:none;box-shadow:none;isolation:isolate}
+.tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:56px;align-items:center;max-width:960px;margin:0 auto;padding:44px 48px 44px 44px;border:1px solid rgba(6,58,99,.08);background:linear-gradient(135deg,#fbfdff 0%,#f3f9fc 55%,#fff7f0 130%);box-shadow:0 30px 70px rgba(6,58,99,.08);isolation:isolate}
 .tch-wrap::before{content:'';position:absolute;z-index:-1;right:-70px;top:-70px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(112,194,87,.2),transparent 68%)}
 .tch-wrap::after{content:'';position:absolute;z-index:-1;left:-60px;bottom:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.16),transparent 68%)}
 .tch-badge{position:absolute;z-index:3;left:-26px;bottom:34px;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;background:rgba(255,255,255,.94);border:1px solid rgba(6,58,99,.1);box-shadow:0 16px 34px rgba(6,58,99,.2);font:800 11px 'Raleway',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#063a63;translate:calc((var(--mx,50%) - 50%) * -.18) calc((var(--my,50%) - 50%) * -.18);transition:translate .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
@@ -57202,7 +57163,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tch-link:hover span::after{transform:translateX(4px)}
 .tch-btn:focus-visible,.tch-link:focus-visible{outline:3px solid #ef8731;outline-offset:4px}
 body.theme-night .tch{background:#06223a}
-body.theme-night .tch-wrap{background:none;border:0;box-shadow:none}
+body.theme-night .tch-wrap{background:linear-gradient(135deg,#0a2e4d 0%,#08263f 60%,#1b2f3e 130%);border-color:rgba(255,255,255,.1);box-shadow:0 30px 70px rgba(0,0,0,.4)}
 body.theme-night .tch-steps li{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
 body.theme-night .tch-steps span{color:#f5fbff}
 body.theme-night .tch-badge{background:rgba(8,38,63,.92);color:#f5fbff;border-color:rgba(255,255,255,.18)}
@@ -57214,7 +57175,7 @@ html body.theme-night .page .tch .tch-btn:not(#ss-x)::before{background:#fff}
 html body.theme-night .page .tch .tch-btn:not(#ss-x) span{color:#fff!important}
 html body.theme-night .page .tch .tch-btn:not(#ss-x):hover span{color:#063a63!important}
 html body.theme-night .page .tch .tch-link:not(#ss-x) span{color:#fff!important}
-@media(max-width:900px){.tch{padding:26px 0 60px}.tch-wrap{grid-template-columns:1fr;gap:44px;padding:10px 0 20px;margin:0 20px}.tch-photo::before{inset:14px -10px -14px 14px}.tch-photo:hover{--ty:-6px}.tch-badge{left:-8px;bottom:22px}}
+@media(max-width:900px){.tch{padding:26px 0 60px}.tch-wrap{grid-template-columns:1fr;gap:44px;padding:34px 24px 40px;margin:0 16px}.tch-photo::before{inset:14px -10px -14px 14px}.tch-photo:hover{--ty:-6px}.tch-badge{left:-8px;bottom:22px}}
 @media(max-width:560px){.tch-btn{width:100%}.tch-actions{gap:18px}.tch-steps{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.tch-photo,.tch-btn,.tch-img img,.tch-photo::before,.tch-badge,.tch-steps li{transition:none!important}.tch-badge i{animation:none}}
 
