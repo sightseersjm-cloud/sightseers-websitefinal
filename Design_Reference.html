@@ -57503,6 +57503,27 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-oshare input{flex:1 1 auto;min-width:0;height:42px;padding:0 12px;font:500 13.5px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-card);border:1px solid var(--ac-line);border-radius:0}
 #p-account .ac-otag{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:10px;font-size:12.5px;color:var(--ac-mut)}
 #p-account .ac-otag input{height:34px;width:150px;padding:0 10px;font:500 13px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-card);border:1px solid var(--ac-line);border-radius:0}
+#p-account .ac-kit{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
+#p-account .ac-kit>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-kit>summary::-webkit-details-marker{display:none}
+#p-account .ac-kit>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-kit>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-kit[open]>summary::after{content:'\2212'}
+#p-account .ac-kitbody{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:22px;padding:2px 16px 18px;align-items:start}
+#p-account .ac-kitmsg label{display:block;margin-bottom:6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ac-mut)}
+#p-account .ac-kitmsg textarea{display:block;width:100%;min-height:128px;padding:11px 12px;font:500 13.5px/1.55 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
+#p-account .ac-kitbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#p-account .ac-kitbtns .ac-sbtn{height:40px;padding:0 14px;text-decoration:none}
+#p-account .ac-sbtn.ac-sbtn--wa{background:linear-gradient(135deg,#43b86a,#2f9a55);box-shadow:0 10px 22px rgba(47,154,85,.28)}
+#p-account .ac-sbtn.ac-sbtn--wa:hover{box-shadow:0 16px 30px rgba(47,154,85,.4)}
+#p-account .ac-sbtn.ac-sbtn--line{background:var(--ac-card);color:var(--ac-head);border:1px solid var(--ac-line);box-shadow:none}
+#p-account .ac-sbtn.ac-sbtn--line:hover{border-color:var(--ac-o);box-shadow:0 10px 22px rgba(6,46,75,.12)}
+#p-account .ac-kitqr{text-align:center}
+#p-account .ac-kitqr .ac-qrbox{display:block;width:210px;max-width:100%;margin:0 auto;padding:10px;background:#fff;border:1px solid var(--ac-line);box-shadow:0 0 0 1px rgba(255,255,255,.9),0 10px 26px rgba(6,46,75,.12)}
+#p-account .ac-kitqr canvas{display:block;width:100%;height:auto;aspect-ratio:1;image-rendering:pixelated}
+#p-account .ac-kitqr .ac-sbtn{margin-top:10px;height:38px;width:100%}
+#p-account .ac-kitqr small{display:block;margin-top:8px;font-size:12px;color:var(--ac-mut)}
+@media(max-width:720px){#p-account .ac-kitbody{grid-template-columns:1fr}#p-account .ac-kitqr{order:-1}}
 #p-account .ac-ostats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
 #p-account .ac-ostat{padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line)}
 #p-account .ac-ostat b{display:block;font-family:'Playfair Display',serif;font-size:26px;line-height:1.05;color:var(--ac-head)}
@@ -58357,13 +58378,21 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<div class="ac-ogrow"><input id="acGrp'+esc(t.id)+'" type="url" inputmode="url" placeholder="https://chat.whatsapp.com/..." value="'+esc(t.groupLink||'')+'"><button type="submit" class="ac-sbtn">'+(t.groupLink?'Update link':'Save link')+'</button></div>'+
       '<small>Create the group or channel in WhatsApp, copy its invite link and paste it here. Everyone who joined is emailed the link and sees it on their dashboard, and new travelers see it straight away.</small><span class="ac-invmsg" role="status"></span></form>';
   }
+  /* invite kit: a ready message, WhatsApp share, QR code and a share card, all built from the trip link */
+  function inviteKit(idx){
+    return '<details class="ac-kit" data-kit><summary><span>Invite kit<small>message, WhatsApp, QR code and share card</small></span></summary>'+
+      '<div class="ac-kitbody"><div class="ac-kitmsg"><label for="acKm'+idx+'">Message to send</label><textarea id="acKm'+idx+'" data-kit-msg spellcheck="true"></textarea>'+
+      '<div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-kit-copy>Copy message</button><a class="ac-sbtn ac-sbtn--wa" data-kit-wa href="https://wa.me/" target="_blank" rel="noopener">Share on WhatsApp</a><button type="button" class="ac-sbtn ac-sbtn--line" data-kit-card>Download share card</button></div>'+
+      '<span class="ac-invmsg" role="status" data-kit-note></span></div>'+
+      '<div class="ac-kitqr"><span class="ac-qrbox"><canvas data-kit-qr width="210" height="210" role="img" aria-label="QR code that opens your trip page"></canvas></span><button type="button" class="ac-sbtn ac-sbtn--line" data-kit-qrdl>Download QR code</button><small>Scan to open your trip page</small></div></div></details>';
+  }
   function orgTrip(t,idx){
     var link=SITE+t.url,c=t.counts||{},tr=t.travelers||[];
-    return '<div class="ac-otrip" data-otrip="'+idx+'" data-base="'+esc(link)+'">'+
+    return '<div class="ac-otrip" data-otrip="'+idx+'" data-base="'+esc(link)+'" data-ttl="'+esc(t.title)+'" data-dates="'+esc(t.dateText||'')+'" data-dest="'+esc(t.destination||'')+'">'+
       '<div class="ac-ohead"><div><h5>'+esc(t.title)+'</h5><small>'+esc([t.dateText,t.destination].filter(Boolean).join(' · ')||'Dates to be added')+'</small></div>'+chip(TRIPST,t.status)+'</div>'+
       (t.status==='open'||t.status==='full'?
         '<div class="ac-oshare"><input type="text" readonly value="'+esc(link)+'" aria-label="Your trip link"><button type="button" class="ac-sbtn" data-ocopy>Copy link</button><a class="ac-sbtn" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'" style="text-decoration:none">Open page</a></div>'+
-        '<div class="ac-otag"><label for="acTag'+idx+'">Track where sign-ups come from:</label><input id="acTag'+idx+'" type="text" maxlength="30" placeholder="e.g. instagram" data-otag><span>Adds a tag to your link.</span></div>'+'<p class="ac-onote ac-oone">Each person joins for themselves through your link, so every traveler appears on your roster with their own name.</p>'
+        '<div class="ac-otag"><label for="acTag'+idx+'">Track where sign-ups come from:</label><input id="acTag'+idx+'" type="text" maxlength="30" placeholder="e.g. instagram" data-otag><span>Adds a tag to your link.</span></div>'+'<p class="ac-onote ac-oone">Each person joins for themselves through your link, so every traveler appears on your roster with their own name.</p>'+inviteKit(idx)
         :'<p class="ac-onote"><b>Your trip page is not live yet.</b> Sight Seers will open it once the package, the dates and your reward are agreed.</p>')+
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
@@ -58445,12 +58474,112 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       .then(function(){grp.loading=false;});
   }
   function reqRowsEmptyLead(){return '<div class="ac-empty"><strong>Lead a trip with your community</strong><p>Apply with a few details about your group. We review every application before anything is promoted.</p><button type="button" class="ac-cta" onclick="ssClubApply()">Apply to lead a trip</button></div>';}
+  /* ═════ invite kit: message, WhatsApp, QR code and share card, all built from the trip link ═════ */
+  var QRP=null;
+  function loadQR(){
+    if(window.qrcode)return Promise.resolve();
+    if(QRP)return QRP;
+    QRP=new Promise(function(ok,no){var sc=document.createElement('script');sc.src='/vendor/qrcode.js';sc.onload=ok;sc.onerror=function(){QRP=null;no(new Error('qr'));};document.head.appendChild(sc);});
+    return QRP;
+  }
+  function qrMatrix(text){var q=window.qrcode(0,'M');q.addData(text);q.make();var n=q.getModuleCount(),m=[];for(var r=0;r<n;r++){m[r]=[];for(var c=0;c<n;c++)m[r][c]=q.isDark(r,c);}return m;}
+  /* draws the code with a four-module quiet zone; returns the pixel size it used */
+  function qrPaint(x,m,px,py,cell,ink){
+    var n=m.length,size=cell*(n+8);x.fillStyle='#fff';x.fillRect(px,py,size,size);x.fillStyle=ink||'#062e4b';
+    for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(m[r][c])x.fillRect(px+(c+4)*cell,py+(r+4)*cell,cell,cell);
+    return size;
+  }
+  function kitBox(el){return el.closest('.ac-otrip');}
+  function kitLink(box){return box.querySelector('.ac-oshare input').value;}
+  function kitMessage(box,link){
+    var line=[box.getAttribute('data-dates'),box.getAttribute('data-dest')].filter(Boolean).join(' · ');
+    return 'I am putting together a group trip with Sight Seers Caribbean: '+box.getAttribute('data-ttl')+(line?' ('+line+')':'')+'.\n\nSee the details and ask to join here:\n'+link;
+  }
+  function kitSync(box){
+    var kit=box.querySelector('[data-kit]');if(!kit)return;
+    var ta=kit.querySelector('[data-kit-msg]'),link=kitLink(box),prev=kit.getAttribute('data-kit-link');
+    if(!ta.value)ta.value=kitMessage(box,link);
+    else if(prev&&prev!==link&&ta.value.indexOf(prev)>-1)ta.value=ta.value.split(prev).join(link);
+    kit.setAttribute('data-kit-link',link);
+    kit.querySelector('[data-kit-wa]').href='https://wa.me/?text='+encodeURIComponent(ta.value);
+  }
+  function kitNote(box,msg,err){var n=box.querySelector('[data-kit-note]');if(!n)return;n.className='ac-invmsg'+(err?' err':msg?' ok':'');n.textContent=msg||'';}
+  function kitQR(box){
+    var cv=box.querySelector('[data-kit-qr]');if(!cv)return Promise.resolve();
+    var link=kitLink(box);
+    return loadQR().then(function(){
+      var m=qrMatrix(link),cell=Math.max(2,Math.ceil(420/(m.length+8))),size=cell*(m.length+8);
+      cv.width=cv.height=size;qrPaint(cv.getContext('2d'),m,0,0,cell);cv.setAttribute('data-qr-link',link);
+    }).catch(function(){kitNote(box,'The QR code could not load. Check your connection and try again.',true);});
+  }
+  function saveCanvas(cv,name){
+    cv.toBlob(function(b){
+      if(!b)return;
+      var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.style.display='none';document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2500);
+    },'image/png');
+  }
+  function fileSlug(box){return (box.getAttribute('data-ttl')||'trip').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'trip';}
+  function loadImg(src){return new Promise(function(ok){var im=new Image();im.onload=function(){ok(im);};im.onerror=function(){ok(null);};im.src=src;});}
+  function wrapLines(x,text,max,limit){
+    var words=String(text).split(/\s+/),lines=[],cur='';
+    words.forEach(function(w){var t=cur?cur+' '+w:w;if(cur&&x.measureText(t).width>max){lines.push(cur);cur=w;}else cur=t;});
+    if(cur)lines.push(cur);
+    if(lines.length>limit){lines=lines.slice(0,limit);var l=lines[limit-1];while(l.length>1&&x.measureText(l+'…').width>max)l=l.slice(0,-1);lines[limit-1]=l.replace(/[\s,.;:-]+$/,'')+'…';}
+    return lines;
+  }
+  function kitCard(box){
+    var W=1080,H=1350,link=kitLink(box),ttl=box.getAttribute('data-ttl')||'Group trip',sub=[box.getAttribute('data-dates'),box.getAttribute('data-dest')].filter(Boolean).join('  ·  ');
+    var fonts=(document.fonts&&document.fonts.load)?Promise.all([document.fonts.load('800 76px "Playfair Display"'),document.fonts.load('700 32px "Raleway"')]).catch(function(){}):Promise.resolve();
+    return Promise.all([loadQR(),loadImg('/assets/logo-wordmark.png'),fonts]).then(function(r){
+      var logo=r[1],cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');
+      var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0c4a78');g.addColorStop(1,'#062e4b');x.fillStyle=g;x.fillRect(0,0,W,H);
+      var g1=x.createRadialGradient(W,260,0,W,260,620);g1.addColorStop(0,'rgba(112,194,87,.34)');g1.addColorStop(1,'rgba(112,194,87,0)');x.fillStyle=g1;x.fillRect(0,0,W,H);
+      var g2=x.createRadialGradient(0,H-120,0,0,H-120,640);g2.addColorStop(0,'rgba(239,135,49,.34)');g2.addColorStop(1,'rgba(239,135,49,0)');x.fillStyle=g2;x.fillRect(0,0,W,H);
+      x.fillStyle='#fff';x.fillRect(0,0,W,170);x.fillStyle='#ef8731';x.fillRect(0,170,W,8);
+      if(logo){var lh=92,lw=lh*logo.width/logo.height;x.drawImage(logo,(W-lw)/2,(170-lh)/2,lw,lh);}
+      else{x.fillStyle='#062e4b';x.font='800 44px "Playfair Display",Georgia,serif';x.textAlign='center';x.textBaseline='middle';x.fillText('SIGHT SEERS CARIBBEAN',W/2,85);}
+      x.textAlign='left';x.textBaseline='alphabetic';
+      x.font='800 74px "Playfair Display",Georgia,serif';
+      var lines=wrapLines(x,ttl,W-200,3),lh2=86,blockH=34+34+lines.length*lh2+(sub?64:0),top=178+Math.max(20,(480-blockH)/2);
+      x.fillStyle='#ef8731';x.font='800 28px "Raleway",Arial,sans-serif';try{x.letterSpacing='7px';}catch(e){}
+      x.fillText('TRAVEL CLUB TRIP',100,top+28);try{x.letterSpacing='0px';}catch(e){}
+      x.fillStyle='#fff';x.font='800 74px "Playfair Display",Georgia,serif';
+      var y=top+28+34+58;lines.forEach(function(l){x.fillText(l,100,y);y+=lh2;});
+      if(sub){x.fillStyle='#8fd677';x.font='700 32px "Raleway",Arial,sans-serif';x.fillText(sub,100,y-lh2+62);}
+      var m=qrMatrix(link),cell=Math.floor(480/(m.length+8)),size=cell*(m.length+8),qx=(W-size)/2,qy=700;
+      x.save();x.shadowColor='rgba(255,255,255,.45)';x.shadowBlur=36;x.fillStyle='#fff';x.fillRect(qx,qy,size,size);x.restore();
+      qrPaint(x,m,qx,qy,cell);
+      x.textAlign='center';x.fillStyle='#fff';x.font='800 36px "Raleway",Arial,sans-serif';x.fillText('Scan to ask to join',W/2,qy+size+66);
+      var shown=link.replace(/^https?:\/\//,'');x.font='600 26px "Raleway",Arial,sans-serif';while(shown.length>10&&x.measureText(shown).width>W-160)shown=shown.slice(0,-2);
+      x.fillStyle='rgba(255,255,255,.78)';x.fillText(shown,W/2,qy+size+110);
+      x.fillStyle='#ef8731';x.fillRect(0,H-14,W,14);
+      return cv;
+    });
+  }
   var gp=$('acPane-groups');
   if(gp){
     if(window.MutationObserver)new MutationObserver(function(){if(!gp.hidden)fillGroups(false);}).observe(gp,{attributes:true,attributeFilter:['hidden']});
     if(!gp.hidden)fillGroups(true);
     document.addEventListener('ss-account-updated',function(){grp.at=0;if(!gp.hidden)fillGroups(true);});
+    gp.addEventListener('toggle',function(e){var k=e.target;if(!k.matches||!k.matches('[data-kit]')||!k.open)return;var b=kitBox(k);kitSync(b);kitQR(b);},true);
     gp.addEventListener('click',function(e){
+      var kc=e.target.closest('[data-kit-copy]');
+      if(kc){var kb=kitBox(kc);copyText(kb.querySelector('[data-kit-msg]').value,kc,'Copied');return;}
+      var kw=e.target.closest('[data-kit-wa]');
+      if(kw){kw.href='https://wa.me/?text='+encodeURIComponent(kitBox(kw).querySelector('[data-kit-msg]').value);return;}
+      var kq=e.target.closest('[data-kit-qrdl]');
+      if(kq){
+        var qb=kitBox(kq);kitNote(qb,'');
+        loadQR().then(function(){var m=qrMatrix(kitLink(qb)),cell=Math.max(8,Math.ceil(1000/(m.length+8))),size=cell*(m.length+8),cv=document.createElement('canvas');cv.width=cv.height=size;qrPaint(cv.getContext('2d'),m,0,0,cell);saveCanvas(cv,fileSlug(qb)+'-qr.png');}).catch(function(){kitNote(qb,'The QR code could not load. Check your connection and try again.',true);});
+        return;
+      }
+      var kd=e.target.closest('[data-kit-card]');
+      if(kd){
+        var db=kitBox(kd);kitNote(db,'Making your card...');kd.disabled=true;
+        kitCard(db).then(function(cv){saveCanvas(cv,fileSlug(db)+'-share-card.png');kitNote(db,'Your share card is downloading.');}).catch(function(){kitNote(db,'We could not make the card. Please try again.',true);}).then(function(){kd.disabled=false;});
+        return;
+      }
       var c=e.target.closest('[data-ocopy]');
       if(c){var box=c.closest('.ac-otrip');copyText(box.querySelector('.ac-oshare input').value,c,'Copied');return;}
       var ad=e.target.closest('[data-app-del]');
@@ -58499,7 +58628,9 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var t=e.target.closest('[data-otag]');if(!t)return;
       var box=t.closest('.ac-otrip'),tag=t.value.replace(/[^\w\-]/g,'').slice(0,30);
       box.querySelector('.ac-oshare input').value=box.getAttribute('data-base')+(tag?'?src='+tag:'');
+      kitSync(box);var kk=box.querySelector('[data-kit]');if(kk&&kk.open)kitQR(box);
     });
+    gp.addEventListener('input',function(e){var m=e.target.closest('[data-kit-msg]');if(m)kitSync(kitBox(m));});
   }
 
   /* the sign-in page lists the two paths: open the Travel Club page from them */
