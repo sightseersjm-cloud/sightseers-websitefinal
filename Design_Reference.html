@@ -96,7 +96,7 @@ document.addEventListener('click', function(e){
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="dns-prefetch" href="https://images.unsplash.com">
-<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <style>
@@ -57102,7 +57102,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
 /* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
 .tch{position:relative;padding:34px 0 90px;background:#fff}
-.tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:72px;align-items:center;max-width:1120px;margin:0 auto;padding:64px 64px 64px 56px;border:1px solid rgba(6,58,99,.08);background:linear-gradient(135deg,#fbfdff 0%,#f3f9fc 55%,#fff7f0 130%);box-shadow:0 30px 70px rgba(6,58,99,.08);isolation:isolate}
+.tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:56px;align-items:center;max-width:960px;margin:0 auto;padding:44px 48px 44px 44px;border:1px solid rgba(6,58,99,.08);background:linear-gradient(135deg,#fbfdff 0%,#f3f9fc 55%,#fff7f0 130%);box-shadow:0 30px 70px rgba(6,58,99,.08);isolation:isolate}
 .tch-wrap::before{content:'';position:absolute;z-index:-1;right:-70px;top:-70px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(112,194,87,.2),transparent 68%)}
 .tch-wrap::after{content:'';position:absolute;z-index:-1;left:-60px;bottom:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.16),transparent 68%)}
 .tch-badge{position:absolute;z-index:3;left:-26px;bottom:34px;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;background:rgba(255,255,255,.94);border:1px solid rgba(6,58,99,.1);box-shadow:0 16px 34px rgba(6,58,99,.2);font:800 11px 'Raleway',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#063a63;translate:calc((var(--mx,50%) - 50%) * -.18) calc((var(--my,50%) - 50%) * -.18);transition:translate .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
@@ -57116,7 +57116,7 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tch-steps span{font:700 12.5px/1.3 'Raleway',sans-serif;color:#063a63}
 .tch-photo{position:relative;margin:0;isolation:isolate;transform:perspective(1100px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .35s cubic-bezier(.2,.8,.2,1);will-change:transform}
 .tch-photo::before{content:'';position:absolute;inset:22px -22px -22px 22px;z-index:-1;border:2px solid rgba(239,135,49,.7);transition:inset .4s cubic-bezier(.2,.8,.2,1),border-color .3s}
-.tch-img{position:relative;overflow:hidden;aspect-ratio:6/5;background:#d9e7ee;box-shadow:0 2px 6px rgba(6,58,99,.1),0 26px 60px rgba(6,58,99,.22);transition:box-shadow .4s cubic-bezier(.2,.8,.2,1)}
+.tch-img{position:relative;overflow:hidden;aspect-ratio:4/3;background:#d9e7ee;box-shadow:0 2px 6px rgba(6,58,99,.1),0 26px 60px rgba(6,58,99,.22);transition:box-shadow .4s cubic-bezier(.2,.8,.2,1)}
 .tch-img img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.001);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .tch-img::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,40%),rgba(255,255,255,.3),transparent 62%)}
 .tch-photo:hover{--ty:-10px}
@@ -57125,8 +57125,8 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tch-photo:hover .tch-img img{transform:scale(1.06)}
 .tch-photo:hover .tch-img::after{opacity:1}
 .tch-eyebrow{display:block;margin:0 0 14px;font:800 12px 'Raleway',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#ef8731}
-.tch-title{margin:0 0 16px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2.1rem,3.6vw,3.1rem);line-height:1.05;color:#063a63}
-.tch-body{margin:0 0 30px;max-width:46ch;font-size:16px;line-height:1.75;color:#4d6275}
+.tch-title{margin:0 0 14px;font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.06;letter-spacing:-.01em;color:#063a63}
+.tch-body{margin:0 0 24px;max-width:44ch;font-size:15.5px;line-height:1.7;color:#4d6275}
 .tch-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
 .tch-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 34px;border:2px solid #063a63;background:rgba(255,255,255,.65);text-decoration:none;transform:perspective(700px) translateY(var(--ty,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s;will-change:transform}
 .tch-btn::before{content:'';position:absolute;inset:0;background:#063a63;transform:scaleX(0);transform-origin:left;transition:transform .38s cubic-bezier(.2,.8,.2,1)}
