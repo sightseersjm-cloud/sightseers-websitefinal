@@ -16899,11 +16899,8 @@ body.theme-night .page .tag{
         <div class="form-row"><div class="fg"><label for="b_budget">Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 to $1,000</option><option>$1,000 to $2,500</option><option>$2,500 to $5,000</option><option>$5,000 to $10,000</option><option>$10,000+</option></select></div></div>
         <div class="fg"><label for="b_notes">Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
         <div class="sp-more">
-          <h3>More about your trip <small>(optional, helps your planner)</small></h3>
           <div class="form-row"><div class="fg"><label for="tpJamaican">Are you a Jamaican national?</label><select id="tpJamaican"><option value="">Select one</option><option>Yes</option><option>No</option></select></div><div class="fg"><label for="tpGroupJamaican">Is anyone in your group a Jamaican national?</label><select id="tpGroupJamaican"><option value="">Select one</option><option>Yes</option><option>No</option><option>N/A</option></select></div></div>
-          <div class="form-row"><div class="fg"><label for="tpLength">Length of trip</label><input type="text" id="tpLength"></div><div class="fg"><label for="tpSeeking">What are you seeking for your trip?</label><select id="tpSeeking"><option value="">Select one</option><option>Land Adventure</option><option>Water Adventure</option><option>Both</option></select></div></div>
           <div class="form-row"><div class="fg"><label for="tpTransport">Do you require transportation?</label><select id="tpTransport"><option value="">Select one</option><option>Yes</option><option>No</option><option>Maybe</option></select></div><div class="fg"><label for="tpPickup">Desired pickup location</label><input type="text" id="tpPickup"></div></div>
-          <div class="form-row"><div class="fg"><label for="tpHousing">Do you require housing accommodations?</label><select id="tpHousing"><option value="">Select one</option><option>Villa</option><option>Vacation Rentals</option><option>Hotel</option><option>No</option></select></div><div class="fg"><label for="tpFood">Would you like Sight Seers to provide food for your trip?</label><select id="tpFood"><option value="">Select one</option><option>Yes</option><option>No</option></select></div></div>
           <div class="fg"><label for="tpExcursions">What excursions do you have in mind?</label><textarea id="tpExcursions"></textarea></div>
           <div class="fg"><label for="tpCall">Availability for a discovery call</label><input type="text" id="tpCall" placeholder="Days and times that suit you"></div>
           <input type="hidden" id="tpEmail"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhone"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
@@ -29909,7 +29906,7 @@ function submitStartPlanning(){
   if(!email){submitBook();return;}   /* submitBook highlights the email field */
   set('tpEmail',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhone',v('b_ph'));set('tpArrival',v('b_dt'));
   set('tpTravelers',v('b_gs'));set('tpBudget',v('b_budget'));set('tpAdditional',v('b_notes'));
-  var extras=['tpJamaican','tpGroupJamaican','tpLength','tpSeeking','tpTransport','tpPickup','tpHousing','tpFood','tpExcursions','tpCall'].some(function(id){return v(id)});
+  var extras=['tpJamaican','tpGroupJamaican','tpTransport','tpPickup','tpExcursions','tpCall'].some(function(id){return v(id)});
   var summary=extras?getTripPlannerSummary():'';
   var notes=document.getElementById('b_notes');
   if(extras&&notes&&notes.value.indexOf('Trip details:')===-1)notes.value=(notes.value?notes.value.trim()+'\n\n':'')+'Trip details:\n'+summary;
