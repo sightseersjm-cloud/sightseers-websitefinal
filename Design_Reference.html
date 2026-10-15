@@ -55857,7 +55857,7 @@ html body .mv-pk,html body .dest-package-card,html body .bx-card:has(.bx-more){c
      Any other box that holds information (a bordered or shadowed panel with some text, at least 110 by 50 pixels, and no form fields) is picked up automatically. */
   var SEL='.tour-card,.bx-card,.dest-package-card,.dest-explorer-card,.discover-jm-card,.bdos-itin-card,.mv-pk,.mv-add,.sl-pk,.sl-step,.sl-why-c,.off-pk,.off-step,.off-ed,.transfer-card,.yacht-card,.yacht-luxe-card,.stay-card,.ss-dyn-card,.shop-card,.blog-card,.lj-card,.lj-price-card,.so-card,.so-moment,.team-gloss-card,.passport-card,.community-point';
   /* Places where boxes stay still: legal text, the admin and V-Tours areas, account and booking forms, menus, pop-ups and side panels. */
-  var STILL='#p-privacy-policy,#p-terms-of-service,#p-refund-policy,#p-admin,#p-vtours,#p-account,#p-booking,#p-blogrequest,#p-tent-rental,header,nav,footer,aside,details,form,table,[role="dialog"],[aria-modal="true"],#mobNav,.ss-bot-panel,.fp-card';
+  var STILL='#p-privacy-policy,#p-terms-of-service,#p-refund-policy,#p-admin,#p-vtours,#p-account,#p-booking,#p-blogrequest,#p-tent-rental,header,nav,footer,aside,details,form,table,[role="dialog"],[aria-modal="true"],#mobNav,.ss-bot-panel,.fp-card,.tcd';
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   var fine=window.matchMedia('(hover: hover) and (pointer: fine)');
   var cur=null,raf=0,ev=null,memo=new WeakMap(),fixedMemo=new WeakMap();
@@ -57026,11 +57026,12 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #tcNotice .tcn-list li b{font:800 14.5px 'Raleway',sans-serif;color:#063a63}
 #tcNotice .tcn-list li span{font-size:13px;color:#5b7288}
 /* Approved departures: a schedule panel on a photo, in the site's navy, orange and green */
-.tcd{position:relative;overflow:hidden;isolation:isolate;margin:24px 0 30px;color:#fff;background:#0a3f66;border:1px solid rgba(255,255,255,.95);box-shadow:0 0 0 6px rgba(255,255,255,.8),0 0 0 7px rgba(6,58,99,.08),0 0 64px rgba(255,255,255,.95),0 32px 70px rgba(6,58,99,.22)}
+#p-travel-club{overflow-x:clip}
+.tcd{position:relative;overflow:hidden;isolation:isolate;width:100vw;max-width:none;margin:24px 0 30px calc(50% - 50vw);color:#fff;background:#0a3f66;border:1px solid rgba(255,255,255,.95);border-left:0;border-right:0;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 0 0 7px rgba(6,58,99,.08),0 0 64px rgba(255,255,255,.95),0 32px 70px rgba(6,58,99,.22)}
 .tcd-bg{position:absolute;inset:-30px;z-index:-3;background:url('/assets/travel-club/departures-bg.jpg') center/cover no-repeat;filter:blur(9px) saturate(1.15);transform:translate(var(--px,0px),var(--py,0px)) scale(1.06);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .tcd::before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 24%),radial-gradient(58% 90% at 0% 100%,rgba(112,194,87,.3),transparent 62%),linear-gradient(100deg,rgba(6,58,99,.88) 0%,rgba(11,80,120,.76) 46%,rgba(11,80,120,.66) 100%)}
 .tcd::after{content:'';position:absolute;z-index:-1;right:-120px;top:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.3),transparent 66%);pointer-events:none}
-.tcd-in{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.5fr);gap:44px;padding:clamp(26px,4vw,52px)}
+.tcd-in{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.5fr);gap:44px;padding:clamp(26px,4vw,52px) max(clamp(26px,4vw,52px),calc((100% - 1132px)/2 + 52px))}
 .tcd-logo{display:block;width:auto;height:44px;margin:0 0 22px;filter:brightness(0) invert(1);opacity:.95}
 .tcd-live{display:inline-block;padding:7px 12px;background:#ef8731;color:#fff;font:800 11px 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase}
 .tcd-h{margin:16px 0 10px;font:900 clamp(34px,4.6vw,58px)/.98 'Playfair Display',serif;letter-spacing:-.01em;color:#fff!important}
@@ -57070,7 +57071,7 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-empty p{margin:0 0 18px;max-width:52ch;font-size:15px;line-height:1.6;color:rgba(255,255,255,.78)}
 .tcd-empty a{color:#f5a04b}
 .tcd-skel{height:74px;border-bottom:1px solid rgba(255,255,255,.14);background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.12),rgba(255,255,255,.04));background-size:200% 100%;animation:tcdSk 1.4s linear infinite}
-.tcd-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:16px clamp(26px,4vw,52px);border-top:1px solid rgba(255,255,255,.2);font-size:13.5px;color:rgba(255,255,255,.7)}
+.tcd-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:16px max(clamp(26px,4vw,52px),calc((100% - 1132px)/2 + 52px));border-top:1px solid rgba(255,255,255,.2);font-size:13.5px;color:rgba(255,255,255,.7)}
 .tcd-lead{padding:0;border:0;background:none;color:#70c257!important;font:800 13px 'Raleway',sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:0}
 .tcd-lead span{display:inline-block;transition:transform .25s}
 .tcd-lead:hover span{transform:translateX(5px)}
