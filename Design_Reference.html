@@ -57097,6 +57097,11 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 #adminTravelClubTrips .tcA-del:hover{background:#c9533f;color:#fff}
 #adminTravelClubTrips .tcA-acchead select{min-width:0}
 #adminTravelClubTrips .tcA-acc .tcA-tr>span{min-width:0;overflow-wrap:anywhere}
+#adminTravelClubTrips .tcA-acc .tcA-tr>span:last-child{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+#p-account .ac-delrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(6,58,99,.1)}
+#p-account .ac-sbtn.ac-dangerbtn{background:#fff!important;color:#c9533f!important;border:1px solid #c9533f!important;box-shadow:none!important;height:38px;transition:background .2s,color .2s}
+#p-account .ac-sbtn.ac-dangerbtn:hover{background:#c9533f!important;color:#fff!important}
+#p-account .ac-delrow .ac-invmsg{flex:1 1 auto;min-width:0}
 @media(max-width:700px){#adminTravelClubTrips .tcA-acc .tcA-tr{grid-template-columns:1fr}}
 /* Travel Club admin page */
 #p-account .tca-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:0 0 16px;padding:16px 20px;background:linear-gradient(135deg,#0b5078 0%,#07324f 100%);color:#fff;border-left:5px solid #ef8731;box-shadow:0 16px 36px rgba(4,31,53,.25)}
@@ -58369,6 +58374,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         return '<li><span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
       '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+
+      '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>'+
     '</div>';
   }
   var PTAG={insurance:'Protection',esim:'Connectivity'};
@@ -58408,6 +58414,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<p class="ac-onote"><b>'+esc(msgs[a.status]||'')+'</b>'+(a.reply?'<br>'+esc(a.reply):'')+'</p>'+
       inviteBox(a)+answers(a)+
       (a.message?'<details class="ac-words"><summary>What you told us</summary><p>'+esc(a.message)+'</p>'+(a.notes?'<p><b>Anything else:</b> '+esc(a.notes)+'</p>':'')+'</details>':'')+
+    '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-app-del="'+esc(a.ref)+'">Delete application</button><span class="ac-invmsg" role="status"></span></div>'+
     '</div>';
   }
   function orgHtml(d){
@@ -58443,6 +58450,22 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     gp.addEventListener('click',function(e){
       var c=e.target.closest('[data-ocopy]');
       if(c){var box=c.closest('.ac-otrip');copyText(box.querySelector('.ac-oshare input').value,c,'Copied');return;}
+      var ad=e.target.closest('[data-app-del]');
+      if(ad){
+        var adCard=ad.closest('.ac-app'),adH=adCard&&adCard.querySelector('h4'),adMsg=ad.parentNode.querySelector('.ac-invmsg'),adTrips=document.querySelectorAll('#acPane-groups .ac-otrip').length;
+        if(!confirm('Delete your application "'+(adH?adH.textContent:'')+'"?'+(adTrips?'\n\nThe trip made from it is deleted too, and anyone who asked to join is emailed that it is no longer going ahead.':'')+'\n\nYour account is kept and you can apply again any time. This cannot be undone.'))return;
+        ad.disabled=true;adMsg.className='ac-invmsg';adMsg.textContent='Deleting...';
+        api('trips','POST',{action:'application-delete-mine',ref:ad.getAttribute('data-app-del')}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){ad.disabled=false;adMsg.className='ac-invmsg err';adMsg.textContent=err.message||'We could not delete it. Please try again.';});
+        return;
+      }
+      var td=e.target.closest('[data-trip-del]');
+      if(td){
+        var tdMsg=td.parentNode.querySelector('.ac-invmsg'),tdN=parseInt(td.getAttribute('data-trip-joined'),10)||0;
+        if(!confirm('Delete the trip "'+td.getAttribute('data-trip-title')+'"?'+(tdN?'\n\n'+tdN+' '+(tdN===1?'person has':'people have')+' asked to join. They are emailed that the trip is no longer going ahead.':'')+'\n\nThe application it was made from is deleted too. Your account is kept and you can apply again any time. This cannot be undone.'))return;
+        td.disabled=true;tdMsg.className='ac-invmsg';tdMsg.textContent='Deleting...';
+        api('trips','POST',{action:'trip-delete-mine',id:td.getAttribute('data-trip-del')}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){td.disabled=false;tdMsg.className='ac-invmsg err';tdMsg.textContent=err.message||'We could not delete it. Please try again.';});
+        return;
+      }
       var ed=e.target.closest('[data-inv-edit]');
       if(ed){var iv=ed.closest('.ac-invite'),f=iv.querySelector('[data-inv-form]');f.hidden=false;ed.hidden=true;var inp=f.querySelector('input');inp.focus();inp.select();return;}
       var cn=e.target.closest('[data-inv-cancel]');
@@ -58615,7 +58638,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 
 
   /* ── overview: what needs you, every leader and their group, and what happened lately ── */
-  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed'};
+  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset'};
   function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(isNaN(m))return '';if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';return dt(iso);}
   function overview(){
     var d=S.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),
@@ -58689,7 +58712,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       (rows.length?'<div class="tcA-table tcA-acc"><div class="tcA-tr tcA-th"><span>Name</span><span>Email</span><span>Phone</span><span>Country</span><span>Joined · source</span><span>Travel Club</span><span></span></div>'+rows.map(function(a){
         return '<div class="tcA-tr"><span><b>'+esc(a.name||'(no name)')+'</b>'+(a.role==='admin'?' <span class="tcA-chip good">Admin</span>':'')+(a.community?'<small>'+esc(a.community)+'</small>':'')+'</span>'+
           '<span><a href="mailto:'+esc(a.email)+'">'+esc(a.email)+'</a></span><span>'+(a.phone?'<a href="tel:'+esc(String(a.phone).replace(/[^0-9+]/g,''))+'">'+esc(a.phone)+'</a>':'<em>Not given</em>')+'</span>'+
-          '<span>'+(a.country?esc(cname(a.country)):'<em>Not known</em>')+(a.city?'<small>'+esc(a.city)+'</small>':'')+(a.basedIn?'<small>Says: '+esc(a.basedIn)+'</small>':'')+'</span><span>'+esc(a.createdAt?dt(a.createdAt):'')+'<small>'+esc(SRC[a.source]||a.source)+'</small></span><span>'+leaderState(a)+(a.tripsLed?'<small>'+a.tripsLed+' trip'+(a.tripsLed===1?'':'s')+' led</small>':'')+(a.tripsJoined?'<small>'+a.tripsJoined+' trip'+(a.tripsJoined===1?'':'s')+' joined</small>':'')+'</span><span>'+(a.role==='admin'?'':'<button type="button" class="tcA-del" data-tcadelacct="'+esc(a.id)+'" aria-label="Delete account '+esc(a.email)+'">Delete</button>')+'</span></div>';
+          '<span>'+(a.country?esc(cname(a.country)):'<em>Not known</em>')+(a.city?'<small>'+esc(a.city)+'</small>':'')+(a.basedIn?'<small>Says: '+esc(a.basedIn)+'</small>':'')+'</span><span>'+esc(a.createdAt?dt(a.createdAt):'')+'<small>'+esc(SRC[a.source]||a.source)+'</small></span><span>'+leaderState(a)+(a.tripsLed?'<small>'+a.tripsLed+' trip'+(a.tripsLed===1?'':'s')+' led</small>':'')+(a.tripsJoined?'<small>'+a.tripsJoined+' trip'+(a.tripsJoined===1?'':'s')+' joined</small>':'')+'</span><span><button type="button" class="tcA-del" data-tcareset="'+esc(a.id)+'" aria-label="Reset Travel Club trips for '+esc(a.email)+'">Reset trips</button>'+(a.role==='admin'?'':'<button type="button" class="tcA-del" data-tcadelacct="'+esc(a.id)+'" aria-label="Delete account '+esc(a.email)+'">Delete</button>')+'</span></div>';
       }).join('')+'</div>':'<p class="tcA-note">No accounts match.</p>');
   }
   function csvCell(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
@@ -58800,6 +58823,26 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(pb){
       e.preventDefault();e.stopPropagation();pb.disabled=true;say('Publishing...','');
       call('trip-status',{id:pb.getAttribute('data-tcapublish'),status:'open'}).then(function(){S.data=null;load(true);setTimeout(function(){say('Published. The trip is on the departure board and the leader has been emailed.','ok');},400);}).catch(function(err){pb.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var rs=e.target.closest('[data-tcareset]');
+    if(rs){
+      var rsId=rs.getAttribute('data-tcareset'),rsAc=(S.data.accounts||[]).filter(function(x){return x.id===rsId;})[0];if(!rsAc)return;
+      var rsEm=String(rsAc.email||'').toLowerCase();
+      var rsApps=(S.data.applications||[]).filter(function(a){return a.email===rsEm||(a.userId&&a.userId===rsId);});
+      var rsLed=(S.data.trips||[]).filter(function(t){return (t.organizerUserId&&t.organizerUserId===rsId)||(t.organizerEmail&&String(t.organizerEmail).toLowerCase()===rsEm)||rsApps.some(function(a){return a.id===t.applicationId||a.tripId===t.id;});});
+      var rsLedIds=rsLed.map(function(t){return t.id;});
+      var rsReqs=(S.data.interests||[]).filter(function(i){return rsLedIds.indexOf(i.tripId)>-1||((i.email===rsEm||(i.userId&&i.userId===rsId))&&i.status!=='booked');});
+      if(!confirm('Start the account for '+(rsAc.name||rsAc.email)+' ('+rsAc.email+') fresh?\n\nThis deletes '+rsApps.length+' application'+(rsApps.length===1?'':'s')+', '+rsLed.length+' trip'+(rsLed.length===1?'':'s')+' they lead and '+rsReqs.length+' traveler request'+(rsReqs.length===1?'':'s')+'. The account, its password and sign-in are kept, so it opens with no trips. Booked travelers are never removed.\n\nThis cannot be undone.'))return;
+      rs.disabled=true;say('Resetting...','');
+      call('account-reset',{id:rsId}).then(function(res){
+        var gone=rsReqs.map(function(i){return i.id;});
+        S.data.applications=S.data.applications.filter(function(a){return rsApps.indexOf(a)<0;});
+        S.data.trips=S.data.trips.filter(function(t){return rsLedIds.indexOf(t.id)<0;});
+        S.data.interests=S.data.interests.filter(function(i){return gone.indexOf(i.id)<0;});
+        S.data.accounts.forEach(function(x){if(x.id===rsId){x.tripsLed=0;x.tripsJoined=0;x.applicationStatus='';x.applicationRef='';x.community='';}});
+        badge();render();say('Done. '+(rsAc.name||rsAc.email)+' starts fresh with no trips.'+(res.keptBooked?' '+res.keptBooked+' booked trip'+(res.keptBooked===1?'':'s')+' kept.':''),'ok');
+      }).catch(function(err){rs.disabled=false;say(err.message,'err');});
       return;
     }
     var da=e.target.closest('[data-tcadelacct]');

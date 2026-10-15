@@ -12,6 +12,9 @@
  *   GET  /api/trips?partners=1         public: the travel insurance and eSIM referral links (as the admin set them)
  *   POST { action:'partners-save' }    admin: set the referral links, titles and notes
  *   POST { action:'trip-save' }        admin: create or update a trip
+ *   POST { action:'trip-delete-mine' } signed in (the trip's leader): delete their own trip, its requests and the application it came from; booked travelers block it
+ *   POST { action:'application-delete-mine' } signed in: delete their own application and any trip made from it
+ *   POST { action:'account-reset' }    admin: clear one account's applications, trips and requests and keep the account (booked travelers are never removed)
  *   POST { action:'trip-delete' }      admin: delete a trip, its requests and the leader application it was drafted from
  *   POST { action:'application-review' } admin: approve, decline or ask for more information (optionally drafts the trip)
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
@@ -251,6 +254,14 @@ function groupLinkMails(t, joiners) {
     `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${t.organizerName ? trip.esc(t.organizerName) + ' has set up' : 'The group chat is ready for'} <b>${trip.esc(t.title)}</b>. Join to meet the group and get every update in one place.</p>${button(t.groupLink, 'Join the group chat')}<p style="color:#555">You can also find it on your dashboard.</p>`)));
   jobs.push(safe('group link admin', adminMail('Group chat added: ' + t.title, 'Group chat added', `<p>${trip.esc(t.organizerName || 'The leader')} added a group chat link to <b>${trip.esc(t.title)}</b>. ${joiners.length} traveler${joiners.length === 1 ? ' was' : 's were'} emailed.</p>${trip.detailTable([['Link', t.groupLink]])}`)));
   if (t.organizerEmail) jobs.push(safe('group link leader', mail(t.organizerEmail, 'Your group chat link is saved', 'Group chat saved', `<p>Your link is saved on <b>${trip.esc(t.title)}</b> and ${joiners.length} traveler${joiners.length === 1 ? ' has' : 's have'} been emailed it. New travelers see it as soon as they join.</p>`)));
+  return Promise.all(jobs);
+}
+
+function tripRemovedMails(t, travelers, leader) {
+  const who = (leader && (leader.name || leader.email)) || t.organizerName || 'The leader';
+  const jobs = [safe('trip removed admin', adminMail('Leader removed a trip: ' + t.title, 'A leader removed their trip', `<p><b>${trip.esc(who)}</b> deleted <b>${trip.esc(t.title)}</b> from their dashboard.${travelers.length ? ' ' + travelers.length + ' traveler' + (travelers.length === 1 ? ' was' : 's were') + ' emailed.' : ''}</p>`))];
+  travelers.forEach(i => jobs.push(safe('trip removed traveler', mail(i.email, 'Update on your trip: ' + t.title, 'This trip is no longer going ahead',
+    `<p>Hi ${trip.esc(firstName(i.name))},</p><p>The group leader has withdrawn <b>${trip.esc(t.title)}</b>, so your request is closed. Nothing was charged.</p><p>You are welcome to look at the other Travel Club departures.</p>${button(SITE + '/travel-club', 'See departures')}`))));
   return Promise.all(jobs);
 }
 
@@ -580,6 +591,37 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, inviteCount: saved.inviteCount });
     }
 
+    /* ===== signed in: the leader deletes their own trip, or their own application (with any trip made from it) ===== */
+    if (action === 'trip-delete-mine' || action === 'application-delete-mine') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const mailAddr = lower(user.email, 120);
+      const [tripsAll, apps, ints] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS)]);
+      const isMine = a => a.email === mailAddr || (a.userId && a.userId === user.id);
+      let app = null, led = [];
+      if (action === 'application-delete-mine') {
+        app = apps.find(a => a.ref === str(body.ref, 40) && isMine(a)) || null;
+        if (!app) return res.status(404).json({ error: 'We could not find that application.' });
+        led = tripsAll.filter(t => t.applicationId === app.id || t.id === app.tripId);
+      } else {
+        const t = tripsAll.find(x => x.id === str(body.id, 80) && ownsTrip(x, user));
+        if (!t) return res.status(404).json({ error: 'We could not find that trip.' });
+        led = [t];
+        app = apps.find(a => (a.id === t.applicationId || a.tripId === t.id) && isMine(a)) || null;
+      }
+      const ledIds = led.map(t => t.id);
+      if (ints.some(i => ledIds.indexOf(i.tripId) > -1 && i.status === 'booked')) return res.status(409).json({ error: 'This trip has booked travelers, so it cannot be deleted here. Please contact Sight Seers and we will sort it out together.' });
+      const gone = ints.filter(i => ledIds.indexOf(i.tripId) > -1);
+      for (const i of gone) await db.removeFromCollection(INTERESTS, i.id);
+      for (const t of led) await db.removeFromCollection(TRIPS, t.id);
+      if (app) await db.removeFromCollection(APPS, app.id);
+      for (const t of led) await tripRemovedMails(t, gone.filter(i => i.tripId === t.id && i.status !== 'cancelled' && i.email), user);
+      if (!led.length && app) await safe('application withdrawn', adminMail('Application withdrawn: ' + app.communityName, 'A leader withdrew their application', `<p><b>${trip.esc(app.name)}</b> (${trip.esc(app.communityName)}) deleted their application ${trip.esc(app.ref)} from their dashboard.</p>`));
+      if (led.length) await log('trip-deleted', 'Trip deleted by its leader: ' + led.map(t => t.title).join(', ') + (gone.length ? ' (with ' + gone.length + ' request' + (gone.length === 1 ? '' : 's') + ')' : '') + (app ? ' and the application it came from' : ''), ledIds[0]);
+      else await log('application-deleted', 'Application deleted by its leader: ' + app.communityName + ' (' + app.name + ')', app.ref);
+      return res.status(200).json({ ok: true, tripsRemoved: led.length, applicationRemoved: !!app });
+    }
+
     /* ===== signed in: the leader adds their WhatsApp group or channel link; joiners are emailed it ===== */
     if (action === 'trip-group-link') {
       const user = getUser(req);
@@ -647,6 +689,27 @@ module.exports = async function handler(req, res) {
       await db.setCollection('users', users.filter(x => x.id !== u.id));
       await log('account-deleted', 'Account removed: ' + (u.name || u.email), u.id);
       return res.status(200).json({ ok: true, keptApplications: keepApps.length });
+    }
+    if (action === 'account-reset') {
+      const admin = requireAdmin(req, res);
+      if (!admin) return;
+      const users = await db.getCollection('users');
+      const u = users.find(x => x.id === str(body.id, 80));
+      if (!u) return res.status(404).json({ error: 'Account not found.' });
+      const em = lower(u.email, 120);
+      const [tripsAll, apps, ints] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS)]);
+      const theirApps = apps.filter(a => a.email === em || (a.userId && a.userId === u.id));
+      const led = tripsAll.filter(t => (t.organizerUserId && t.organizerUserId === u.id) || (t.organizerEmail && t.organizerEmail === em) || theirApps.some(a => a.id === t.applicationId || a.tripId === t.id));
+      const ledIds = led.map(t => t.id);
+      if (ints.some(i => ledIds.indexOf(i.tripId) > -1 && i.status === 'booked')) return res.status(409).json({ error: 'A trip this account leads has booked travelers. Delete that trip from the Trips tab first, so you decide what happens to them.' });
+      const own = ints.filter(i => i.email === em || (i.userId && i.userId === u.id));
+      const reqIds = new Set(own.filter(i => i.status !== 'booked').concat(ints.filter(i => ledIds.indexOf(i.tripId) > -1)).map(i => i.id));
+      for (const id of reqIds) await db.removeFromCollection(INTERESTS, id);
+      for (const t of led) await db.removeFromCollection(TRIPS, t.id);
+      for (const a of theirApps) await db.removeFromCollection(APPS, a.id);
+      const keptBooked = own.filter(i => i.status === 'booked').length;
+      await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
+      return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
     if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save') {
       const admin = requireAdmin(req, res);
