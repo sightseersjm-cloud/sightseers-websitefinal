@@ -58460,10 +58460,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function chip(map,k){var m=map[k]||['other',k];return '<span class="ac-status '+m[0]+'">'+esc(m[1])+'</span>';}
   function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
 
-  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function ym(v){var m=/^(\d{4})-(\d{2})/.exec(v||'');return m?{y:+m[1],m:+m[2]}:null;}
-  function ymText(o){return MON[o.m-1]+' '+o.y;}
-  function dOnly(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?MON[+m[2]-1]+' '+(+m[3])+', '+m[1]:'';}
+  function ymText(o){return MONS[o.m-1]+' '+o.y;}
+  function dOnly(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?MONS[+m[2]-1]+' '+(+m[3])+', '+m[1]:'';}
   function hostOf(u){try{return new URL(u).hostname.replace(/^www\./,'');}catch(e){return u;}}
   /* what the passport's expiry month means for this trip, using only the dates we hold: never a rule we have not been given */
   function passportCheck(i){
@@ -59065,26 +59065,26 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 
   /* ── partner links: travel insurance and eSIM referrals shown on every member's Group trips tab ── */
   /* ── rewards: a record of what has been paid to each leader (this only keeps the record; it moves no money) ── */
-  function money(a,c){return Number(a).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+c;}
+  function moneyTxt(a,c){return Number(a).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+c;}
   function dOnlyA(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m?M[+m[2]-1]+' '+(+m[3])+', '+m[1]:esc(v||'');}
   function rewardsTab(){
     var d=S.data,P=d.payouts||[],T=(d.trips||[]).filter(function(t){return t.organizerEmail||t.organizerName;}),totals={};
     P.forEach(function(p){totals[p.currency]=(totals[p.currency]||0)+p.amount;});
     var out='<p class="tcA-note">Record each reward you pay to a leader here: how much, how, when, and a reference. <b>This only keeps the record. It does not send money.</b> The leader sees what you record on their trip card, and can be emailed when you add it.</p>';
-    out+='<div class="tcA-todos"><span class="tcA-todo has"><b>'+P.length+'</b><span>Payments recorded</span></span>'+Object.keys(totals).map(function(c){return '<span class="tcA-todo"><b>'+esc(money(totals[c],c))+'</b><span>Paid out in '+esc(c)+'</span></span>';}).join('')+'</div>';
+    out+='<div class="tcA-todos"><span class="tcA-todo has"><b>'+P.length+'</b><span>Payments recorded</span></span>'+Object.keys(totals).map(function(c){return '<span class="tcA-todo"><b>'+esc(moneyTxt(totals[c],c))+'</b><span>Paid out in '+esc(c)+'</span></span>';}).join('')+'</div>';
     if(!T.length)out+='<p class="tcA-note">No trips with a leader yet.</p>';
     T.forEach(function(t,ti){
       var list=P.filter(function(p){return p.tripId===t.id;}),booked=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status==='booked';}).reduce(function(n,i){return n+(i.partySize||1);},0),joined=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status!=='cancelled'&&i.status!=='waitlist';}).length,pid='tcAR'+ti;
       out+='<details class="tcA-dest"'+((S.rOpen||{})[t.id]?' open':'')+'><summary><span>'+esc(t.title)+'</span><small>'+esc(t.organizerName||t.organizerEmail||'')+'</small>'+chip({not_set:'',agreed:'warn',earned:'good',paid:'good'},t.rewardStatus||'not_set')+'<small>'+joined+' joined &middot; '+booked+' booked</small>'+(list.length?'<small>'+list.length+' paid</small>':'')+'</summary><div class="tcA-dbody">'+
         '<p class="tcA-note">'+(t.reward?'<b>Agreed reward:</b> '+esc(t.reward):'<b>No reward written down for this trip.</b> Add it under Trips.')+'</p>'+
-        (list.length?'<ul class="tcA-ulist">'+list.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b><small>'+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+' &middot; recorded by '+esc(p.createdBy||'')+'</small>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'<div class="tcA-actions" style="margin-top:6px"><button type="button" class="tcA-del" data-tcapaydel="'+esc(p.id)+'">Remove record</button></div></li>';}).join('')+'</ul>':'<p class="tcA-note">Nothing recorded yet.</p>')+
+        (list.length?'<ul class="tcA-ulist">'+list.map(function(p){return '<li><b>'+esc(moneyTxt(p.amount,p.currency))+'</b><small>'+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+' &middot; recorded by '+esc(p.createdBy||'')+'</small>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'<div class="tcA-actions" style="margin-top:6px"><button type="button" class="tcA-del" data-tcapaydel="'+esc(p.id)+'">Remove record</button></div></li>';}).join('')+'</ul>':'<p class="tcA-note">Nothing recorded yet.</p>')+
         '<h4 class="tcA-h" style="margin-top:14px">Record a payment</h4><div class="admin-package-grid">'+fld('Amount',pid+'_amount','',{type:'number',min:0,ph:'0.00'})+
         fld('Currency',pid+'_cur','USD',{type:'select',options:['USD','JMD','CAD','GBP','EUR']})+fld('How it was paid',pid+'_method','',{ph:'Bank transfer, PayPal, cash...'})+fld('Reference (optional)',pid+'_ref','',{})+fld('Paid on',pid+'_date',new Date().toISOString().slice(0,10),{type:'date'})+fld('Note (optional, the leader can see it)',pid+'_note','',{})+
         fld('Email the leader that it was paid',pid+'_notify',true,{type:'check'})+fld('Mark the reward as paid for this trip',pid+'_mark',t.rewardStatus!=='paid',{type:'check'})+'</div>'+
         '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcapay="'+ti+'">Record payment</button></div></div></details>';
     });
     var live={};T.forEach(function(t){live[t.id]=1;});var gone=P.filter(function(p){return !live[p.tripId];});
-    if(gone.length)out+='<h4 class="tcA-h">Payments for trips that no longer exist</h4><ul class="tcA-ulist">'+gone.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b><small>'+esc(p.tripTitle)+' &middot; '+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+'</small></li>';}).join('')+'</ul>';
+    if(gone.length)out+='<h4 class="tcA-h">Payments for trips that no longer exist</h4><ul class="tcA-ulist">'+gone.map(function(p){return '<li><b>'+esc(moneyTxt(p.amount,p.currency))+'</b><small>'+esc(p.tripTitle)+' &middot; '+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+'</small></li>';}).join('')+'</ul>';
     return out;
   }
   /* ── destinations: the entry information travelers see on their checklist, drafted from official pages and shown only once you approve it ── */
