@@ -4,8 +4,9 @@
  *
  *   destination (the country a trip goes to)  x  passport (the country on the traveler's passport)
  *
- * The starting text lives in api/_data/club-entry-drafts.json. It was drafted from official government and tourism pages
- * and is only ever a DRAFT: a traveler sees an entry only after the owner has approved it in the master admin (Destinations tab).
+ * The starting text lives in api/_data/club-entry-drafts.json. It was drafted from official government and tourism pages.
+ * A traveler sees an entry only once it is approved: the owner approved the entries that have a summary and an official link,
+ * and can unapprove or edit any of them in the master admin (Destinations tab).
  * The owner's edits and approvals are stored in 'club-destinations' and override the drafts field by field.
  * Nothing is invented: an entry cannot be approved without a summary and at least one official link, and a passport nobody
  * has prepared gets no card, never a guess. The only thing collected from travelers is the passport's country, never a passport number.
@@ -34,10 +35,18 @@ function httpsLinks(v) {
   return out.slice(0, 6);
 }
 
+/* a shipped approval only counts when the same rule the admin screen enforces holds: a summary and an official link (general: a source and one detail) */
+function okEntry(e) { return !!(e && str(e.summary, 900) && httpsLinks(e.officialLinks).length); }
+function okGeneral(g) { return !!(g && httpsLinks(g.sources).length && GENERAL_FIELDS.some(k => str(g[k], 200))); }
 function fromDraft(d) {
-  const g = Object.assign({}, d.general || {}, { status: 'draft' });
+  const g = Object.assign({}, d.general || {});
+  g.status = g.status === 'approved' && okGeneral(g) ? 'approved' : 'draft';
   const entry = {};
-  Object.keys(d.entry || {}).forEach(p => { entry[p] = Object.assign({}, d.entry[p], { status: 'draft' }); });
+  Object.keys(d.entry || {}).forEach(p => {
+    const e = Object.assign({}, d.entry[p]);
+    e.status = e.status === 'approved' && okEntry(e) ? 'approved' : 'draft';
+    entry[p] = e;
+  });
   return { id: d.id || slug(d.country), country: d.country, source: 'research', reviewNote: d.reviewNote || '', general: g, entry };
 }
 

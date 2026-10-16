@@ -1,6 +1,6 @@
 {
  "drafted": "2026-10-15",
- "about": "Entry information drafted from official government and tourism pages by a research pass on 2026-10-15. Every entry is a DRAFT: nothing here is shown to travelers until the owner approves it in the master admin (Destinations tab). Nothing is invented: where a source gave no answer the field is empty and flagged.",
+ "about": "Entry information drafted from official government and tourism pages by a research pass on 2026-10-15. On 2026-10-16 the owner approved every entry that has a summary and an official link (the Dominican Republic entry for Jamaican passports has no content yet, so it stays a draft). The owner can unapprove or edit any entry in the master admin (Destinations tab); the drafts below carry review flags where the research was unsure.",
  "destinations": [
   {
    "id": "jamaica",
@@ -14,7 +14,10 @@
     "sources": [
      "https://www.visitjamaica.com/plan-your-adventure/travel-tips/faq/",
      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Jamaica.html"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -29,7 +32,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "Canadians do not need a tourist visa for stays of up to 90 days; visitors are generally granted 90 days and can request an extension at an immigration office.",
@@ -43,7 +49,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens do not need a visa for tourism. Entry is usually granted for up to 90 days, and the date you must leave is stamped in the passport.",
@@ -57,7 +66,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    },
    "reviewNote": "Researcher could not open official pages (no network from its fetch tool); drawn from search-engine summaries of travel.state.gov, travel.gc.ca, gov.uk and visitjamaica.com. Re-verify before approving."
@@ -74,7 +86,10 @@
     "sources": [
      "https://www.travelbelize.org/facts-about-belize/",
      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Belize.html"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -87,7 +102,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "No tourist visa is needed for stays of up to 30 days. Staying longer requires a visa from Belize immigration, and overstaying can bring fines, detention or deportation.",
@@ -99,7 +117,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens can visit Belize without a visa for 30 days. An extension costs BZ$200 for each additional 30 days.",
@@ -111,7 +132,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "Belize's immigration site lists Jamaica as not requiring a visa, and the Belize Tourism Board says visas are not required for Caribbean countries. Visitors are given a one-month stay, and a visa and extensions are needed for longer.",
@@ -126,7 +150,10 @@
      "flags": [
       "Confidence medium: check the official links before approving.",
       "The sources are not fully consistent. Confirm the stay length on the official page."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    }
   },
@@ -142,7 +169,10 @@
     "sources": [
      "https://www.bahamas.com/plan-your-trip/island-faq/visa-immigration",
      "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -159,7 +189,10 @@
       "Confidence medium: check the official links before approving.",
       "Mentions a current health notice that can change quickly. Re-check the date before approving.",
       "The sources are not fully consistent. Confirm the stay length on the official page."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "Canadians do not need a visa for tourism and can stay up to 8 months.",
@@ -173,7 +206,10 @@
      "confidence": "high",
      "flags": [
       "Mentions a current health notice that can change quickly. Re-check the date before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens can usually stay up to 30 days without a visa as tourists. Extensions are possible up to a maximum of 8 months, and overstaying can bring fines, detention or deportation.",
@@ -187,7 +223,10 @@
      "confidence": "high",
      "flags": [
       "Mentions a current health notice that can change quickly. Re-check the date before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "Bahamas Immigration lists Jamaica among the countries whose citizens are visa-waived for visits of up to 3 or 8 months, depending on each agreement. The exact period for Jamaica could not be confirmed.",
@@ -202,7 +241,10 @@
      "flags": [
       "Confidence medium: check the official links before approving.",
       "Mentions a current health notice that can change quickly. Re-check the date before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    }
   },
@@ -218,7 +260,10 @@
     "sources": [
      "https://stlucia.org/en/plan-your-saint-lucia-trip/traveler-guide/",
      "https://travel.gc.ca/destinations/saint-lucia"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -233,7 +278,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "Canadians do not need a tourist visa for stays of up to 6 weeks.",
@@ -247,7 +295,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens can visit Saint Lucia without a visa and are allowed to stay for a maximum of 6 weeks on entry.",
@@ -259,7 +310,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "Jamaica's government visa list for Jamaicans travelling overseas shows no visa required for Saint Lucia. A 2023 list was the only official source found, and the permitted length of stay was not confirmed from an official source.",
@@ -275,7 +329,10 @@
      "flags": [
       "Confidence low: check the official links before approving.",
       "The sources are not fully consistent. Confirm the stay length on the official page."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    }
   },
@@ -291,7 +348,10 @@
     "sources": [
      "https://www.godominicanrepublic.com/travel/travel-tips",
      "https://travel.gc.ca/destinations/dominican-republic"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -308,7 +368,10 @@
      "flags": [
       "Confidence medium: check the official links before approving.",
       "Includes a temporary rule that ends on 31 December 2026."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "Canadians do not need a tourist visa for stays of up to 30 days.",
@@ -322,7 +385,10 @@
      "confidence": "high",
      "flags": [
       "Includes a temporary rule that ends on 31 December 2026."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens can visit the Dominican Republic for tourism without a visa for up to 30 days.",
@@ -336,7 +402,10 @@
      "confidence": "high",
      "flags": [
       "Includes a temporary rule that ends on 31 December 2026."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "",
@@ -370,7 +439,10 @@
     "sources": [
      "https://www.visitbarbados.org/plan-your-trip/travel-information",
      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Barbados.html"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -385,7 +457,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "Canadian tourists do not need a visa for stays of up to 180 days; work and student visas are required.",
@@ -397,7 +472,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "British citizens do not need a visa to visit Barbados; immigration officers tell you how long you may stay on arrival.",
@@ -409,7 +487,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "No visa is listed for Jamaicans visiting Barbados in Jamaica's government visa listing (2023), and the Barbados consulate says only non-citizens of Canada, CARICOM, the UK or the US need a visa. Permitted length of stay is not confirmed from an official source.",
@@ -425,7 +506,10 @@
      "flags": [
       "Confidence medium: check the official links before approving.",
       "The sources are not fully consistent. Confirm the stay length on the official page."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    }
   },
@@ -442,7 +526,10 @@
      "https://www.curacao.com/en/questions/electricity/do-i-need-special-plugs-adaptors-for-my-devices-in-curacao",
      "https://www.cia.gov/the-world-factbook/countries/curacao/travel-facts",
      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Curacao.html"
-    ]
+    ],
+    "status": "approved",
+    "approvedAt": "2026-10-16T00:00:00.000Z",
+    "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
    },
    "entry": {
     "United States": {
@@ -456,7 +543,10 @@
      ],
      "checkedOn": "2026-10-15",
      "confidence": "high",
-     "flags": []
+     "flags": [],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Canada": {
      "summary": "No visa is needed for tourism: Canada is on the Dutch government's visa-exempt list for the Caribbean parts of the Kingdom. The Curaçao immigration service gives Canadians 90 days a year as a tourist.",
@@ -471,7 +561,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "United Kingdom": {
      "summary": "No visa is needed for tourism. The UK FCDO says visitors can stay up to 90 days in a calendar year without a visa, and can ask Curaçao immigration for an extension if they have travel insurance for the extended stay.",
@@ -486,7 +579,10 @@
      "confidence": "medium",
      "flags": [
       "Confidence medium: check the official links before approving."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     },
     "Jamaica": {
      "summary": "No visa is needed for Curaçao: the Dutch government lists Jamaica as visa-exempt for Curaçao only (a visa is needed for Aruba, Bonaire, Saba, St Eustatius and St Maarten). The Dutch government gives 90 days in any 180-day period, but the Curaçao immigration service says visa-exempt nationals not in its named groups get 30 days, extendable by application, so confirm before booking.",
@@ -502,7 +598,10 @@
      "flags": [
       "Confidence medium: check the official links before approving.",
       "The sources are not fully consistent. Confirm the stay length on the official page."
-     ]
+     ],
+     "status": "approved",
+     "approvedAt": "2026-10-16T00:00:00.000Z",
+     "approvedBy": "Owner (approved all entries in chat, 2026-10-16)"
     }
    }
   }
