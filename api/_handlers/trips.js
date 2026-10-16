@@ -22,6 +22,7 @@
  *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
  *   POST { action:'payout-add' }       admin: record a reward paid to a leader for a trip (amount, method, reference); the leader sees it on their trip card
  *   POST { action:'payout-delete' }    admin: remove a payout record
+ *   POST { action:'trip-info-save' }   signed in (the trip's leader, or the owner): set the summary, details and included list shown on the public trip page
  *   POST { action:'checklist-tick' }   signed in: tick (or untick) a before-you-go item on my own trip request
  *   POST { action:'destination-save' } admin: save or approve entry information for a destination (general card, or one passport)
  *   POST { action:'destination-reset' } admin: put a destination back to its research draft
@@ -425,6 +426,7 @@ module.exports = async function handler(req, res) {
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
+            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [],
             payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
@@ -650,6 +652,29 @@ module.exports = async function handler(req, res) {
       if (led.length) await log('trip-deleted', 'Trip deleted by its leader: ' + led.map(t => t.title).join(', ') + (gone.length ? ' (with ' + gone.length + ' request' + (gone.length === 1 ? '' : 's') + ')' : '') + (app ? ' and the application it came from' : ''), ledIds[0]);
       else await log('application-deleted', 'Application deleted by its leader: ' + app.communityName + ' (' + app.name + ')', app.ref);
       return res.status(200).json({ ok: true, tripsRemoved: led.length, applicationRemoved: !!app });
+    }
+
+    /* ===== signed in: the leader writes what their trip involves (summary, details, what is included); it shows on the public trip page at once ===== */
+    if (action === 'trip-info-save') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!allow('info:' + user.id, 30, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of edits in an hour. Please wait a little and try again.' });
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      const isOwner = user.role === 'admin';
+      if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
+      const summary = str(body.summary, 300);
+      const description = String(body.description == null ? '' : body.description).replace(/\r\n/g, '\n').trim().slice(0, 6000);
+      const included = lines(body.included, 14, 140);
+      if ((t.status === 'open' || t.status === 'full') && summary.length < 10) return res.status(400).json({ error: 'Write a short summary of the trip, at least a sentence, because it shows under the trip title.' });
+      const now = new Date().toISOString();
+      const patch = { summary, description, included, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
+      /* the owner hears about leader edits, but at most once an hour per trip so a long editing session is one email */
+      const notifyOwner = !isOwner && (!t.infoMailedAt || Date.now() - new Date(t.infoMailedAt).getTime() > 3600000);
+      if (notifyOwner) patch.infoMailedAt = now;
+      await db.updateInCollection(TRIPS, t.id, patch);
+      await log('trip-info', (isOwner ? 'Sight Seers' : (t.organizerName || 'A leader')) + ' updated the trip details for ' + t.title, t.id);
+      if (notifyOwner) await safe('trip info', adminMail('Leader updated trip details: ' + t.title, 'A leader updated their trip page', `<p><b>${trip.esc(t.organizerName || 'A leader')}</b> changed what travelers see on <b>${trip.esc(t.title)}</b>. It is live now${t.status === 'open' || t.status === 'full' ? '' : ' (the trip itself is not open yet)'}.</p>${trip.detailTable([['Summary', summary], ['Details', description.slice(0, 400) + (description.length > 400 ? '...' : '')], ['Included', included.join(', ')]])}${button(SITE + '/trip/' + t.slug, 'View the trip page')}<p>Edit or remove anything under Trips in the master admin.</p>`));
+      return res.status(200).json({ ok: true, url: '/trip/' + t.slug, summary, descriptionText: description, included });
     }
 
     /* ===== signed in: tick a before-you-go checklist item on one of my own trip requests ===== */

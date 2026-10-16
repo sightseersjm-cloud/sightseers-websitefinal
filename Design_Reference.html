@@ -13985,7 +13985,7 @@ body.theme-night #p-flagship-programs{
           <aside class="tcd-side">
             <span class="tcd-live">Approved departures</span>
             <h2 class="tcd-h">Join a trip</h2>
-            <p class="tcd-script">Group trips led by people from our community.</p>
+            <p class="tcd-script">Group trips led by people from our community. Click <b>View trip</b> to join a trip.</p>
             <dl class="tcd-stats">
               <div><dt id="tcdN1">0</dt><dd>Departures open</dd></div>
               <div><dt id="tcdN2">0</dt><dd>Destinations</dd></div>
@@ -14061,7 +14061,8 @@ body.theme-night #p-flagship-programs{
     <div class="tp-layout" id="tpLayout" hidden>
       <div class="tp-main">
         <div class="tp-img" id="tpImg" hidden></div>
-        <div class="tp-desc" id="tpDesc"></div>
+        <div class="tc-card tp-block tp-about" id="tpDescWrap" hidden><h2>About this trip</h2><div class="tp-desc" id="tpDesc"></div><small class="tp-by" id="tpBy"></small></div>
+        <div class="tc-card tp-block tp-soon" id="tpSoon" hidden></div>
         <div class="tc-card tp-block" id="tpInclWrap" hidden><h2>What is included</h2><ul class="tc-ticks" id="tpIncluded"></ul></div>
         <div class="tc-card tp-block tp-org" id="tpOrg" hidden></div>
         <div class="tc-air" id="tpDisclose" hidden></div>
@@ -24379,7 +24380,7 @@ vtSessionAction=function(el,type){
             <div class="ac-scene" id="acScene" data-mode="signin">
               <div class="ac-side">
                 <span class="ac-eyebrow">The Travel Club</span>
-                <h2 class="ac-h2">Lead a trip. Keep it all in one place.</h2>
+                <h2 class="ac-h2">Lead a trip. <em>Keep it all in one place.</em></h2>
                 <ul class="ac-perks">
                   <li class="ac-perk"><span class="ac-perk-i" aria-hidden="true">1</span><div><h3>Lead a trip</h3><p>Bring your community. We run the bookings and delivery.</p></div></li>
                   <li class="ac-perk"><span class="ac-perk-i" aria-hidden="true">2</span><div><h3>Earn Travel Points</h3><p>100 points to start, and more on every booking.</p></div></li>
@@ -56935,7 +56936,10 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
 
       <section class="tla-step is-on" data-step="1">
         <p class="tla-legend">About you</p>
+        <div class="tla-as" id="tlaAs" hidden><span class="tla-as-k">Applying with your account</span><b id="tlaAsName"></b><small id="tlaAsEmail"></small><p>This goes on the account you are signed in with. We do not create a new one.</p></div>
         <div class="tla-row"><label class="tla-field"><span class="tla-label">Full name</span><input class="tla-input" type="text" name="fullName" data-label="Full name" data-req autocomplete="name" placeholder="First and last name"><span class="tla-err"></span></label><label class="tla-field"><span class="tla-label">Email</span><input class="tla-input" type="email" name="email" data-label="Email" data-req data-email autocomplete="email" placeholder="you@example.com"><span class="tla-err"></span></label></div>
+        <div class="tla-have" id="tlaHave"><span>Already have a Sight Seers account?</span><button type="button" class="tla-link" id="tlaHaveBtn">Sign in instead</button></div>
+        <div class="tla-signin" id="tlaSignin" hidden><label class="tla-field"><span class="tla-label">Your password <i>(for the email above)</i></span><input class="tla-input" type="password" id="tlaSigninPw" autocomplete="current-password" placeholder="Your password"></label><div class="tla-signin-act"><button type="button" class="tla-btn primary" id="tlaSigninBtn">Sign in</button><button type="button" class="tla-link" id="tlaSigninBack">Create an account instead</button></div><span class="tla-err" id="tlaSigninMsg" role="status" style="display:block"></span></div>
         <div class="tla-row" id="tlaPwRow"><label class="tla-field"><span class="tla-label">Create a password <i>(this opens your account)</i></span><input class="tla-input" type="password" name="password" data-label="Password" data-req data-pw autocomplete="new-password" placeholder="8+ characters, with upper, lower and a number"><span class="tla-err"></span></label></div>
         <div class="tla-row"><label class="tla-field"><span class="tla-label">Phone or WhatsApp <i>(optional)</i></span><input class="tla-input" type="tel" name="phone" data-label="Phone or WhatsApp" autocomplete="tel" placeholder="+1 305 000 0000"><span class="tla-err"></span></label><label class="tla-field"><span class="tla-label">City and country</span><input class="tla-input" type="text" name="city" data-label="City and country" data-req placeholder="Atlanta, United States"><span class="tla-err"></span></label></div>
       </section>
@@ -57052,6 +57056,7 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-live{display:inline-block;padding:6px 11px;background:#ef8731;color:#fff;font:800 10.5px 'Raleway',sans-serif;letter-spacing:.12em;text-transform:uppercase}
 .tcd-h{margin:16px 0 12px;font:900 clamp(30px,3.4vw,46px)/1.08 'Playfair Display',serif;letter-spacing:.01em;text-transform:uppercase;color:#fff!important}
 .tcd-script{margin:0 0 26px;font:italic 600 clamp(16px,1.4vw,18px)/1.45 'Playfair Display',serif;color:#ef8731}
+.tcd-script b{font-weight:800;color:#fff}
 .tcd-stats{margin:0 0 28px;padding:20px 0 0;border-top:1px solid rgba(255,255,255,.22);display:grid;gap:12px}
 .tcd-stats>div{display:flex;align-items:baseline;gap:14px}
 .tcd-stats dt{min-width:38px;font:900 28px/1 'Playfair Display',serif;color:#fff}
@@ -57164,23 +57169,27 @@ body.theme-night #p-account .ac-stat,body.theme-night #p-account .ac-action,body
 /* Sign-in page: a glossy side card, a frosted sign-in card, one simple set of perks */
 #p-account .ac-band{padding:34px 0 38px}
 #p-account .ac-scene{padding:44px 0 20px;gap:26px 34px;grid-template-columns:minmax(0,.92fr) minmax(0,1fr);grid-template-areas:"side panel" "help help";align-items:stretch}
-#p-account .ac-side{position:relative;overflow:hidden;padding:clamp(26px,3.4vw,40px);color:#fff;border-radius:0;background:radial-gradient(120% 110% at 0% 0%,#0b5078 0%,#07324f 52%,#041f35 100%);box-shadow:0 30px 70px rgba(4,31,53,.34),inset 0 1px 0 rgba(255,255,255,.18)}
-#p-account .ac-side::before{content:'';position:absolute;top:-30%;left:-20%;width:70%;height:80%;background:radial-gradient(circle,rgba(112,194,87,.4),transparent 62%);filter:blur(24px);pointer-events:none}
-#p-account .ac-side::after{content:'';position:absolute;bottom:-40%;right:-20%;width:70%;height:90%;background:radial-gradient(circle,rgba(239,135,49,.34),transparent 62%);filter:blur(24px);pointer-events:none}
+#p-account .ac-side{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:clamp(24px,2.8vw,32px);color:var(--ac-ink);border-radius:0;background:linear-gradient(180deg,#f4f9fd 0%,#e9f2f9 100%);border:1px solid rgba(6,58,99,.1);box-shadow:0 30px 70px rgba(6,58,99,.14),inset 0 1px 0 #fff}
+#p-account .ac-side::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#70c257,#ef8731);pointer-events:none}
+#p-account .ac-side::after{content:'';position:absolute;inset:0;background:radial-gradient(440px 300px at 0% 0%,rgba(112,194,87,.16),transparent 70%),radial-gradient(460px 320px at 100% 100%,rgba(239,135,49,.14),transparent 70%);pointer-events:none}
 #p-account .ac-side>*{position:relative;z-index:1}
-#p-account .ac-side .ac-eyebrow{color:#f5a04b}
-#p-account .ac-side .ac-h2{margin:10px 0 24px;color:#fff!important;font-size:clamp(26px,3vw,36px);line-height:1.1}
-#p-account .ac-perks{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:12px}
-#p-account .ac-perk{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.22);backdrop-filter:blur(6px);transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .28s,background .28s}
-#p-account .ac-perk:hover{transform:translateY(-3px) translateX(3px);border-color:rgba(245,160,75,.7);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08))}
-#p-account .ac-perk-i{flex:0 0 auto;display:grid;place-items:center;width:42px;height:42px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font:800 17px 'Playfair Display',serif;box-shadow:0 10px 22px rgba(239,135,49,.4)}
-#p-account .ac-perk h3{margin:0 0 3px;font-family:'Playfair Display',serif;font-size:19px;line-height:1.2;color:#fff!important}
-#p-account .ac-perk p{margin:0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82)}
-#p-account .ac-perk-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border:0;background:#fff;color:#063a63!important;font:800 13.5px 'Raleway',sans-serif;letter-spacing:.06em;cursor:pointer;border-radius:0;transition:transform .25s,box-shadow .25s}
-#p-account .ac-perk-cta:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(0,0,0,.3)}
-#p-account .ac-perk-cta span{color:#ef8731;transition:transform .25s}
+#p-account .ac-side .ac-eyebrow{color:var(--ac-o)}
+#p-account .ac-side .ac-h2{margin:10px 0 18px;color:var(--ac-head)!important;font-size:clamp(27px,3vw,38px);line-height:1.12}
+#p-account .ac-side .ac-h2 em{display:block;margin-top:2px;font-style:italic;font-weight:700;color:var(--ac-o)}
+#p-account .ac-perks{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-direction:column;gap:10px;flex:1}
+#p-account .ac-perk{position:relative;overflow:hidden;flex:1;display:flex;gap:16px;align-items:center;padding:13px 18px;background:linear-gradient(160deg,#fff 0%,#f6fafd 100%);border:1px solid var(--ac-line);border-left:3px solid var(--ac-o);box-shadow:0 10px 24px rgba(6,58,99,.08),inset 0 1px 0 #fff;transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .28s,box-shadow .28s}
+#p-account .ac-perk::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(239,135,49,.16),transparent 62%)}
+#p-account .ac-perk:hover{transform:translateY(-3px);border-color:rgba(239,135,49,.55);box-shadow:0 18px 38px rgba(6,58,99,.16),0 0 0 1px rgba(239,135,49,.2),0 0 26px rgba(255,255,255,.9)}
+#p-account .ac-perk:hover::after{opacity:1}
+#p-account .ac-perk>*{position:relative;z-index:1}
+#p-account .ac-perk-i{flex:0 0 auto;display:grid;place-items:center;width:44px;height:44px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font:800 18px 'Playfair Display',serif;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 22px rgba(239,135,49,.4)}
+#p-account .ac-perk h3{margin:0 0 3px;font-family:'Playfair Display',serif;font-size:19px;line-height:1.2;color:var(--ac-head)!important}
+#p-account .ac-perk p{margin:0;font-size:14px;line-height:1.55;color:var(--ac-mut)}
+#p-account .ac-perk-cta{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border:0;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font:800 13.5px 'Raleway',sans-serif;letter-spacing:.06em;cursor:pointer;border-radius:0;box-shadow:0 12px 26px rgba(239,135,49,.4);transition:transform .25s,box-shadow .25s,background .25s}
+#p-account .ac-perk-cta:hover{transform:translateY(-2px);background:#063a63;box-shadow:0 16px 32px rgba(6,58,99,.3)}
+#p-account .ac-perk-cta span{color:inherit;transition:transform .25s}
 #p-account .ac-perk-cta:hover span{transform:translateX(4px)}
-#p-account .ac-panel{position:sticky;top:112px;align-self:start;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#f6fafc 100%);border:1px solid rgba(6,58,99,.1);box-shadow:0 30px 70px rgba(6,58,99,.16),inset 0 1px 0 #fff}
+#p-account .ac-panel{position:relative;top:auto;align-self:stretch;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#f6fafc 100%);border:1px solid rgba(6,58,99,.1);box-shadow:0 30px 70px rgba(6,58,99,.16),inset 0 1px 0 #fff}
 #p-account .ac-panel::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#70c257,#ef8731)}
 #p-account .ac-panel::after{content:'';position:absolute;top:-90px;right:-90px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(239,135,49,.14),transparent 68%);pointer-events:none}
 #p-account .ac-panel>*{position:relative;z-index:1}
@@ -57427,6 +57436,9 @@ body.theme-night .tc-status.ok{color:#9be8a8}body.theme-night .tc-status.err{col
 .tp-img{aspect-ratio:16/9;overflow:hidden;margin-bottom:22px;background:var(--tc-soft);border:1px solid var(--tc-line)}
 .tp-img img{display:block;width:100%;height:100%;object-fit:cover}
 .tp-desc p{margin:0 0 14px;font-size:15.5px;line-height:1.75;color:var(--tc-ink)}
+.tp-desc p:last-child{margin-bottom:0}
+.tp-by{display:block;margin-top:12px;font-size:12.5px;color:var(--tc-mut)}
+.tp-soon p{margin:0;font-size:14.5px;line-height:1.7;color:var(--tc-mut)}
 .tp-block{margin-top:14px;padding:18px 20px}
 .tp-block h2{margin:0 0 12px;font-family:'Playfair Display',serif;font-size:22px;color:var(--tc-head)!important}
 .tp-block .tc-ticks li{font-size:14px}
@@ -57599,6 +57611,17 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-pays b{color:var(--ac-head);font-size:14px}
 #p-account .ac-pays span{font-size:13px;color:var(--ac-ink)}
 #p-account .ac-pays small{flex-basis:100%;font-size:12px;color:var(--ac-mut)}
+#p-account .ac-infobox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
+#p-account .ac-infobox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-infobox>summary::-webkit-details-marker{display:none}
+#p-account .ac-infobox>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-infobox>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-infobox[open]>summary::after{content:'\2212'}
+#p-account .ac-infoform{display:flex;flex-direction:column;gap:12px;padding:2px 16px 16px}
+#p-account .ac-infoform label{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ac-mut)}
+#p-account .ac-infoform label span{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none}
+#p-account .ac-infoform input[type=text],#p-account .ac-infoform textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;font:500 14px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
+#p-account .ac-infonote{margin:0;font-size:12.5px;color:var(--ac-mut)}
 #p-account .ac-ostats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
 #p-account .ac-ostat{padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line)}
 #p-account .ac-ostat b{display:block;font-family:'Playfair Display',serif;font-size:26px;line-height:1.05;color:var(--ac-head)}
@@ -57764,6 +57787,20 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #tcApplyModal .tla-row+.tla-field,#tcApplyModal .tla-row+.tla-row{margin-top:14px}
 #tcApplyModal .tla-label{display:block;font-size:12.5px;font-weight:700;color:var(--tla-navy);letter-spacing:.1px;margin-bottom:7px}
 #tcApplyModal .tla-label i{font-style:normal;font-weight:600;color:var(--tla-mut);opacity:.8}
+#tcApplyModal .tla-as{display:flex;flex-direction:column;gap:2px;margin:0 0 16px;padding:14px 16px;background:rgba(112,194,87,.12);border:1px solid rgba(112,194,87,.45);border-left:4px solid var(--tla-green)}
+#tcApplyModal .tla-as[hidden]{display:none}
+#tcApplyModal .tla-as-k{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--tla-navy2)}
+#tcApplyModal .tla-as b{font-size:16px;color:var(--tla-navy)}
+#tcApplyModal .tla-as small{font-size:13px;color:var(--tla-mut)}
+#tcApplyModal .tla-as p{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--tla-ink)}
+#tcApplyModal .tla-have{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin:0 0 14px;font-size:13.5px;color:var(--tla-mut)}
+#tcApplyModal [hidden]{display:none!important}
+#tcApplyModal .tla-link{padding:0;border:0;background:none;font:700 13.5px 'Raleway',sans-serif;color:var(--tla-orange);text-decoration:underline;cursor:pointer}
+#tcApplyModal .tla-link:hover{color:var(--tla-navy)}
+#tcApplyModal .tla-signin{margin:12px 0 14px;padding:14px 16px;background:rgba(6,58,99,.04);border:1px solid var(--tla-line)}
+#tcApplyModal .tla-signin-act{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:10px}
+#tcApplyModal .tla-signin-act .tla-btn{padding:11px 22px}
+#tcApplyModal .tla-input[readonly]{opacity:.78;cursor:not-allowed}
 #tcApplyModal .tla-help{display:block;margin-top:6px;font-size:12px;line-height:1.5;color:var(--tla-mut)}
 #tcApplyModal .tla-num{-moz-appearance:textfield;appearance:textfield}
 #tcApplyModal .tla-num::-webkit-outer-spin-button,#tcApplyModal .tla-num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -58053,7 +58090,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ═════ pointer: a soft tilt and glow on the cards, as on Flagship Programs ═════ */
-  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply,.tch-photo,.tch-btn,.tcd-row,.tcd-cta,.tcn-card,.tcn-btn,#p-account .ac-otrip,#p-account .ac-ogroup,#p-account .ac-otrav li,#p-account .ac-app';
+  var CARD='#p-travel-club .tc-path,#p-travel-club .tc-dcard,#p-travel-club .tc-steps>li,#p-travel-club .tc-apply,.tch-photo,.tch-btn,.tcd-row,.tcd-cta,.tcn-card,.tcn-btn,#p-account .ac-otrip,#p-account .ac-ogroup,#p-account .ac-otrav li,#p-account .ac-app,#p-account .ac-perk';
   document.addEventListener('pointermove',function(e){
     var t=e.target&&e.target.closest&&e.target.closest(CARD);if(!t)return;
     var r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
@@ -58249,7 +58286,11 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var facts=[t.dateText,[t.destination,t.country].filter(Boolean).join(', '),t.priceText,t.seats&&!full?seatsText(t):''].filter(Boolean);
     $('tpFacts').innerHTML=facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join('');
     var img=$('tpImg');if(t.image){img.innerHTML='<img src="'+esc(t.image)+'" alt="'+esc(t.imageAlt||t.title)+'">';img.hidden=false;}else{img.innerHTML='';img.hidden=true;}
-    $('tpDesc').innerHTML=(t.description||[]).map(function(p){return '<p>'+esc(p)+'</p>';}).join('');
+    var hasDesc=!!(t.description&&t.description.length),hasInc=!!(t.included&&t.included.length);
+    $('tpDesc').innerHTML=(t.description||[]).map(function(p){return '<p>'+esc(p)+'</p>';}).join('');$('tpDescWrap').hidden=!hasDesc;
+    $('tpBy').textContent=hasDesc&&t.organizer?'Written by '+t.organizer.name:'';
+    var soon=$('tpSoon');soon.hidden=hasDesc||hasInc;
+    soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
     var inc=$('tpIncluded');inc.innerHTML=(t.included||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpInclWrap').hidden=!(t.included&&t.included.length);
     var org=$('tpOrg');
     if(t.organizer){org.innerHTML='<span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+(t.organizer.bio?'<p>'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
@@ -58378,13 +58419,39 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     apClose();nav('account');
     setTimeout(function(){var t=$('acTab-groups');if(t)t.click();},500);
   }
+  /* who the application is for: the signed-in account (its email is locked, nothing new is created), or a new or returning visitor */
+  function apAccountUi(){
+    var signed=!!token(),u=who(),f=af().elements;
+    var pr=$('tlaPwRow'),as=$('tlaAs'),hv=$('tlaHave'),si=$('tlaSignin');
+    if(signed&&u){
+      [['fullName','name'],['phone','phone']].forEach(function(p){var el=f[p[0]];if(el&&!el.value&&u[p[1]])el.value=u[p[1]];});
+      if(f.email){f.email.value=u.email||f.email.value;f.email.readOnly=true;}
+      $('tlaAsName').textContent=u.name||'Your account';$('tlaAsEmail').textContent=u.email||'';
+    }else if(f.email){f.email.readOnly=false;}
+    if(as)as.hidden=!(signed&&u);
+    if(pr)pr.hidden=signed||AP.mode==='signin';
+    if(hv)hv.hidden=signed||AP.mode==='signin';
+    if(si)si.hidden=signed||AP.mode!=='signin';
+    var m=$('tlaSigninMsg');if(m&&!si.hidden)m.textContent='';
+  }
+  function apSignIn(){
+    var f=af().elements,em=(f.email.value||'').trim(),pw=$('tlaSigninPw').value,msg=$('tlaSigninMsg'),btn=$('tlaSigninBtn');
+    msg.style.color='';
+    if(!EMAIL.test(em)){msg.textContent='Enter the email of your account above first.';f.email.focus();return;}
+    if(!pw){msg.textContent='Enter your password.';$('tlaSigninPw').focus();return;}
+    if(!window.SS||!SS.signin){msg.textContent='Sign in is not available right now. Please try again.';return;}
+    btn.disabled=true;msg.textContent='Signing in...';
+    SS.signin(em,pw).then(function(){
+      btn.disabled=false;$('tlaSigninPw').value='';AP.mode='';apAccountUi();apAlert('');
+    }).catch(function(err){
+      btn.disabled=false;msg.style.color='#c0392b';msg.textContent=(err&&err.message)||'That email and password do not match.';
+    });
+  }
   function apOpen(){
     var m=am();if(!m)return;
     AP.last=document.activeElement;AP.step=1;apAlert('');
     var done=$('tlaDone');done.classList.remove('is-on');done.setAttribute('aria-hidden','true');
-    var u=who();
-    var pr=$('tlaPwRow');if(pr)pr.hidden=!!token();
-    if(u){[['fullName','name'],['email','email'],['phone','phone']].forEach(function(p){var el=af().elements[p[0]];if(el&&!el.value&&u[p[1]])el.value=u[p[1]];});}
+    AP.mode='';apAccountUi();
     apPaint();
     AP.prev=document.body.style.overflow;document.body.style.overflow='hidden';
     m.classList.add('is-open');m.setAttribute('aria-hidden','false');
@@ -58405,6 +58472,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   if(am()){
     $('tlaNext').addEventListener('click',function(){if(AP.busy)return;if(!apValidate(AP.step))return;if(AP.step<AP.STEPS){AP.step++;apPaint();var f=af().querySelector('.tla-step.is-on input,.tla-step.is-on select');if(f&&f.type!=='radio'&&f.type!=='checkbox')f.focus({preventScroll:true});}else apSubmit();});
     $('tlaBack').addEventListener('click',function(){if(AP.step>1){AP.step--;apPaint();}});
+    $('tlaHaveBtn').addEventListener('click',function(){AP.mode='signin';apAccountUi();var p=$('tlaSigninPw');if(p)p.focus();});
+    $('tlaSigninBack').addEventListener('click',function(){AP.mode='';apAccountUi();});
+    $('tlaSigninBtn').addEventListener('click',apSignIn);
+    $('tlaSigninPw').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();e.stopPropagation();apSignIn();}});
     $('tlaClose').addEventListener('click',apClose);
     $('tlaDoneBtn').addEventListener('click',apClose);
     $('tlaAccount').addEventListener('click',function(){clearTimeout(AP.goTimer);goAccount();});
@@ -58539,6 +58610,17 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<ul class="ac-pays" aria-label="Rewards paid to you">'+list.map(function(p){return '<li><b>Paid '+esc(Number(p.amount).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}))+' '+esc(p.currency)+'</b><span>'+esc(dOnly(p.paidOn))+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+'</span>'+(p.note?'<small>'+esc(p.note)+'</small>':'')+'</li>';}).join('')+'</ul>';
   }
   function updList(list,del){return list&&list.length?'<ul class="ac-upds">'+list.map(function(u){return updItem(u,del);}).join('')+'</ul>':'';}
+  function infoBox(t){
+    if(t.status==='closed')return '';
+    var empty=!(t.descriptionText&&t.descriptionText.trim()),live=t.status==='open'||t.status==='full';
+    return '<details class="ac-infobox" data-info-box'+(empty?' open':'')+'><summary><span>Trip details for travelers<small>'+(empty?'tell people what your trip involves':'shown on your trip page')+'</small></span></summary>'+
+      '<form class="ac-infoform" data-info-form data-info-id="'+esc(t.id)+'" data-travel-club-bound="1" novalidate>'+
+      '<label>Summary <span>(one or two sentences, shown under the trip title)</span><input type="text" maxlength="300" data-info-summary value="'+esc(t.summary||'')+'"></label>'+
+      '<label>What the trip involves <span>(where you go, what a day looks like, who it is for. Leave a blank line between paragraphs.)</span><textarea rows="8" maxlength="6000" data-info-desc>'+esc(t.descriptionText||'')+'</textarea></label>'+
+      '<label>What is included <span>(one per line)</span><textarea rows="4" maxlength="2000" data-info-incl>'+esc((t.included||[]).join('\n'))+'</textarea></label>'+
+      '<p class="ac-infonote">'+(live?'Travelers see this on your trip page the moment you save.':'Travelers see this once your trip page is open.')+' Dates, price, places and your reward stay with Sight Seers.</p>'+
+      '<div class="ac-kitbtns"><button type="submit" class="ac-sbtn">Save trip details</button>'+(live?'<a class="ac-sbtn ac-sbtn--line" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'">View trip page</a>':'')+'<span class="ac-invmsg" role="status"></span></div></form></details>';
+  }
   function updBox(t,idx){
     var n=(t.travelers||[]).filter(function(x){return x.status!=='waitlist';}).length,ups=t.updates||[];
     return '<details class="ac-updbox" data-upd-box><summary><span>Trip updates<small>'+(ups.length?ups.length+' posted':'tell everyone who joined')+'</small></span></summary>'+
@@ -58566,7 +58648,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         :'<p class="ac-onote"><b>Your trip page is not live yet.</b> Sight Seers will open it once the package, the dates and your reward are agreed.</p>')+
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
-      groupForm(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+
+      groupForm(t)+infoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
@@ -58795,6 +58877,17 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         if(!psel.value){pm.className='ac-invmsg err';pm.textContent='Choose the country on your passport.';return;}
         pm.className='ac-invmsg';pm.textContent='Saving...';
         (window.SS&&SS.updateProfile?SS.updateProfile({passportCountry:psel.value}):Promise.reject(new Error('Sign in with your account to save this.'))).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){pm.className='ac-invmsg err';pm.textContent=err.message||'We could not save that. Please try again.';});
+        return;
+      }
+      var inf=e.target.closest('[data-info-form]');
+      if(inf){
+        e.preventDefault();
+        var im=inf.querySelector('.ac-invmsg'),ib=inf.querySelector('[type=submit]'),isum=inf.querySelector('[data-info-summary]');
+        im.className='ac-invmsg';ib.disabled=true;im.textContent='Saving...';
+        api('trips','POST',{action:'trip-info-save',id:inf.getAttribute('data-info-id'),summary:isum.value,description:inf.querySelector('[data-info-desc]').value,included:inf.querySelector('[data-info-incl]').value}).then(function(r){
+          ib.disabled=false;im.className='ac-invmsg ok';im.textContent='Saved. Travelers see it on your trip page.';grp.at=0;
+          var s2=inf.closest('.ac-infobox').querySelector('summary small');if(s2)s2.textContent='shown on your trip page';
+        }).catch(function(err){ib.disabled=false;im.className='ac-invmsg err';im.textContent=err.message||'We could not save that. Please try again.';});
         return;
       }
       var uf=e.target.closest('[data-upd-form]');
@@ -59225,7 +59318,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<details class="tcA-row" id="tcANewRow"><summary><b>+ New trip</b><small>Add an approved departure</small></summary>'+tripForm(BLANK)+'</details>'+
       '<div class="tcA-list" style="margin-top:10px">'+(list.length?list.map(function(t){
         var n=d.interests.filter(function(i){return i.tripId===t.id;}).length;
-        return '<details class="tcA-row" data-tcrow="'+t.id+'"><summary><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+'</small>'+chip(TRIPCHIP,t.status)+(t.organizerName?'<small>led by '+esc(t.organizerName)+'</small>':'')+(t.status==='draft'?'<button type="button" class="tcA-pub" data-tcapublish="'+t.id+'">Publish to departure board</button>':'')+delRow('trip',t.id,t.title)+'</summary>'+tripForm(t)+'</details>';
+        return '<details class="tcA-row" data-tcrow="'+t.id+'"><summary><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+'</small>'+chip(TRIPCHIP,t.status)+(t.infoUpdatedBy==='leader'?'<small>details edited by the leader '+esc(dt(t.infoUpdatedAt))+'</small>':'')+(t.organizerName?'<small>led by '+esc(t.organizerName)+'</small>':'')+(t.status==='draft'?'<button type="button" class="tcA-pub" data-tcapublish="'+t.id+'">Publish to departure board</button>':'')+delRow('trip',t.id,t.title)+'</summary>'+tripForm(t)+'</details>';
       }).join(''):'<p class="tcA-note">No trips yet. Add one above, or approve an application and draft a trip from it.</p>')+'</div>';
   }
   function readTrip(k){
