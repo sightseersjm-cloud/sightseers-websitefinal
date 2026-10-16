@@ -306,7 +306,7 @@ function tripLiveMail(t) {
   const link = SITE + '/trip/' + t.slug;
   if (t.status === 'open') {
     return safe('trip live', mail(t.organizerEmail, 'Your trip page is live: ' + t.title, 'Your trip is live',
-      `<p>Good news${t.organizerName ? ', ' + trip.esc(firstName(t.organizerName)) : ''}. Your trip page is open and ready to share.</p>${trip.detailTable([['Trip', t.title], ['Dates', t.dateText], ['Your link', link]])}${button(link, 'Open my trip page')}<p>Share the link with your community. Travelers who join are counted on your dashboard, where you can also add your WhatsApp group or channel link so everyone lands in the same place.</p>${button(SITE + '/account', 'Open my dashboard')}`));
+      `<p>Good news${t.organizerName ? ', ' + trip.esc(firstName(t.organizerName)) : ''}. Your trip page is open and ready to share.</p>${trip.detailTable([['Trip', t.title], ['Dates', t.dateText], ['Your link', link]])}${button(link, 'Open my trip page')}<p>Share the link with your community. Open the <b>Invite kit</b> on your dashboard for a ready message, a WhatsApp share, a QR code and a share card. Travelers who join are counted there too, and you can add your WhatsApp group or channel link so everyone lands in the same place.</p>${button(SITE + '/account', 'Open my dashboard')}`));
   }
   if (t.status === 'full') {
     return safe('trip full', mail(t.organizerEmail, 'Your trip is full: ' + t.title, 'Your trip is full', `<p><b>${trip.esc(t.title)}</b> is full. New travelers join the waitlist.</p>${button(SITE + '/account', 'Open my dashboard')}`));

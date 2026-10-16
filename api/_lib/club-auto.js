@@ -116,7 +116,7 @@ function whenWords(days) { return days === 0 ? 'today' : days === 1 ? 'tomorrow'
 function reminderMail(i, t, days) {
   const link = t.groupLink ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : '';
   return mail(i.email, t.title + ' is ' + whenWords(days), 'Your trip is ' + whenWords(days),
-    `<p>Hi ${trip.esc(first(i.name))},</p><p><b>${trip.esc(t.title)}</b> leaves ${whenWords(days)}. Here is everything in one place.</p>${trip.detailTable([['Trip', t.title], ['Dates', t.dateText], ['Led by', t.organizerName], ['Your reference', i.ref], ['Travelers', String(i.partySize || 1)]])}${link}<p>Your dashboard has the trip details${t.groupLink ? ' and the group chat' : ''}. If anything changes, just reply to this email.</p>${button(SITE + '/account', 'Open my dashboard')}`);
+    `<p>Hi ${trip.esc(first(i.name))},</p><p><b>${trip.esc(t.title)}</b> leaves ${whenWords(days)}. Here is everything in one place.</p>${trip.detailTable([['Trip', t.title], ['Dates', t.dateText], ['Led by', t.organizerName], ['Your reference', i.ref], ['Travelers', String(i.partySize || 1)]])}${link}<p>Your dashboard has the trip details${t.groupLink ? ', the group chat' : ''} and your before-you-go checklist (passport, entry rules, insurance and data). If anything changes, just reply to this email.</p>${button(SITE + '/account', 'Open my dashboard')}`);
 }
 
 /* ---------- the Monday digest for leaders ---------- */
