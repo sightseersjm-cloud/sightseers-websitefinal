@@ -20,6 +20,11 @@
  *   POST { action:'interest-update' }  admin: move a traveler through new, contacted, confirmed, booked, cancelled, waitlist
  *   POST { action:'trip-group-link' }  signed in (the trip's leader): add the WhatsApp group or channel link; joiners are emailed it
  *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
+ *   POST { action:'payout-add' }       admin: record a reward paid to a leader for a trip (amount, method, reference); the leader sees it on their trip card
+ *   POST { action:'payout-delete' }    admin: remove a payout record
+ *   POST { action:'checklist-tick' }   signed in: tick (or untick) a before-you-go item on my own trip request
+ *   POST { action:'destination-save' } admin: save or approve entry information for a destination (general card, or one passport)
+ *   POST { action:'destination-reset' } admin: put a destination back to its research draft
  *   POST { action:'trip-update-post' } signed in (the trip's leader, or the owner): post an update on a trip; everyone who joined is emailed and sees it on their dashboard
  *   POST { action:'trip-update-delete' } signed in: take an update down (its author, or the owner)
  *   POST { action:'advisory-post' }    admin: preview ({dryRun:true}) or send an advisory to every upcoming trip set to a country
@@ -40,6 +45,8 @@ const inboxLib = require('../_lib/inbox');
 const { geo } = require('../_lib/geo');
 const auto = require('../_lib/club-auto');
 const updates = require('../_lib/club-updates');
+const entryLib = require('../_lib/club-entry');
+const payouts = require('../_lib/club-payouts');
 
 const TRIPS = 'club-trips';
 const APPS = 'club-applications';
@@ -393,7 +400,7 @@ module.exports = async function handler(req, res) {
           return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
             country: u.country || '', city: u.city || '', basedIn: latest ? (latest.city || '') : '', applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
         }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), updates: (await db.getCollection('club-updates')).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 150), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), payouts: (await db.getCollection(payouts.PAYOUTS)).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))), destinations: await entryLib.all(), passportDemand: entryLib.demand(users, interests, await entryLib.all()), updates: (await db.getCollection('club-updates')).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 150), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -407,6 +414,7 @@ module.exports = async function handler(req, res) {
             communityType: a.communityType || '', city: a.city || '', link: a.link || '', audienceSize: a.audienceSize || '', channels: a.channels || [], experience: a.experience || '',
             inviteCount: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '', styles: a.styles || [], timing: a.timing || '', message: a.message || '', notes: a.notes || ''
           }));
+        const allPayouts = await db.getCollection(payouts.PAYOUTS);
         const allUpdates = await db.getCollection('club-updates');
         const updatesOf = id => allUpdates.filter(u => u.tripId === id).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 20).map(updates.publicUpdate);
         const myTrips = trips.filter(t => ownsTrip(t, user)).map(t => {
@@ -417,17 +425,23 @@ module.exports = async function handler(req, res) {
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
+            payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });
+        const me = (await db.getCollection('users')).find(u => u.id === user.id) || {};
+        const dests = await entryLib.all();
         const myInterests = interests.filter(i => i.email === mailAddr || (i.userId && i.userId === user.id))
           .map(i => {
             const t = trips.find(x => x.id === i.tripId);
+            const passport = me.passportCountry || i.passportCountry || '', expiry = me.passportExpiry || i.passportExpiry || '';
             const open = i.status !== 'cancelled' && i.status !== 'waitlist';
             return { guests: i.guests || [], ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact,
+              tripCountry: t ? t.country || '' : '', tripStart: t ? t.startDate || '' : '', tripEnd: t ? t.endDate || '' : '', passport, passportExpiry: expiry, checklist: i.checklist || {},
+              entry: t && open ? entryLib.pick(dests, t.country, passport) : null,
               updates: i.tripId && ['new', 'contacted', 'confirmed', 'booked'].indexOf(i.status) > -1 ? updatesOf(i.tripId).slice(0, 8) : [] };
           });
         /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application and new website requests */
@@ -454,7 +468,7 @@ module.exports = async function handler(req, res) {
           if (t && t.groupLink) notices.push({ key: 'join:' + i.ref, kind: 'group', title: t.title, groupLink: t.groupLink, leaderName: t.organizerName || '' });
         });
         notices.sort((x, y) => (y.kind === 'adminapps' ? 1 : 0) - (x.kind === 'adminapps' ? 1 : 0));   /* the owner's applications come first */
-        return res.status(200).json({ ok: true, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
+        return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
       const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
@@ -500,6 +514,7 @@ module.exports = async function handler(req, res) {
         tripId: t ? t.id : null, tripSlug: t ? t.slug : '', tripTitle: t ? t.title : '',
         name: contact.name, email: contact.email, phone: contact.phone, partySize, guests: partySize > 1 ? guests : [],
         message: str(body.message, 1200), source: str(body.source, 40), shareContact: !!body.shareContact,
+        passportCountry: entryLib.cleanPassport(body.passportCountry), passportExpiry: entryLib.cleanExpiry(body.passportExpiry),
         userId: user && user.id !== 'admin-passcode' ? user.id : null,
         status: full ? 'waitlist' : 'new', note: '', createdAt: new Date().toISOString()
       };
@@ -637,6 +652,20 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, tripsRemoved: led.length, applicationRemoved: !!app });
     }
 
+    /* ===== signed in: tick a before-you-go checklist item on one of my own trip requests ===== */
+    if (action === 'checklist-tick') {
+      const user = getUser(req);
+      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const key = str(body.key, 20);
+      if (['passport', 'entry', 'insurance', 'esim', 'chat'].indexOf(key) < 0) return res.status(400).json({ error: 'Unknown checklist item.' });
+      const mailAddr = lower(user.email, 120);
+      const i = (await db.getCollection(INTERESTS)).find(x => x.ref === str(body.ref, 40) && (x.email === mailAddr || (x.userId && x.userId === user.id)));
+      if (!i) return res.status(404).json({ error: 'We could not find that trip request.' });
+      const checklist = Object.assign({}, i.checklist || {}, { [key]: !!body.done });
+      await db.updateInCollection(INTERESTS, i.id, { checklist });
+      return res.status(200).json({ ok: true, checklist });
+    }
+
     /* ===== signed in: post an update on a trip (its leader, or the owner), or take one down ===== */
     if (action === 'trip-update-post' || action === 'trip-update-delete') {
       const user = getUser(req);
@@ -749,7 +778,7 @@ module.exports = async function handler(req, res) {
       await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
-    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post') {
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post' || action === 'destination-save' || action === 'destination-reset' || action === 'payout-add' || action === 'payout-delete') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -876,6 +905,30 @@ module.exports = async function handler(req, res) {
         const cur = await getPartnersDoc();
         const saved = cur ? await db.updateInCollection(SETTINGS, 'partners', doc) : await db.addToCollection(SETTINGS, Object.assign({ createdAt: new Date().toISOString() }, doc));
         return res.status(200).json({ ok: true, partners: publicPartners(saved), partnersRaw: saved });
+      }
+
+      if (action === 'payout-add') {
+        const r = await payouts.add(admin, { tripId: body.tripId, amount: body.amount, currency: body.currency, method: body.method, reference: body.reference, paidOn: body.paidOn, note: body.note, notify: body.notify, markPaid: body.markPaid });
+        if (r.error) return res.status(400).json({ error: r.error });
+        return res.status(200).json({ ok: true, payout: r.payout, emailed: r.emailed, rewardStatus: body.markPaid ? 'paid' : undefined });
+      }
+      if (action === 'payout-delete') {
+        const r = await payouts.remove(admin, body.id);
+        if (r.error) return res.status(404).json({ error: r.error });
+        return res.status(200).json({ ok: true });
+      }
+
+      if (action === 'destination-save') {
+        const r = await entryLib.save({ country: body.country, scope: body.scope, passport: body.passport, fields: body.fields, status: body.status }, admin.email || admin.id);
+        if (r.error) return res.status(400).json({ error: r.error });
+        await log('destination', (body.status === 'approved' ? 'Approved ' : 'Saved a draft of ') + (body.scope === 'general' ? 'the general card for ' : 'entry info for ' + str(body.passport, 60) + ' passports to ') + str(body.country, 80), '');
+        return res.status(200).json({ ok: true, destinations: await entryLib.all() });
+      }
+
+      if (action === 'destination-reset') {
+        await entryLib.reset(body.country);
+        await log('destination', 'Reset ' + str(body.country, 80) + ' to the research draft', '');
+        return res.status(200).json({ ok: true, destinations: await entryLib.all() });
       }
 
       if (action === 'advisory-post') {

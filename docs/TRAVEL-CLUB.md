@@ -110,7 +110,7 @@ Sent through the existing Resend helper (`RESEND_API_KEY`, `RESEND_FROM`, `BUSIN
 ## Deliberately not built
 
 - **Payments for these trips.** Terms are confirmed by email first, then handled the way Sight Seers handles any booking. The older Stripe deposit flow is not used here.
-- **Payouts or reward calculations.** Rewards are recorded, not computed.
+- **Reward calculations or sending money.** A payout log exists (below), but it only records what you paid outside the site. Nothing is computed and no money moves.
 - **Organizers editing their own page or publishing.** An admin controls every word that is public.
 - **Notifying the organizer of each new request.** They see their recruits in their account.
 - **Tracking clicks on the partner links.** They are plain links. Use your partner's own dashboard for referral reporting.
@@ -141,3 +141,45 @@ Four JSON documents in the existing Vercel Blob store: `club-trips`, `club-appli
 - **Approved departures** is a schedule panel on the Travel Club page: one row per open trip (date, title, leader, places left or waitlist) with live totals. When no trip is open it says the next departures are being announced and offers the notify form.
 - **Start Planning and the Travel Form are one page.** `/contact` redirects to `/booking`.
 - Night mode was removed.
+
+
+## Update: invite kit, automatic emails, trip updates, passport checklist, reward log
+
+All owner controls are in the **master admin** (Travel Club admin). New tabs: **Rewards**, **Destinations**, **Updates**, **Automatic emails**.
+
+### Invite kit (leader dashboard)
+Every live trip card has an **Invite kit**: a ready message (trip title, dates, place and the trip link, editable), **Copy message**, **Share on WhatsApp**, a **QR code** with **Download QR code**, and **Download share card** (a 1080 x 1350 PNG with the logo, the trip and the QR). It builds itself from the trip, so the leader sets nothing up. Adding a source tag ("instagram") updates the link in the message and the QR together. The QR library is the MIT-licensed `qrcode-generator`, served from `/vendor/qrcode.js` and loaded only when a kit is opened. Draft trips have no kit.
+
+### Automatic emails (master admin > Automatic emails)
+| Email | When | Default |
+| --- | --- | --- |
+| **Waitlist promotion** | A place opens (a cancellation, a deleted request, more seats, a trip reopened): the person who waited longest moves up to "new" and is emailed. People who asked earlier and are still waiting for confirmation keep their place first. | **On** |
+| **Countdown reminders** | Confirmed and booked travelers, once at 14 days and once at 3 days before departure, with trip details and the group chat link. Needs a real **start date** on the trip (trips drafted from an application only have text dates until you set one under Trips). | **Off** |
+| **Monday leader digest** | Each Monday, every leader of a live trip: new people this week, total joined, progress to their invite goal, places left, days to departure, and a nudge to use the invite kit. | **Off** |
+
+- A daily job (`vercel.json` cron, 13:00 UTC = 8am Jamaica) calls `/api/club-cron`, which only runs with the `CRON_SECRET` bearer key (set in Vercel, never in the repo). Without the key it refuses everything.
+- **Preview what would send today** lists every email and recipient and changes nothing (it shows everything as if all three switches were on). **Run today's emails now** runs the job on demand, following the switches.
+- Every send is marked first (per traveler per milestone, per trip per week), so retries and repeat runs never double-send.
+
+### Trip updates and advisories (master admin > Updates)
+- A leader (or you) posts an update on **one trip**. Everyone who joined sees it under their request on their dashboard and gets an email (optional per post). Waitlisted and cancelled people get nothing. You get a copy of every leader post. Leaders can delete their own posts, you can delete any. Posting is limited to 12 an hour per person.
+- An **advisory** is the same message sent to every upcoming trip set to one **country** (matched to the country on each trip, ignoring case and accents), one email per person even if they are on several of those trips, leaders included. **Preview who would get it** lists the trips and people first; Send is a second, deliberate step and only sends exactly what was previewed.
+- Updates belong to a trip, never to a country; the country only decides which trips an advisory reaches. Deleting a trip removes its updates.
+
+### Passport country and the before-you-go checklist
+- **Optional** fields on the Profile and on the join form: the **country on your passport** and the **month it expires**. Never a passport number (the server stores only these two). Signed-in people have them pre-filled.
+- Each active request (not waitlisted or cancelled) on the traveler's dashboard has a **Before you go** checklist with saved ticks: check your passport, read the entry rules for the destination, travel insurance and eSIM (your partner links), join the group chat. If no passport country is known it offers a one-field form.
+- The passport check uses only dates we hold: expired before the trip ends, within six months of the trip, or fine. It never invents a country's validity rule. A Jamaican passport that needs renewing gets a link to Passport Renewal.
+- **Entry rules come only from what you approve** (Destinations tab). Seven destinations were drafted from official government and tourism pages on 2026-10-15 (Jamaica, Belize, The Bahamas, Saint Lucia, Dominican Republic, Barbados, Curaçao) for United States, Canadian, British and Jamaican passports, in `api/_data/club-entry-drafts.json`. **Every one starts hidden.** Entries the research was unsure of are flagged (medium or low confidence, temporary rules such as the Dominican Republic exception to 31 December 2026, and the current health notice in the Bahamas). You cannot approve an entry without a summary and at least one official https link. Your edits and approvals are stored in `club-destinations` and override the drafts field by field; "Reset to the research draft" undoes them.
+- A passport nobody has prepared (for example Nigeria) gets an honest "we have not prepared entry details for ... yet" message, never a guess. The Destinations tab lists which passports travelers have told us about and whether anything is approved for them, so you know what to research next.
+- A trip finds its destination by the **country** set on the trip.
+
+### Reward log (master admin > Rewards)
+Record each reward paid to a leader: amount and currency (USD, JMD, CAD, GBP, EUR), how it was paid, a reference, the date, a note, whether to email the leader, and whether to mark the trip's reward as paid. The leader sees what you record under "Your reward" on their trip card. Records are kept if the trip is later deleted. **This only records payments made outside the site; it moves no money.**
+
+### Still on hold: deposits
+No deposit or payment collection for Travel Club trips has been built. It waits for the Stripe connector to be authorized and for refund and cancellation terms to be written.
+
+### Data added
+`club-updates`, `club-destinations`, `club-payouts`, and the `automation` document in `club-settings`.
+

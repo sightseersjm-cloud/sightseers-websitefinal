@@ -1,0 +1,510 @@
+{
+ "drafted": "2026-10-15",
+ "about": "Entry information drafted from official government and tourism pages by a research pass on 2026-10-15. Every entry is a DRAFT: nothing here is shown to travelers until the owner approves it in the master admin (Destinations tab). Nothing is invented: where a source gave no answer the field is empty and flagged.",
+ "destinations": [
+  {
+   "id": "jamaica",
+   "country": "Jamaica",
+   "general": {
+    "currency": "Jamaican dollar (JMD)",
+    "language": "English (official); Jamaican Patois is widely spoken",
+    "plug": "Type A and B (flat two-prong, same as the US)",
+    "voltage": "110 V, 50 Hz",
+    "driving": "Left-hand side",
+    "sources": [
+     "https://www.visitjamaica.com/plan-your-adventure/travel-tips/faq/",
+     "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Jamaica.html"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "No visa is required for tourism for stays of 90 days or less. The immigration officer at the port of entry decides the actual length of stay.",
+     "passportValidity": "Passport must be valid for the length of the stay (valid on entry and exit).",
+     "extra": "Complete the free online C5 immigration and customs declaration before arriving by air; travellers are also expected to hold a return or onward ticket. Yellow fever proof is required only if arriving from certain countries in South/Central America or Africa.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Jamaica.html",
+      "https://www.visitjamaica.com/plan-your-adventure/travel-tips/entry-requirements/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "Canada": {
+     "summary": "Canadians do not need a tourist visa for stays of up to 90 days; visitors are generally granted 90 days and can request an extension at an immigration office.",
+     "passportValidity": "Passport should be valid for the expected duration of the stay; Canada notes airlines may apply stricter validity rules.",
+     "extra": "Officials may ask for a return or onward ticket and proof of sufficient funds. Complete the free online C5 declaration before arriving by air. Yellow fever proof is needed if arriving from or transiting a country where yellow fever occurs.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/jamaica",
+      "https://www.visitjamaica.com/plan-your-adventure/travel-tips/entry-requirements/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "United Kingdom": {
+     "summary": "British citizens do not need a visa for tourism. Entry is usually granted for up to 90 days, and the date you must leave is stamped in the passport.",
+     "passportValidity": "Passport must be valid for the duration of the stay, with 2 blank pages for entry and exit stamps.",
+     "extra": "Complete the free online C5 customs and immigration form before arrival if possible. A yellow fever certificate is needed if arriving from a country with transmission risk. Cash of USD 10,000 or more must be declared; meat and dairy products cannot be brought in.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/jamaica/entry-requirements",
+      "https://www.visitjamaica.com/plan-your-adventure/travel-tips/entry-requirements/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    }
+   },
+   "reviewNote": "Researcher could not open official pages (no network from its fetch tool); drawn from search-engine summaries of travel.state.gov, travel.gc.ca, gov.uk and visitjamaica.com. Re-verify before approving."
+  },
+  {
+   "id": "belize",
+   "country": "Belize",
+   "general": {
+    "currency": "Belize dollar (BZD), fixed at BZ$2 = US$1; US dollars are widely accepted",
+    "language": "English (official); Kriol, Spanish, Garifuna, Maya and Mandarin are also spoken",
+    "plug": "Same electrical system as the United States (North American flat-pin plugs)",
+    "voltage": "110 V AC nationwide (same as the US)",
+    "driving": "Right-hand side of the road",
+    "sources": [
+     "https://www.travelbelize.org/facts-about-belize/",
+     "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Belize.html"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "No visa is needed for tourism for stays of 30 days or less. A passport book is required to enter by air.",
+     "passportValidity": "A U.S. passport must be valid for the length of your stay and have at least one blank page.",
+     "extra": "Carry a return or onward ticket and proof of enough funds. Complete the Belize immigration and customs declaration on arrival; it can be submitted online in advance.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Belize.html",
+      "https://www.travelbelize.org/media/traveling-to-belize/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "Canada": {
+     "summary": "No tourist visa is needed for stays of up to 30 days. Staying longer requires a visa from Belize immigration, and overstaying can bring fines, detention or deportation.",
+     "passportValidity": "A regular Canadian passport must be valid for at least 6 months beyond the date you expect to leave Belize.",
+     "extra": "You must complete the online travel declaration form before you travel, for both entering and leaving Belize. Officials may ask for a return or onward ticket and proof of sufficient funds. Proof of vaccination is not required.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/belize",
+      "https://www.belizetourismboard.org/belize-introduces-new-digital-embarkation-disembarkation-e-form-for-travelers/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "United Kingdom": {
+     "summary": "British citizens can visit Belize without a visa for 30 days. An extension costs BZ$200 for each additional 30 days.",
+     "passportValidity": "Your passport must have an expiry date more than 3 months after the date you arrive. Some airlines may refuse boarding if it is not more than 6 months.",
+     "extra": "Travellers through Philip Goldson International Airport must complete an immigration and customs declaration. Belize recommends the digital version, and paper forms are still accepted during the transition.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/belize/entry-requirements",
+      "https://www.belizetourismboard.org/belize-introduces-new-digital-embarkation-disembarkation-e-form-for-travelers/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "Jamaica": {
+     "summary": "Belize's immigration site lists Jamaica as not requiring a visa, and the Belize Tourism Board says visas are not required for Caribbean countries. Visitors are given a one-month stay, and a visa and extensions are needed for longer.",
+     "passportValidity": "The Belize Tourism Board says a passport must be valid for at least 30 days. A 2020 Belize Tourism Board press kit says 3 months after arrival, so confirm before travel.",
+     "extra": "Visitors need a return ticket and sufficient funds. Complete the Belize online immigration and customs declaration.",
+     "officialLinks": [
+      "https://immigration.gov.bz/visa/visa-who-qualify/",
+      "https://www.travelbelize.org/media/traveling-to-belize/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "The sources are not fully consistent. Confirm the stay length on the official page."
+     ]
+    }
+   }
+  },
+  {
+   "id": "bahamas",
+   "country": "The Bahamas",
+   "general": {
+    "currency": "Bahamian dollar (BSD), pegged 1:1 to the US dollar; both are accepted interchangeably on all islands",
+    "language": "English",
+    "plug": "Type A and B (two flat pins, with or without a round earth pin)",
+    "voltage": "120 V, 60 Hz",
+    "driving": "Left-hand side of the road",
+    "sources": [
+     "https://www.bahamas.com/plan-your-trip/island-faq/visa-immigration",
+     "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "No visa is needed for tourism. The stay allowed is stated differently by official pages: the US State Department travel page says 1 month or less (an older US Embassy Nassau page says up to 90 days), and Bahamas Immigration says up to 8 months, so confirm before travel.",
+     "passportValidity": "Bahamas Immigration requires a passport valid for at least 6 months at entry. The US State Department says valid for the whole stay with 2 blank pages. A passport card is not accepted for air travel.",
+     "extra": "A return or onward ticket and proof of funds for the stay are required. Fill in the Bahamas immigration (arrival/departure) card. The Bahamas is piloting an online Digital Arrival Card (announced 5 May 2026) on selected flights only, and the paper card is still in use. Travellers who were in Ebola-affected regions in the last 30 days face health screening and possible isolation. Declare cash of US$10,000 or more.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Bahamas.html",
+      "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "Mentions a current health notice that can change quickly. Re-check the date before approving.",
+      "The sources are not fully consistent. Confirm the stay length on the official page."
+     ]
+    },
+    "Canada": {
+     "summary": "Canadians do not need a visa for tourism and can stay up to 8 months.",
+     "passportValidity": "Passport valid for at least 6 months beyond the planned departure date (Government of Canada).",
+     "extra": "Officers may ask for a return or onward ticket and proof of funds. Complete and sign the immigration card on arrival. Proof of yellow fever vaccination is needed only if arriving from or transiting a yellow fever country. Ebola health screening applies to recent travellers from affected regions. A departure tax applies, usually included in airfare.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/bahamas",
+      "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": [
+      "Mentions a current health notice that can change quickly. Re-check the date before approving."
+     ]
+    },
+    "United Kingdom": {
+     "summary": "British citizens can usually stay up to 30 days without a visa as tourists. Extensions are possible up to a maximum of 8 months, and overstaying can bring fines, detention or deportation.",
+     "passportValidity": "Passport expiry date must be at least 6 months after the planned departure from The Bahamas (GOV.UK).",
+     "extra": "A return or onward ticket and proof of funds may be required, and the immigration card must be completed. A yellow fever certificate is needed if arriving from a listed risk country. The Bahamian government introduced health screening and possible quarantine or isolation for travellers who visited Ebola-affected regions within 30 days of arrival (GOV.UK update, 28 May 2026).",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/bahamas/entry-requirements",
+      "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": [
+      "Mentions a current health notice that can change quickly. Re-check the date before approving."
+     ]
+    },
+    "Jamaica": {
+     "summary": "Bahamas Immigration lists Jamaica among the countries whose citizens are visa-waived for visits of up to 3 or 8 months, depending on each agreement. The exact period for Jamaica could not be confirmed.",
+     "passportValidity": "Bahamas Immigration requires a passport valid for at least 6 months at entry.",
+     "extra": "A valid return ticket, proof of funds (or a local sponsor), and the completed immigration card are required. Visitors planning to stay more than 90 days should check their country's requirements with Bahamas Immigration. A yellow fever certificate applies if arriving from a risk country, and Ebola screening applies to recent travellers from affected regions.",
+     "officialLinks": [
+      "https://www.immigration.gov.bs/entry-requirements/before-your-arrival/",
+      "https://www.bahamas.com/plan-your-trip/island-faq/visa-immigration"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "Mentions a current health notice that can change quickly. Re-check the date before approving."
+     ]
+    }
+   }
+  },
+  {
+   "id": "saint-lucia",
+   "country": "Saint Lucia",
+   "general": {
+    "currency": "Eastern Caribbean dollar (XCD); US dollars are widely accepted",
+    "language": "English (official); Saint Lucian Creole (Kwéyòl) also widely spoken",
+    "plug": "Type G (UK-style three-pin); dual-voltage devices generally need only an adapter",
+    "voltage": "240 V, 50 Hz (a few hotels may offer 110 V, 60 Hz)",
+    "driving": "Left-hand side; visitors need a temporary local driving permit, bought with a valid home licence",
+    "sources": [
+     "https://stlucia.org/en/plan-your-saint-lucia-trip/traveler-guide/",
+     "https://travel.gc.ca/destinations/saint-lucia"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "US citizens do not need a visa for tourism. Saint Lucia's government gives visitors a maximum stay of 6 weeks on entry.",
+     "passportValidity": "Passport must be valid for the duration of the stay, with one blank page for the entry stamp (travel.state.gov).",
+     "extra": "Travelers should have an onward or return ticket, proof of accommodation and evidence of funds. Air travelers must complete Saint Lucia's online immigration form before arrival. Yellow fever proof is needed only if arriving from a risk country.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/SaintLucia.html",
+      "https://travelslu.govt.lc/en"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "Canada": {
+     "summary": "Canadians do not need a tourist visa for stays of up to 6 weeks.",
+     "passportValidity": "travel.gc.ca says a regular Canadian passport should be valid for at least 3 months beyond the planned departure date.",
+     "extra": "Air travelers must complete one electronic immigration form per family or group within 3 days before arrival. Officials may ask for a return or onward ticket, proof of accommodation and proof of sufficient funds. Yellow fever proof is required if arriving from a country where it occurs.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/saint-lucia",
+      "https://stlucia.org/en/plan-your-saint-lucia-trip/visa-electronic-entry-form/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "United Kingdom": {
+     "summary": "British citizens can visit Saint Lucia without a visa and are allowed to stay for a maximum of 6 weeks on entry.",
+     "passportValidity": "Passport must have an expiry date after the day you plan to leave (GOV.UK).",
+     "extra": "Air travelers must complete Saint Lucia's online immigration form before arrival. A yellow fever certificate is required only if arriving from a transmission-risk country. Make sure the border officer stamps your passport. A return ticket is required for all visitors.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/st-lucia/entry-requirements",
+      "https://travelslu.govt.lc/en"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "Jamaica": {
+     "summary": "Jamaica's government visa list for Jamaicans travelling overseas shows no visa required for Saint Lucia. A 2023 list was the only official source found, and the permitted length of stay was not confirmed from an official source.",
+     "passportValidity": "Saint Lucia immigration rules say the passport must be valid for the duration of the stay.",
+     "extra": "Saint Lucia requires all visitors to have a return ticket, and air arrivals are asked to complete the online immigration form before travel.",
+     "officialLinks": [
+      "https://stlucia.org/en/plan-your-saint-lucia-trip/visa-electronic-entry-form/",
+      "https://mfaft.gov.jm/site/wp-content/uploads/2019/03/Country-Listing-Jamaican-going-overseas-July-19-2023-1.pdf",
+      "https://www.stlucia.gov.lc/visiting-saint-lucia"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "low",
+     "flags": [
+      "Confidence low: check the official links before approving.",
+      "The sources are not fully consistent. Confirm the stay length on the official page."
+     ]
+    }
+   }
+  },
+  {
+   "id": "dominican-republic",
+   "country": "Dominican Republic",
+   "general": {
+    "currency": "Dominican peso (DOP, symbol RD$)",
+    "language": "Spanish",
+    "plug": "Types A and B (type C also listed)",
+    "voltage": "110 V (nominal 120 V), 60 Hz",
+    "driving": "Right-hand side of the road",
+    "sources": [
+     "https://www.godominicanrepublic.com/travel/travel-tips",
+     "https://travel.gc.ca/destinations/dominican-republic"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "US citizens do not need a visa for tourism. The tourist card allows a stay of up to 30 days; a visa is required for longer stays, and stays can be extended through Dominican Migration (up to 120 days in total).",
+     "passportValidity": "Until 31 December 2026 the passport only needs to be valid for the stay and departure (Dominican Migration exception). Otherwise the Dominican tourism site lists a minimum of 6 months.",
+     "extra": "Complete the free electronic E-Ticket entry and exit form for every entry and exit, before reaching the airline check-in counter. Officials expect a return or onward ticket, proof of funds and a stay address. US$10 tourist card fee listed by the State Department. Cash of US$10,000 or more must be declared.",
+     "officialLinks": [
+      "https://travel.state.gov/en/international-travel/travel-advisories/dominican-republic.html",
+      "https://www.godominicanrepublic.com/travel/entry-requirements",
+      "https://eticket.migracion.gob.do"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "Includes a temporary rule that ends on 31 December 2026."
+     ]
+    },
+    "Canada": {
+     "summary": "Canadians do not need a tourist visa for stays of up to 30 days.",
+     "passportValidity": "Until 31 December 2026, Canadians travelling for tourism can enter with a passport valid for the duration of their stay. For other purposes, at least 6 months of validity is required.",
+     "extra": "A new E-Ticket form must be completed before boarding for every trip (digital or printed copy at the airport). For arrivals by air, the tourist card cost is included in the airline ticket. Officials may ask for proof of funds, the address where you will stay, and a return or onward ticket.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/dominican-republic",
+      "https://www.godominicanrepublic.com/travel/entry-requirements"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": [
+      "Includes a temporary rule that ends on 31 December 2026."
+     ]
+    },
+    "United Kingdom": {
+     "summary": "British citizens can visit the Dominican Republic for tourism without a visa for up to 30 days.",
+     "passportValidity": "Until 31 December 2026, British passport holders can enter and leave for tourism as long as the passport is valid for the whole visit. The page says rules may change after this date.",
+     "extra": "Complete the free digital entry and exit form (E-Ticket) before arriving and before leaving; it can be filled in up to 7 days before arrival and gives a QR code to show on arrival or departure. Entry can be refused without proof of onward or return travel. Fingerprints and a photograph are taken on arrival.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/dominican-republic/entry-requirements",
+      "https://www.godominicanrepublic.com/travel/entry-requirements"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": [
+      "Includes a temporary rule that ends on 31 December 2026."
+     ]
+    },
+    "Jamaica": {
+     "summary": "",
+     "passportValidity": "The Dominican tourism site lists a passport valid for at least 6 months for tourists. The temporary exception to 31 December 2026 names the US, Canada, UK, EU, Argentina, Brazil, Chile, Colombia and Ecuador; Jamaica is not named.",
+     "extra": "Jamaica's government visa listing (2023 edition) shows no visa for the Dominican Republic and mentions a tourist card; this is not confirmed against the current Dominican list. The E-Ticket entry and exit form is required of all passengers on commercial flights. Tourists are expected to hold a return ticket, proof of funds and a stay address.",
+     "officialLinks": [
+      "https://www.godominicanrepublic.com/travel/entry-requirements",
+      "https://servicios360.mirex.gob.do/visas/",
+      "https://mfaft.gov.jm/site/wp-content/uploads/2019/03/Country-Listing-Jamaican-going-overseas-July-19-2023.pdf"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "low",
+     "flags": [
+      "Confidence low: check the official links before approving.",
+      "Includes a temporary rule that ends on 31 December 2026.",
+      "The sources are not fully consistent. Confirm the stay length on the official page.",
+      "No summary was found for this passport. Fill it in from an official source before approving."
+     ]
+    }
+   }
+  },
+  {
+   "id": "barbados",
+   "country": "Barbados",
+   "general": {
+    "currency": "Barbados dollar (BBD), pegged at about BBD 1.98 to US$1; US dollars are widely accepted",
+    "language": "English (official); Bajan, an English-based creole, is spoken informally",
+    "plug": "Type A and B (two flat blades, or two flat blades with a round grounding pin)",
+    "voltage": "115/230 V, 50 Hz",
+    "driving": "Left-hand side of the road",
+    "sources": [
+     "https://www.visitbarbados.org/plan-your-trip/travel-information",
+     "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Barbados.html"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "No visa is required for US citizens on visits of 6 months or less.",
+     "passportValidity": "Passport must be valid at the time of entry; the State Department does not state a minimum validity beyond that. One blank page is needed for the entry stamp.",
+     "extra": "Travelers must show proof of plans to leave Barbados (return or onward ticket). No vaccinations are required. Visit Barbados says the online Immigration and Customs (ED) form at travelform.gov.bb opens 72 hours before arrival, and the emailed receipt must be shown on arrival.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Barbados.html",
+      "https://www.visitbarbados.org/plan-your-trip/visa-and-entry-requirements"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "Canada": {
+     "summary": "Canadian tourists do not need a visa for stays of up to 180 days; work and student visas are required.",
+     "passportValidity": "A regular Canadian passport must be valid for the duration of the stay. Airlines may apply stricter validity rules than Barbados does.",
+     "extra": "Immigration officers may ask for a return or onward ticket, proof of accommodation and proof of sufficient funds. An arrival form must be completed (Visit Barbados: online ED form at travelform.gov.bb, available 72 hours before arrival). Yellow fever vaccination proof is required only if arriving from a country where yellow fever occurs.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/barbados",
+      "https://www.visitbarbados.org/plan-your-trip/visa-and-entry-requirements"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "United Kingdom": {
+     "summary": "British citizens do not need a visa to visit Barbados; immigration officers tell you how long you may stay on arrival.",
+     "passportValidity": "Passport must be valid for the whole planned stay.",
+     "extra": "Visitors must show an onward or return ticket. Every traveller must complete the Barbados immigration and customs form online before arrival. Yellow fever certificate is required only if arriving from a country with a transmission risk. Extensions are applied for through the Barbados Immigration Department.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/barbados/entry-requirements",
+      "https://www.visitbarbados.org/plan-your-trip/visa-and-entry-requirements"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "Jamaica": {
+     "summary": "No visa is listed for Jamaicans visiting Barbados in Jamaica's government visa listing (2023), and the Barbados consulate says only non-citizens of Canada, CARICOM, the UK or the US need a visa. Permitted length of stay is not confirmed from an official source.",
+     "passportValidity": "Passport must be valid for the duration of the trip (Visit Barbados).",
+     "extra": "Barbados Immigration lists a return ticket, intended address and evidence of personal support. The online ED form at travelform.gov.bb opens 72 hours before arrival. A child travelling without both parents or a guardian needs a notarised consent letter (carry original and copy).",
+     "officialLinks": [
+      "https://www.visitbarbados.org/plan-your-trip/visa-and-entry-requirements",
+      "https://toronto.foreign.gov.bb/travelling/",
+      "https://mfaft.gov.jm/site/wp-content/uploads/2019/03/Country-Listing-Jamaican-going-overseas-July-19-2023.pdf"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "The sources are not fully consistent. Confirm the stay length on the official page."
+     ]
+    }
+   }
+  },
+  {
+   "id": "curacao",
+   "country": "Curaçao",
+   "general": {
+    "currency": "Caribbean guilder (XCG, symbol Cg); US dollars are widely accepted",
+    "language": "Papiamentu, Dutch and English (English and Spanish are widely spoken)",
+    "plug": "Types A and B (US-style); some hotels have 220 V outlets that take European plugs",
+    "voltage": "127 V / 50 Hz (curacao.com gives 110-130 V, 50 Hz)",
+    "driving": "Right-hand side",
+    "sources": [
+     "https://www.curacao.com/en/questions/electricity/do-i-need-special-plugs-adaptors-for-my-devices-in-curacao",
+     "https://www.cia.gov/the-world-factbook/countries/curacao/travel-facts",
+     "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Curacao.html"
+    ]
+   },
+   "entry": {
+    "United States": {
+     "summary": "No visa is needed for tourism. The US State Department says a visa is not needed for stays under 180 days, and the Dutch government says US nationals may stay up to 180 consecutive days in any 365-day period.",
+     "passportValidity": "US State Department: passport valid for the period of stay, with one blank page per stamp. Dutch government: valid for the whole stay and issued no more than 10 years ago.",
+     "extra": "Complete the free Digital Immigration Card online before arrival (official portal: dicardcuracao.com). The Dutch government lists these visa-free entry conditions: proof of return or onward travel, proof of the reason for the visit (e.g. hotel booking), enough money for the stay, and medical/travel insurance covering at least USD 15,000. Cash over US$10,000 or 18,000 Cg must be declared.",
+     "officialLinks": [
+      "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Curacao.html",
+      "https://www.netherlandsworldwide.nl/caribbean-visa/travel-without-visa",
+      "https://www.curacao.com/en/questions/digital-immigration-card/digital-immigration-card"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "high",
+     "flags": []
+    },
+    "Canada": {
+     "summary": "No visa is needed for tourism: Canada is on the Dutch government's visa-exempt list for the Caribbean parts of the Kingdom. The Curaçao immigration service gives Canadians 90 days a year as a tourist.",
+     "passportValidity": "Government of Canada: valid for at least 6 months after the date you expect to leave Curaçao. Dutch government: valid for the whole stay and issued no more than 10 years ago.",
+     "extra": "Government of Canada: a completely filled-in and signed Digital Immigration Card is required and can be completed online within 7 days before travel. Officials may ask for a return or onward ticket, proof of the purpose of your stay, proof of sufficient funds and proof of valid health insurance. Proof of yellow fever vaccination is required if arriving from or transiting a country where yellow fever occurs.",
+     "officialLinks": [
+      "https://travel.gc.ca/destinations/curacao",
+      "https://www.netherlandsworldwide.nl/caribbean-visa/visa-needed-caribbean",
+      "https://immigrationcur.org/en/dep/toerist/"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "United Kingdom": {
+     "summary": "No visa is needed for tourism. The UK FCDO says visitors can stay up to 90 days in a calendar year without a visa, and can ask Curaçao immigration for an extension if they have travel insurance for the extended stay.",
+     "passportValidity": "UK FCDO: passport must be valid for the whole of your stay (no months-after-departure figure given). Dutch government: issued no more than 10 years ago.",
+     "extra": "UK FCDO: complete the Digital Immigration Card online 48 hours before arrival, including if only travelling through Curaçao. The Dutch government lists proof of return or onward travel, proof of the reason for the visit, enough money for the stay, and medical/travel insurance of at least USD 15,000 as visa-free entry conditions.",
+     "officialLinks": [
+      "https://www.gov.uk/foreign-travel-advice/curacao/entry-requirements",
+      "https://www.netherlandsworldwide.nl/caribbean-visa/travel-without-visa",
+      "https://www.curacao.com/en/questions/digital-immigration-card/digital-immigration-card"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving."
+     ]
+    },
+    "Jamaica": {
+     "summary": "No visa is needed for Curaçao: the Dutch government lists Jamaica as visa-exempt for Curaçao only (a visa is needed for Aruba, Bonaire, Saba, St Eustatius and St Maarten). The Dutch government gives 90 days in any 180-day period, but the Curaçao immigration service says visa-exempt nationals not in its named groups get 30 days, extendable by application, so confirm before booking.",
+     "passportValidity": "Dutch government: valid for the whole stay and issued no more than 10 years ago.",
+     "extra": "Complete the free Digital Immigration Card online before arrival (dicardcuracao.com). The Dutch government lists proof of return or onward travel, proof of the reason for the visit, enough money for the stay, and medical/travel insurance of at least USD 15,000 as visa-free entry conditions. The Curaçao immigration service says tourists must show US$1,000 per week.",
+     "officialLinks": [
+      "https://www.netherlandsworldwide.nl/caribbean-visa/visa-needed-caribbean",
+      "https://immigrationcur.org/en/dep/toerist/",
+      "https://www.curacao.com/en/questions/digital-immigration-card/digital-immigration-card"
+     ],
+     "checkedOn": "2026-10-15",
+     "confidence": "medium",
+     "flags": [
+      "Confidence medium: check the official links before approving.",
+      "The sources are not fully consistent. Confirm the stay length on the official page."
+     ]
+    }
+   }
+  }
+ ]
+}

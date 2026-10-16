@@ -14076,6 +14076,8 @@ body.theme-night #p-flagship-programs{
             <div class="tc-field"><label for="tpPhone">Phone or WhatsApp <small>(optional)</small></label><input id="tpPhone" type="tel" autocomplete="tel" placeholder="+1 555 000 0000"></div>
             <input id="tpParty" type="hidden" value="1">
             <p class="tc-fine tc-onenote"><b>One person per request.</b> Coming with friends or teammates? Send them this trip page, and each person joins for themselves.</p>
+            <div class="tc-field"><label for="tpPassport">Country on your passport <small>(optional)</small></label><select id="tpPassport"><option value="">Choose a country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Jamaica</option><option value="__other">Another country</option></select><input id="tpPassportOther" type="text" maxlength="60" placeholder="Which country?" hidden style="margin-top:8px"><small class="tc-fine">So your trip checklist can show the entry rules for you. Country only, never a passport number.</small></div>
+            <div class="tc-field"><label for="tpPassportExp">Passport expires <small>(optional)</small></label><input id="tpPassportExp" type="month" placeholder="YYYY-MM"></div>
             <div class="tc-field"><label for="tpMessage">Anything we should know? <small>(optional)</small></label><textarea id="tpMessage" rows="3"></textarea></div>
             <label class="tc-check"><input id="tpConsent" type="checkbox"><span>I agree that Sight Seers may contact me about this trip.</span></label>
             <label class="tc-check"><input id="tpShareContact" type="checkbox"><span>Share my name, email and phone with the trip leader so they can add me to the group chat. <small>(optional)</small></span></label>
@@ -24624,6 +24626,8 @@ vtSessionAction=function(el,type){
                   <div class="ac-lfield"><label for="acPName">Full name</label><input type="text" id="acPName" autocomplete="name"></div>
                   <div class="ac-lfield"><label for="acPEmail">Email address</label><input type="email" id="acPEmail" autocomplete="email" readonly><small>Your email is how you sign in. To change it, contact us.</small></div>
                   <div class="ac-lfield"><label for="acPPhone">Phone number <span>(optional)</span></label><input type="tel" id="acPPhone" autocomplete="tel"></div>
+                  <div class="ac-lfield"><label for="acPPass">Country on your passport <span>(optional)</span></label><select id="acPPass"><option value="">Choose a country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Jamaica</option><option value="__other">Another country</option></select><input type="text" id="acPPassOther" maxlength="60" placeholder="Which country?" hidden style="margin-top:8px"><small>Used to show the entry rules for your Travel Club trips. We only ask for the country, never a passport number.</small></div>
+                  <div class="ac-lfield"><label for="acPPassExp">Passport expires <span>(optional)</span></label><input type="month" id="acPPassExp" placeholder="YYYY-MM"><small>Month and year only. We use it to tell you whether your passport covers a trip.</small></div>
                   <div class="ac-lfield"><label id="acPStyleLabel">Travel style</label><div class="ac-lchips" id="acPStyle" role="radiogroup" aria-labelledby="acPStyleLabel"></div></div>
                   <button type="submit" class="ac-cta ac-cta--wide">Save changes</button>
                   <div class="ac-fstatus" id="acProfileStatus" role="status" aria-live="polite"></div>
@@ -56384,6 +56388,8 @@ body.theme-night #p-account .ac-status.other{background:rgba(160,200,230,.16);co
 #p-account .ac-lfield label{display:block;margin:0 0 7px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-mut)}
 #p-account .ac-lfield label span{font-weight:600;letter-spacing:.04em;text-transform:none}
 #p-account .ac-lfield input{width:100%;height:50px;padding:0 14px;font:500 16px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0;transition:border-color .2s,box-shadow .2s,background .2s}
+#p-account .ac-lfield select{width:100%;height:50px;padding:0 12px;font:500 16px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0}
+#p-account .ac-lfield select:focus{border-color:var(--ac-o);box-shadow:0 0 0 4px rgba(239,135,49,.16)}
 #p-account .ac-lfield input:hover{border-color:rgba(239,135,49,.5)}
 #p-account .ac-lfield input:focus{border-color:var(--ac-o);background:var(--ac-card);box-shadow:0 0 0 4px rgba(239,135,49,.16)}
 #p-account .ac-lfield input[readonly]{opacity:.75;cursor:not-allowed}
@@ -56818,25 +56824,37 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     if($('acPName'))$('acPName').value=u.name||'';
     if($('acPEmail'))$('acPEmail').value=u.email||'';
     if($('acPPhone'))$('acPPhone').value=u.phone||'';
+    passFill('acPPass','acPPassOther',u.passportCountry||'');if($('acPPassExp'))$('acPPassExp').value=u.passportExpiry||'';
     pStyle=u.style||'Adventure';
     var box=$('acPStyle');
     if(box){buildChips(box,{value:pStyle},function(v){pStyle=v;});[].forEach.call(box.children,function(c){c.setAttribute('aria-checked',String(c.dataset.v===pStyle));});}
   }
+  /* the country on a passport: a short list we have prepared entry information for, or any other country typed in */
+  var PASS_LIST=['United States','Canada','United Kingdom','Jamaica'];
+  function passFill(selId,otherId,val){
+    var sel=$(selId),oth=$(otherId);if(!sel)return;
+    if(!val){sel.value='';}else if(PASS_LIST.indexOf(val)>-1){sel.value=val;}else{sel.value='__other';if(oth)oth.value=val;}
+    if(oth)oth.hidden=sel.value!=='__other';
+  }
+  function passVal(selId,otherId){var sel=$(selId);if(!sel)return '';if(sel.value==='__other')return (($(otherId)||{}).value||'').trim();return sel.value;}
+  document.addEventListener('change',function(e){var t=e.target;if(t&&(t.id==='acPPass'||t.id==='tpPassport')){var o=$(t.id==='acPPass'?'acPPassOther':'tpPassportOther');if(o){o.hidden=t.value!=='__other';if(!o.hidden)o.focus();}}});
   function fstat(id,msg,type){var e=$(id);if(!e)return;e.textContent=msg;e.className='ac-fstatus'+(type?' '+type:'');}
   var pf=$('acProfileForm');
   if(pf)pf.addEventListener('submit',function(e){
     e.preventDefault();
-    var name=($('acPName').value||'').trim(),phone=($('acPPhone').value||'').trim();
+    var name=($('acPName').value||'').trim(),phone=($('acPPhone').value||'').trim(),pcountry=passVal('acPPass','acPPassOther'),pexp=(($('acPPassExp')||{}).value||'').trim();
     if(!name){fstat('acProfileStatus','Please add your name.','err');$('acPName').focus();return;}
+    if($('acPPass').value==='__other'&&!pcountry){fstat('acProfileStatus','Type the country on your passport, or choose one from the list.','err');$('acPPassOther').focus();return;}
+    if(pexp&&!/^\d{4}-(0[1-9]|1[0-2])$/.test(pexp)){fstat('acProfileStatus','Write the expiry month like 2029-06 (year, then month).','err');$('acPPassExp').focus();return;}
     fstat('acProfileStatus','Saving...','');
     var done=function(){if(typeof updateAccountUI==='function')updateAccountUI();fstat('acProfileStatus','Your details are saved.','ok');};
     if(apiAccount()){
-      SS.updateProfile({name:name,phone:phone,style:pStyle}).then(done).catch(function(err){fstat('acProfileStatus',(err&&err.message)||'We could not save that. Please try again.','err');});
+      SS.updateProfile({name:name,phone:phone,style:pStyle,passportCountry:pcountry,passportExpiry:pexp}).then(function(r){done();var g=window.ssClub;if(g&&g.fillGroups)try{g.fillGroups(true);}catch(x){}}).catch(function(err){fstat('acProfileStatus',(err&&err.message)||'We could not save that. Please try again.','err');});
     }else{
       try{
         var u=getCurrentUser(),users=getUsers(),i=users.findIndex(function(x){return x.email===u.email;});
-        var next=Object.assign({},u,{name:name,phone:phone,style:pStyle});
-        if(i>-1){users[i]=Object.assign({},users[i],{name:name,phone:phone,style:pStyle});setUsers(users);}
+        var next=Object.assign({},u,{name:name,phone:phone,style:pStyle,passportCountry:pcountry,passportExpiry:pexp});
+        if(i>-1){users[i]=Object.assign({},users[i],{name:name,phone:phone,style:pStyle,passportCountry:pcountry,passportExpiry:pexp});setUsers(users);}
         setCurrentUser(next);done();
       }catch(err){fstat('acProfileStatus','We could not save that. Please try again.','err');}
     }
@@ -57545,6 +57563,42 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-updform textarea{min-height:96px;resize:vertical}
 #p-account .ac-updform label.ac-updchk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ac-mut)}
 #p-account .ac-updbox .ac-upds{padding:0 16px 16px;margin:0}
+#p-account .ac-before{margin:8px 0 0 18px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-o)}
+#p-account .ac-before>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-before>summary::-webkit-details-marker{display:none}
+#p-account .ac-before>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-before>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-before[open]>summary::after{content:'\2212'}
+#p-account .ac-beforebody{padding:0 16px 16px}
+#p-account .ac-ckl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+#p-account .ac-ck{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--ac-soft);border:1px solid var(--ac-line)}
+#p-account .ac-ck.is-done{opacity:.72}
+#p-account .ac-ck.is-done .ac-ckbody>b{text-decoration:line-through;text-decoration-color:rgba(6,46,75,.35)}
+#p-account .ac-ckbox{flex:none;position:relative;width:22px;height:22px;margin-top:1px;cursor:pointer}
+#p-account .ac-ckbox input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+#p-account .ac-ckbox span{display:block;width:22px;height:22px;background:var(--ac-card);border:2px solid rgba(6,46,75,.3);transition:background .2s,border-color .2s}
+#p-account .ac-ckbox input:checked+span{background:var(--ac-g);border-color:var(--ac-g)}
+#p-account .ac-ckbox input:checked+span::after{content:'';display:block;width:6px;height:11px;margin:2px 0 0 7px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+#p-account .ac-ckbox input:focus-visible+span{box-shadow:0 0 0 4px rgba(239,135,49,.3)}
+#p-account .ac-ckbody{min-width:0;flex:1;font-size:13.5px;line-height:1.6;color:var(--ac-ink)}
+#p-account .ac-ckbody>b{display:block;font-size:14px;color:var(--ac-head)}
+#p-account .ac-ckbody p{margin:5px 0 0}
+#p-account .ac-ckbody small{display:block;margin-top:6px;font-size:12px;color:var(--ac-mut)}
+#p-account .ac-ckbody a{color:var(--ac-head);font-weight:700}
+#p-account .ac-ckwarn{margin:6px 0 0;padding:8px 10px;background:#fff6ec;border-left:3px solid var(--ac-o);font-size:13px;color:#7a4a12}
+#p-account .ac-ckgood{margin:6px 0 0;padding:8px 10px;background:rgba(112,194,87,.12);border-left:3px solid var(--ac-g);font-size:13px}
+#p-account .ac-ckdl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:8px 0 0;font-size:13px}
+#p-account .ac-ckdl dt{font-weight:800;color:var(--ac-head)}
+#p-account .ac-ckdl dd{margin:0;color:var(--ac-ink)}
+#p-account .ac-ckpass{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px;padding:12px 14px;background:#fff6ec;border:1px solid rgba(239,135,49,.35)}
+#p-account .ac-ckpass label{font-size:13px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-ckpass select,#p-account .ac-ckpass input{height:40px;padding:0 10px;font:500 14px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-card);border:1px solid var(--ac-line);border-radius:0}
+#p-account .ac-ckfine{margin:10px 0 0;font-size:12px;color:var(--ac-mut)}
+#p-account .ac-pays{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+#p-account .ac-pays li{display:flex;flex-wrap:wrap;gap:2px 14px;align-items:baseline;padding:10px 14px;background:rgba(112,194,87,.12);border:1px solid rgba(112,194,87,.4)}
+#p-account .ac-pays b{color:var(--ac-head);font-size:14px}
+#p-account .ac-pays span{font-size:13px;color:var(--ac-ink)}
+#p-account .ac-pays small{flex-basis:100%;font-size:12px;color:var(--ac-mut)}
 #p-account .ac-ostats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
 #p-account .ac-ostat{padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line)}
 #p-account .ac-ostat b{display:block;font-family:'Playfair Display',serif;font-size:26px;line-height:1.05;color:var(--ac-head)}
@@ -57640,6 +57694,16 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #adminTravelClubTrips .tcA-ulist b{display:block;color:#062e4b;font-size:14px}
 #adminTravelClubTrips .tcA-ulist small{display:block;margin-top:2px;color:#7a8895}
 #adminTravelClubTrips .tcA-ulist p{margin:6px 0 0;white-space:pre-wrap}
+#adminTravelClubTrips .tcA-dest{border:1px solid rgba(6,58,99,.12);background:#fff;margin:0 0 10px}
+#adminTravelClubTrips .tcA-dest>summary{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:13px 16px;cursor:pointer;font-weight:800;color:#062e4b;list-style:none}
+#adminTravelClubTrips .tcA-dest>summary::-webkit-details-marker{display:none}
+#adminTravelClubTrips .tcA-dest>summary small{font-weight:500;color:#7a8895}
+#adminTravelClubTrips .tcA-dest .tcA-dest{margin:10px 0 0;background:#f8fbfd}
+#adminTravelClubTrips .tcA-dbody{padding:4px 16px 16px}
+#adminTravelClubTrips .tcA-flags{margin:0 0 10px;padding:0;list-style:none}
+#adminTravelClubTrips .tcA-flags li{margin:0 0 6px;padding:8px 10px;background:#fff6ec;border-left:3px solid #ef8731;font-size:12.5px;color:#7a4a12}
+#adminTravelClubTrips .tcA-dem{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+#adminTravelClubTrips .tcA-dem li{padding:7px 12px;border:1px solid rgba(6,58,99,.14);background:#fff;font-size:13px;color:#33505f}
 #adminTravelClubTrips .tcA-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 #adminTravelClubTrips .tcA-msg{min-height:20px;margin-top:10px;font-size:13px;font-weight:700;color:#5b7083}
 #adminTravelClubTrips .tcA-msg.ok{color:#2a8a47}#adminTravelClubTrips .tcA-msg.err{color:#c0392b}
@@ -58198,6 +58262,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpPay').innerHTML=esc(t.paymentNote||'We confirm availability and payment terms with you by email before anything is charged.')+' Questions? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.';
     $('tpLink').value=SITE+path;$('tpShare').hidden=!navigator.share;
     prefill({name:'tpName',email:'tpEmail',phone:'tpPhone'});
+    (function(){var pu=who();if(!pu)return;var ps=$('tpPassport');if(ps&&!ps.value&&pu.passportCountry){var known=[].some.call(ps.options,function(o){return o.value===pu.passportCountry;});ps.value=known?pu.passportCountry:'__other';if(!known){$('tpPassportOther').value=pu.passportCountry;$('tpPassportOther').hidden=false;}}if($('tpPassportExp')&&!$('tpPassportExp').value&&pu.passportExpiry)$('tpPassportExp').value=pu.passportExpiry;})();
     setMeta(t.title+' | Sight Seers Travel Club',(t.summary||('Join '+t.title+' with Sight Seers.')).slice(0,200),path);
     track('travel_club_trip_view',{trip:t.slug});
   }
@@ -58211,9 +58276,12 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       if(name.length<2){bad('tpName',1);setMsg(st,'Please add your name.','err');$('tpName').focus();return;}
       if(!EMAIL.test(email)){bad('tpEmail',1);setMsg(st,'Please add a valid email address.','err');$('tpEmail').focus();return;}
       if(!$('tpConsent').checked){setMsg(st,'Please tick the box so we can contact you about this trip.','err');return;}
-      var b=$('tpBtn'),label=b.textContent;b.disabled=true;b.textContent='Sending...';setMsg(st,'','');
       var src='';try{src=(new URLSearchParams(location.search).get('src')||'').replace(/[^\w\-]/g,'').slice(0,40);}catch(x){}
-      api('trips','POST',{action:'interest',tripSlug:cur.slug,name:name,email:email,phone:$('tpPhone').value.trim(),partySize:1,message:$('tpMessage').value.trim(),consent:true,shareContact:$('tpShareContact').checked,source:src,website:$('tpHp').value}).then(function(res){
+      var tpPass=$('tpPassport').value==='__other'?($('tpPassportOther').value||'').trim():$('tpPassport').value,tpExp=($('tpPassportExp').value||'').trim();
+      if($('tpPassport').value==='__other'&&!tpPass){setMsg(st,'Type the country on your passport, or choose one from the list.','err');$('tpPassportOther').focus();return;}
+      if(tpExp&&!/^\d{4}-(0[1-9]|1[0-2])$/.test(tpExp)){setMsg(st,'Write the passport expiry month like 2029-06, or leave it empty.','err');$('tpPassportExp').focus();return;}
+      var b=$('tpBtn'),label=b.textContent;b.disabled=true;b.textContent='Sending...';setMsg(st,'','');
+      api('trips','POST',{action:'interest',tripSlug:cur.slug,name:name,email:email,phone:$('tpPhone').value.trim(),partySize:1,passportCountry:tpPass,passportExpiry:tpExp,message:$('tpMessage').value.trim(),consent:true,shareContact:$('tpShareContact').checked,source:src,website:$('tpHp').value}).then(function(res){
         var d=$('tpDone');
         d.innerHTML='<h3>'+(res.waitlist?'You are on the waitlist':res.already?'We already have your request':'Your request is in')+'</h3>'+
           '<p>Thanks, '+esc(first(name))+'. '+(res.waitlist?'Our team will be in touch if a place opens.':'We will email you at <b>'+esc(email)+'</b> to confirm availability and payment terms.')+'</p>'+
@@ -58392,12 +58460,61 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function chip(map,k){var m=map[k]||['other',k];return '<span class="ac-status '+m[0]+'">'+esc(m[1])+'</span>';}
   function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
 
-  function reqRows(list){
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function ym(v){var m=/^(\d{4})-(\d{2})/.exec(v||'');return m?{y:+m[1],m:+m[2]}:null;}
+  function ymText(o){return MON[o.m-1]+' '+o.y;}
+  function dOnly(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?MON[+m[2]-1]+' '+(+m[3])+', '+m[1]:'';}
+  function hostOf(u){try{return new URL(u).hostname.replace(/^www\./,'');}catch(e){return u;}}
+  /* what the passport's expiry month means for this trip, using only the dates we hold: never a rule we have not been given */
+  function passportCheck(i){
+    var exp=ym(i.passportExpiry),end=ym(i.tripEnd||i.tripStart),out={html:'',issue:false};
+    if(!i.passport){out.html='<p>Add the country on your passport to see the rules for this trip.</p>';return out;}
+    out.html='<p>Passport: <b>'+esc(i.passport)+'</b>'+(exp?' &middot; expires <b>'+esc(ymText(exp))+'</b>':'')+'.</p>';
+    if(!exp){out.html+='<p>Add the month it expires (in your Profile) and we will tell you whether it covers this trip.</p>';return out;}
+    if(!end){out.html+='<p>Once the trip dates are set, we will check this against them.</p>';return out;}
+    var gap=(exp.y-end.y)*12+(exp.m-end.m);
+    if(gap<0){out.issue=true;out.html+='<p class="ac-ckwarn"><b>Your passport expires before this trip ends.</b> Renew it before you book flights.</p>';}
+    else if(gap<6){out.issue=true;out.html+='<p class="ac-ckwarn">Your passport expires within six months of this trip. Many countries need more validity than that, so check the entry rule below or renew early.</p>';}
+    else out.html+='<p class="ac-ckgood">Your passport covers the dates of this trip. Still check the validity rule below.</p>';
+    return out;
+  }
+  function ckItem(i,key,title,body){
+    var done=!!(i.checklist&&i.checklist[key]);
+    return '<li class="ac-ck'+(done?' is-done':'')+'"><label class="ac-ckbox"><input type="checkbox" data-ck="'+key+'" data-ck-ref="'+esc(i.ref)+'" aria-label="'+esc(title)+'"'+(done?' checked':'')+'><span></span></label><div class="ac-ckbody"><b>'+esc(title)+'</b>'+body+'</div></li>';
+  }
+  function checklist(i,pt){
+    if(!i.tripSlug||i.status==='cancelled'||i.status==='waitlist')return '';
+    var cc=i.tripCountry,pc=passportCheck(i),e=i.entry&&i.entry.entry,g=i.entry&&i.entry.general,renew='';
+    if(pc.issue)renew=i.passport==='Jamaica'?'<p><button type="button" class="ac-sbtn" onclick="nav(\'passport\')">Renew your Jamaican passport</button></p>':'<p>Renew it through your government\'s passport service.</p>';
+    var entryBody;
+    if(e){
+      entryBody='<p>'+esc(e.summary)+'</p>'+(e.passportValidity?'<p><b>Passport validity:</b> '+esc(e.passportValidity)+'</p>':'')+(e.extra?'<p>'+esc(e.extra)+'</p>':'')+
+        (e.officialLinks&&e.officialLinks.length?'<p>Official pages: '+e.officialLinks.map(function(u){return '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(hostOf(u))+'</a>';}).join(' &middot; ')+'</p>':'')+
+        '<small>Checked'+(e.checkedOn?' '+esc(dOnly(e.checkedOn)):'')+' against official sources. Rules change, so confirm on the official page before you fly.</small>';
+    }else if(!i.passport)entryBody='<p>Add the country on your passport to see the entry rules'+(cc?' for '+esc(cc):'')+'.</p>';
+    else if(!cc)entryBody='<p>The entry rules appear here once the trip\'s country is set.</p>';
+    else if(i.passport===cc)entryBody='<p>This trip is in your passport\'s own country, so there are no visitor entry rules to prepare. Carry your valid passport or ID.</p>';
+    else entryBody='<p>We have not prepared entry details for '+esc(i.passport)+' passports going to '+esc(cc)+' yet. Check your government\'s travel advice for '+esc(cc)+' before you book flights, or ask us.</p>';
+    var good=g?'<dl class="ac-ckdl">'+[['Currency',g.currency],['Language',g.language],['Plugs',g.plug],['Voltage',g.voltage],['Driving',g.driving]].filter(function(r){return r[1];}).map(function(r){return '<dt>'+r[0]+'</dt><dd>'+esc(r[1])+'</dd>';}).join('')+'</dl>':'';
+    var ins=pt&&pt.insurance,es=pt&&pt.esim;
+    function pbody(p,label){return p?'<p>'+esc(p.note)+'</p>'+(p.url?'<p><a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored">'+esc(p.cta||label)+'</a></p>':'<small>Link coming soon.</small>'):'';}
+    var items=[
+      ckItem(i,'passport','Check your passport',pc.html+renew),
+      ckItem(i,'entry','Read the entry rules'+(cc?' for '+cc:''),entryBody+(good?'<p style="margin-top:8px"><b>Good to know in '+esc(cc)+'</b></p>'+good:'')),
+      ckItem(i,'insurance','Get travel insurance',pbody(ins,'Get a quote')),
+      ckItem(i,'esim','Sort your phone data',pbody(es,'Get an eSIM')),
+      ckItem(i,'chat','Join the group chat',i.groupLink?'<p><a href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Open the group chat</a></p>':'<p>'+esc(i.leaderName||'Your leader')+' will share the group chat link here.</p>')
+    ];
+    var done=['passport','entry','insurance','esim','chat'].filter(function(k){return i.checklist&&i.checklist[k];}).length;
+    var form=i.passport?'':'<form class="ac-ckpass" data-pp-form novalidate><label for="acPP'+esc(i.ref)+'">Country on your passport</label><select id="acPP'+esc(i.ref)+'"><option value="">Choose a country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Jamaica</option></select><button type="submit" class="ac-sbtn" style="height:40px">Save</button><span class="ac-invmsg" role="status"></span></form>';
+    return '<details class="ac-before"><summary><span>Before you go<small>'+done+' of 5 done</small></span></summary><div class="ac-beforebody">'+form+'<ul class="ac-ckl">'+items.join('')+'</ul><p class="ac-ckfine">Entry rules can change. Always confirm on the official pages before you travel.</p></div></details>';
+  }
+  function reqRows(list,pt){
     if(!list.length)return '<div class="ac-empty"><strong>No trip requests yet</strong><p>When you ask to join a Travel Club trip, it shows up here with where it stands.</p><button type="button" class="ac-cta" onclick="ssClubGo(\'departures\')">See departures</button></div>';
     return '<div class="ac-greq">'+list.map(function(i){
       var title=i.tripSlug?'<a href="/trip/'+esc(i.tripSlug)+'" data-trip="'+esc(i.tripSlug)+'">'+esc(i.tripTitle||'Travel Club trip')+'</a>':'Travel Club departure alert';
       var chat=i.groupLink?'<a class="ac-chatbtn" href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Join the group chat</a>':(i.tripSlug&&i.status!=='cancelled'&&i.status!=='waitlist'?'<span class="ac-chatsoon">Group chat link coming from '+esc(i.leaderName||'your leader')+'</span>':'');
-      return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+'</div>';
+      return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+checklist(i,pt)+'</div>';
     }).join('')+'</div>';
   }
   function goalBar(t){
@@ -58416,6 +58533,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   /* trip updates: a leader posts to everyone who joined; travelers read them under their request */
   function updItem(u,del){
     return '<li class="'+(u.kind==='advisory'?'is-advisory':'')+'" data-upd="'+esc(u.id)+'"><div class="ac-uhead"><b>'+esc(u.title)+'</b><small>'+(u.kind==='advisory'?'Travel update &middot; ':'')+esc(u.authorName)+' &middot; '+esc(dt(u.createdAt))+'</small></div><p>'+esc(u.body)+'</p>'+(del&&u.authorRole==='leader'?'<button type="button" class="ac-updel" data-upd-del="'+esc(u.id)+'">Delete</button>':'')+'</li>';
+  }
+  function payList(list){
+    if(!list||!list.length)return '';
+    return '<ul class="ac-pays" aria-label="Rewards paid to you">'+list.map(function(p){return '<li><b>Paid '+esc(Number(p.amount).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}))+' '+esc(p.currency)+'</b><span>'+esc(dOnly(p.paidOn))+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+'</span>'+(p.note?'<small>'+esc(p.note)+'</small>':'')+'</li>';}).join('')+'</ul>';
   }
   function updList(list,del){return list&&list.length?'<ul class="ac-upds">'+list.map(function(u){return updItem(u,del);}).join('')+'</ul>':'';}
   function updBox(t,idx){
@@ -58454,7 +58575,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
         return '<li><span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
-      '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+
+      '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+payList(t.payouts)+
       '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>'+
     '</div>';
   }
@@ -58518,7 +58639,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
     if(!force&&grp.at&&Date.now()-grp.at<20000)return;
     grp.loading=true;reqs.innerHTML='<div class="ac-skel"></div>';org.innerHTML='<div class="ac-skel"></div>';
-    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[]);org.innerHTML=orgHtml(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
+    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[],d.partners);org.innerHTML=orgHtml(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
       .catch(function(err){reqs.innerHTML='<p class="ac-onote"><b>We could not load your trips.</b> '+esc(err.message||'Please try again.')+'</p>';org.innerHTML='';})
       .then(function(){grp.loading=false;});
   }
@@ -58659,7 +58780,23 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var cn=e.target.closest('[data-inv-cancel]');
       if(cn){var iv2=cn.closest('.ac-invite');iv2.querySelector('[data-inv-form]').hidden=true;iv2.querySelector('[data-inv-edit]').hidden=false;iv2.querySelector('.ac-invmsg').textContent='';return;}
     });
+    gp.addEventListener('change',function(e){
+      var ck=e.target.closest&&e.target.closest('[data-ck]');if(!ck)return;
+      var li=ck.closest('.ac-ck'),on=ck.checked;li.classList.toggle('is-done',on);
+      api('trips','POST',{action:'checklist-tick',ref:ck.getAttribute('data-ck-ref'),key:ck.getAttribute('data-ck'),done:on}).then(function(){
+        var det=ck.closest('.ac-before'),n=det.querySelectorAll('[data-ck]:checked').length;det.querySelector('summary small').textContent=n+' of 5 done';grp.at=0;
+      }).catch(function(){ck.checked=!on;li.classList.toggle('is-done',!on);});
+    });
     gp.addEventListener('submit',function(e){
+      var pf2=e.target.closest('[data-pp-form]');
+      if(pf2){
+        e.preventDefault();
+        var psel=pf2.querySelector('select'),pm=pf2.querySelector('.ac-invmsg');
+        if(!psel.value){pm.className='ac-invmsg err';pm.textContent='Choose the country on your passport.';return;}
+        pm.className='ac-invmsg';pm.textContent='Saving...';
+        (window.SS&&SS.updateProfile?SS.updateProfile({passportCountry:psel.value}):Promise.reject(new Error('Sign in with your account to save this.'))).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){pm.className='ac-invmsg err';pm.textContent=err.message||'We could not save that. Please try again.';});
+        return;
+      }
       var uf=e.target.closest('[data-upd-form]');
       if(uf){
         e.preventDefault();
@@ -58836,13 +58973,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var body=$('tcAdminBody');if(!body||!S.data)return;
     var d=S.data,newReq=((d.inbox||{}).counts||{}).new||0,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
     body.innerHTML='<div class="tcA-tabs" role="tablist">'+
-      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['updates','Updates'],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
-      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():S.tab==='updates'?updatesTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
+      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['rewards','Rewards'],['dest','Destinations'],['updates','Updates'],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
+      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():S.tab==='updates'?updatesTab():S.tab==='dest'?destTab():S.tab==='rewards'?rewardsTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
   }
 
 
   /* ── overview: what needs you, every leader and their group, and what happened lately ── */
-  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails',update:'Trip update',advisory:'Advisory'};
+  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails',update:'Trip update',advisory:'Advisory',destination:'Destinations',payout:'Reward payout'};
   function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(isNaN(m))return '';if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';return dt(iso);}
   function overview(){
     var d=S.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),
@@ -58927,6 +59064,59 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ── partner links: travel insurance and eSIM referrals shown on every member's Group trips tab ── */
+  /* ── rewards: a record of what has been paid to each leader (this only keeps the record; it moves no money) ── */
+  function money(a,c){return Number(a).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+c;}
+  function dOnlyA(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m?M[+m[2]-1]+' '+(+m[3])+', '+m[1]:esc(v||'');}
+  function rewardsTab(){
+    var d=S.data,P=d.payouts||[],T=(d.trips||[]).filter(function(t){return t.organizerEmail||t.organizerName;}),totals={};
+    P.forEach(function(p){totals[p.currency]=(totals[p.currency]||0)+p.amount;});
+    var out='<p class="tcA-note">Record each reward you pay to a leader here: how much, how, when, and a reference. <b>This only keeps the record. It does not send money.</b> The leader sees what you record on their trip card, and can be emailed when you add it.</p>';
+    out+='<div class="tcA-todos"><span class="tcA-todo has"><b>'+P.length+'</b><span>Payments recorded</span></span>'+Object.keys(totals).map(function(c){return '<span class="tcA-todo"><b>'+esc(money(totals[c],c))+'</b><span>Paid out in '+esc(c)+'</span></span>';}).join('')+'</div>';
+    if(!T.length)out+='<p class="tcA-note">No trips with a leader yet.</p>';
+    T.forEach(function(t,ti){
+      var list=P.filter(function(p){return p.tripId===t.id;}),booked=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status==='booked';}).reduce(function(n,i){return n+(i.partySize||1);},0),joined=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status!=='cancelled'&&i.status!=='waitlist';}).length,pid='tcAR'+ti;
+      out+='<details class="tcA-dest"'+((S.rOpen||{})[t.id]?' open':'')+'><summary><span>'+esc(t.title)+'</span><small>'+esc(t.organizerName||t.organizerEmail||'')+'</small>'+chip({not_set:'',agreed:'warn',earned:'good',paid:'good'},t.rewardStatus||'not_set')+'<small>'+joined+' joined &middot; '+booked+' booked</small>'+(list.length?'<small>'+list.length+' paid</small>':'')+'</summary><div class="tcA-dbody">'+
+        '<p class="tcA-note">'+(t.reward?'<b>Agreed reward:</b> '+esc(t.reward):'<b>No reward written down for this trip.</b> Add it under Trips.')+'</p>'+
+        (list.length?'<ul class="tcA-ulist">'+list.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b><small>'+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+' &middot; recorded by '+esc(p.createdBy||'')+'</small>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'<div class="tcA-actions" style="margin-top:6px"><button type="button" class="tcA-del" data-tcapaydel="'+esc(p.id)+'">Remove record</button></div></li>';}).join('')+'</ul>':'<p class="tcA-note">Nothing recorded yet.</p>')+
+        '<h4 class="tcA-h" style="margin-top:14px">Record a payment</h4><div class="admin-package-grid">'+fld('Amount',pid+'_amount','',{type:'number',min:0,ph:'0.00'})+
+        fld('Currency',pid+'_cur','USD',{type:'select',options:['USD','JMD','CAD','GBP','EUR']})+fld('How it was paid',pid+'_method','',{ph:'Bank transfer, PayPal, cash...'})+fld('Reference (optional)',pid+'_ref','',{})+fld('Paid on',pid+'_date',new Date().toISOString().slice(0,10),{type:'date'})+fld('Note (optional, the leader can see it)',pid+'_note','',{})+
+        fld('Email the leader that it was paid',pid+'_notify',true,{type:'check'})+fld('Mark the reward as paid for this trip',pid+'_mark',t.rewardStatus!=='paid',{type:'check'})+'</div>'+
+        '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcapay="'+ti+'">Record payment</button></div></div></details>';
+    });
+    var live={};T.forEach(function(t){live[t.id]=1;});var gone=P.filter(function(p){return !live[p.tripId];});
+    if(gone.length)out+='<h4 class="tcA-h">Payments for trips that no longer exist</h4><ul class="tcA-ulist">'+gone.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b><small>'+esc(p.tripTitle)+' &middot; '+dOnlyA(p.paidOn)+' &middot; '+esc(p.method)+(p.reference?' &middot; ref '+esc(p.reference):'')+'</small></li>';}).join('')+'</ul>';
+    return out;
+  }
+  /* ── destinations: the entry information travelers see on their checklist, drafted from official pages and shown only once you approve it ── */
+  function destTab(){
+    var d=S.data,D=d.destinations||[],dem=d.passportDemand||[],O=S.dOpen||{};
+    var out='<p class="tcA-note">This is the <b>know-before-you-go</b> information on each traveler\'s trip checklist. It was <b>drafted from official government and tourism pages</b> and every entry starts hidden. <b>Travelers only see what you approve</b>, one destination and one passport at a time. Check each entry against its official links, edit anything, then approve. You cannot approve an entry without a summary and an official link.</p>';
+    if(dem.length)out+='<h4 class="tcA-h">Passports travelers have told us about</h4><ul class="tcA-dem">'+dem.map(function(x){return '<li><b>'+esc(x.country)+'</b> &middot; '+x.count+' '+(x.count===1?'traveler':'travelers')+' &middot; '+(x.covered?'<span class="tcA-chip good">entry info approved</span>':'<span class="tcA-chip warn">nothing approved yet</span>')+'</li>';}).join('')+'</ul>';
+    D.forEach(function(x,di){
+      var keys=Object.keys(x.entry||{}),apr=keys.filter(function(k){return x.entry[k].status==='approved';}).length;
+      out+='<details class="tcA-dest"'+(O[di]?' open':'')+'><summary><span>'+esc(x.country)+'</span><span class="tcA-chip '+(x.general&&x.general.status==='approved'?'good':'warn')+'">general card '+(x.general&&x.general.status==='approved'?'approved':'draft')+'</span><span class="tcA-chip '+(apr===keys.length&&keys.length?'good':'warn')+'">'+apr+' of '+keys.length+' passports approved</span>'+(x.source==='owner'?'<small>added by you</small>':'')+'</summary><div class="tcA-dbody">';
+      if(x.reviewNote)out+='<p class="tcA-note warn"><b>Check first:</b> '+esc(x.reviewNote)+'</p>';
+      var g=x.general||{};
+      out+='<h4 class="tcA-h">Good to know (shown to every traveler going here)</h4><div class="admin-package-grid">'+
+        fld('Currency','tcAD'+di+'_g_currency',g.currency||'',{})+fld('Language','tcAD'+di+'_g_language',g.language||'',{})+fld('Plugs','tcAD'+di+'_g_plug',g.plug||'',{})+fld('Voltage','tcAD'+di+'_g_voltage',g.voltage||'',{})+fld('Driving','tcAD'+di+'_g_driving',g.driving||'',{})+
+        fld('Source links (one per line)','tcAD'+di+'_g_sources',(g.sources||[]).join('\n'),{type:'textarea',help:'Official pages this card comes from. Needed to approve.'})+'</div>'+
+        '<div class="tcA-actions"><button type="button" class="admin-inline-btn alt" data-tcadsave="'+di+':g" data-st="draft">Save as draft</button><button type="button" class="admin-inline-btn" data-tcadsave="'+di+':g" data-st="approved">Approve</button></div>';
+      out+='<h4 class="tcA-h" style="margin-top:18px">Entry rules by passport</h4>';
+      keys.forEach(function(pk,pi){
+        var e=x.entry[pk],pid='tcAD'+di+'_'+pi,flags=e.flags||[];
+        out+='<details class="tcA-dest"'+(O[di+':'+pi]?' open':'')+'><summary><span>'+esc(pk)+' passport</span><span class="tcA-chip '+(e.status==='approved'?'good':'warn')+'">'+(e.status==='approved'?'approved':'draft')+'</span><span class="tcA-chip '+(e.confidence==='high'?'good':e.confidence==='low'?'bad':'warn')+'">confidence '+esc(e.confidence||'medium')+'</span></summary><div class="tcA-dbody">'+
+          (flags.length&&e.status!=='approved'?'<ul class="tcA-flags">'+flags.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul>':'')+
+          '<div class="admin-package-grid">'+fld('Summary (visa and length of stay)',pid+'_summary',e.summary||'',{type:'textarea'})+fld('Passport validity',pid+'_validity',e.passportValidity||'',{type:'textarea'})+fld('Forms, proof of onward travel and other requirements',pid+'_extra',e.extra||'',{type:'textarea'})+
+          fld('Official links (one per line)',pid+'_links',(e.officialLinks||[]).join('\n'),{type:'textarea',help:'Government or tourism-board pages travelers can check themselves. Needed to approve.'})+
+          fld('Checked on (date)',pid+'_checked',e.checkedOn||'',{type:'date'})+fld('Confidence',pid+'_conf',e.confidence||'medium',{type:'select',options:['high','medium','low']})+'</div>'+
+          '<div class="tcA-actions"><button type="button" class="admin-inline-btn alt" data-tcadsave="'+di+':'+pi+'" data-st="draft">'+(e.status==='approved'?'Hide from travelers (save as draft)':'Save as draft')+'</button><button type="button" class="admin-inline-btn" data-tcadsave="'+di+':'+pi+'" data-st="approved">'+(e.status==='approved'?'Save and keep approved':'Approve')+'</button></div></div></details>';
+      });
+      out+='<div class="tcA-actions" style="margin-top:14px"><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input type="text" id="tcADnew'+di+'" list="tcADpass" placeholder="Add a passport, e.g. Nigeria" style="height:38px;padding:0 10px;border:1px solid rgba(6,58,99,.18)"><button type="button" class="admin-inline-btn alt" data-tcadaddp="'+di+'">Add passport</button></span><button type="button" class="tcA-del" data-tcadreset="'+di+'">Reset to the research draft</button></div></div></details>';
+    });
+    out+='<datalist id="tcADpass"><option value="United States"><option value="Canada"><option value="United Kingdom"><option value="Jamaica"></datalist>';
+    out+='<h4 class="tcA-h">Add a destination</h4><div class="tcA-actions"><input type="text" id="tcADnewdest" placeholder="Country, e.g. Grenada" style="height:38px;padding:0 10px;border:1px solid rgba(6,58,99,.18);min-width:220px"><button type="button" class="admin-inline-btn alt" data-tcadadd>Add destination</button></div><p class="tcA-note" style="margin-top:12px">A trip uses these when its <b>country</b> (set under Trips) matches the destination name.</p>';
+    return out;
+  }
   /* ── updates: an advisory to every upcoming trip in a country, a note on one trip, and what has been posted ── */
   function updatesTab(){
     var d=S.data,all=d.trips||[],live=all.filter(function(t){return t.status==='open'||t.status==='full'||t.status==='closed';}),F=S.advForm||{},P=S.adv&&S.adv.preview,T=S.updForm||{};
@@ -59137,6 +59327,58 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       }).catch(function(err){rv.disabled=false;say(err.message,'err');});
       return;
     }
+    var pay=e.target.closest('[data-tcapay]');
+    if(pay){
+      var pti=+pay.getAttribute('data-tcapay'),pT=(S.data.trips||[]).filter(function(t){return t.organizerEmail||t.organizerName;})[pti],ppid='tcAR'+pti;
+      pay.disabled=true;say('Saving...','');
+      call('payout-add',{tripId:pT.id,amount:$(ppid+'_amount').value,currency:$(ppid+'_cur').value,method:$(ppid+'_method').value,reference:$(ppid+'_ref').value,paidOn:$(ppid+'_date').value,note:$(ppid+'_note').value,notify:$(ppid+'_notify').checked,markPaid:$(ppid+'_mark').checked}).then(function(res){
+        S.rOpen=S.rOpen||{};S.rOpen[pT.id]=true;S.data=null;load(true);setTimeout(function(){say('Payment recorded'+(res.emailed?' and the leader was emailed':'')+'.','ok');},500);
+      }).catch(function(err){pay.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var pdl=e.target.closest('[data-tcapaydel]');
+    if(pdl){
+      if(!confirm('Remove this payment record?\n\nThis only removes the record. If you already paid the leader, that payment is not affected.'))return;
+      call('payout-delete',{id:pdl.getAttribute('data-tcapaydel')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Record removed.','ok');},400);}).catch(function(err){say(err.message,'err');});
+      return;
+    }
+    var dsv=e.target.closest('[data-tcadsave]');
+    if(dsv){
+      var dp=dsv.getAttribute('data-tcadsave').split(':'),ddi=+dp[0],dx=S.data.destinations[ddi],dstat=dsv.getAttribute('data-st'),dbody;
+      if(dp[1]==='g'){
+        var gv=function(k){return $('tcAD'+ddi+'_g_'+k).value;};
+        dbody={country:dx.country,scope:'general',status:dstat,fields:{currency:gv('currency'),language:gv('language'),plug:gv('plug'),voltage:gv('voltage'),driving:gv('driving'),sources:gv('sources')}};
+      }else{
+        var dpi=+dp[1],pk2=Object.keys(dx.entry)[dpi],pid2='tcAD'+ddi+'_'+dpi,pv=function(k){return $(pid2+'_'+k).value;};
+        dbody={country:dx.country,scope:'entry',passport:pk2,status:dstat,fields:{summary:pv('summary'),passportValidity:pv('validity'),extra:pv('extra'),officialLinks:pv('links'),checkedOn:pv('checked'),confidence:pv('conf')}};
+      }
+      dsv.disabled=true;say('Saving...','');
+      call('destination-save',dbody).then(function(res){S.data.destinations=res.destinations;S.dOpen=S.dOpen||{};S.dOpen[ddi]=true;if(dp[1]!=='g')S.dOpen[ddi+':'+dp[1]]=true;render();say(dstat==='approved'?'Approved. Travelers going to '+dx.country+(dp[1]==='g'?'':' with a '+dbody.passport+' passport')+' can now see it.':'Saved as a draft. Travelers do not see it.','ok');}).catch(function(err){dsv.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var dap=e.target.closest('[data-tcadaddp]');
+    if(dap){
+      var adi=+dap.getAttribute('data-tcadaddp'),apn=($('tcADnew'+adi).value||'').trim();
+      if(!apn){say('Type the passport country to add.','err');return;}
+      dap.disabled=true;
+      call('destination-save',{country:S.data.destinations[adi].country,scope:'entry',passport:apn,status:'draft',fields:{}}).then(function(res){S.data.destinations=res.destinations;S.dOpen=S.dOpen||{};S.dOpen[adi]=true;render();say('Added. Fill in the details from an official source, then approve.','ok');}).catch(function(err){dap.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var dad=e.target.closest('[data-tcadadd]');
+    if(dad){
+      var nm=($('tcADnewdest').value||'').trim();
+      if(!nm){say('Type the destination to add.','err');return;}
+      dad.disabled=true;
+      call('destination-save',{country:nm,scope:'general',status:'draft',fields:{}}).then(function(res){S.data.destinations=res.destinations;var ix=res.destinations.findIndex(function(x){return x.country===nm;});S.dOpen={};if(ix>-1)S.dOpen[ix]=true;render();say('Destination added.','ok');}).catch(function(err){dad.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var drs=e.target.closest('[data-tcadreset]');
+    if(drs){
+      var rdi=+drs.getAttribute('data-tcadreset');
+      if(!confirm('Put '+S.data.destinations[rdi].country+' back to the research draft?\n\nYour edits and approvals for it are removed and travelers stop seeing it until you approve it again.'))return;
+      call('destination-reset',{country:S.data.destinations[rdi].country}).then(function(res){S.data.destinations=res.destinations;render();say('Back to the research draft.','ok');}).catch(function(err){say(err.message,'err');});
+      return;
+    }
     var avp=e.target.closest('[data-tcaadvprev]');
     if(avp){
       var AF={country:$('tcAV_country').value,title:$('tcAV_title').value,body:$('tcAV_body').value};S.advForm=AF;
@@ -59233,7 +59475,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     window.nav=function(id){
       var r=_nav.apply(this,arguments);
       if(id==='club-admin'){
-        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links','auto','updates'].indexOf(hm[1])>-1)S.tab=hm[1];
+        var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm&&['overview','apps','inbox','accounts','trips','reqs','links','auto','updates','dest','rewards'].indexOf(hm[1])>-1)S.tab=hm[1];
         try{var rb=document.querySelector('meta[name="robots"]');if(!rb){rb=document.createElement('meta');rb.name='robots';document.head.appendChild(rb);}rb.content='noindex,nofollow';}catch(e){}
         try{history.replaceState(history.state,'','/club-admin#tab='+S.tab);}catch(x){}
         setTimeout(function(){load(true);},60);

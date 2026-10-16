@@ -183,7 +183,7 @@ module.exports = async function handler(req, res) {
   if (action === 'update') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    const { name, phone, style } = req.body;
+    const { name, phone, style, passportCountry, passportExpiry } = req.body;
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === caller.id);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });
@@ -191,6 +191,9 @@ module.exports = async function handler(req, res) {
     if (name && typeof name === 'string') users[idx].name = name.trim().slice(0, 100);
     if (phone !== undefined) users[idx].phone = String(phone).trim().slice(0, 30);
     if (style && typeof style === 'string') users[idx].style = style.slice(0, 50);
+    /* optional, for the Travel Club's before-you-go checklist: only the passport's country and when it expires (a month), never a passport number */
+    if (passportCountry !== undefined) users[idx].passportCountry = String(passportCountry || '').trim().slice(0, 60);
+    if (passportExpiry !== undefined) users[idx].passportExpiry = /^\d{4}-(0[1-9]|1[0-2])$/.test(String(passportExpiry || '').trim()) ? String(passportExpiry).trim() : '';
     users[idx].updatedAt = new Date().toISOString();
 
     await db.setCollection('users', users);
@@ -329,6 +332,9 @@ module.exports = async function handler(req, res) {
     if (email && typeof email === 'string') users[idx].email = email.trim().toLowerCase();
     if (phone !== undefined) users[idx].phone = String(phone).trim().slice(0, 30);
     if (style && typeof style === 'string') users[idx].style = style.slice(0, 50);
+    /* optional, for the Travel Club's before-you-go checklist: only the passport's country and when it expires (a month), never a passport number */
+    if (passportCountry !== undefined) users[idx].passportCountry = String(passportCountry || '').trim().slice(0, 60);
+    if (passportExpiry !== undefined) users[idx].passportExpiry = /^\d{4}-(0[1-9]|1[0-2])$/.test(String(passportExpiry || '').trim()) ? String(passportExpiry).trim() : '';
     if (role === 'admin' || role === 'guest') users[idx].role = role;
     users[idx].updatedAt = new Date().toISOString();
 
