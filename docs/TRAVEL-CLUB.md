@@ -195,3 +195,10 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 - **Where photos show.** Next to your name at the top of the account page, on the leader's "Led by" card on the public trip page (the leader's initial when there is no photo), and beside each traveler in the list on the leader's dashboard (nothing when there is no photo).
 - **About you.** An optional intro on the Profile (up to 700 characters, plain text). A trip leader's intro shows on the public trip page in the "Led by" card, so guests can read who is leading before they join. It falls back to the intro written when the trip was set up, if any.
 - Data added: `bio` and `avatarUrl` on the user record.
+
+### Update: joining first, prices on the board, Not included, the phone Ask to join bar
+- **Travel Club page order**: the departures band ("Join a trip") now comes straight after the top banner, then "Apply to lead a trip", then how leading works and the questions. The banner itself is unchanged.
+- **Departures board**: each trip shows its price as written in the trip's "Price as shown" (for example "From US$1,250 per person"). A trip with no price shows none.
+- **Not included**: a second list beside "What is included" on the trip page (stacked on phones). The leader fills it in the Trip details box on their dashboard, and the owner in the trip form in the master admin. Up to 10 lines of 140 characters. A screen that does not send the list (an older admin tab, for instance) keeps what is saved. A trip with only a Not included list shows that list alone.
+- **Ask to join bar on phones** (screens up to 900px wide): a bar pinned to the bottom of the trip page with the price, places left and an "Ask to join" button (or "Join the waitlist" on a full trip). Tapping it scrolls to the form with the name box ready. It steps aside while the form is on screen, disappears once the request is sent, and only shows on trip pages. The chat button moves up while it shows.
+- Data added: `notIncluded` on a trip.

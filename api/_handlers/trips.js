@@ -22,7 +22,7 @@
  *   POST { action:'notice-seen' }      signed in: mark a dashboard popup (approved, trip live, group link) as seen
  *   POST { action:'payout-add' }       admin: record a reward paid to a leader for a trip (amount, method, reference); the leader sees it on their trip card
  *   POST { action:'payout-delete' }    admin: remove a payout record
- *   POST { action:'trip-info-save' }   signed in (the trip's leader, or the owner): set the summary, details and included list shown on the public trip page
+ *   POST { action:'trip-info-save' }   signed in (the trip's leader, or the owner): set the summary, details, included and not-included lists shown on the public trip page
  *   POST { action:'checklist-tick' }   signed in: tick (or untick) a before-you-go item on my own trip request
  *   POST { action:'destination-save' } admin: save or approve entry information for a destination (general card, or one passport)
  *   POST { action:'destination-reset' } admin: put a destination back to its research draft
@@ -176,6 +176,7 @@ function publicTrip(t, interests, leader) {
     summary: t.summary,
     description: paragraphs(t.description),
     included: t.included || [],
+    notIncluded: t.notIncluded || [],
     image: t.image,
     imageAlt: t.imageAlt || t.title,
     priceText: t.priceText,
@@ -204,6 +205,8 @@ function cleanTrip(b, existing, all) {
     summary: str(b.summary, 300),
     description: String(b.description == null ? '' : b.description).trim().slice(0, 6000),
     included: lines(b.included, 14, 140),
+    /* an older admin screen that does not send the list keeps what is there */
+    notIncluded: b.notIncluded !== undefined ? lines(b.notIncluded, 10, 140) : ((existing && existing.notIncluded) || []),
     image: safeUrl(b.image),
     imageAlt: str(b.imageAlt, 140),
     priceText: str(b.priceText, 120),
@@ -433,7 +436,7 @@ module.exports = async function handler(req, res) {
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
-            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [],
+            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [],
             payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
@@ -661,7 +664,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, tripsRemoved: led.length, applicationRemoved: !!app });
     }
 
-    /* ===== signed in: the leader writes what their trip involves (summary, details, what is included); it shows on the public trip page at once ===== */
+    /* ===== signed in: the leader writes what their trip involves (summary, details, what is and is not included); it shows on the public trip page at once ===== */
     if (action === 'trip-info-save') {
       const user = getUser(req);
       if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
@@ -672,16 +675,17 @@ module.exports = async function handler(req, res) {
       const summary = str(body.summary, 300);
       const description = String(body.description == null ? '' : body.description).replace(/\r\n/g, '\n').trim().slice(0, 6000);
       const included = lines(body.included, 14, 140);
+      const notIncluded = body.notIncluded !== undefined ? lines(body.notIncluded, 10, 140) : (t.notIncluded || []);
       if ((t.status === 'open' || t.status === 'full') && summary.length < 10) return res.status(400).json({ error: 'Write a short summary of the trip, at least a sentence, because it shows under the trip title.' });
       const now = new Date().toISOString();
-      const patch = { summary, description, included, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
+      const patch = { summary, description, included, notIncluded, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
       /* the owner hears about leader edits, but at most once an hour per trip so a long editing session is one email */
       const notifyOwner = !isOwner && (!t.infoMailedAt || Date.now() - new Date(t.infoMailedAt).getTime() > 3600000);
       if (notifyOwner) patch.infoMailedAt = now;
       await db.updateInCollection(TRIPS, t.id, patch);
       await log('trip-info', (isOwner ? 'Sight Seers' : (t.organizerName || 'A leader')) + ' updated the trip details for ' + t.title, t.id);
       if (notifyOwner) await safe('trip info', adminMail('Leader updated trip details: ' + t.title, 'A leader updated their trip page', `<p><b>${trip.esc(t.organizerName || 'A leader')}</b> changed what travelers see on <b>${trip.esc(t.title)}</b>. It is live now${t.status === 'open' || t.status === 'full' ? '' : ' (the trip itself is not open yet)'}.</p>${trip.detailTable([['Summary', summary], ['Details', description.slice(0, 400) + (description.length > 400 ? '...' : '')], ['Included', included.join(', ')]])}${button(SITE + '/trip/' + t.slug, 'View the trip page')}<p>Edit or remove anything under Trips in the master admin.</p>`));
-      return res.status(200).json({ ok: true, url: '/trip/' + t.slug, summary, descriptionText: description, included });
+      return res.status(200).json({ ok: true, url: '/trip/' + t.slug, summary, descriptionText: description, included, notIncluded });
     }
 
     /* ===== signed in: tick a before-you-go checklist item on one of my own trip requests ===== */
@@ -911,7 +915,7 @@ module.exports = async function handler(req, res) {
           drafted = {
             id: uid(), createdAt: new Date().toISOString(), applicationId: app.id, slug, status: goLive ? 'open' : 'draft',
             title: (app.communityName + (app.destination ? ': ' + app.destination : '')).slice(0, 120), destination: app.destination || '', country: '', dateText: draftDates, startDate: '', endDate: '',
-            summary: draftSummary, description: '', included: [], image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
+            summary: draftSummary, description: '', included: [], notIncluded: [], image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
             organizerName: app.name, organizerCommunity: app.communityName, organizerBio: '', organizerEmail: app.email, organizerUserId: app.userId || null, showOrganizer: true,
             reward: '', rewardStatus: 'not_set', internalNote: 'Drafted from application ' + app.ref
           };
