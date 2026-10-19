@@ -29069,7 +29069,7 @@ function updateAccountUI(){
     if(guestView) guestView.style.display='none';
     if(dashboard) dashboard.style.display='block';
     document.getElementById('dashName').textContent=`Welcome, ${user.name.split(' ')[0]}`;
-    var acMe=document.getElementById('acMe');if(acMe)acMe.innerHTML=/^https:\/\//.test(user.avatarUrl||'')?'<img src="'+String(user.avatarUrl).replace(/"/g,'&quot;')+'" alt="">':'';
+    var acMe=document.getElementById('acMe');if(acMe)acMe.innerHTML=/^(https:\/\/|\/api\/auth\/avatar\/)/.test(user.avatarUrl||'')?'<img src="'+String(user.avatarUrl).replace(/"/g,'&quot;')+'" alt="">':'';
     document.getElementById('dashEmail').textContent=user.email+(user.phone?` · ${user.phone}`:'');
     document.getElementById('dashCartCount').textContent=String(cart.reduce((s,i)=>s+i.qty,0));
     document.getElementById('dashMemberSince').textContent=new Date(user.createdAt||Date.now()).getFullYear();
@@ -56864,7 +56864,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
   /* profile photo: cropped to a square and shrunk in the browser, then saved to the account */
   function photoPaint(u){
     var box=$('acPhotoImg'),del=$('acPhotoDel');if(!box)return;
-    var url=u&&/^https:\/\//.test(u.avatarUrl||'')?u.avatarUrl:'';
+    var url=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'';
     box.innerHTML=url?'<img src="'+url.replace(/"/g,'&quot;')+'" alt="Your profile photo">':esc1(((u&&u.name)||'?').trim().charAt(0).toUpperCase());
     if(del)del.hidden=!url;
   }
@@ -58354,7 +58354,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
     var inc=$('tpIncluded');inc.innerHTML=(t.included||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpInclWrap').hidden=!(t.included&&t.included.length);
     var org=$('tpOrg');
-    if(t.organizer){var oph=/^https:\/\//.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
+    if(t.organizer){var oph=/^(https:\/\/|\/api\/auth\/avatar\/)/.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
       org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
     var dis=$('tpDisclose');
     if(t.led){dis.innerHTML='<b>Organizer reward.</b> '+(t.organizer?esc(t.organizer.name):'The organizer of this trip')+' receives a reward from Sight Seers for travelers who book this trip. Sight Seers approved the trip, manages the bookings and runs the delivery.';dis.hidden=false;}else{dis.hidden=true;}
@@ -58717,7 +58717,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
           var digits=String(x.phone||'').replace(/[^0-9]/g,'');
           contact='<div class="ac-ocontact">'+(x.email?'<a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a>':'')+(x.phone?'<a href="tel:'+esc(x.phone.replace(/[^0-9+]/g,''))+'">'+esc(x.phone)+'</a>':'')+(digits.length>=7?'<a href="https://wa.me/'+digits+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>';
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
-        return '<li>'+(/^https:\/\//.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
+        return '<li>'+(/^(https:\/\/|\/api\/auth\/avatar\/)/.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
       '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+payList(t.payouts)+
       '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>'+

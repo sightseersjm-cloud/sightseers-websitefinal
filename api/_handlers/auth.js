@@ -32,6 +32,8 @@ module.exports = async function handler(req, res) {
     const gurl = new URL(req.url || '/', 'http://x');
     const gq = Object.assign(Object.fromEntries(gurl.searchParams), req.query || {});
     if (gq.providers) return res.status(200).json({ ok: true, providers: social.providers() });
+    const am = gurl.pathname.match(/\/auth\/avatar\/([^/]+)$/);
+    if (am) return require('../_lib/avatar').serve(decodeURIComponent(am[1]), res);
     const sm = gurl.pathname.match(/\/auth\/(google|microsoft)\/(start|callback)\/?$/);
     if (sm) {
       if (sm[2] === 'start') return social.start(sm[1], res);
