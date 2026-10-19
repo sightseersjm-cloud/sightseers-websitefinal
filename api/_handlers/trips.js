@@ -66,6 +66,8 @@ const AUDIENCE_SIZES = ['Fewer than 25', '25 to 100', '100 to 500', '500 to 2,00
 const CHANNELS = ['Instagram', 'TikTok', 'YouTube', 'WhatsApp or group chat', 'Email list', 'Events or in person', 'Other'];
 const EXPERIENCE = ['I have organized group trips', 'I have organized events, not trips', 'This would be my first'];
 const STYLES = ['Adventure and excursions', 'Villa and relaxation', 'Celebration or party', 'Wellness or fitness', 'Culture and food', 'Group retreat or learning'];
+/* a trip's theme, shown as a tag on the departures board and the trip page; a fixed list so the tags stay tidy */
+const THEMES = ['Yacht and party', 'Girls trip', 'Guys trip', 'Festival', 'Birthday', 'Family', 'Wellness', 'Adventure', 'Food and culture', 'Alumni and Greek life'];
 const PAYMENT_NOTE = 'We confirm availability and payment terms with you by email before anything is charged.';
 
 /* ---------- small helpers ---------- */
@@ -78,6 +80,14 @@ function int(v, min, max, dflt) {
   return Math.min(max, Math.max(min, n));
 }
 function oneOf(v, list, dflt) { return list.indexOf(v) > -1 ? v : dflt; }
+/* the day-by-day plan: up to 14 days, each a short title and a line or two about it */
+function cleanDays(v) {
+  let arr = v;
+  if (typeof arr === 'string') { try { arr = JSON.parse(arr); } catch (e) { arr = []; } }
+  if (!Array.isArray(arr)) return [];
+  return arr.map(d => ({ title: str(d && d.title, 80), text: String(d && d.text != null ? d.text : '').replace(/\r\n/g, '\n').trim().slice(0, 400) }))
+    .filter(d => d.title || d.text).slice(0, 14);
+}
 function manyOf(v, list, max) {
   const arr = Array.isArray(v) ? v : (v == null || v === '' ? [] : [v]);
   const out = [];
@@ -177,6 +187,8 @@ function publicTrip(t, interests, leader) {
     description: paragraphs(t.description),
     included: t.included || [],
     notIncluded: t.notIncluded || [],
+    itinerary: t.itinerary || [],
+    theme: t.theme || '',
     image: t.image,
     imageAlt: t.imageAlt || t.title,
     priceText: t.priceText,
@@ -207,6 +219,8 @@ function cleanTrip(b, existing, all) {
     included: lines(b.included, 14, 140),
     /* an older admin screen that does not send the list keeps what is there */
     notIncluded: b.notIncluded !== undefined ? lines(b.notIncluded, 10, 140) : ((existing && existing.notIncluded) || []),
+    itinerary: b.itinerary !== undefined ? cleanDays(b.itinerary) : ((existing && existing.itinerary) || []),
+    theme: b.theme !== undefined ? oneOf(b.theme, THEMES, '') : ((existing && existing.theme) || ''),
     image: safeUrl(b.image),
     imageAlt: str(b.imageAlt, 140),
     priceText: str(b.priceText, 120),
@@ -436,7 +450,7 @@ module.exports = async function handler(req, res) {
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
-            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [],
+            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [], itinerary: t.itinerary || [], theme: t.theme || '', themes: THEMES,
             payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
@@ -676,16 +690,18 @@ module.exports = async function handler(req, res) {
       const description = String(body.description == null ? '' : body.description).replace(/\r\n/g, '\n').trim().slice(0, 6000);
       const included = lines(body.included, 14, 140);
       const notIncluded = body.notIncluded !== undefined ? lines(body.notIncluded, 10, 140) : (t.notIncluded || []);
+      const itinerary = body.itinerary !== undefined ? cleanDays(body.itinerary) : (t.itinerary || []);
+      const theme = body.theme !== undefined ? oneOf(body.theme, THEMES, '') : (t.theme || '');
       if ((t.status === 'open' || t.status === 'full') && summary.length < 10) return res.status(400).json({ error: 'Write a short summary of the trip, at least a sentence, because it shows under the trip title.' });
       const now = new Date().toISOString();
-      const patch = { summary, description, included, notIncluded, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
+      const patch = { summary, description, included, notIncluded, itinerary, theme, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
       /* the owner hears about leader edits, but at most once an hour per trip so a long editing session is one email */
       const notifyOwner = !isOwner && (!t.infoMailedAt || Date.now() - new Date(t.infoMailedAt).getTime() > 3600000);
       if (notifyOwner) patch.infoMailedAt = now;
       await db.updateInCollection(TRIPS, t.id, patch);
       await log('trip-info', (isOwner ? 'Sight Seers' : (t.organizerName || 'A leader')) + ' updated the trip details for ' + t.title, t.id);
       if (notifyOwner) await safe('trip info', adminMail('Leader updated trip details: ' + t.title, 'A leader updated their trip page', `<p><b>${trip.esc(t.organizerName || 'A leader')}</b> changed what travelers see on <b>${trip.esc(t.title)}</b>. It is live now${t.status === 'open' || t.status === 'full' ? '' : ' (the trip itself is not open yet)'}.</p>${trip.detailTable([['Summary', summary], ['Details', description.slice(0, 400) + (description.length > 400 ? '...' : '')], ['Included', included.join(', ')]])}${button(SITE + '/trip/' + t.slug, 'View the trip page')}<p>Edit or remove anything under Trips in the master admin.</p>`));
-      return res.status(200).json({ ok: true, url: '/trip/' + t.slug, summary, descriptionText: description, included, notIncluded });
+      return res.status(200).json({ ok: true, url: '/trip/' + t.slug, summary, descriptionText: description, included, notIncluded, itinerary, theme });
     }
 
     /* ===== signed in: tick a before-you-go checklist item on one of my own trip requests ===== */
@@ -915,7 +931,7 @@ module.exports = async function handler(req, res) {
           drafted = {
             id: uid(), createdAt: new Date().toISOString(), applicationId: app.id, slug, status: goLive ? 'open' : 'draft',
             title: (app.communityName + (app.destination ? ': ' + app.destination : '')).slice(0, 120), destination: app.destination || '', country: '', dateText: draftDates, startDate: '', endDate: '',
-            summary: draftSummary, description: '', included: [], notIncluded: [], image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
+            summary: draftSummary, description: '', included: [], notIncluded: [], itinerary: [], theme: '', image: '', imageAlt: '', priceText: '', paymentNote: PAYMENT_NOTE, seatsTotal: 0,
             organizerName: app.name, organizerCommunity: app.communityName, organizerBio: '', organizerEmail: app.email, organizerUserId: app.userId || null, showOrganizer: true,
             reward: '', rewardStatus: 'not_set', internalNote: 'Drafted from application ' + app.ref
           };

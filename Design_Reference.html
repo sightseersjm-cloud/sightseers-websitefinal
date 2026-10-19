@@ -14062,6 +14062,7 @@ body.theme-night #p-flagship-programs{
       <div class="tp-main">
         <div class="tp-img" id="tpImg" hidden></div>
         <div class="tc-card tp-block tp-about" id="tpDescWrap" hidden><h2>About this trip</h2><div class="tp-desc" id="tpDesc"></div><small class="tp-by" id="tpBy"></small></div>
+        <div class="tc-card tp-block" id="tpDaysWrap" hidden><h2>Day by day</h2><ol class="tp-days" id="tpDays"></ol></div>
         <div class="tc-card tp-block tp-soon" id="tpSoon" hidden></div>
         <div class="tc-card tp-block" id="tpInclWrap" hidden><div class="tp-incl"><div id="tpIncCol"><h2>What is included</h2><ul class="tc-ticks" id="tpIncluded"></ul></div><div id="tpNotCol"><h2>Not included</h2><ul class="tp-notinc" id="tpNotIncluded"></ul></div></div></div>
         <div class="tc-card tp-block tp-org" id="tpOrg" hidden></div>
@@ -57146,6 +57147,7 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-main small{display:block;margin-top:4px;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.72)}
 .tcd-tag{padding:5px 10px;background:#70c257;color:#06223a;font:800 10.5px 'Raleway',sans-serif;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .tcd-end{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.tcd-theme{display:block;margin-bottom:4px;font:800 10.5px/1.3 'Raleway',sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:#ffc58f}
 .tcd-price{max-width:200px;font:800 12.5px/1.35 'Raleway',sans-serif;letter-spacing:.03em;color:#fff;text-align:right}
 @media(max-width:900px){.tcd-price{text-align:left;max-width:none}}
 .tcd-tag--wait{background:#ef8731;color:#fff}
@@ -57510,6 +57512,27 @@ body.theme-night .tc-status.ok{color:#9be8a8}body.theme-night .tc-status.err{col
 .tp-notinc{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .tp-notinc li{position:relative;padding-left:16px;font-size:14px;line-height:1.5;color:var(--tc-ink)}
 .tp-notinc li::before{content:'';position:absolute;left:0;top:.7em;width:8px;height:2px;background:#9aa9b6}
+/* day by day on the trip page: a numbered timeline the leader writes */
+.tp-days{list-style:none;margin:4px 0 0;padding:0;position:relative}
+.tp-days::before{content:'';position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:rgba(239,135,49,.35)}
+.tp-days li{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;padding:0 0 18px}
+.tp-days li:last-child{padding-bottom:0}
+.tp-days i{position:relative;z-index:1;width:32px;height:32px;display:grid;place-items:center;background:#ef8731;color:#fff;font:800 12px 'Raleway',sans-serif;font-style:normal}
+.tp-days b{display:block;margin:2px 0 3px;font:800 11px 'Raleway',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#ef8731}
+.tp-days strong{display:block;margin-bottom:3px;font-family:'Playfair Display',serif;font-size:17px;color:var(--tc-head)}
+.tp-days span{display:block;font-size:14.5px;line-height:1.6;color:var(--tc-mut);white-space:pre-line}
+/* the day rows editor (leader dashboard and master admin) */
+.tc-days{display:grid;gap:8px;margin-top:6px}
+.tc-day{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px;background:#f4f8fb;border-left:3px solid #ef8731}
+.tc-day-n{padding-top:10px;font:800 11px 'Raleway',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#ef8731}
+.tc-day-f{display:grid;gap:6px}
+.tc-day-f input,.tc-day-f textarea{width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid rgba(6,46,75,.16);background:#fff;font:14px/1.45 'Raleway',sans-serif;color:#062e4b;border-radius:0}
+.tc-day-f textarea{resize:vertical;min-height:52px}
+.tc-day-del{border:0;background:none;padding:10px 4px;font:700 12px 'Raleway',sans-serif;color:#8a5a2b;cursor:pointer;text-decoration:underline}
+.tc-day-add{justify-self:start;padding:9px 14px;border:1px dashed #ef8731;background:#fff;font:700 12.5px 'Raleway',sans-serif;color:#c4621b;cursor:pointer}
+.tc-day-add[hidden]{display:none}
+@media(max-width:600px){.tc-day{grid-template-columns:minmax(0,1fr) auto;gap:6px 10px}.tc-day-n{grid-column:1;grid-row:1;padding-top:0;align-self:center}.tc-day .tc-day-del{grid-column:2;grid-row:1;padding:0 2px;font-size:12px!important}.tc-day-f{grid-column:1/-1;grid-row:2}}
+body.theme-night .tc-day{background:#0a2740}
 @media(max-width:640px){.tp-incl--two .tp-incl{grid-template-columns:1fr;gap:14px}}
 .tp-org strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--tc-head)}
 .tp-ohead{display:flex;gap:16px;align-items:center}
@@ -57710,6 +57733,11 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-infoform label span{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none}
 #p-account .ac-infoform input[type=text],#p-account .ac-infoform textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;font:500 14px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
 #p-account .ac-infonote{margin:0;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-infoform .ac-infolab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ac-mut)}
+#p-account .ac-infoform .ac-infolab>span{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none}
+#p-account .ac-infoform .tc-day-f input[type=text],#p-account .ac-infoform .tc-day-f textarea{margin-top:0;background:#fff}
+#p-account .ac-infoform select{display:block;width:100%;max-width:340px;margin-top:6px;padding:10px 12px;font:500 14px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0}
+body.theme-night #p-account .ac-infoform .tc-day-f input[type=text],body.theme-night #p-account .ac-infoform .tc-day-f textarea{background:#0c2b46;color:#fff}
 #p-account .ac-ostats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
 #p-account .ac-ostat{padding:12px 14px;background:var(--ac-card);border:1px solid var(--ac-line)}
 #p-account .ac-ostat b{display:block;font-family:'Playfair Display',serif;font-size:26px;line-height:1.05;color:var(--ac-head)}
@@ -58148,6 +58176,35 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
   var fine=window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches;
   var SITE=location.origin;
+  /* a trip's theme (the server keeps the same list and refuses anything else) and the day-by-day editor,
+     shared by the leader's Trip details box and the trip form in the master admin */
+  var THEMES=['Yacht and party','Girls trip','Guys trip','Festival','Birthday','Family','Wellness','Adventure','Food and culture','Alumni and Greek life'];
+  function escA(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function themeSelect(cur,attr){
+    return '<select '+attr+'><option value="">No theme</option>'+THEMES.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+escA(x)+'</option>';}).join('')+'</select>';
+  }
+  function dayRow(d,i){
+    d=d||{};
+    return '<div class="tc-day" data-day><span class="tc-day-n">Day '+((i||0)+1)+'</span><div class="tc-day-f"><input type="text" maxlength="80" placeholder="Title, e.g. Catamaran day" aria-label="Day title" data-day-title value="'+escA(d.title)+'">'+
+      '<textarea rows="2" maxlength="400" placeholder="What happens that day" aria-label="What happens that day" data-day-text>'+escA(d.text)+'</textarea></div>'+
+      '<button type="button" class="tc-day-del" data-day-del aria-label="Remove this day">Remove</button></div>';
+  }
+  /* renumber Day 1, Day 2... after a day is added or removed */
+  function daysNumber(box){var rows=box.querySelectorAll('[data-day]');[].forEach.call(rows,function(r,i){r.querySelector('.tc-day-n').textContent='Day '+(i+1);});var add=box.querySelector('[data-day-add]');if(add)add.hidden=rows.length>=14;}
+  function daysHtml(days){
+    var list=(days&&days.length?days:[{}]).map(function(d,i){return dayRow(d,i);}).join('');
+    return '<div class="tc-days" data-days>'+list+'<button type="button" class="tc-day-add" data-day-add'+(days&&days.length>=14?' hidden':'')+'>Add a day</button></div>';
+  }
+  function daysRead(box){
+    return [].map.call(box.querySelectorAll('[data-day]'),function(r){return {title:r.querySelector('[data-day-title]').value.trim(),text:r.querySelector('[data-day-text]').value.trim()};}).filter(function(d){return d.title||d.text;});
+  }
+  document.addEventListener('click',function(e){
+    var add=e.target.closest&&e.target.closest('[data-day-add]');
+    if(add){var box=add.closest('[data-days]');if(box.querySelectorAll('[data-day]').length>=14)return;add.insertAdjacentHTML('beforebegin',dayRow());daysNumber(box);var rows=box.querySelectorAll('[data-day]');rows[rows.length-1].querySelector('input').focus();return;}
+    var del=e.target.closest&&e.target.closest('[data-day-del]');
+    if(del){var b2=del.closest('[data-days]');var rs=b2.querySelectorAll('[data-day]');if(rs.length>1)del.closest('[data-day]').remove();else{rs[0].querySelector('input').value='';rs[0].querySelector('textarea').value='';}daysNumber(b2);}
+  });
+  window.ssDays={html:daysHtml,read:daysRead,themeSelect:themeSelect,THEMES:THEMES};
   function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
   function first(n){return String(n||'').trim().split(/\s+/)[0]||'there';}
   function track(n,p){try{if(typeof ssTrack==='function')ssTrack(n,p||{});}catch(e){}}
@@ -58262,7 +58319,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var meta=[t.dateText,t.organizer?'Led by '+t.organizer.name:'',[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
     var href='/trip/'+encodeURIComponent(t.slug);
     return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
-      '<span class="tcd-main"><strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
+      '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
   }
   function depStats(list){
     var places=0,dests={};
@@ -58353,6 +58410,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       can.setAttribute('href',SITE+path);
     }catch(e){}
   }
+  /* the date of day i of a trip, only when the trip has a start date and the day falls within its dates */
+  function dayDate(t,i){
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.startDate||'');if(!m)return '';
+    var d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3]+i));
+    var e=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.endDate||'');if(e&&d.getTime()>Date.UTC(+e[1],+e[2]-1,+e[3]))return '';
+    try{return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'});}catch(x){return '';}
+  }
   function tpState(html){var s=$('tpState');s.innerHTML=html;s.hidden=false;$('tpLayout').hidden=true;}
   function renderTrip(){
     var slug=slugNow(),n=$('n-travel-club');if(n)n.classList.add('act');
@@ -58371,13 +58435,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpState').hidden=true;$('tpLayout').hidden=false;
     $('tpKicker').textContent=full?'Travel Club trip · Waitlist':'Travel Club trip';
     $('tpTitle').textContent=t.title;$('tpLede').textContent=t.summary||'';
-    var facts=[t.dateText,[t.destination,t.country].filter(Boolean).join(', '),t.priceText,t.seats&&!full?seatsText(t):''].filter(Boolean);
+    var facts=[t.theme,t.dateText,[t.destination,t.country].filter(Boolean).join(', '),t.priceText,t.seats&&!full?seatsText(t):''].filter(Boolean);
     $('tpFacts').innerHTML=facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join('');
     var img=$('tpImg');if(t.image){img.innerHTML='<img src="'+esc(t.image)+'" alt="'+esc(t.imageAlt||t.title)+'">';img.hidden=false;}else{img.innerHTML='';img.hidden=true;}
-    var hasDesc=!!(t.description&&t.description.length),hasInc=!!(t.included&&t.included.length),hasNot=!!(t.notIncluded&&t.notIncluded.length);
+    var hasDesc=!!(t.description&&t.description.length),hasInc=!!(t.included&&t.included.length),hasNot=!!(t.notIncluded&&t.notIncluded.length),hasDays=!!(t.itinerary&&t.itinerary.length);
+    $('tpDays').innerHTML=(t.itinerary||[]).map(function(d,i){var dt=dayDate(t,i);return '<li><i>'+(i+1)+'</i><div><b>Day '+(i+1)+(dt?' · '+esc(dt):'')+'</b>'+(d.title?'<strong>'+esc(d.title)+'</strong>':'')+(d.text?'<span>'+esc(d.text)+'</span>':'')+'</div></li>';}).join('');$('tpDaysWrap').hidden=!hasDays;
     $('tpDesc').innerHTML=(t.description||[]).map(function(p){return '<p>'+esc(p)+'</p>';}).join('');$('tpDescWrap').hidden=!hasDesc;
     $('tpBy').textContent=hasDesc&&t.organizer?'Written by '+t.organizer.name:'';
-    var soon=$('tpSoon');soon.hidden=hasDesc||hasInc||hasNot;
+    var soon=$('tpSoon');soon.hidden=hasDesc||hasInc||hasNot||hasDays;
     soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
     var inc=$('tpIncluded');inc.innerHTML=(t.included||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpIncCol').hidden=!hasInc;
     $('tpNotIncluded').innerHTML=(t.notIncluded||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpNotCol').hidden=!hasNot;
@@ -58739,6 +58804,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<label>What the trip involves <span>(where you go, what a day looks like, who it is for. Leave a blank line between paragraphs.)</span><textarea rows="8" maxlength="6000" data-info-desc>'+esc(t.descriptionText||'')+'</textarea></label>'+
       '<label>What is included <span>(one per line)</span><textarea rows="4" maxlength="2000" data-info-incl>'+esc((t.included||[]).join('\n'))+'</textarea></label>'+
       '<label>Not included <span>(one per line, for example flights, drinks, travel insurance)</span><textarea rows="3" maxlength="1500" data-info-notincl>'+esc((t.notIncluded||[]).join('\n'))+'</textarea></label>'+
+      '<div class="ac-infodays"><span class="ac-infolab">Day by day <span>(optional: a title and a line or two for each day; the dates are added from the trip dates)</span></span>'+daysHtml(t.itinerary)+'</div>'+
+      '<label>Theme <span>(optional, shown as a tag on the departures and your trip page)</span>'+themeSelect(t.theme||'','data-info-theme')+'</label>'+
       '<p class="ac-infonote">'+(live?'Travelers see this on your trip page the moment you save.':'Travelers see this once your trip page is open.')+' Dates, price, places and your reward stay with Sight Seers. Your photo and the intro about you come from your <a href="#" onclick="var t=document.getElementById(\'acTab-profile\');if(t)t.click();return false;">Profile</a>.</p>'+
       '<div class="ac-kitbtns"><button type="submit" class="ac-sbtn">Save trip details</button>'+(live?'<a class="ac-sbtn ac-sbtn--line" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'">View trip page</a>':'')+'<span class="ac-invmsg" role="status"></span></div></form></details>';
   }
@@ -59005,7 +59072,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         e.preventDefault();
         var im=inf.querySelector('.ac-invmsg'),ib=inf.querySelector('[type=submit]'),isum=inf.querySelector('[data-info-summary]');
         im.className='ac-invmsg';ib.disabled=true;im.textContent='Saving...';
-        api('trips','POST',{action:'trip-info-save',id:inf.getAttribute('data-info-id'),summary:isum.value,description:inf.querySelector('[data-info-desc]').value,included:inf.querySelector('[data-info-incl]').value,notIncluded:inf.querySelector('[data-info-notincl]').value}).then(function(r){
+        api('trips','POST',{action:'trip-info-save',id:inf.getAttribute('data-info-id'),summary:isum.value,description:inf.querySelector('[data-info-desc]').value,included:inf.querySelector('[data-info-incl]').value,notIncluded:inf.querySelector('[data-info-notincl]').value,itinerary:daysRead(inf.querySelector('[data-days]')),theme:inf.querySelector('[data-info-theme]').value}).then(function(r){
           ib.disabled=false;im.className='ac-invmsg ok';im.textContent='Saved. Travelers see it on your trip page.';grp.at=0;
           var s2=inf.closest('.ac-infobox').querySelector('summary small');if(s2)s2.textContent='shown on your trip page';
         }).catch(function(err){ib.disabled=false;im.className='ac-invmsg err';im.textContent=err.message||'We could not save that. Please try again.';});
@@ -59416,7 +59483,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
 
   /* ── trips ── */
-  var BLANK={id:'',title:'',slug:'',status:'draft',destination:'',country:'',dateText:'',startDate:'',endDate:'',summary:'',description:'',included:[],notIncluded:[],image:'',imageAlt:'',priceText:'',paymentNote:'',seatsTotal:0,organizerName:'',organizerCommunity:'',organizerEmail:'',organizerBio:'',showOrganizer:true,reward:'',rewardStatus:'not_set',internalNote:''};
+  var BLANK={id:'',title:'',slug:'',status:'draft',destination:'',country:'',dateText:'',startDate:'',endDate:'',summary:'',description:'',included:[],notIncluded:[],itinerary:[],theme:'',image:'',imageAlt:'',priceText:'',paymentNote:'',seatsTotal:0,organizerName:'',organizerCommunity:'',organizerEmail:'',organizerBio:'',showOrganizer:true,reward:'',rewardStatus:'not_set',internalNote:''};
   function tripForm(t){
     var k=t.id||'new',st=S.data.statuses;
     return '<div class="tcA-body"><div class="admin-package-grid">'+
@@ -59425,6 +59492,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       fld('Start date','tcAT_startDate_'+k,t.startDate,{type:'date'})+fld('End date','tcAT_endDate_'+k,t.endDate,{type:'date'})+fld('Price as shown','tcAT_priceText_'+k,t.priceText,{ph:'For example: Quoted on confirmation',help:'Only what you can stand behind. Leave empty to show no price.'})+
       fld('Short summary (shown on cards)','tcAT_summary_'+k,t.summary,{type:'textarea'})+fld('Full description (blank line between paragraphs)','tcAT_description_'+k,t.description,{type:'textarea'})+
       fld('What is included (one per line)','tcAT_included_'+k,(t.included||[]).join('\n'),{type:'textarea'})+fld('Not included (one per line)','tcAT_notIncluded_'+k,(t.notIncluded||[]).join('\n'),{type:'textarea',help:'For example flights, drinks, travel insurance. Shown beside What is included.'})+
+      '<div class="field-col full"><label>Day by day</label><div id="tcAT_days_'+k+'">'+window.ssDays.html(t.itinerary)+'</div><small>A title and a line or two for each day. The dates are added from the start date.</small></div>'+
+      '<div class="field-col"><label for="tcAT_theme_'+k+'">Theme</label>'+window.ssDays.themeSelect(t.theme||'','id="tcAT_theme_'+k+'"')+'</div>'+
       fld('Photo address','tcAT_image_'+k,t.image,{full:true,ph:'/assets/... or https://...',help:'A site photo such as /assets/flagship/shore-leave-beach-group.jpg, or a full https address.'})+fld('Photo description','tcAT_imageAlt_'+k,t.imageAlt)+
       fld('Seats in total','tcAT_seatsTotal_'+k,t.seatsTotal||0,{type:'number',min:0,help:'0 shows no seat count. Confirmed and booked travelers come off it automatically.'})+fld('Payment note','tcAT_paymentNote_'+k,t.paymentNote,{full:true,help:'Leave empty for the standard note: we confirm availability and payment terms before anything is charged.'})+
       fld('Organizer name','tcAT_organizerName_'+k,t.organizerName)+fld('Organizer community','tcAT_organizerCommunity_'+k,t.organizerCommunity)+fld('Organizer email (their account email)','tcAT_organizerEmail_'+k,t.organizerEmail,{type:'email',help:'They see this trip in their account when they sign in with that email.'})+
@@ -59444,7 +59513,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function readTrip(k){
     var g=function(n){var e=$('tcAT_'+n+'_'+k);return e?(e.type==='checkbox'?e.checked:e.value):'';};
-    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink')};
+    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('tcAT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink')};
   }
 
   /* ── requests ── */
