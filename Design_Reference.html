@@ -6852,7 +6852,6 @@ body{
   border-top:none !important;
 }
 
-@media (min-width:1025px) and (max-width:1280px){.nav-menu .nav-item>a{padding:8px 9px!important;letter-spacing:1px!important;font-size:10.5px!important}.nav-menu .btn-book{padding-left:16px!important;padding-right:16px!important}.nav-wrap{gap:12px!important}}
 .hroutes{background:#f7fafc;padding:34px 20px 38px;border-bottom:1px solid rgba(6,58,99,.06)}
 .hroutes-in{max-width:1280px;margin:0 auto}
 .hroutes-h{margin:0 0 18px;text-align:center;font-family:'Playfair Display',serif;font-size:clamp(22px,2.4vw,30px);color:#062e4b}
@@ -6868,7 +6867,6 @@ body{
 .testi-plan{text-align:left!important;padding:32px!important;border-top:3px solid #ef8731!important}
 .testi-plan h3{margin:6px 0 10px;font-family:'Playfair Display',serif;font-size:26px;color:#062e4b}
 .testi-plan p{margin:0 0 20px;font-size:15px;line-height:1.7;color:#5c6f82}
-.mob-nav a.mob-cta{display:block;margin:14px 0 6px;padding:14px 18px;text-align:center;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:0}
 </style>
 
 <style id="assistant-v12-overrides">
@@ -9442,28 +9440,38 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
       <li class="nav-item"><a href="#" onclick="nav('home')" id="n-home" class="act">Home</a></li>
 
       <li class="nav-item">
-        <a href="#" onclick="nav('travel-club');return false;" id="n-travel-club">Group Trips ▾</a>
-        <div class="dropdown">
-          <a href="#" onclick="nav('travel-club');return false;">Travel Club: join or lead a trip</a>
-          <a href="#" onclick="nav('custom-group');return false;">Friends &amp; family groups</a>
-          <a href="#" onclick="nav('greek-life');return false;">Greek Life Travel</a>
-          <a href="#" onclick="nav('school-tours');return false;">School Tours</a>
-        </div>
-      </li>
-      <li class="nav-item">
         <a href="#" onclick="nav('tours')" id="n-tours">Tours ▾</a>
         <div class="dropdown">
-          <a href="#" onclick="openToursFilter('all');return false;">All experiences</a>
-          <a href="#" onclick="openToursFilter('water');return false;">Water experiences</a>
-          <a href="#" onclick="openToursFilter('land');return false;">Land experiences</a>
-          <a href="#" onclick="nav('yacht-charters');return false;">Yacht Charters</a>
-          <a href="#" onclick="openToursFilter('package');return false;">5-day island packages</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a href="#" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;" id="n-stays">Stays ▾</a>
-        <div class="dropdown">
-              <a href="#" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;">All villas &amp; rentals</a>
+          <div class="dropdown-submenu">
+            <a href="#" class="submenu-toggle" onclick="nav('tours');return false;">Experiences <i class="fas fa-chevron-right"></i></a>
+            <div class="dropdown-nested">
+              <a href="#" onclick="openToursFilter('all');return false;">All Experiences</a>
+              <a href="#" onclick="openToursFilter('water');return false;">Water Experiences</a>
+              <a href="#" onclick="openToursFilter('land');return false;">Land Experiences</a>
+              <a href="#" onclick="openToursFilter('package');return false;">Start Planning</a>
+            </div>
+          </div>
+          <div class="dropdown-submenu">
+            <a href="#" class="submenu-toggle" onclick="nav('transfers');return false;">Transfers <i class="fas fa-chevron-right"></i></a>
+            <div class="dropdown-nested">
+              <a href="#" onclick="nav('transfers');return false;">All Transfers</a>
+              <a href="#" onclick="nav('transfers');return false;">Airport Pickup &amp; Drop-Off</a>
+              <a href="#" onclick="nav('transfers');return false;">Executive Transfers</a>
+              <a href="#" onclick="nav('transfers');return false;">Group Transfers</a>
+            </div>
+          </div>
+          <div class="dropdown-submenu">
+            <a href="#" class="submenu-toggle" onclick="nav('tours');return false;">Custom Packages <i class="fas fa-chevron-right"></i></a>
+            <div class="dropdown-nested">
+              <a href="#" onclick="nav('yacht-charters');return false;">Yacht Charters</a>
+              <a href="#" onclick="nav('school-tours');return false;">School Tours</a>
+              <a href="#" onclick="nav('greek-life');return false;">Greek Life Travel</a>
+              <a href="#" onclick="nav('greek-life');return false;">Custom Group Travel</a></div>
+          </div>
+<div class="dropdown-submenu">
+            <a href="#" class="submenu-toggle" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;">Villas &amp; Vacation Rentals <i class="fas fa-chevron-right"></i></a>
+            <div class="dropdown-nested">
+              <a href="#" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;">All Villas &amp; Vacation Rentals</a>
               <a href="#" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;">Jamaica</a>
               <a href="#" onclick="nav('stays');openStayCountryPage('Barbados','all');return false;">Barbados</a>
               <a href="#" onclick="nav('stays');openStayCountryPage('Saint Lucia','all');return false;">Saint Lucia</a>
@@ -9471,36 +9479,29 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
               <a href="#" onclick="nav('stays');openStayCountryPage('Belize','all');return false;">Belize</a>
               <a href="#" onclick="nav('stays');openStayCountryPage('Dominican Republic','all');return false;">Dominican Republic</a>
               <a href="#" onclick="openStayCountryPage('Curacao','all');return false;">Curacao</a>
-            
-        </div>
-      </li>
-      <li class="nav-item"><a href="#" onclick="nav('transfers');return false;" id="n-transfers">Transfers</a></li>
-      <li class="nav-item nav-feature"><a href="#" onclick="nav('flagship-programs');return false;" id="n-flagship-programs">Flagship Programs</a>
-        <div class="dropdown">
-          <a href="#" onclick="nav('flagship-programs');return false;">All programs</a>
-          <a href="#" onclick="nav('mba-voyages');return false;">Seven Shores MBA Voyages</a>
-          <a href="#" onclick="nav('shore-leave');return false;">Shore Leave</a>
-          <a href="#" onclick="nav('seven-shores-society');return false;">Seven Shores Society</a>
-          <a href="#" onclick="nav('seven-shores-offsite');return false;">Seven Shores Offsite</a>
+            </div>
+          </div>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
+          <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
         </div>
       </li>
+      <li class="nav-item nav-feature"><a href="#" onclick="nav('flagship-programs');return false;" id="n-flagship-programs">Flagship Programs</a></li>
+      <li class="nav-item"><a href="#" onclick="nav('travel-club');return false;" id="n-travel-club">Travel Club</a></li>
       <li class="nav-item">
-        <a href="#" onclick="nav('about')" id="n-about">More ▾</a>
+        <a href="#" onclick="nav('about')" id="n-about">About ▾</a>
         <div class="dropdown">
-          <a href="#" onclick="nav('about')">About us</a>
+          <a href="#" onclick="nav('about')">About</a>
           <a href="#" onclick="openGalleryPage();return false;">Gallery</a>
           <a href="#" onclick="nav('discoverjamaica')">Discover Jamaica</a>
           <a href="#" data-blog-link onclick="nav('blog')" id="n-blog">Blog</a>
           <a href="#" onclick="nav('partners')" id="n-partners">Partners</a>
-          <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
-          <a href="#" onclick="nav('passport');return false;">Jamaican Passport Renewal</a>
-          <a href="#" data-vtours-link onclick="nav('vtours')" id="n-vtours">360° V-Tours</a>
         </div>
       </li>
+      <li class="nav-item" data-vtours-link><a href="#" onclick="nav('vtours')" id="n-vtours">360° V-Tours</a></li>
       <li class="nav-item"><a href="#" onclick="nav('booking')" class="btn-book">Start Planning</a></li>
     </ul>
     <div class="nav-actions">
+      <a href="#" class="utility-link utility-pill" id="n-passport" onclick="nav('passport');return false;" title="Jamaican Passport Renewal"><span>Passport Renewal</span></a>
       <a href="#" class="utility-link" id="n-account" onclick="nav('account');return false;" title="Guest Account"><i class="far fa-user"></i></a>
       <a href="#" class="utility-link admin" id="n-admin" onclick="nav('admin');return false;" title="Admin Portal"></a>
       <div class="cart-icon" onclick="openCart()" title="View Cart">
@@ -9517,22 +9518,22 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   <span class="mob-close" onclick="closeMob()"><i class="fas fa-times"></i></span>
   <a href="#" onclick="nav('home');closeMob()">Home</a>
   <a href="#" class="mob-feature" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Group Trips <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <a href="#" onclick="nav('travel-club');closeMob();return false;">Travel Club</a>
+
+  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Tours & Excursions <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
   <div class="mob-group">
-    <a href="#" onclick="nav('travel-club');closeMob();return false;">Travel Club: join or lead a trip</a>
-    <a href="#" onclick="nav('custom-group');closeMob();return false;">Friends &amp; family groups</a>
-    <a href="#" onclick="nav('greek-life');closeMob();return false;">Greek Life Travel</a>
+    <a href="#" onclick="nav('tours');closeMob()">All Tours</a>
+    <a href="#" onclick="nav('tours');closeMob()">Custom Packages</a>
     <a href="#" onclick="nav('school-tours');closeMob();return false;">School Tours</a>
+    <a href="#" onclick="nav('greek-life');closeMob();return false;">Greek Life Travel</a>
+    <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
+    <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
+    <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
+    <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
+    <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
   </div>
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Tours <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
-  <div class="mob-group">
-    <a href="#" onclick="openToursFilter('all');closeMob();return false;">All experiences</a>
-    <a href="#" onclick="openToursFilter('water');closeMob();return false;">Water experiences</a>
-    <a href="#" onclick="openToursFilter('land');closeMob();return false;">Land experiences</a>
-    <a href="#" onclick="nav('yacht-charters');closeMob();return false;">Yacht Charters</a>
-    <a href="#" onclick="openToursFilter('package');closeMob();return false;">5-day island packages</a>
-  </div>
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Stays <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+
+  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Stays & Villas <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
   <div class="mob-group">
     <a href="#" onclick="openStayCountryPage('Jamaica','all');closeMob();return false;">Jamaica</a>
     <a href="#" onclick="openStayCountryPage('Barbados','all');closeMob();return false;">Barbados</a>
@@ -9542,20 +9543,19 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="openStayCountryPage('Dominican Republic','all');closeMob();return false;">Dominican Republic</a>
     <a href="#" onclick="openStayCountryPage('Curacao','all');closeMob();return false;">Curacao</a>
   </div>
-  <a href="#" onclick="nav('transfers');closeMob();return false;">Transfers</a>
+
+
   <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">More <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
   <div class="mob-group">
-    <a href="#" onclick="nav('about');closeMob()">About us</a>
+    <a href="#" onclick="nav('passport');closeMob()">Jamaican Passport Renewal</a>
+    <a href="#" onclick="nav('about');closeMob()">About Us</a>
     <a href="#" onclick="openGalleryPage(true);closeMob();return false;">Guest Gallery</a>
     <a href="#" onclick="nav('discoverjamaica');closeMob()">Discover Jamaica</a>
     <a href="#" data-blog-link onclick="nav('blog');closeMob()">Blog</a>
     <a href="#" onclick="nav('partners');closeMob()">Partners</a>
-    <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
-    <a href="#" onclick="nav('passport');closeMob()">Jamaican Passport Renewal</a>
     <a href="#" data-vtours-link onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
 
-  <a href="#" class="mob-cta" onclick="nav('booking');closeMob();return false;">Start Planning</a>
   <a href="#" onclick="nav('account');closeMob()">Guest Account</a>
   <a href="#" id="n-admin-mobile" class="admin-hidden-link" onclick="nav('admin');closeMob()">Admin Portal</a>
   <a href="#" onclick="nav('booking');closeMob()" style="color:var(--orange);margin-top:20px;font-size:1.1em">Start Planning →</a>
@@ -29508,7 +29508,7 @@ var SS_ROUTES = {
   'yacht-charters':'/yacht-charters',
   'stays':'/villas-and-stays',
   'staycountry':'/stays-by-country',
-  'greek-life':'/greek-life-travel', 'custom-group':'/group-travel',
+  'greek-life':'/greek-life-travel',
   'leaders-jamaica':'/leaders-in-jamaica',
   'mba-voyages':'/mba-caribbean-voyages',
   'flagship-programs':'/flagship-programs',
@@ -29550,7 +29550,6 @@ var SS_META = {
   'stays':['Caribbean Villas & Group Vacation Rentals | Sight Seers','Villas and vacation rentals with room for the whole group in Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao and the Dominican Republic.'],
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Greek Life Trips: Fraternity & Sorority Travel, Caribbean','Spring break, founders, probate and chapter trips to Jamaica and the Caribbean. Villas, transfers, yacht days and nightlife, planned for your whole crew.'],
-  'custom-group':['Friends & Family Group Trips, Caribbean | Sight Seers','Group trips for friends, families and celebrations of 5 or more: villas, airport transfers, excursions and yacht days in Jamaica and the Caribbean.'],
   'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
   'travel-club':['Travel Club: Lead a Caribbean Group Trip | Sight Seers','Apply to lead a Caribbean group trip with your own community. We manage the bookings and run the delivery.'],
   'trip':['Travel Club trip | Sight Seers Caribbean','An approved Sight Seers Travel Club trip. Ask to join and we confirm availability and payment terms before anything is charged.'],
@@ -29667,7 +29666,7 @@ function nav(id,opts={}){
   try{ ssSetMeta(id); }catch(e){}
   try{ ssBackSync(id); }catch(e){}
   document.querySelectorAll('.nav-item>a,.utility-link').forEach(a=>a.classList.remove('act'));
-  const activeId=(id==='giftcards'?'n-shop':((id==='flagship-programs' || id==='mba-voyages' || id==='leaders-jamaica' || id==='seven-shores-society' || id==='shore-leave' || id==='seven-shores-offsite')?'n-flagship-programs':((id==='stays' || id==='staycountry')?'n-stays':((id==='yacht-charters')?'n-tours':((id==='travel-club'||id==='trip'||id==='greek-life'||id==='school-tours'||id==='custom-group')?'n-travel-club':((id==='discoverjamaica'||id==='partners'||id==='gallery'||id==='blog'||id==='tent-rental'||id==='passport'||id==='vtours'||id==='landmark')?'n-about':'n-'+id))))));
+  const activeId=(id==='giftcards'?'n-shop':((id==='flagship-programs' || id==='mba-voyages' || id==='leaders-jamaica' || id==='seven-shores-society' || id==='shore-leave' || id==='seven-shores-offsite')?'n-flagship-programs':((id==='stays' || id==='staycountry' || id==='transfers')?'n-tours':((id==='discoverjamaica'||id==='partners')?'n-about':'n-'+id))));
   const na=document.getElementById(activeId);if(na)na.classList.add('act');
   /* A different page replaces the content instantly, so jump straight to its top. Animating from the old
      scroll position made the new page visibly slide past (the "glitch" when opening Tours from deep in Home). */
