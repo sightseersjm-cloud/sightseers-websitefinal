@@ -6853,6 +6853,21 @@ body{
 }
 
 @media (min-width:1025px) and (max-width:1280px){.nav-menu .nav-item>a{padding:8px 9px!important;letter-spacing:1px!important;font-size:10.5px!important}.nav-menu .btn-book{padding-left:16px!important;padding-right:16px!important}.nav-wrap{gap:12px!important}}
+.hroutes{background:#f7fafc;padding:34px 20px 38px;border-bottom:1px solid rgba(6,58,99,.06)}
+.hroutes-in{max-width:1280px;margin:0 auto}
+.hroutes-h{margin:0 0 18px;text-align:center;font-family:'Playfair Display',serif;font-size:clamp(22px,2.4vw,30px);color:#062e4b}
+.hroutes-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.hroute{position:relative;display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px;background:linear-gradient(160deg,#fff 0%,#f6fafd 100%);border:1px solid rgba(6,58,99,.1);border-top:3px solid #ef8731;color:#12293d;text-decoration:none;box-shadow:0 10px 24px rgba(6,58,99,.07);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.hroute:hover{transform:translateY(-4px);border-color:rgba(239,135,49,.55);box-shadow:0 18px 38px rgba(6,58,99,.14),0 0 0 1px rgba(239,135,49,.18)}
+.hroute b{font-family:'Playfair Display',serif;font-size:20px;color:#062e4b}
+.hroute span{flex:1;font-size:13.5px;line-height:1.55;color:#5c6f82}
+.hroute i{font-style:normal;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ef8731}
+@media(max-width:1100px){.hroutes-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.hroutes-grid{grid-template-columns:1fr}.hroute{padding:16px}}
+.testi-right.testi-next{display:block}
+.testi-plan{text-align:left!important;padding:32px!important;border-top:3px solid #ef8731!important}
+.testi-plan h3{margin:6px 0 10px;font-family:'Playfair Display',serif;font-size:26px;color:#062e4b}
+.testi-plan p{margin:0 0 20px;font-size:15px;line-height:1.7;color:#5c6f82}
 .mob-nav a.mob-cta{display:block;margin:14px 0 6px;padding:14px 18px;text-align:center;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:0}
 </style>
 
@@ -9582,7 +9597,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <div class="hero-content">
 <div class="hero-reveal hero-reveal--delay1"><span class="hero-small hero-small--down" id="heroSlide1Eyebrow">Curated Caribbean Living</span></div>
 <div class="hero-reveal hero-reveal--delay2"><h1 class="hero-title hero-title--down"><span id="heroSlide1Title">Travel With Us</span><em id="heroSlide1Em">An Adventure awaits</em></h1></div>
-<div class="hero-reveal hero-reveal--delay3"><p class="hero-sub hero-sub--down" id="heroSlide1Sub">Luxury water escapes, sun-soaked moments and seamless island planning designed around your pace, your people and the way you love to travel.</p></div>
+<div class="hero-reveal hero-reveal--delay3"><p class="hero-sub hero-sub--down" id="heroSlide1Sub">Group trips, tours, villas and transfers in seven Caribbean destinations, planned for groups of 5 or more by one local team.</p></div>
 <div class="hero-reveal hero-reveal--delay4"><div class="hero-btns">
 <a class="btn-primary" href="#" onclick="nav('tours');return false;">Explore Water Escapes</a>
 <a class="btn-secondary" href="#" onclick="openLinkedStartPlanning();">Start Planning</a>
@@ -9644,6 +9659,20 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <div class="trust-item"><span>Verified Local Operators</span></div>
   </div>
 </div>
+
+<!-- WHERE TO START: one route per kind of trip (content review: clear routes before details) -->
+<section class="hroutes" aria-labelledby="hroutesTitle">
+  <div class="hroutes-in">
+    <h2 class="hroutes-h" id="hroutesTitle">Where would you like to start?</h2>
+    <div class="hroutes-grid">
+      <a class="hroute" href="/travel-club" onclick="nav('travel-club');return false;"><b>Group Trips</b><span>Join an approved departure, lead one with your community, or plan a trip for friends, family, Greek life or a school.</span><i>Group trips &rarr;</i></a>
+      <a class="hroute" href="/tours" onclick="nav('tours');return false;"><b>Tours</b><span>Excursions, yacht charters and 5-day island packages, with prices shown per person.</span><i>See tours &rarr;</i></a>
+      <a class="hroute" href="/villas-and-stays" onclick="nav('stays');openStayCountryPage('Jamaica','all');return false;"><b>Stays</b><span>Villas and vacation rentals with room for the whole group in all seven destinations.</span><i>See stays &rarr;</i></a>
+      <a class="hroute" href="/airport-transfers" onclick="nav('transfers');return false;"><b>Transfers</b><span>Airport pickups from Montego Bay and Kingston, executive cars and 28 to 54 seat coaches.</span><i>See transfers &rarr;</i></a>
+      <a class="hroute" href="/flagship-programs" onclick="nav('flagship-programs');return false;"><b>Programs</b><span>Seven Shores MBA Voyages, Leaders in Jamaica, Shore Leave, Seven Shores Society and company offsites.</span><i>See programs &rarr;</i></a>
+    </div>
+  </div>
+</section>
 
 <!-- RHYTHM HUB -->
 <section class="jm3d-sec" id="jm3dSec">
@@ -10474,13 +10503,13 @@ body.theme-night .page .tag{
     <div class="special-card reveal">
       <div class="special-intro">
         <span id="specialKicker">What makes us special?</span>
-        <h3 id="specialTitle">Tailored itineraries, luxury stays and concierge-level island planning.</h3>
-        <p id="specialBody">We shape every escape around the traveler, from refined accommodation and VIP arrivals to curated adventure, social moments and smoother planning from start to finish.</p>
+        <h3 id="specialTitle">One local team for the whole trip.</h3>
+        <p id="specialBody">We plan the tours, villas, transfers and yacht days for groups of 5 to 60 across seven Caribbean destinations, and stay in touch on WhatsApp from arrival to departure.</p>
       </div>
       <div class="special-grid">
-        <div class="special-point"><div class="special-point-copy"><strong>Tailored itineraries</strong><p>Every trip can be curated around your pace, your people and the mix of adventure, culture, rest and celebration that fits you best.</p></div></div>
-        <div class="special-point"><div class="special-point-copy"><strong>Luxury stays</strong><p>We can shape elevated accommodation experiences with polished property options, smoother transfers and premium touches throughout the trip.</p></div></div>
-        <div class="special-point"><i class="fas fa-user-shield"></i><div class="special-point-copy"><strong>Concierge-style support</strong><p>From VIP airport lounges and private add-ons to curated travel flow, we help the journey feel organized, premium and personal.</p></div></div>
+        <div class="special-point"><div class="special-point-copy"><strong>Built around your group</strong><p>You choose the pace, the mix of excursions and the stay. Packages are priced per person for groups of 5 or more.</p></div></div>
+        <div class="special-point"><div class="special-point-copy"><strong>Stays with room for everyone</strong><p>Villas and vacation rentals in all seven destinations, with airport pickups arranged to match your flights.</p></div></div>
+        <div class="special-point"><i class="fas fa-user-shield"></i><div class="special-point-copy"><strong>Airport to departure</strong><p>VIP lounge access at Club Mobay and Club Kingston, private transfers, and one contact for the whole trip.</p></div></div>
         <div class="special-point"><div class="special-point-copy"><strong>MBA-ready development travel</strong><p>MBA graduates get a more elevated lane of travel with luxury stays, professional networking, purposeful dinners and curated experiences that feel far more fulfilling than a standard excursion.</p></div></div>
       </div>
     </div>
@@ -10510,11 +10539,8 @@ body.theme-night .page .tag{
           <div class="testi-dot" onclick="goTesti(3)"></div>
         </div>
       </div>
-      <div class="testi-right reveal" style="transition-delay:.15s">
-        <div class="testi-stat"><strong>75+</strong><span>Happy Travelers</span></div>
-        <div class="testi-stat"><strong>7</strong><span>Destinations</span></div>
-        <div class="testi-stat"><strong>30+</strong><span>Experience Styles</span></div>
-        <div class="testi-stat"><strong>5★</strong><span>Avg Rating</span></div>
+      <div class="testi-right testi-next reveal" style="transition-delay:.15s">
+        <div class="testi-stat testi-plan"><span class="sec-pre">Your next step</span><h3>Tell us about your group</h3><p>Share your dates, group size, destination and budget. We reply with options and a quote, and nothing is charged until you confirm.</p><a class="btn-primary" href="/booking" onclick="nav('booking');return false;">Start Planning</a></div>
       </div>
     </div>
   </div>
