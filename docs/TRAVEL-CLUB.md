@@ -189,3 +189,9 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 - **Departures board** line: "Group trips led by people from our community. Click View trip to join a trip."
 - **Sign-in page**: the left card is a white card with the same green-to-orange top line as the sign-in card, white step cards with an orange accent, an orange button, and both cards the same height.
 
+
+### Update: profile photos and the leader's intro
+- **Profile photo for every account.** Profile > Photo: choose a JPEG, PNG or WebP picture. The browser crops it to a square (480 px) before upload; the server checks the file's real type from its first bytes (no SVG) and refuses anything over 700 KB. It is stored in Vercel Blob under a random file name, so the address never contains the account id. Replacing or removing a photo deletes the old file. The admin passcode session cannot set one.
+- **Where photos show.** Next to your name at the top of the account page, on the leader's "Led by" card on the public trip page (the leader's initial when there is no photo), and beside each traveler in the list on the leader's dashboard (nothing when there is no photo).
+- **About you.** An optional intro on the Profile (up to 700 characters, plain text). A trip leader's intro shows on the public trip page in the "Led by" card, so guests can read who is leading before they join. It falls back to the intro written when the trip was set up, if any.
+- Data added: `bio` and `avatarUrl` on the user record.
