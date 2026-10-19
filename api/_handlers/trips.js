@@ -156,7 +156,12 @@ function travelersCounted(interests, tripId) {
     .reduce((n, i) => n + (i.partySize || 1), 0);
 }
 
-function publicTrip(t, interests) {
+/* the leader's own account (photo and intro), found by id or by the organizer email */
+function leaderOf(t, users) {
+  if (!users || !users.length) return null;
+  return users.find(u => t.organizerUserId && u.id === t.organizerUserId) || users.find(u => t.organizerEmail && lower(u.email, 120) === t.organizerEmail) || null;
+}
+function publicTrip(t, interests, leader) {
   const total = t.seatsTotal || 0;
   const taken = total ? travelersCounted(interests, t.id) : 0;
   return {
@@ -178,7 +183,7 @@ function publicTrip(t, interests) {
     status: t.status,
     seats: total ? { total, left: Math.max(0, total - taken) } : null,
     led: !!(t.organizerName || t.organizerEmail),
-    organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName, community: t.organizerCommunity || '', bio: t.organizerBio || '' } : null
+    organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName, community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
   };
 }
 
@@ -416,6 +421,8 @@ module.exports = async function handler(req, res) {
             inviteCount: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '', styles: a.styles || [], timing: a.timing || '', message: a.message || '', notes: a.notes || ''
           }));
         const allPayouts = await db.getCollection(payouts.PAYOUTS);
+        const usersForPhotos = await db.getCollection('users');
+        const photoOf = i => { const u = usersForPhotos.find(x => (i.userId && x.id === i.userId) || (i.email && lower(x.email, 120) === i.email)); return u && u.avatarUrl ? u.avatarUrl : ''; };
         const allUpdates = await db.getCollection('club-updates');
         const updatesOf = id => allUpdates.filter(u => u.tripId === id).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 20).map(updates.publicUpdate);
         const myTrips = trips.filter(t => ownsTrip(t, user)).map(t => {
@@ -429,7 +436,7 @@ module.exports = async function handler(req, res) {
             summary: t.summary || '', descriptionText: t.description || '', included: t.included || [],
             payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
-              .map(i => Object.assign({ firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
+              .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });
@@ -473,16 +480,16 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
-      const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
+      const [trips, interests, usersAll] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS), db.getCollection('users')]);
       const slug = get('slug');
       if (slug) {
         const t = trips.find(x => x.slug === String(slug));
         if (!t || (t.status !== 'open' && t.status !== 'full')) return res.status(404).json({ error: 'That trip is not open right now.' });
-        return res.status(200).json({ ok: true, trip: publicTrip(t, interests) });
+        return res.status(200).json({ ok: true, trip: publicTrip(t, interests, leaderOf(t, usersAll)) });
       }
       const open = trips.filter(t => t.status === 'open' || t.status === 'full')
         .sort((a, b) => String(a.startDate || '9999').localeCompare(String(b.startDate || '9999')))
-        .map(t => publicTrip(t, interests));
+        .map(t => publicTrip(t, interests, leaderOf(t, usersAll)));
       return res.status(200).json({ ok: true, trips: open });
     }
 

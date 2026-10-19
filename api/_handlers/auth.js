@@ -183,7 +183,7 @@ module.exports = async function handler(req, res) {
   if (action === 'update') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    const { name, phone, style, passportCountry, passportExpiry } = req.body;
+    const { name, phone, style, passportCountry, passportExpiry, bio } = req.body;
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === caller.id);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });
@@ -192,10 +192,37 @@ module.exports = async function handler(req, res) {
     if (phone !== undefined) users[idx].phone = String(phone).trim().slice(0, 30);
     if (style && typeof style === 'string') users[idx].style = style.slice(0, 50);
     /* optional, for the Travel Club's before-you-go checklist: only the passport's country and when it expires (a month), never a passport number */
+    /* a short intro in their own words, shown on trips they lead (plain text) */
+    if (bio !== undefined) users[idx].bio = String(bio || '').replace(/\r\n/g, '\n').trim().slice(0, 700);
     if (passportCountry !== undefined) users[idx].passportCountry = String(passportCountry || '').trim().slice(0, 60);
     if (passportExpiry !== undefined) users[idx].passportExpiry = /^\d{4}-(0[1-9]|1[0-2])$/.test(String(passportExpiry || '').trim()) ? String(passportExpiry).trim() : '';
     users[idx].updatedAt = new Date().toISOString();
 
+    await db.setCollection('users', users);
+    const { passwordHash, ...safe } = users[idx];
+    return res.status(200).json({ ok: true, user: safe });
+  }
+
+  /* a profile photo: anyone with an account; it shows on their dashboard, to the leader of a trip they join, and on trips they lead */
+  if (action === 'avatar' || action === 'avatar-remove') {
+    const caller = requireAuth(req, res);
+    if (!caller) return;
+    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to add a photo.' });
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.id === caller.id);
+    if (idx === -1) return res.status(404).json({ error: 'Account not found' });
+    const avatar = require('../_lib/avatar');
+    if (action === 'avatar-remove') {
+      await avatar.removeAvatar(users[idx].avatarUrl);
+      users[idx].avatarUrl = '';
+    } else {
+      let r;
+      try { r = await avatar.saveAvatar(caller.id, req.body.data, users[idx].avatarUrl); }
+      catch (e) { console.error('avatar upload', e && e.message); return res.status(502).json({ error: 'We could not save that photo just now. Please try again.' }); }
+      if (r.error) return res.status(400).json({ error: r.error });
+      users[idx].avatarUrl = r.url;
+    }
+    users[idx].updatedAt = new Date().toISOString();
     await db.setCollection('users', users);
     const { passwordHash, ...safe } = users[idx];
     return res.status(200).json({ ok: true, user: safe });

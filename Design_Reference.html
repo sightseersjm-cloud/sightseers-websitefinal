@@ -24460,6 +24460,7 @@ vtSessionAction=function(el,type){
         <div id="accountDashboard" class="ac-dash" style="display:none">
           <div class="ac-band"><div class="ac-band-in">
             <span class="ac-kicker">Sight Seers Travel Club</span>
+            <span class="ac-me" id="acMe" aria-hidden="true"></span>
             <h1 class="ac-h1" id="dashName">Welcome back</h1>
             <p class="ac-lede" id="dashEmail"></p>
             <div class="ac-bchips">
@@ -24624,11 +24625,18 @@ vtSessionAction=function(el,type){
               <div class="ac-profile">
                 <form class="ac-section ac-form" id="acProfileForm" novalidate>
                   <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Your details</span><h4>Profile</h4></div></div>
+                  <div class="ac-photo" id="acPhotoBox">
+                    <span class="ac-photo-img" id="acPhotoImg" aria-hidden="true"></span>
+                    <div class="ac-photo-txt"><b>Profile photo</b><small>Shown on your dashboard, to the leader of a trip you join, and on trips you lead. JPG, PNG or WebP.</small>
+                      <div class="ac-photo-act"><label class="ac-sbtn ac-photo-pick" for="acPhotoFile">Upload photo</label><input type="file" id="acPhotoFile" accept="image/jpeg,image/png,image/webp" hidden><button type="button" class="ac-linkbtn" id="acPhotoDel" hidden>Remove</button></div>
+                      <span class="ac-fstatus" id="acPhotoStatus" role="status" aria-live="polite"></span></div>
+                  </div>
                   <div class="ac-lfield"><label for="acPName">Full name</label><input type="text" id="acPName" autocomplete="name"></div>
                   <div class="ac-lfield"><label for="acPEmail">Email address</label><input type="email" id="acPEmail" autocomplete="email" readonly><small>Your email is how you sign in. To change it, contact us.</small></div>
                   <div class="ac-lfield"><label for="acPPhone">Phone number <span>(optional)</span></label><input type="tel" id="acPPhone" autocomplete="tel"></div>
                   <div class="ac-lfield"><label for="acPPass">Country on your passport <span>(optional)</span></label><select id="acPPass"><option value="">Choose a country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Jamaica</option><option value="__other">Another country</option></select><input type="text" id="acPPassOther" maxlength="60" placeholder="Which country?" hidden style="margin-top:8px"><small>Used to show the entry rules for your Travel Club trips. We only ask for the country, never a passport number.</small></div>
                   <div class="ac-lfield"><label for="acPPassExp">Passport expires <span>(optional)</span></label><input type="month" id="acPPassExp" placeholder="YYYY-MM"><small>Month and year only. We use it to tell you whether your passport covers a trip.</small></div>
+                  <div class="ac-lfield"><label for="acPBio">About you <span>(optional)</span></label><textarea id="acPBio" maxlength="700" rows="4" placeholder="A few lines in your own words: who you are, the community you lead, what you love about travel."></textarea><small>Shown on any Travel Club trip you lead, next to your photo.</small></div>
                   <div class="ac-lfield"><label id="acPStyleLabel">Travel style</label><div class="ac-lchips" id="acPStyle" role="radiogroup" aria-labelledby="acPStyleLabel"></div></div>
                   <button type="submit" class="ac-cta ac-cta--wide">Save changes</button>
                   <div class="ac-fstatus" id="acProfileStatus" role="status" aria-live="polite"></div>
@@ -29061,6 +29069,7 @@ function updateAccountUI(){
     if(guestView) guestView.style.display='none';
     if(dashboard) dashboard.style.display='block';
     document.getElementById('dashName').textContent=`Welcome, ${user.name.split(' ')[0]}`;
+    var acMe=document.getElementById('acMe');if(acMe)acMe.innerHTML=/^https:\/\//.test(user.avatarUrl||'')?'<img src="'+String(user.avatarUrl).replace(/"/g,'&quot;')+'" alt="">':'';
     document.getElementById('dashEmail').textContent=user.email+(user.phone?` · ${user.phone}`:'');
     document.getElementById('dashCartCount').textContent=String(cart.reduce((s,i)=>s+i.qty,0));
     document.getElementById('dashMemberSince').textContent=new Date(user.createdAt||Date.now()).getFullYear();
@@ -56389,6 +56398,19 @@ body.theme-night #p-account .ac-status.other{background:rgba(160,200,230,.16);co
 #p-account .ac-lfield label{display:block;margin:0 0 7px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac-mut)}
 #p-account .ac-lfield label span{font-weight:600;letter-spacing:.04em;text-transform:none}
 #p-account .ac-lfield input{width:100%;height:50px;padding:0 14px;font:500 16px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0;transition:border-color .2s,box-shadow .2s,background .2s}
+#p-account .ac-photo{display:flex;gap:18px;align-items:center;margin:0 0 20px;padding:16px;background:var(--ac-soft);border:1px solid var(--ac-line)}
+#p-account .ac-photo-img,#p-account .ac-me{flex:none;display:grid;place-items:center;width:84px;height:84px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font:800 30px 'Playfair Display',serif;box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(6,58,99,.12),0 10px 24px rgba(6,58,99,.16)}
+#p-account .ac-photo-img img,#p-account .ac-me img{width:100%;height:100%;object-fit:cover;display:block}
+#p-account .ac-photo-txt b{display:block;font-size:15px;color:var(--ac-head)}
+#p-account .ac-photo-txt small{display:block;margin-top:3px;font-size:12.5px;line-height:1.5;color:var(--ac-mut)}
+#p-account .ac-photo-act{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:10px}
+#p-account .ac-photo-pick{height:38px;cursor:pointer}
+#p-account .ac-linkbtn{padding:0;border:0;background:none;font:700 13px 'Raleway',sans-serif;color:#c0392b;text-decoration:underline;cursor:pointer}
+#p-account .ac-lfield textarea{width:100%;padding:12px 14px;font:500 15px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0;resize:vertical}
+#p-account .ac-lfield textarea:focus{border-color:var(--ac-o);background:var(--ac-card);box-shadow:0 0 0 4px rgba(239,135,49,.16)}
+#p-account .ac-me{width:64px;height:64px;font-size:24px;margin:0 auto 12px}
+#p-account .ac-me:empty{display:none}
+#p-account .ac-ophoto{flex:none;width:28px;height:28px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff,0 2px 6px rgba(6,58,99,.18)}
 #p-account .ac-lfield select{width:100%;height:50px;padding:0 12px;font:500 16px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0}
 #p-account .ac-lfield select:focus{border-color:var(--ac-o);box-shadow:0 0 0 4px rgba(239,135,49,.16)}
 #p-account .ac-lfield input:hover{border-color:rgba(239,135,49,.5)}
@@ -56825,7 +56847,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     if($('acPName'))$('acPName').value=u.name||'';
     if($('acPEmail'))$('acPEmail').value=u.email||'';
     if($('acPPhone'))$('acPPhone').value=u.phone||'';
-    passFill('acPPass','acPPassOther',u.passportCountry||'');if($('acPPassExp'))$('acPPassExp').value=u.passportExpiry||'';
+    passFill('acPPass','acPPassOther',u.passportCountry||'');if($('acPBio'))$('acPBio').value=u.bio||'';photoPaint(u);if($('acPPassExp'))$('acPPassExp').value=u.passportExpiry||'';
     pStyle=u.style||'Adventure';
     var box=$('acPStyle');
     if(box){buildChips(box,{value:pStyle},function(v){pStyle=v;});[].forEach.call(box.children,function(c){c.setAttribute('aria-checked',String(c.dataset.v===pStyle));});}
@@ -56839,6 +56861,40 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
   }
   function passVal(selId,otherId){var sel=$(selId);if(!sel)return '';if(sel.value==='__other')return (($(otherId)||{}).value||'').trim();return sel.value;}
   document.addEventListener('change',function(e){var t=e.target;if(t&&(t.id==='acPPass'||t.id==='tpPassport')){var o=$(t.id==='acPPass'?'acPPassOther':'tpPassportOther');if(o){o.hidden=t.value!=='__other';if(!o.hidden)o.focus();}}});
+  /* profile photo: cropped to a square and shrunk in the browser, then saved to the account */
+  function photoPaint(u){
+    var box=$('acPhotoImg'),del=$('acPhotoDel');if(!box)return;
+    var url=u&&/^https:\/\//.test(u.avatarUrl||'')?u.avatarUrl:'';
+    box.innerHTML=url?'<img src="'+url.replace(/"/g,'&quot;')+'" alt="Your profile photo">':esc1(((u&&u.name)||'?').trim().charAt(0).toUpperCase());
+    if(del)del.hidden=!url;
+  }
+  function esc1(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function photoSquare(file){
+    return new Promise(function(ok,no){
+      var fr=new FileReader();fr.onerror=function(){no(new Error('That picture could not be read.'));};
+      fr.onload=function(){var im=new Image();im.onerror=function(){no(new Error('That file is not a picture we can use.'));};im.onload=function(){
+        var side=Math.min(im.naturalWidth,im.naturalHeight),S=Math.min(480,side),c=document.createElement('canvas');c.width=c.height=S;
+        var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);x.drawImage(im,(im.naturalWidth-side)/2,(im.naturalHeight-side)/2,side,side,0,0,S,S);
+        ok(c.toDataURL('image/jpeg',0.86));};im.src=fr.result;};
+      fr.readAsDataURL(file);
+    });
+  }
+  function photoSaved(res){try{localStorage.setItem('ss_current_user',JSON.stringify(res.user));if(typeof setCurrentUser==='function')setCurrentUser(res.user);}catch(e){}photoPaint(res.user);if(typeof updateAccountUI==='function')updateAccountUI();try{document.dispatchEvent(new CustomEvent('ss-account-updated',{detail:{user:res.user}}));}catch(e){}}
+  var pfile=$('acPhotoFile');
+  if(pfile)pfile.addEventListener('change',function(){
+    var f=pfile.files&&pfile.files[0];pfile.value='';if(!f)return;
+    if(!/^image\/(jpeg|png|webp)$/.test(f.type)){fstat('acPhotoStatus','Choose a JPG, PNG or WebP picture.','err');return;}
+    if(f.size>15*1024*1024){fstat('acPhotoStatus','That picture is very large. Please choose one under 15MB.','err');return;}
+    if(!apiAccount()){fstat('acPhotoStatus','Sign in with your account to add a photo.','err');return;}
+    fstat('acPhotoStatus','Uploading...','');
+    photoSquare(f).then(function(data){return SS.api('auth','POST',{action:'avatar',data:data});}).then(function(res){photoSaved(res);fstat('acPhotoStatus','Your photo is saved.','ok');}).catch(function(err){fstat('acPhotoStatus',(err&&err.message)||'We could not save that photo. Please try again.','err');});
+  });
+  var pdel=$('acPhotoDel');
+  if(pdel)pdel.addEventListener('click',function(){
+    if(!confirm('Remove your profile photo?'))return;
+    fstat('acPhotoStatus','Removing...','');
+    SS.api('auth','POST',{action:'avatar-remove'}).then(function(res){photoSaved(res);fstat('acPhotoStatus','Photo removed.','ok');}).catch(function(err){fstat('acPhotoStatus',(err&&err.message)||'We could not remove it.','err');});
+  });
   function fstat(id,msg,type){var e=$(id);if(!e)return;e.textContent=msg;e.className='ac-fstatus'+(type?' '+type:'');}
   var pf=$('acProfileForm');
   if(pf)pf.addEventListener('submit',function(e){
@@ -56850,7 +56906,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     fstat('acProfileStatus','Saving...','');
     var done=function(){if(typeof updateAccountUI==='function')updateAccountUI();fstat('acProfileStatus','Your details are saved.','ok');};
     if(apiAccount()){
-      SS.updateProfile({name:name,phone:phone,style:pStyle,passportCountry:pcountry,passportExpiry:pexp}).then(function(r){done();var g=window.ssClub;if(g&&g.fillGroups)try{g.fillGroups(true);}catch(x){}}).catch(function(err){fstat('acProfileStatus',(err&&err.message)||'We could not save that. Please try again.','err');});
+      SS.updateProfile({name:name,phone:phone,style:pStyle,passportCountry:pcountry,passportExpiry:pexp,bio:(($('acPBio')||{}).value||'').trim()}).then(function(r){done();var g=window.ssClub;if(g&&g.fillGroups)try{g.fillGroups(true);}catch(x){}}).catch(function(err){fstat('acProfileStatus',(err&&err.message)||'We could not save that. Please try again.','err');});
     }else{
       try{
         var u=getCurrentUser(),users=getUsers(),i=users.findIndex(function(x){return x.email===u.email;});
@@ -57443,6 +57499,10 @@ body.theme-night .tc-status.ok{color:#9be8a8}body.theme-night .tc-status.err{col
 .tp-block h2{margin:0 0 12px;font-family:'Playfair Display',serif;font-size:22px;color:var(--tc-head)!important}
 .tp-block .tc-ticks li{font-size:14px}
 .tp-org strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--tc-head)}
+.tp-ohead{display:flex;gap:16px;align-items:center}
+.tp-ophoto{flex:none;width:76px;height:76px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(6,46,75,.12),0 10px 24px rgba(6,46,75,.16)}
+.tp-oinit{display:grid;place-items:center;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff;font:800 28px 'Playfair Display',serif}
+.tp-obio{white-space:pre-wrap}
 .tp-org .tc-eyebrow{margin-bottom:6px}
 .tp-org p{margin:8px 0 0;font-size:14px;line-height:1.65;color:var(--tc-mut)}
 .tc-air{margin-top:18px;padding:14px 18px;font-size:13.5px;line-height:1.65;color:var(--tc-mut);background:var(--tc-card);border:1px solid var(--tc-line);border-left:4px solid var(--tc-g)}
@@ -57628,7 +57688,7 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-ostat span{display:block;margin-top:3px;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ac-mut)}
 #p-account .ac-otrav{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
 #p-account .ac-otrav li{display:flex;align-items:center;gap:10px;padding:9px 12px;font-size:13.5px;background:var(--ac-card);border:1px solid var(--ac-line)}
-#p-account .ac-otrav li span:first-child{flex:1;min-width:0;font-weight:700;color:var(--ac-head)}
+#p-account .ac-otrav li>span:first-of-type{flex:1;min-width:0;font-weight:700;color:var(--ac-head)}
 #p-account .ac-otrav li small{color:var(--ac-mut)}
 #p-account .ac-oreward{margin:14px 0 0;padding:12px 14px;font-size:13.5px;line-height:1.6;color:var(--ac-mut);background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
 #p-account .ac-oreward b{color:var(--ac-head)}
@@ -58293,7 +58353,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
     var inc=$('tpIncluded');inc.innerHTML=(t.included||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpInclWrap').hidden=!(t.included&&t.included.length);
     var org=$('tpOrg');
-    if(t.organizer){org.innerHTML='<span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+(t.organizer.bio?'<p>'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
+    if(t.organizer){var oph=/^https:\/\//.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
+      org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
     var dis=$('tpDisclose');
     if(t.led){dis.innerHTML='<b>Organizer reward.</b> '+(t.organizer?esc(t.organizer.name):'The organizer of this trip')+' receives a reward from Sight Seers for travelers who book this trip. Sight Seers approved the trip, manages the bookings and runs the delivery.';dis.hidden=false;}else{dis.hidden=true;}
     $('tpFormTitle').textContent=full?'Join the waitlist':'Ask to join this trip';
@@ -58618,7 +58679,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<label>Summary <span>(one or two sentences, shown under the trip title)</span><input type="text" maxlength="300" data-info-summary value="'+esc(t.summary||'')+'"></label>'+
       '<label>What the trip involves <span>(where you go, what a day looks like, who it is for. Leave a blank line between paragraphs.)</span><textarea rows="8" maxlength="6000" data-info-desc>'+esc(t.descriptionText||'')+'</textarea></label>'+
       '<label>What is included <span>(one per line)</span><textarea rows="4" maxlength="2000" data-info-incl>'+esc((t.included||[]).join('\n'))+'</textarea></label>'+
-      '<p class="ac-infonote">'+(live?'Travelers see this on your trip page the moment you save.':'Travelers see this once your trip page is open.')+' Dates, price, places and your reward stay with Sight Seers.</p>'+
+      '<p class="ac-infonote">'+(live?'Travelers see this on your trip page the moment you save.':'Travelers see this once your trip page is open.')+' Dates, price, places and your reward stay with Sight Seers. Your photo and the intro about you come from your <a href="#" onclick="var t=document.getElementById(\'acTab-profile\');if(t)t.click();return false;">Profile</a>.</p>'+
       '<div class="ac-kitbtns"><button type="submit" class="ac-sbtn">Save trip details</button>'+(live?'<a class="ac-sbtn ac-sbtn--line" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'">View trip page</a>':'')+'<span class="ac-invmsg" role="status"></span></div></form></details>';
   }
   function updBox(t,idx){
@@ -58655,7 +58716,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
           var digits=String(x.phone||'').replace(/[^0-9]/g,'');
           contact='<div class="ac-ocontact">'+(x.email?'<a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a>':'')+(x.phone?'<a href="tel:'+esc(x.phone.replace(/[^0-9+]/g,''))+'">'+esc(x.phone)+'</a>':'')+(digits.length>=7?'<a href="https://wa.me/'+digits+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>';
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
-        return '<li><span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
+        return '<li>'+(/^https:\/\//.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
       '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+payList(t.payouts)+
       '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>'+
