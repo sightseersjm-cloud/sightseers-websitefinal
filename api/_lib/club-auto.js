@@ -5,6 +5,7 @@
  *  - waitlist promotion: when a place opens, the people who have waited longest move up and are emailed
  *  - countdown reminders: confirmed and booked travelers, once per milestone (14 days and 3 days before departure)
  *  - the leader digest: every Monday, how each live trip is doing
+ *  - new trip emails: the 'Be first to hear about new trips' list hears about each trip once it opens (sent from club-announce.js)
  *
  * The owner turns each one on or off (club-settings, id 'automation'). Reminders and the digest start OFF, so nothing
  * goes out to real people until the owner has looked at the preview and switched them on. Every send is marked first,
@@ -22,7 +23,7 @@ const INTERESTS = 'club-interests';
 const SETTINGS = 'club-settings';
 const ACTIVITY = 'club-activity';
 const SITE = (process.env.SITE_URL || 'https://www.sightseerscaribbean.com').replace(/\/+$/, '');
-const DEFAULTS = { waitlist: true, reminders: false, digest: false };
+const DEFAULTS = { waitlist: true, reminders: false, digest: false, newTrips: true };   /* newTrips: people asked for these, so they start on */
 const MILESTONES = [3, 14];          /* days before departure, nearest first */
 const DAY = 86400000;
 
@@ -46,13 +47,14 @@ async function getSettings() {
     waitlist: doc.waitlist === undefined ? DEFAULTS.waitlist : !!doc.waitlist,
     reminders: doc.reminders === undefined ? DEFAULTS.reminders : !!doc.reminders,
     digest: doc.digest === undefined ? DEFAULTS.digest : !!doc.digest,
+    newTrips: doc.newTrips === undefined ? DEFAULTS.newTrips : !!doc.newTrips,
     lastRun: doc.lastRun || null, updatedBy: doc.updatedBy || ''
   };
 }
 async function saveSettings(patch, by) {
   const docs = await db.getCollection(SETTINGS), cur = docs.find(x => x.id === 'automation');
   const next = {};
-  ['waitlist', 'reminders', 'digest'].forEach(k => { if (patch && patch[k] !== undefined) next[k] = !!patch[k]; });
+  ['waitlist', 'reminders', 'digest', 'newTrips'].forEach(k => { if (patch && patch[k] !== undefined) next[k] = !!patch[k]; });
   if (by) next.updatedBy = by;
   if (cur) await db.updateInCollection(SETTINGS, 'automation', next);
   else await db.addToCollection(SETTINGS, Object.assign({ id: 'automation', createdAt: new Date().toISOString() }, next));

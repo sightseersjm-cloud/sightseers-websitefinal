@@ -212,3 +212,12 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 ### Update: wording
 - The sign-up under the departures is now "Be first to hear about new trips" ("Leave your email and we will tell you the moment a new departure opens"), with the button "Tell me first". It works as before: it emails when a departure opens.
 - The profile photo button says "Change photo" once a photo is saved, and "Upload photo" before that or after it is removed.
+
+### Update: "Be first to hear about new trips" now emails people
+- Before this, people who left their email under the departures were saved to a list but **nothing emailed them** when a trip opened. Now they get one email per trip.
+- **When**: the moment a trip goes to open (the trip form, the status buttons, or publishing a trip drafted from an application), unless "do not send emails" was chosen for that change. A trip that closes and reopens is not announced again.
+- **Who**: everyone on the list (sign-ups under the departures, kept as requests with no trip), one email per address, skipping anyone who stopped these emails and anyone who already asked to join that trip. Each person gets their own email, so nobody sees another address.
+- **What it says**: the trip title, summary, dates, place, price, theme, leader and number of places (only what is filled in), a "See the trip and ask to join" button, "Asking to join is free... before anything is charged", and a "Stop these emails" link (also sent as a List-Unsubscribe header).
+- **Stop these emails**: a signed one-click link (`/api/trips?unsub=...&k=...`); it marks every list sign-up with that address as cancelled and shows a short confirmation page. A wrong or edited link does nothing.
+- **Owner controls**: master admin > Automatic emails > "New trips: email the 'Be first to hear' list" (on by default, since people asked for these; shows how many are on the list). Each trip in the Trips tab says whether its email went out and to how many; an open trip that was never announced (for example one opened before this change) has an "Email them about this trip" button. It goes out once per trip.
+- Sent through Resend's batch endpoint, 100 per call. Data added: `announcedAt`, `announcedCount` (and `announcedFailed` if any were refused) on a trip; `unsubscribedAt` on a list sign-up.

@@ -59429,13 +59429,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   /* ── automatic emails: the three switches, a preview of what would go out, and the last run ── */
   function autoTab(){
-    var a=S.data.automation||{waitlist:true,reminders:false,digest:false},p=S.autoPreview,t=S.data.trips||[];
+    var a=S.data.automation||{waitlist:true,reminders:false,digest:false,newTrips:true},p=S.autoPreview,t=S.data.trips||[],nl=S.data.alertList||0;
     function sw(id,label,help,on){return '<label class="tcA-sw"><input type="checkbox" id="'+id+'"'+(on?' checked':'')+'><span><b>'+esc(label)+'</b><small>'+esc(help)+'</small></span></label>';}
     var undated=t.filter(function(x){return (x.status==='open'||x.status==='full'||x.status==='closed')&&!/^\d{4}-\d{2}-\d{2}$/.test(x.startDate||'');});
     var out='<p class="tcA-note">These emails go out by themselves, so nobody has to remember. The daily job runs at 8am Jamaica time. <b>Reminders and the leader digest start switched off</b>: use the preview to see exactly who would get what, then switch them on.</p>'+
       '<div class="tcA-body">'+
       sw('tcAU_w','Waitlist: tell people when a place opens','When a seat frees up (a cancellation, a deleted request, more seats, a trip reopened), the person who has waited longest moves up and is emailed. Our team still confirms and agrees payment with them.',a.waitlist)+
       sw('tcAU_r','Countdown reminders to travelers','Confirmed and booked travelers get one email at 14 days and one at 3 days before departure, with the trip details and the group chat link. Needs a start date on the trip.',a.reminders)+
+      sw('tcAU_n','New trips: email the "Be first to hear" list','When a trip opens, everyone who left their email under the departures gets one email about it with a button to see the trip and ask to join, and a link to stop these emails. '+nl+' '+(nl===1?'person is':'people are')+' on the list now. For a trip that was already open, use the button on the trip under Trips.',a.newTrips!==false)+
       sw('tcAU_d','Monday digest to each leader','Every Monday each leader of a live trip gets: new people this week, total joined, progress to their invite goal, places left and days to departure, with a nudge to use their invite kit.',a.digest)+
       '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcaautosave>Save switches</button><button type="button" class="admin-inline-btn alt" data-tcaautoprev>Preview what would send today</button><button type="button" class="admin-inline-btn alt" data-tcaautorun>Run today\'s emails now</button></div></div>';
     if(undated.length)out+='<p class="tcA-note warn"><b>No start date, so no countdown reminders:</b> '+undated.map(function(x){return esc(x.title);}).join('; ')+'. Add the start date under Trips.</p>';
@@ -59501,8 +59502,15 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       fld('Show the organizer on the trip page','tcAT_showOrganizer_'+k,t.showOrganizer,{type:'check'})+fld('Organizer bio (public)','tcAT_organizerBio_'+k,t.organizerBio,{type:'textarea'})+
       fld('Agreed reward (private: only you and the organizer see it)','tcAT_reward_'+k,t.reward,{type:'textarea',help:'Whatever you agreed in writing. Nothing is invented or shown publicly.'})+fld('Reward status','tcAT_rewardStatus_'+k,t.rewardStatus,{type:'select',options:st.reward})+
       fld('WhatsApp group or channel link (the leader can also add this)','tcAT_groupLink_'+k,t.groupLink||'',{full:true,type:'url',ph:'https://chat.whatsapp.com/...',help:'Shown to everyone who joined. Changing it here does not send emails; the leader adding it from their dashboard does.'})+fld('Internal note (private)','tcAT_internalNote_'+k,t.internalNote,{type:'textarea'})+
-      '</div><div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcatrip="'+k+'">Save trip</button>'+
+      '</div>'+(t.id?announceLine(t):'')+'<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcatrip="'+k+'">Save trip</button>'+
       (t.id?'<a class="admin-inline-btn alt" href="/trip/'+esc(t.slug)+'" target="_blank" rel="noopener" style="text-decoration:none">Open page</a><button type="button" class="admin-inline-btn alt" data-tcacopy="'+esc(location.origin+'/trip/'+t.slug)+'">Copy link</button><button type="button" class="admin-inline-btn alt" data-tcadel="'+t.id+'">Delete</button>':'')+'</div></div>';
+  }
+  /* the 'Be first to hear about new trips' email for this trip: sent, ready to send, or what will happen when it opens */
+  function announceLine(t){
+    var n=S.data.alertList||0,on=!S.data.automation||S.data.automation.newTrips!==false;
+    if(t.announcedAt)return '<p class="tcA-note">New trip email: sent to '+(t.announcedCount||0)+' '+(t.announcedCount===1?'person':'people')+' on the list, '+esc(ago(t.announcedAt))+'.</p>';
+    if(t.status==='open')return '<p class="tcA-note">New trip email: not sent for this trip yet. '+n+' '+(n===1?'person is':'people are')+' on the "Be first to hear about new trips" list.'+(n?' <button type="button" class="admin-inline-btn alt" data-tcaannounce="'+esc(t.id)+'">Email them about this trip</button>':'')+'</p>';
+    return '<p class="tcA-note">New trip email: '+(on?'when this trip opens, the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list get one email about it.':'switched off under Automatic emails, so nobody on the list is emailed when this trip opens.')+'</p>';
   }
   function trips(){
     var d=S.data,list=d.trips.slice().sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
@@ -59692,10 +59700,18 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       call('trip-update-delete',{id:upd.getAttribute('data-tcaupddel')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Update deleted.','ok');},400);}).catch(function(err){say(err.message,'err');});
       return;
     }
+    var ann=e.target.closest('[data-tcaannounce]');
+    if(ann){
+      var n=S.data.alertList||0;
+      if(!confirm('Email the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list about this trip?\n\nEach person gets their own email with a button to see the trip. It goes out once.'))return;
+      ann.disabled=true;say('Sending...','');
+      call('trip-announce',{id:ann.getAttribute('data-tcaannounce')}).then(function(res){var r=res.result||{};S.data=null;load(true);setTimeout(function(){say('Sent to '+(r.sent||0)+' of '+(r.count||0)+' people on the list.'+(r.failed?' '+r.failed+' could not be sent; check the email settings.':''),r.failed?'err':'ok');},400);}).catch(function(err){ann.disabled=false;say(err.message,'err');});
+      return;
+    }
     var asv=e.target.closest('[data-tcaautosave]');
     if(asv){
       asv.disabled=true;say('Saving...','');
-      call('automation-save',{waitlist:$('tcAU_w').checked,reminders:$('tcAU_r').checked,digest:$('tcAU_d').checked}).then(function(res){S.data.automation=res.automation;S.autoPreview=null;render();say('Saved. '+(res.automation.reminders||res.automation.digest?'The daily job will send what is switched on.':'Only the waitlist email will go out by itself.'),'ok');}).catch(function(err){asv.disabled=false;say(err.message,'err');});
+      call('automation-save',{waitlist:$('tcAU_w').checked,reminders:$('tcAU_r').checked,digest:$('tcAU_d').checked,newTrips:$('tcAU_n').checked}).then(function(res){S.data.automation=res.automation;S.autoPreview=null;render();say('Saved. '+(res.automation.reminders||res.automation.digest?'The daily job will send what is switched on.':'Only the waitlist email will go out by itself.'),'ok');}).catch(function(err){asv.disabled=false;say(err.message,'err');});
       return;
     }
     var apv=e.target.closest('[data-tcaautoprev]');

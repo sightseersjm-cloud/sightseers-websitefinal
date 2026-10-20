@@ -30,6 +30,8 @@
  *   POST { action:'trip-update-delete' } signed in: take an update down (its author, or the owner)
  *   POST { action:'advisory-post' }    admin: preview ({dryRun:true}) or send an advisory to every upcoming trip set to a country
  *   POST { action:'automation-save' }  admin: switch the automatic emails (waitlist promotion, reminders, leader digest) on or off
+ *   POST { action:'trip-announce' }    admin: email the 'Be first to hear about new trips' list about an open trip (once per trip)
+ *   GET  ?unsub=<id>&k=<signature>     the one-click link in that email: takes the address off the list
  *   POST { action:'automation-run' }   admin: preview what would send today ({dryRun:true}), or run the daily job now
  *
  * Nothing here invents a price, a seat count, a reward or a departure: a trip only exists when an admin enters it,
@@ -153,6 +155,10 @@ function joinedPeople(list) {
   return list.filter(i => i.status !== 'cancelled' && i.status !== 'waitlist').reduce((n, i) => n + (i.partySize || 1), 0);
 }
 /* a place may have opened: let the automatic waitlist step run (it checks the owner's switch itself, and never breaks the request) */
+/* a trip just opened: the 'Be first to hear about new trips' list gets one email about it (if the owner has that switched on) */
+async function announceSafe(tripId) {
+  try { return await require('../_lib/club-announce').announceTrip(tripId); } catch (e) { console.error('club announce', e && e.message); return null; }
+}
 async function promoteSafe(tripId) {
   if (!tripId) return [];
   try { return await auto.promoteWaitlist(tripId); } catch (e) { console.error('club waitlist', e && e.message); return []; }
@@ -405,6 +411,13 @@ module.exports = async function handler(req, res) {
       const url = new URL(req.url || '/', 'http://x');
       const get = k => (q[k] != null ? q[k] : url.searchParams.get(k));
 
+      if (get('unsub')) {
+        const r = await require('../_lib/club-announce').unsubscribe(String(get('unsub')).slice(0, 80), String(get('k') || '').slice(0, 64));
+        const msg = r.ok ? 'You will not get any more new trip emails from Sight Seers. You can sign up again on the Travel Club page at any time.' : 'That link did not work. Reply to any of our emails and we will take you off the list.';
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.status(r.ok ? 200 : 400).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sight Seers</title><body style="margin:0;font-family:Arial,sans-serif;background:#f4f8fb;color:#062e4b"><div style="max-width:520px;margin:12vh auto;padding:28px;background:#fff;border-top:4px solid #ef8731"><h1 style="font-size:22px;margin:0 0 12px">' + (r.ok ? 'You are off the list' : 'Something went wrong') + '</h1><p style="line-height:1.6;color:#4a5d6e">' + msg + '</p><p><a href="/travel-club" style="color:#d96f12;font-weight:bold">Go to the Travel Club</a></p></div></body>');
+      }
+
       if (get('partners')) {
         return res.status(200).json({ ok: true, partners: publicPartners(await getPartnersDoc()) });
       }
@@ -423,7 +436,7 @@ module.exports = async function handler(req, res) {
           return { id: u.id, name: u.name || '', email: u.email || '', phone: u.phone || (latest && latest.phone) || '', role: u.role || 'guest', source: u.provider || 'sign-up', createdAt: u.createdAt || '',
             country: u.country || '', city: u.city || '', basedIn: latest ? (latest.city || '') : '', applicationStatus: latest ? latest.status : '', applicationRef: latest ? latest.ref : '', community: latest ? latest.communityName : '', tripsLed: led.length, tripsJoined: joined.filter(i => i.status !== 'cancelled').length };
         }).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), payouts: (await db.getCollection(payouts.PAYOUTS)).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))), destinations: await entryLib.all(), passportDemand: entryLib.demand(users, interests, await entryLib.all()), updates: (await db.getCollection('club-updates')).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 150), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
+        return res.status(200).json({ ok: true, accounts, trips, applications, interests, activity: activity.slice().sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 150), partners: publicPartners(partnersDoc), partnersRaw: partnersDoc || {}, automation: await auto.getSettings(), alertList: require('../_lib/club-announce').recipients({ id: '' }, interests).length, payouts: (await db.getCollection(payouts.PAYOUTS)).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))), destinations: await entryLib.all(), passportDemand: entryLib.demand(users, interests, await entryLib.all()), updates: (await db.getCollection('club-updates')).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 150), statuses: { trip: TRIP_STATUS, application: APP_STATUS, interest: INTEREST_STATUS, reward: REWARD_STATUS } });
       }
 
       if (get('mine')) {
@@ -830,7 +843,7 @@ module.exports = async function handler(req, res) {
       await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
-    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post' || action === 'destination-save' || action === 'destination-reset' || action === 'payout-add' || action === 'payout-delete') {
+    if (action === 'trip-save' || action === 'trip-status' || action === 'trip-announce' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post' || action === 'destination-save' || action === 'destination-reset' || action === 'payout-add' || action === 'payout-delete') {
       const admin = requireAdmin(req, res);
       if (!admin) return;
 
@@ -849,6 +862,7 @@ module.exports = async function handler(req, res) {
         if ((!existing || existing.status !== saved.status) && ['open', 'full', 'closed'].indexOf(saved.status) > -1 && body.notify !== false) {
           await log('trip-' + saved.status, saved.title + ' is now ' + saved.status, saved.id);
           await tripLiveMail(saved);
+          if (saved.status === 'open') await announceSafe(saved.id);
         }
         if (existing && (existing.seatsTotal !== saved.seatsTotal || existing.status !== saved.status)) await promoteSafe(saved.id);
         return res.status(200).json({ ok: true, trip: saved });
@@ -891,7 +905,7 @@ module.exports = async function handler(req, res) {
         if ((status === 'open' || status === 'full') && !t.summary) return res.status(400).json({ error: 'Add a short summary to the trip before it opens.' });
         if ((status === 'open' || status === 'full') && !t.dateText && !t.startDate) return res.status(400).json({ error: 'Add the dates to the trip before it opens.' });
         const saved = await db.updateInCollection(TRIPS, t.id, { status });
-        if (t.status !== status && ['open', 'full', 'closed'].indexOf(status) > -1) { await log('trip-' + status, saved.title + ' is now ' + status, saved.id); if (body.notify !== false) await tripLiveMail(saved); }
+        if (t.status !== status && ['open', 'full', 'closed'].indexOf(status) > -1) { await log('trip-' + status, saved.title + ' is now ' + status, saved.id); if (body.notify !== false) { await tripLiveMail(saved); if (status === 'open') await announceSafe(saved.id); } }
         if (t.status !== status) await promoteSafe(t.id);
         return res.status(200).json({ ok: true, trip: saved });
       }
@@ -939,7 +953,7 @@ module.exports = async function handler(req, res) {
           updates.tripId = drafted.id;
         }
         const saved = await db.updateInCollection(APPS, app.id, updates);
-        if (drafted && drafted.status === 'open') { await log('trip-open', drafted.title + ' is now open', drafted.id); if (body.notify !== false) await tripLiveMail(drafted); }
+        if (drafted && drafted.status === 'open') { await log('trip-open', drafted.title + ' is now open', drafted.id); if (body.notify !== false) { await tripLiveMail(drafted); await announceSafe(drafted.id); } }
         await log('decision', app.communityName + ' (' + app.name + ') ' + status.replace('_', ' '), app.ref);
         if (body.notify !== false) { try { await decisionMail(saved); } catch (e) { console.error('club decision email', e && e.message); } }
         return res.status(200).json({ ok: true, application: saved, trip: drafted });
@@ -991,9 +1005,18 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'automation-save') {
-        const settings = await auto.saveSettings({ waitlist: body.waitlist, reminders: body.reminders, digest: body.digest }, admin.email || admin.id);
-        await log('automation', 'Automatic emails: waitlist ' + (settings.waitlist ? 'on' : 'off') + ', reminders ' + (settings.reminders ? 'on' : 'off') + ', leader digest ' + (settings.digest ? 'on' : 'off'), '');
+        const settings = await auto.saveSettings({ waitlist: body.waitlist, reminders: body.reminders, digest: body.digest, newTrips: body.newTrips }, admin.email || admin.id);
+        await log('automation', 'Automatic emails: waitlist ' + (settings.waitlist ? 'on' : 'off') + ', reminders ' + (settings.reminders ? 'on' : 'off') + ', leader digest ' + (settings.digest ? 'on' : 'off') + ', new trip emails ' + (settings.newTrips ? 'on' : 'off'), '');
         return res.status(200).json({ ok: true, automation: settings });
+      }
+
+      if (action === 'trip-announce') {
+        const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+        if (!t) return res.status(404).json({ error: 'Trip not found.' });
+        if (t.status !== 'open') return res.status(400).json({ error: 'Open the trip first. The email goes out for open trips only.' });
+        if (t.announcedAt) return res.status(400).json({ error: 'The list already had the email about this trip.' });
+        const r = await require('../_lib/club-announce').announceTrip(t.id, { manual: true });
+        return res.status(200).json({ ok: true, result: r });
       }
 
       if (action === 'automation-run') {
