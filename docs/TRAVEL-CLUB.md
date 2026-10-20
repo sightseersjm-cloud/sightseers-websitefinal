@@ -229,3 +229,10 @@ The same "Be first to hear about new trips" list (a request with no trip) can no
 - **Account > Group trips**: a signed-in member who is not on the list gets a one-tap "Tell me first" (under the empty state, or under their requests). Once they are on the list it no longer shows; the sign-up appears with their requests as "Travel Club departure alert".
 - **The departures board with no trips open**: "Tell me first" scrolls to the sign-up below the board with the name box ready.
 Someone already on the list is told "You are already on the list" and nothing is added twice. Everyone on the list gets the new trip email when a trip opens.
+
+### Update: the newsletter list
+- The box at the bottom of the home page ("Subscribe to Our Newsletter") now **saves people to a list** (`newsletter-subscribers`) through `/api/newsletter`. Before, it only emailed the team and left a contact message. The team still gets a short "New newsletter subscriber" email. The box itself looks the same.
+- The people who subscribed the old way (contact messages with the subject "Newsletter Subscription") are brought into the list the first time it is read, once each, with their original date.
+- **Master admin > Newsletter**: everyone, newest first, with where they signed up; **Download the list (CSV)** (only people still subscribed: email, name, subscribed_on, where) to import into your email tool; **Copy all emails**; **Mark unsubscribed** / **Subscribe again**; **Delete**.
+- The owner writes and sends the newsletter in their own email tool for now. A signed unsubscribe link (`/api/newsletter?unsub=...&k=...`) exists for each subscriber, ready for when newsletters are sent from the site.
+- Same email twice is not added twice; a bad email is refused; a hidden box catches bots; someone who unsubscribed can subscribe again.

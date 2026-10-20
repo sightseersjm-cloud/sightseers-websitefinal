@@ -26728,21 +26728,20 @@ function subscribeNewsletter(){
   var btn=document.querySelector('.nl-submit');
   var orig=btn?btn.textContent:'Subscribe';
   if(btn){btn.textContent='Subscribing...';btn.disabled=true;}
-  if(window.SS&&typeof SS.sendContactMessage==='function'){
-    SS.sendContactMessage({name:'Newsletter Subscriber',email:email,subject:'Newsletter Subscription',message:'New newsletter subscription from: '+email}).then(function(){
+  /* saved to the newsletter list (master admin > Newsletter), which the owner downloads for their email tool */
+  var headers={'Content-Type':'application/json'};
+  try{var tok=localStorage.getItem('ss_auth_token');if(tok)headers.Authorization='Bearer '+tok;}catch(e){}
+  fetch('/api/newsletter',{method:'POST',headers:headers,body:JSON.stringify({action:'subscribe',email:email,source:'Home page newsletter box'})})
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Could not subscribe');return d;});})
+    .then(function(d){
       if(btn){btn.textContent='Subscribed!';btn.style.background='#22c55e';}
       if(input)input.value='';
-      toast('You are subscribed! Watch your inbox for Caribbean travel inspiration.');
+      toast(d&&d.already?'You are already subscribed. Thank you!':'You are subscribed! Watch your inbox for Caribbean travel inspiration.');
       setTimeout(function(){if(btn){btn.textContent=orig;btn.style.background='';btn.disabled=false;}},4000);
-    }).catch(function(){
+    }).catch(function(err){
       if(btn){btn.textContent=orig;btn.disabled=false;}
-      toast('Could not subscribe right now, please try again.');
+      toast(err&&/valid email|Too many/.test(err.message)?err.message:'Could not subscribe right now, please try again.');
     });
-  }else{
-    toast('You are subscribed! Watch your inbox for Caribbean travel inspiration.');
-    if(input)input.value='';
-    if(btn){btn.textContent='Subscribed!';btn.style.background='#22c55e';setTimeout(function(){btn.textContent=orig;btn.style.background='';btn.disabled=false;},4000);}
-  }
 }
 
 function toggleAboutReadMore(){
@@ -57842,6 +57841,11 @@ body.theme-night #p-account .ac-infoform .tc-day-f input[type=text],body.theme-n
 #adminTravelClubTrips .tcA-sw small{display:block;margin-top:3px;font-size:12.5px;line-height:1.55;color:#5c6f82}
 #adminTravelClubTrips .tcA-prev{margin:16px 0 0;padding:0;list-style:none;border:1px solid rgba(6,58,99,.12);background:#fff}
 #adminTravelClubTrips .tcA-prev li{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;font-size:13px;color:#33505f;border-top:1px solid rgba(6,58,99,.08)}
+#adminTravelClubTrips .tcA-news li{align-items:center}
+#adminTravelClubTrips .tcA-news li small{display:block;margin-top:2px;color:#6b7a8d}
+#adminTravelClubTrips .tcA-news li.is-off{opacity:.6}
+#adminTravelClubTrips .tcA-newsact{display:flex;gap:6px;flex-wrap:wrap}
+#adminTravelClubTrips .tcA-newsact .admin-inline-btn{padding:6px 10px;font-size:11px}
 #adminTravelClubTrips .tcA-prev li:first-child{border-top:0;background:#f4f8fb;font-weight:800;color:#062e4b;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px}
 #adminTravelClubTrips .tcA-prev li small{color:#7a8895}
 #adminTravelClubTrips .tcA-ulist{list-style:none;margin:10px 0 0;padding:0;border:1px solid rgba(6,58,99,.12);background:#fff}
@@ -59315,8 +59319,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var body=$('tcAdminBody');if(!body||!S.data)return;
     var d=S.data,newReq=((d.inbox||{}).counts||{}).new||0,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
     body.innerHTML='<div class="tcA-tabs" role="tablist">'+
-      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['rewards','Rewards'],['dest','Destinations'],['updates','Updates'],['auto','Automatic emails'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
-      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():S.tab==='updates'?updatesTab():S.tab==='dest'?destTab():S.tab==='rewards'?rewardsTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
+      [['overview','Overview'+(pend?' ('+pend+' new)':'')],['apps','Applications'+(pend?' ('+pend+' to review)':'')],['inbox','Inbox'+(newReq?' ('+newReq+' new)':'')],['accounts','Accounts ('+(d.accounts||[]).length+')'],['trips','Trips ('+d.trips.length+')'],['reqs','Requests'+(fresh?' ('+fresh+' new)':' ('+d.interests.length+')')],['rewards','Rewards'],['dest','Destinations'],['updates','Updates'],['auto','Automatic emails'],['news','Newsletter ('+((d.newsletter||[]).filter(function(x){return x.status==='subscribed';}).length)+')'],['links','Partner links']].map(function(t){return '<button type="button" role="tab" data-tcatab="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+esc(t[1])+'</button>';}).join('')+
+      '</div><div id="tcAPane">'+(S.tab==='overview'?overview():S.tab==='inbox'?inboxTab():S.tab==='accounts'?accountsTab():S.tab==='apps'?apps():S.tab==='trips'?trips():S.tab==='links'?links():S.tab==='auto'?autoTab():S.tab==='news'?newsTab():S.tab==='updates'?updatesTab():S.tab==='dest'?destTab():S.tab==='rewards'?rewardsTab():reqs())+'</div><div class="tcA-msg'+(S.msgType?' '+S.msgType:'')+'" id="tcAMsg" role="status">'+esc(S.msg)+'</div>';
   }
 
 
@@ -59509,6 +59513,24 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
     if(a.lastRun)out+='<p class="tcA-note">Last run: '+esc(ago(a.lastRun.at))+' - '+(a.lastRun.counts?a.lastRun.counts.waitlist+' waitlist, '+a.lastRun.counts.reminders+' reminders, '+a.lastRun.counts.digests+' digests':'')+'.</p>';
     return out;
+  }
+  /* ── newsletter: who subscribed (the box at the bottom of the home page), to download into your email tool ── */
+  function newsTab(){
+    var all=S.data.newsletter||[],subs=all.filter(function(x){return x.status==='subscribed';}),off=all.length-subs.length;
+    var out='<p class="tcA-note">Everyone who subscribes with the box at the bottom of the home page is saved here, including the people who subscribed before this list existed. Write your newsletter in your email tool, then <b>download the list</b> and import it there. Only people still subscribed are in the download. If someone asks to stop, mark them unsubscribed here.</p>'+
+      '<div class="tcA-actions"><button type="button" class="admin-inline-btn" data-tcanewscsv'+(subs.length?'':' disabled')+'>Download the list (CSV, '+subs.length+')</button><button type="button" class="admin-inline-btn alt" data-tcanewscopy'+(subs.length?'':' disabled')+'>Copy all emails</button></div>';
+    if(!all.length)return out+'<p class="tcA-note">Nobody has subscribed yet.</p>';
+    out+='<ul class="tcA-prev tcA-news"><li><span><b>'+subs.length+' subscribed</b>'+(off?' &middot; '+off+' unsubscribed':'')+'</span><small>Newest first</small></li>'+all.map(function(x){
+      var on=x.status==='subscribed';
+      return '<li class="'+(on?'':'is-off')+'"><span><b>'+esc(x.email)+'</b>'+(x.name?' &middot; '+esc(x.name):'')+'<small>'+esc(dt(x.createdAt))+(x.source?' &middot; '+esc(x.source):'')+(on?'':' &middot; unsubscribed')+'</small></span>'+
+        '<span class="tcA-newsact"><button type="button" class="admin-inline-btn alt" data-tcanewsst="'+esc(x.id)+'" data-st="'+(on?'unsubscribed':'subscribed')+'">'+(on?'Mark unsubscribed':'Subscribe again')+'</button><button type="button" class="admin-inline-btn alt" data-tcanewsdel="'+esc(x.id)+'">Delete</button></span></li>';
+    }).join('')+'</ul>';
+    return out;
+  }
+  function newsCsv(){
+    var q=function(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+    var rows=[['email','name','subscribed_on','where']].concat((S.data.newsletter||[]).filter(function(x){return x.status==='subscribed';}).map(function(x){return [x.email,x.name||'',String(x.createdAt||'').slice(0,10),x.source||''];}));
+    return rows.map(function(r){return r.map(q).join(',');}).join('\n');
   }
   function links(){
     var raw=(S.data&&S.data.partnersRaw)||{},ins=raw.insurance||{},es=raw.esim||{};
@@ -59758,6 +59780,26 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(upd){
       if(!confirm('Delete this update?\n\nIt disappears from the dashboards. Anyone who was emailed keeps their copy.'))return;
       call('trip-update-delete',{id:upd.getAttribute('data-tcaupddel')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Update deleted.','ok');},400);}).catch(function(err){say(err.message,'err');});
+      return;
+    }
+    if(e.target.closest('[data-tcanewscsv]')){
+      var blob=new Blob([newsCsv()],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sight-seers-newsletter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+      say('Downloaded. Import the file into your email tool.','ok');return;
+    }
+    if(e.target.closest('[data-tcanewscopy]')){
+      var em=(S.data.newsletter||[]).filter(function(x){return x.status==='subscribed';}).map(function(x){return x.email;}).join(', ');
+      (navigator.clipboard?navigator.clipboard.writeText(em):Promise.reject()).then(function(){say('All subscribed emails copied.','ok');}).catch(function(){prompt('Copy these emails:',em);});return;
+    }
+    var nst=e.target.closest('[data-tcanewsst]');
+    if(nst){
+      nst.disabled=true;
+      SS.api('newsletter','POST',{action:'status',id:nst.getAttribute('data-tcanewsst'),status:nst.getAttribute('data-st')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Saved.','ok');},400);}).catch(function(err){nst.disabled=false;say(err.message,'err');});
+      return;
+    }
+    var ndel=e.target.closest('[data-tcanewsdel]');
+    if(ndel){
+      if(!confirm('Delete this subscriber from the list?\n\nTo keep a record that they asked to stop, use Mark unsubscribed instead.'))return;
+      SS.api('newsletter','POST',{action:'delete',id:ndel.getAttribute('data-tcanewsdel')}).then(function(){S.data=null;load(true);setTimeout(function(){say('Deleted.','ok');},400);}).catch(function(err){say(err.message,'err');});
       return;
     }
     var ann=e.target.closest('[data-tcaannounce]');

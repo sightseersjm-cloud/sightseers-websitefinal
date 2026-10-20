@@ -26,6 +26,7 @@ const handlers = {
   'inbox':           require('./_handlers/inbox'),
   'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
+  'newsletter':      require('./_handlers/newsletter'),
   'passport':        require('./_handlers/passport'),
   'planning-request': require('./_handlers/planning-request'),
   'sections':        require('./_handlers/sections'),
