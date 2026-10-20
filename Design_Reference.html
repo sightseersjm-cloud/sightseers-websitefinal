@@ -57537,6 +57537,22 @@ body.theme-night .tc-day{background:#0a2740}
 @media(max-width:640px){.tp-incl--two .tp-incl{grid-template-columns:1fr;gap:14px}}
 .tp-org strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--tc-head)}
 .tp-ohead{display:flex;gap:16px;align-items:center}
+/* "Be first to hear about new trips" boxes: after a request, on a trip that is not open, in the Group trips tab */
+.tc-listbox{display:block;margin:18px 0 0;padding:16px 18px;text-align:left;background:#fff;border:1px solid rgba(6,46,75,.12);border-left:3px solid #ef8731}
+.tc-listbox>strong{display:block;margin:0 0 4px;font-family:'Playfair Display',serif;font-size:18px;color:#062e4b}
+.tc-listbox>p{margin:0 0 12px;font-size:14px;line-height:1.55;color:#4a5d6e}
+.tc-listbox .tc-listrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.tc-listbox input[type=text],.tc-listbox input[type=email]{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(6,46,75,.16);background:#f4f8fb;font:14px 'Raleway',sans-serif;color:#062e4b;border-radius:0}
+.tc-listbox .tc-check{display:flex;gap:8px;align-items:center;margin:2px 0 10px;font-size:13px;color:#4a5d6e}
+.tc-listbox .tc-fbtn{margin:0}
+.tc-listbox .tc-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.tc-listmsg{display:block;margin-top:8px;font-size:13px}
+.tc-listmsg.err{color:#b3261e}
+.tc-listbox.is-done{border-left-color:#5aa847}
+@media(max-width:600px){.tc-listbox .tc-listrow{grid-template-columns:1fr}}
+body.theme-night .tc-listbox{background:#0a2740;border-color:rgba(255,255,255,.14)}
+body.theme-night .tc-listbox>strong{color:#fff}
+body.theme-night .tc-listbox>p,body.theme-night .tc-listbox .tc-check{color:#c9d8e6}
 /* phones: the pinned Ask to join bar (added by script, outside the page so it never moves with the page transition) */
 .tp-bar{position:fixed;left:0;right:0;bottom:0;z-index:1100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:3px solid #ef8731;box-shadow:0 -8px 24px rgba(6,46,75,.14)}
 .tp-bar[hidden]{display:none!important}
@@ -58224,6 +58240,46 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function bad(id,on){var f=$(id);if(!f)return;var w=f.closest('.tc-field');if(w)w.classList.toggle('tc-bad',!!on);}
   var EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   function who(){try{return typeof getCurrentUser==='function'?getCurrentUser():null;}catch(e){return null;}}
+  /* "Be first to hear about new trips" in more places: one tap when we already know the name and email, a short form when we do not.
+     Both add the person to the same list the Travel Club page uses (a request with no trip), which is emailed when a trip opens. */
+  function listBox(src,known){
+    var head='<strong>Be first to hear about new trips</strong>';
+    if(known&&known.email)return '<div class="tc-listbox" data-list-box>'+head+'<p>We email <b>'+esc(known.email)+'</b> the moment a new departure opens. Nothing is charged.</p>'+
+      '<button type="button" class="tc-fbtn" data-list-me data-list-src="'+esc(src)+'" data-list-name="'+esc(known.name||'')+'" data-list-email="'+esc(known.email)+'">'+(known.label||'Tell me first')+'</button><span class="tc-listmsg" role="status"></span></div>';
+    return '<form class="tc-listbox" data-list-box data-list-form data-list-src="'+esc(src)+'" data-travel-club-bound="1" novalidate>'+head+'<p>Leave your email and we will tell you the moment a new departure opens. Nothing is charged.</p>'+
+      '<div class="tc-listrow"><input type="text" name="n" autocomplete="name" placeholder="Your name" aria-label="Your name"><input type="email" name="e" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-label="Email"></div>'+
+      '<label class="tc-check"><input type="checkbox" name="c"><span>Email me about Travel Club departures</span></label><input class="tc-hp" type="text" name="w" tabindex="-1" autocomplete="off" aria-hidden="true">'+
+      '<button type="submit" class="tc-fbtn">Tell me first</button><span class="tc-listmsg" role="status"></span></form>';
+  }
+  function listDone(box,res,email){
+    box.innerHTML='<strong>'+(res&&res.already?'You are already on the list':'You are on the list')+'</strong><p>We will email <b>'+esc(email)+'</b> the moment a new departure opens.</p>';
+    box.classList.add('is-done');
+  }
+  function listJoin(box,name,email,src,website){
+    var msg=box.querySelector('.tc-listmsg'),btn=box.querySelector('button');
+    if(btn){btn.disabled=true;btn.textContent='Sending...';}
+    return api('trips','POST',{action:'interest',name:name,email:email,consent:true,source:src||'travel-club',website:website||''}).then(function(res){listDone(box,res,email);track('travel_club_alert',{from:src});})
+      .catch(function(err){if(btn){btn.disabled=false;btn.textContent='Tell me first';}if(msg){msg.className='tc-listmsg err';msg.textContent=err.message||'We could not add you just now. Please try again.';}});
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-list-me]');if(!b)return;
+    listJoin(b.closest('[data-list-box]'),b.getAttribute('data-list-name')||'Traveler',b.getAttribute('data-list-email'),b.getAttribute('data-list-src'));
+  });
+  document.addEventListener('click',function(e){
+    var j=e.target.closest&&e.target.closest('[data-list-jump]');if(!j)return;
+    var c=$('tcAlertCard');if(!c)return;c.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});setTimeout(function(){try{$('tcAlName').focus({preventScroll:true});}catch(x){}},500);
+  });
+  /* a warning goes away as soon as the person changes something */
+  ['input','change'].forEach(function(ev){document.addEventListener(ev,function(e){var f=e.target.closest&&e.target.closest('[data-list-form]');if(!f)return;var m=f.querySelector('.tc-listmsg');if(m&&m.classList.contains('err'))m.textContent='';});});
+  document.addEventListener('submit',function(e){
+    var f=e.target.closest&&e.target.closest('[data-list-form]');if(!f)return;
+    e.preventDefault();
+    var n=f.elements.n.value.trim(),em=f.elements.e.value.trim(),msg=f.querySelector('.tc-listmsg');msg.className='tc-listmsg err';
+    if(n.length<2){msg.textContent='Please add your name.';f.elements.n.focus();return;}
+    if(!EMAIL.test(em)){msg.textContent='Please add a valid email address.';f.elements.e.focus();return;}
+    if(!f.elements.c.checked){msg.textContent='Please tick the box so we can email you.';return;}
+    msg.textContent='';listJoin(f,n,em,f.getAttribute('data-list-src'),f.elements.w.value);
+  });
   function prefill(map){
     var u=who();if(!u)return;
     Object.keys(map).forEach(function(k){var el=$(map[k]);if(el&&!el.value&&u[k])el.value=u[k];});
@@ -58354,7 +58410,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var list=(res&&res.trips)||[];
       dep.at=Date.now();
       depStats(list);
-      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Follow our WhatsApp Channel to be first to see each new departure.</p></div>';
+      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Leave your email and we will tell you the moment one opens.</p><button type="button" class="tcd-cta" data-list-jump>Tell me first <span aria-hidden="true">&rarr;</span></button></div>';
       g.scrollTop=0;depMore();
     }).catch(function(){
       g.innerHTML='<div class="tcd-empty"><strong>We could not load the departures</strong><p>Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.</p><button type="button" class="tcd-cta" id="tcRetry">Try again</button></div>';
@@ -58427,7 +58483,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     api('trips?slug='+encodeURIComponent(slug)).then(function(res){cur=res.trip;fillTrip(cur);}).catch(function(err){
       cur=null;$('tpTitle').textContent='This trip is not open';
       var gone=err&&err.status===404;
-      tpState('<strong>'+(gone?'This trip is not open right now':'We could not load this trip')+'</strong>'+(gone?'It may be full, finished or not yet announced. See the departures that are open.':'Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.')+'<br><a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>');
+      tpState('<strong>'+(gone?'This trip is not open right now':'We could not load this trip')+'</strong>'+(gone?'It may be full, finished or not yet announced. See the departures that are open.':'Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.')+'<br><a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>'+
+        (gone?listBox('trip-closed',(function(){var u=who();return u&&u.email&&u.role!=='admin'?{name:u.name,email:u.email}:null;})()):''));
       setMeta('Trip not open | Sight Seers Travel Club','This Travel Club trip is not open right now.',location.pathname);
     });
   }
@@ -58512,7 +58569,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         var d=$('tpDone');
         d.innerHTML='<h3>'+(res.waitlist?'You are on the waitlist':res.already?'We already have your request':'Your request is in')+'</h3>'+
           '<p>Thanks, '+esc(first(name))+'. '+(res.waitlist?'Our team will be in touch if a place opens.':'We will email you at <b>'+esc(email)+'</b> to confirm availability and payment terms.')+'</p>'+
-          (res.ref?'<p><span class="tc-ref">'+esc(res.ref)+'</span></p>':'')+'<p>Nothing is charged until we have confirmed those terms with you.</p><p>Your trip and its group chat will show on your dashboard once you sign in with <b>'+esc(email)+'</b>.</p>';
+          (res.ref?'<p><span class="tc-ref">'+esc(res.ref)+'</span></p>':'')+'<p>Nothing is charged until we have confirmed those terms with you.</p><p>Your trip and its group chat will show on your dashboard once you sign in with <b>'+esc(email)+'</b>.</p>'+
+          listBox('trip-done',{name:name,email:email,label:'Also tell me about new trips'});
         $('tpForm').hidden=true;d.hidden=false;track('travel_club_interest',{trip:cur.slug});
       }).catch(function(err){setMsg(st,err.message,'err');b.disabled=false;b.textContent=label;});
     });
@@ -58767,12 +58825,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<details class="ac-before"><summary><span>Before you go<small>'+done+' of 5 done</small></span></summary><div class="ac-beforebody">'+form+'<ul class="ac-ckl">'+items.join('')+'</ul><p class="ac-ckfine">Entry rules can change. Always confirm on the official pages before you travel.</p></div></details>';
   }
   function reqRows(list,pt){
-    if(!list.length)return '<div class="ac-empty"><strong>No trip requests yet</strong><p>When you ask to join a Travel Club trip, it shows up here with where it stands.</p><button type="button" class="ac-cta" onclick="ssClubGo(\'departures\')">See departures</button></div>';
+    var u=who(),onList=list.some(function(i){return !i.tripSlug&&i.status!=='cancelled';});
+    var lb=!onList&&u&&u.email?listBox('account',{name:u.name,email:u.email}):'';
+    if(!list.length)return '<div class="ac-empty"><strong>No trip requests yet</strong><p>When you ask to join a Travel Club trip, it shows up here with where it stands.</p><button type="button" class="ac-cta" onclick="ssClubGo(\'departures\')">See departures</button></div>'+lb;
     return '<div class="ac-greq">'+list.map(function(i){
       var title=i.tripSlug?'<a href="/trip/'+esc(i.tripSlug)+'" data-trip="'+esc(i.tripSlug)+'">'+esc(i.tripTitle||'Travel Club trip')+'</a>':'Travel Club departure alert';
       var chat=i.groupLink?'<a class="ac-chatbtn" href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Join the group chat</a>':(i.tripSlug&&i.status!=='cancelled'&&i.status!=='waitlist'?'<span class="ac-chatsoon">Group chat link coming from '+esc(i.leaderName||'your leader')+'</span>':'');
       return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+checklist(i,pt)+'</div>';
-    }).join('')+'</div>';
+    }).join('')+'</div>'+lb;
   }
   function goalBar(t){
     if(!t.inviteGoal)return '';

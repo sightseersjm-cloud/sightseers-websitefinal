@@ -221,3 +221,11 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 - **Stop these emails**: a signed one-click link (`/api/trips?unsub=...&k=...`); it marks every list sign-up with that address as cancelled and shows a short confirmation page. A wrong or edited link does nothing.
 - **Owner controls**: master admin > Automatic emails > "New trips: email the 'Be first to hear' list" (on by default, since people asked for these; shows how many are on the list). Each trip in the Trips tab says whether its email went out and to how many; an open trip that was never announced (for example one opened before this change) has an "Email them about this trip" button. It goes out once per trip.
 - Sent through Resend's batch endpoint, 100 per call. Data added: `announcedAt`, `announcedCount` (and `announcedFailed` if any were refused) on a trip; `unsubscribedAt` on a list sign-up.
+
+### Update: the sign-up in more places
+The same "Be first to hear about new trips" list (a request with no trip) can now be joined from:
+- **After asking to join a trip**: the confirmation offers "Also tell me about new trips", one tap with the name and email just used.
+- **A trip page that is not open** (full, closed, finished or not announced): a short form (name, email, permission tick) under "See departures"; a signed-in member gets a one-tap button with their own email instead.
+- **Account > Group trips**: a signed-in member who is not on the list gets a one-tap "Tell me first" (under the empty state, or under their requests). Once they are on the list it no longer shows; the sign-up appears with their requests as "Travel Club departure alert".
+- **The departures board with no trips open**: "Tell me first" scrolls to the sign-up below the board with the name box ready.
+Someone already on the list is told "You are already on the list" and nothing is added twice. Everyone on the list gets the new trip email when a trip opens.
