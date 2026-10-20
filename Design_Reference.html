@@ -13980,8 +13980,8 @@ body.theme-night #p-flagship-programs{
 
       <div class="tc-card tc-alert" id="tcAlertCard">
         <div class="tc-alert-copy">
-          <h3>Do not see the right trip?</h3>
-          <p>Tell us you are interested and we will email you when a departure opens. Nothing is charged. Or <a class="tc-inl" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">follow our WhatsApp Channel</a> to see new departures as they are announced.</p>
+          <h3>Be first to hear about new trips</h3>
+          <p>Leave your email and we will tell you the moment a new departure opens. Nothing is charged. Or <a class="tc-inl" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">follow our WhatsApp Channel</a> to see new departures as they are announced.</p>
         </div>
         <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
           <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
@@ -13989,7 +13989,7 @@ body.theme-night #p-flagship-programs{
           <input id="tcAlParty" type="hidden" value="1">
           <label class="tc-check"><input id="tcAlConsent" type="checkbox"><span>Email me about Travel Club departures</span></label>
           <input class="tc-hp" id="tcAlHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me when one opens</button>
+          <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me first</button>
           <div class="tc-status" id="tcAlStatus" role="status" aria-live="polite"></div>
         </form>
       </div>
@@ -56868,6 +56868,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     var url=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'';
     box.innerHTML=url?'<img src="'+url.replace(/"/g,'&quot;')+'" alt="Your profile photo">':esc1(((u&&u.name)||'?').trim().charAt(0).toUpperCase());
     if(del)del.hidden=!url;
+    var pick=document.querySelector('#acPhotoBox .ac-photo-pick');if(pick)pick.textContent=url?'Change photo':'Upload photo';
   }
   function esc1(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function photoSquare(file){
@@ -58384,7 +58385,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       api('trips','POST',{action:'interest',name:name,email:email,partySize:parseInt($('tcAlParty').value,10)||1,consent:true,website:$('tcAlHp').value,source:'travel-club'}).then(function(res){
         setMsg(st,res.already?'You are already on the list. We will email you when a departure opens.':'Thanks, '+first(name)+'. We will email you when a departure opens.','ok');
         b.textContent='You are on the list';track('travel_club_alert');
-      }).catch(function(err){setMsg(st,err.message,'err');b.disabled=false;b.textContent='Tell me when one opens';});
+      }).catch(function(err){setMsg(st,err.message,'err');b.disabled=false;b.textContent='Tell me first';});
     });
   }
   alertForm();

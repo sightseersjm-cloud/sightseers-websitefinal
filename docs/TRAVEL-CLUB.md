@@ -65,7 +65,7 @@ The Sight Seers WhatsApp Channel (`https://www.whatsapp.com/channel/0029VbCaiVTG
 - the account dashboard, in **Follow the journey**, next to Instagram and TikTok;
 - the footer icons on every page;
 - the Contact page list;
-- the Travel Club page, in the "Do not see the right trip?" panel, as the way to see new departures as they are announced.
+- the Travel Club page, in the "Be first to hear about new trips" panel, as the way to see new departures as they are announced.
 
 To change the address, search `Design_Reference.html` for `0029VbCaiVTGehERQ13cpR2v` and replace it in each place, then run `node build.js`.
 
@@ -208,3 +208,7 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 - **Themes** (optional): one of Yacht and party, Girls trip, Guys trip, Festival, Birthday, Family, Wellness, Adventure, Food and culture, Alumni and Greek life. The server refuses anything else. Set by the leader (Trip details box) or the owner (trip form). It shows as a small label above the trip title on the departures board and as the first fact in the trip page banner.
 - A save that does not send these (an older admin tab, for instance) keeps what is saved.
 - Data added: `itinerary` (a list of { title, text }) and `theme` on a trip.
+
+### Update: wording
+- The sign-up under the departures is now "Be first to hear about new trips" ("Leave your email and we will tell you the moment a new departure opens"), with the button "Tell me first". It works as before: it emails when a departure opens.
+- The profile photo button says "Change photo" once a photo is saved, and "Upload photo" before that or after it is removed.
