@@ -458,7 +458,7 @@ module.exports = async function handler(req, res) {
         const myTrips = trips.filter(t => ownsTrip(t, user)).map(t => {
           const list = interests.filter(i => i.tripId === t.id);
           return {
-            id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination,
+            id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
@@ -479,7 +479,7 @@ module.exports = async function handler(req, res) {
             const open = i.status !== 'cancelled' && i.status !== 'waitlist';
             return { guests: i.guests || [], ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact,
-              tripCountry: t ? t.country || '' : '', tripStart: t ? t.startDate || '' : '', tripEnd: t ? t.endDate || '' : '', passport, passportExpiry: expiry, checklist: i.checklist || {},
+              tripCountry: t ? t.country || '' : '', tripStart: t ? t.startDate || '' : '', tripEnd: t ? t.endDate || '' : '', tripImage: t ? t.image || '' : '', tripDestination: t ? t.destination || '' : '', tripTheme: t ? t.theme || '' : '', passport, passportExpiry: expiry, checklist: i.checklist || {},
               entry: t && open ? entryLib.pick(dests, t.country, passport) : null,
               updates: i.tripId && ['new', 'contacted', 'confirmed', 'booked'].indexOf(i.status) > -1 ? updatesOf(i.tripId).slice(0, 8) : [] };
           });

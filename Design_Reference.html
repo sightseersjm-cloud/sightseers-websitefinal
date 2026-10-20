@@ -24474,19 +24474,20 @@ vtSessionAction=function(el,type){
           <div class="ac-wrap">
             <div class="dashboard-shell ac-dash-shell">
 
-              <div class="ac-club">
+              <div class="ac-club g-tier">
                 <div class="ac-club-top">
                   <div class="ac-club-name"><span class="ac-mini">Membership tier</span><strong id="dashTierName">Explorer</strong></div>
                   <span class="ac-club-pts"><b id="acHeroPts">0</b><small>points</small></span>
                 </div>
                 <i id="dashTierIcon" hidden></i>
-                <div class="ac-bar" role="progressbar" aria-label="Progress to the next tier"><div class="ac-bar-fill" id="dashTierBar" style="width:0%"></div></div>
+                <div class="ac-bar" role="progressbar" aria-label="Points on the way to Pioneer (750)"><div class="ac-bar-fill" id="dashTierBar" style="width:0%"></div><i class="g-dot" data-t="0" style="left:0%"></i><i class="g-dot" data-t="1" style="left:33.333%"></i><i class="g-dot" data-t="2" style="left:100%"></i></div>
                 <span class="ac-bar-note" id="dashTierProgress">Earn points to reach the next tier</span>
                 <ol class="ac-ladder" id="acLadder">
                   <li data-tier="Explorer"><i></i><b>Explorer</b><span>0+</span></li>
                   <li data-tier="Voyager"><i></i><b>Voyager</b><span>250+</span></li>
                   <li data-tier="Pioneer"><i></i><b>Pioneer</b><span>750+</span></li>
                 </ol>
+                <div class="g-marks" id="acMarks" aria-hidden="true"><span data-t="0" style="left:0%"><b>Explorer</b>0+ points</span><span data-t="1" style="left:33.333%"><b>Voyager</b>250+ points</span><span data-t="2" style="left:100%"><b>Pioneer</b>750+ points</span></div>
               </div>
 
             <div class="ac-tabs" role="tablist" aria-label="Your account">
@@ -24500,7 +24501,7 @@ vtSessionAction=function(el,type){
 
             <!-- Overview -->
             <div class="ac-pane on" id="acPane-overview" role="tabpanel" aria-labelledby="acTab-overview">
-              <div class="ac-stats">
+              <div class="ac-stats" hidden>
                 <button type="button" class="ac-stat" data-tab-go="club">
                   <strong id="dashPoints">0</strong><span class="ac-stat-lab">Travel Points</span>
                 </button>
@@ -24516,12 +24517,9 @@ vtSessionAction=function(el,type){
                 <span id="dashMemberSince" hidden>2026</span>
               </div>
 
-              <div class="ac-actions">
-                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Browse Tours" data-action="tours" onclick="return forceAccountAction('tours', event)"><h4>Browse Tours</h4><p>Open curated tours fast.</p><span class="dashboard-link-cta">Explore</span></button>
-                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Review Cart" data-action="cart" onclick="return forceAccountAction('cart', event)"><h4>Review Cart</h4><p>Check your saved selections.</p><span class="dashboard-link-cta">Open cart</span></button>
-                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Start a Booking Request" data-action="booking" onclick="return forceAccountAction('booking', event)"><h4>Start Booking</h4><p>Open your booking form.</p><span class="dashboard-link-cta">Start now</span></button>
-                <button type="button" class="dashboard-link dashboard-link--live ac-action" aria-label="Create a Blog" data-action="blog" onclick="return forceAccountAction('blog', event)"><h4>Create a Blog</h4><p>Open your writer page.</p><span class="dashboard-link-cta">Write now</span></button>
-              </div>
+              <div class="g-next" id="acNext" aria-live="polite"></div>
+              <div class="g-short" id="acShort"></div>
+              <p class="g-also" id="acAlso"></p>
 
               <div class="ac-section">
                 <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Picked for you</span><h4 id="acPickTitle">Experiences to explore</h4><p id="acPickSub">Based on your travel style.</p></div><button type="button" class="ac-link" onclick="nav('tours')">See all tours</button></div>
@@ -24629,7 +24627,7 @@ vtSessionAction=function(el,type){
                   <div class="ac-photo" id="acPhotoBox">
                     <span class="ac-photo-img" id="acPhotoImg" aria-hidden="true"></span>
                     <div class="ac-photo-txt"><b>Profile photo</b><small>Shown on your dashboard, to the leader of a trip you join, and on trips you lead. JPG, PNG or WebP.</small>
-                      <div class="ac-photo-act"><label class="ac-sbtn ac-photo-pick" for="acPhotoFile">Upload photo</label><input type="file" id="acPhotoFile" accept="image/jpeg,image/png,image/webp" hidden><button type="button" class="ac-linkbtn" id="acPhotoDel" hidden>Remove</button></div>
+                      <div class="ac-photo-act"><label class="ac-sbtn ac-photo-pick" for="acPhotoFile">Upload photo</label><input type="file" id="acPhotoFile" class="ac-photo-input" accept="image/*" tabindex="-1"><button type="button" class="ac-linkbtn" id="acPhotoDel" hidden>Remove</button></div>
                       <span class="ac-fstatus" id="acPhotoStatus" role="status" aria-live="polite"></span></div>
                   </div>
                   <div class="ac-lfield"><label for="acPName">Full name</label><input type="text" id="acPName" autocomplete="name"></div>
@@ -29184,9 +29182,8 @@ function refreshTravelClub(){
   var lbl=document.getElementById('dashTierProgress');
   if(bar){
     if(tier.next){
-      var span=tier.next-tier.min;
-      var prog=Math.min(100,Math.max(4,Math.round(((points-tier.min)/span)*100)));
-      bar.style.width=prog+'%';
+      /* one scale from 0 to 750 points, so the Explorer, Voyager and Pioneer marks on the bar line up */
+      bar.style.width=Math.min(100,Math.max(2,points/750*100))+'%';
       if(lbl)lbl.textContent=(tier.next-points)+' points to '+getTravelTier(tier.next).name;
     }else{
       bar.style.width='100%';
@@ -56405,6 +56402,9 @@ body.theme-night #p-account .ac-status.other{background:rgba(160,200,230,.16);co
 #p-account .ac-photo-txt small{display:block;margin-top:3px;font-size:12.5px;line-height:1.5;color:var(--ac-mut)}
 #p-account .ac-photo-act{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:10px}
 #p-account .ac-photo-pick{height:38px;cursor:pointer}
+/* the file box stays in the page but out of sight: iPhone Safari will not open the photo picker for a box that is hidden outright */
+#p-account .ac-photo-act{position:relative}
+#p-account .ac-photo-input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0);pointer-events:none}
 #p-account .ac-linkbtn{padding:0;border:0;background:none;font:700 13px 'Raleway',sans-serif;color:#c0392b;text-decoration:underline;cursor:pointer}
 #p-account .ac-lfield textarea{width:100%;padding:12px 14px;font:500 15px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;outline:0;resize:vertical}
 #p-account .ac-lfield textarea:focus{border-color:var(--ac-o);background:var(--ac-card);box-shadow:0 0 0 4px rgba(239,135,49,.16)}
@@ -56689,6 +56689,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
         var chip=$('acTierChip');if(chip)chip.textContent=name+' tier';
     var idx=['Explorer','Voyager','Pioneer'].indexOf(name);
     [].forEach.call(document.querySelectorAll('#acLadder li'),function(li,i){li.classList.toggle('on',i===idx);li.classList.toggle('done',i<idx);});
+    [].forEach.call(document.querySelectorAll('#accountDashboard .g-dot, #acMarks span'),function(el){var i=+el.getAttribute('data-t');el.classList.toggle('on',i===idx);el.classList.toggle('done',i<idx);});
     [].forEach.call(document.querySelectorAll('#acSteps .ac-step'),function(s,i){s.classList.toggle('on',i===idx);s.classList.toggle('done',i<idx);});
     var head=$('acClubHeadline');if(head)head.textContent=name+' · '+pts.toLocaleString()+' points';
     var lede=$('acClubLede'),bar=$('acClubBar');
@@ -56873,7 +56874,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
   function photoSquare(file){
     return new Promise(function(ok,no){
       var fr=new FileReader();fr.onerror=function(){no(new Error('That picture could not be read.'));};
-      fr.onload=function(){var im=new Image();im.onerror=function(){no(new Error('That file is not a picture we can use.'));};im.onload=function(){
+      fr.onload=function(){var im=new Image();im.onerror=function(){no(new Error('This browser cannot open that picture. Try a JPG or PNG, or a screenshot of it.'));};im.onload=function(){
         var side=Math.min(im.naturalWidth,im.naturalHeight),S=Math.min(480,side),c=document.createElement('canvas');c.width=c.height=S;
         var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);x.drawImage(im,(im.naturalWidth-side)/2,(im.naturalHeight-side)/2,side,side,0,0,S,S);
         ok(c.toDataURL('image/jpeg',0.86));};im.src=fr.result;};
@@ -56884,8 +56885,9 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
   var pfile=$('acPhotoFile');
   if(pfile)pfile.addEventListener('change',function(){
     var f=pfile.files&&pfile.files[0];pfile.value='';if(!f)return;
-    if(!/^image\/(jpeg|png|webp)$/.test(f.type)){fstat('acPhotoStatus','Choose a JPG, PNG or WebP picture.','err');return;}
-    if(f.size>15*1024*1024){fstat('acPhotoStatus','That picture is very large. Please choose one under 15MB.','err');return;}
+    /* any picture the phone or browser can show is fine (iPhone HEIC photos too): it is redrawn as a small square JPEG before it is sent */
+    if(f.type&&!/^image\//.test(f.type)){fstat('acPhotoStatus','Choose a photo or picture file.','err');return;}
+    if(f.size>25*1024*1024){fstat('acPhotoStatus','That picture is very large. Please choose one under 25MB.','err');return;}
     if(!apiAccount()){fstat('acPhotoStatus','Sign in with your account to add a photo.','err');return;}
     fstat('acPhotoStatus','Uploading...','');
     photoSquare(f).then(function(data){return SS.api('auth','POST',{action:'avatar',data:data});}).then(function(res){photoSaved(res);fstat('acPhotoStatus','Your photo is saved.','ok');}).catch(function(err){fstat('acPhotoStatus',(err&&err.message)||'We could not save that photo. Please try again.','err');});
@@ -57536,6 +57538,91 @@ body.theme-night .tc-day{background:#0a2740}
 @media(max-width:640px){.tp-incl--two .tp-incl{grid-template-columns:1fr;gap:14px}}
 .tp-org strong{display:block;font-family:'Playfair Display',serif;font-size:20px;color:var(--tc-head)}
 .tp-ohead{display:flex;gap:16px;align-items:center}
+
+/* ── account overview: glossy tier card, "your next step", shortcuts ── */
+#p-account .ac-stats[hidden],#p-account .ac-ladder{display:none!important}
+#p-account .ac-club.g-tier{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,#062e4b 0%,#0a4a73 55%,#0d5a7e 100%)!important;border:0!important;box-shadow:0 22px 50px rgba(6,46,75,.32),inset 0 1px 0 rgba(255,255,255,.18)!important}
+#p-account .ac-club.g-tier::before{content:'';position:absolute;right:-10%;top:-40%;width:520px;height:520px;background:radial-gradient(circle,rgba(239,135,49,.32),transparent 62%);pointer-events:none}
+#p-account .ac-club.g-tier::after{content:'';position:absolute;left:-120px;top:-160px;width:460px;height:460px;background:radial-gradient(circle,rgba(112,194,87,.26),transparent 62%);pointer-events:none}
+#p-account .g-tier>*{position:relative;z-index:1}
+#p-account .g-tier .ac-mini{color:#ffc58f!important}
+#p-account .g-tier #dashTierName{color:#fff!important}
+#p-account .g-tier .ac-club-pts b{color:#fff!important;text-shadow:0 0 24px rgba(255,197,143,.45)}
+#p-account .g-tier .ac-club-pts small,#p-account .g-tier .ac-bar-note{color:rgba(255,255,255,.8)!important}
+#p-account .g-tier .ac-bar{position:relative;height:12px;margin-top:14px;background:rgba(255,255,255,.14)!important;border-radius:999px;overflow:visible!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+#p-account .g-tier .ac-bar-fill{position:relative;height:100%;border-radius:999px;background:linear-gradient(90deg,#70c257,#ef8731)!important;box-shadow:0 0 18px rgba(239,135,49,.55);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+#p-account .g-tier .ac-bar-fill::after{content:'';position:absolute;inset:0;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0) 60%)}
+#p-account .g-dot{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#0a4a73;border:3px solid rgba(255,255,255,.5);z-index:2}
+#p-account .g-dot.done{background:#70c257;border-color:#fff}
+#p-account .g-dot.on{background:#ef8731;border-color:#fff;box-shadow:0 0 0 6px rgba(239,135,49,.25),0 0 22px rgba(239,135,49,.8);animation:acTierPulse 2s infinite}
+@keyframes acTierPulse{0%,100%{box-shadow:0 0 0 4px rgba(239,135,49,.28),0 0 18px rgba(239,135,49,.7)}50%{box-shadow:0 0 0 10px rgba(239,135,49,0),0 0 26px rgba(239,135,49,.9)}}
+#p-account .g-marks{position:relative;height:36px;margin-top:10px}
+#p-account .g-marks span{position:absolute;top:0;transform:translateX(-50%);text-align:center;font:700 12px 'Raleway',sans-serif;color:rgba(255,255,255,.7);white-space:nowrap}
+#p-account .g-marks span:first-child{transform:none;text-align:left}
+#p-account .g-marks span:last-child{transform:none;left:auto!important;right:0;text-align:right}
+#p-account .g-marks span b{display:block;font-size:13px;color:#fff}
+#p-account .g-marks span.on b{color:#ffc58f}
+#p-account .g-next{padding:26px;background:linear-gradient(180deg,#fff,#f7fafd);border:1px solid rgba(6,46,75,.08);box-shadow:0 18px 44px rgba(6,46,75,.1)}
+#p-account .g-next:empty{display:none}
+#p-account .g-next h3{margin:6px 0 4px;font-family:'Playfair Display',serif;font-size:26px;color:#062e4b!important}
+#p-account .g-next>p{margin:0 0 18px;font-size:14.5px;color:#5b6f82}
+#p-account .g-opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#p-account .g-opt{all:unset;box-sizing:border-box;position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:260px;padding:20px;overflow:hidden;color:#fff;cursor:pointer;background:#062e4b;box-shadow:0 14px 30px rgba(6,46,75,.18);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+#p-account .g-opt img{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+#p-account .g-opt::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,46,75,.1) 0%,rgba(6,46,75,.55) 40%,rgba(6,46,75,.96) 100%)}
+#p-account .g-opt::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 45%,transparent 60%);transform:translateX(-120%);transition:transform .9s}
+#p-account .g-opt>span{position:relative;z-index:2;display:block}
+#p-account .g-opt strong{display:block;margin-bottom:6px;font-family:'Playfair Display',serif;font-size:22px;color:#fff!important}
+#p-account .g-opt small{display:block;margin:0 0 14px;font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.88)}
+#p-account .g-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;background:linear-gradient(135deg,#f5a04b,#ef8731);color:#fff!important;font:800 12.5px 'Raleway',sans-serif;letter-spacing:.03em;text-decoration:none;border:0;cursor:pointer;box-shadow:0 10px 22px rgba(239,135,49,.35)}
+#p-account .g-btn i{font-style:normal;transition:transform .3s}
+#p-account .g-btn.glass{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.45);box-shadow:none;backdrop-filter:blur(6px)}
+#p-account .g-btn.is-done{background:#5aa847;box-shadow:none}
+#p-account .g-opt:hover,#p-account .g-opt:focus-visible{transform:translateY(-8px);box-shadow:0 26px 50px rgba(6,46,75,.3),0 0 0 2px rgba(239,135,49,.7),0 0 34px rgba(239,135,49,.35)}
+#p-account .g-opt:hover img,#p-account .g-opt:focus-visible img{transform:scale(1.08)}
+#p-account .g-opt:hover::after,#p-account .g-opt:focus-visible::after{transform:translateX(120%)}
+#p-account .g-opt:hover .g-btn i,#p-account .g-opt:focus-visible .g-btn i,#p-account .g-btn:hover i{transform:translateX(5px)}
+#p-account .g-trip{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;min-height:250px;padding:26px;overflow:hidden;color:#fff;background:#062e4b;box-shadow:0 18px 40px rgba(6,46,75,.22)}
+#p-account .g-trip>img{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover}
+#p-account .g-trip::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(6,46,75,.97) 0%,rgba(6,46,75,.9) 48%,rgba(6,46,75,.45) 80%,rgba(6,46,75,.3) 100%)}
+#p-account .g-trip>div{position:relative;z-index:2}
+#p-account .g-trip strong{display:block;font-family:'Playfair Display',serif;font-size:30px;line-height:1.15;color:#fff!important}
+#p-account .g-trip small{display:block;margin:6px 0 14px;font-size:14px;color:rgba(255,255,255,.88)}
+#p-account .g-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+#p-account .g-chips span{padding:5px 10px;font:800 10.5px 'Raleway',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35)}
+#p-account .g-chips span.ok{background:#5aa847;border-color:#5aa847}
+#p-account .g-chips span.wait{background:#ef8731;border-color:#ef8731}
+#p-account .g-acts{display:flex;flex-wrap:wrap;gap:10px}
+#p-account .g-side{display:flex;gap:16px;align-items:center}
+#p-account .g-count{min-width:118px;padding:14px 18px;text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+#p-account .g-count b{display:block;font-family:'Playfair Display',serif;font-size:44px;line-height:1;color:#ffc58f}
+#p-account .g-count span{font:800 10.5px 'Raleway',sans-serif;letter-spacing:.12em;text-transform:uppercase}
+#p-account .g-ring{position:relative;width:104px;height:104px}
+#p-account .g-ring svg{transform:rotate(-90deg)}
+#p-account .g-ring circle{fill:none;stroke-width:9}
+#p-account .g-ring .bg{stroke:rgba(255,255,255,.18)}
+#p-account .g-ring .fg{stroke:url(#acRingGrad);stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)}
+#p-account .g-ring>span{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font:800 10.5px 'Raleway',sans-serif;letter-spacing:.06em;line-height:1.3;text-transform:uppercase}
+#p-account .g-ring>span b{display:block;font-size:22px;letter-spacing:0}
+#p-account .g-short{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#p-account .g-sc{all:unset;box-sizing:border-box;position:relative;overflow:hidden;display:block;padding:22px 22px 20px 26px;cursor:pointer;background:linear-gradient(160deg,#fff 0%,#f3f8fc 100%);border:1px solid rgba(6,46,75,.08);box-shadow:0 12px 26px rgba(6,46,75,.08),inset 0 1px 0 #fff;transition:transform .3s,box-shadow .3s}
+#p-account .g-sc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#70c257,#ef8731)}
+#p-account .g-sc strong{display:block;font-family:'Playfair Display',serif;font-size:19px;color:#062e4b!important}
+#p-account .g-sc small{display:block;margin:4px 0 12px;font-size:13.5px;color:#5b6f82}
+#p-account .g-sc em{font:800 12.5px 'Raleway',sans-serif;font-style:normal;color:#ef8731}
+#p-account .g-sc em i{display:inline-block;font-style:normal;transition:transform .3s}
+#p-account .g-sc:hover,#p-account .g-sc:focus-visible{transform:translateY(-4px);box-shadow:0 20px 40px rgba(6,46,75,.14),0 0 0 1px rgba(239,135,49,.4)}
+#p-account .g-sc:hover em i,#p-account .g-sc:focus-visible em i{transform:translateX(5px)}
+#p-account .g-also{margin:-4px 0 0;font-size:13.5px;color:#5b6f82}
+#p-account .g-also:empty{display:none}
+#p-account .g-also button{all:unset;cursor:pointer;margin:0 4px;font-weight:700;color:#c4621b;text-decoration:underline}
+@media(max-width:900px){#p-account .g-opts,#p-account .g-short{grid-template-columns:1fr}#p-account .g-opt{min-height:200px}#p-account .g-trip{grid-template-columns:1fr;padding:20px}#p-account .g-trip strong{font-size:24px}#p-account .g-next{padding:20px}}
+@media(prefers-reduced-motion:reduce){#p-account .g-dot.on{animation:none}#p-account .g-tier .ac-bar-fill,#p-account .g-ring .fg,#p-account .g-opt,#p-account .g-opt img,#p-account .g-opt::after,#p-account .g-sc{transition:none}}
+body.theme-night #p-account .g-next{background:#0c2b46;border-color:rgba(255,255,255,.1)}
+body.theme-night #p-account .g-next h3{color:#fff!important}
+body.theme-night #p-account .g-next>p,body.theme-night #p-account .g-sc small{color:#c9d8e6}
+body.theme-night #p-account .g-sc{background:#0c2b46;border-color:rgba(255,255,255,.1)}
+body.theme-night #p-account .g-sc strong{color:#fff!important}
 /* "Be first to hear about new trips" boxes: after a request, on a trip that is not open, in the Group trips tab */
 .tc-listbox{display:block;margin:18px 0 0;padding:16px 18px;text-align:left;background:#fff;border:1px solid rgba(6,46,75,.12);border-left:3px solid #ef8731}
 .tc-listbox>strong{display:block;margin:0 0 4px;font-family:'Playfair Display',serif;font-size:18px;color:#062e4b}
@@ -59061,6 +59148,98 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       x.fillStyle='#ef8731';x.fillRect(0,H-14,W,14);
       return cv;
     });
+  }
+  /* ── the account overview: "your next step" (a trip coming up, a trip you lead, or three ways to start) and shortcuts that fit ── */
+  var nx={at:0,loading:false,data:null};
+  var NX_STATUS={'new':'Request received',contacted:'We are in touch',confirmed:'Confirmed',booked:'Booked',waitlist:'Waitlist'};
+  function nxDays(iso){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||'');if(!m)return null;var now=new Date(),t=Date.UTC(+m[1],+m[2]-1,+m[3]),d=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());return Math.round((t-d)/86400000);}
+  function nxPick(list){
+    var rank={confirmed:0,booked:0,contacted:1,'new':1,waitlist:2};
+    return (list||[]).filter(function(i){if(!i.tripSlug||!(i.status in rank))return false;var e=nxDays(i.tripEnd||i.tripStart);return e==null||e>=0;})
+      .sort(function(a,b){return (rank[a.status]-rank[b.status])||String(a.tripStart||'9').localeCompare(String(b.tripStart||'9'));})[0]||null;
+  }
+  function nxCount(el,to){if(!el)return;if(reduced||!to){el.textContent=String(to);return;}var s0=null;(function st(ts){if(!s0)s0=ts;var k=Math.min(1,(ts-s0)/1300);el.textContent=String(Math.round(to*(1-Math.pow(1-k,3))));if(k<1)requestAnimationFrame(st);})(performance.now());}
+  function nxTrip(i){
+    var days=nxDays(i.tripStart),open=i.status!=='waitlist',done=['passport','entry','insurance','esim','chat'].filter(function(k){return i.checklist&&i.checklist[k];}).length;
+    var C=2*Math.PI*44,meta=[i.dateText,[i.tripDestination,i.tripCountry].filter(Boolean).join(', '),i.leaderName?'Led by '+i.leaderName:''].filter(Boolean).join(' · ');
+    var side=(days!=null&&days>=0?'<div class="g-count"><b data-nx-count="'+days+'">'+days+'</b><span>'+(days===1?'day to go':'days to go')+'</span></div>':'')+
+      (open?'<div class="g-ring" title="Before you go: '+done+' of 5 done"><svg width="104" height="104" aria-hidden="true"><circle class="bg" cx="52" cy="52" r="44"/><circle class="fg" cx="52" cy="52" r="44" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+C.toFixed(1)+'" data-to="'+(C*(1-done/5)).toFixed(1)+'"/></svg><span><span><b>'+done+'/5</b>Before<br>you go</span></span></div>':'');
+    return '<span class="ac-eyebrow ac-eyebrow--dark">Your next step</span><h3>'+(i.status==='waitlist'?'You are on the waitlist':'Your trip is coming up')+'</h3><p>Everything for your next trip in one place.</p>'+
+      '<div class="g-trip"><img src="'+esc(i.tripImage||'/assets/travel-club/departures-bg.jpg')+'" alt="" loading="lazy">'+
+      '<div><div class="g-chips"><span class="'+(i.status==='confirmed'||i.status==='booked'?'ok':i.status==='waitlist'?'wait':'')+'">'+esc(NX_STATUS[i.status]||i.status)+'</span>'+(i.tripTheme?'<span>'+esc(i.tripTheme)+'</span>':'')+'</div>'+
+      '<strong>'+esc(i.tripTitle||'Your trip')+'</strong><small>'+esc(meta)+'</small>'+
+      '<div class="g-acts"><a class="g-btn" href="/trip/'+esc(i.tripSlug)+'" data-trip="'+esc(i.tripSlug)+'">Open the trip <i>&rarr;</i></a>'+
+      (i.groupLink?'<a class="g-btn glass" href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Join the group chat</a>':open?'<button type="button" class="g-btn glass" data-tab-go="groups">Before you go</button>':'')+'</div></div>'+
+      (side?'<div class="g-side">'+side+'</div>':'')+'</div>';
+  }
+  function nxLead(t){
+    return '<span class="ac-eyebrow ac-eyebrow--dark">Your next step</span><h3>Your trip is live</h3><p>Share it with your community and watch the requests come in.</p>'+
+      '<div class="g-trip"><img src="'+esc(t.image||'/assets/travel-club/group-leader.jpg')+'" alt="" loading="lazy">'+
+      '<div><div class="g-chips"><span class="ok">'+(t.status==='full'?'Full':'Open')+'</span><span>You lead this trip</span></div>'+
+      '<strong>'+esc(t.title)+'</strong><small>'+esc([t.dateText,[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))+'</small>'+
+      '<div class="g-acts"><button type="button" class="g-btn" data-tab-go="groups">Open your organizer space <i>&rarr;</i></button><a class="g-btn glass" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'">View the trip page</a></div></div>'+
+      '<div class="g-side"><div class="g-count"><b data-nx-count="'+(t.joined||0)+'">'+(t.joined||0)+'</b><span>'+((t.joined||0)===1?'person joined':'people joined')+'</span></div></div></div>';
+  }
+  function nxStart(onList){
+    function opt(img,title,body,btn,attrs,cls){return '<button type="button" class="g-opt" '+attrs+'><img src="'+img+'" alt="" loading="lazy"><span><strong>'+title+'</strong><small>'+body+'</small><span class="g-btn'+(cls?' '+cls:'')+'">'+btn+' <i>&rarr;</i></span></span></button>';}
+    return '<span class="ac-eyebrow ac-eyebrow--dark">Your next step</span><h3>Where would you like to go first?</h3><p>Three ways to get started with the Travel Club.</p><div class="g-opts">'+
+      opt('/assets/tours/private-catamaran-sunset-cruise.jpg','Join a group trip','Trips led by people from our community, with the price and places left.','See departures','data-nx="departures"')+
+      (onList?opt('/assets/tours/dunns-river-falls-and-blue-hole-tour.jpg','Be first to hear','You are on the list. We email you the moment a new trip opens.','On the list','data-nx="listed"','is-done')
+             :opt('/assets/tours/dunns-river-falls-and-blue-hole-tour.jpg','Be first to hear','We email you the moment a new trip opens. One tap, nothing to fill in.','Tell me first','data-nx="list"'))+
+      opt('/assets/travel-club/group-leader.jpg','Lead a trip','Bring your community. We run the bookings and the trip, and you earn a reward.','Apply to lead','data-nx="lead"','glass')+'</div>';
+  }
+  function nxShortcuts(hasTrip){
+    var cart=parseInt(((document.getElementById('dashCartCount')||{}).textContent||'0').replace(/[^\d]/g,''),10)||0;
+    var saved=parseInt(((document.getElementById('dashSavedCount')||{}).textContent||'0').replace(/[^\d]/g,''),10)||0;
+    function sc(title,body,cta,attrs){return '<button type="button" class="g-sc" '+attrs+'><strong>'+title+'</strong><small>'+body+'</small><em>'+cta+' <i>&rarr;</i></em></button>';}
+    var list=[],also=['<button type="button" onclick="return forceAccountAction(\'blog\', event)">Write for our blog</button>'];
+    if(hasTrip)list.push(sc('Join another trip','Group trips with places open.','See departures','data-nx="departures"'));
+    list.push(sc('Browse tours','Curated tours across the islands.','Explore','onclick="return forceAccountAction(\'tours\', event)"'));
+    if(cart)list.push(sc('Review cart ('+cart+')','Finish booking what you picked.','Open cart','onclick="return forceAccountAction(\'cart\', event)"'));
+    else list.push(sc('Start planning','Tell us your dates and your group.','Start now','onclick="return forceAccountAction(\'booking\', event)"'));
+    if(list.length<3)list.push(sc('Saved tours'+(saved?' ('+saved+')':''),'Tours you kept for later.','Open saved','data-tab-go="saved"'));
+    else also.push('<button type="button" data-tab-go="saved">Saved tours'+(saved?' ('+saved+')':'')+'</button>');
+    if(cart&&!hasTrip)also.push('<button type="button" onclick="return forceAccountAction(\'booking\', event)">Start planning</button>');
+    var sh=$('acShort'),al=$('acAlso');if(sh)sh.innerHTML=list.join('');if(al)al.innerHTML='Also: '+also.join(' &middot; ');
+  }
+  function nxRender(){
+    var box=$('acNext');if(!box)return;
+    var d=nx.data||{},mine=d.interests||[],trip=nxPick(mine),led=(d.trips||[]).filter(function(t){return t.status==='open'||t.status==='full';})[0];
+    var onList=mine.some(function(i){return !i.tripSlug&&i.status!=='cancelled';});
+    box.innerHTML=trip?nxTrip(trip):led?nxLead(led):nxStart(onList);
+    nxShortcuts(!!(trip||led));
+    requestAnimationFrame(function(){
+      var fg=box.querySelector('.g-ring .fg');if(fg)setTimeout(function(){fg.setAttribute('stroke-dashoffset',fg.getAttribute('data-to'));},reduced?0:250);
+      [].forEach.call(box.querySelectorAll('[data-nx-count]'),function(el){nxCount(el,+el.getAttribute('data-nx-count'));});
+    });
+  }
+  function fillNext(force){
+    if(!$('acNext'))return;
+    if(!token()){nx.data=null;nxRender();return;}
+    if(nx.loading||(!force&&nx.data&&Date.now()-nx.at<60000)){nxRender();return;}
+    nx.loading=true;if(!nx.data)nxRender();
+    api('trips?mine=1').then(function(d){nx.data=d;nx.at=Date.now();nx.loading=false;nxRender();}).catch(function(){nx.loading=false;nxRender();});
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#acPane-overview [data-nx]');if(!b)return;
+    var k=b.getAttribute('data-nx');
+    if(k==='departures'){e.preventDefault();go('departures');return;}
+    if(k==='lead'){e.preventDefault();if(window.ssClubApply)window.ssClubApply();return;}
+    if(k==='list'){
+      var u=who();if(!u||!u.email)return;var lab=b.querySelector('.g-btn');lab.innerHTML='Sending...';b.disabled=true;
+      api('trips','POST',{action:'interest',name:u.name||'Traveler',email:u.email,consent:true,source:'account-overview'}).then(function(){
+        if(nx.data){(nx.data.interests=nx.data.interests||[]).push({tripSlug:'',status:'new'});}nxRender();track('travel_club_alert',{from:'account-overview'});
+      }).catch(function(err){b.disabled=false;lab.innerHTML='Tell me first <i>&rarr;</i>';alert(err.message||'We could not add you just now.');});
+    }
+  });
+  var ov=$('acPane-overview');
+  if(ov){
+    if(window.MutationObserver){
+      new MutationObserver(function(){if(!ov.hidden)fillNext(false);}).observe(ov,{attributes:true,attributeFilter:['hidden']});
+      ['dashCartCount','dashSavedCount'].forEach(function(id){var el=$(id);if(el)new MutationObserver(function(){nxShortcuts(!!(nx.data&&(nxPick(nx.data.interests)||(nx.data.trips||[]).some(function(t){return t.status==='open'||t.status==='full';}))));}).observe(el,{childList:true,characterData:true,subtree:true});});
+    }
+    fillNext(true);
+    document.addEventListener('ss-account-updated',function(){fillNext(true);});
   }
   var gp=$('acPane-groups');
   if(gp){
