@@ -60357,44 +60357,40 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 @media (prefers-reduced-motion:reduce){.tch-copy.ix-tg-sw *{animation:none!important}}
 
 
-/* Travel Club: glow and move (all of it is switched off for people who ask their device for reduced motion) */
-@keyframes ixGlow{0%,100%{box-shadow:0 0 0 0 rgba(239,135,49,0),0 10px 26px rgba(239,135,49,.32)}50%{box-shadow:0 0 0 7px rgba(239,135,49,.16),0 16px 40px rgba(239,135,49,.6)}}
-@keyframes ixFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+/* Travel Club: glow and move. Kept calm: navy, green and white glows, with orange only on the main buttons and thin accents. Off for reduced motion. */
+@keyframes ixGlow{0%,100%{box-shadow:0 8px 18px rgba(239,135,49,.16)}50%{box-shadow:0 10px 24px rgba(239,135,49,.3)}}
+@keyframes ixFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
 @keyframes ixRing{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-@keyframes ixDot{0%{box-shadow:0 0 0 0 rgba(239,135,49,.65)}100%{box-shadow:0 0 0 13px rgba(239,135,49,0)}}
-@keyframes ixNum{0%,100%{text-shadow:0 0 0 rgba(255,255,255,0)}50%{text-shadow:0 0 18px rgba(255,205,150,.95),0 0 4px rgba(239,135,49,.9)}}
-@keyframes ixTagStep{0%,34%,100%{translate:0 0}10%,24%{translate:0 -4px;background-color:rgba(239,135,49,.2);border-color:#ef8731;box-shadow:0 0 0 4px rgba(239,135,49,.18),0 10px 22px rgba(239,135,49,.4)}}
-@keyframes ixNumGlow{0%,100%{text-shadow:0 0 0 rgba(239,135,49,0)}50%{text-shadow:0 0 16px rgba(239,135,49,.85)}}
+@keyframes ixDot{0%{box-shadow:0 0 0 0 rgba(255,255,255,.45)}100%{box-shadow:0 0 0 11px rgba(255,255,255,0)}}
+@keyframes ixNum{0%,100%{text-shadow:0 0 0 rgba(255,255,255,0)}50%{text-shadow:0 0 14px rgba(255,255,255,.55)}}
+@keyframes ixTagStep{0%,34%,100%{translate:0 0}10%,24%{translate:0 -3px;background-color:rgba(112,194,87,.2);border-color:#70c257;box-shadow:0 0 0 3px rgba(112,194,87,.16),0 8px 18px rgba(6,46,75,.12)}}
+@keyframes ixNumGlow{0%,100%{text-shadow:0 0 0 rgba(10,77,115,0)}50%{text-shadow:0 0 12px rgba(10,77,115,.3)}}
 @media (prefers-reduced-motion:no-preference){
-  .tc-fbtn:not(.tc-fbtn--ghost),.tcd-cta,.tch-btn{animation:ixGlow 2.8s ease-in-out infinite}
-  .tc-fbtn:not(.tc-fbtn--ghost):hover,.tcd-cta:hover,.tch-btn:hover{animation-duration:1.2s}
-  .tcd-live{animation:ixGlow 2.4s ease-in-out infinite}
-  .tcd-dot{animation:ixDot 1.9s ease-out infinite}
+  .tc-fbtn:not(.tc-fbtn--ghost),.tch-btn{animation:ixGlow 3.2s ease-in-out infinite}
+  .tcd-dot{animation:ixDot 2.2s ease-out infinite}
   .tcd-row:nth-child(2) .tcd-dot{animation-delay:.3s}.tcd-row:nth-child(3) .tcd-dot{animation-delay:.6s}.tcd-row:nth-child(4) .tcd-dot{animation-delay:.9s}
-  .tcd-stats dt{animation:ixNum 3.2s ease-in-out infinite}
+  .tcd-stats dt{animation:ixNum 3.4s ease-in-out infinite}
   .tcd-stats>div:nth-child(2) dt{animation-delay:.5s}.tcd-stats>div:nth-child(3) dt{animation-delay:1s}
-  .tc-apply{animation:ixFloat 6s ease-in-out infinite}
+  .tc-apply{animation:ixFloat 6.5s ease-in-out infinite}
   .tc-apply-steps li{animation:ixTagStep 7s ease-in-out infinite}
   .tc-apply-steps li:nth-child(2){animation-delay:1.7s}.tc-apply-steps li:nth-child(3){animation-delay:3.4s}.tc-apply-steps li:nth-child(4){animation-delay:5.1s}
-  .tc-steps>li{animation:ixFloat 5.5s ease-in-out infinite}
+  .tc-steps>li{animation:ixFloat 6s ease-in-out infinite}
   .tc-steps>li:nth-child(2){animation-delay:.5s}.tc-steps>li:nth-child(3){animation-delay:1s}.tc-steps>li:nth-child(4){animation-delay:1.5s}.tc-steps>li:nth-child(5){animation-delay:2s}
-  .tc-num{animation:ixNumGlow 3s ease-in-out infinite}
+  .tc-num{animation:ixNumGlow 3.2s ease-in-out infinite}
   .tc-steps>li:nth-child(2) .tc-num{animation-delay:.6s}.tc-steps>li:nth-child(3) .tc-num{animation-delay:1.2s}.tc-steps>li:nth-child(4) .tc-num{animation-delay:1.8s}.tc-steps>li:nth-child(5) .tc-num{animation-delay:2.4s}
-  .tch-photo{animation:ixFloat 6.5s ease-in-out infinite}
+  .tch-photo{animation:ixFloat 7s ease-in-out infinite}
   .tc-faq{transition:transform .25s,box-shadow .25s,border-color .25s}
-  .ix-tg-b[aria-pressed="true"]{animation:ixGlow 2.6s ease-in-out infinite}
 }
-.tc-apply::before{content:'';position:absolute;inset:0;padding:2px;pointer-events:none;background:linear-gradient(90deg,#ef8731,#70c257,#0a4d73,#ef8731);background-size:300% 100%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
-@media (prefers-reduced-motion:no-preference){.tc-apply::before{animation:ixRing 5s linear infinite}}
-.tc-faq:hover{transform:translateY(-3px);border-color:#ef8731;box-shadow:0 0 0 1px rgba(239,135,49,.55),0 14px 32px rgba(239,135,49,.22)}
-.tc-faq[open]{border-color:#ef8731;box-shadow:inset 4px 0 0 #ef8731,0 0 0 1px rgba(239,135,49,.5),0 16px 36px rgba(239,135,49,.26)}
-.tc-faq[open] summary{color:var(--tc-head,#062e4b)}
+.tc-apply::before{content:'';position:absolute;inset:0;padding:2px;pointer-events:none;background:linear-gradient(90deg,#0a4d73,#70c257,#8cc4e0,#0a4d73);background-size:300% 100%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.75}
+@media (prefers-reduced-motion:no-preference){.tc-apply::before{animation:ixRing 6s linear infinite}}
+.tc-faq:hover{transform:translateY(-2px);border-color:rgba(10,77,115,.55);box-shadow:0 0 0 1px rgba(10,77,115,.22),0 12px 28px rgba(6,46,75,.14)}
+.tc-faq[open]{border-color:rgba(10,77,115,.45);box-shadow:inset 3px 0 0 #70c257,0 12px 28px rgba(6,46,75,.12)}
 @media (prefers-reduced-motion:no-preference){.tc-faq[open] p{animation:ixRise .4s both}}
 .tcd-row{transition:translate .25s,background .25s,box-shadow .25s}
-.tcd-row:hover{translate:8px 0;background:linear-gradient(90deg,rgba(239,135,49,.2),rgba(255,255,255,.04));box-shadow:inset 3px 0 0 #ef8731,0 0 28px rgba(239,135,49,.3)}
-.tcd-fc:hover{box-shadow:0 0 18px rgba(255,255,255,.35)}
-.tcd-fc[aria-pressed="true"]{box-shadow:0 0 20px rgba(239,135,49,.7)}
-.tc-apply-steps li:hover{background-color:rgba(239,135,49,.22);border-color:#ef8731;box-shadow:0 0 0 4px rgba(239,135,49,.18),0 10px 22px rgba(239,135,49,.35)}
+.tcd-row:hover{translate:6px 0;background:linear-gradient(90deg,rgba(255,255,255,.13),rgba(255,255,255,.03));box-shadow:inset 3px 0 0 #ef8731,0 0 22px rgba(255,255,255,.1)}
+.tcd-fc:hover{box-shadow:0 0 14px rgba(255,255,255,.28)}
+.tc-apply-steps li:hover{background-color:rgba(112,194,87,.2);border-color:#70c257;box-shadow:0 0 0 3px rgba(112,194,87,.16),0 8px 18px rgba(6,46,75,.12)}
+[data-ix-steps].ix-js>li.ix-cur{box-shadow:0 14px 34px rgba(6,46,75,.14)!important}
 
 /* reveals */
 .ix-rv{opacity:0}
