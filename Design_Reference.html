@@ -60343,21 +60343,6 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 .tcd-fc[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
 .tcd-fc:focus-visible{outline:3px solid #70c257;outline-offset:2px}
 .tcd-row.tcd-hide{display:none!important}
-.ix-ap-tabs li{cursor:pointer;transition:background .18s,border-color .18s,transform .18s,color .18s}
-.ix-ap-tabs li:hover{transform:translateY(-1px)}
-.ix-ap-tabs li[aria-selected="true"]{background:var(--tc-o,#ef8731);border-color:var(--tc-o,#ef8731);color:#fff}
-.ix-ap-tabs li[aria-selected="true"] b{background:#fff;color:var(--tc-o,#ef8731)}
-.ix-ap-tabs li:focus-visible{outline:3px solid var(--tc-g,#70c257);outline-offset:2px}
-.ix-ap{margin:0 0 16px;padding:14px 16px;border:1px solid var(--tc-line,rgba(6,46,75,.1));background:var(--tc-soft,#f2f7fb);color:var(--tc-ink,#12293d);animation:ixRise .3s both}
-.ix-ap-bar{height:4px;background:var(--tc-line,rgba(6,46,75,.1));margin:0 0 12px}
-.ix-ap-bar i{display:block;height:100%;background:linear-gradient(90deg,#70c257,#ef8731);transition:width .35s}
-.ix-ap-h{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tc-o,#ef8731)}
-.ix-ap ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
-.ix-ap li{position:relative;padding-left:18px;font-size:14px;line-height:1.55}
-.ix-ap li::before{content:'';position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--tc-g,#70c257)}
-.ix-ap-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;font-size:13px;color:var(--tc-mut,#5c6f82)}
-.ix-ap-nav button{border:1px solid var(--tc-line,rgba(6,46,75,.18));border-radius:0;background:transparent;color:var(--tc-ink,#12293d);font:800 13px 'Raleway',sans-serif;padding:8px 14px;cursor:pointer}
-.ix-ap-nav button:hover{background:var(--tc-ink,#12293d);color:var(--tc-card,#fff)}
 .ix-fq{margin:0 0 14px}
 .ix-fq-l{display:block;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tc-o,#ef8731);margin:0 0 6px}
 .ix-fq-i{width:100%;max-width:560px;min-height:46px;padding:10px 14px;border:1.5px solid var(--tc-line,rgba(6,46,75,.2));border-radius:0;background:var(--tc-card,#fff);color:var(--tc-ink,#12293d);font:600 15px 'Raleway',sans-serif}
@@ -60369,7 +60354,47 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 .ix-tg-b[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
 .ix-tg-b:focus-visible{outline:3px solid #70c257;outline-offset:2px}
 .tch-copy.ix-tg-sw .tch-title,.tch-copy.ix-tg-sw .tch-tagline,.tch-copy.ix-tg-sw .tch-body{animation:ixRise .35s both}
-@media (prefers-reduced-motion:reduce){.ix-ap,.tch-copy.ix-tg-sw *{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.tch-copy.ix-tg-sw *{animation:none!important}}
+
+
+/* Travel Club: glow and move (all of it is switched off for people who ask their device for reduced motion) */
+@keyframes ixGlow{0%,100%{box-shadow:0 0 0 0 rgba(239,135,49,0),0 10px 26px rgba(239,135,49,.32)}50%{box-shadow:0 0 0 7px rgba(239,135,49,.16),0 16px 40px rgba(239,135,49,.6)}}
+@keyframes ixFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes ixRing{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes ixDot{0%{box-shadow:0 0 0 0 rgba(239,135,49,.65)}100%{box-shadow:0 0 0 13px rgba(239,135,49,0)}}
+@keyframes ixNum{0%,100%{text-shadow:0 0 0 rgba(255,255,255,0)}50%{text-shadow:0 0 18px rgba(255,205,150,.95),0 0 4px rgba(239,135,49,.9)}}
+@keyframes ixTagStep{0%,34%,100%{translate:0 0}10%,24%{translate:0 -4px;background-color:rgba(239,135,49,.2);border-color:#ef8731;box-shadow:0 0 0 4px rgba(239,135,49,.18),0 10px 22px rgba(239,135,49,.4)}}
+@keyframes ixNumGlow{0%,100%{text-shadow:0 0 0 rgba(239,135,49,0)}50%{text-shadow:0 0 16px rgba(239,135,49,.85)}}
+@media (prefers-reduced-motion:no-preference){
+  .tc-fbtn:not(.tc-fbtn--ghost),.tcd-cta,.tch-btn{animation:ixGlow 2.8s ease-in-out infinite}
+  .tc-fbtn:not(.tc-fbtn--ghost):hover,.tcd-cta:hover,.tch-btn:hover{animation-duration:1.2s}
+  .tcd-live{animation:ixGlow 2.4s ease-in-out infinite}
+  .tcd-dot{animation:ixDot 1.9s ease-out infinite}
+  .tcd-row:nth-child(2) .tcd-dot{animation-delay:.3s}.tcd-row:nth-child(3) .tcd-dot{animation-delay:.6s}.tcd-row:nth-child(4) .tcd-dot{animation-delay:.9s}
+  .tcd-stats dt{animation:ixNum 3.2s ease-in-out infinite}
+  .tcd-stats>div:nth-child(2) dt{animation-delay:.5s}.tcd-stats>div:nth-child(3) dt{animation-delay:1s}
+  .tc-apply{animation:ixFloat 6s ease-in-out infinite}
+  .tc-apply-steps li{animation:ixTagStep 7s ease-in-out infinite}
+  .tc-apply-steps li:nth-child(2){animation-delay:1.7s}.tc-apply-steps li:nth-child(3){animation-delay:3.4s}.tc-apply-steps li:nth-child(4){animation-delay:5.1s}
+  .tc-steps>li{animation:ixFloat 5.5s ease-in-out infinite}
+  .tc-steps>li:nth-child(2){animation-delay:.5s}.tc-steps>li:nth-child(3){animation-delay:1s}.tc-steps>li:nth-child(4){animation-delay:1.5s}.tc-steps>li:nth-child(5){animation-delay:2s}
+  .tc-num{animation:ixNumGlow 3s ease-in-out infinite}
+  .tc-steps>li:nth-child(2) .tc-num{animation-delay:.6s}.tc-steps>li:nth-child(3) .tc-num{animation-delay:1.2s}.tc-steps>li:nth-child(4) .tc-num{animation-delay:1.8s}.tc-steps>li:nth-child(5) .tc-num{animation-delay:2.4s}
+  .tch-photo{animation:ixFloat 6.5s ease-in-out infinite}
+  .tc-faq{transition:transform .25s,box-shadow .25s,border-color .25s}
+  .ix-tg-b[aria-pressed="true"]{animation:ixGlow 2.6s ease-in-out infinite}
+}
+.tc-apply::before{content:'';position:absolute;inset:0;padding:2px;pointer-events:none;background:linear-gradient(90deg,#ef8731,#70c257,#0a4d73,#ef8731);background-size:300% 100%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
+@media (prefers-reduced-motion:no-preference){.tc-apply::before{animation:ixRing 5s linear infinite}}
+.tc-faq:hover{transform:translateY(-3px);border-color:#ef8731;box-shadow:0 0 0 1px rgba(239,135,49,.55),0 14px 32px rgba(239,135,49,.22)}
+.tc-faq[open]{border-color:#ef8731;box-shadow:inset 4px 0 0 #ef8731,0 0 0 1px rgba(239,135,49,.5),0 16px 36px rgba(239,135,49,.26)}
+.tc-faq[open] summary{color:var(--tc-head,#062e4b)}
+@media (prefers-reduced-motion:no-preference){.tc-faq[open] p{animation:ixRise .4s both}}
+.tcd-row{transition:translate .25s,background .25s,box-shadow .25s}
+.tcd-row:hover{translate:8px 0;background:linear-gradient(90deg,rgba(239,135,49,.2),rgba(255,255,255,.04));box-shadow:inset 3px 0 0 #ef8731,0 0 28px rgba(239,135,49,.3)}
+.tcd-fc:hover{box-shadow:0 0 18px rgba(255,255,255,.35)}
+.tcd-fc[aria-pressed="true"]{box-shadow:0 0 20px rgba(239,135,49,.7)}
+.tc-apply-steps li:hover{background-color:rgba(239,135,49,.22);border-color:#ef8731;box-shadow:0 0 0 4px rgba(239,135,49,.18),0 10px 22px rgba(239,135,49,.35)}
 
 /* reveals */
 .ix-rv{opacity:0}
@@ -60721,31 +60746,6 @@ body.theme-night .ix-q-also a{color:#9fd2ff}
     };
   };
 
-  /* ── Travel Club: tappable application steps ── */
-  var APPLY=[
-    {t:'About you',p:['Your name and email. Already have an account? Sign in and apply with it, and no new account is created.','Your phone or WhatsApp number (optional).','Your city and country.']},
-    {t:'Your community',p:['Who you lead: a creator or influencer following, a birthday or celebration group, an alumni or school group, and more.','Your community or group name, and a website or social link (optional).','Roughly how big it is, how you reach them, and whether you have organized a group trip before.']},
-    {t:'The trip',p:['Where you would like to go: any of the seven shores, or not sure yet.','Exactly how many people you would personally invite.','What kind of trip: adventure, villa and relaxation, celebration, wellness, culture and food, or a group retreat.','When you would like to travel (optional).']},
-    {t:'In your own words',p:['A few lines about your community and the trip you have in mind.','Anything else we should know (optional), like questions, accessibility needs or dates that will not work.','Your OK for us to contact you about the application.']}
-  ];
-  function initApply(ol){
-    if(ol.__ix)return;var li=[].slice.call(ol.children);if(li.length!==APPLY.length)return;ol.__ix=1;
-    var panel=document.createElement('div');panel.className='ix-ap';panel.setAttribute('role','tabpanel');panel.setAttribute('aria-live','polite');
-    ol.parentNode.insertBefore(panel,ol.nextSibling);ol.setAttribute('role','tablist');ol.classList.add('ix-ap-tabs');
-    var cur=0;
-    function set(k,fresh){
-      cur=k;li.forEach(function(l,j){l.setAttribute('aria-selected',j===k?'true':'false');});
-      var A=APPLY[k];
-      panel.innerHTML='<div class="ix-ap-bar" aria-hidden="true"><i style="width:'+((k+1)/APPLY.length*100)+'%"></i></div><p class="ix-ap-h">Step '+(k+1)+' of '+APPLY.length+' \u00b7 '+esc(A.t)+'</p><ul>'+A.p.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><div class="ix-ap-nav"><span>'+(k<APPLY.length-1?'':'That is everything. Nothing is charged.')+'</span>'+(k<APPLY.length-1?'<button type="button" class="ix-ap-next">Next step &rarr;</button>':'')+'</div>';
-      panel.style.animation='none';void panel.offsetWidth;panel.style.animation='';
-    }
-    li.forEach(function(l,k){l.setAttribute('role','tab');l.setAttribute('tabindex','0');
-      l.addEventListener('click',function(e){e.stopPropagation();set(k);});
-      l.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(k);}else if(e.key==='ArrowRight'&&k<li.length-1){set(k+1);li[k+1].focus();}else if(e.key==='ArrowLeft'&&k>0){set(k-1);li[k-1].focus();}});});
-    panel.addEventListener('click',function(e){e.stopPropagation();if(e.target.closest('.ix-ap-next'))set(Math.min(APPLY.length-1,cur+1));});
-    set(0);
-  }
-
   /* ── Travel Club: search the questions ── */
   function initFaq(box){
     var items=[].slice.call(box.querySelectorAll('details.tc-faq'));if(box.__ix||items.length<2)return;box.__ix=1;
@@ -60787,7 +60787,6 @@ body.theme-night .ix-q-also a{color:#9fd2ff}
     document.querySelectorAll('[data-ix-voyage]').forEach(initVoyage);
     document.querySelectorAll('[data-ix-slider]').forEach(initSlider);
     document.querySelectorAll('[data-ix-steps]').forEach(initSteps);
-    document.querySelectorAll('.tc-apply-steps').forEach(initApply);
     document.querySelectorAll('.tc-faqs').forEach(initFaq);
     document.querySelectorAll('#homeTravelClub').forEach(initHomeClub);
     initCounts(document);
