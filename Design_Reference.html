@@ -14031,6 +14031,7 @@ body.theme-night #p-flagship-programs{
               <div><dt id="tcdN2">0</dt><dd>Destinations</dd></div>
               <div><dt id="tcdN3">0</dt><dd>Places left</dd></div>
             </dl>
+            <div class="tcd-filters" id="tcdFilters" role="group" aria-label="Filter departures"></div>
             <a class="tcd-cta" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">Follow our WhatsApp Channel <span aria-hidden="true">&rarr;</span></a>
           </aside>
           <div class="tcd-list" id="tcDepartures" aria-live="polite"></div>
@@ -58542,14 +58543,16 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function depCard(t,i){
     var meta=[t.dateText,t.organizer?'Led by '+t.organizer.name:'',[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
     var href='/trip/'+encodeURIComponent(t.slug);
-    return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
+    var isFull=t.status==='full'||(t.seats&&t.seats.left===0);
+    return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'" data-dest="'+esc(t.country||t.destination||'')+'" data-full="'+(isFull?'1':'0')+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
       '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
   }
   function depStats(list){
     var places=0,dests={};
     list.forEach(function(t){if(t.seats&&t.status!=='full')places+=t.seats.left;var d=[t.destination,t.country].filter(Boolean).join(', ');if(d)dests[d]=1;});
     var set=function(id,v){var e=$(id);if(e)e.textContent=v;};
-    set('tcdN1',list.length);set('tcdN2',Object.keys(dests).length);set('tcdN3',places);
+    var cnt=function(id,v){var e=$(id);if(!e)return;if(window.ixCount)window.ixCount(e,v);else e.textContent=v;};
+    cnt('tcdN1',list.length);cnt('tcdN2',Object.keys(dests).length);cnt('tcdN3',places);
   }
   /* the list scrolls inside the panel (no visible scrollbar); a soft fade at the bottom shows there are more trips below */
   function depMore(){
@@ -58579,6 +58582,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       depStats(list);
       g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Leave your email and we will tell you the moment one opens.</p><button type="button" class="tcd-cta" data-list-jump>Tell me first <span aria-hidden="true">&rarr;</span></button></div>';
       g.scrollTop=0;depMore();
+      if(window.ixDepFilters)window.ixDepFilters();
     }).catch(function(){
       g.innerHTML='<div class="tcd-empty"><strong>We could not load the departures</strong><p>Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.</p><button type="button" class="tcd-cta" id="tcRetry">Try again</button></div>';
       var r=$('tcRetry');if(r)r.addEventListener('click',function(){loadDepartures(true);});
@@ -60329,6 +60333,44 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 [data-ix-steps].ix-js>li{transition:opacity .3s,border-color .3s,box-shadow .3s}
 [data-ix-steps].ix-js>li.ix-cur{border-color:#ef8731!important;box-shadow:0 18px 44px rgba(239,135,49,.18)!important}
 
+
+/* Travel Club: departure filters, tappable apply steps, FAQ search, home lead-or-join toggle */
+.tcd-filters{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 20px}
+.tcd-filters:empty{display:none}
+.tcd-fc{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid rgba(255,255,255,.38);border-radius:0;background:rgba(255,255,255,.06);color:#fff;font:700 12.5px/1.2 'Raleway',sans-serif;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.tcd-fc:hover{transform:translateY(-1px);border-color:#fff}
+.tcd-fc i{font-style:normal;font-weight:800;font-size:11px;opacity:.8}
+.tcd-fc[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
+.tcd-fc:focus-visible{outline:3px solid #70c257;outline-offset:2px}
+.tcd-row.tcd-hide{display:none!important}
+.ix-ap-tabs li{cursor:pointer;transition:background .18s,border-color .18s,transform .18s,color .18s}
+.ix-ap-tabs li:hover{transform:translateY(-1px)}
+.ix-ap-tabs li[aria-selected="true"]{background:var(--tc-o,#ef8731);border-color:var(--tc-o,#ef8731);color:#fff}
+.ix-ap-tabs li[aria-selected="true"] b{background:#fff;color:var(--tc-o,#ef8731)}
+.ix-ap-tabs li:focus-visible{outline:3px solid var(--tc-g,#70c257);outline-offset:2px}
+.ix-ap{margin:0 0 16px;padding:14px 16px;border:1px solid var(--tc-line,rgba(6,46,75,.1));background:var(--tc-soft,#f2f7fb);color:var(--tc-ink,#12293d);animation:ixRise .3s both}
+.ix-ap-bar{height:4px;background:var(--tc-line,rgba(6,46,75,.1));margin:0 0 12px}
+.ix-ap-bar i{display:block;height:100%;background:linear-gradient(90deg,#70c257,#ef8731);transition:width .35s}
+.ix-ap-h{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tc-o,#ef8731)}
+.ix-ap ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.ix-ap li{position:relative;padding-left:18px;font-size:14px;line-height:1.55}
+.ix-ap li::before{content:'';position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--tc-g,#70c257)}
+.ix-ap-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;font-size:13px;color:var(--tc-mut,#5c6f82)}
+.ix-ap-nav button{border:1px solid var(--tc-line,rgba(6,46,75,.18));border-radius:0;background:transparent;color:var(--tc-ink,#12293d);font:800 13px 'Raleway',sans-serif;padding:8px 14px;cursor:pointer}
+.ix-ap-nav button:hover{background:var(--tc-ink,#12293d);color:var(--tc-card,#fff)}
+.ix-fq{margin:0 0 14px}
+.ix-fq-l{display:block;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tc-o,#ef8731);margin:0 0 6px}
+.ix-fq-i{width:100%;max-width:560px;min-height:46px;padding:10px 14px;border:1.5px solid var(--tc-line,rgba(6,46,75,.2));border-radius:0;background:var(--tc-card,#fff);color:var(--tc-ink,#12293d);font:600 15px 'Raleway',sans-serif}
+.ix-fq-i:focus{outline:none;border-color:var(--tc-o,#ef8731);box-shadow:0 0 0 3px rgba(239,135,49,.25)}
+.ix-fq-n{margin:8px 0 0;font-size:13px;color:var(--tc-mut,#5c6f82);min-height:1.2em}
+.tch-copy .ix-tg{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.ix-tg-b{padding:10px 16px;border:1px solid rgba(255,255,255,.45);border-radius:0;background:rgba(255,255,255,.08);color:#fff;font:800 13px/1.2 'Raleway',sans-serif;letter-spacing:.3px;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.ix-tg-b:hover{transform:translateY(-1px);border-color:#fff}
+.ix-tg-b[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
+.ix-tg-b:focus-visible{outline:3px solid #70c257;outline-offset:2px}
+.tch-copy.ix-tg-sw .tch-title,.tch-copy.ix-tg-sw .tch-tagline,.tch-copy.ix-tg-sw .tch-body{animation:ixRise .35s both}
+@media (prefers-reduced-motion:reduce){.ix-ap,.tch-copy.ix-tg-sw *{animation:none!important}}
+
 /* reveals */
 .ix-rv{opacity:0}
 .ix-rv.ix-in{animation:ixRise .6s cubic-bezier(.2,.8,.2,1) both}
@@ -60652,12 +60694,102 @@ body.theme-night .ix-q-also a{color:#9fd2ff}
     });
   }
 
+  /* ── Travel Club: departure counts and filters ── */
+  window.ixCount=function(el,v){
+    var to=+v;if(!isFinite(to)||RM||to<=0){el.textContent=v;return;}
+    var t0=null,D=900;
+    function f(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/D),e=1-Math.pow(1-p,3);el.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(f);else el.textContent=to;}
+    el.textContent='0';requestAnimationFrame(f);
+  };
+  window.ixDepFilters=function(){
+    var host=document.getElementById('tcdFilters'),g=document.getElementById('tcDepartures');if(!host||!g)return;
+    host.innerHTML='';
+    var rows=[].slice.call(g.querySelectorAll('.tcd-row'));if(rows.length<2)return;
+    var isFull=function(r){return r.getAttribute('data-full')==='1';};
+    var opts=[{t:'All trips',f:function(){return true;}}];
+    var nOpen=rows.filter(function(r){return !isFull(r);}).length;
+    if(nOpen&&nOpen<rows.length){opts.push({t:'Places open',f:function(r){return !isFull(r);}});opts.push({t:'Waitlist',f:isFull});}
+    var dests=[];rows.forEach(function(r){var d=r.getAttribute('data-dest');if(d&&dests.indexOf(d)<0)dests.push(d);});
+    if(dests.length>1)dests.forEach(function(d){opts.push({t:d,f:function(r){return r.getAttribute('data-dest')===d;}});});
+    if(opts.length<2)return;
+    host.innerHTML=opts.map(function(o,k){return '<button type="button" class="tcd-fc" aria-pressed="'+(k?'false':'true')+'" data-k="'+k+'">'+esc(o.t)+' <i>'+rows.filter(o.f).length+'</i></button>';}).join('');
+    host.onclick=function(e){
+      var b=e.target.closest('.tcd-fc');if(!b)return;var o=opts[+b.getAttribute('data-k')];
+      host.querySelectorAll('.tcd-fc').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+      rows.forEach(function(r){r.classList.toggle('tcd-hide',!o.f(r));});
+      g.scrollTop=0;g.dispatchEvent(new Event('scroll'));
+    };
+  };
+
+  /* ── Travel Club: tappable application steps ── */
+  var APPLY=[
+    {t:'About you',p:['Your name and email. Already have an account? Sign in and apply with it, and no new account is created.','Your phone or WhatsApp number (optional).','Your city and country.']},
+    {t:'Your community',p:['Who you lead: a creator or influencer following, a birthday or celebration group, an alumni or school group, and more.','Your community or group name, and a website or social link (optional).','Roughly how big it is, how you reach them, and whether you have organized a group trip before.']},
+    {t:'The trip',p:['Where you would like to go: any of the seven shores, or not sure yet.','Exactly how many people you would personally invite.','What kind of trip: adventure, villa and relaxation, celebration, wellness, culture and food, or a group retreat.','When you would like to travel (optional).']},
+    {t:'In your own words',p:['A few lines about your community and the trip you have in mind.','Anything else we should know (optional), like questions, accessibility needs or dates that will not work.','Your OK for us to contact you about the application.']}
+  ];
+  function initApply(ol){
+    if(ol.__ix)return;var li=[].slice.call(ol.children);if(li.length!==APPLY.length)return;ol.__ix=1;
+    var panel=document.createElement('div');panel.className='ix-ap';panel.setAttribute('role','tabpanel');panel.setAttribute('aria-live','polite');
+    ol.parentNode.insertBefore(panel,ol.nextSibling);ol.setAttribute('role','tablist');ol.classList.add('ix-ap-tabs');
+    var cur=0;
+    function set(k,fresh){
+      cur=k;li.forEach(function(l,j){l.setAttribute('aria-selected',j===k?'true':'false');});
+      var A=APPLY[k];
+      panel.innerHTML='<div class="ix-ap-bar" aria-hidden="true"><i style="width:'+((k+1)/APPLY.length*100)+'%"></i></div><p class="ix-ap-h">Step '+(k+1)+' of '+APPLY.length+' \u00b7 '+esc(A.t)+'</p><ul>'+A.p.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><div class="ix-ap-nav"><span>'+(k<APPLY.length-1?'':'That is everything. Nothing is charged.')+'</span>'+(k<APPLY.length-1?'<button type="button" class="ix-ap-next">Next step &rarr;</button>':'')+'</div>';
+      panel.style.animation='none';void panel.offsetWidth;panel.style.animation='';
+    }
+    li.forEach(function(l,k){l.setAttribute('role','tab');l.setAttribute('tabindex','0');
+      l.addEventListener('click',function(e){e.stopPropagation();set(k);});
+      l.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(k);}else if(e.key==='ArrowRight'&&k<li.length-1){set(k+1);li[k+1].focus();}else if(e.key==='ArrowLeft'&&k>0){set(k-1);li[k-1].focus();}});});
+    panel.addEventListener('click',function(e){e.stopPropagation();if(e.target.closest('.ix-ap-next'))set(Math.min(APPLY.length-1,cur+1));});
+    set(0);
+  }
+
+  /* ── Travel Club: search the questions ── */
+  function initFaq(box){
+    var items=[].slice.call(box.querySelectorAll('details.tc-faq'));if(box.__ix||items.length<2)return;box.__ix=1;
+    var bar=document.createElement('div');bar.className='ix-fq';
+    bar.innerHTML='<label class="ix-fq-l" for="ixFaqQ">Search the questions</label><input id="ixFaqQ" class="ix-fq-i" type="search" placeholder="Try \u201creward\u201d or \u201cfull\u201d" autocomplete="off"><p class="ix-fq-n" role="status" aria-live="polite"></p>';
+    box.parentNode.insertBefore(bar,box);
+    var inp=bar.querySelector('input'),note=bar.querySelector('.ix-fq-n');
+    items.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)items.forEach(function(o){if(o!==d)o.open=false;});});});
+    inp.addEventListener('input',function(){
+      var q=inp.value.trim().toLowerCase(),hit=[];
+      items.forEach(function(d){var ok=!q||d.textContent.toLowerCase().indexOf(q)>-1;d.style.display=ok?'':'none';if(ok)hit.push(d);});
+      if(!q)note.textContent='';
+      else if(!hit.length)note.textContent='No question matches. Call or text +1 (876) 465-0630 and we will help.';
+      else{note.textContent=hit.length+' of '+items.length+' questions';if(hit.length===1)hit[0].open=true;}
+    });
+  }
+
+  /* ── Home: lead or join ── */
+  function initHomeClub(sec){
+    var copy=sec.querySelector('.tch-copy');if(sec.__ix||!copy)return;
+    var ti=copy.querySelector('[data-home-club="title"]'),tg=copy.querySelector('[data-home-club="tagline"]'),bd=copy.querySelector('[data-home-club="body"]'),bt=copy.querySelector('[data-home-club="primaryBtn"]'),a=bt&&bt.closest('a'),eb=copy.querySelector('.tch-eyebrow');
+    if(!ti||!tg||!bd||!bt||!a||!eb)return;sec.__ix=1;
+    var O={ti:ti.textContent,tg:tg.textContent,bd:bd.textContent,bt:bt.textContent,href:a.getAttribute('href'),on:a.getAttribute('onclick')};
+    var J={ti:'Join a trip led by our community.',tg:'Pick a departure. Join the group.',bd:'Browse approved group trips led by people from our community, open one with View trip, and ask to join. Nothing is charged until we confirm with you.',bt:'See departures',href:'/travel-club#departures',on:"return ssClubGo('departures');"};
+    var bar=document.createElement('div');bar.className='ix-tg';bar.setAttribute('role','group');bar.setAttribute('aria-label','Lead or join a trip');
+    bar.innerHTML='<button type="button" class="ix-tg-b" aria-pressed="true" data-m="lead">I want to lead</button><button type="button" class="ix-tg-b" aria-pressed="false" data-m="join">I want to join</button>';
+    copy.insertBefore(bar,eb);
+    bar.addEventListener('click',function(e){
+      var b=e.target.closest('.ix-tg-b');if(!b)return;var M=b.getAttribute('data-m')==='join'?J:{ti:O.ti,tg:O.tg,bd:O.bd,bt:O.bt,href:O.href,on:O.on};
+      bar.querySelectorAll('.ix-tg-b').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+      ti.textContent=M.ti;tg.textContent=M.tg;bd.textContent=M.bd;bt.textContent=M.bt;a.setAttribute('href',M.href);if(M.on)a.setAttribute('onclick',M.on);else a.removeAttribute('onclick');
+      copy.classList.remove('ix-tg-sw');void copy.offsetWidth;copy.classList.add('ix-tg-sw');
+    });
+  }
+
   function boot(){
     document.querySelectorAll('[data-ix-quiz]').forEach(initQuiz);
     document.querySelectorAll('[data-ix-build]').forEach(initBuild);
     document.querySelectorAll('[data-ix-voyage]').forEach(initVoyage);
     document.querySelectorAll('[data-ix-slider]').forEach(initSlider);
     document.querySelectorAll('[data-ix-steps]').forEach(initSteps);
+    document.querySelectorAll('.tc-apply-steps').forEach(initApply);
+    document.querySelectorAll('.tc-faqs').forEach(initFaq);
+    document.querySelectorAll('#homeTravelClub').forEach(initHomeClub);
     initCounts(document);
     MAIN.forEach(function(id){var p=document.getElementById(id);if(p&&p.classList.contains('on'))initReveal(p);});
   }
