@@ -60343,11 +60343,6 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
 .tcd-fc[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
 .tcd-fc:focus-visible{outline:3px solid #70c257;outline-offset:2px}
 .tcd-row.tcd-hide{display:none!important}
-.ix-fq{margin:0 0 14px}
-.ix-fq-l{display:block;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--tc-o,#ef8731);margin:0 0 6px}
-.ix-fq-i{width:100%;max-width:560px;min-height:46px;padding:10px 14px;border:1.5px solid var(--tc-line,rgba(6,46,75,.2));border-radius:0;background:var(--tc-card,#fff);color:var(--tc-ink,#12293d);font:600 15px 'Raleway',sans-serif}
-.ix-fq-i:focus{outline:none;border-color:var(--tc-o,#ef8731);box-shadow:0 0 0 3px rgba(239,135,49,.25)}
-.ix-fq-n{margin:8px 0 0;font-size:13px;color:var(--tc-mut,#5c6f82);min-height:1.2em}
 .tch-copy .ix-tg{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .ix-tg-b{padding:10px 16px;border:1px solid rgba(255,255,255,.45);border-radius:0;background:rgba(255,255,255,.08);color:#fff;font:800 13px/1.2 'Raleway',sans-serif;letter-spacing:.3px;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
 .ix-tg-b:hover{transform:translateY(-1px);border-color:#fff}
@@ -60742,21 +60737,10 @@ body.theme-night .ix-q-also a{color:#9fd2ff}
     };
   };
 
-  /* ── Travel Club: search the questions ── */
+  /* ── Travel Club: one question open at a time ── */
   function initFaq(box){
     var items=[].slice.call(box.querySelectorAll('details.tc-faq'));if(box.__ix||items.length<2)return;box.__ix=1;
-    var bar=document.createElement('div');bar.className='ix-fq';
-    bar.innerHTML='<label class="ix-fq-l" for="ixFaqQ">Search the questions</label><input id="ixFaqQ" class="ix-fq-i" type="search" placeholder="Try \u201creward\u201d or \u201cfull\u201d" autocomplete="off"><p class="ix-fq-n" role="status" aria-live="polite"></p>';
-    box.parentNode.insertBefore(bar,box);
-    var inp=bar.querySelector('input'),note=bar.querySelector('.ix-fq-n');
     items.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)items.forEach(function(o){if(o!==d)o.open=false;});});});
-    inp.addEventListener('input',function(){
-      var q=inp.value.trim().toLowerCase(),hit=[];
-      items.forEach(function(d){var ok=!q||d.textContent.toLowerCase().indexOf(q)>-1;d.style.display=ok?'':'none';if(ok)hit.push(d);});
-      if(!q)note.textContent='';
-      else if(!hit.length)note.textContent='No question matches. Call or text +1 (876) 465-0630 and we will help.';
-      else{note.textContent=hit.length+' of '+items.length+' questions';if(hit.length===1)hit[0].open=true;}
-    });
   }
 
   /* ── Home: lead or join ── */
