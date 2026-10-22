@@ -4138,6 +4138,11 @@ body.theme-night .mba-getaway-kicker{color:#7ed8c7!important}
   #p-stays .stay-media,
   #p-staycountry .stay-media{min-height:175px}
 }
+/* when the buttons stack into a column on phones and tablets, the 160px flex-basis above turned into a 160px height */
+@media (max-width:1024px){
+  #p-stays .stay-actions>.btn-primary,#p-staycountry .stay-actions>.btn-primary,
+  #p-stays .stay-actions>.btn-outline,#p-staycountry .stay-actions>.btn-outline{flex:0 0 auto!important}
+}
 
 /* ===== STAYS LAYOUT WIDER TUNE ===== */
 #p-stays .stays-shell,
