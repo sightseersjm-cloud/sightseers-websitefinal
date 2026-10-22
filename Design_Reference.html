@@ -9645,6 +9645,14 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   </div>
 </div>
 
+<!-- TRIP-FIT QUIZ -->
+<section class="ix-sec" id="ixHomeQuiz">
+  <div class="ix-wrap">
+    <div class="ix-sec-head"><span class="ix-kick">Find your trip</span><h2 class="ix-h">Not sure where to start?</h2><p>Answer three quick questions and we will point you to the trip that fits you best.</p></div>
+    <div data-ix-quiz></div>
+  </div>
+</section>
+
 <!-- RHYTHM HUB -->
 <section class="jm3d-sec" id="jm3dSec">
 <style>
@@ -12218,6 +12226,17 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
 </section>
 
 <!-- The program at a glance -->
+<section class="mv-sec" id="mbvBuild">
+  <div class="mv-wrap">
+    <div class="mv-head">
+      <div class="mv-eyebrow">Build your voyage</div>
+      <h2 class="mv-h2">Put your week together</h2>
+      <p class="mv-sub">Choose a package, pick your shore and tap the extras you want. Send it to a planner when it looks right, and nothing is charged.</p>
+    </div>
+    <div data-ix-voyage></div>
+  </div>
+</section>
+
 <section class="mv-sec tint" id="mbvProgram">
   <div class="mv-wrap">
     <div class="mv-head">
@@ -12360,6 +12379,7 @@ body.theme-night #p-mba-voyages .mv-cc[aria-pressed="true"]{background:#ef8731;b
       short:'Villas and developments with licensed local agents, then a property lawyer. Optional, information only.',
       text:'For guests curious about a second home or income property. Visit villas and developments with licensed local agents, then meet a property lawyer on foreign ownership, taxes and financing. Optional, with no sales pressure and no investment advice.'}
   ];
+  window.MBV_ADDONS=ADDONS;
   function pkIndex(id){for(var i=0;i<PACKAGES.length;i++){if(PACKAGES[i].id===id)return i;}return -1;}
   function addonsFor(k){var id=PACKAGES[k]&&PACKAGES[k].id,out=[];ADDONS.forEach(function(a,i){if(a.pk.indexOf(id)>-1)out.push(i);});return out;}
   function addPicked(k){return (state.add[k]||[]).filter(function(i){return !!ADDONS[i];});}
@@ -13188,6 +13208,7 @@ body.theme-night #p-seven-shores-society{
     <div class="so-eyebrow">A sample week</div>
     <h2 class="so-h2">A slower, deeper rhythm</h2>
     <p class="so-sub">Eight days and seven nights: connection, nature and enough space to breathe. On the days without a hosted dinner, the group cooks breakfast, lunch and dinner together as a team.</p>
+    <div data-ix-build="ssoc" style="margin:26px 0 30px"></div>
     <ol class="so-week">
       <li><details class="so-wk" open><summary><span class="so-day">Before &middot; Meet online</span><h3>Workshops, virtual conferences and the meet and greet</h3></summary><p>Before you arrive, your circle meets online for workshops and virtual conferences, plus the virtual Shore meet and greet with breakout rooms, so you meet before day one. It is part of the package.</p></details></li>
       <li><details class="so-wk"><summary><span class="so-day">1 &middot; Settle in</span><h3>Arrive and begin</h3></summary><p>Airport pickup and scheduled arrivals, orientation and a family-style welcome dinner.</p></details></li>
@@ -13914,6 +13935,7 @@ body.theme-night #p-flagship-programs{
       </article>
     </div>
     <p class="fp-air"><b>Curated end to end.</b> For every flagship program, Sight Seers curates the entire package, from your airport pickup to your departure, including an airport lounge booking for your flight home.</p>
+    <div data-ix-quiz style="margin:34px auto 0"></div>
     <div class="fp-help">
       <h3>Not sure which one fits?</h3>
       <p>Tell us about your group and a planner will point you to the right program. It is free to send.</p>
@@ -14040,11 +14062,27 @@ body.theme-night #p-flagship-programs{
       <p class="tc-asidenote">Questions first? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>.</p>
     </div>
 
+    <div class="tc-sec" id="ideas">
+      <span class="tc-eyebrow">Ideas for your trip</span>
+      <h2 class="tc-h2">What a community trip can look like</h2>
+      <p class="tc-sub">Swipe through a few of the experiences groups book with us. Your package is agreed with you, so the trip fits your people.</p>
+      <div class="ix-sl" data-ix-slider aria-roledescription="carousel" aria-label="Ideas for a community trip">
+        <div class="ix-sl-vp"><div class="ix-sl-track">
+          <figure class="ix-sl-s"><img src="/assets/gallery/jamaica-rafting-crew.webp" alt="A group in helmets with rafting paddles" loading="lazy"><figcaption><small>Adventure</small>River rafting with your crew</figcaption></figure>
+          <figure class="ix-sl-s"><img src="/assets/gallery/jamaica-buggy-ride.webp" alt="Two guests in an off-road buggy" loading="lazy"><figcaption><small>Off-road</small>Buggy rides through the hills</figcaption></figure>
+          <figure class="ix-sl-s"><img src="/assets/yachts/empress-kool-runnings-bow-guests.jpg" alt="Guests relaxing on the bow of a yacht" loading="lazy"><figcaption><small>On the water</small>A day on the yacht</figcaption></figure>
+          <figure class="ix-sl-s"><img src="/assets/gallery/jamaica-water-cars.webp" alt="Guests driving water cars on turquoise water" loading="lazy"><figcaption><small>Something different</small>Water cars on the bay</figcaption></figure>
+          <figure class="ix-sl-s"><img src="/assets/gallery/jamaica-glowing-water.webp" alt="Two guests swimming in glowing blue water at night" loading="lazy"><figcaption><small>After dark</small>Night swims in the glowing lagoon</figcaption></figure>
+          <figure class="ix-sl-s"><img src="/assets/gallery/jamaica-sunset-heart.webp" alt="Two guests making a heart shape at sunset" loading="lazy"><figcaption><small>Golden hour</small>Sunsets your group will remember</figcaption></figure>
+        </div></div>
+      </div>
+    </div>
+
     <div class="tc-sec" id="how">
       <span class="tc-eyebrow">Lead a trip</span>
       <h2 class="tc-h2">How leading a trip works</h2>
       <p class="tc-sub">For creators, birthday organizers, alumni representatives, clubs, fitness instructors and other group leaders who already have a community.</p>
-      <ol class="tc-steps">
+      <ol class="tc-steps" data-ix-steps>
         <li class="tc-card"><span class="tc-num">1</span><h3>Apply</h3><p>Tell us about your group and the trip you have in mind. It takes a few minutes and takes no payment.</p></li>
         <li class="tc-card"><span class="tc-num">2</span><h3>We review it</h3><p>A member of the team reads your application and talks it through with you by email.</p></li>
         <li class="tc-card"><span class="tc-num">3</span><h3>We agree the offer</h3><p>The package, the dates and your reward are agreed in writing before anything is promoted.</p></li>
@@ -60140,5 +60178,452 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   window.ssClubAdmin={inject:inject,load:load,setTab:function(t){S.tab=t;try{history.replaceState(history.state,'',location.pathname+'#tab='+t);}catch(x){}}};
   /* a refresh on /club-admin opens before this script wrapped nav: load it now */
   if($('p-club-admin')&&$('p-club-admin').classList.contains('on'))setTimeout(function(){var hm=/[#&]tab=([a-z]+)/.exec(location.hash||'');if(hm)S.tab=hm[1];load(true);},80);
+})();
+</script>
+
+<!-- ── Interactive kit (ix): trip-fit quiz, build-your-week, voyage builder, swipe slider, step rail, count-ups, scroll reveals ── -->
+<style id="ix-style">
+.ix-card{position:relative;background:#fff;border:1px solid rgba(6,46,75,.10);box-shadow:0 1px 2px rgba(6,46,75,.05),0 18px 44px rgba(6,46,75,.09);border-radius:0;overflow:hidden;color:#12293d;font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;text-align:left}
+.ix-card *{box-sizing:border-box}
+.ix-kick{display:block;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#ef8731}
+.ix-h{font-size:clamp(20px,2.6vw,26px);font-weight:800;line-height:1.2;margin:4px 0 0;color:#062e4b;letter-spacing:-.2px}
+.ix-mut{color:#5c6f82}
+.ix-note{font-size:12.5px;line-height:1.6;color:#5c6f82;margin:12px 0 0}
+.ix-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:12px 22px;border-radius:0;border:0;background:#ef8731;color:#fff!important;font:800 14px/1.2 'Raleway',sans-serif;letter-spacing:.2px;text-decoration:none;cursor:pointer;box-shadow:0 10px 24px rgba(239,135,49,.32);transition:transform .18s,box-shadow .18s,background .18s,opacity .18s}
+.ix-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(239,135,49,.38)}
+.ix-btn:focus-visible,.ix-opt:focus-visible,.ix-row:focus-visible,.ix-chip:focus-visible,.ix-sl-btn:focus-visible,.ix-st-dot:focus-visible{outline:3px solid #70c257;outline-offset:2px}
+.ix-btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.ix-btn.ghost{background:transparent;color:#062e4b!important;border:1.5px solid rgba(6,46,75,.22);box-shadow:none}
+.ix-btn.ghost:hover{border-color:#062e4b;box-shadow:none}
+.ix-sec{padding:64px 20px}
+/* the admin layout-scale tool locks section heights in px when a page loads; these widgets grow after that */
+.ix-sec,section:has([data-ix-quiz],[data-ix-build],[data-ix-voyage],[data-ix-slider],[data-ix-steps]){height:auto!important;min-height:0!important;max-height:none!important}
+.ix-wrap{max-width:1080px;margin:0 auto}
+.ix-sec-head{text-align:center;max-width:680px;margin:0 auto 26px}
+.ix-sec-head .ix-h{font-size:clamp(26px,3.4vw,36px)}
+.ix-sec-head p{margin:10px 0 0;font-size:15.5px;line-height:1.7;color:#5c6f82}
+
+/* quiz */
+.ix-quiz{max-width:760px;margin:0 auto;padding:26px 24px 24px}
+.ix-q-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.ix-q-dots{display:flex;gap:6px;padding-top:6px;flex:none}
+.ix-q-dots i{display:block;width:26px;height:6px;border-radius:0;background:rgba(6,46,75,.12);transition:background .3s}
+.ix-q-dots i.on{background:#ef8731}
+.ix-q-body{margin-top:18px;min-height:220px}
+.ix-q-q{font-size:18px;font-weight:800;color:#062e4b;margin:0 0 14px}
+.ix-q-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ix-opt{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:14px 16px;border-radius:0;border:1.5px solid rgba(6,46,75,.12);background:#f7fafc;color:#12293d;font:700 15px/1.3 'Raleway',sans-serif;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s}
+.ix-opt small{font-weight:600;font-size:12.5px;color:#5c6f82}
+.ix-opt:hover{transform:translateY(-2px);border-color:#ef8731;box-shadow:0 10px 22px rgba(6,46,75,.08)}
+.ix-opt.pick{border-color:#ef8731;background:#fff4ea;animation:ixPop .3s}
+.ix-q-back{margin-top:14px;background:none;border:0;color:#5c6f82;font:700 13px 'Raleway',sans-serif;cursor:pointer;padding:6px 0;text-decoration:underline}
+.ix-q-res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:center;animation:ixRise .45s both}
+.ix-q-res figure{margin:0;border-radius:0;overflow:hidden;aspect-ratio:4/3;background:#e9f0f5}
+.ix-q-res img{width:100%;height:100%;object-fit:cover;display:block;animation:ixZoom 6s ease-out both}
+.ix-q-res h4{font-size:24px;font-weight:800;color:#062e4b;margin:6px 0 8px;line-height:1.2}
+.ix-q-res p{margin:0 0 16px;font-size:15px;line-height:1.65;color:#5c6f82}
+.ix-q-btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ix-q-also{margin-top:14px;font-size:13.5px;color:#5c6f82}
+.ix-q-also a{color:#0a4d73;font-weight:800}
+.ix-q-in{animation:ixRise .35s both}
+
+/* build your week */
+.ix-build{padding:22px}
+.ix-b-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.ix-b-count{flex:none;min-width:58px;text-align:center;padding:7px 12px;border-radius:0;background:#70c257;color:#fff;font:800 15px 'Raleway',sans-serif;font-variant-numeric:tabular-nums}
+.ix-b-count.bump{animation:ixPop .35s}
+.ix-b-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:20px}
+.ix-b-media{position:relative;border-radius:0;overflow:hidden;background:#dfe9f0;aspect-ratio:4/3;align-self:start}
+.ix-b-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s ease,transform 5s ease-out}
+.ix-b-media img.off{opacity:0}
+.ix-b-media img.on{transform:scale(1.06)}
+.ix-b-media::after{content:'';position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,rgba(4,26,44,.82));pointer-events:none}
+.ix-b-cap{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff;font-weight:800;font-size:clamp(18px,2.3vw,24px);line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,.3)}
+.ix-b-cap small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#ffd2a8;margin-bottom:4px}
+.ix-b-cap.swap{animation:ixRise .35s both}
+.ix-b-stamp{position:absolute;top:16px;right:16px;z-index:3;padding:9px 16px;border:3px solid #fff;border-radius:0;background:#ef8731;color:#fff;font:900 15px 'Raleway',sans-serif;letter-spacing:1px;text-transform:uppercase;transform:rotate(-8deg) scale(0);opacity:0;transition:transform .35s cubic-bezier(.2,1.6,.4,1),opacity .2s;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+.ix-b-stamp.on{transform:rotate(-8deg) scale(1);opacity:1}
+.ix-b-bar{height:8px;border-radius:0;background:rgba(6,46,75,.10);overflow:hidden;margin-bottom:12px}
+.ix-b-bar i{display:block;height:100%;width:0;border-radius:0;background:linear-gradient(90deg,#70c257,#ef8731);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.ix-b-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ix-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border-radius:0;border:1.5px solid rgba(6,46,75,.10);background:#f7fafc;color:#12293d;text-align:left;cursor:pointer;font-family:'Raleway',sans-serif;transition:border-color .18s,background .18s,transform .18s}
+.ix-row:hover{transform:translateX(3px);border-color:rgba(239,135,49,.6)}
+.ix-row b{display:block;font-size:14.5px;font-weight:800;line-height:1.3}
+.ix-row small{display:block;font-size:12px;color:#5c6f82;margin-top:2px;line-height:1.4}
+.ix-row[aria-checked="true"]{border-color:#70c257;background:#f1faee}
+.ix-row[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.ix-sw{flex:none;position:relative;width:44px;height:26px;border-radius:0;background:rgba(6,46,75,.18);transition:background .2s}
+.ix-sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:0;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .22s cubic-bezier(.2,1.4,.4,1)}
+.ix-row[aria-checked="true"] .ix-sw{background:#70c257}
+.ix-row[aria-checked="true"] .ix-sw::after{transform:translateX(18px)}
+.ix-b-foot{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.ix-conf{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}
+.ix-conf i{position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;animation:ixConf 1.1s cubic-bezier(.2,.7,.3,1) forwards}
+
+/* voyage builder */
+.ix-step{margin-top:16px}
+.ix-step:first-child{margin-top:0}
+.ix-step-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#062e4b;margin:0 0 8px;letter-spacing:.2px}
+.ix-step-h span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#062e4b;color:#fff;font-size:12px}
+.ix-step-h.done span{background:#70c257}
+.ix-step-h em{font-style:normal;font-weight:600;color:#5c6f82}
+.ix-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ix-chip{padding:9px 14px;border-radius:0;border:1.5px solid rgba(6,46,75,.14);background:#f7fafc;color:#12293d;font:700 13.5px 'Raleway',sans-serif;cursor:pointer;transition:border-color .16s,background .16s,transform .16s}
+.ix-chip:hover{transform:translateY(-1px);border-color:#ef8731}
+.ix-chip[aria-pressed="true"]{background:#062e4b;border-color:#062e4b;color:#fff}
+.ix-chip small{font-weight:600;opacity:.75;margin-left:4px}
+.ix-sum{margin-top:16px;padding:14px 16px;border-radius:0;background:#fff7ef;border:1px dashed rgba(239,135,49,.55);font-size:14px;line-height:1.6;color:#12293d}
+.ix-sum b{color:#062e4b}
+
+/* swipe slider */
+.ix-sl{position:relative;max-width:980px;margin:0 auto}
+.ix-sl-vp{overflow:hidden;border-radius:0;touch-action:pan-y}
+.ix-sl-track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory}
+.ix-sl.ix-js .ix-sl-track{overflow:visible;transition:transform .5s cubic-bezier(.2,.8,.2,1);will-change:transform;cursor:grab}
+.ix-sl.drag .ix-sl-track{transition:none;cursor:grabbing}
+.ix-sl-s{position:relative;flex:0 0 100%;margin:0;aspect-ratio:16/9;scroll-snap-align:start;background:#dfe9f0;user-select:none;-webkit-user-select:none}
+.ix-sl-s img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;transition:transform 6s ease-out}
+.ix-sl-s.on img{transform:scale(1.06)}
+.ix-sl-s::after{content:'';position:absolute;inset:auto 0 0;height:50%;background:linear-gradient(transparent,rgba(4,26,44,.8));pointer-events:none}
+.ix-sl-s figcaption{position:absolute;left:20px;right:20px;bottom:18px;z-index:2;color:#fff;font:800 clamp(18px,2.4vw,26px)/1.2 'Raleway',sans-serif;text-shadow:0 2px 10px rgba(0,0,0,.3)}
+.ix-sl-s figcaption small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#ffd2a8;margin-bottom:4px}
+.ix-sl-ui{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.ix-sl-dots{display:flex;gap:6px;flex-wrap:wrap}
+.ix-sl-dots button{width:9px;height:9px;padding:0;border:0;border-radius:0;background:rgba(6,46,75,.2);cursor:pointer;transition:width .25s,background .25s}
+.ix-sl-dots button[aria-current="true"]{width:26px;background:#ef8731}
+.ix-sl-nav{display:flex;align-items:center;gap:10px}
+.ix-sl-n{font:800 13px 'Raleway',sans-serif;color:#5c6f82;font-variant-numeric:tabular-nums;min-width:44px;text-align:center}
+.ix-sl-btn{width:44px;height:44px;border-radius:0;border:1.5px solid rgba(6,46,75,.18);background:#fff;color:#062e4b;font-size:20px;line-height:1;cursor:pointer;transition:background .18s,color .18s,transform .18s}
+.ix-sl-btn:hover{background:#062e4b;color:#fff;transform:scale(1.06)}
+.ix-sl-hint{position:absolute;top:14px;right:14px;z-index:3;padding:7px 12px;border-radius:0;background:rgba(255,255,255,.92);color:#062e4b;font:800 12px 'Raleway',sans-serif;letter-spacing:.3px;transition:opacity .4s}
+.ix-sl-hint.gone{opacity:0}
+
+/* step rail */
+.ix-st-rail{margin:0 0 18px}
+.ix-st-bar{height:6px;border-radius:0;background:rgba(6,46,75,.10);overflow:hidden}
+.ix-st-bar i{display:block;height:100%;width:20%;background:linear-gradient(90deg,#70c257,#ef8731);border-radius:0;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.ix-st-dots{display:flex;justify-content:space-between;gap:6px;margin-top:10px}
+.ix-st-dot{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 2px;background:none;border:0;cursor:pointer;color:#5c6f82;font:700 12px/1.25 'Raleway',sans-serif;text-align:center}
+.ix-st-dot span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid rgba(6,46,75,.18);color:#062e4b;font-weight:800;transition:background .2s,border-color .2s,color .2s,transform .2s}
+.ix-st-dot.done span{background:#70c257;border-color:#70c257;color:#fff}
+.ix-st-dot[aria-current="step"]{color:#062e4b}
+.ix-st-dot[aria-current="step"] span{background:#ef8731;border-color:#ef8731;color:#fff;transform:scale(1.12)}
+[data-ix-steps].ix-js>li{transition:opacity .3s,border-color .3s,box-shadow .3s}
+[data-ix-steps].ix-js>li.ix-dim{opacity:.62}
+[data-ix-steps].ix-js>li.ix-cur{border-color:#ef8731!important;box-shadow:0 18px 44px rgba(239,135,49,.18)!important}
+
+/* reveals */
+.ix-rv{opacity:0}
+.ix-rv.ix-in{animation:ixRise .6s cubic-bezier(.2,.8,.2,1) both}
+
+@keyframes ixRise{from{opacity:0;translate:0 18px}to{opacity:1;translate:0 0}}
+@keyframes ixPop{0%{transform:scale(1)}45%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes ixZoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes ixConf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+
+@media (max-width:760px){
+  .ix-sec{padding:48px 16px}
+  .ix-b-grid,.ix-q-res{grid-template-columns:minmax(0,1fr)}
+  .ix-build,.ix-quiz{padding:18px 16px}
+  .ix-q-opts{grid-template-columns:minmax(0,1fr)}
+  .ix-sl-s{aspect-ratio:4/5}
+  .ix-st-dot{font-size:0}
+  .ix-st-dot span{font-size:13px}
+  .ix-btn{width:100%}
+  .ix-q-btns .ix-btn,.ix-b-foot .ix-btn{width:auto;flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .ix-rv{opacity:1}.ix-rv.ix-in{animation:none}
+  .ix-card *,.ix-sl *{animation:none!important;transition:none!important}
+}
+
+body.theme-night .ix-card{background:#0c2b46;border-color:rgba(255,255,255,.12);color:#e6eff8}
+body.theme-night .ix-h,body.theme-night .ix-q-q,body.theme-night .ix-q-res h4,body.theme-night .ix-step-h,body.theme-night .ix-sum b{color:#fff}
+body.theme-night .ix-mut,body.theme-night .ix-note,body.theme-night .ix-q-res p,body.theme-night .ix-sec-head p,body.theme-night .ix-row small,body.theme-night .ix-opt small{color:#b3c5d7}
+body.theme-night .ix-opt,body.theme-night .ix-row,body.theme-night .ix-chip{background:#0a2c48;border-color:rgba(255,255,255,.14);color:#e6eff8}
+body.theme-night .ix-opt.pick{background:#3a2a1c}
+body.theme-night .ix-row[aria-checked="true"]{background:#173f2c}
+body.theme-night .ix-chip[aria-pressed="true"]{background:#ef8731;border-color:#ef8731}
+body.theme-night .ix-sum{background:#14304a;color:#e6eff8}
+body.theme-night .ix-btn.ghost{color:#fff!important;border-color:rgba(255,255,255,.3)}
+body.theme-night .ix-sl-btn{background:#0c2b46;color:#fff;border-color:rgba(255,255,255,.2)}
+body.theme-night .ix-st-dot span{background:#0c2b46;color:#fff}
+body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
+body.theme-night .ix-q-also a{color:#9fd2ff}
+</style>
+<script id="ix-kit">
+(function(){
+  'use strict';
+  var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function go(key,path){if(typeof window.nav==='function'){window.nav(key);try{window.scrollTo(0,0);}catch(e){}return false;}location.href=path;return false;}
+  function confetti(host){
+    if(RM||!host)return;
+    var box=document.createElement('div');box.className='ix-conf';
+    var cols=['#ef8731','#70c257','#0a4d73','#ffd2a8','#fff'];
+    for(var i=0;i<34;i++){var p=document.createElement('i');var a=Math.random()*Math.PI*2,d=90+Math.random()*170;
+      p.style.background=cols[i%cols.length];p.style.setProperty('--dx',Math.round(Math.cos(a)*d)+'px');p.style.setProperty('--dy',Math.round(Math.sin(a)*d-60)+'px');p.style.setProperty('--r',Math.round(Math.random()*720-360)+'deg');p.style.animationDelay=(Math.random()*.12)+'s';box.appendChild(p);}
+    host.appendChild(box);setTimeout(function(){if(box.parentNode)box.parentNode.removeChild(box);},1500);
+  }
+
+  /* ── Which trip fits you? ── */
+  var RES={
+    ssoc:{key:'seven-shores-society',path:'/seven-shores-society',t:'Seven Shores Society',img:'/assets/mba/mba-circle-selfie.jpg',d:'A hosted seven-night residency in nature for entrepreneurs and independent professionals, with a circle that keeps going after you fly home.',cta:'See the Residency'},
+    mba:{key:'mba-voyages',path:'/mba-caribbean-voyages',t:'Seven Shores MBA Voyages',img:'/assets/mba/seven-shores-feature.jpg',d:'MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores, quoted for your group.',cta:'Explore the voyages'},
+    leaders:{key:'leaders-jamaica',path:'/leaders-in-jamaica',t:'Leaders in Jamaica',img:'/assets/discover-jamaica/jamaica-kingston-desktop.webp',d:'A five-day leadership institute in Jamaica for student governments, alongside a Jamaican university’s student government.',cta:'See the institute'},
+    shore:{key:'shore-leave',path:'/shore-leave',t:'Shore Leave',img:'/assets/flagship/shore-leave-beach-group.jpg',d:'Time ashore, Jamaican style. Adventure, culture and fun for undergraduates from the US, Canada and abroad.',cta:'See Shore Leave'},
+    greek:{key:'greek-life',path:'/greek-life-travel',t:'Greek Life Travel',img:'/assets/greek-life/montego-bay-boat-day.jpg',d:'Group escapes for fraternities, sororities and social crews: villas, yacht moments, excursions and celebration-ready add-ons.',cta:'See Greek Life trips'},
+    offsite:{key:'seven-shores-offsite',path:'/seven-shores-offsite',t:'Seven Shores Offsite',img:'/assets/flagship/offsite-lantern-dinner.jpg',d:'A company offsite built around experience, culture, excursions and villas, with a yacht day, team building and a local business mixer.',cta:'See the Offsite'},
+    club:{key:'travel-club',path:'/travel-club',t:'Lead a trip with the Travel Club',img:'/assets/travel-club/group-leader.jpg',d:'Bring your own community to the Caribbean. You bring the people; Sight Seers manages the bookings and runs the trip.',cta:'Lead a trip'},
+    tours:{key:'tours',path:'/tours',t:'Tours and experiences',img:'/assets/gallery/jamaica-buggy-ride.webp',d:'Browse curated Caribbean experiences, or build a group trip and see a live estimate as you go.',cta:'Browse experiences'},
+    stays:{key:'stays',path:'/villas-and-stays',t:'Villas and stays',img:'/assets/mba/mba-villa-cohort.jpg',d:'Curated villas and vacation rentals by destination, with transfers and experiences planned around your stay.',cta:'See villas and stays'}
+  };
+  var QS=[
+    {q:'Who is coming?',o:[
+      {t:'Founders and entrepreneurs',s:'Building something of my own',w:{ssoc:5}},
+      {t:'MBA students or alumni',s:'A class, cohort or chapter',w:{mba:5}},
+      {t:'A company team',s:'An offsite or team retreat',w:{offsite:5}},
+      {t:'University students',s:'Undergrads, student leaders, Greek life',w:{shore:3,greek:2,leaders:2}},
+      {t:'A community I would lead',s:'Club, followers, friends or alumni',w:{club:5}},
+      {t:'Me, my partner or family',s:'A trip just for us',w:{tours:3,stays:3}}
+    ]},
+    {q:'What matters most?',o:[
+      {t:'Growth and real connection',s:'Space to think, people who get it',w:{ssoc:3,mba:1,leaders:2,offsite:1}},
+      {t:'Adventure and fun',s:'Rivers, ziplines, the water',w:{shore:2,greek:2,tours:3,club:1}},
+      {t:'Careers and networking',s:'Leaders, companies, introductions',w:{mba:3,leaders:2,ssoc:1,offsite:1}},
+      {t:'Rest and a beautiful stay',s:'Villas, beaches, slow days',w:{stays:3,ssoc:1}}
+    ]},
+    {q:'How big is the group?',o:[
+      {t:'Just me, or two of us',s:'Solo or a couple',w:{ssoc:2,tours:2,stays:1}},
+      {t:'5 to 20 people',s:'A small group',w:{club:2,offsite:2,greek:2,stays:1,tours:1}},
+      {t:'20 or more',s:'A full cohort or class',w:{mba:2,shore:2,leaders:2,offsite:1}}
+    ]}
+  ];
+  function initQuiz(el){
+    if(el.__ix)return;el.__ix=1;
+    var st={i:0,a:[]};
+    el.classList.add('ix-card','ix-quiz');
+    el.innerHTML='<div class="ix-q-top"><div><span class="ix-kick">20-second quiz</span><div class="ix-h">Which trip fits you?</div></div><div class="ix-q-dots" aria-hidden="true">'+QS.map(function(){return '<i></i>';}).join('')+'<i></i></div></div><div class="ix-q-body" aria-live="polite"></div>';
+    var body=el.querySelector('.ix-q-body'),dots=el.querySelectorAll('.ix-q-dots i');
+    function paint(){
+      for(var d=0;d<dots.length;d++)dots[d].classList.toggle('on',d<=st.i);
+      if(st.i<QS.length){
+        var Q=QS[st.i];
+        body.innerHTML='<div class="ix-q-in"><p class="ix-q-q">'+(st.i+1)+'. '+esc(Q.q)+'</p><div class="ix-q-opts">'+Q.o.map(function(o,k){return '<button type="button" class="ix-opt" data-k="'+k+'">'+esc(o.t)+'<small>'+esc(o.s)+'</small></button>';}).join('')+'</div>'+(st.i?'<button type="button" class="ix-q-back">Back</button>':'')+'</div>';
+      }else{
+        var sc={};st.a.forEach(function(k,qi){var w=QS[qi].o[k].w;for(var r in w)sc[r]=(sc[r]||0)+w[r];});
+        var rank=Object.keys(sc).sort(function(x,y){return sc[y]-sc[x];});
+        var R=RES[rank[0]],A=rank[1]&&sc[rank[1]]>=3?RES[rank[1]]:null;
+        body.innerHTML='<div class="ix-q-res"><figure><img src="'+R.img+'" alt=""></figure><div><span class="ix-kick">Your match</span><h4>'+esc(R.t)+'</h4><p>'+esc(R.d)+'</p><div class="ix-q-btns"><a class="ix-btn" href="'+R.path+'" data-go="'+R.key+'">'+esc(R.cta)+' &rarr;</a><button type="button" class="ix-btn ghost ix-q-again">Start again</button></div>'+(A?'<p class="ix-q-also">Also worth a look: <a href="'+A.path+'" data-go="'+A.key+'">'+esc(A.t)+'</a></p>':'')+'</div></div>';
+        confetti(el);
+      }
+    }
+    el.addEventListener('click',function(e){
+      var t=e.target.closest('button,a');if(!t||!el.contains(t))return;
+      if(t.classList.contains('ix-opt')){
+        if(el.__busy)return;el.__busy=1;t.classList.add('pick');
+        setTimeout(function(){st.a[st.i]=+t.getAttribute('data-k');st.i++;el.__busy=0;paint();},RM?0:260);
+      }else if(t.classList.contains('ix-q-back')){st.i=Math.max(0,st.i-1);st.a.length=st.i;paint();}
+      else if(t.classList.contains('ix-q-again')){st.i=0;st.a=[];paint();}
+      else if(t.hasAttribute('data-go')){e.preventDefault();go(t.getAttribute('data-go'),t.getAttribute('href'));}
+    });
+    paint();
+  }
+
+  /* ── Build your week (Seven Shores Society) ── */
+  var BUILDS={
+    ssoc:{kick:'Build your week',title:'Jamaica Residency',unit:'Week',img0:'/assets/discover-jamaica/jamaica-portland-desktop.webp',cap0:'Seven nights in Jamaica',k0:'Tap each day',
+      done:'Week built!',cta:{t:'Apply for the Residency',fn:'ssocApply'},note:'Illustrative photos. A sample week; your host confirms the final schedule once the venue and local contributors are set.',
+      items:[
+        {t:'Arrive and begin',s:'Day 1 · Airport pickup and a welcome dinner',img:'/assets/discover-jamaica/jamaica-portland-desktop.webp'},
+        {t:'Meet your circle',s:'Day 2 · Introductions, intentions and a nature outing',img:'/assets/mba/mba-circle-selfie.jpg'},
+        {t:'Workshops and meditation',s:'Day 3 · Make space, then a local host dinner',img:'/assets/discover-jamaica/jamaica-elizabeth-desktop.webp'},
+        {t:'The adventure day',s:'Day 4 · Zipline, ATV or dune buggy, horses and a cruise',img:'/assets/gallery/jamaica-buggy-ride.webp'},
+        {t:'Team competitions',s:'Day 5 · Fun-filled team competitions and obstacle courses',img:'/assets/gallery/jamaica-rafting-crew.webp'},
+        {t:'A locally hosted evening',s:'Day 6 · A workshop, then a chef-led dinner',img:'/assets/flagship/offsite-lantern-dinner.jpg'},
+        {t:'A yacht day, then reflect',s:'Day 7 · The water, then the closing circle',img:'/assets/yachts/empress-kool-runnings-bow-guests.jpg'}
+      ]}
+  };
+  function initBuild(el){
+    if(el.__ix)return;var C=BUILDS[el.getAttribute('data-ix-build')];if(!C)return;el.__ix=1;
+    var on=C.items.map(function(){return false;}),n=C.items.length;
+    el.classList.add('ix-card','ix-build');
+    el.innerHTML='<div class="ix-b-head"><div><span class="ix-kick">'+esc(C.kick)+'</span><div class="ix-h">'+esc(C.title)+'</div></div><div class="ix-b-count" aria-live="polite">0/'+n+'</div></div>'
+      +'<div class="ix-b-grid"><div class="ix-b-media"><img class="on" src="'+C.img0+'" alt=""><img class="off" alt=""><div class="ix-b-cap"><small>'+esc(C.k0)+'</small>'+esc(C.cap0)+'</div><div class="ix-b-stamp">'+esc(C.done)+'</div></div>'
+      +'<div><div class="ix-b-bar" aria-hidden="true"><i></i></div><ul class="ix-b-list">'+C.items.map(function(it,k){return '<li><button type="button" class="ix-row" role="switch" aria-checked="false" data-k="'+k+'"><span><b>'+esc(it.t)+'</b><small>'+esc(it.s)+'</small></span><span class="ix-sw" aria-hidden="true"></span></button></li>';}).join('')+'</ul>'
+      +'<div class="ix-b-foot"><button type="button" class="ix-btn ghost ix-b-all">Add every day</button><a href="#" class="ix-btn ix-b-cta">'+esc(C.cta.t)+' &rarr;</a></div></div></div>'
+      +'<p class="ix-note">'+esc(C.note)+'</p>';
+    var imgs=el.querySelectorAll('.ix-b-media img'),cap=el.querySelector('.ix-b-cap'),cnt=el.querySelector('.ix-b-count'),bar=el.querySelector('.ix-b-bar i'),stamp=el.querySelector('.ix-b-stamp'),media=el.querySelector('.ix-b-media'),front=0;
+    function show(src,k,txt){
+      var cur=imgs[front],nxt=imgs[1-front];
+      if(cur.getAttribute('src')!==src){nxt.src=src;nxt.classList.remove('off');nxt.classList.add('on');cur.classList.add('off');cur.classList.remove('on');front=1-front;}
+      cap.innerHTML='<small>'+esc(k)+'</small>'+esc(txt);cap.classList.remove('swap');void cap.offsetWidth;cap.classList.add('swap');
+    }
+    function sync(){
+      var c=on.filter(Boolean).length;cnt.textContent=c+'/'+n;cnt.classList.remove('bump');void cnt.offsetWidth;cnt.classList.add('bump');
+      bar.style.width=(c/n*100)+'%';
+      var was=stamp.classList.contains('on');stamp.classList.toggle('on',c===n);
+      if(c===n&&!was)confetti(media);
+      el.querySelector('.ix-b-all').textContent=c===n?'Start over':'Add every day';
+    }
+    el.addEventListener('click',function(e){
+      var r=e.target.closest('.ix-row');
+      if(r){var k=+r.getAttribute('data-k');on[k]=!on[k];r.setAttribute('aria-checked',on[k]?'true':'false');
+        if(on[k])show(C.items[k].img,C.items[k].s.split(' · ')[0],C.items[k].t);
+        else{var last=-1;for(var j=n-1;j>=0;j--)if(on[j]){last=j;break;}if(last<0)show(C.img0,C.k0,C.cap0);else show(C.items[last].img,C.items[last].s.split(' · ')[0],C.items[last].t);}
+        sync();return;}
+      if(e.target.closest('.ix-b-all')){
+        var full=on.every(Boolean);
+        if(full){on=on.map(function(){return false;});el.querySelectorAll('.ix-row').forEach(function(b){b.setAttribute('aria-checked','false');});show(C.img0,C.k0,C.cap0);sync();return;}
+        var rows=el.querySelectorAll('.ix-row'),i=0;
+        (function step(){while(i<n&&on[i])i++;if(i>=n)return;rows[i].click();i++;setTimeout(step,RM?0:220);})();
+        return;}
+      if(e.target.closest('.ix-b-cta')){e.preventDefault();var f=window[C.cta.fn];if(typeof f==='function')f();}
+    });
+    el.addEventListener('mouseover',function(e){var r=e.target.closest('.ix-row');if(r&&!el.__hov){var it=C.items[+r.getAttribute('data-k')];if(it)new Image().src=it.img;}});
+  }
+
+  /* ── Build your voyage (MBA) ── */
+  var SHORES=['Jamaica','Barbados','Saint Lucia','The Bahamas','Belize','Dominican Republic','Curacao'];
+  var ADD_FB=[
+    {title:'Island Pitch Night',nick:'Pitch Night',pk:['lifestyle','executive','industry','voyage'],short:'Pitch a real company challenge to local founders and investors at the closing dinner.'},
+    {title:'Caribbean Opportunity Briefing',nick:'Opportunity Briefing',pk:['executive','industry','voyage'],short:'A half day on doing business in your chosen shore, led by local business leaders.'},
+    {title:'Alumni Mentor Day',nick:'Mentor Day',pk:['lifestyle','executive','industry','voyage'],short:'Ask an alum roundtables and speed mentoring for current students and recent graduates.'},
+    {title:'Property & Investment Insight Day',nick:'Property Day',pk:['executive','voyage'],short:'Villas and developments with licensed local agents, then a property lawyer. Optional, information only.'}
+  ];
+  function initVoyage(el){
+    var P=window.MBV_PACKAGES;if(el.__ix||!P||!P.length)return;el.__ix=1;
+    var AD=window.MBV_ADDONS||ADD_FB;
+    var st={p:-1,sh:[],ad:{}};
+    el.classList.add('ix-card','ix-build');
+    el.innerHTML='<div class="ix-b-head"><div><span class="ix-kick">Build your voyage</span><div class="ix-h">Your MBA voyage</div></div><div class="ix-b-count" aria-live="polite">0/3</div></div>'
+      +'<div class="ix-b-grid"><div class="ix-b-media"><img class="on" src="/assets/mba/mba-yacht-raft-up.jpg" alt=""><img class="off" alt=""><div class="ix-b-cap"><small>Start here</small>Choose a package</div><div class="ix-b-stamp">Voyage built!</div></div>'
+      +'<div><div class="ix-b-bar" aria-hidden="true"><i></i></div>'
+      +'<div class="ix-step"><p class="ix-step-h" data-s="0"><span>1</span>Choose your package</p><div class="ix-chips ix-v-pk">'+P.map(function(p,k){return '<button type="button" class="ix-chip" aria-pressed="false" data-k="'+k+'">'+esc(p.title.replace(/^MBA /,''))+'</button>';}).join('')+'</div></div>'
+      +'<div class="ix-step"><p class="ix-step-h" data-s="1"><span>2</span>Pick your shore <em class="ix-v-shint"></em></p><div class="ix-chips ix-v-sh">'+SHORES.map(function(s){return '<button type="button" class="ix-chip" aria-pressed="false" data-s="'+esc(s)+'">'+esc(s)+'</button>';}).join('')+'</div></div>'
+      +'<div class="ix-step"><p class="ix-step-h" data-s="2"><span>3</span>Add the extras <em>optional</em></p><ul class="ix-b-list ix-v-ad">'+AD.map(function(a,k){return '<li><button type="button" class="ix-row" role="switch" aria-checked="false" data-k="'+k+'"><span><b>'+esc(a.title)+'</b><small>'+esc(a.short)+'</small></span><span class="ix-sw" aria-hidden="true"></span></button></li>';}).join('')+'</ul></div>'
+      +'<div class="ix-sum" aria-live="polite"></div>'
+      +'<div class="ix-b-foot"><button type="button" class="ix-btn ix-v-send" disabled>Send this voyage to a planner &rarr;</button></div>'
+      +'<p class="ix-note">Nothing is charged. A planner replies with a custom quote, and add-ons are quoted with your package.</p></div></div>';
+    var imgs=el.querySelectorAll('.ix-b-media img'),cap=el.querySelector('.ix-b-cap'),cnt=el.querySelector('.ix-b-count'),bar=el.querySelector('.ix-b-bar i'),stamp=el.querySelector('.ix-b-stamp'),media=el.querySelector('.ix-b-media'),sum=el.querySelector('.ix-sum'),send=el.querySelector('.ix-v-send'),front=0;
+    function show(src,k,txt){var cur=imgs[front],nxt=imgs[1-front];if(src&&cur.getAttribute('src')!==src){nxt.src=src;nxt.classList.remove('off');nxt.classList.add('on');cur.classList.add('off');cur.classList.remove('on');front=1-front;}cap.innerHTML='<small>'+esc(k)+'</small>'+esc(txt);cap.classList.remove('swap');void cap.offsetWidth;cap.classList.add('swap');}
+    function picked(){var p=P[st.p];return p?AD.map(function(a,k){return k;}).filter(function(k){return st.ad[k]&&AD[k].pk.indexOf(p.id)>=0;}):[];}
+    function shoresOk(){var p=P[st.p];return p&&(p.multi?st.sh.length>=2:st.sh.length===1);}
+    function list(a){return a.length>1?a.slice(0,-1).join(', ')+' and '+a[a.length-1]:a[0]||'';}
+    function sync(){
+      var p=P[st.p],c=(p?1:0)+(shoresOk()?1:0)+(picked().length?1:0);
+      cnt.textContent=c+'/3';cnt.classList.remove('bump');void cnt.offsetWidth;cnt.classList.add('bump');bar.style.width=(c/3*100)+'%';
+      var ready=!!(p&&shoresOk()),was=stamp.classList.contains('on');stamp.classList.toggle('on',ready);if(ready&&!was)confetti(media);
+      el.querySelectorAll('.ix-step-h').forEach(function(h,i){h.classList.toggle('done',i===0?!!p:i===1?shoresOk():picked().length>0);});
+      el.querySelector('.ix-v-shint').textContent=p?(p.multi?'pick two or more':'pick one'):'';
+      el.querySelectorAll('.ix-v-ad .ix-row').forEach(function(r){var k=+r.getAttribute('data-k'),ok=!p||AD[k].pk.indexOf(p.id)>=0;r.disabled=!ok;r.setAttribute('aria-checked',ok&&st.ad[k]?'true':'false');var sm=r.querySelector('small');sm.textContent=ok?AD[k].short:'Not offered with this package';});
+      if(!p){sum.innerHTML='Pick a package to start your voyage.';}
+      else{var ad=picked().map(function(k){return AD[k].nick||AD[k].title;});
+        sum.innerHTML='<b>Your voyage:</b> '+esc(p.title)+(st.sh.length?' in '+esc(list(st.sh)):'')+' · '+esc(p.dur)+' · '+esc(p.pax)+' guests'+(ad.length?'<br><b>Extras:</b> '+esc(ad.join(', ')):'');}
+      send.disabled=!(p&&shoresOk());
+    }
+    el.addEventListener('click',function(e){
+      var c=e.target.closest('.ix-v-pk .ix-chip');
+      if(c){st.p=+c.getAttribute('data-k');var p=P[st.p];el.querySelectorAll('.ix-v-pk .ix-chip').forEach(function(b){b.setAttribute('aria-pressed',b===c?'true':'false');});
+        if(!p.multi&&st.sh.length>1)st.sh=st.sh.slice(0,1);el.querySelectorAll('.ix-v-sh .ix-chip').forEach(function(b){b.setAttribute('aria-pressed',st.sh.indexOf(b.getAttribute('data-s'))>=0?'true':'false');});
+        show(p.src||p.img,p.tag+' · '+p.dur,p.title);sync();return;}
+      var s=e.target.closest('.ix-v-sh .ix-chip');
+      if(s){var nm=s.getAttribute('data-s'),p2=P[st.p],i=st.sh.indexOf(nm);
+        if(p2&&p2.multi){if(i>=0)st.sh.splice(i,1);else st.sh.push(nm);}else{st.sh=i>=0?[]:[nm];}
+        el.querySelectorAll('.ix-v-sh .ix-chip').forEach(function(b){b.setAttribute('aria-pressed',st.sh.indexOf(b.getAttribute('data-s'))>=0?'true':'false');});
+        if(st.sh.length&&p2)show(null,list(st.sh),p2.title);sync();return;}
+      var r=e.target.closest('.ix-v-ad .ix-row');
+      if(r&&!r.disabled){var k=+r.getAttribute('data-k');st.ad[k]=!st.ad[k];if(st.ad[k])show(null,'Extra added',AD[k].title);sync();return;}
+      if(e.target.closest('.ix-v-send')){var p3=P[st.p];if(!p3||!shoresOk())return;
+        var ad2=picked().map(function(k){return AD[k].title;});
+        var msg='Interested in the '+p3.title+', '+p3.theme+', in '+list(st.sh)+' for a cohort, alumni chapter or leadership team.'+(ad2.length?' MBA add-ons: '+ad2.join(', ')+'.':'');
+        if(typeof window.openStartPlanning==='function')window.openStartPlanning(st.sh[0],p3.title,'MBA Experience',msg);
+        else if(typeof window.mbvPlan==='function')window.mbvPlan();}
+    });
+    sync();
+  }
+
+  /* ── Swipe slider ── */
+  function initSlider(el){
+    if(el.__ix)return;el.__ix=1;
+    var track=el.querySelector('.ix-sl-track'),sl=[].slice.call(el.querySelectorAll('.ix-sl-s')),n=sl.length,i=0;if(!track||n<2)return;
+    el.classList.add('ix-js');
+    var ui=document.createElement('div');ui.className='ix-sl-ui';
+    ui.innerHTML='<div class="ix-sl-dots">'+sl.map(function(s,k){return '<button type="button" aria-label="Photo '+(k+1)+' of '+n+'"></button>';}).join('')+'</div><div class="ix-sl-nav"><button type="button" class="ix-sl-btn" data-d="-1" aria-label="Previous photo">&#8249;</button><span class="ix-sl-n"></span><button type="button" class="ix-sl-btn" data-d="1" aria-label="Next photo">&#8250;</button></div>';
+    el.appendChild(ui);
+    var hint=document.createElement('span');hint.className='ix-sl-hint';hint.textContent='Swipe →';el.querySelector('.ix-sl-vp').appendChild(hint);
+    var dots=ui.querySelectorAll('.ix-sl-dots button'),num=ui.querySelector('.ix-sl-n');
+    function to(k){i=(k%n+n)%n;track.style.transform='translateX('+(-i*100)+'%)';sl.forEach(function(s,j){s.classList.toggle('on',j===i);s.setAttribute('aria-hidden',j===i?'false':'true');});dots.forEach(function(d,j){d.setAttribute('aria-current',j===i?'true':'false');});num.textContent=(i+1)+' / '+n;}
+    function gone(){hint.classList.add('gone');}
+    ui.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;gone();if(b.hasAttribute('data-d'))to(i+(+b.getAttribute('data-d')));else to([].indexOf.call(dots,b));});
+    el.setAttribute('tabindex','0');el.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){gone();to(i+1);}else if(e.key==='ArrowLeft'){gone();to(i-1);}});
+    var x0=null,y0=0,dx=0,w=1,lock=null;
+    track.addEventListener('pointerdown',function(e){if(e.pointerType==='mouse'&&e.button!==0)return;x0=e.clientX;y0=e.clientY;dx=0;lock=null;w=track.offsetWidth||1;});
+    window.addEventListener('pointermove',function(e){if(x0===null)return;var ddx=e.clientX-x0,ddy=e.clientY-y0;
+      if(lock===null&&(Math.abs(ddx)>8||Math.abs(ddy)>8))lock=Math.abs(ddx)>Math.abs(ddy)?'x':'y';
+      if(lock!=='x')return;dx=ddx;el.classList.add('drag');track.style.transform='translateX(calc('+(-i*100)+'% + '+dx+'px))';});
+    function end(){if(x0===null)return;var moved=lock==='x';x0=null;el.classList.remove('drag');if(moved){gone();if(Math.abs(dx)>w*.15)to(i+(dx<0?1:-1));else to(i);}}
+    window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);
+    track.addEventListener('click',function(e){if(Math.abs(dx)>6){e.preventDefault();e.stopPropagation();}},true);
+    to(0);
+  }
+
+  /* ── Step rail ── */
+  function initSteps(ol){
+    if(ol.__ix)return;var li=[].slice.call(ol.children);if(li.length<2)return;ol.__ix=1;ol.classList.add('ix-js');
+    var rail=document.createElement('div');rail.className='ix-st-rail';
+    rail.innerHTML='<div class="ix-st-bar" aria-hidden="true"><i></i></div><div class="ix-st-dots">'+li.map(function(l,k){var h=l.querySelector('h3');return '<button type="button" class="ix-st-dot" aria-label="Step '+(k+1)+': '+esc(h?h.textContent:'')+'"><span>'+(k+1)+'</span>'+esc(h?h.textContent:'')+'</button>';}).join('')+'</div>';
+    ol.parentNode.insertBefore(rail,ol);
+    var dots=rail.querySelectorAll('.ix-st-dot'),bar=rail.querySelector('.ix-st-bar i');
+    function set(k){li.forEach(function(l,j){l.classList.toggle('ix-cur',j===k);l.classList.toggle('ix-dim',j!==k);});dots.forEach(function(d,j){d.classList.toggle('done',j<k);if(j===k)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current');});bar.style.width=((k+1)/li.length*100)+'%';}
+    rail.addEventListener('click',function(e){var d=e.target.closest('.ix-st-dot');if(!d)return;var k=[].indexOf.call(dots,d);set(k);try{li[k].scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});}catch(x){}});
+    if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting)set(li.indexOf(en.target));});},{rootMargin:'-45% 0px -45% 0px'});li.forEach(function(l){io.observe(l);});}
+    set(0);li.forEach(function(l){l.classList.remove('ix-dim');});
+  }
+
+  /* ── Count-ups ── */
+  var countIO=('IntersectionObserver' in window)&&!RM?new IntersectionObserver(function(es){es.forEach(function(en){if(!en.isIntersecting)return;countIO.unobserve(en.target);run(en.target);});},{threshold:.6}):null;
+  function run(el){
+    var m=/^(\d+)(\.\d+)?(.*)$/.exec(el.getAttribute('data-ix-n')||'');if(!m)return;
+    var to=parseFloat(m[1]+(m[2]||'')),dec=m[2]?m[2].length-1:0,suf=m[3]||'',t0=null,D=1200;
+    function f(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/D),e=1-Math.pow(1-p,3);el.textContent=(to*e).toFixed(dec)+suf;if(p<1)requestAnimationFrame(f);else el.textContent=m[0];}
+    requestAnimationFrame(f);
+  }
+  function initCounts(root){
+    if(!countIO)return;
+    root.querySelectorAll('.trust-item strong,.testi-stat strong,.mv-fact b,.so-fact b').forEach(function(el){
+      if(el.__ixn)return;var t=el.textContent.trim();if(!/^\d+(\.\d+)?[+★]?$/.test(t))return;el.__ixn=1;el.setAttribute('data-ix-n',t);countIO.observe(el);
+    });
+  }
+
+  /* ── Scroll reveals on the main pages ── */
+  var MAIN=['p-home','p-seven-shores-society','p-mba-voyages','p-travel-club','p-flagship-programs','p-tours','p-destinations','p-stays'];
+  var RV_SEL='h2,.ix-card,.ix-sl,.so-card,.so-moment,.so-wk,.so-qa-row,.tc-card,.tc-faq,.mv-qa-row,.fp-help,.fp-air';
+  var rvIO=('IntersectionObserver' in window)&&!RM?new IntersectionObserver(function(es){var k=0;es.forEach(function(en){if(!en.isIntersecting)return;rvIO.unobserve(en.target);var t=en.target;t.style.animationDelay=(k++*70)+'ms';t.classList.add('ix-in');t.addEventListener('animationend',function(){t.classList.remove('ix-rv','ix-in');t.style.animationDelay='';},{once:true});});},{threshold:.08,rootMargin:'0px 0px -40px 0px'}):null;
+  function initReveal(page){
+    if(!rvIO||!page||page.__ixrv)return;page.__ixrv=1;
+    var first=page.querySelector('section,header,.hero,[class*="hero"]');
+    page.querySelectorAll(RV_SEL).forEach(function(el){
+      if(el.closest('.reveal,.reveal-scale,.reveal-left,.reveal-right,.reveal-child,[class*="carousel"],[class*="slider"],[class*="-gl"],.ix-q-body,.ix-build,nav,footer,dialog,[role="dialog"]'))return;
+      if(first&&first.contains(el))return;
+      var r=el.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0&&page.offsetHeight)return;
+      if(getComputedStyle(el).animationName!=='none')return;
+      el.classList.add('ix-rv');rvIO.observe(el);
+    });
+  }
+
+  function boot(){
+    document.querySelectorAll('[data-ix-quiz]').forEach(initQuiz);
+    document.querySelectorAll('[data-ix-build]').forEach(initBuild);
+    document.querySelectorAll('[data-ix-voyage]').forEach(initVoyage);
+    document.querySelectorAll('[data-ix-slider]').forEach(initSlider);
+    document.querySelectorAll('[data-ix-steps]').forEach(initSteps);
+    initCounts(document);
+    MAIN.forEach(function(id){var p=document.getElementById(id);if(p&&p.classList.contains('on'))initReveal(p);});
+  }
+  window.ixBoot=boot;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,60);});else setTimeout(boot,60);
+  var on0=window.nav;
+  if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
 })();
 </script>
