@@ -57,7 +57,8 @@ async function serve(name, res) {
   const kind = NAME_RE.test(name || '') && KINDS.find(k => k.ext === name.split('.').pop());
   if (!kind) return res.status(404).json({ error: 'Not found' });
   let r = null;
-  try { r = await get('avatars/' + name, { access: 'private' }); } catch (e) { r = null; }
+  /* useCache: false so a photo that was only just saved is found straight away instead of a cached "not found" */
+  try { r = await get('avatars/' + name, { access: 'private', useCache: false }); } catch (e) { r = null; }
   if (!r || r.statusCode !== 200 || !r.stream) return res.status(404).json({ error: 'Not found' });
   const buf = Buffer.from(await new Response(r.stream).arrayBuffer());
   res.setHeader('Content-Type', kind.type);

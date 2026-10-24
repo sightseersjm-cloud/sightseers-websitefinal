@@ -56940,6 +56940,9 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     var box=$('acPhotoImg'),del=$('acPhotoDel');if(!box)return;
     var url=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'';
     box.innerHTML=url?'<img src="'+url.replace(/"/g,'&quot;')+'" alt="Your profile photo">':esc1(((u&&u.name)||'?').trim().charAt(0).toUpperCase());
+    /* a photo saved a moment ago can take a second to appear: try once more before giving up */
+    var pim=box.querySelector('img');
+    if(pim)pim.addEventListener('error',function(){if(pim.dataset.retry)return;pim.dataset.retry='1';setTimeout(function(){pim.src=url+(url.indexOf('?')>-1?'&':'?')+'r='+Date.now();},1500);});
     if(del)del.hidden=!url;
     var pick=document.querySelector('#acPhotoBox .ac-photo-pick');if(pick)pick.textContent=url?'Change photo':'Upload photo';
   }
