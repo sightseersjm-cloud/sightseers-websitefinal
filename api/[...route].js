@@ -61,5 +61,14 @@ module.exports = async function router(req, res) {
     return res.status(404).json({ error: 'Not found' });
   }
 
-  return handler(req, res);
+  /* a failure inside a handler must still answer in JSON, so the page can show a real message instead of "not valid JSON" */
+  try {
+    return await handler(req, res);
+  } catch (e) {
+    const stopped = e && (e.name === 'BlobStoreSuspendedError' || /suspended|limits? exceeded|quota/i.test(String(e.message || '')));
+    console.error('api error', segment, e && e.name, e && e.message);
+    if (res.headersSent) return;
+    if (stopped) return res.status(503).json({ error: 'The website storage is paused at the moment, so this could not be saved. Please try again later, or contact us if it keeps happening.', code: 'storage-paused' });
+    return res.status(500).json({ error: 'Something went wrong on our side. Please try again in a moment.' });
+  }
 };

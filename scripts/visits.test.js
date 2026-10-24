@@ -3,7 +3,7 @@ const Module = require('module');
 const store = new Map();
 const blob = { put: async (p, b) => { store.set(p, Buffer.from(b)); return {}; }, get: async p => store.has(p) ? { statusCode: 200, stream: new Response(store.get(p)).body } : { statusCode: 404 }, del: async p => { store.delete(p); }, list: async () => ({ blobs: [] }) };
 const o = Module._load; Module._load = function (r, ...a) { return r === '@vercel/blob' ? blob : o.call(this, r, ...a); };
-process.env.BLOB_READ_WRITE_TOKEN = 'x'; process.env.JWT_SECRET = 'test-secret-test-secret-test-secret-12345'; process.env.OWNER_EMAIL = 'owner@example.com'; process.env.OWNER_PASSWORD = 'OwnerPass123!';
+process.env.BLOB_READ_WRITE_TOKEN = 'x'; process.env.JWT_SECRET = 'test-secret-test-secret-test-secret-12345'; process.env.VISIT_COUNTING = 'on'; process.env.OWNER_EMAIL = 'owner@example.com'; process.env.OWNER_PASSWORD = 'OwnerPass123!';
 const root = require('path').resolve(__dirname, '..') + '/';
 const H = { auth: require(root + 'api/_handlers/auth'), track: require(root + 'api/_handlers/track') };
 function call(h, method, body, token, headers, query) {
@@ -28,5 +28,11 @@ let fails = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FAIL ') + n
   ok('unknown events are ignored', !Object.keys(t).some(k => k.startsWith('evil')));
   ok('markup in a key is stripped', !Object.keys(t).some(k => /[<>]/.test(k)));
   ok('only signed-in people see the numbers', (await call('track', 'GET', {}, null, null, { days: '7' })).code === 401);
+  process.env.VISIT_COUNTING = 'off';
+  await call('track', 'POST', { events: [{ e: 'site_view', k: 'home' }, { e: 'site_visit' }, { e: 'hotspot_click', k: 'hs1' }] }, null, human);
+  const t2 = (await call('track', 'GET', {}, r.body.token, null, { days: '7' })).body;
+  ok('with counting switched off, nothing about visits is written', t2.totals['site_view|home'] === 2 && t2.totals['site_visit'] === 1);
+  ok('...but the older V-Tours counters still work', t2.totals['hotspot_click|hs1'] === 1);
+  ok('the numbers say whether counting is on', t2.counting === false);
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED'); process.exit(fails ? 1 : 0);
 })();

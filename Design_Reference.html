@@ -61805,6 +61805,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(!VS.loaded)return '';
     var d=VS.d;
     if(!d)return '';
+    if(d.counting===false)return '<h2>Visitors</h2><div class="mg-card" style="padding:20px"><b>Visitor counting is paused</b><p class="mg-hint" style="margin:4px 0 0;font-size:14px">It saves a small update for every visit, so it stays switched off until the website storage limit is sorted out. Ask to have it switched on when you are ready.</p></div>';
     var days=dayList(14),daily=d.daily||{},visits=days.map(function(x){return (daily[x]||{}).site_visit||0;}),views=days.map(function(x){return sumKeys(daily[x],'site_view|');});
     var w1=days.slice(7),w0=days.slice(0,7);
     var v1=visits.slice(7).reduce(function(a,b){return a+b;},0),v0=visits.slice(0,7).reduce(function(a,b){return a+b;},0),p1=views.slice(7).reduce(function(a,b){return a+b;},0);

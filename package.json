@@ -7,7 +7,8 @@
     "test:admin": "node scripts/admin-permissions.test.js",
     "test:site": "node scripts/site-edit.test.js",
     "test:inbox": "node scripts/inbox.test.js",
-    "test:visits": "node scripts/visits.test.js"
+    "test:visits": "node scripts/visits.test.js",
+    "test:paused": "node scripts/storage-paused.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

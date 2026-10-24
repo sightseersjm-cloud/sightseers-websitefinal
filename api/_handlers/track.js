@@ -52,6 +52,8 @@ module.exports = async function handler(req, res) {
     } catch (e) { /* ignore malformed */ }
 
     let keys = events.map(normalize).filter(Boolean);
+    /* visit counting writes a small file per visit, so it only runs when the owner switches it on (VISIT_COUNTING=on) */
+    if (process.env.VISIT_COUNTING !== 'on') keys = keys.filter(k => k.indexOf('site_') !== 0);
     /* robots and link checkers do not count as visitors */
     if (BOT.test(String((req.headers && req.headers['user-agent']) || ''))) keys = keys.filter(k => k.indexOf('site_') !== 0);
     /* the country of a visit comes from the network edge, never from the browser */
@@ -85,7 +87,7 @@ module.exports = async function handler(req, res) {
         for (const k of Object.keys(doc)) totals[k] = (totals[k] || 0) + doc[k];
       }
     }
-    return res.status(200).json({ ok: true, days, totals, daily });
+    return res.status(200).json({ ok: true, days, totals, daily, counting: process.env.VISIT_COUNTING === 'on' });
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
