@@ -70,7 +70,9 @@ function toItem(key, r) {
   const own = STATUSES.indexOf(r.inboxStatus) > -1 ? r.inboxStatus : (src.done.indexOf(r.status) > -1 ? 'done' : 'new');
   return {
     key: key + ':' + r.id, source: key, id: r.id, ref: r.ref || '', type: m.type, title: s(m.title, 160), name: s(m.name, 120), email: s(m.email, 160), phone: s(m.phone, 60),
-    summary: s(m.summary, 160), details: s(m.details, 3000), status: own, note: s(r.inboxNote, 1000), createdAt: r.createdAt || '', handledAt: r.inboxAt || ''
+    summary: s(m.summary, 160), details: s(m.details, 3000), status: own, note: s(r.inboxNote, 1000), createdAt: r.createdAt || '', handledAt: r.inboxAt || '',
+    assignee: r.inboxAssignee && r.inboxAssignee.id ? { id: String(r.inboxAssignee.id), name: s(r.inboxAssignee.name, 120) } : null,
+    thread: Array.isArray(r.inboxThread) ? r.inboxThread.slice(-60) : []
   };
 }
 

@@ -20394,6 +20394,29 @@ function vtRTCLeave(){
    Batched counters via sendBeacon, no cookies, no PII, no third-party.
    Wraps existing functions at DOMContentLoaded so their behavior is
    untouched; every wrapper is try/caught. */
+/* Whole-site visitor numbers for the owner's Home screen. Counts only: no cookies, no ids, nothing about the person.
+   A visit is counted once per browsing session; the place it came from is the website name only. Skipped for Do Not Track,
+   for signed-in admins and team members, and on the admin pages. */
+var ssViewLast='';
+function ssCountView(id){
+  try{
+    id=String(id||'').replace(/[^a-z0-9-]/gi,'').slice(0,40);
+    if(!id||id===ssViewLast||/^(manage|admin|club-admin)$/.test(id))return;
+    if(navigator.doNotTrack==='1'||window.doNotTrack==='1')return;
+    var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(e){}
+    if(u&&(u.role==='admin'||u.role==='staff'||u.role==='editor'))return;
+    ssViewLast=id;
+    vtTrack('site_view',id);
+    var first=false;try{if(!sessionStorage.getItem('ss_visit')){sessionStorage.setItem('ss_visit','1');first=true;}}catch(e){}
+    if(first){
+      vtTrack('site_visit');
+      var host='';try{host=document.referrer?new URL(document.referrer).hostname.replace(/^www\./,''):'';}catch(e){}
+      if(host&&host!==location.hostname.replace(/^www\./,''))vtTrack('site_ref',host);else if(!host)vtTrack('site_ref','direct');
+      vtTrack('site_dev',window.matchMedia&&matchMedia('(max-width: 820px)').matches?'phone':'computer');
+    }
+  }catch(e){}
+}
+setTimeout(function(){try{var on=document.querySelector('.page.on');if(on&&on.id)ssCountView(on.id.replace(/^p-/,''));}catch(e){}},900);
 var vtTrackQ=[];
 function vtTrack(e,k){
   try{
@@ -20428,6 +20451,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
       if(id==='vtours')vtTrack('page_view','vtours');
       else if(id==='booking')vtTrack('book_cta','site');
       else if(id==='contact')vtTrack('quote_cta','site');
+      ssCountView(id);
     });
     wrap('vtSwitchScene',function(scene){vtTrack('pano_scene',scene)});
     wrap('vtToggleHotspot',function(e,id){vtTrack('hotspot_click',id)});
@@ -60760,6 +60784,8 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
 <style id="manage-style">
 /* the new admin lives at /manage: its own full-screen app, so the public menu, footer and chat button step aside */
 body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage.on) #mobNav,body:has(#p-manage.on) footer,body:has(#p-manage.on) #scrollTop,body:has(#p-manage.on) #ssBotLauncher,body:has(#p-manage.on) #ssBotPanel,body:has(#p-manage.on) #cartOverlay,body:has(#p-manage.on) #cartPanel,body:has(#p-manage.on) .skip-link{display:none!important}
+/* the public site clips sideways overflow on the page itself, which stops anything in the admin from sticking while it scrolls */
+html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-manage{--navy:#062e4b;--blue:#0a4d73;--green:#70c257;--orange:#ef8731;--ink:#12293d;--mut:#5c6f82;--line:rgba(6,46,75,.12);--bg:#f4f8fb;--card:#fff;--shadow:0 1px 2px rgba(6,46,75,.06),0 14px 34px rgba(6,46,75,.08);background:var(--bg);color:var(--ink);font-family:'Raleway',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;min-height:100vh}
 #p-manage *{box-sizing:border-box}
 #p-manage button{font:inherit;cursor:pointer}
@@ -60922,7 +60948,7 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
     var h=S.home||{},first=(S.user.name||'').split(' ')[0]||'there',hr=new Date().getHours(),greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
     var cards='';
     if(can('pages')&&h.drafts)cards+='<div class="mg-card mg-todo"><span class="n">'+h.drafts+'</span><b>'+(h.canApprove?'Website changes waiting for you':'Your changes waiting for approval')+'</b><small>'+(h.canApprove?'Nothing goes live until you approve it':'They go live when the owner approves them')+'</small><button class="mg-btn sm pri" data-go="pages" data-pgtab="waiting">'+(h.canApprove?'Review them':'See them')+'</button></div>';
-    if(can('trips'))cards+='<div class="mg-card mg-todo"><span class="n">'+(h.apps==null?'–':h.apps)+'</span><b>Leaders waiting for approval</b><small>Applications to lead a trip</small><button class="mg-btn sm pri" data-go="trips">Review them</button></div>';
+    if(can('trips'))cards+='<div class="mg-card mg-todo"><span class="n">'+(h.apps==null?'–':h.apps)+'</span><b>Leaders waiting for approval</b><small>Applications to lead a trip</small><button class="mg-btn sm pri" data-go="trips" data-cltab="apps">Review them</button></div>';
     if(can('inbox'))cards+='<div class="mg-card mg-todo b"><span class="n">'+(h.inboxNew==null?'–':h.inboxNew)+'</span><b>New enquiries</b><small>'+esc(h.inboxWhat||'Bookings, planning requests and messages')+'</small><button class="mg-btn sm" data-go="inbox">Open inbox</button></div>';
     if(isOwner())cards+='<div class="mg-card mg-todo g"><span class="n">'+(h.team==null?'–':h.team)+'</span><b>People on your team</b><small>Owners and team members</small><button class="mg-btn sm" data-go="team">Manage team</button></div>';
     if(!cards)cards='<div class="mg-card mg-todo g"><b>You are all set</b><small>Use the menu on the left to get to what you can work on.</small></div>';
@@ -60930,7 +60956,7 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
     if(can('pages'))quick+='<button class="mg-btn" data-go="pages">Edit a page</button> ';
     if(can('catalog','blog'))quick+='<button class="mg-btn" data-go="catalog">Tours, stays and blog</button> ';
     if(can('pages','catalog'))quick+='<button class="mg-btn" data-go="photos">Change a photo</button> ';
-    return '<h1>'+greet+', '+esc(first)+'</h1><p class="mg-sub">Here is what needs you today.</p><div class="mg-grid g3">'+cards+'</div>'+(quick?'<h2>Do something</h2><div style="display:flex;gap:12px;flex-wrap:wrap">'+quick+'</div>':'');
+    return '<h1>'+greet+', '+esc(first)+'</h1><p class="mg-sub">Here is what needs you today.</p><div class="mg-grid g3">'+cards+'</div>'+(MG.homeExtra?MG.homeExtra():'')+(quick?'<h2>Do something</h2><div style="display:flex;gap:12px;flex-wrap:wrap">'+quick+'</div>':'');
   }
   function permTick(has){return has?'<td class="c yes">&#10003;</td>':'<td class="c no">&ndash;</td>';}
   function viewTeam(){
@@ -61007,6 +61033,7 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
     if(can('pages'))jobs.push(api('site-edit?view=drafts').then(function(d){h.drafts=d.pending.length;h.canApprove=d.canApprove;h.badge.pages=h.drafts;}).catch(function(){}));
     if(can('trips'))jobs.push(api('trips?admin=1').then(function(d){h.apps=(d.applications||[]).filter(function(a){return a.status==='pending';}).length;h.badge.trips=h.apps;}).catch(function(){}));
     if(isOwner())jobs.push(auth('team-list').then(function(d){h.team=d.team.length;S.team=d;}).catch(function(){}));
+    if(MG.homeJobs)MG.homeJobs().forEach(function(j){jobs.push(j);});
     Promise.all(jobs).then(function(){if(S.state==='app'){var pg=document.getElementById('mgPage');if(S.screen==='home'&&pg)pg.innerHTML=viewHome();var sb=document.querySelector('#p-manage .mg-nav');if(sb){/* refresh the badges only */var tmp=document.createElement('div');tmp.innerHTML=viewApp();var nn=tmp.querySelector('.mg-nav');if(nn)sb.innerHTML=nn.innerHTML;}}});
   }
   function enter(user,perms){S.user=user;S.perms=perms||user.perms||[];if(!S.perms.length){S.state='noaccess';render();return;}S.state='app';var h=(location.hash||'').replace('#','');S.screen=TITLES[h]?h:'home';var ok=NAV.some(function(g){return g.items.some(function(i){return i.id===S.screen&&i.show();});});if(!ok)S.screen='home';render();if(S.screen==='team')loadTeam();loadHome();}
@@ -61040,7 +61067,7 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
   R.addEventListener('change',function(e){if(e.target.id==='mgIRole'){var c=document.getElementById('mgICustom');if(c)c.hidden=e.target.value!=='custom';}});
   R.addEventListener('click',function(e){
     var t=e.target.closest('button');if(!t)return;
-    if(t.dataset.go){if(t.dataset.pgtab&&MG.PG)MG.PG.tab=t.dataset.pgtab;return go(t.dataset.go);}
+    if(t.dataset.go){if(t.dataset.pgtab&&MG.PG)MG.PG.tab=t.dataset.pgtab;if(t.dataset.cltab&&MG.CL)MG.CL.tab=t.dataset.cltab;return go(t.dataset.go);}
     if(t.dataset.open){try{nav(t.dataset.open);}catch(x){location.href='/';}return;}
     if(t.dataset.live){try{nav('home');}catch(x){location.href='/';}return;}
     if(t.id==='mgMenu'){document.getElementById('mgSb').classList.toggle('open');return;}
@@ -61626,6 +61653,7 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
   }
 
   /* ---------- wiring ---------- */
+  MG.changer=changer;
   MG.screens.pages=screenPages;
   MG.screens.photos=screenPhotos;
   MG.after.pages=function(){if(!PG.groups)load().then(function(){if(S.screen==='pages')refresh();}).catch(function(e){var p=document.getElementById('mgPage');if(p)p.insertAdjacentHTML('beforeend','<div class="mg-msg on err">'+esc(e.message)+'</div>');});};
@@ -61674,5 +61702,655 @@ body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage
     if(t.id==='plF'){PG.libFolder=t.value;var p=document.getElementById('mgPage');if(p)p.innerHTML=screenPhotos();return;}
     if(t.id==='plFile'&&t.files.length)libUpload(t.files);
   });
+})();
+</script>
+<style id="manage-inbox-style">
+#p-manage .vs{padding:20px 22px}
+#p-manage .vs-top{display:flex;gap:34px;flex-wrap:wrap;margin-bottom:14px}
+#p-manage .vs-top .n{display:block;font-family:Georgia,serif;font-size:40px;line-height:1;color:var(--navy)}
+#p-manage .vs-top small{color:var(--mut)}
+#p-manage .vs-top b.up{color:#2f7a2a}#p-manage .vs-top b.dn{color:#a1362a}
+#p-manage .vs-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin:8px 0 18px;border-bottom:1px solid var(--line)}
+#p-manage .vs-b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+#p-manage .vs-b i{display:block;width:100%;background:var(--blue);min-height:3px}
+#p-manage .vs-b:nth-child(n+8) i{background:var(--green)}
+#p-manage .vs-b span{position:absolute;bottom:-20px;font-size:11px;color:var(--mut)}
+#p-manage .vs-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:30px}
+#p-manage .vs-l h4{margin:0 0 8px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+#p-manage .vs-r{position:relative;display:flex;justify-content:space-between;gap:10px;padding:5px 8px;margin:3px 0;font-size:14px}
+#p-manage .vs-r i{position:absolute;left:0;top:0;bottom:0;background:#e6f0f7;z-index:0}
+#p-manage .vs-r span,#p-manage .vs-r b{position:relative;z-index:1}
+#p-manage .ib-bar{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+#p-manage .ib-chips{display:flex;gap:6px;flex-wrap:wrap}
+#p-manage .ib-chips button{border:1.5px solid var(--line);background:#fff;padding:7px 12px;font-weight:700;color:var(--ink);border-radius:0;min-height:40px}
+#p-manage .ib-chips button b{margin-left:4px;color:var(--mut)}
+#p-manage .ib-chips button.on{background:var(--navy);border-color:var(--navy);color:#fff}#p-manage .ib-chips button.on b{color:#bcd7ea}
+#p-manage .ib-find{display:flex;gap:8px;flex-wrap:wrap}
+#p-manage .ib-find input,#p-manage .ib-find select,#p-manage .ib-ctl select,#p-manage .ib-d input,#p-manage .ib-d textarea{border:1.5px solid var(--line);padding:9px 12px;font:inherit;border-radius:0;background:#fff;color:var(--ink);min-height:42px;width:100%}
+#p-manage .ib-find input{min-width:240px;width:auto}#p-manage .ib-find select{width:auto}
+#p-manage .ib-find input:focus,#p-manage .ib-find select:focus,#p-manage .ib-ctl select:focus,#p-manage .ib-d input:focus,#p-manage .ib-d textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(239,135,49,.22)}
+#p-manage .ib-wrap{display:grid;grid-template-columns:minmax(300px,400px) minmax(0,1fr);gap:18px;align-items:start}
+#p-manage .ib-list{max-height:calc(100vh - 210px);overflow:auto;position:sticky;top:78px}
+#p-manage .ib-i{display:flex;gap:12px;width:100%;text-align:left;background:#fff;border:0;border-bottom:1px solid var(--line);border-left:4px solid transparent;padding:12px 12px;border-radius:0;align-items:flex-start}
+#p-manage .ib-i:hover{background:#f6fafd}
+#p-manage .ib-i.on{background:#eef6fb;border-left-color:var(--green)}
+#p-manage .ib-i.new{border-left-color:var(--orange)}
+#p-manage .ib-i.new .ib-t b{color:var(--navy)}
+#p-manage .ib-av{width:38px;height:38px;border-radius:50%;background:#dbe9f3;color:var(--navy);display:grid;place-items:center;font-weight:800;flex:none;font-size:14px}
+#p-manage .ib-av.big{width:52px;height:52px;font-size:18px;background:var(--green)}
+#p-manage .ib-t{flex:1;min-width:0;display:block}
+#p-manage .ib-t b{display:block;font-size:15px}#p-manage .ib-t em{display:block;font-style:normal;font-size:13px;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-manage .ib-t small{display:block;color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-manage .ib-m{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+#p-manage .ib-m small{color:var(--mut);font-size:12px}#p-manage .ib-as{background:#eaf3f9;padding:1px 6px;color:var(--blue);font-weight:700}
+#p-manage .ib-empty{padding:26px 20px;color:var(--mut)}
+#p-manage .ib-none{padding:26px}
+#p-manage .ib-d{padding:22px 24px}
+#p-manage .ib-back{display:none;margin-bottom:12px}
+#p-manage .ib-dh{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+#p-manage .ib-dh h3{margin:0;font-family:Georgia,serif;font-size:24px;color:var(--navy)}#p-manage .ib-dh small{color:var(--mut)}
+#p-manage .ib-act{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#p-manage .ib-sum{margin:6px 0;font-size:15px}
+#p-manage .ib-body{white-space:pre-wrap;background:#f4f8fb;padding:12px 14px;margin:8px 0 14px;border-left:3px solid var(--blue);font-size:14.5px}
+#p-manage .ib-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#p-manage .ib-ctl label{display:block;font-weight:800;font-size:13px;margin-bottom:6px}
+#p-manage .ib-seg{display:flex}
+#p-manage .ib-seg button{flex:1;border:1.5px solid var(--line);background:#fff;padding:9px 6px;font-weight:700;border-radius:0;margin-left:-1.5px;min-height:42px}
+#p-manage .ib-seg button.on{background:var(--navy);border-color:var(--navy);color:#fff;position:relative}
+#p-manage .ib-tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:6px 0 12px}
+#p-manage .ib-tabs button{background:none;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;padding:10px 14px;font-weight:800;color:var(--mut);border-radius:0}
+#p-manage .ib-tabs button.on{color:var(--navy);border-bottom-color:var(--green)}
+#p-manage .ib-h{margin:22px 0 8px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+#p-manage .ib-tls{list-style:none;margin:0;padding:0}
+#p-manage .ib-tl{padding:10px 12px;margin:0 0 8px;border-left:4px solid var(--line);background:#fafcfd}
+#p-manage .ib-tl.reply{border-left-color:var(--green)}#p-manage .ib-tl.note{border-left-color:var(--orange);background:#fffaf4}#p-manage .ib-tl.assign{border-left-color:var(--blue)}
+#p-manage .ib-tl .h{font-size:13px}#p-manage .ib-tl small{color:var(--mut)}
+#p-manage .ib-tl .s{font-size:13px;color:var(--mut);margin-top:2px}#p-manage .ib-tl .b{white-space:pre-wrap;margin-top:4px;font-size:14px}
+@media (max-width:1000px){#p-manage .vs-cols{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){
+  #p-manage .ib-wrap{grid-template-columns:minmax(0,1fr)}
+  #p-manage .ib-list{position:static;max-height:none}
+  #p-manage .ib-wrap.has .ib-list{display:none}
+  #p-manage .ib-wrap:not(.has) .ib-detail{display:none}
+  #p-manage .ib-back{display:inline-flex}
+  #p-manage .ib-d{padding:16px 14px}
+  #p-manage .ib-ctl{grid-template-columns:minmax(0,1fr)}
+  #p-manage .ib-find input{min-width:0;width:100%}#p-manage .ib-find{width:100%}#p-manage .ib-find select{flex:1}
+}
+</style>
+<script id="manage-inbox-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api,can=MG.can,isOwner=MG.isOwner,ago=MG.ago;
+
+  /* ====================== visitor numbers on Home ====================== */
+  var VS={d:null,loaded:false};
+  MG.homeJobs=function(){return [api('track?days=14').then(function(d){VS.d=d;VS.loaded=true;}).catch(function(){VS.d=null;VS.loaded=true;})];};
+  function pretty(id){return String(id||'').replace(/-/g,' ').replace(/^./,function(c){return c.toUpperCase();});}
+  var RN=null;try{RN=new Intl.DisplayNames(['en'],{type:'region'});}catch(e){}
+  function country(c){try{return RN?RN.of(c):c;}catch(e){return c;}}
+  function dayList(n){var out=[],now=Date.now();for(var i=n-1;i>=0;i--)out.push(new Date(now-i*86400000).toISOString().slice(0,10));return out;}
+  function sumKeys(day,prefix){var t=0;Object.keys(day||{}).forEach(function(k){if(k.indexOf(prefix)===0)t+=day[k];});return t;}
+  function topOf(daily,days,prefix,n){
+    var m={};days.forEach(function(dt){var d=daily[dt]||{};Object.keys(d).forEach(function(k){if(k.indexOf(prefix)===0){var name=k.slice(prefix.length);m[name]=(m[name]||0)+d[k];}});});
+    return Object.keys(m).map(function(k){return [k,m[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,n);
+  }
+  function list(title,rows,fmt){
+    if(!rows.length)return '<div class="vs-l"><h4>'+esc(title)+'</h4><p class="mg-hint">Nothing yet.</p></div>';
+    var max=rows[0][1]||1;
+    return '<div class="vs-l"><h4>'+esc(title)+'</h4>'+rows.map(function(r){return '<div class="vs-r"><span>'+esc(fmt?fmt(r[0]):r[0])+'</span><i style="width:'+Math.max(4,Math.round(r[1]/max*100))+'%"></i><b>'+r[1]+'</b></div>';}).join('')+'</div>';
+  }
+  MG.homeExtra=function(){
+    if(!VS.loaded)return '';
+    var d=VS.d;
+    if(!d)return '';
+    var days=dayList(14),daily=d.daily||{},visits=days.map(function(x){return (daily[x]||{}).site_visit||0;}),views=days.map(function(x){return sumKeys(daily[x],'site_view|');});
+    var w1=days.slice(7),w0=days.slice(0,7);
+    var v1=visits.slice(7).reduce(function(a,b){return a+b;},0),v0=visits.slice(0,7).reduce(function(a,b){return a+b;},0),p1=views.slice(7).reduce(function(a,b){return a+b;},0);
+    var any=visits.some(function(x){return x>0;})||views.some(function(x){return x>0;});
+    if(!any)return '<h2>Visitors</h2><div class="mg-card" style="padding:20px"><b>Counting has started</b><p class="mg-hint" style="margin:4px 0 0;font-size:14px">The website now counts visits and page views, without cookies or any personal details. Numbers appear here as people visit.</p></div>';
+    var max=Math.max.apply(null,visits.concat([1])),delta=v0?Math.round((v1-v0)/v0*100):null;
+    var bars=days.map(function(x,i){var dt=new Date(x+'T12:00:00Z');return '<div class="vs-b" title="'+esc(dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'})+': '+visits[i]+' visit'+(visits[i]===1?'':'s'))+'"><i style="height:'+Math.max(3,Math.round(visits[i]/max*100))+'%"></i><span>'+dt.toLocaleDateString('en-US',{weekday:'narrow',timeZone:'UTC'})+'</span></div>';}).join('');
+    var dev=topOf(daily,w1,'site_dev|',2),devTotal=dev.reduce(function(a,b){return a+b[1];},0);
+    return '<h2>Visitors, last 7 days</h2><div class="mg-card vs"><div class="vs-top"><div><span class="n">'+v1+'</span><small>Visits'+(delta===null?'':' <b class="'+(delta>=0?'up':'dn')+'">'+(delta>=0?'+':'')+delta+'% on the week before</b>')+'</small></div><div><span class="n">'+p1+'</span><small>Pages viewed</small></div>'+(devTotal?'<div><span class="n">'+Math.round((dev.filter(function(x){return x[0]==='phone';})[0]||[0,0])[1]/devTotal*100)+'%</span><small>On a phone</small></div>':'')+'</div>'
+      +'<div class="vs-bars" role="img" aria-label="Visits per day for the last 14 days">'+bars+'</div>'
+      +'<div class="vs-cols">'+list('Most viewed pages',topOf(daily,w1,'site_view|',5),pretty)+list('Where people came from',topOf(daily,w1,'site_ref|',5))+list('Countries',topOf(daily,w1,'site_ctry|',5),country)+'</div>'
+      +'<p class="mg-hint" style="margin:12px 0 0">Counted without cookies. A visit is one browsing session. Robots, signed-in team members and people who ask not to be tracked are left out.</p></div>';
+  };
+
+  /* ====================== the inbox ====================== */
+  var IB={items:null,counts:null,team:[],filter:'open',q:'',type:'all',sel:'',mode:'reply',draft:{},busy:false,loading:false,err:''};
+  MG.IB=IB;
+  var ST={new:'New',in_progress:'In progress',done:'Done'};
+  function first(n){return String(n||'').trim().split(/\s+/)[0]||'there';}
+  function initials(n){return String(n||'?').trim().split(/\s+/).slice(0,2).map(function(x){return x.charAt(0).toUpperCase();}).join('');}
+  function digits(p){return String(p||'').replace(/[^0-9]/g,'');}
+  function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
+  function meId(){return S.user&&S.user.id;}
+  function load(){
+    IB.loading=true;
+    return api('inbox').then(function(d){IB.items=d.items||[];IB.counts=d.counts||{};IB.team=d.team||[];IB.loading=false;IB.err='';}).catch(function(e){IB.loading=false;IB.err=e.message;});
+  }
+  function recount(){var c={total:IB.items.length,new:0,in_progress:0,done:0,byType:{}};IB.items.forEach(function(i){c[i.status]++;if(i.status!=='done')c.byType[i.type]=(c.byType[i.type]||0)+1;});IB.counts=c;}
+  function put(it){var k=IB.items.findIndex(function(x){return x.key===it.key;});if(k>-1)IB.items[k]=it;recount();}
+  function visible(){
+    var q=IB.q.trim().toLowerCase();
+    return (IB.items||[]).filter(function(i){
+      var f=IB.filter;
+      if(f==='open'&&i.status==='done')return false;
+      if(f==='mine'&&!(i.assignee&&i.assignee.id===meId()&&i.status!=='done'))return false;
+      if(f==='unassigned'&&!(!i.assignee&&i.status!=='done'))return false;
+      if(f==='new'&&i.status!=='new')return false;
+      if(f==='done'&&i.status!=='done')return false;
+      if(IB.type!=='all'&&i.type!==IB.type)return false;
+      return !q||[i.name,i.email,i.phone,i.title,i.summary,i.details,i.ref].join(' ').toLowerCase().indexOf(q)>-1;
+    });
+  }
+  function count(f){return (IB.items||[]).filter(function(i){
+    if(f==='open')return i.status!=='done';if(f==='new')return i.status==='new';if(f==='mine')return i.assignee&&i.assignee.id===meId()&&i.status!=='done';
+    if(f==='unassigned')return !i.assignee&&i.status!=='done';if(f==='done')return i.status==='done';return true;}).length;}
+  function screen(){
+    if(IB.items===null)return '<h1>Enquiries and bookings</h1><p class="mg-sub">'+(IB.err?esc(IB.err):'Loading…')+'</p>';
+    var types={};IB.items.forEach(function(i){types[i.type]=1;});
+    var chips=[['open','Open'],['new','New'],['mine','Mine'],['unassigned','Not handled yet'],['done','Done'],['all','Everything']].map(function(f){return '<button type="button" data-ib-f="'+f[0]+'" class="'+(IB.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+count(f[0])+'</b></button>';}).join('');
+    var rows=visible();
+    var sel=IB.items.filter(function(i){return i.key===IB.sel;})[0];
+    var listHtml=rows.length?rows.slice(0,250).map(function(i){
+      return '<button type="button" class="ib-i'+(i.key===IB.sel?' on':'')+(i.status==='new'?' new':'')+'" data-ib-sel="'+esc(i.key)+'"><span class="ib-av">'+esc(initials(i.name))+'</span><span class="ib-t"><b>'+esc(i.name||'(no name)')+'</b><em>'+esc(i.type)+(i.title&&i.title!==i.type?' · '+esc(i.title):'')+'</em><small>'+esc(i.summary||i.details||'')+'</small></span><span class="ib-m"><small>'+esc(ago(i.createdAt))+'</small><span class="mg-chip '+(i.status==='new'?'o':i.status==='done'?'g':'')+'">'+esc(ST[i.status])+'</span>'+(i.assignee?'<small class="ib-as">'+esc(first(i.assignee.name))+'</small>':'')+'</span></button>';
+    }).join(''):'<div class="ib-empty">'+(IB.items.length?'Nothing here. Try another filter.':'No requests yet. Bookings, contact messages, tent rentals, planning requests and passport renewals arrive here, and you also get an email for each.')+'</div>';
+    return '<h1>Enquiries and bookings</h1><p class="mg-sub">Everything people send through the website, in one place. Give each request to someone, keep notes, and reply by email.</p>'
+      +(IB.err?'<div class="mg-msg on err">'+esc(IB.err)+'</div>':'')
+      +'<div class="ib-bar"><div class="ib-chips">'+chips+'</div><div class="ib-find"><input id="ibQ" type="search" placeholder="Search name, email, phone or request" value="'+esc(IB.q)+'" aria-label="Search"><select id="ibT" aria-label="Type"><option value="all">All types</option>'+Object.keys(types).sort().map(function(t){return '<option'+(IB.type===t?' selected':'')+'>'+esc(t)+'</option>';}).join('')+'</select></div></div>'
+      +'<div class="ib-wrap'+(sel?' has':'')+'"><div class="ib-list mg-card">'+listHtml+'</div><div class="ib-detail">'+(sel?detail(sel):'<div class="ib-none mg-card"><b>Pick a request</b><p class="mg-hint" style="margin:4px 0 0">Choose one on the left to see the details, hand it to someone, add a note or reply.</p></div>')+'</div></div>';
+  }
+  function detail(i){
+    var dr=IB.draft[i.key]||{};
+    var team=IB.team||[];
+    var timeline=(i.thread||[]).slice().reverse().map(function(t){
+      var icon=t.type==='reply'?'Reply sent':t.type==='note'?'Private note':t.type==='assign'?'Handled by':'Status';
+      return '<li class="ib-tl '+esc(t.type)+'"><div class="h"><b>'+icon+'</b> · '+esc(t.by&&t.by.name||'')+' <small>'+esc(dt(t.at))+'</small></div>'
+        +(t.type==='reply'?'<div class="s">To '+esc(t.to||'')+': '+esc(t.subject||'')+'</div>':'')+'<div class="b">'+esc(t.text)+'</div></li>';
+    }).join('');
+    if(i.note&&!(i.thread||[]).length)timeline='<li class="ib-tl note"><div class="h"><b>Earlier note</b></div><div class="b">'+esc(i.note)+'</div></li>';
+    var contact='<a class="mg-btn sm" href="mailto:'+esc(i.email)+'">Email</a>'+(i.phone?' <a class="mg-btn sm" href="tel:'+esc('+'.indexOf(i.phone)===0?i.phone:digits(i.phone))+'">Call</a> <a class="mg-btn sm" target="_blank" rel="noopener" href="https://wa.me/'+esc(digits(i.phone))+'">WhatsApp</a>':'');
+    var subj=dr.subject!==undefined?dr.subject:'Re: '+(i.title||i.type);
+    var msgv=dr.message!==undefined?dr.message:'Hi '+first(i.name)+',\n\n';
+    var composer=IB.mode==='note'
+      ?'<div class="mg-fld"><label for="ibNote">Private note (only your team sees it)</label><textarea id="ibNote" rows="3" data-ib-key="'+esc(i.key)+'" placeholder="For example: called, left a message">'+esc(dr.note||'')+'</textarea></div><button type="button" class="mg-btn pri" data-ib-send="note">Save note</button>'
+      :(i.email?'<div class="mg-fld"><label for="ibSub">Subject</label><input id="ibSub" data-ib-key="'+esc(i.key)+'" value="'+esc(subj)+'" maxlength="160"></div><div class="mg-fld"><label for="ibMsg">Your reply to '+esc(first(i.name))+' ('+esc(i.email)+')</label><textarea id="ibMsg" rows="7" data-ib-key="'+esc(i.key)+'">'+esc(msgv)+'</textarea><div class="mg-hint">Sent from the website by email. Their answer comes to the company inbox. Your name is added at the end.</div></div><button type="button" class="mg-btn pri" data-ib-send="reply">Send reply</button>':'<p class="mg-hint">There is no email address on this request, so a reply cannot be sent from here.</p>');
+    return '<div class="mg-card ib-d"><button type="button" class="mg-btn sm ghost ib-back" data-ib-back="1">&larr; All requests</button>'
+      +'<div class="ib-dh"><span class="ib-av big">'+esc(initials(i.name))+'</span><div><h3>'+esc(i.name||'(no name)')+'</h3><small>'+esc(i.type)+(i.ref?' · '+esc(i.ref):'')+' · received '+esc(dt(i.createdAt))+'</small></div></div>'
+      +'<div class="ib-act">'+contact+'</div>'
+      +(i.title?'<p class="ib-sum"><b>'+esc(i.title)+'</b>'+(i.summary?'<br>'+esc(i.summary):'')+'</p>':'')+(i.details?'<p class="ib-body">'+esc(i.details)+'</p>':'')
+      +'<div class="ib-ctl"><div><label>Status</label><div class="ib-seg">'+['new','in_progress','done'].map(function(s){return '<button type="button" data-ib-st="'+s+'" class="'+(i.status===s?'on':'')+'">'+ST[s]+'</button>';}).join('')+'</div></div>'
+      +'<div><label for="ibAs">Handled by</label><select id="ibAs"><option value="">No one yet</option>'+team.map(function(t){return '<option value="'+esc(t.id)+'"'+(i.assignee&&i.assignee.id===t.id?' selected':'')+'>'+esc(t.name+(t.id===meId()?' (me)':''))+'</option>';}).join('')+'</select></div></div>'
+      +'<div class="ib-tabs"><button type="button" data-ib-mode="reply" class="'+(IB.mode==='reply'?'on':'')+'">Reply to customer</button><button type="button" data-ib-mode="note" class="'+(IB.mode==='note'?'on':'')+'">Private note</button></div>'
+      +composer+'<div class="mg-msg" id="ibMsgBox" role="alert"></div>'
+      +'<h4 class="ib-h">History</h4>'+(timeline?'<ul class="ib-tls">'+timeline+'</ul>':'<p class="mg-hint">Nothing has been done on this request yet.</p>')
+      +(isOwner()?'<p style="margin-top:18px"><button type="button" class="mg-btn sm ghost" data-ib-del="1">Delete this request for good</button></p>':'')+'</div>';
+  }
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='inbox'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function flash(t,type){var e=document.getElementById('ibMsgBox');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function cur(){return (IB.items||[]).filter(function(i){return i.key===IB.sel;})[0];}
+  function act(body,done){
+    var i=cur();if(!i||IB.busy)return;IB.busy=true;
+    api('inbox',Object.assign({source:i.source,id:i.id},body)).then(function(d){IB.busy=false;put(d.item);done&&done(d.item);rerender();MG.loadHome();}).catch(function(e){IB.busy=false;flash(e.message,'err');var b=R.querySelector('[data-ib-send]');if(b)b.disabled=false;});
+  }
+  MG.screens.inbox=screen;
+  MG.after.inbox=function(){if(IB.items===null&&!IB.loading)load().then(function(){if(S.screen==='inbox')rerender();});};
+  /* deep link to one request, from an email: /manage#inbox */
+  R.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t)return;var ds=t.dataset;
+    if(ds.ibF){IB.filter=ds.ibF;rerender();return;}
+    if(ds.ibSel){IB.sel=ds.ibSel;IB.mode='reply';rerender();var d=document.querySelector('.ib-detail');if(d&&window.innerWidth<900)window.scrollTo(0,d.getBoundingClientRect().top+window.scrollY-70);return;}
+    if(ds.ibBack){IB.sel='';rerender();return;}
+    if(ds.ibMode){IB.mode=ds.ibMode;rerender();return;}
+    if(ds.ibSt){act({action:'set-status',status:ds.ibSt});return;}
+    if(ds.ibSend==='note'){var n=document.getElementById('ibNote').value;var k=IB.sel;t.disabled=true;act({action:'note',text:n},function(){delete (IB.draft[k]||{}).note;});return;}
+    if(ds.ibSend==='reply'){
+      var sub=document.getElementById('ibSub').value,msg=document.getElementById('ibMsg').value,key=IB.sel,i=cur();
+      if(!msg.trim()||msg.trim()===('Hi '+first(i.name)+',')){flash('Write your reply first.','err');return;}
+      if(!confirm('Send this reply to '+i.email+' now?'))return;
+      t.disabled=true;t.textContent='Sending…';
+      act({action:'reply',subject:sub,message:msg},function(){delete IB.draft[key];flash('Sent.','ok');});
+      return;
+    }
+    if(ds.ibDel){var it=cur();if(!it||!confirm('Delete this '+it.type.toLowerCase()+' from '+(it.name||it.email)+' for good? This cannot be undone.'))return;
+      api('inbox',{action:'delete',source:it.source,id:it.id}).then(function(){IB.items=IB.items.filter(function(x){return x.key!==it.key;});IB.sel='';recount();rerender();MG.loadHome();}).catch(function(e){flash(e.message,'err');});return;}
+  });
+  R.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.id==='ibT'){IB.type=t.value;rerender();return;}
+    if(t.id==='ibAs'){act({action:'assign',assigneeId:t.value});return;}
+  });
+  R.addEventListener('input',function(e){
+    var t=e.target;
+    if(t.id==='ibQ'){IB.q=t.value;var pos=t.selectionStart;rerender();var q=document.getElementById('ibQ');if(q){q.focus();q.setSelectionRange(pos,pos);}return;}
+    if(t.dataset&&t.dataset.ibKey){var d=IB.draft[t.dataset.ibKey]=IB.draft[t.dataset.ibKey]||{};if(t.id==='ibSub')d.subject=t.value;else if(t.id==='ibMsg')d.message=t.value;else if(t.id==='ibNote')d.note=t.value;}
+  });
+})();
+</script>
+<style id="manage-club-style">
+#p-manage .cl-tabs button{white-space:nowrap}
+#p-manage .cl-todos{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:8px}
+#p-manage .cl-todo{display:flex;flex-direction:column;gap:4px;padding:16px 18px;text-align:left;border-top:4px solid var(--line);color:var(--ink);font-weight:700;border-radius:0}
+#p-manage .cl-todo b{font-family:Georgia,serif;font-size:36px;line-height:1;color:var(--navy);font-weight:400}
+#p-manage button.cl-todo:hover{border-color:var(--blue)}
+#p-manage .cl-todo.has{border-top-color:var(--orange)}
+#p-manage .cl-row{background:#fff;border:1px solid var(--line);margin:0 0 10px;box-shadow:var(--shadow)}
+#p-manage .cl-row>summary{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;list-style:none;flex-wrap:wrap;min-height:56px}
+#p-manage .cl-row>summary::-webkit-details-marker{display:none}
+#p-manage .cl-row>summary::before{content:"\25B8";color:var(--mut);font-size:14px;flex:none}
+#p-manage .cl-row[open]>summary::before{content:"\25BE"}
+#p-manage .cl-row>summary .s{flex:1;min-width:200px}
+#p-manage .cl-row>summary .s b{display:block;color:var(--navy)}
+#p-manage .cl-row>summary .s small{display:block;color:var(--mut);font-size:13px}
+#p-manage .cl-row[open]>summary{border-bottom:1px solid var(--line);background:#f8fbfd}
+#p-manage .cl-body{padding:16px 18px 18px}
+#p-manage .cl-body details.cl-row{box-shadow:none;margin-top:10px}
+#p-manage .cl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
+#p-manage .cl-grid .full{grid-column:1/-1}
+#p-manage .cl-grid .mg-fld{margin:10px 0}
+#p-manage .mg-fld textarea,#p-manage .cl-in,#p-manage .cl-find input,#p-manage .cl-find select,#p-manage .cl-photo input{width:100%;border:1.5px solid var(--line);padding:10px 12px;font:inherit;border-radius:0;background:#fff;color:var(--ink);min-height:46px}
+#p-manage .mg-fld textarea{resize:vertical;line-height:1.5}
+#p-manage .mg-fld textarea:focus,#p-manage .cl-in:focus,#p-manage .cl-find input:focus,#p-manage .cl-find select:focus,#p-manage .cl-photo input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(239,135,49,.22)}
+#p-manage .cl-chk{display:flex!important;gap:10px;align-items:center;font-weight:700!important;margin-top:20px}
+#p-manage .cl-chk input,#p-manage .cl-checks input,#p-manage .cl-sw input{width:20px;height:20px;min-height:0;accent-color:var(--orange);flex:none}
+#p-manage .cl-checks{display:grid;gap:8px;margin:10px 0}
+#p-manage .cl-checks label{display:flex;gap:10px;align-items:center;font-weight:600;font-size:14px}
+#p-manage .cl-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+#p-manage .cl-acts a.mg-btn{text-decoration:none}
+#p-manage .cl-kv{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr);gap:6px 16px;margin:0 0 14px;font-size:14px}
+#p-manage .cl-kv dt{color:var(--mut);font-weight:700}#p-manage .cl-kv dd{margin:0;word-break:break-word}
+#p-manage .cl-find{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+#p-manage .cl-find input{flex:1;min-width:220px;width:auto}#p-manage .cl-find select{width:auto}
+#p-manage .cl-del{background:none;border:0;color:#a1362a;font-weight:700;text-decoration:underline;padding:6px 8px;border-radius:0;font-size:13px;min-height:32px}
+#p-manage .cl-del:hover{color:#7e251b}
+#p-manage .cl-ta{white-space:nowrap;text-align:right}
+#p-manage .cl-feed li small{white-space:nowrap}
+#p-manage .cl-box{padding:18px 20px}
+#p-manage .cl-h{margin:18px 0 6px;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+#p-manage .cl-ul{list-style:none;margin:8px 0;padding:0}
+#p-manage .cl-ul li{padding:9px 12px;border:1px solid var(--line);background:#fff;margin:0 0 6px;font-size:14px}
+#p-manage .cl-ul small,#p-manage .cl-posts small{color:var(--mut)}
+#p-manage .cl-posts li{align-items:flex-start}
+#p-manage .cl-prev li{justify-content:space-between;font-size:14px}
+#p-manage .cl-flags{margin:0 0 12px;padding:10px 14px 10px 30px;background:#fffaf4;border-left:3px solid var(--orange);font-size:14px}
+#p-manage .cl-sw{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
+#p-manage .cl-sw b{display:block;color:var(--navy)}#p-manage .cl-sw small{display:block;color:var(--mut);font-size:13.5px;margin-top:2px;line-height:1.5}
+#p-manage .cl-photo{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#p-manage .cl-photo input{flex:1;min-width:200px}
+#p-manage .cl-days .tc-day{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:10px;align-items:start;margin:8px 0;padding:10px;border:1px solid var(--line);background:#fafcfd}
+#p-manage .cl-days .tc-day-n{font-weight:800;color:var(--navy);padding-top:10px}
+#p-manage .cl-days .tc-day-f{display:grid;gap:8px}
+#p-manage .cl-days input,#p-manage .cl-days textarea{width:100%;border:1.5px solid var(--line);padding:9px 12px;font:inherit;border-radius:0;background:#fff;min-height:42px}
+#p-manage .cl-days .tc-day-del,#p-manage .cl-days .tc-day-add{border:1.5px solid var(--line);background:#fff;padding:8px 12px;font-weight:700;border-radius:0;min-height:40px;color:var(--navy)}
+#p-manage .cl-days .tc-day-add{margin-top:6px}
+#p-manage .cl-days select{width:100%;min-height:44px}
+@media (max-width:860px){
+  #p-manage .cl-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:thin}
+  #p-manage .cl-tabs button{flex:none}
+  #p-manage .cl-grid{grid-template-columns:minmax(0,1fr)}
+  #p-manage .cl-kv{grid-template-columns:minmax(0,1fr)}#p-manage .cl-kv dt{margin-top:6px}
+  #p-manage .cl-body{padding:14px 12px}
+  #p-manage .cl-days .tc-day{grid-template-columns:minmax(0,1fr)}
+  #p-manage .cl-days .tc-day-n{padding-top:0}
+}
+</style>
+<script id="manage-club-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api,can=MG.can,isOwner=MG.isOwner;
+  var CL=MG.CL={tab:'overview',data:null,loading:false,err:'',filter:'all',q:'',cc:'all',open:{},adv:null,advForm:null,updForm:null,autoPreview:null,rOpen:{},dOpen:{}};
+  var TABS=[['overview','Overview'],['apps','Leader applications'],['trips','Trips'],['reqs','Traveler requests'],['accounts','Accounts'],['updates','Updates'],['rewards','Rewards'],['dest','Entry information'],['auto','Automatic emails'],['news','Newsletter'],['links','Partner links']];
+  var ACT_LABEL={application:'New application',decision:'Decision',joined:'Traveler joined','group-link':'Group chat',goal:'Goal reached',traveler:'Traveler update','trip-open':'Trip live','trip-full':'Trip full','trip-closed':'Trip closed','account-reset':'Account reset',automation:'Automatic emails',update:'Trip update',advisory:'Advisory',payout:'Reward paid'};
+  var APPCHIP={pending:'o',needs_info:'o',approved:'g',declined:'r'},TRIPCHIP={draft:'',open:'g',full:'o',closed:'r'},INTCHIP={new:'o',contacted:'',confirmed:'g',booked:'g',cancelled:'r',waitlist:'o'};
+  var LABEL={needs_info:'needs info',not_set:'not set',in_progress:'in progress'};
+  function lab(k){return LABEL[k]||String(k).replace(/_/g,' ');}
+  function chip(map,k){return '<span class="mg-chip '+(map[k]||'')+'">'+esc(lab(k))+'</span>';}
+  function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
+  function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(isNaN(m))return '';if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';return dt(iso);}
+  var RN=null;try{RN=new Intl.DisplayNames(['en'],{type:'region'});}catch(e){}
+  function cname(c){if(!c)return '';try{return RN?RN.of(c):c;}catch(e){return c;}}
+  function call(action,body){return api('trips',Object.assign({action:action},body||{}));}
+  function $(id){return document.getElementById(id);}
+  function val(id){var e=$(id);return e?(e.type==='checkbox'?e.checked:e.value):'';}
+  function ph(p){return String(p||'').replace(/[^0-9+]/g,'');}
+  /* a form field in the admin's own style */
+  function fld(label,id,v,o){
+    o=o||{};var x=esc(v==null?'':v);
+    if(o.type==='textarea')return '<div class="mg-fld full"><label for="'+id+'">'+esc(label)+'</label><textarea id="'+id+'" rows="'+(o.rows||3)+'"'+(o.ph?' placeholder="'+esc(o.ph)+'"':'')+'>'+x+'</textarea>'+(o.help?'<div class="mg-hint">'+esc(o.help)+'</div>':'')+'</div>';
+    if(o.type==='select')return '<div class="mg-fld"><label for="'+id+'">'+esc(label)+'</label><select id="'+id+'">'+o.options.map(function(y){return '<option value="'+esc(y)+'"'+(y===v?' selected':'')+'>'+esc(lab(y))+'</option>';}).join('')+'</select></div>';
+    if(o.type==='check')return '<div class="mg-fld"><label class="cl-chk"><input type="checkbox" id="'+id+'"'+(v?' checked':'')+'> '+esc(label)+'</label></div>';
+    return '<div class="mg-fld'+(o.full?' full':'')+'"><label for="'+id+'">'+esc(label)+'</label><input type="'+(o.type||'text')+'" id="'+id+'" value="'+x+'"'+(o.ph?' placeholder="'+esc(o.ph)+'"':'')+(o.min!=null?' min="'+o.min+'"':'')+(o.list?' list="'+o.list+'"':'')+'>'+(o.help?'<div class="mg-hint">'+esc(o.help)+'</div>':'')+'</div>';
+  }
+  function say(t,type){var m=$('clMsg');if(!m){var pg=document.getElementById('mgPage');if(!pg)return;pg.insertAdjacentHTML('afterbegin','<div id="clMsg" class="mg-msg" role="status"></div>');m=$('clMsg');}m.textContent=t||'';m.className='mg-msg'+(t?' on '+(type||'ok'):'');if(t&&type!=='err'){clearTimeout(say.t);say.t=setTimeout(function(){var e=$('clMsg');if(e&&e.textContent===t)e.className='mg-msg';},9000);}if(t)window.scrollTo(0,0);}
+  function delBtn(kind,id,what){return '<button type="button" class="cl-del" data-cl-del="'+kind+':'+esc(id)+'" aria-label="Delete '+esc(what)+'">Delete</button>';}
+
+  /* ---------- loading ---------- */
+  function load(force){
+    if(CL.loading)return Promise.resolve();
+    if(CL.data&&!force)return Promise.resolve();
+    CL.loading=true;
+    return api('trips?admin=1').then(function(d){CL.data=d;CL.at=Date.now();CL.loading=false;CL.err='';badge();}).catch(function(e){CL.loading=false;CL.err=e.message;});
+  }
+  function reload(msg,type){CL.data=null;return load(true).then(function(){if(S.screen==='trips'){repaint();if(msg)say(msg,type||'ok');}});}
+  function badge(){var h=S.home;if(h&&CL.data){var n=CL.data.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length;h.apps=n;(h.badge=h.badge||{}).trips=n;}}
+  function snapOpen(){CL.open={};[].forEach.call(R.querySelectorAll('details[open][data-k]'),function(d){CL.open[d.dataset.k]=1;});}
+  function repaint(){var pg=document.getElementById('mgPage');if(!pg||S.screen!=='trips')return;snapOpen();var y=window.scrollY;pg.innerHTML=screen();window.scrollTo(0,y);}
+  function det(key,summary,body){return '<details class="cl-row" data-k="'+esc(key)+'"'+(CL.open[key]?' open':'')+'><summary>'+summary+'</summary><div class="cl-body">'+body+'</div></details>';}
+
+  /* ---------- the screen ---------- */
+  function visibleTabs(){return TABS.filter(function(t){return t[0]!=='news'||can('inbox');});}
+  function screen(){
+    if(CL.err&&!CL.data)return '<h1>Trips and Travel Club</h1><div class="mg-msg on err">'+esc(CL.err)+'</div>';
+    if(!CL.data)return '<h1>Trips and Travel Club</h1><p class="mg-sub">Loading…</p>';
+    var d=CL.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
+    var tabs=visibleTabs().map(function(t){var n=t[0]==='apps'?pend:t[0]==='reqs'?fresh:0;return '<button type="button" role="tab" data-cl-tab="'+t[0]+'" class="'+(CL.tab===t[0]?'on':'')+'" aria-selected="'+(CL.tab===t[0])+'">'+t[1]+(n?'<span class="bd">'+n+'</span>':'')+'</button>';}).join('');
+    var body={overview:overview,apps:apps,trips:trips,reqs:reqs,accounts:accountsTab,updates:updatesTab,rewards:rewardsTab,dest:destTab,auto:autoTab,news:newsTab,links:links}[CL.tab]||overview;
+    return '<h1>Trips and Travel Club</h1><p class="mg-sub">Approve group leaders, run the trips, and follow every traveler.</p><div id="clMsg" class="mg-msg" role="status"></div><div class="pg-tabs cl-tabs" role="tablist">'+tabs+'</div><div id="clPane">'+body()+'</div>';
+  }
+
+  /* ---------- overview ---------- */
+  function overview(){
+    var d=CL.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),fresh=d.interests.filter(function(i){return i.status==='new';}),wait=d.interests.filter(function(i){return i.status==='waitlist';}),drafts=d.trips.filter(function(t){return t.status==='draft';}),leaders=d.applications.filter(function(a){return a.status==='approved';});
+    function todo(n,label,tab,tone){return '<button type="button" class="mg-card cl-todo'+(n?' has '+(tone||''):'')+'" data-cl-tab="'+tab+'"><b>'+n+'</b><span>'+esc(label)+'</span></button>';}
+    var out='<div class="cl-todos">'+todo(pend.length,'Applications to review','apps','o')+todo(fresh.length,'New traveler requests','reqs','o')+todo(drafts.length,'Draft trips to finish','trips','')+todo(wait.length,'On a waitlist','reqs','')+'</div>';
+    out+='<h2>Group leaders ('+leaders.length+')</h2>';
+    if(!leaders.length)out+='<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No approved leaders yet. Approve an application and it shows here with its trip, its joiners and its group chat.</p></div>';
+    else out+='<div class="mg-card mg-tw"><table><tr><th>Leader</th><th>Trip</th><th>Joined</th><th>Group chat</th></tr>'+leaders.map(function(a){
+      var t=d.trips.filter(function(x){return x.id===a.tripId||x.applicationId===a.id;})[0],list=t?d.interests.filter(function(i){return i.tripId===t.id;}):[],joined=list.filter(function(i){return i.status!=='cancelled'&&i.status!=='waitlist';}).reduce(function(n,i){return n+(i.partySize||1);},0);
+      return '<tr><td><b>'+esc(a.communityName)+'</b><br><small style="color:var(--mut)">'+esc(a.name)+' · '+esc(a.email)+'</small></td><td>'+(t?esc(t.title)+' '+chip(TRIPCHIP,t.status):'<em>No trip yet</em>')+'</td><td>'+joined+(a.inviteCount?' of '+esc(a.inviteCount):'')+'</td><td>'+(t&&t.groupLink?'<a href="'+esc(t.groupLink)+'" target="_blank" rel="noopener">Added</a>':'<em>Not yet</em>')+'</td></tr>';
+    }).join('')+'</table></div>';
+    var act=(d.activity||[]).slice(0,30);
+    out+='<h2>Recent activity</h2>'+(act.length?'<div class="mg-card"><ul class="mg-list cl-feed">'+act.map(function(a){return '<li><span class="mg-chip">'+esc(ACT_LABEL[a.type]||a.type)+'</span><span style="flex:1">'+esc(a.text)+'</span><small style="color:var(--mut)">'+esc(ago(a.at))+'</small>'+delBtn('act',a.id,'this activity')+'</li>';}).join('')+'</ul></div>':'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">Nothing yet. Applications, approvals, joins and group chats appear here as they happen.</p></div>');
+    return out;
+  }
+
+  /* ---------- applications ---------- */
+  function apps(){
+    var list=CL.data.applications.slice().sort(function(a,b){var pa=(a.status==='pending'||a.status==='needs_info')?0:1,pb=(b.status==='pending'||b.status==='needs_info')?0:1;return pa-pb||String(b.createdAt).localeCompare(String(a.createdAt));});
+    if(!list.length)return '<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No leader applications yet. They appear here when someone applies on the Travel Club page.</p></div>';
+    return list.map(function(a){
+      var link=/^https?:\/\//.test(a.link||'')?'<a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.link)+'</a>':esc(a.link||'');
+      var kv=[['Email','<a href="mailto:'+esc(a.email)+'">'+esc(a.email)+'</a>'],['Phone',esc(a.phone||'')],['Based in',esc(a.city||'')],['Who they lead',esc(a.communityType)],['Link',link],['Community size',esc(a.audienceSize||'')],['How they reach people',esc((a.channels||[]).join(', '))],['Past group trips',esc(a.experience||'')],['Destination',esc(a.destination||'')],['People they would invite',esc(a.inviteCount!=null?a.inviteCount:(a.groupSize||''))],['Trip style',esc((a.styles||[]).join(', '))],['Timing',esc(a.timing||'')],['In their words',esc(a.message)],['Anything else',esc(a.notes||'')]];
+      if(a.tripId)kv.push(['Trip','Drafted (see Trips)']);
+      var body='<dl class="cl-kv">'+kv.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>';}).join('')+'</dl>'
+        +'<div class="cl-grid">'+fld('Message to the applicant (emailed, and shown in their account)','clRep_'+a.id,a.reply||'',{type:'textarea'})+fld('Internal note (private)','clNote_'+a.id,a.note||'',{type:'textarea'})+'</div>'
+        +'<div class="cl-checks"><label><input type="checkbox" id="clDraft_'+a.id+'" '+(a.tripId?'disabled':'checked')+'> Draft a trip from this application when approving</label><label><input type="checkbox" id="clPub_'+a.id+'" '+(a.tripId?'disabled':'checked')+'> Put the trip on the departure board right away (you can edit it afterwards)</label><label><input type="checkbox" id="clNotify_'+a.id+'" checked> Email the applicant</label></div>'
+        +'<div class="cl-acts"><button type="button" class="mg-btn ok" data-cl-review="'+a.id+'" data-st="approved">Approve</button><button type="button" class="mg-btn" data-cl-review="'+a.id+'" data-st="needs_info">Ask for more info</button><button type="button" class="mg-btn ghost" data-cl-review="'+a.id+'" data-st="declined">Decline</button></div>';
+      return det('app'+a.id,'<span class="s"><b>'+esc(a.communityName)+' · '+esc(a.name)+'</b><small>'+esc(a.ref)+' · '+esc(dt(a.createdAt))+'</small></span>'+chip(APPCHIP,a.status)+delBtn('app',a.id,a.communityName),body);
+    }).join('');
+  }
+
+  /* ---------- trips ---------- */
+  var BLANK={id:'',title:'',slug:'',status:'draft',destination:'',country:'',dateText:'',startDate:'',endDate:'',summary:'',description:'',included:[],notIncluded:[],itinerary:[],theme:'',image:'',imageAlt:'',priceText:'',paymentNote:'',seatsTotal:0,organizerName:'',organizerCommunity:'',organizerEmail:'',organizerBio:'',showOrganizer:true,reward:'',rewardStatus:'not_set',internalNote:''};
+  function tripForm(t){
+    var k=t.id||'new',st=CL.data.statuses,id=function(n){return 'clT_'+n+'_'+k;};
+    return '<div class="cl-grid">'
+      +fld('Title',id('title'),t.title,{full:true})+fld('Web address (slug)',id('slug'),t.slug,{help:'Becomes /trip/your-slug. Leave empty to build it from the title.'})+fld('Status',id('status'),t.status,{type:'select',options:st.trip})
+      +fld('Destination',id('destination'),t.destination)+fld('Country',id('country'),t.country)+fld('Dates as shown',id('dateText'),t.dateText,{ph:'Mar 12 to 16, 2027'})
+      +fld('Start date',id('startDate'),t.startDate,{type:'date'})+fld('End date',id('endDate'),t.endDate,{type:'date'})+fld('Price as shown',id('priceText'),t.priceText,{ph:'For example: Quoted on confirmation',help:'Only what you can stand behind. Leave empty to show no price.'})
+      +fld('Short summary (shown on cards)',id('summary'),t.summary,{type:'textarea'})+fld('Full description (blank line between paragraphs)',id('description'),t.description,{type:'textarea',rows:5})
+      +fld('What is included (one per line)',id('included'),(t.included||[]).join('\n'),{type:'textarea'})+fld('Not included (one per line)',id('notIncluded'),(t.notIncluded||[]).join('\n'),{type:'textarea',help:'For example flights, drinks, travel insurance. Shown beside What is included.'})
+      +'<div class="mg-fld full"><label>Day by day</label><div id="'+id('days')+'" class="cl-days">'+window.ssDays.html(t.itinerary)+'</div><div class="mg-hint">A title and a line or two for each day. The dates are added from the start date.</div></div>'
+      +'<div class="mg-fld"><label for="'+id('theme')+'">Theme</label>'+window.ssDays.themeSelect(t.theme||'','id="'+id('theme')+'"')+'</div>'
+      +'<div class="mg-fld full"><label for="'+id('image')+'">Photo</label><div class="cl-photo"><div class="pg-thumb" id="'+id('thumb')+'" style="background-image:'+(t.image?cssUrl(t.image):'none')+'"></div><input id="'+id('image')+'" value="'+esc(t.image||'')+'" placeholder="/assets/... or https://..."><button type="button" class="mg-btn sm" data-cl-photo="'+k+'">Choose photo</button></div><div class="mg-hint">Pick from the library, upload one, or type a site photo such as /assets/flagship/shore-leave-beach-group.jpg.</div></div>'
+      +fld('Photo description',id('imageAlt'),t.imageAlt)+fld('Seats in total',id('seatsTotal'),t.seatsTotal||0,{type:'number',min:0,help:'0 shows no seat count. Confirmed and booked travelers come off it automatically.'})+fld('Payment note',id('paymentNote'),t.paymentNote,{full:true,help:'Leave empty for the standard note: we confirm availability and payment terms before anything is charged.'})
+      +fld('Organizer name',id('organizerName'),t.organizerName)+fld('Organizer community',id('organizerCommunity'),t.organizerCommunity)+fld('Organizer email (their account email)',id('organizerEmail'),t.organizerEmail,{type:'email',help:'They see this trip in their account when they sign in with that email.'})
+      +fld('Show the organizer on the trip page',id('showOrganizer'),t.showOrganizer,{type:'check'})+fld('Organizer bio (public)',id('organizerBio'),t.organizerBio,{type:'textarea'})
+      +fld('Agreed reward (private: only you and the organizer see it)',id('reward'),t.reward,{type:'textarea',help:'Whatever you agreed in writing. Nothing is invented or shown publicly.'})+fld('Reward status',id('rewardStatus'),t.rewardStatus,{type:'select',options:st.reward})
+      +fld('WhatsApp group or channel link (the leader can also add this)',id('groupLink'),t.groupLink||'',{full:true,type:'url',ph:'https://chat.whatsapp.com/...',help:'Shown to everyone who joined. Changing it here does not send emails; the leader adding it from their dashboard does.'})+fld('Internal note (private)',id('internalNote'),t.internalNote,{type:'textarea'})
+      +'</div>'+(t.id?announceLine(t):'')
+      +'<div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-trip="'+k+'">Save trip</button>'+(t.id?'<a class="mg-btn" href="/trip/'+esc(t.slug)+'" target="_blank" rel="noopener">Open page</a><button type="button" class="mg-btn" data-cl-copy="'+esc(location.origin+'/trip/'+t.slug)+'">Copy link</button><button type="button" class="mg-btn ghost" data-cl-deltrip="'+t.id+'">Delete</button>':'')+'</div>';
+  }
+  function cssUrl(v){return 'url(&quot;'+esc(String(v).replace(/["'()\\\s]/g,function(c){return encodeURIComponent(c);}))+'&quot;)';}
+  function announceLine(t){
+    var n=CL.data.alertList||0,on=!CL.data.automation||CL.data.automation.newTrips!==false;
+    if(t.announcedAt)return '<p class="mg-hint">New trip email: sent to '+(t.announcedCount||0)+' '+(t.announcedCount===1?'person':'people')+' on the list, '+esc(ago(t.announcedAt))+'.</p>';
+    if(t.status==='open')return '<p class="mg-hint">New trip email: not sent for this trip yet. '+n+' '+(n===1?'person is':'people are')+' on the "Be first to hear about new trips" list.'+(n?' <button type="button" class="mg-btn sm" data-cl-announce="'+esc(t.id)+'">Email them about this trip</button>':'')+'</p>';
+    return '<p class="mg-hint">New trip email: '+(on?'when this trip opens, the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list get one email about it.':'switched off under Automatic emails, so nobody on the list is emailed when this trip opens.')+'</p>';
+  }
+  function trips(){
+    var d=CL.data,list=d.trips.slice().sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
+    return det('newtrip','<span class="s"><b>+ New trip</b><small>Add an approved departure</small></span>',tripForm(BLANK))
+      +'<div style="margin-top:12px">'+(list.length?list.map(function(t){
+        var n=d.interests.filter(function(i){return i.tripId===t.id;}).length;
+        return det('trip'+t.id,'<span class="s"><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+(t.organizerName?' · led by '+esc(t.organizerName):'')+(t.infoUpdatedBy==='leader'?' · details edited by the leader '+esc(dt(t.infoUpdatedAt)):'')+'</small></span>'+chip(TRIPCHIP,t.status)+(t.status==='draft'?'<button type="button" class="mg-btn sm ok" data-cl-publish="'+t.id+'">Publish to departure board</button>':''),tripForm(t));
+      }).join(''):'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No trips yet. Add one above, or approve an application and draft a trip from it.</p></div>')+'</div>';
+  }
+  function readTrip(k){
+    var g=function(n){return val('clT_'+n+'_'+k);};
+    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink')};
+  }
+
+  /* ---------- traveler requests ---------- */
+  function reqs(){
+    var d=CL.data,opts='<option value="all">All requests</option><option value="alert"'+(CL.filter==='alert'?' selected':'')+'>Departure alerts (no trip)</option>'+d.trips.map(function(t){return '<option value="'+t.id+'"'+(CL.filter===t.id?' selected':'')+'>'+esc(t.title)+'</option>';}).join('');
+    var list=d.interests.filter(function(i){return CL.filter==='all'||(CL.filter==='alert'?!i.tripId:i.tripId===CL.filter);}).sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
+    return '<div class="mg-fld" style="max-width:420px"><label for="clFilter">Show</label><select id="clFilter">'+opts+'</select></div>'
+      +(list.length?list.map(function(i){
+        var kv=[['Email','<a href="mailto:'+esc(i.email)+'">'+esc(i.email)+'</a>'],['Phone',esc(i.phone||'')],['Also travelling',esc((i.guests||[]).join(', '))],['Message',esc(i.message||'')],['Came from',esc(i.source||'')]];
+        return det('int'+i.id,'<span class="s"><b>'+esc(i.name)+' · '+esc(i.partySize)+' traveler'+(i.partySize===1?'':'s')+'</b><small>'+esc(i.ref)+' · '+esc(i.tripTitle||'Departure alert')+' · '+esc(dt(i.createdAt))+'</small></span>'+chip(INTCHIP,i.status)+delBtn('int',i.id,i.name),
+          '<dl class="cl-kv">'+kv.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>';}).join('')+'</dl><div class="cl-grid">'+fld('Status','clI_st_'+i.id,i.status,{type:'select',options:d.statuses.interest})+fld('Internal note (private)','clI_note_'+i.id,i.note||'')+'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-int="'+i.id+'">Save</button></div>');
+      }).join(''):'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No requests here yet.</p></div>');
+  }
+
+  /* ---------- accounts ---------- */
+  var SRC={'sign-up':'Sign-up','application':'Application','application-link':'Application',google:'Google',microsoft:'Microsoft'};
+  function leaderState(a){
+    if(a.applicationStatus==='approved')return '<span class="mg-chip g">Leader</span>';
+    if(a.applicationStatus==='pending'||a.applicationStatus==='needs_info')return '<span class="mg-chip o">Application pending</span>';
+    if(a.applicationStatus==='declined')return '<span class="mg-chip r">Declined</span>';
+    return '<span class="mg-chip">'+(a.tripsJoined?'Traveler':'Member')+'</span>';
+  }
+  function accountsTab(){
+    var list=CL.data.accounts||[],q=CL.q.toLowerCase(),cf=CL.cc,cs={};
+    list.forEach(function(a){if(a.country)cs[a.country]=cname(a.country);});
+    var rows=list.filter(function(a){return (cf==='all'||(cf==='none'?!a.country:a.country===cf))&&(!q||[a.name,a.email,a.phone,a.community,cname(a.country),a.city,a.basedIn].join(' ').toLowerCase().indexOf(q)>-1);});
+    return '<div class="cl-find"><input type="search" id="clQ" placeholder="Search name, email, phone or group" value="'+esc(CL.q)+'" aria-label="Search accounts"><select id="clCC" aria-label="Country"><option value="all">All countries</option>'+Object.keys(cs).sort(function(a,b){return cs[a].localeCompare(cs[b]);}).map(function(k){return '<option value="'+esc(k)+'"'+(cf===k?' selected':'')+'>'+esc(cs[k])+'</option>';}).join('')+'<option value="none"'+(cf==='none'?' selected':'')+'>Country not known</option></select><button type="button" class="mg-btn" data-cl-csv="accounts">Download CSV</button></div>'
+      +'<p class="mg-hint">'+list.length+' account'+(list.length===1?'':'s')+'. Accounts are created when someone signs up or applies to lead a trip. Passwords are never shown or stored in readable form.</p>'
+      +(rows.length?'<div class="mg-card mg-tw"><table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Country</th><th>Joined</th><th>Travel Club</th><th></th></tr>'+rows.map(function(a){
+        return '<tr><td><b>'+esc(a.name||'(no name)')+'</b>'+(a.role==='admin'?' <span class="mg-chip g">Owner</span>':a.role==='staff'?' <span class="mg-chip">Team</span>':'')+(a.community?'<br><small style="color:var(--mut)">'+esc(a.community)+'</small>':'')+'</td><td><a href="mailto:'+esc(a.email)+'">'+esc(a.email)+'</a></td><td>'+(a.phone?'<a href="tel:'+esc(ph(a.phone))+'">'+esc(a.phone)+'</a>':'<em>Not given</em>')+'</td><td>'+(a.country?esc(cname(a.country)):'<em>Not known</em>')+(a.city?'<br><small style="color:var(--mut)">'+esc(a.city)+'</small>':'')+'</td><td>'+esc(a.createdAt?dt(a.createdAt):'')+'<br><small style="color:var(--mut)">'+esc(SRC[a.source]||a.source)+'</small></td><td>'+leaderState(a)+(a.tripsLed?'<br><small style="color:var(--mut)">'+a.tripsLed+' led</small>':'')+(a.tripsJoined?'<br><small style="color:var(--mut)">'+a.tripsJoined+' joined</small>':'')+'</td><td class="cl-ta"><button type="button" class="cl-del" data-cl-reset="'+esc(a.id)+'">Reset trips</button>'+(a.role==='admin'||a.role==='staff'?'':'<button type="button" class="cl-del" data-cl-delacct="'+esc(a.id)+'">Delete</button>')+'</td></tr>';
+      }).join('')+'</table></div>':'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No accounts match.</p></div>');
+  }
+  function csvCell(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+  function download(name,text){try{var b=new Blob([text],{type:'text/csv'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},500);}catch(e){}}
+  function accountsCsv(){var head=['Name','Email','Phone','Country','City','Role','Source','Created','Travel Club status','Group','Trips led','Trips joined'];return [head].concat((CL.data.accounts||[]).map(function(a){return [a.name,a.email,a.phone,cname(a.country),a.city||a.basedIn||'',a.role,SRC[a.source]||a.source,a.createdAt,a.applicationStatus||'',a.community||'',a.tripsLed,a.tripsJoined];})).map(function(r){return r.map(csvCell).join(',');}).join('\n');}
+
+  /* ---------- updates and advisories ---------- */
+  function updatesTab(){
+    var d=CL.data,all=d.trips||[],live=all.filter(function(t){return t.status==='open'||t.status==='full'||t.status==='closed';}),F=CL.advForm||{},P=CL.adv&&CL.adv.preview,T=CL.updForm||{};
+    var countries=[];live.forEach(function(t){if(t.country&&countries.indexOf(t.country)<0)countries.push(t.country);});
+    var nocountry=live.filter(function(t){return !t.country;});
+    var out='<p class="mg-hint" style="font-size:14px">Updates belong to <b>one trip</b>: the leader or you post them, and everyone who joined sees them on their dashboard and gets an email. An <b>advisory</b> is the same message sent to every upcoming trip set to one country, once per person, so you can warn travelers about something that affects a whole destination.</p>';
+    out+='<h2>Send an advisory to a country</h2><div class="mg-card cl-box"><div class="cl-grid"><div class="mg-fld"><label for="clV_country">Country</label><input id="clV_country" list="clV_countries" value="'+esc(F.country||'')+'" placeholder="e.g. Jamaica"><datalist id="clV_countries">'+countries.map(function(c){return '<option value="'+esc(c)+'">';}).join('')+'</datalist><div class="mg-hint">Matches the country set on each trip under Trips.</div></div>'+fld('Title','clV_title',F.title||'',{ph:'e.g. Entry form now required before you fly'})+fld('Message','clV_body',F.body||'',{type:'textarea',ph:'What changed, what travelers need to do, and where to read more.'})+'</div>'
+      +'<div class="cl-acts"><button type="button" class="mg-btn" data-cl-advprev>Preview who would get it</button>'+(P&&CL.adv.key===[F.country,F.title,F.body].join('|')?'<button type="button" class="mg-btn pri" data-cl-advsend>Send to '+P.people.length+' '+(P.people.length===1?'person':'people')+'</button>':'')+'</div>';
+    if(P)out+='<h3 class="cl-h">It would reach</h3><ul class="cl-ul">'+P.trips.map(function(t){return '<li><b>'+esc(t.title)+'</b> <small>'+esc(t.dateText||'')+'</small></li>';}).join('')+'</ul><p class="mg-hint">'+P.people.length+' '+(P.people.length===1?'person':'people')+' (travelers and leaders, one email each): '+esc(P.people.map(function(p){return p.name||p.email;}).slice(0,12).join(', '))+(P.people.length>12?' and '+(P.people.length-12)+' more':'')+'. Nothing has been sent.</p>';
+    out+='</div>';
+    if(nocountry.length)out+='<div class="mg-msg on err" style="margin-top:10px"><b>No country set, so an advisory cannot reach:</b> '+nocountry.map(function(t){return esc(t.title);}).join('; ')+'. Set the country under Trips.</div>';
+    out+='<h2>Post an update on one trip</h2><div class="mg-card cl-box"><div class="cl-grid"><div class="mg-fld"><label for="clU_trip">Trip</label><select id="clU_trip">'+live.map(function(t){return '<option value="'+esc(t.id)+'"'+(T.trip===t.id?' selected':'')+'>'+esc(t.title)+'</option>';}).join('')+'</select></div>'+fld('Title','clU_title',T.title||'')+fld('Message','clU_body',T.body||'',{type:'textarea'})+fld('Email it to everyone who joined','clU_notify',true,{type:'check'})+'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-updpost'+(live.length?'':' disabled')+'>Post update</button></div></div>';
+    var ups=d.updates||[];
+    out+='<h2>Posted so far ('+ups.length+')</h2>'+(ups.length?'<div class="mg-card"><ul class="mg-list cl-posts">'+ups.map(function(u){return '<li><div style="flex:1;min-width:0"><b>'+esc(u.title)+'</b><br><small style="color:var(--mut)">'+(u.kind==='advisory'?'Advisory for '+esc(u.country)+' · ':'')+esc(u.tripTitle||'')+' · '+esc(u.authorName)+' · '+esc(dt(u.createdAt))+(u.emailed?' · emailed '+u.emailed:'')+'</small><p style="margin:6px 0 0">'+esc(u.body)+'</p></div><button type="button" class="cl-del" data-cl-upddel="'+esc(u.id)+'">Delete</button></li>';}).join('')+'</ul></div>':'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">Nothing posted yet.</p></div>');
+    return out;
+  }
+
+  /* ---------- rewards ---------- */
+  function money(a,c){return Number(a).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+c;}
+  function dOnly(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''),M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m?M[+m[2]-1]+' '+(+m[3])+', '+m[1]:esc(v||'');}
+  function rewardsTab(){
+    var d=CL.data,P=d.payouts||[],T=(d.trips||[]).filter(function(t){return t.organizerEmail||t.organizerName;}),totals={};
+    P.forEach(function(p){totals[p.currency]=(totals[p.currency]||0)+p.amount;});
+    var out='<p class="mg-hint" style="font-size:14px">Record each reward you pay to a leader here: how much, how, when, and a reference. <b>This only keeps the record. It does not send money.</b> The leader sees what you record on their trip card, and can be emailed when you add it.</p>';
+    out+='<div class="cl-todos"><div class="mg-card cl-todo has"><b>'+P.length+'</b><span>Payments recorded</span></div>'+Object.keys(totals).map(function(c){return '<div class="mg-card cl-todo"><b style="font-size:22px">'+esc(money(totals[c],c))+'</b><span>Paid out in '+esc(c)+'</span></div>';}).join('')+'</div>';
+    if(!T.length)out+='<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No trips with a leader yet.</p></div>';
+    T.forEach(function(t,ti){
+      var list=P.filter(function(p){return p.tripId===t.id;}),booked=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status==='booked';}).reduce(function(n,i){return n+(i.partySize||1);},0),joined=(d.interests||[]).filter(function(i){return i.tripId===t.id&&i.status!=='cancelled'&&i.status!=='waitlist';}).length,pid='clR'+ti;
+      out+=det('rw'+t.id,'<span class="s"><b>'+esc(t.title)+'</b><small>'+esc(t.organizerName||t.organizerEmail||'')+' · '+joined+' joined · '+booked+' booked'+(list.length?' · '+list.length+' paid':'')+'</small></span>'+chip({not_set:'',agreed:'o',earned:'g',paid:'g'},t.rewardStatus||'not_set'),
+        '<p class="mg-hint" style="font-size:14px">'+(t.reward?'<b>Agreed reward:</b> '+esc(t.reward):'<b>No reward written down for this trip.</b> Add it under Trips.')+'</p>'
+        +(list.length?'<ul class="cl-ul">'+list.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b> <small>'+dOnly(p.paidOn)+' · '+esc(p.method)+(p.reference?' · ref '+esc(p.reference):'')+' · recorded by '+esc(p.createdBy||'')+'</small>'+(p.note?'<p style="margin:4px 0">'+esc(p.note)+'</p>':'')+' <button type="button" class="cl-del" data-cl-paydel="'+esc(p.id)+'">Remove record</button></li>';}).join('')+'</ul>':'<p class="mg-hint">Nothing recorded yet.</p>')
+        +'<h3 class="cl-h">Record a payment</h3><div class="cl-grid">'+fld('Amount',pid+'_amount','',{type:'number',min:0,ph:'0.00'})+fld('Currency',pid+'_cur','USD',{type:'select',options:['USD','JMD','CAD','GBP','EUR']})+fld('How it was paid',pid+'_method','',{ph:'Bank transfer, PayPal, cash...'})+fld('Reference (optional)',pid+'_ref','')+fld('Paid on',pid+'_date',new Date().toISOString().slice(0,10),{type:'date'})+fld('Note (optional, the leader can see it)',pid+'_note','')+fld('Email the leader that it was paid',pid+'_notify',true,{type:'check'})+fld('Mark the reward as paid for this trip',pid+'_mark',t.rewardStatus!=='paid',{type:'check'})+'</div>'
+        +'<div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-pay="'+ti+'">Record payment</button></div>');
+    });
+    var live={};T.forEach(function(t){live[t.id]=1;});var gone=P.filter(function(p){return !live[p.tripId];});
+    if(gone.length)out+='<h2>Payments for trips that no longer exist</h2><ul class="cl-ul">'+gone.map(function(p){return '<li><b>'+esc(money(p.amount,p.currency))+'</b> <small>'+esc(p.tripTitle)+' · '+dOnly(p.paidOn)+' · '+esc(p.method)+(p.reference?' · ref '+esc(p.reference):'')+'</small></li>';}).join('')+'</ul>';
+    return out;
+  }
+
+  /* ---------- entry information (destinations) ---------- */
+  function destTab(){
+    var d=CL.data,D=d.destinations||[],dem=d.passportDemand||[];
+    var out='<p class="mg-hint" style="font-size:14px">This is the <b>know-before-you-go</b> information on each traveler\'s trip checklist. It was <b>drafted from official government and tourism pages</b>. <b>Travelers only see what is approved</b>: you can unapprove or edit any entry, one destination and one passport at a time. Review notes show where the research was unsure. Check each entry against its official links, edit anything, then approve. You cannot approve an entry without a summary and an official link.</p>';
+    if(dem.length)out+='<h2>Passports travelers have told us about</h2><ul class="cl-ul">'+dem.map(function(x){return '<li><b>'+esc(x.country)+'</b> · '+x.count+' '+(x.count===1?'traveler':'travelers')+' · '+(x.covered?'<span class="mg-chip g">entry info approved</span>':'<span class="mg-chip o">nothing approved yet</span>')+'</li>';}).join('')+'</ul>';
+    D.forEach(function(x,di){
+      var keys=Object.keys(x.entry||{}),apr=keys.filter(function(k){return x.entry[k].status==='approved';}).length,g=x.general||{};
+      var inner='';
+      if(x.reviewNote)inner+='<div class="mg-msg on err"><b>Check first:</b> '+esc(x.reviewNote)+'</div>';
+      inner+='<h3 class="cl-h">Good to know (shown to every traveler going here)</h3><div class="cl-grid">'+fld('Currency','clD'+di+'_g_currency',g.currency||'')+fld('Language','clD'+di+'_g_language',g.language||'')+fld('Plugs','clD'+di+'_g_plug',g.plug||'')+fld('Voltage','clD'+di+'_g_voltage',g.voltage||'')+fld('Driving','clD'+di+'_g_driving',g.driving||'')+fld('Source links (one per line)','clD'+di+'_g_sources',(g.sources||[]).join('\n'),{type:'textarea',help:'Official pages this card comes from. Needed to approve.'})+'</div>'
+        +'<div class="cl-acts"><button type="button" class="mg-btn" data-cl-dsave="'+di+':g" data-st="draft">Save as draft</button><button type="button" class="mg-btn ok" data-cl-dsave="'+di+':g" data-st="approved">Approve</button></div><h3 class="cl-h">Entry rules by passport</h3>';
+      keys.forEach(function(pk,pi){
+        var e=x.entry[pk],pid='clD'+di+'_'+pi,flags=e.flags||[];
+        inner+=det('dp'+di+'_'+pi,'<span class="s"><b>'+esc(pk)+' passport</b></span><span class="mg-chip '+(e.status==='approved'?'g':'o')+'">'+(e.status==='approved'?'approved':'draft')+'</span><span class="mg-chip '+(e.confidence==='high'?'g':e.confidence==='low'?'r':'o')+'">confidence '+esc(e.confidence||'medium')+'</span>',
+          (flags.length?'<ul class="cl-flags">'+flags.map(function(f){return '<li>'+(e.status==='approved'?'Review note: ':'')+esc(f)+'</li>';}).join('')+'</ul>':'')
+          +'<div class="cl-grid">'+fld('Summary (visa and length of stay)',pid+'_summary',e.summary||'',{type:'textarea'})+fld('Passport validity',pid+'_validity',e.passportValidity||'',{type:'textarea'})+fld('Forms, proof of onward travel and other requirements',pid+'_extra',e.extra||'',{type:'textarea'})+fld('Official links (one per line)',pid+'_links',(e.officialLinks||[]).join('\n'),{type:'textarea',help:'Government or tourism-board pages travelers can check themselves. Needed to approve.'})+fld('Checked on (date)',pid+'_checked',e.checkedOn||'',{type:'date'})+fld('Confidence',pid+'_conf',e.confidence||'medium',{type:'select',options:['high','medium','low']})+'</div>'
+          +'<div class="cl-acts"><button type="button" class="mg-btn" data-cl-dsave="'+di+':'+pi+'" data-st="draft">'+(e.status==='approved'?'Hide from travelers (save as draft)':'Save as draft')+'</button><button type="button" class="mg-btn ok" data-cl-dsave="'+di+':'+pi+'" data-st="approved">'+(e.status==='approved'?'Save and keep approved':'Approve')+'</button></div>');
+      });
+      inner+='<div class="cl-acts" style="margin-top:14px"><input id="clDnew'+di+'" list="clDpass" placeholder="Add a passport, e.g. Nigeria" class="cl-in"><button type="button" class="mg-btn" data-cl-daddp="'+di+'">Add passport</button><button type="button" class="cl-del" data-cl-dreset="'+di+'">Reset to the research draft</button></div>';
+      out+=det('dest'+di,'<span class="s"><b>'+esc(x.country)+'</b>'+(x.source==='owner'?'<small>added by you</small>':'')+'</span><span class="mg-chip '+(g.status==='approved'?'g':'o')+'">general card '+(g.status==='approved'?'approved':'draft')+'</span><span class="mg-chip '+(apr===keys.length&&keys.length?'g':'o')+'">'+apr+' of '+keys.length+' passports approved</span>',inner);
+    });
+    out+='<datalist id="clDpass"><option value="United States"><option value="Canada"><option value="United Kingdom"><option value="Jamaica"></datalist><h2>Add a destination</h2><div class="cl-acts"><input id="clDnewdest" placeholder="Country, e.g. Grenada" class="cl-in"><button type="button" class="mg-btn" data-cl-dadd>Add destination</button></div><p class="mg-hint">A trip uses these when its <b>country</b> (set under Trips) matches the destination name.</p>';
+    return out;
+  }
+
+  /* ---------- automatic emails ---------- */
+  function autoTab(){
+    var a=CL.data.automation||{waitlist:true,reminders:false,digest:false,newTrips:true},p=CL.autoPreview,t=CL.data.trips||[],nl=CL.data.alertList||0;
+    function sw(id,label,help,on){return '<label class="cl-sw"><input type="checkbox" id="'+id+'"'+(on?' checked':'')+'><span><b>'+esc(label)+'</b><small>'+esc(help)+'</small></span></label>';}
+    var undated=t.filter(function(x){return (x.status==='open'||x.status==='full'||x.status==='closed')&&!/^\d{4}-\d{2}-\d{2}$/.test(x.startDate||'');});
+    var out='<p class="mg-hint" style="font-size:14px">These emails go out by themselves, so nobody has to remember. The daily job runs at 8am Jamaica time. <b>Reminders and the leader digest start switched off</b>: use the preview to see exactly who would get what, then switch them on.</p>'
+      +'<div class="mg-card cl-box">'+sw('clU_w','Waitlist: tell people when a place opens','When a seat frees up (a cancellation, a deleted request, more seats, a trip reopened), the person who has waited longest moves up and is emailed. Our team still confirms and agrees payment with them.',a.waitlist)
+      +sw('clU_r','Countdown reminders to travelers','Confirmed and booked travelers get one email at 14 days and one at 3 days before departure, with the trip details and the group chat link. Needs a start date on the trip.',a.reminders)
+      +sw('clU_n','New trips: email the "Be first to hear" list','When a trip opens, everyone who left their email under the departures gets one email about it with a button to see the trip and ask to join, and a link to stop these emails. '+nl+' '+(nl===1?'person is':'people are')+' on the list now.',a.newTrips!==false)
+      +sw('clU_d','Monday digest to each leader','Every Monday each leader of a live trip gets: new people this week, total joined, progress to their invite goal, places left and days to departure, with a nudge to use their invite kit.',a.digest)
+      +'<div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-autosave>Save switches</button><button type="button" class="mg-btn" data-cl-autoprev>Preview what would send today</button><button type="button" class="mg-btn ghost" data-cl-autorun>Run today\'s emails now</button></div></div>';
+    if(undated.length)out+='<div class="mg-msg on err" style="margin-top:10px"><b>No start date, so no countdown reminders:</b> '+undated.map(function(x){return esc(x.title);}).join('; ')+'. Add the start date under Trips.</div>';
+    if(p){
+      var rows=[];
+      (p.waitlist||[]).forEach(function(x){rows.push('<li><span>Waitlist: '+esc(x.name)+' moves up on '+esc(x.trip)+'</span><small>'+esc(x.email)+'</small></li>');});
+      (p.reminders||[]).forEach(function(x){rows.push('<li><span>Reminder: '+esc(x.name)+' for '+esc(x.trip)+' ('+x.days+' day'+(x.days===1?'':'s')+' to go)</span><small>'+esc(x.email)+'</small></li>');});
+      (p.digests||[]).forEach(function(x){rows.push('<li><span>Digest: '+esc(x.trip)+' ('+x.newPeople+' new this week)'+(x.alreadySent?' - already sent this week':'')+'</span><small>'+esc(x.to)+'</small></li>');});
+      out+='<h2>Preview for today</h2>'+(rows.length?'<div class="mg-card"><ul class="mg-list cl-prev"><li><b>What would send: '+rows.length+' email'+(rows.length===1?'':'s')+'</b></li>'+rows.join('')+'</ul></div><p class="mg-hint">Nothing was sent. The preview shows everything as if all four switches were on.</p>':'<p class="mg-hint">Nothing would be sent today.</p>');
+    }
+    if(a.lastRun)out+='<p class="mg-hint">Last run: '+esc(ago(a.lastRun.at))+(a.lastRun.counts?' · '+a.lastRun.counts.waitlist+' waitlist, '+a.lastRun.counts.reminders+' reminders, '+a.lastRun.counts.digests+' digests':'')+'.</p>';
+    return out;
+  }
+
+  /* ---------- newsletter ---------- */
+  function newsTab(){
+    var all=CL.data.newsletter||[],subs=all.filter(function(x){return x.status==='subscribed';}),off=all.length-subs.length;
+    var out='<p class="mg-hint" style="font-size:14px">Everyone who subscribes with the box at the bottom of the home page is saved here. Write your newsletter in your email tool, then <b>download the list</b> and import it there. Only people still subscribed are in the download. If someone asks to stop, mark them unsubscribed here.</p>'
+      +'<div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-csv="news"'+(subs.length?'':' disabled')+'>Download the list (CSV, '+subs.length+')</button><button type="button" class="mg-btn" data-cl-newscopy'+(subs.length?'':' disabled')+'>Copy all emails</button></div>';
+    if(!all.length)return out+'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">Nobody has subscribed yet.</p></div>';
+    return out+'<div class="mg-card" style="margin-top:14px"><ul class="mg-list"><li><b>'+subs.length+' subscribed</b>'+(off?' · '+off+' unsubscribed':'')+'<small style="margin-left:auto;color:var(--mut)">Newest first</small></li>'+all.map(function(x){
+      var on=x.status==='subscribed';
+      return '<li'+(on?'':' style="opacity:.6"')+'><div style="flex:1;min-width:0"><b>'+esc(x.email)+'</b>'+(x.name?' · '+esc(x.name):'')+'<br><small style="color:var(--mut)">'+esc(dt(x.createdAt))+(x.source?' · '+esc(x.source):'')+(on?'':' · unsubscribed')+'</small></div><button type="button" class="mg-btn sm ghost" data-cl-newsst="'+esc(x.id)+'" data-st="'+(on?'unsubscribed':'subscribed')+'">'+(on?'Mark unsubscribed':'Subscribe again')+'</button><button type="button" class="cl-del" data-cl-newsdel="'+esc(x.id)+'">Delete</button></li>';
+    }).join('')+'</ul></div>';
+  }
+  function newsCsv(){return [['email','name','subscribed_on','where']].concat((CL.data.newsletter||[]).filter(function(x){return x.status==='subscribed';}).map(function(x){return [x.email,x.name||'',String(x.createdAt||'').slice(0,10),x.source||''];})).map(function(r){return r.map(csvCell).join(',');}).join('\n');}
+
+  /* ---------- partner links ---------- */
+  function links(){
+    var raw=CL.data.partnersRaw||{},ins=raw.insurance||{},es=raw.esim||{};
+    return '<p class="mg-hint" style="font-size:14px">These two cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'
+      +'<div class="mg-card cl-box"><div class="cl-grid">'
+      +fld('Travel insurance: your referral link','clL_ins_url',ins.url||'',{full:true,type:'url',ph:'https://...',help:'Must start with https://. Leave empty to show Link coming soon.'})+fld('Travel insurance: title (optional)','clL_ins_title',ins.title||'',{ph:'Travel insurance'})+fld('Travel insurance: short note (optional)','clL_ins_note',ins.note||'',{ph:'Cover for cancellations, delays and medical care while you travel.'})
+      +fld('eSIM: your referral link','clL_esim_url',es.url||'',{full:true,type:'url',ph:'https://go.saily.site/aff_c?offer_id=101&aff_id=14170',help:'Must start with https://. Leave empty to use your Saily referral link.'})+fld('eSIM: title (optional)','clL_esim_title',es.title||'',{ph:'Saily eSIM'})+fld('eSIM: short note (optional)','clL_esim_note',es.note||'',{ph:'Land connected, without swapping your SIM or paying roaming.'})
+      +fld('Disclosure shown under the cards (optional)','clL_disc',raw.disclosure||'',{type:'textarea',ph:'These are referral links. Sight Seers may receive a reward if you sign up through them.',help:'Leave empty to use the standard sentence shown above. Check it matches your agreement with each partner.'})
+      +'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-links>Save partner links</button></div></div>';
+  }
+
+  /* ---------- actions ---------- */
+  function busy(b,t){if(b){b.disabled=true;if(t)b.dataset.was=b.textContent,b.textContent=t;}}
+  function fail(b,e){if(b){b.disabled=false;if(b.dataset.was)b.textContent=b.dataset.was;}say(e.message,'err');}
+  R.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t||S.screen!=='trips')return;var ds=t.dataset,D=CL.data;
+    if(ds.clTab){CL.tab=ds.clTab;repaint();window.scrollTo(0,0);/* new requests arrive at any time, so a tab that has been open a while is refreshed */if(Date.now()-(CL.at||0)>20000)load(true).then(function(){if(S.screen==='trips')repaint();});return;}
+    if(ds.clDel){
+      var spec=ds.clDel,kind=spec.split(':')[0],rid=spec.slice(kind.length+1),msg='',run=null,after=null;
+      if(kind==='app'){var ap=D.applications.filter(function(x){return x.id===rid;})[0];if(!ap)return;var made=D.trips.filter(function(tt){return tt.applicationId===rid||tt.id===ap.tripId;}),gone=made.filter(function(tt){return tt.status==='draft'&&!D.interests.some(function(i){return i.tripId===tt.id;});}),goneIds=gone.map(function(tt){return tt.id;});
+        msg='Delete the application from '+ap.name+' ('+ap.communityName+')? It disappears from their account, which is kept.'+(gone.length?'\n\nThe draft trip made from it is deleted too.':'')+(made.length>gone.length?'\n\nThe trip made from it is live or has travelers, so it stays. Delete that trip separately.':'');
+        run=function(){return call('application-delete',{id:rid});};after=function(){D.applications=D.applications.filter(function(x){return x.id!==rid;});D.trips=D.trips.filter(function(tt){return goneIds.indexOf(tt.id)<0;});};}
+      else if(kind==='int'){var it=D.interests.filter(function(x){return x.id===rid;})[0];if(!it)return;msg='Delete the request from '+it.name+(it.tripTitle?' for "'+it.tripTitle+'"':'')+'?';run=function(){return call('interest-delete',{id:rid});};after=function(){D.interests=D.interests.filter(function(x){return x.id!==rid;});};}
+      else if(kind==='act'){msg='Remove this line from the activity feed?';run=function(){return call('activity-delete',{id:rid});};after=function(){D.activity=(D.activity||[]).filter(function(x){return x.id!==rid;});};}
+      if(!run||!confirm(msg))return;busy(t);
+      run().then(function(){after();badge();repaint();say('Deleted.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clDeltrip){
+      var did=ds.clDeltrip,dn=D.interests.filter(function(i){return i.tripId===did;}).length,dtr=D.trips.filter(function(x){return x.id===did;})[0],dla=D.applications.filter(function(a){return a.tripId===did||(dtr&&dtr.applicationId&&a.id===dtr.applicationId);});
+      if(!confirm('Delete this trip?'+(dn?'\n\nIt has '+dn+' traveler request'+(dn===1?'':'s')+', which will be deleted with it.':'')+(dla.length?'\n\nThe leader application it was made from ("'+dla[0].communityName+'") is deleted too, so it disappears from their account.':'')+'\n\nThis cannot be undone.'))return;
+      busy(t);call('trip-delete',{id:did,force:true}).then(function(){return reload('Trip deleted.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clPublish){busy(t,'Publishing…');call('trip-status',{id:ds.clPublish,status:'open'}).then(function(){return reload('Published. The trip is on the departure board and the leader has been emailed.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clTrip){var k=ds.clTrip;busy(t,'Saving…');call('trip-save',readTrip(k)).then(function(){CL.open={};return reload('Trip saved.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clPhoto){var kk=ds.clPhoto;if(!MG.changer)return;MG.changer({title:'Choose the trip photo',simple:true,current:val('clT_image_'+kk),folder:'tours',onUse:function(r){$('clT_image_'+kk).value=r.url;var th=$('clT_thumb_'+kk);if(th)th.style.backgroundImage='url("'+r.url.replace(/["'()\\\s]/g,encodeURIComponent)+'")';}});return;}
+    if(ds.clCopy){try{navigator.clipboard.writeText(ds.clCopy);}catch(x){}var o=t.textContent;t.textContent='Copied';setTimeout(function(){t.textContent=o;},1400);return;}
+    if(ds.clAnnounce){var n=D.alertList||0;if(!confirm('Email the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list about this trip?\n\nEach person gets their own email with a button to see the trip. It goes out once.'))return;busy(t,'Sending…');
+      call('trip-announce',{id:ds.clAnnounce}).then(function(res){var r=res.result||{};return reload('Sent to '+(r.sent||0)+' of '+(r.count||0)+' people on the list.'+(r.failed?' '+r.failed+' could not be sent; check the email settings.':''),r.failed?'err':'ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clReview){
+      var id=ds.clReview,st=ds.st,dr=$('clDraft_'+id),nt=$('clNotify_'+id),pb=$('clPub_'+id);busy(t);
+      call('application-review',{id:id,status:st,reply:val('clRep_'+id),note:val('clNote_'+id),createTrip:st==='approved'&&dr&&dr.checked&&!dr.disabled,publish:st==='approved'&&!!pb&&pb.checked&&!pb.disabled,notify:nt?nt.checked:true}).then(function(res){
+        CL.open={};if(res.trip)CL.tab='trips';return reload(res.trip?(res.trip.status==='open'?'Approved. The trip is on the departure board. Open it under Trips to add the dates, photo and details.':'Approved. A draft trip was created: add its summary and dates, then use Publish to put it on the departure board.'):'Application updated.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clInt){var iid=ds.clInt;busy(t,'Saving…');call('interest-update',{id:iid,status:val('clI_st_'+iid),note:val('clI_note_'+iid)}).then(function(){return reload('Request updated.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clCsv){if(ds.clCsv==='accounts')download('sight-seers-accounts.csv',accountsCsv());else{download('sight-seers-newsletter-'+new Date().toISOString().slice(0,10)+'.csv',newsCsv());say('Downloaded. Import the file into your email tool.','ok');}return;}
+    if(ds.clReset){
+      var rsId=ds.clReset,rsAc=(D.accounts||[]).filter(function(x){return x.id===rsId;})[0];if(!rsAc)return;var rsEm=String(rsAc.email||'').toLowerCase();
+      var rsApps=D.applications.filter(function(a){return a.email===rsEm||(a.userId&&a.userId===rsId);});
+      var rsLed=D.trips.filter(function(tt){return (tt.organizerUserId&&tt.organizerUserId===rsId)||(tt.organizerEmail&&String(tt.organizerEmail).toLowerCase()===rsEm)||rsApps.some(function(a){return a.id===tt.applicationId||a.tripId===tt.id;});}),rsLedIds=rsLed.map(function(tt){return tt.id;});
+      var rsReqs=D.interests.filter(function(i){return rsLedIds.indexOf(i.tripId)>-1||((i.email===rsEm||(i.userId&&i.userId===rsId))&&i.status!=='booked');});
+      if(!confirm('Start the account for '+(rsAc.name||rsAc.email)+' ('+rsAc.email+') fresh?\n\nThis deletes '+rsApps.length+' application'+(rsApps.length===1?'':'s')+', '+rsLed.length+' trip'+(rsLed.length===1?'':'s')+' they lead and '+rsReqs.length+' traveler request'+(rsReqs.length===1?'':'s')+'. The account, its password and sign-in are kept, so it opens with no trips. Booked travelers are never removed.\n\nThis cannot be undone.'))return;
+      busy(t,'Resetting…');call('account-reset',{id:rsId}).then(function(res){return reload('Done. '+(rsAc.name||rsAc.email)+' starts fresh with no trips.'+(res.keptBooked?' '+res.keptBooked+' booked trip'+(res.keptBooked===1?'':'s')+' kept.':''));}).catch(function(err){fail(t,err);});return;}
+    if(ds.clDelacct){
+      var aid=ds.clDelacct,ac=(D.accounts||[]).filter(function(x){return x.id===aid;})[0];if(!ac)return;
+      if(!confirm('Delete the account for '+(ac.name||ac.email)+' ('+ac.email+')?\n\nThis removes the account, their pending applications and their join requests. An approved leader application is kept on record. This cannot be undone.'))return;
+      busy(t,'Deleting…');call('account-delete',{id:aid}).then(function(res){return reload('Account deleted.'+(res.keptApplications?' Their approved application was kept on record.':''));}).catch(function(err){fail(t,err);});return;}
+    if(ds.clPay){
+      var pti=+ds.clPay,pT=(D.trips||[]).filter(function(tt){return tt.organizerEmail||tt.organizerName;})[pti],pp='clR'+pti;busy(t,'Saving…');
+      call('payout-add',{tripId:pT.id,amount:val(pp+'_amount'),currency:val(pp+'_cur'),method:val(pp+'_method'),reference:val(pp+'_ref'),paidOn:val(pp+'_date'),note:val(pp+'_note'),notify:val(pp+'_notify'),markPaid:val(pp+'_mark')}).then(function(res){CL.open['rw'+pT.id]=1;return reload('Payment recorded'+(res.emailed?' and the leader was emailed':'')+'.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clPaydel){if(!confirm('Remove this payment record?\n\nThis only removes the record. If you already paid the leader, that payment is not affected.'))return;call('payout-delete',{id:ds.clPaydel}).then(function(){return reload('Record removed.');}).catch(function(err){say(err.message,'err');});return;}
+    if(ds.clDsave){
+      var dp=ds.clDsave.split(':'),ddi=+dp[0],dx=D.destinations[ddi],dstat=ds.st,dbody;
+      if(dp[1]==='g'){var gv=function(kx){return val('clD'+ddi+'_g_'+kx);};dbody={country:dx.country,scope:'general',status:dstat,fields:{currency:gv('currency'),language:gv('language'),plug:gv('plug'),voltage:gv('voltage'),driving:gv('driving'),sources:gv('sources')}};}
+      else{var dpi=+dp[1],pk2=Object.keys(dx.entry)[dpi],pid2='clD'+ddi+'_'+dpi,pv=function(kx){return val(pid2+'_'+kx);};dbody={country:dx.country,scope:'entry',passport:pk2,status:dstat,fields:{summary:pv('summary'),passportValidity:pv('validity'),extra:pv('extra'),officialLinks:pv('links'),checkedOn:pv('checked'),confidence:pv('conf')}};}
+      busy(t,'Saving…');call('destination-save',dbody).then(function(res){D.destinations=res.destinations;CL.open['dest'+ddi]=1;if(dp[1]!=='g')CL.open['dp'+ddi+'_'+dp[1]]=1;repaint();say(dstat==='approved'?'Approved. Travelers going to '+dx.country+(dp[1]==='g'?'':' with a '+dbody.passport+' passport')+' can now see it.':'Saved as a draft. Travelers do not see it.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clDaddp){var adi=+ds.clDaddp,apn=(val('clDnew'+adi)||'').trim();if(!apn){say('Type the passport country to add.','err');return;}busy(t);
+      call('destination-save',{country:D.destinations[adi].country,scope:'entry',passport:apn,status:'draft',fields:{}}).then(function(res){D.destinations=res.destinations;CL.open['dest'+adi]=1;repaint();say('Added. Fill in the details from an official source, then approve.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clDadd!==undefined){var nm=(val('clDnewdest')||'').trim();if(!nm){say('Type the destination to add.','err');return;}busy(t);
+      call('destination-save',{country:nm,scope:'general',status:'draft',fields:{}}).then(function(res){D.destinations=res.destinations;var ix=res.destinations.findIndex(function(x){return x.country===nm;});if(ix>-1)CL.open['dest'+ix]=1;repaint();say('Destination added.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clDreset){var rdi=+ds.clDreset;if(!confirm('Put '+D.destinations[rdi].country+' back to the research draft?\n\nYour edits and approvals for it are removed and travelers stop seeing it until you approve it again.'))return;
+      call('destination-reset',{country:D.destinations[rdi].country}).then(function(res){D.destinations=res.destinations;repaint();say('Back to the research draft.','ok');}).catch(function(err){say(err.message,'err');});return;}
+    if(ds.clAdvprev!==undefined){var AF={country:val('clV_country'),title:val('clV_title'),body:val('clV_body')};CL.advForm=AF;busy(t,'Checking…');
+      call('advisory-post',{dryRun:true,country:AF.country,title:AF.title,body:AF.body}).then(function(res){CL.adv={preview:res.preview,key:[AF.country,AF.title,AF.body].join('|')};repaint();say('Preview ready. Nothing was sent.','ok');}).catch(function(err){CL.adv=null;repaint();say(err.message,'err');});return;}
+    if(ds.clAdvsend!==undefined){var SF={country:val('clV_country'),title:val('clV_title'),body:val('clV_body')};
+      if(!CL.adv||CL.adv.key!==[SF.country,SF.title,SF.body].join('|')){CL.adv=null;CL.advForm=SF;repaint();say('You changed the advisory after the preview. Preview it again so you send exactly what you checked.','err');return;}
+      if(!confirm('Send this advisory for '+SF.country+'?\n\n'+CL.adv.preview.people.length+' people on '+CL.adv.preview.trips.length+' trip'+(CL.adv.preview.trips.length===1?'':'s')+' will get it by email and on their dashboards. This cannot be taken back.'))return;busy(t,'Sending…');
+      call('advisory-post',{country:SF.country,title:SF.title,body:SF.body}).then(function(res){CL.adv=null;CL.advForm=null;return reload('Sent to '+res.sent.people+' '+(res.sent.people===1?'person':'people')+' across '+res.sent.trips+' trip'+(res.sent.trips===1?'':'s')+'.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clUpdpost!==undefined){var UF={trip:val('clU_trip'),title:val('clU_title'),body:val('clU_body')};CL.updForm=UF;busy(t,'Posting…');
+      call('trip-update-post',{tripId:UF.trip,title:UF.title,body:UF.body,notify:val('clU_notify')}).then(function(res){CL.updForm=null;return reload('Posted'+(res.emailed?' and emailed to '+res.emailed+' '+(res.emailed===1?'person':'people'):'')+'.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clUpddel){if(!confirm('Delete this update?\n\nIt disappears from the dashboards. Anyone who was emailed keeps their copy.'))return;call('trip-update-delete',{id:ds.clUpddel}).then(function(){return reload('Update deleted.');}).catch(function(err){say(err.message,'err');});return;}
+    if(ds.clNewscopy!==undefined){var em=(D.newsletter||[]).filter(function(x){return x.status==='subscribed';}).map(function(x){return x.email;}).join(', ');(navigator.clipboard?navigator.clipboard.writeText(em):Promise.reject()).then(function(){say('All subscribed emails copied.','ok');}).catch(function(){window.prompt('Copy these emails:',em);});return;}
+    if(ds.clNewsst){busy(t);api('newsletter',{action:'status',id:ds.clNewsst,status:ds.st}).then(function(){return reload('Saved.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clNewsdel){if(!confirm('Delete this subscriber from the list?\n\nTo keep a record that they asked to stop, use Mark unsubscribed instead.'))return;api('newsletter',{action:'delete',id:ds.clNewsdel}).then(function(){return reload('Deleted.');}).catch(function(err){say(err.message,'err');});return;}
+    if(ds.clAutosave!==undefined){busy(t,'Saving…');call('automation-save',{waitlist:val('clU_w'),reminders:val('clU_r'),digest:val('clU_d'),newTrips:val('clU_n')}).then(function(res){D.automation=res.automation;CL.autoPreview=null;repaint();say('Saved. '+(res.automation.reminders||res.automation.digest?'The daily job will send what is switched on.':'Only the waitlist email will go out by itself.'),'ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clAutoprev!==undefined){busy(t,'Checking…');call('automation-run',{dryRun:true}).then(function(res){CL.autoPreview=res.summary;D.automation=res.automation;repaint();say('Preview ready. Nothing was sent.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clAutorun!==undefined){if(!confirm('Run the daily emails now?\n\nThis sends today\'s real emails for the switches that are on, exactly as the daily job would. Use Preview first to see who gets what.'))return;busy(t,'Sending…');
+      call('automation-run',{dryRun:false}).then(function(res){CL.autoPreview=null;D.automation=res.automation;repaint();var c=res.summary.counts||{};say('Done: '+(c.waitlist||0)+' waitlist, '+(c.reminders||0)+' reminders, '+(c.digests||0)+' digests sent.','ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clLinks!==undefined){busy(t,'Saving…');call('partners-save',{insurance:{url:val('clL_ins_url'),title:val('clL_ins_title'),note:val('clL_ins_note')},esim:{url:val('clL_esim_url'),title:val('clL_esim_title'),note:val('clL_esim_note')},disclosure:val('clL_disc')}).then(function(){return reload('Partner links saved. Members see them on their Group trips tab.');}).catch(function(err){fail(t,err);});return;}
+  });
+  R.addEventListener('input',function(e){var t=e.target;if(S.screen!=='trips')return;if(t.id==='clQ'){CL.q=t.value;var pos=t.selectionStart;repaint();var q=$('clQ');if(q){q.focus();try{q.setSelectionRange(pos,pos);}catch(x){}}}});
+  R.addEventListener('change',function(e){var t=e.target;if(S.screen!=='trips')return;if(t.id==='clFilter'){CL.filter=t.value;repaint();}if(t.id==='clCC'){CL.cc=t.value;repaint();}});
+
+  MG.screens.trips=screen;
+  MG.after.trips=function(){if(!CL.data&&!CL.loading)load().then(function(){if(S.screen==='trips')repaint();});else if(CL.data)load(true).then(function(){if(S.screen==='trips')repaint();});};
+  MG.openClubTab=function(tab){CL.tab=tab;};
 })();
 </script>

@@ -24,8 +24,12 @@ const ALLOWED = [
   'page_view', 'tour_page', 'pano_scene', 'hotspot_click', 'shop_add',
   'cart_open', 'checkout_click', '3d_view', 'xr_enter', 'book_cta',
   'quote_cta', 'live_join', 'rtc_join', 'invite_click', 'vote_cast',
-  'trip_add'
+  'trip_add',
+  /* whole-site visitor numbers: a page view, a visit (the first page of a browsing session), where it came from, and the kind of device */
+  'site_view', 'site_visit', 'site_ref', 'site_dev'
 ];
+const MAX_KEYS_PER_DAY = 800;      // a day's counters can never grow without limit
+const BOT = /bot|crawl|spider|slurp|headless|lighthouse|preview|monitor|facebookexternalhit|curl|wget|python|node-fetch/i;
 
 function normalize(ev) {
   if (!ev || typeof ev.e !== 'string') return null;
@@ -47,12 +51,19 @@ module.exports = async function handler(req, res) {
       events = Array.isArray(body.events) ? body.events.slice(0, 25) : [];
     } catch (e) { /* ignore malformed */ }
 
-    const keys = events.map(normalize).filter(Boolean);
+    let keys = events.map(normalize).filter(Boolean);
+    /* robots and link checkers do not count as visitors */
+    if (BOT.test(String((req.headers && req.headers['user-agent']) || ''))) keys = keys.filter(k => k.indexOf('site_') !== 0);
+    /* the country of a visit comes from the network edge, never from the browser */
+    if (keys.indexOf('site_visit') > -1) {
+      const cc = String((req.headers && req.headers['x-vercel-ip-country']) || '').toUpperCase();
+      if (/^[A-Z]{2}$/.test(cc)) keys.push('site_ctry|' + cc);
+    }
     if (keys.length) {
       try {
         const day = new Date().toISOString().slice(0, 10);
         const doc = (await db.getDoc('analytics-' + day)) || {};
-        keys.forEach(k => { doc[k] = (doc[k] || 0) + 1; });
+        keys.forEach(k => { if (doc[k] !== undefined || Object.keys(doc).length < MAX_KEYS_PER_DAY) doc[k] = (doc[k] || 0) + 1; });
         await db.setDoc('analytics-' + day, doc);
       } catch (e) { /* never fail the beacon */ }
     }
@@ -60,7 +71,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
-    const admin = await requirePerm(req, res, 'inbox', 'trips');
+    const admin = await requirePerm(req, res, 'pages', 'catalog', 'blog', 'trips', 'inbox');
     if (!admin) return;
     const days = Math.min(31, Math.max(1, parseInt((req.query || {}).days, 10) || 7));
     const daily = {};
