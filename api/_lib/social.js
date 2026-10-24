@@ -89,7 +89,7 @@ async function callback(name, req, res, q, deps) {
   const verified = name === 'google' ? (claims && (claims.email_verified === true || claims.email_verified === 'true')) : !!email;
   if (!email || !verified) return back(res, 'sso_error', 'That account has no verified email address, so we cannot sign you in with it.');
 
-  const { db, createToken, hashPassword, uid, sendEmail, BUSINESS_EMAIL } = deps;
+  const { db, createToken, tokenFor, hashPassword, uid, sendEmail, BUSINESS_EMAIL } = deps;
   const users = await db.getCollection('users');
   let user = users.find(u => u.email === email);
   if (!user) {
@@ -102,7 +102,9 @@ async function callback(name, req, res, q, deps) {
     await db.setCollection('users', users);
     sendEmail({ to: BUSINESS_EMAIL, subject: 'New member signup: ' + user.name + ' (' + user.email + ')', html: '<p><strong>' + deps.escapeHtml(user.name) + '</strong> created an account with ' + (name === 'google' ? 'Google' : 'Microsoft') + '.</p><p>Email: ' + deps.escapeHtml(user.email) + '</p>' }).catch(() => {});
   }
-  const token = createToken({ id: user.id, email: user.email, name: user.name, role: user.role });
+  if (user.disabled) return back(res, 'sso_error', 'This account has been switched off. Please contact the owner.');
+  if (user.totpEnabled) return back(res, 'sso_error', 'This account uses a sign-in code. Please sign in with your email, password and code instead.');
+  const token = tokenFor ? tokenFor(user) : createToken({ id: user.id, email: user.email, name: user.name, role: user.role });
   if (!token) return back(res, 'sso_error', 'Sign-in is not configured on the server.');
   return back(res, 'sso', token);
 }

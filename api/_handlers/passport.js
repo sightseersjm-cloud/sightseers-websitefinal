@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { getUser, uid, escapeHtml } = require('../_lib/auth');
+const { getUser, uid, escapeHtml, requirePerm } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 
 /* Strip a data-URI prefix if the client sent one; Resend wants bare base64. */
@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
     // Admin listing of submitted requests
     if (req.method === 'GET') {
       const { requireAdmin } = require('../_lib/auth');
-      const admin = requireAdmin(req, res);
+      const admin = await requirePerm(req, res, 'inbox');
       if (!admin) return;
       const requests = await db.getCollection('passport-requests');
       return res.status(200).json({ ok: true, requests });

@@ -188,7 +188,7 @@ checkPriceAgreement(html);
  * shipping a page with the wrong head.
  */
 const SITE = 'https://www.sightseerscaribbean.com';
-const ROUTE_SKIP = new Set(['home', 'vtours', 'club-admin', 'admin']);                    // '/' is the main document; V-Tours is hidden until launch
+const ROUTE_SKIP = new Set(['home', 'vtours', 'club-admin', 'admin', 'manage']);                    // '/' is the main document; V-Tours is hidden until launch
 const ROUTE_RESERVED = new Set(['api', 'assets', 'logos', 'panos', 'models', 'vendor', 'virtual-tours']);
 const ROUTE_MARKER = '<!-- ss-route-page ';                        // identifies files this step owns (safe to replace or remove)
 

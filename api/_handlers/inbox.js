@@ -7,13 +7,13 @@
  * The forms still save to their own collections and still email the team; this is the one place to work through them.
  */
 const db = require('../_lib/db');
-const { requireAdmin } = require('../_lib/auth');
+const { requireAdmin, requirePerm } = require('../_lib/auth');
 const inbox = require('../_lib/inbox');
 
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'OPTIONS') return res.status(200).end();
-    const admin = requireAdmin(req, res);
+    const admin = await requirePerm(req, res, 'inbox');
     if (!admin) return;
 
     if (req.method === 'GET') {

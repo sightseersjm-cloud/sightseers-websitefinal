@@ -22,7 +22,7 @@
  * behaviour, and which reveals nothing specific.
  */
 
-const { getUser } = require('../_lib/auth');
+const { getUser, can } = require('../_lib/auth');
 /* Shared with /api/stripe-checkout so the price shown and the price billed
    come from the same place. */
 const { muxScenes } = require('../_lib/vt-scenes');
@@ -109,7 +109,7 @@ module.exports = async function handler(req, res) {
 
   let user = null;
   try { user = getUser(req); } catch { user = null; }
-  const privileged = !!user && (user.role === 'admin' || user.role === 'editor');
+  const privileged = !!user && (await can(user, 'pages', 'catalog', 'blog', 'inbox', 'trips'));
 
   const body = {
     ok: true,

@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, uid, ADMIN_CODE } = require('../_lib/auth');
+const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, requireOwner, permsOf, tokenFor, publicUser, PERMS, PRESETS, cleanPerms, newTotpSecret, totpOk, sealSecret, openSecret, uid, ADMIN_CODE } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const social = require('../_lib/social');
 const { geo } = require('../_lib/geo');
@@ -37,12 +37,12 @@ module.exports = async function handler(req, res) {
     const sm = gurl.pathname.match(/\/auth\/(google|microsoft)\/(start|callback)\/?$/);
     if (sm) {
       if (sm[2] === 'start') return social.start(sm[1], res);
-      return social.callback(sm[1], req, res, gq, { geo, db, createToken, hashPassword, uid, sendEmail, BUSINESS_EMAIL, escapeHtml: require('../_lib/auth').escapeHtml });
+      return social.callback(sm[1], req, res, gq, { geo, db, createToken, tokenFor, hashPassword, uid, sendEmail, BUSINESS_EMAIL, escapeHtml: require('../_lib/auth').escapeHtml });
     }
-    const admin = requireAdmin(req, res);
+    const admin = await requireOwner(req, res);
     if (!admin) return;
     const users = await db.getCollection('users');
-    const safe = users.map(({ passwordHash, ...u }) => u);
+    const safe = users.map(publicUser);
     return res.status(200).json({ ok: true, accounts: safe });
   }
 
@@ -91,8 +91,8 @@ module.exports = async function handler(req, res) {
     users.push(user);
     await db.setCollection('users', users);
 
-    const token = createToken({ id: user.id, email: user.email, name: user.name, role: user.role });
-    const { passwordHash, ...safe } = user;
+    const token = tokenFor(user);
+    const safe = publicUser(user);
 
     const firstName = user.name.split(' ')[0];
     sendEmail({
@@ -143,8 +143,20 @@ module.exports = async function handler(req, res) {
     /* accounts made before countries were recorded get the country they sign in from */
     if (!user.country) { const g = geo(req); if (g.country) { user.country = g.country; user.city = user.city || g.city; try { await db.setCollection('users', users); } catch (e) { /* best effort */ } } }
 
-    const token = createToken({ id: user.id, email: user.email, name: user.name, role: user.role });
-    const { passwordHash, ...safe } = user;
+    if (user.disabled) return res.status(403).json({ error: 'This account has been switched off. Please contact the owner.' });
+    /* two-step sign-in: an owner or team member who turned it on also needs the 6-digit code from their authenticator app */
+    if (user.totpEnabled && user.totpSecret) {
+      const code = String(req.body.code || '').trim();
+      if (!code) return res.status(401).json({ error: 'Enter the 6-digit code from your authenticator app.', need2fa: true });
+      if (!checkRate('totp:' + user.id)) return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+      if (!totpOk(openSecret(user.totpSecret), code)) return res.status(401).json({ error: 'That code is not right. Try the newest one.', need2fa: true });
+    }
+    if (user.role === 'admin' || user.role === 'staff') {
+      user.lastSignInAt = new Date().toISOString();
+      try { await db.setCollection('users', users); } catch (e) { /* best effort */ }
+    }
+    const token = tokenFor(user);
+    const safe = publicUser(user);
     return res.status(200).json({ ok: true, token, user: safe });
   }
 
@@ -179,7 +191,8 @@ module.exports = async function handler(req, res) {
     const users = await db.getCollection('users');
     const user = users.find(u => u.id === caller.id);
     if (!user) return res.status(404).json({ error: 'Account not found' });
-    const { passwordHash, ...safe } = user;
+    const safe = publicUser(user);
+    safe.perms = await permsOf(caller);
     return res.status(200).json({ ok: true, user: safe });
   }
 
@@ -202,7 +215,7 @@ module.exports = async function handler(req, res) {
     users[idx].updatedAt = new Date().toISOString();
 
     await db.setCollection('users', users);
-    const { passwordHash, ...safe } = users[idx];
+    const safe = publicUser(users[idx]);
     return res.status(200).json({ ok: true, user: safe });
   }
 
@@ -227,7 +240,7 @@ module.exports = async function handler(req, res) {
     }
     users[idx].updatedAt = new Date().toISOString();
     await db.setCollection('users', users);
-    const { passwordHash, ...safe } = users[idx];
+    const safe = publicUser(users[idx]);
     return res.status(200).json({ ok: true, user: safe });
   }
 
@@ -308,17 +321,150 @@ module.exports = async function handler(req, res) {
     users[idx].passwordHash = hashPassword(String(newPassword));
     delete users[idx].resetCode;
     delete users[idx].resetExpires;
+    delete users[idx].inviteCode;
     users[idx].updatedAt = new Date().toISOString();
     await db.setCollection('users', users);
 
     const u = users[idx];
-    const token = createToken({ id: u.id, email: u.email, name: u.name, role: u.role });
-    const { passwordHash, ...safe } = u;
+    const token = tokenFor(u);
+    const safe = publicUser(u);
     return res.status(200).json({ ok: true, token, user: safe });
   }
 
+
+  /* ============================ team and sign-in security ============================ */
+  if (action === 'team-list') {
+    const owner = await requireOwner(req, res);
+    if (!owner) return;
+    const users = await db.getCollection('users');
+    const team = users.filter(u => u.role === 'admin' || u.role === 'staff').map(u => ({
+      id: u.id, name: u.name || '', email: u.email, role: u.role, perms: u.role === 'admin' ? PERMS.slice() : cleanPerms(u.perms),
+      preset: u.preset || '', disabled: !!u.disabled, twoStep: !!u.totpEnabled, invited: !!u.inviteCode, lastSignInAt: u.lastSignInAt || '', createdAt: u.createdAt || ''
+    }));
+    return res.status(200).json({ ok: true, team, presets: Object.keys(PRESETS).map(k => ({ id: k, label: PRESETS[k].label, perms: PRESETS[k].perms })), perms: PERMS });
+  }
+
+  if (action === 'team-invite') {
+    const owner = await requireOwner(req, res);
+    if (!owner) return;
+    if (!checkRate('invite:' + owner.id)) return res.status(429).json({ error: 'That is a lot of invitations. Please try again later.' });
+    const { name, email, preset, perms } = req.body;
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail) || cleanEmail.length > 200) return res.status(400).json({ error: 'Please enter a valid email address.' });
+    const cleanName = String(name || '').trim().slice(0, 100);
+    if (!cleanName) return res.status(400).json({ error: 'Please add their name.' });
+    const granted = PRESETS[preset] ? PRESETS[preset].perms.slice() : cleanPerms(perms);
+    if (!granted.length) return res.status(400).json({ error: 'Choose a role, or tick at least one thing they can do.' });
+    const users = await db.getCollection('users');
+    let idx = users.findIndex(u => u.email === cleanEmail);
+    const inviteCode = require('crypto').randomBytes(9).toString('hex');
+    if (idx === -1) {
+      users.push({ id: uid(), name: cleanName, email: cleanEmail, passwordHash: hashPassword(require('crypto').randomBytes(18).toString('hex') + 'Aa1'), phone: '', style: 'Adventure', role: 'staff', perms: granted, preset: PRESETS[preset] ? preset : '', invitedBy: owner.id, createdAt: new Date().toISOString() });
+      idx = users.length - 1;
+    } else {
+      if (users[idx].role === 'admin') return res.status(409).json({ error: 'That person is already an owner.' });
+      if (users[idx].role === 'staff') return res.status(409).json({ error: 'That person is already on the team. Change their role instead.' });
+      users[idx].role = 'staff'; users[idx].perms = granted; users[idx].preset = PRESETS[preset] ? preset : ''; users[idx].invitedBy = owner.id;
+    }
+    users[idx].inviteCode = inviteCode;
+    users[idx].resetCode = inviteCode;
+    users[idx].resetExpires = Date.now() + 7 * 24 * 60 * 60 * 1000;
+    users[idx].updatedAt = new Date().toISOString();
+    await db.setCollection('users', users);
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || 'www.sightseerscaribbean.com').split(',')[0].trim();
+    const link = 'https://' + host + '/manage?invite=' + encodeURIComponent(cleanEmail) + '&code=' + inviteCode;
+    const first = cleanName.split(' ')[0];
+    const label = PRESETS[preset] ? PRESETS[preset].label : 'Team member';
+    sendEmail({
+      to: cleanEmail,
+      subject: 'You have been invited to the Sight Seers admin',
+      html: '<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;color:#1a2b3f"><h2 style="color:#0a3557">Welcome to the team, ' + require('../_lib/auth').escapeHtml(first) + '</h2><p>You have been invited to help run the Sight Seers website as a <b>' + require('../_lib/auth').escapeHtml(label) + '</b>. Choose a password to get started. This link works for 7 days.</p><p><a href="' + link + '" style="display:inline-block;background:#ef8731;color:#fff;padding:14px 26px;text-decoration:none;font-weight:bold">Set my password</a></p><p style="color:#6b7a8d;font-size:13px">If you were not expecting this, you can ignore this email.</p></div>'
+    }).catch(() => {});
+    return res.status(200).json({ ok: true, link, member: { id: users[idx].id, email: cleanEmail, name: cleanName, perms: granted } });
+  }
+
+  if (action === 'team-update') {
+    const owner = await requireOwner(req, res);
+    if (!owner) return;
+    const { id, preset, perms, disabled } = req.body;
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'We could not find that person.' });
+    if (users[idx].role !== 'staff') return res.status(400).json({ error: 'Only team members can be changed here.' });
+    if (preset !== undefined || perms !== undefined) {
+      const granted = PRESETS[preset] ? PRESETS[preset].perms.slice() : cleanPerms(perms);
+      if (!granted.length) return res.status(400).json({ error: 'Choose a role, or tick at least one thing they can do.' });
+      users[idx].perms = granted; users[idx].preset = PRESETS[preset] ? preset : '';
+    }
+    if (disabled !== undefined) users[idx].disabled = !!disabled;
+    users[idx].updatedAt = new Date().toISOString();
+    await db.setCollection('users', users);
+    return res.status(200).json({ ok: true });
+  }
+
+  if (action === 'team-remove') {
+    const owner = await requireOwner(req, res);
+    if (!owner) return;
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.id === req.body.id);
+    if (idx === -1) return res.status(404).json({ error: 'We could not find that person.' });
+    if (users[idx].role !== 'staff') return res.status(400).json({ error: 'Only team members can be removed here.' });
+    users[idx].role = 'guest'; delete users[idx].perms; delete users[idx].preset; delete users[idx].inviteCode; delete users[idx].disabled;
+    users[idx].sessionVersion = (users[idx].sessionVersion || 0) + 1;
+    users[idx].updatedAt = new Date().toISOString();
+    await db.setCollection('users', users);
+    return res.status(200).json({ ok: true });
+  }
+
+  /* "sign out everywhere": every older sign-in of this account stops working for admin and team access; this device gets a fresh one */
+  if (action === 'signout-all') {
+    const caller = requireAuth(req, res);
+    if (!caller) return;
+    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to do this.' });
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.id === caller.id);
+    if (idx === -1) return res.status(404).json({ error: 'Account not found' });
+    users[idx].sessionVersion = (users[idx].sessionVersion || 0) + 1;
+    users[idx].updatedAt = new Date().toISOString();
+    await db.setCollection('users', users);
+    return res.status(200).json({ ok: true, token: tokenFor(users[idx]) });
+  }
+
+  if (action === '2fa-setup' || action === '2fa-enable' || action === '2fa-disable') {
+    const caller = requireAuth(req, res);
+    if (!caller) return;
+    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to do this.' });
+    const users = await db.getCollection('users');
+    const idx = users.findIndex(u => u.id === caller.id);
+    if (idx === -1) return res.status(404).json({ error: 'Account not found' });
+    const u = users[idx];
+    if (u.role !== 'admin' && u.role !== 'staff') return res.status(403).json({ error: 'Two-step sign-in is for the owner and team.' });
+    if (!checkRate('2fa:' + u.id)) return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+    if (action === '2fa-setup') {
+      if (u.totpEnabled) return res.status(409).json({ error: 'Two-step sign-in is already on.' });
+      const secret = newTotpSecret();
+      u.totpPending = sealSecret(secret);
+      await db.setCollection('users', users);
+      const issuer = 'Sight Seers Admin';
+      return res.status(200).json({ ok: true, secret, otpauth: 'otpauth://totp/' + encodeURIComponent(issuer) + ':' + encodeURIComponent(u.email) + '?secret=' + secret + '&issuer=' + encodeURIComponent(issuer) });
+    }
+    if (action === '2fa-enable') {
+      if (!u.totpPending) return res.status(400).json({ error: 'Start again: ask for a new set-up code first.' });
+      if (!totpOk(openSecret(u.totpPending), req.body.code)) return res.status(400).json({ error: 'That code is not right. Check your phone and try the newest one.' });
+      u.totpSecret = u.totpPending; u.totpEnabled = true; delete u.totpPending;
+      await db.setCollection('users', users);
+      return res.status(200).json({ ok: true });
+    }
+    if (!u.totpEnabled || !verifyPassword(String(req.body.password || ''), u.passwordHash) || !totpOk(openSecret(u.totpSecret), req.body.code)) {
+      return res.status(400).json({ error: 'Your password or code is not right.' });
+    }
+    delete u.totpSecret; delete u.totpPending; u.totpEnabled = false;
+    await db.setCollection('users', users);
+    return res.status(200).json({ ok: true });
+  }
+
   if (action === 'admin-create') {
-    const admin = requireAdmin(req, res);
+    const admin = await requireOwner(req, res);
     if (!admin) return;
     const { name, email, password, phone, style, role } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'Name, email and password required' });
@@ -349,9 +495,9 @@ module.exports = async function handler(req, res) {
   }
 
   if (action === 'admin-update') {
-    const admin = requireAdmin(req, res);
+    const admin = await requireOwner(req, res);
     if (!admin) return;
-    const { id, name, email, phone, style, role } = req.body;
+    const { id, name, email, phone, style, role, passportCountry, passportExpiry } = req.body;
     if (!id) return res.status(400).json({ error: 'Account ID required' });
 
     const users = await db.getCollection('users');
@@ -369,12 +515,11 @@ module.exports = async function handler(req, res) {
     users[idx].updatedAt = new Date().toISOString();
 
     await db.setCollection('users', users);
-    const { passwordHash: _, ...safe } = users[idx];
-    return res.status(200).json({ ok: true, account: safe });
+    return res.status(200).json({ ok: true, account: publicUser(users[idx]) });
   }
 
   if (action === 'admin-reset-password') {
-    const admin = requireAdmin(req, res);
+    const admin = await requireOwner(req, res);
     if (!admin) return;
     const { id, newPassword } = req.body;
     if (!id || !newPassword) return res.status(400).json({ error: 'Account ID and new password required' });
@@ -393,7 +538,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (action === 'admin-delete') {
-    const admin = requireAdmin(req, res);
+    const admin = await requireOwner(req, res);
     if (!admin) return;
     const { id } = req.body;
     if (!id) return res.status(400).json({ error: 'Account ID required' });

@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { requireAuth, requireAdmin, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { requireAuth, requireAdmin, getUser, uid, escapeHtml, requirePerm, can } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 
 module.exports = async function handler(req, res) {
@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
       if (!user) return res.status(401).json({ error: 'Sign in required' });
 
       const bookings = await db.getCollection('bookings');
-      if (user.role === 'admin') return res.status(200).json({ ok: true, bookings });
+      if (await can(user, 'inbox')) return res.status(200).json({ ok: true, bookings });
 
       const mine = bookings.filter(b => b.userId === user.id || b.email === user.email);
       return res.status(200).json({ ok: true, bookings: mine });
@@ -71,7 +71,7 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'update-status') {
-        const admin = requireAdmin(req, res);
+        const admin = await requirePerm(req, res, 'inbox');
         if (!admin) return;
 
         const { id, status: newStatus, adminNote } = req.body;
@@ -88,7 +88,7 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'delete') {
-        const admin = requireAdmin(req, res);
+        const admin = await requirePerm(req, res, 'inbox');
         if (!admin) return;
 
         const { id } = req.body;

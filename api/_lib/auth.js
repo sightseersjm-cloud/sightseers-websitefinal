@@ -94,6 +94,137 @@ function requireEditor(req, res) {
   return user;
 }
 
+/* ============================ roles and permissions ============================
+   Owners are accounts with role 'admin' and can do everything. Team members are accounts with role 'staff'
+   and a list of permissions. Their permissions are read from their account on every request, so changing or
+   removing someone takes effect straight away. The old shared passcode ('editor') keeps its three content
+   permissions until the new admin replaces it. */
+const PERMS = ['pages', 'catalog', 'blog', 'trips', 'inbox'];
+const PRESETS = {
+  content: { label: 'Content editor', perms: ['pages', 'catalog', 'blog'] },
+  trips:   { label: 'Trips manager',  perms: ['trips', 'inbox'] },
+  inbox:   { label: 'Inbox helper',   perms: ['inbox'] },
+  blog:    { label: 'Blog writer',    perms: ['blog'] }
+};
+const cleanPerms = list => PERMS.filter(p => Array.isArray(list) && list.includes(p));
+
+async function accountOf(id) {
+  const db = require('./db');
+  const users = await db.getCollection('users');
+  return users.find(u => u.id === id) || null;
+}
+
+/* what this signed-in person may do right now */
+async function permsOf(user) {
+  if (!user) return [];
+  if (user.role === 'editor') return ['pages', 'catalog', 'blog'];
+  if (user.role === 'admin') {
+    if (user.id === 'admin-passcode') return [];
+    const acct = await accountOf(user.id);
+    /* "sign out everywhere" ends older sign-ins; an owner is never locked out by a failed read of the account list */
+    if (acct && (acct.sessionVersion || 0) !== (user.sv || 0)) return [];
+    return PERMS.slice();
+  }
+  if (user.role === 'staff') {
+    const acct = await accountOf(user.id);
+    if (!acct || acct.role !== 'staff' || acct.disabled) return [];
+    if ((acct.sessionVersion || 0) !== (user.sv || 0)) return [];
+    return cleanPerms(acct.perms);
+  }
+  return [];
+}
+
+/* true when the signed-in person has at least one of the permissions */
+async function can(user, ...need) {
+  const have = await permsOf(user);
+  return need.some(n => have.includes(n));
+}
+
+async function requirePerm(req, res, ...need) {
+  const user = getUser(req);
+  if (!user) { res.status(401).json({ error: 'Sign in required' }); return null; }
+  const have = await permsOf(user);
+  if (!need.some(n => have.includes(n))) {
+    res.status(403).json({ error: 'You do not have access to this. Ask the owner to change your role.' });
+    return null;
+  }
+  user.perms = have;
+  return user;
+}
+
+/* owners only: the team, sign-in settings and anything that gives or takes away access */
+async function requireOwner(req, res) {
+  const user = getUser(req);
+  if (!user) { res.status(401).json({ error: 'Sign in required' }); return null; }
+  if (user.role !== 'admin' || user.id === 'admin-passcode' || !(await permsOf(user)).length) {
+    res.status(403).json({ error: 'Only the owner can do this.' });
+    return null;
+  }
+  return user;
+}
+
+/* a sign-in token for an account; "sv" ends older tokens when the person chooses "sign out everywhere" */
+function tokenFor(u) {
+  return createToken({ id: u.id, email: u.email, name: u.name, role: u.role, sv: u.sessionVersion || 0 });
+}
+
+/* an account as it may leave the server: never the password, reset code or two-step secret */
+function publicUser(u) {
+  const { passwordHash, resetCode, resetExpires, totpSecret, totpPending, ...rest } = u || {};
+  return rest;
+}
+
+/* ============================ two-step sign-in (authenticator app codes, RFC 6238) ============================ */
+const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32encode(buf) {
+  let bits = '', out = '';
+  for (const b of buf) bits += b.toString(2).padStart(8, '0');
+  for (let i = 0; i < bits.length; i += 5) out += B32[parseInt(bits.slice(i, i + 5).padEnd(5, '0'), 2)];
+  return out;
+}
+function b32decode(str) {
+  let bits = '';
+  for (const c of String(str).replace(/=+$/, '').toUpperCase()) { const v = B32.indexOf(c); if (v < 0) return Buffer.alloc(0); bits += v.toString(2).padStart(5, '0'); }
+  const bytes = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) bytes.push(parseInt(bits.slice(i, i + 8), 2));
+  return Buffer.from(bytes);
+}
+function hotp(secretBuf, counter) {
+  const msg = Buffer.alloc(8);
+  msg.writeBigUInt64BE(BigInt(counter));
+  const h = crypto.createHmac('sha1', secretBuf).update(msg).digest();
+  const o = h[h.length - 1] & 0xf;
+  const n = ((h[o] & 0x7f) << 24) | (h[o + 1] << 16) | (h[o + 2] << 8) | h[o + 3];
+  return String(n % 1000000).padStart(6, '0');
+}
+function newTotpSecret() { return b32encode(crypto.randomBytes(20)); }
+/* accepts the current code and the one either side, to allow for a slightly wrong clock */
+function totpOk(secret, code, now) {
+  const c = String(code || '').replace(/\s+/g, '');
+  if (!/^\d{6}$/.test(c)) return false;
+  const buf = b32decode(secret);
+  if (!buf.length) return false;
+  const step = Math.floor((now || Date.now()) / 30000);
+  for (const d of [-1, 0, 1]) {
+    const a = Buffer.from(hotp(buf, step + d)), b = Buffer.from(c);
+    if (a.length === b.length && crypto.timingSafeEqual(a, b)) return true;
+  }
+  return false;
+}
+function totpKey() { return crypto.createHash('sha256').update('totp:' + (SECRET || 'x')).digest(); }
+function sealSecret(plain) {
+  const iv = crypto.randomBytes(12), c = crypto.createCipheriv('aes-256-gcm', totpKey(), iv);
+  const enc = Buffer.concat([c.update(plain, 'utf8'), c.final()]);
+  return iv.toString('base64') + '.' + c.getAuthTag().toString('base64') + '.' + enc.toString('base64');
+}
+function openSecret(sealed) {
+  try {
+    const [iv, tag, enc] = String(sealed).split('.').map(x => Buffer.from(x, 'base64'));
+    const d = crypto.createDecipheriv('aes-256-gcm', totpKey(), iv); d.setAuthTag(tag);
+    return Buffer.concat([d.update(enc), d.final()]).toString('utf8');
+  } catch { return ''; }
+}
+
 function uid() { return crypto.randomUUID(); }
 
 function escapeHtml(str) {
@@ -105,4 +236,5 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml, ADMIN_CODE };
+module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml, ADMIN_CODE,
+  PERMS, PRESETS, cleanPerms, permsOf, can, requirePerm, requireOwner, tokenFor, publicUser, newTotpSecret, totpOk, b32encode, sealSecret, openSecret };

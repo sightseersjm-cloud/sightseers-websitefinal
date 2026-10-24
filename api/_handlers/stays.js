@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { requireEditor, uid } = require('../_lib/auth');
+const { requireEditor, uid, requirePerm } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -19,7 +19,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const admin = requireEditor(req, res);
+    const admin = await requirePerm(req, res, 'catalog');
     if (!admin) return;
 
     const { action } = req.body;

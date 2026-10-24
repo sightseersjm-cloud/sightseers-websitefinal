@@ -1,5 +1,5 @@
 const { put, get } = require('@vercel/blob');
-const { getUser } = require('../_lib/auth');
+const { getUser, can } = require('../_lib/auth');
 
 const SETTINGS_PATH = 'ss-admin/settings.json';
 
@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
     if (batch && typeof batch === 'object') {
       const keys = Object.keys(batch);
       for (const k of keys) {
-        if (adminKeys.includes(k) && (!user || (user.role !== 'admin' && user.role !== 'editor'))) {
+        if (adminKeys.includes(k) && (!user || !(await can(user, 'pages', 'catalog', 'blog')))) {
           return res.status(403).json({ error: 'Admin access required for this setting' });
         }
       }
@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
     if (!key) return res.status(400).json({ error: 'Key required' });
 
     // Content editors (passcode login) and full admins can write site content.
-    if (adminKeys.includes(key) && (!user || (user.role !== 'admin' && user.role !== 'editor'))) {
+    if (adminKeys.includes(key) && (!user || !(await can(user, 'pages', 'catalog', 'blog')))) {
       return res.status(403).json({ error: 'Admin access required for this setting' });
     }
 

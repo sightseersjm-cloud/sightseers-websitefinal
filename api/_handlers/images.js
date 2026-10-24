@@ -1,6 +1,6 @@
 const { put } = require('@vercel/blob');
 const db = require('../_lib/db');
-const { getUser, uid } = require('../_lib/auth');
+const { getUser, uid, can } = require('../_lib/auth');
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
 const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
 
   const user = getUser(req);
   if (!user) return res.status(401).json({ error: 'Sign in required to manage images.' });
-  if (user.role !== 'admin' && user.role !== 'editor') {
+  if (!(await can(user, 'pages', 'catalog', 'blog'))) {
     return res.status(403).json({ error: 'Admin or editor access required to manage images.' });
   }
 

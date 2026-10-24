@@ -7,7 +7,7 @@
  *   GET  ?unsub=<id>&k=<signature>                     the unsubscribe link for newsletters: takes that address off the list
  */
 const news = require('../_lib/newsletter');
-const { requireAdmin, getUser, escapeHtml } = require('../_lib/auth');
+const { requireAdmin, getUser, escapeHtml, requirePerm } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 
 const hits = new Map();
@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
 
     if (req.method === 'GET') {
       if (q.unsub) return page(res, (await news.unsubscribeLink(String(q.unsub).slice(0, 80), String(q.k || '').slice(0, 64))).ok);
-      const admin = requireAdmin(req, res);
+      const admin = await requirePerm(req, res, 'inbox');
       if (!admin) return;
       return res.status(200).json({ ok: true, subscribers: await news.list() });
     }
@@ -53,7 +53,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, already: !!r.already, back: !!r.back });
     }
 
-    const admin = requireAdmin(req, res);
+    const admin = await requirePerm(req, res, 'inbox');
     if (!admin) return;
     const id = String(body.id || '').slice(0, 80);
     if (body.action === 'status') {

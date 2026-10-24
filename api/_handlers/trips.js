@@ -40,7 +40,7 @@
  */
 
 const db = require('../_lib/db');
-const { getUser, requireAdmin, uid, hashPassword, validatePassword, createToken } = require('../_lib/auth');
+const { getUser, requireAdmin, uid, hashPassword, validatePassword, createToken, requirePerm, requireOwner } = require('../_lib/auth');
 const crypto = require('crypto');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
@@ -423,7 +423,7 @@ module.exports = async function handler(req, res) {
       }
 
       if (get('admin')) {
-        const admin = requireAdmin(req, res);
+        const admin = await requirePerm(req, res, 'trips');
         if (!admin) return;
         const [trips, applications, interests, partnersDoc, activity, users] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS), getPartnersDoc(), db.getCollection(ACTIVITY), db.getCollection('users')]);
         /* every account, with what we hold on it (never the password): the owner's contact list for the Travel Club */
@@ -804,7 +804,7 @@ module.exports = async function handler(req, res) {
 
     /* ===== admin ===== */
     if (action === 'account-delete') {
-      const admin = requireAdmin(req, res);
+      const admin = await requireOwner(req, res);
       if (!admin) return;
       const users = await db.getCollection('users');
       const u = users.find(x => x.id === str(body.id, 80));
@@ -823,7 +823,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, keptApplications: keepApps.length });
     }
     if (action === 'account-reset') {
-      const admin = requireAdmin(req, res);
+      const admin = await requireOwner(req, res);
       if (!admin) return;
       const users = await db.getCollection('users');
       const u = users.find(x => x.id === str(body.id, 80));
@@ -844,7 +844,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
     if (action === 'trip-save' || action === 'trip-status' || action === 'trip-announce' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post' || action === 'destination-save' || action === 'destination-reset' || action === 'payout-add' || action === 'payout-delete') {
-      const admin = requireAdmin(req, res);
+      const admin = await requirePerm(req, res, 'trips');
       if (!admin) return;
 
       if (action === 'trip-save') {

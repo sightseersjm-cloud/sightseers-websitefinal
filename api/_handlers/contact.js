@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { requireAdmin, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { requireAdmin, getUser, uid, escapeHtml, requirePerm } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 
 module.exports = async function handler(req, res) {
@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     if (req.method === 'GET') {
-      const admin = requireAdmin(req, res);
+      const admin = await requirePerm(req, res, 'inbox');
       if (!admin) return;
 
       const messages = await db.getCollection('contact-messages');
@@ -70,7 +70,7 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'mark-read') {
-        const admin = requireAdmin(req, res);
+        const admin = await requirePerm(req, res, 'inbox');
         if (!admin) return;
 
         const { id } = req.body;
@@ -83,7 +83,7 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'delete') {
-        const admin = requireAdmin(req, res);
+        const admin = await requirePerm(req, res, 'inbox');
         if (!admin) return;
 
         const { id } = req.body;

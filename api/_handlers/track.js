@@ -18,7 +18,7 @@
  */
 
 const db = require('../_lib/db');
-const { requireAdmin } = require('../_lib/auth');
+const { requireAdmin, requirePerm } = require('../_lib/auth');
 
 const ALLOWED = [
   'page_view', 'tour_page', 'pano_scene', 'hotspot_click', 'shop_add',
@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
-    const admin = requireAdmin(req, res);
+    const admin = await requirePerm(req, res, 'inbox', 'trips');
     if (!admin) return;
     const days = Math.min(31, Math.max(1, parseInt((req.query || {}).days, 10) || 7));
     const daily = {};

@@ -13,7 +13,7 @@
  */
 
 const db = require('../_lib/db');
-const { uid, requireAdmin } = require('../_lib/auth');
+const { uid, requireAdmin, requirePerm } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const trip = require('../_lib/trip');
 
@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     if (req.method === 'GET') {
-      const admin = requireAdmin(req, res);
+      const admin = await requirePerm(req, res, 'inbox');
       if (!admin) return;
       return res.status(200).json({ ok: true, requests: await db.getCollection(COLLECTION) });
     }

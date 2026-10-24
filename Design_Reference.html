@@ -24837,6 +24837,8 @@ vtSessionAction=function(el,type){
 </div>
 </div>
 
+<div class="page" id="p-manage"><div id="mgRoot"></div></div>
+
 <div class="page" id="p-refund-policy">
   <section class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=80')">
     <div class="ph-inner reveal">
@@ -29562,6 +29564,7 @@ var SS_ROUTES = {
   'travel-club':'/travel-club',
   'club-admin':'/club-admin',
   'admin':'/admin',
+  'manage':'/manage',
   'tent-rental':'/tent-rental',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
@@ -60688,5 +60691,323 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,60);});else setTimeout(boot,60);
   var on0=window.nav;
   if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
+})();
+</script>
+<style id="manage-style">
+/* the new admin lives at /manage: its own full-screen app, so the public menu, footer and chat button step aside */
+body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage.on) #mobNav,body:has(#p-manage.on) footer,body:has(#p-manage.on) #scrollTop,body:has(#p-manage.on) #ssBotLauncher,body:has(#p-manage.on) #ssBotPanel,body:has(#p-manage.on) #cartOverlay,body:has(#p-manage.on) #cartPanel,body:has(#p-manage.on) .skip-link{display:none!important}
+#p-manage{--navy:#062e4b;--blue:#0a4d73;--green:#70c257;--orange:#ef8731;--ink:#12293d;--mut:#5c6f82;--line:rgba(6,46,75,.12);--bg:#f4f8fb;--card:#fff;--shadow:0 1px 2px rgba(6,46,75,.06),0 14px 34px rgba(6,46,75,.08);background:var(--bg);color:var(--ink);font-family:'Raleway',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;min-height:100vh}
+#p-manage *{box-sizing:border-box}
+#p-manage button{font:inherit;cursor:pointer}
+#p-manage .mg-app{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+#p-manage .mg-sb{background:var(--navy);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+#p-manage .mg-brand{padding:22px 20px 14px}
+#p-manage .mg-brand b{font-family:Georgia,'Playfair Display',serif;font-size:20px;letter-spacing:-.3px;display:block}
+#p-manage .mg-brand small{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#9cc6e4}
+#p-manage .mg-nh{margin:16px 20px 6px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#7fb0d4;font-weight:800}
+#p-manage .mg-nav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 20px;color:#e6eff8;background:none;border:0;border-left:4px solid transparent;font-weight:700;border-radius:0}
+#p-manage .mg-nav button:hover{background:rgba(255,255,255,.07)}
+#p-manage .mg-nav button.on{background:rgba(255,255,255,.12);border-left-color:var(--green);color:#fff}
+#p-manage .mg-nav .bd{margin-left:auto;background:var(--orange);color:#fff;font-size:12px;font-weight:800;padding:1px 8px;min-width:24px;text-align:center}
+#p-manage .mg-sbf{margin-top:auto;padding:16px;border-top:1px solid rgba(255,255,255,.14)}
+#p-manage .mg-me{display:flex;align-items:center;gap:10px;margin-top:12px}
+#p-manage .mg-av{width:38px;height:38px;border-radius:50%;background:var(--green);color:#06304a;display:grid;place-items:center;font-weight:800;flex:none}
+#p-manage .mg-me small{display:block;color:#9cc6e4;font-size:12px}
+#p-manage .mg-main{min-width:0}
+#p-manage .mg-top{display:flex;align-items:center;gap:14px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+#p-manage .mg-crumbs{font-size:13px;color:var(--mut)}#p-manage .mg-crumbs b{color:var(--ink)}
+#p-manage .mg-menu{display:none;width:44px;height:44px;border:1px solid var(--line);background:#fff;border-radius:0}
+#p-manage .mg-page{padding:28px;max-width:1180px}
+#p-manage h1{font-family:Georgia,'Playfair Display',serif;font-size:32px;margin:0 0 4px;color:var(--navy);letter-spacing:-.3px}
+#p-manage .mg-sub{color:var(--mut);margin:0 0 22px}
+#p-manage h2{font-size:13px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut);margin:30px 0 12px}
+#p-manage .mg-card{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+#p-manage .mg-grid{display:grid;gap:16px}
+#p-manage .g3{grid-template-columns:repeat(3,minmax(0,1fr))}#p-manage .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#p-manage .mg-todo{padding:18px;border-top:4px solid var(--orange);display:flex;flex-direction:column;gap:6px}
+#p-manage .mg-todo.b{border-top-color:var(--blue)}#p-manage .mg-todo.g{border-top-color:var(--green)}
+#p-manage .mg-todo .n{font-family:Georgia,serif;font-size:38px;line-height:1;color:var(--navy)}
+#p-manage .mg-todo small{color:var(--mut)}
+#p-manage .mg-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-weight:800;border-radius:0}
+#p-manage .mg-btn:hover{background:var(--navy);color:#fff}
+#p-manage .mg-btn.pri{background:var(--orange);border-color:var(--orange);color:#fff}#p-manage .mg-btn.pri:hover{background:#d9741f}
+#p-manage .mg-btn.ok{background:var(--green);border-color:var(--green);color:#06304a}
+#p-manage .mg-btn.sm{min-height:36px;padding:0 12px;font-size:13px}
+#p-manage .mg-btn.ghost{border-color:var(--line);color:var(--mut)}
+#p-manage .mg-btn[disabled]{opacity:.5;cursor:not-allowed}
+#p-manage .mg-todo .mg-btn{margin-top:10px;align-self:flex-start}
+#p-manage .mg-chip{display:inline-block;padding:3px 10px;background:#eaf3f9;color:var(--blue);font-size:12px;font-weight:800}
+#p-manage .mg-chip.g{background:#e8f6e3;color:#2f7a2a}#p-manage .mg-chip.o{background:#fdeedd;color:#a9540e}#p-manage .mg-chip.r{background:#fbe6e3;color:#a1362a}
+#p-manage .mg-fld{margin:14px 0}
+#p-manage .mg-fld label{display:block;font-weight:800;font-size:13px;margin-bottom:6px}
+#p-manage .mg-fld input,#p-manage .mg-fld select{width:100%;border:1.5px solid var(--line);padding:11px 12px;font:inherit;border-radius:0;background:#fff;color:var(--ink);min-height:46px}
+#p-manage .mg-fld input:focus,#p-manage .mg-fld select:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(239,135,49,.22)}
+#p-manage .mg-hint{font-size:12.5px;color:var(--mut);margin-top:4px}
+#p-manage .mg-msg{margin:12px 0 0;padding:10px 12px;font-size:14px;display:none}
+#p-manage .mg-msg.on{display:block}#p-manage .mg-msg.err{background:#fbe6e3;color:#a1362a}#p-manage .mg-msg.ok{background:#e8f6e3;color:#2f7a2a}
+#p-manage table{width:100%;border-collapse:collapse}
+#p-manage th,#p-manage td{text-align:left;padding:12px 16px;border-top:1px solid var(--line);font-size:14px;vertical-align:middle}
+#p-manage th{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);border-top:0;background:#f4f8fb}
+#p-manage td.c,#p-manage th.c{text-align:center}
+#p-manage .yes{color:#2f7a2a;font-weight:800}#p-manage .no{color:#b8c6d2}
+#p-manage .mg-role{padding:16px;border:1.5px solid var(--line);background:#fff}
+#p-manage .mg-role b{display:block;color:var(--navy)}#p-manage .mg-role small{color:var(--mut)}
+#p-manage .mg-list{list-style:none;margin:0;padding:0}
+#p-manage .mg-list li{display:flex;align-items:center;gap:14px;padding:13px 18px;border-top:1px solid var(--line)}#p-manage .mg-list li:first-child{border-top:0}
+#p-manage .mg-checks{display:flex;flex-wrap:wrap;gap:10px 18px;margin:8px 0}
+#p-manage .mg-checks label{display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px;margin:0}
+#p-manage .mg-checks input{width:20px;height:20px;min-height:0;accent-color:var(--orange)}
+#p-manage .mg-bg{position:fixed;inset:0;background:rgba(6,30,48,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+#p-manage .mg-modal{background:#fff;max-width:520px;width:100%;max-height:92vh;overflow:auto;padding:24px}
+#p-manage .mg-modal h3{margin:0 0 4px;font-size:20px;color:var(--navy)}
+#p-manage .mg-auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(180deg,#eef5fa,#f8fbff)}
+#p-manage .mg-auth .mg-card{width:100%;max-width:440px;padding:30px}
+#p-manage .mg-auth h1{font-size:28px}
+#p-manage .mg-qr{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:12px 0}
+#p-manage .mg-qr canvas{border:1px solid var(--line);background:#fff;padding:8px;image-rendering:pixelated}
+#p-manage code{background:#eef4f8;padding:2px 6px;font-size:13px;word-break:break-all}
+#p-manage .mg-soon{padding:22px}
+#p-manage .mg-soon h3{margin:0 0 6px;color:var(--navy)}
+@media (max-width:1100px){#p-manage .g3{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){
+  #p-manage .mg-app{grid-template-columns:minmax(0,1fr)}
+  #p-manage .mg-sb{position:fixed;left:0;top:0;z-index:30;width:280px;transform:translateX(-100%);transition:transform .25s}
+  #p-manage .mg-sb.open{transform:none}
+  #p-manage .mg-menu{display:grid;place-items:center}
+  #p-manage .mg-top{padding:10px 14px}#p-manage .mg-crumbs{display:none}#p-manage .mg-page{padding:18px 14px}
+  #p-manage .g2{grid-template-columns:minmax(0,1fr)}#p-manage h1{font-size:26px}
+  #p-manage .mg-tw{overflow:auto}
+}
+</style>
+<script id="manage-script">
+(function(){
+  'use strict';
+  var P=document.getElementById('p-manage'),R=document.getElementById('mgRoot');if(!P||!R)return;
+  var S={state:'loading',user:null,perms:[],screen:'home',team:null,home:null,msg:'',setup:null,invite:null};
+  var PERM_LABEL={pages:'Pages and photos',catalog:'Tours and stays',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings'};
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function tok(){try{return localStorage.getItem('ss_auth_token')||'';}catch(e){return '';}}
+  function isOwner(){return !!S.user&&S.user.role==='admin';}
+  function can(){for(var i=0;i<arguments.length;i++)if(S.perms.indexOf(arguments[i])>-1)return true;return false;}
+  function api(path,body){
+    var h={'Content-Type':'application/json'},t=tok();if(t)h.Authorization='Bearer '+t;
+    var o=body===undefined?{method:'GET',headers:h}:{method:'POST',headers:h,body:JSON.stringify(body)};
+    return fetch('/api/'+path,o).then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok){var e=new Error(d.error||'Something went wrong. Please try again.');e.status=r.status;e.data=d;throw e;}return d;});});
+  }
+  function auth(action,body){return api('auth',Object.assign({action:action},body||{}));}
+  function setSession(token,user){try{localStorage.setItem('ss_auth_token',token);localStorage.setItem('ss_current_user',JSON.stringify(user));}catch(e){}try{if(typeof updateAccountUI==='function')updateAccountUI();}catch(e){}}
+  function msg(id,text,type){var e=document.getElementById(id);if(!e)return;e.textContent=text||'';e.className='mg-msg'+(text?' on '+(type||'err'):'');}
+  function ago(iso){if(!iso)return 'Never';var d=Date.now()-new Date(iso).getTime(),m=Math.round(d/60000);if(m<2)return 'Just now';if(m<90)return m+' minutes ago';var h=Math.round(m/60);if(h<36)return h+' hours ago';return Math.round(h/24)+' days ago';}
+
+  /* ---------- sign-in, invitation, no access ---------- */
+  function authShell(inner){return '<div class="mg-auth"><div class="mg-card">'+inner+'</div></div>';}
+  function viewSignin(need2fa){
+    return authShell('<h1>Admin sign in</h1><p class="mg-sub">Use your own email and password. Your team and role are set by the owner.</p>'
+      +'<form id="mgSignin" novalidate><div class="mg-fld"><label for="mgEmail">Email</label><input id="mgEmail" type="email" autocomplete="username" required></div>'
+      +'<div class="mg-fld"><label for="mgPass">Password</label><input id="mgPass" type="password" autocomplete="current-password" required></div>'
+      +(need2fa?'<div class="mg-fld"><label for="mgCode">6-digit code from your authenticator app</label><input id="mgCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>':'')
+      +'<button class="mg-btn pri" type="submit" style="width:100%">Sign in</button><div class="mg-msg" id="mgSigninMsg" role="alert"></div></form>'
+      +'<p class="mg-hint" style="margin-top:16px">Forgot your password? Use the reset option on the sign-in of the account page, or ask the owner to send you a new invitation.</p>');
+  }
+  function viewInvite(){
+    return authShell('<h1>Welcome to the team</h1><p class="mg-sub">Choose a password for <b>'+esc(S.invite.email)+'</b> to finish setting up your admin access.</p>'
+      +'<form id="mgInvite" novalidate><div class="mg-fld"><label for="mgNew">New password</label><input id="mgNew" type="password" autocomplete="new-password" required><div class="mg-hint">At least 8 characters, with a capital letter, a small letter and a number.</div></div>'
+      +'<button class="mg-btn pri" type="submit" style="width:100%">Save password and sign in</button><div class="mg-msg" id="mgInviteMsg" role="alert"></div></form>');
+  }
+  function viewNoAccess(){
+    return authShell('<h1>No admin access yet</h1><p class="mg-sub">You are signed in as <b>'+esc(S.user&&S.user.email)+'</b>, but this account has no admin role. Ask the owner to invite you.</p><button class="mg-btn" id="mgOut">Sign out</button>');
+  }
+
+  /* ---------- the app ---------- */
+  var NAV=[
+    {h:'',items:[{id:'home',t:'Home',show:function(){return true;}}]},
+    {h:'Website',items:[
+      {id:'pages',t:'Pages and sections',show:function(){return can('pages');}},
+      {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}},
+      {id:'catalog',t:'Tours, stays and blog',show:function(){return can('catalog','blog');}}]},
+    {h:'People and trips',items:[
+      {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
+      {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'}]},
+    {h:'Settings',items:[
+      {id:'team',t:'Team and access',show:function(){return isOwner();}},
+      {id:'me',t:'My sign-in',show:function(){return true;}}]}
+  ];
+  var TITLES={home:'Home',pages:'Pages and sections',photos:'Photo library',catalog:'Tours, stays and blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
+  function viewApp(){
+    var nav='';
+    NAV.forEach(function(g){
+      var items=g.items.filter(function(i){return i.show();});if(!items.length)return;
+      if(g.h)nav+='<div class="mg-nh">'+esc(g.h)+'</div>';
+      items.forEach(function(i){
+        var n=i.bd&&S.home&&S.home.badge?S.home.badge[i.bd]:0;
+        nav+='<button type="button" data-go="'+i.id+'" class="'+(S.screen===i.id?'on':'')+'">'+esc(i.t)+(n?'<span class="bd">'+n+'</span>':'')+'</button>';
+      });
+    });
+    var role=isOwner()?'Owner · full access':({content:'Content editor',trips:'Trips manager',inbox:'Inbox helper',blog:'Blog writer'}[S.user.preset]||'Team member');
+    return '<div class="mg-app"><aside class="mg-sb" id="mgSb"><div class="mg-brand"><b>Sight Seers</b><small>Admin</small></div><nav class="mg-nav">'+nav+'</nav>'
+      +'<div class="mg-sbf"><button type="button" class="mg-btn sm" style="width:100%;border-color:rgba(255,255,255,.4);color:#fff;background:none" data-live="1">View live website</button>'
+      +'<div class="mg-me"><div class="mg-av">'+esc((S.user.name||'?').trim().charAt(0).toUpperCase())+'</div><div><b>'+esc((S.user.name||'').split(' ')[0]||'You')+'</b><small>'+esc(role)+'</small></div></div></div></aside>'
+      +'<div class="mg-main"><div class="mg-top"><button type="button" class="mg-menu" id="mgMenu" aria-label="Menu">&#9776;</button><div class="mg-crumbs">Admin / <b>'+esc(TITLES[S.screen])+'</b></div><span style="margin-left:auto"></span><button class="mg-btn sm ghost" id="mgOut">Sign out</button></div>'
+      +'<div class="mg-page" id="mgPage"></div></div></div>';
+  }
+  function soon(id,what,open){
+    return '<h1>'+esc(TITLES[id])+'</h1><p class="mg-sub">'+esc(what)+'</p><div class="mg-card mg-soon"><h3>Being rebuilt</h3><p class="mg-hint" style="font-size:14px;margin:0 0 14px">This part of the new admin is coming in the next update. Until then, everything still works in the current tool, so nothing is lost.</p><button class="mg-btn pri" data-open="'+open+'">Open the current tool</button></div>';
+  }
+  function viewHome(){
+    var h=S.home||{},first=(S.user.name||'').split(' ')[0]||'there',hr=new Date().getHours(),greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+    var cards='';
+    if(can('trips'))cards+='<div class="mg-card mg-todo"><span class="n">'+(h.apps==null?'–':h.apps)+'</span><b>Leaders waiting for approval</b><small>Applications to lead a trip</small><button class="mg-btn sm pri" data-go="trips">Review them</button></div>';
+    if(can('inbox'))cards+='<div class="mg-card mg-todo b"><span class="n">'+(h.inboxNew==null?'–':h.inboxNew)+'</span><b>New enquiries</b><small>'+esc(h.inboxWhat||'Bookings, planning requests and messages')+'</small><button class="mg-btn sm" data-go="inbox">Open inbox</button></div>';
+    if(isOwner())cards+='<div class="mg-card mg-todo g"><span class="n">'+(h.team==null?'–':h.team)+'</span><b>People on your team</b><small>Owners and team members</small><button class="mg-btn sm" data-go="team">Manage team</button></div>';
+    if(!cards)cards='<div class="mg-card mg-todo g"><b>You are all set</b><small>Use the menu on the left to get to what you can work on.</small></div>';
+    var quick='';
+    if(can('pages'))quick+='<button class="mg-btn" data-go="pages">Edit a page</button> ';
+    if(can('catalog','blog'))quick+='<button class="mg-btn" data-go="catalog">Tours, stays and blog</button> ';
+    if(can('pages','catalog'))quick+='<button class="mg-btn" data-go="photos">Change a photo</button> ';
+    return '<h1>'+greet+', '+esc(first)+'</h1><p class="mg-sub">Here is what needs you today.</p><div class="mg-grid g3">'+cards+'</div>'+(quick?'<h2>Do something</h2><div style="display:flex;gap:12px;flex-wrap:wrap">'+quick+'</div>':'');
+  }
+  function permTick(has){return has?'<td class="c yes">&#10003;</td>':'<td class="c no">&ndash;</td>';}
+  function viewTeam(){
+    var T=S.team;if(!T)return '<h1>Team and access</h1><p class="mg-sub">Loading…</p>';
+    var rows=T.team.map(function(m){
+      var role=m.role==='admin'?'<span class="mg-chip g">Owner</span>':'<span class="mg-chip">'+esc(presetLabel(m))+'</span>';
+      var status=[];if(m.invited)status.push('<span class="mg-chip o">Invited</span>');if(m.disabled)status.push('<span class="mg-chip r">Switched off</span>');if(m.twoStep)status.push('<span class="mg-chip g">Two-step on</span>');
+      var acts=m.role==='admin'?'':'<button class="mg-btn sm ghost" data-team-edit="'+esc(m.id)+'">Change</button> <button class="mg-btn sm ghost" data-team-off="'+esc(m.id)+'" data-to="'+(m.disabled?'0':'1')+'">'+(m.disabled?'Switch on':'Switch off')+'</button> <button class="mg-btn sm ghost" data-team-rm="'+esc(m.id)+'">Remove</button>';
+      return '<tr><td><b>'+esc(m.name||m.email)+'</b><br><small style="color:var(--mut)">'+esc(m.email)+'</small></td><td>'+role+'</td>'
+        +T.perms.map(function(p){return permTick(m.perms.indexOf(p)>-1);}).join('')+'<td>'+status.join(' ')+'<br><small style="color:var(--mut)">Last sign-in: '+esc(ago(m.lastSignInAt))+'</small></td><td>'+acts+'</td></tr>';
+    }).join('');
+    var roleCards=T.presets.map(function(p){return '<div class="mg-role"><b>'+esc(p.label)+'</b><small>'+esc(p.perms.map(function(x){return PERM_LABEL[x];}).join(', '))+'</small></div>';}).join('');
+    return '<h1>Team and access</h1><p class="mg-sub">Give each person only what they need. Changes take effect straight away.</p>'
+      +'<div class="mg-grid g3" style="margin-bottom:18px"><div class="mg-role" style="border-color:var(--orange)"><b>Owner</b><small>Everything, including the team and sign-in settings.</small></div>'+roleCards+'</div>'
+      +'<div class="mg-card mg-tw"><table><tr><th>Person</th><th>Role</th>'+T.perms.map(function(p){return '<th class="c">'+esc(PERM_LABEL[p].split(' ')[0])+'</th>';}).join('')+'<th>Status</th><th></th></tr>'+rows+'</table></div>'
+      +'<h2>Invite someone</h2><div class="mg-card" style="padding:20px;max-width:620px"><form id="mgInviteForm" novalidate>'
+      +'<div class="mg-fld"><label for="mgIName">Name</label><input id="mgIName" autocomplete="off"></div><div class="mg-fld"><label for="mgIEmail">Email</label><input id="mgIEmail" type="email" autocomplete="off"></div>'
+      +'<div class="mg-fld"><label for="mgIRole">Role</label><select id="mgIRole">'+T.presets.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.label)+'</option>';}).join('')+'<option value="custom">Custom: choose what they can do</option></select></div>'
+      +'<div class="mg-checks" id="mgICustom" hidden>'+T.perms.map(function(p){return '<label><input type="checkbox" value="'+p+'">'+esc(PERM_LABEL[p])+'</label>';}).join('')+'</div>'
+      +'<button class="mg-btn pri" type="submit">Send invitation</button><div class="mg-msg" id="mgIMsg" role="alert"></div></form>'
+      +(S.invite&&S.invite.link?'<div class="mg-msg on ok" style="margin-top:14px">Invitation sent to '+esc(S.invite.email)+'. If the email does not arrive, send them this link yourself:<br><code>'+esc(S.invite.link)+'</code> <button class="mg-btn sm" data-copy="'+esc(S.invite.link)+'">Copy link</button></div>':'')+'</div>';
+  }
+  function presetLabel(m){var p=S.team&&S.team.presets.filter(function(x){return x.id===m.preset;})[0];return p?p.label:'Custom role';}
+  function viewMe(){
+    var u=S.user,twoOn=!!u.totpEnabled;
+    var two;
+    if(twoOn){
+      two='<p>Two-step sign-in is <b style="color:#2f7a2a">on</b>. You need a code from your authenticator app each time you sign in.</p><button class="mg-btn" id="mgTwoOffOpen">Turn off…</button><div id="mgTwoOffBox" hidden><div class="mg-fld"><label for="mgOffPass">Your password</label><input id="mgOffPass" type="password" autocomplete="current-password"></div><div class="mg-fld"><label for="mgOffCode">A current code</label><input id="mgOffCode" inputmode="numeric" maxlength="6"></div><button class="mg-btn pri" id="mgTwoOff">Turn off two-step sign-in</button></div>';
+    }else if(S.setup){
+      two='<p>1. Open an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…) and scan this code, or type the key in.</p><div class="mg-qr"><canvas id="mgQr" width="180" height="180"></canvas><div>Key: <code>'+esc(S.setup.secret)+'</code></div></div><p>2. Type the 6-digit code the app shows.</p><div class="mg-fld" style="max-width:240px"><input id="mgSetupCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></div><button class="mg-btn pri" id="mgTwoOn">Turn on</button> <button class="mg-btn ghost" id="mgTwoCancel">Cancel</button>';
+    }else{
+      two='<p>Add a second step: after your password you type a 6-digit code from an app on your phone. It protects the admin even if a password is stolen.</p><button class="mg-btn pri" id="mgTwoStart">Set up two-step sign-in</button>';
+    }
+    return '<h1>My sign-in</h1><p class="mg-sub">Keep your admin account safe.</p><div class="mg-grid g2">'
+      +'<div class="mg-card" style="padding:20px"><h3 style="margin:0 0 8px;color:var(--navy)">Two-step sign-in</h3>'+two+'<div class="mg-msg" id="mgTwoMsg" role="alert"></div></div>'
+      +'<div class="mg-card" style="padding:20px"><h3 style="margin:0 0 8px;color:var(--navy)">Sign out everywhere</h3><p>Lost a phone or used a shared computer? This signs this account out of every other device. You stay signed in here.</p><button class="mg-btn" id="mgSignoutAll">Sign out everywhere else</button><div class="mg-msg" id="mgAllMsg" role="alert"></div>'
+      +'<h3 style="margin:22px 0 8px;color:var(--navy)">Change password</h3><div class="mg-fld"><label for="mgPw0">Current password</label><input id="mgPw0" type="password" autocomplete="current-password"></div><div class="mg-fld"><label for="mgPw1">New password</label><input id="mgPw1" type="password" autocomplete="new-password"></div><button class="mg-btn" id="mgPwSave">Change password</button><div class="mg-msg" id="mgPwMsg" role="alert"></div></div></div>';
+  }
+
+  /* ---------- drawing and events ---------- */
+  function render(){
+    if(S.state==='loading')R.innerHTML=authShell('<h1>Admin</h1><p class="mg-sub">Loading…</p>');
+    else if(S.state==='signin')R.innerHTML=viewSignin(S.need2fa);
+    else if(S.state==='invite')R.innerHTML=viewInvite();
+    else if(S.state==='noaccess')R.innerHTML=viewNoAccess();
+    else{
+      R.innerHTML=viewApp();
+      var pg=document.getElementById('mgPage'),id=S.screen,html='';
+      if(id==='home')html=viewHome();
+      else if(id==='team')html=viewTeam();
+      else if(id==='me')html=viewMe();
+      else if(id==='pages')html=soon('pages','Change the words and photos on any page, and add new sections.','admin');
+      else if(id==='photos')html=soon('photos','Every photo on the site in one place.','admin');
+      else if(id==='catalog')html=soon('catalog','Edit tours, stays and blog posts.','admin');
+      else if(id==='trips')html=soon('trips','Approve leaders and trips, post updates and log rewards.','club-admin');
+      else if(id==='inbox')html=soon('inbox','Everything people send you, in one place.','club-admin');
+      pg.innerHTML=html;
+      if(id==='me'&&S.setup&&!(S.user.totpEnabled))drawQr(S.setup.otpauth);
+    }
+  }
+  function drawQr(text){
+    var go=function(){try{var cv=document.getElementById('mgQr');if(!cv||!window.qrcode)return;var q=window.qrcode(0,'M');q.addData(text);q.make();var n=q.getModuleCount(),cell=Math.floor(180/n),ctx=cv.getContext('2d');cv.width=cv.height=cell*n;ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#000';for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))ctx.fillRect(c*cell,r*cell,cell,cell);}catch(e){}};
+    if(window.qrcode)return go();
+    var sc=document.createElement('script');sc.src='/vendor/qrcode.js';sc.onload=go;document.head.appendChild(sc);
+  }
+  function go(screen){S.screen=screen;S.msg='';try{history.replaceState(history.state,'','/manage#'+screen);}catch(e){}render();if(screen==='team')loadTeam();if(screen==='home')loadHome();window.scrollTo(0,0);}
+  function loadTeam(){auth('team-list').then(function(d){S.team=d;if(S.screen==='team')render();}).catch(function(e){var pg=document.getElementById('mgPage');if(pg)pg.insertAdjacentHTML('afterbegin','<div class="mg-msg on err">'+esc(e.message)+'</div>');});}
+  function loadHome(){
+    var jobs=[],h=S.home||(S.home={badge:{}});
+    if(can('inbox'))jobs.push(api('inbox?count=1').then(function(d){var c=d.counts||{};h.inboxNew=c.new||0;h.badge.inbox=c.new||0;var bt=c.byType||{},keys=Object.keys(bt).sort(function(a,b){return bt[b]-bt[a];}).slice(0,3);h.inboxWhat=keys.length?keys.map(function(k){return bt[k]+' '+k.toLowerCase();}).join(', '):'Nothing waiting';}).catch(function(){}));
+    if(can('trips'))jobs.push(api('trips?admin=1').then(function(d){h.apps=(d.applications||[]).filter(function(a){return a.status==='pending';}).length;h.badge.trips=h.apps;}).catch(function(){}));
+    if(isOwner())jobs.push(auth('team-list').then(function(d){h.team=d.team.length;S.team=d;}).catch(function(){}));
+    Promise.all(jobs).then(function(){if(S.state==='app'){var pg=document.getElementById('mgPage');if(S.screen==='home'&&pg)pg.innerHTML=viewHome();var sb=document.querySelector('#p-manage .mg-nav');if(sb){/* refresh the badges only */var tmp=document.createElement('div');tmp.innerHTML=viewApp();var nn=tmp.querySelector('.mg-nav');if(nn)sb.innerHTML=nn.innerHTML;}}});
+  }
+  function enter(user,perms){S.user=user;S.perms=perms||user.perms||[];if(!S.perms.length){S.state='noaccess';render();return;}S.state='app';var h=(location.hash||'').replace('#','');S.screen=TITLES[h]?h:'home';var ok=NAV.some(function(g){return g.items.some(function(i){return i.id===S.screen&&i.show();});});if(!ok)S.screen='home';render();if(S.screen==='team')loadTeam();loadHome();}
+  function boot(){
+    var q=new URLSearchParams(location.search);
+    if(q.get('invite')&&q.get('code')){S.invite={email:q.get('invite'),code:q.get('code')};S.state='invite';render();return;}
+    if(!tok()){S.state='signin';render();return;}
+    S.state='loading';render();
+    auth('me').then(function(d){enter(d.user,d.user.perms);}).catch(function(e){if(e.status===401||e.status===404){try{localStorage.removeItem('ss_auth_token');}catch(x){}S.state='signin';}else S.state='signin';render();});
+  }
+  function signOut(){try{localStorage.removeItem('ss_auth_token');localStorage.removeItem('ss_current_user');}catch(e){}try{if(typeof updateAccountUI==='function')updateAccountUI();}catch(e){}S.user=null;S.perms=[];S.home=null;S.team=null;S.state='signin';S.need2fa=false;render();}
+
+  R.addEventListener('submit',function(e){
+    var f=e.target;e.preventDefault();
+    if(f.id==='mgSignin'){
+      var body={email:document.getElementById('mgEmail').value.trim(),password:document.getElementById('mgPass').value},c=document.getElementById('mgCode');if(c)body.code=c.value.trim();
+      msg('mgSigninMsg','Signing in…','ok');
+      auth('signin',body).then(function(d){setSession(d.token,d.user);S.need2fa=false;return auth('me').then(function(m){enter(m.user,m.user.perms);});}).catch(function(err){
+        if(err.data&&err.data.need2fa){var em=body.email;S.need2fa=true;render();var a=document.getElementById('mgEmail'),b=document.getElementById('mgPass');a.value=em;b.value=body.password;msg('mgSigninMsg',err.message,body.code?'err':'ok');var cc=document.getElementById('mgCode');if(cc)cc.focus();}
+        else msg('mgSigninMsg',err.message,'err');});
+    }else if(f.id==='mgInvite'){
+      var pw=document.getElementById('mgNew').value;msg('mgInviteMsg','Saving…','ok');
+      auth('reset-password',{email:S.invite.email,code:S.invite.code,newPassword:pw}).then(function(d){setSession(d.token,d.user);try{history.replaceState(null,'','/manage');}catch(x){}S.invite=null;return auth('me').then(function(m){enter(m.user,m.user.perms);});}).catch(function(err){msg('mgInviteMsg',err.message,'err');});
+    }else if(f.id==='mgInviteForm'){
+      var role=document.getElementById('mgIRole').value,perms=[].map.call(document.querySelectorAll('#mgICustom input:checked'),function(x){return x.value;});
+      var body2={name:document.getElementById('mgIName').value.trim(),email:document.getElementById('mgIEmail').value.trim()};if(role==='custom')body2.perms=perms;else body2.preset=role;
+      msg('mgIMsg','Sending…','ok');
+      auth('team-invite',body2).then(function(d){S.invite={email:d.member.email,link:d.link};loadTeam();}).catch(function(err){msg('mgIMsg',err.message,'err');});
+    }
+  });
+  R.addEventListener('change',function(e){if(e.target.id==='mgIRole'){var c=document.getElementById('mgICustom');if(c)c.hidden=e.target.value!=='custom';}});
+  R.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t)return;
+    if(t.dataset.go)return go(t.dataset.go);
+    if(t.dataset.open){try{nav(t.dataset.open);}catch(x){location.href='/';}return;}
+    if(t.dataset.live){try{nav('home');}catch(x){location.href='/';}return;}
+    if(t.id==='mgMenu'){document.getElementById('mgSb').classList.toggle('open');return;}
+    if(t.id==='mgOut')return signOut();
+    if(t.dataset.copy){try{navigator.clipboard.writeText(t.dataset.copy);t.textContent='Copied';}catch(x){}return;}
+    if(t.dataset.teamOff){auth('team-update',{id:t.dataset.teamOff,disabled:t.dataset.to==='1'}).then(loadTeam).catch(function(err){alert(err.message);});return;}
+    if(t.dataset.teamRm){if(confirm('Remove this person from the team? They keep a normal account but lose all admin access.'))auth('team-remove',{id:t.dataset.teamRm}).then(loadTeam).catch(function(err){alert(err.message);});return;}
+    if(t.dataset.teamEdit){openEdit(t.dataset.teamEdit);return;}
+    if(t.id==='mgTwoStart'){auth('2fa-setup').then(function(d){S.setup=d;render();}).catch(function(err){msg('mgTwoMsg',err.message,'err');});return;}
+    if(t.id==='mgTwoCancel'){S.setup=null;render();return;}
+    if(t.id==='mgTwoOn'){auth('2fa-enable',{code:document.getElementById('mgSetupCode').value}).then(function(){S.setup=null;S.user.totpEnabled=true;try{localStorage.setItem('ss_current_user',JSON.stringify(S.user));}catch(x){}render();msg('mgTwoMsg','Two-step sign-in is on.','ok');}).catch(function(err){msg('mgTwoMsg',err.message,'err');});return;}
+    if(t.id==='mgTwoOffOpen'){document.getElementById('mgTwoOffBox').hidden=false;return;}
+    if(t.id==='mgTwoOff'){auth('2fa-disable',{password:document.getElementById('mgOffPass').value,code:document.getElementById('mgOffCode').value}).then(function(){S.user.totpEnabled=false;render();msg('mgTwoMsg','Two-step sign-in is off.','ok');}).catch(function(err){msg('mgTwoMsg',err.message,'err');});return;}
+    if(t.id==='mgSignoutAll'){if(!confirm('Sign this account out of every other device?'))return;auth('signout-all').then(function(d){setSession(d.token,S.user);msg('mgAllMsg','Done. Every other device is signed out.','ok');}).catch(function(err){msg('mgAllMsg',err.message,'err');});return;}
+    if(t.id==='mgPwSave'){auth('update-password',{currentPassword:document.getElementById('mgPw0').value,newPassword:document.getElementById('mgPw1').value}).then(function(){msg('mgPwMsg','Password changed.','ok');document.getElementById('mgPw0').value='';document.getElementById('mgPw1').value='';}).catch(function(err){msg('mgPwMsg',err.message,'err');});return;}
+  });
+  function openEdit(id){
+    var m=S.team.team.filter(function(x){return x.id===id;})[0];if(!m)return;
+    var bg=document.createElement('div');bg.className='mg-bg';
+    bg.innerHTML='<div class="mg-modal" role="dialog" aria-modal="true"><h3>Change '+esc(m.name||m.email)+'</h3><p class="mg-hint" style="margin:0 0 10px">'+esc(m.email)+'</p>'
+      +'<div class="mg-fld"><label for="mgERole">Role</label><select id="mgERole">'+S.team.presets.map(function(p){return '<option value="'+esc(p.id)+'"'+(m.preset===p.id?' selected':'')+'>'+esc(p.label)+'</option>';}).join('')+'<option value="custom"'+(m.preset?'':' selected')+'>Custom</option></select></div>'
+      +'<div class="mg-checks" id="mgECustom">'+S.team.perms.map(function(p){return '<label><input type="checkbox" value="'+p+'"'+(m.perms.indexOf(p)>-1?' checked':'')+'>'+esc(PERM_LABEL[p])+'</label>';}).join('')+'</div>'
+      +'<div style="display:flex;gap:10px;margin-top:14px"><button class="mg-btn ok" id="mgESave">Save</button><button class="mg-btn ghost" id="mgECancel">Cancel</button></div><div class="mg-msg" id="mgEMsg" role="alert"></div></div>';
+    R.appendChild(bg);
+    var sel=bg.querySelector('#mgERole'),box=bg.querySelector('#mgECustom');
+    function sync(){var p=S.team.presets.filter(function(x){return x.id===sel.value;})[0];box.hidden=!!p&&false;if(p)[].forEach.call(box.querySelectorAll('input'),function(i){i.checked=p.perms.indexOf(i.value)>-1;});}
+    sel.addEventListener('change',sync);
+    bg.addEventListener('click',function(ev){
+      if(ev.target===bg||ev.target.id==='mgECancel')return bg.remove();
+      if(ev.target.id==='mgESave'){var body={id:id},perms=[].map.call(box.querySelectorAll('input:checked'),function(i){return i.value;});if(sel.value==='custom')body.perms=perms;else body.preset=sel.value;
+        auth('team-update',body).then(function(){bg.remove();loadTeam();}).catch(function(err){msg('mgEMsg',err.message,'err');});}
+    });
+  }
+  /* open when the page is shown (a direct visit to /manage, or nav('manage')) */
+  window.ssManageOpen=function(){boot();};
+  var _nav=window.nav;
+  if(typeof _nav==='function'&&!_nav.__mgWrapped){window.nav=function(id){var r=_nav.apply(this,arguments);if(id==='manage')setTimeout(boot,30);return r;};window.nav.__mgWrapped=true;}
+  if(P.classList.contains('on'))boot();
 })();
 </script>

@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { requireAdmin, requireAuth, requireEditor, getUser, uid, escapeHtml } = require('../_lib/auth');
+const { requireAdmin, requireAuth, requireEditor, getUser, uid, escapeHtml, requirePerm } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 
 /* Build a URL-safe slug from a title. */
@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
     const { id, type } = req.query || {};
 
     if (type === 'requests') {
-      const editor = requireEditor(req, res);
+      const editor = await requirePerm(req, res, 'blog');
       if (!editor) return;
       const requests = await db.getCollection('blog-requests');
       requests.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
@@ -113,7 +113,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'review-request') {
-      const editor = requireEditor(req, res);
+      const editor = await requirePerm(req, res, 'blog');
       if (!editor) return;
 
       const { id, status: newStatus, note } = req.body;
@@ -131,7 +131,7 @@ module.exports = async function handler(req, res) {
 
     /* One click: approve a member's request AND publish it as a live post. */
     if (action === 'approve-request') {
-      const editor = requireEditor(req, res);
+      const editor = await requirePerm(req, res, 'blog');
       if (!editor) return;
 
       const { id } = req.body;
@@ -157,7 +157,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'create') {
-      const admin = requireEditor(req, res);
+      const admin = await requirePerm(req, res, 'blog');
       if (!admin) return;
 
       const { title, slug, excerpt, content, coverImage, author, tags, category } = req.body;
@@ -183,7 +183,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'update') {
-      const admin = requireEditor(req, res);
+      const admin = await requirePerm(req, res, 'blog');
       if (!admin) return;
 
       const { id, ...updates } = req.body;
@@ -197,7 +197,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'delete') {
-      const admin = requireEditor(req, res);
+      const admin = await requirePerm(req, res, 'blog');
       if (!admin) return;
 
       const { id } = req.body;
