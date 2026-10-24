@@ -1,29 +1,6 @@
-const { put, get } = require('@vercel/blob');
 const { getUser, can } = require('../_lib/auth');
 
-const SETTINGS_PATH = 'ss-admin/settings.json';
-
-// Read the private settings doc through the authenticated get() API.
-// A plain fetch() of a private blob URL is unauthorized and returns {},
-// which is why admin edits previously never appeared on reload/other devices.
-async function readSettings() {
-  try {
-    const result = await get(SETTINGS_PATH, { access: 'private', useCache: false });
-    if (!result || !result.stream) return {};
-    return await new Response(result.stream).json();
-  } catch {
-    return {};
-  }
-}
-
-async function writeSettings(data) {
-  await put(SETTINGS_PATH, JSON.stringify(data), {
-    access: 'private',
-    contentType: 'application/json',
-    addRandomSuffix: false,
-    allowOverwrite: true
-  });
-}
+const { readSettings, writeSettings } = require('../_lib/siteStore');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();

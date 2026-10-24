@@ -64,7 +64,7 @@ async function listImages(prefix) {
   try {
     const { blobs } = await list({ prefix: prefix || 'site-images/' });
     // downloadUrl is the authenticated URL that works for private blobs
-    return blobs.map(b => ({ url: b.downloadUrl || b.url, pathname: b.pathname, size: b.size, uploadedAt: b.uploadedAt }));
+    return blobs.map(b => ({ url: b.downloadUrl || b.url, publicUrl: b.url, pathname: b.pathname, size: b.size, uploadedAt: b.uploadedAt }));
   } catch { return []; }
 }
 

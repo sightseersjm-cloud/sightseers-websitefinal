@@ -339,7 +339,7 @@ module.exports = async function handler(req, res) {
     const users = await db.getCollection('users');
     const team = users.filter(u => u.role === 'admin' || u.role === 'staff').map(u => ({
       id: u.id, name: u.name || '', email: u.email, role: u.role, perms: u.role === 'admin' ? PERMS.slice() : cleanPerms(u.perms),
-      preset: u.preset || '', disabled: !!u.disabled, twoStep: !!u.totpEnabled, invited: !!u.inviteCode, lastSignInAt: u.lastSignInAt || '', createdAt: u.createdAt || ''
+      preset: u.preset || '', needsApproval: u.role === 'staff' ? u.needsApproval !== false : false, disabled: !!u.disabled, twoStep: !!u.totpEnabled, invited: !!u.inviteCode, lastSignInAt: u.lastSignInAt || '', createdAt: u.createdAt || ''
     }));
     return res.status(200).json({ ok: true, team, presets: Object.keys(PRESETS).map(k => ({ id: k, label: PRESETS[k].label, perms: PRESETS[k].perms })), perms: PERMS });
   }
@@ -359,12 +359,12 @@ module.exports = async function handler(req, res) {
     let idx = users.findIndex(u => u.email === cleanEmail);
     const inviteCode = require('crypto').randomBytes(9).toString('hex');
     if (idx === -1) {
-      users.push({ id: uid(), name: cleanName, email: cleanEmail, passwordHash: hashPassword(require('crypto').randomBytes(18).toString('hex') + 'Aa1'), phone: '', style: 'Adventure', role: 'staff', perms: granted, preset: PRESETS[preset] ? preset : '', invitedBy: owner.id, createdAt: new Date().toISOString() });
+      users.push({ id: uid(), name: cleanName, email: cleanEmail, passwordHash: hashPassword(require('crypto').randomBytes(18).toString('hex') + 'Aa1'), phone: '', style: 'Adventure', role: 'staff', perms: granted, preset: PRESETS[preset] ? preset : '', needsApproval: req.body.needsApproval !== false, invitedBy: owner.id, createdAt: new Date().toISOString() });
       idx = users.length - 1;
     } else {
       if (users[idx].role === 'admin') return res.status(409).json({ error: 'That person is already an owner.' });
       if (users[idx].role === 'staff') return res.status(409).json({ error: 'That person is already on the team. Change their role instead.' });
-      users[idx].role = 'staff'; users[idx].perms = granted; users[idx].preset = PRESETS[preset] ? preset : ''; users[idx].invitedBy = owner.id;
+      users[idx].role = 'staff'; users[idx].perms = granted; users[idx].preset = PRESETS[preset] ? preset : ''; users[idx].needsApproval = req.body.needsApproval !== false; users[idx].invitedBy = owner.id;
     }
     users[idx].inviteCode = inviteCode;
     users[idx].resetCode = inviteCode;
@@ -386,7 +386,7 @@ module.exports = async function handler(req, res) {
   if (action === 'team-update') {
     const owner = await requireOwner(req, res);
     if (!owner) return;
-    const { id, preset, perms, disabled } = req.body;
+    const { id, preset, perms, disabled, needsApproval } = req.body;
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === id);
     if (idx === -1) return res.status(404).json({ error: 'We could not find that person.' });
@@ -397,6 +397,7 @@ module.exports = async function handler(req, res) {
       users[idx].perms = granted; users[idx].preset = PRESETS[preset] ? preset : '';
     }
     if (disabled !== undefined) users[idx].disabled = !!disabled;
+    if (needsApproval !== undefined) users[idx].needsApproval = !!needsApproval;
     users[idx].updatedAt = new Date().toISOString();
     await db.setCollection('users', users);
     return res.status(200).json({ ok: true });
@@ -409,7 +410,7 @@ module.exports = async function handler(req, res) {
     const idx = users.findIndex(u => u.id === req.body.id);
     if (idx === -1) return res.status(404).json({ error: 'We could not find that person.' });
     if (users[idx].role !== 'staff') return res.status(400).json({ error: 'Only team members can be removed here.' });
-    users[idx].role = 'guest'; delete users[idx].perms; delete users[idx].preset; delete users[idx].inviteCode; delete users[idx].disabled;
+    users[idx].role = 'guest'; delete users[idx].perms; delete users[idx].preset; delete users[idx].inviteCode; delete users[idx].disabled; delete users[idx].needsApproval;
     users[idx].sessionVersion = (users[idx].sessionVersion || 0) + 1;
     users[idx].updatedAt = new Date().toISOString();
     await db.setCollection('users', users);

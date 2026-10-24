@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "node build.js",
-    "test:admin": "node scripts/admin-permissions.test.js"
+    "test:admin": "node scripts/admin-permissions.test.js",
+    "test:site": "node scripts/site-edit.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

@@ -23,6 +23,21 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      /* ?folder=all lists every photo folder for the new photo library; the old call (no folder) is unchanged */
+      const want = String((req.query && req.query.folder) || '');
+      if (want) {
+        const folders = want === 'all' ? ['site-images', 'logos', 'gallery', 'tours', 'stays', 'blog', 'partners'] : [sanitizeFolder(want)];
+        const meta = await db.getCollection('image-meta');
+        const byPath = {};
+        meta.forEach(m => { byPath[m.pathname] = m; });
+        const lists = await Promise.all(folders.map(f => db.listImages(f + '/')));
+        const images = [].concat(...lists.map((l, i) => l.map(x => Object.assign({ folder: folders[i] }, x, {
+          name: (byPath[x.pathname] && byPath[x.pathname].originalName) || '',
+          uploadedBy: (byPath[x.pathname] && byPath[x.pathname].uploadedBy) || ''
+        }))));
+        images.sort((a, b) => String(b.uploadedAt || '').localeCompare(String(a.uploadedAt || '')));
+        return res.status(200).json({ ok: true, images });
+      }
       const images = await db.listImages('site-images/');
       return res.status(200).json({ ok: true, images });
     } catch (e) {

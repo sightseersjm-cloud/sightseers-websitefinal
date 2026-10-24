@@ -31,6 +31,7 @@ const handlers = {
   'planning-request': require('./_handlers/planning-request'),
   'sections':        require('./_handlers/sections'),
   'settings':        require('./_handlers/settings'),
+  'site-edit':       require('./_handlers/site-edit'),
   'stays':           require('./_handlers/stays'),
   'stripe-checkout': require('./_handlers/stripe-checkout'),
   'tours':           require('./_handlers/tours'),

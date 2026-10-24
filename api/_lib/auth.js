@@ -152,6 +152,17 @@ async function requirePerm(req, res, ...need) {
   return user;
 }
 
+/* may this person put a change on the live site straight away? Owners can. Team members can unless the owner has asked
+   for their changes to be approved first (the default, so a new account is safe until the owner decides otherwise). */
+async function canPublishNow(user) {
+  if (!user) return false;
+  const have = await permsOf(user);
+  if (!have.length) return false;
+  if (user.role === 'admin') return user.id !== 'admin-passcode';
+  if (user.role === 'staff') { const acct = await accountOf(user.id); return !!acct && acct.needsApproval === false; }
+  return false;
+}
+
 /* owners only: the team, sign-in settings and anything that gives or takes away access */
 async function requireOwner(req, res) {
   const user = getUser(req);
@@ -225,6 +236,23 @@ function openSecret(sealed) {
   } catch { return ''; }
 }
 
+/* preview links: a short-lived signed reference to one waiting change, usable without signing in and good for nothing else */
+function previewKey() { return crypto.createHash('sha256').update('preview:' + (SECRET || 'x')).digest(); }
+function signPreview(draftId, days) {
+  const body = Buffer.from(JSON.stringify({ d: draftId, exp: Date.now() + (days || 7) * 86400000 })).toString('base64url');
+  return body + '.' + crypto.createHmac('sha256', previewKey()).update(body).digest('base64url');
+}
+function verifyPreview(token) {
+  try {
+    const [body, sig] = String(token || '').split('.');
+    if (!body || !sig) return null;
+    const want = crypto.createHmac('sha256', previewKey()).update(body).digest('base64url');
+    if (sig.length !== want.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(want))) return null;
+    const p = JSON.parse(Buffer.from(body, 'base64url').toString());
+    return p.exp > Date.now() && typeof p.d === 'string' ? p.d : null;
+  } catch { return null; }
+}
+
 function uid() { return crypto.randomUUID(); }
 
 function escapeHtml(str) {
@@ -237,4 +265,4 @@ function escapeHtml(str) {
 }
 
 module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml, ADMIN_CODE,
-  PERMS, PRESETS, cleanPerms, permsOf, can, requirePerm, requireOwner, tokenFor, publicUser, newTotpSecret, totpOk, b32encode, sealSecret, openSecret };
+  PERMS, PRESETS, cleanPerms, permsOf, can, canPublishNow, signPreview, verifyPreview, requirePerm, requireOwner, tokenFor, publicUser, newTotpSecret, totpOk, b32encode, sealSecret, openSecret };
