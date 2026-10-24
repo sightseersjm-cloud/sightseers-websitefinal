@@ -346,8 +346,8 @@
   }
 
   function syncFromServer() {
-    fetch('/api/settings', { cache: 'no-store', headers: authHeaders() })
-      .then(function (r) { return r.json(); })
+    /* visitors share the one settings request the page already made; signed-in people ask again so they see the latest */
+    (!getToken() && window.__ssSettings ? window.__ssSettings() : fetch('/api/settings', { cache: 'no-store', headers: authHeaders() }).then(function (r) { return r.json(); }))
       .then(function (data) {
         var origSet = (localStorage.setItem.__ssOriginal) || localStorage.setItem.bind(localStorage);
         SS_SYNC_KEYS.forEach(function (key) {

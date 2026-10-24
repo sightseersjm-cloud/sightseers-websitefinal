@@ -65,9 +65,11 @@ window.SS_GA4_ID = window.SS_GA4_ID || '';
     gtag('config', id, { anonymize_ip: true });
   }
   if (window.SS_GA4_ID) return boot(window.SS_GA4_ID);
+  /* the saved settings are asked for once per page load and shared with the site code that also needs them */
+  window.__ssSettings = function(){ if(!window.__ssSettingsP) window.__ssSettingsP = fetch('/api/settings').then(function(r){ return r.json(); }); return window.__ssSettingsP; };
   window.addEventListener('DOMContentLoaded', function(){
     try {
-      fetch('/api/settings').then(function(r){ return r.json(); }).then(function(d){
+      window.__ssSettings().then(function(d){
         if (d && d.ss_ga4_id) boot(d.ss_ga4_id);
       }).catch(function(){});
     } catch(e) {}
@@ -61236,7 +61238,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 
   /* ---------- what is live now, and what each thing was to begin with ---------- */
   function load(){
-    return Promise.all([fetch('/api/settings',{cache:'no-store'}).then(function(r){return r.json();}).catch(function(){return {};}),api('site-edit?view=map')]).then(function(a){
+    /* the public copy of the settings may be a few minutes old, so the editor asks for the latest */
+    return Promise.all([api('settings?fresh='+Date.now()).catch(function(){return {};}),api('site-edit?view=map')]).then(function(a){
       PG.base=a[0]||{};PG.map=a[1].map||{};PG.secs=JSON.parse(JSON.stringify(Array.isArray(PG.base.ss_dynamic_sections_v1)?PG.base.ss_dynamic_sections_v1:[]));buildGroups();
     });
   }

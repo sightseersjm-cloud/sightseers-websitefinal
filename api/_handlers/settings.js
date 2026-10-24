@@ -1,4 +1,4 @@
-const { getUser, can } = require('../_lib/auth');
+const { getUser, can, permsOf } = require('../_lib/auth');
 
 const { readSettings, writeSettings } = require('../_lib/siteStore');
 
@@ -6,7 +6,14 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    const data = await readSettings();
+    /* Visitors get a copy that may be a few minutes old (it is cached at the edge and in the browser): the page asks for
+       this on every load, and each fresh read counts against the storage allowance. A signed-in team member can ask for
+       the latest with ?fresh=. */
+    const q = Object.assign({}, req.query || {});
+    const user = (req.headers && req.headers.authorization) ? getUser(req) : null;
+    const staff = !!user && q.fresh && (await permsOf(user)).length > 0;
+    const data = await readSettings(staff ? undefined : { cached: true });
+    res.setHeader('Cache-Control', req.headers && req.headers.authorization ? 'no-store' : 'public, max-age=60, s-maxage=300, stale-while-revalidate=3600');
     return res.status(200).json(data);
   }
 

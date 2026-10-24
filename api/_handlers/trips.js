@@ -418,7 +418,11 @@ module.exports = async function handler(req, res) {
         return res.status(r.ok ? 200 : 400).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sight Seers</title><body style="margin:0;font-family:Arial,sans-serif;background:#f4f8fb;color:#062e4b"><div style="max-width:520px;margin:12vh auto;padding:28px;background:#fff;border-top:4px solid #ef8731"><h1 style="font-size:22px;margin:0 0 12px">' + (r.ok ? 'You are off the list' : 'Something went wrong') + '</h1><p style="line-height:1.6;color:#4a5d6e">' + msg + '</p><p><a href="/travel-club" style="color:#d96f12;font-weight:bold">Go to the Travel Club</a></p></div></body>');
       }
 
+      /* public pages (no sign-in) may be served from the edge for a couple of minutes: each answer costs several storage reads */
+      const edge = () => { if (!(req.headers && req.headers.authorization)) res.setHeader('Cache-Control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=900'); };
+
       if (get('partners')) {
+        edge();
         return res.status(200).json({ ok: true, partners: publicPartners(await getPartnersDoc()) });
       }
 
@@ -515,11 +519,13 @@ module.exports = async function handler(req, res) {
       if (slug) {
         const t = trips.find(x => x.slug === String(slug));
         if (!t || (t.status !== 'open' && t.status !== 'full')) return res.status(404).json({ error: 'That trip is not open right now.' });
+        edge();
         return res.status(200).json({ ok: true, trip: publicTrip(t, interests, leaderOf(t, usersAll)) });
       }
       const open = trips.filter(t => t.status === 'open' || t.status === 'full')
         .sort((a, b) => String(a.startDate || '9999').localeCompare(String(b.startDate || '9999')))
         .map(t => publicTrip(t, interests, leaderOf(t, usersAll)));
+      edge();
       return res.status(200).json({ ok: true, trips: open });
     }
 

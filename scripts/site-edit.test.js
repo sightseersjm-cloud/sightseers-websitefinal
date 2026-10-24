@@ -133,6 +133,16 @@ let fails = 0; const ok = (name, cond, extra) => { console.log((cond ? 'PASS ' :
   r = await post({ action: 'save', changes: [{ id: '@sections', value: [{ page: 'home', type: 'cards', title: 'Links', entries: 'https://x.com/a.jpg | Ok | text | Go | javascript:alert(1)\n/b.jpg | Two | text | Go | https://example.com' }] }] }, owner);
   s = await live(); ok('a script link inside a section is neutralised', !/javascript:/i.test(s.ss_dynamic_sections_v1[0].entries) && s.ss_dynamic_sections_v1[0].entries.includes('https://example.com'));
 
+  // --- the public copy of the settings is held briefly to save storage reads; the admin can still ask for the latest
+  await call('settings', 'GET', '/api/settings');
+  const raw = JSON.parse(store.get('ss-admin/settings.json').toString());
+  raw.ss_site_settings = Object.assign({}, raw.ss_site_settings, { heroTitle: 'Changed behind the back' });
+  store.set('ss-admin/settings.json', Buffer.from(JSON.stringify(raw)));    // as if another server instance had saved
+  r = await call('settings', 'GET', '/api/settings'); ok('a visitor may get a copy that is a moment old', r.body.ss_site_settings.heroTitle !== 'Changed behind the back');
+  r = await call('settings', 'GET', '/api/settings', {}, null, { fresh: '1' }); ok('a visitor cannot force a fresh read', r.body.ss_site_settings.heroTitle !== 'Changed behind the back');
+  r = await call('settings', 'GET', '/api/settings', {}, owner, { fresh: '1' }); ok('a signed-in team member can ask for the latest', r.body.ss_site_settings.heroTitle === 'Changed behind the back');
+  ok('saving always starts from the latest, never the held copy', (await post({ action: 'save', changes: [{ id: 'adminHeroEm', kind: 'text', value: 'Fresh base', label: 'x', page: 'home' }] }, owner)).body.live === true && JSON.parse(store.get('ss-admin/settings.json').toString()).ss_site_settings.heroTitle === 'Changed behind the back');
+
   // --- the old passcode can no longer publish through the new system
   r = await call('auth', 'POST', '/api/auth', { action: 'passcode', passcode: 'TestCode123!' }); const pass = r.body.token;
   r = await post({ action: 'save', changes: [{ id: 'adminToursSub', value: 'Passcode wording', label: 'x', page: 'tours' }] }, pass);
