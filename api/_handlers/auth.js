@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
   const clientIp = (req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown').split(',')[0].trim();
 
   if (action === 'signup') {
-    const { name, email, password, phone, style, adminCode } = req.body;
+    const { name, email, password, phone, style } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'Name, email and password are required' });
     if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
       return res.status(400).json({ error: 'Invalid input' });
@@ -74,7 +74,8 @@ module.exports = async function handler(req, res) {
       return res.status(409).json({ error: 'An account with that email already exists' });
     }
 
-    const isAdmin = ADMIN_CODE && adminCode && adminCode === ADMIN_CODE;
+    /* Signing up never makes an admin. The admin passcode is in the public page, so it must not be able to create an admin account. Admins come from the owner login or an existing admin. */
+    const isAdmin = false;
     const user = {
       id: uid(),
       name: name.trim().slice(0, 100),
