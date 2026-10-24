@@ -56956,8 +56956,14 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
   }
   function photoSaved(res){try{localStorage.setItem('ss_current_user',JSON.stringify(res.user));if(typeof setCurrentUser==='function')setCurrentUser(res.user);}catch(e){}photoPaint(res.user);if(typeof updateAccountUI==='function')updateAccountUI();try{document.dispatchEvent(new CustomEvent('ss-account-updated',{detail:{user:res.user}}));}catch(e){}}
   var pfile=$('acPhotoFile');
+  /* the button opens the picker directly (works in every browser, including phones and in-app browsers), and a browser that only reports 'input' is handled too */
+  if(pfile){
+    var ppick=document.querySelector('#acPhotoBox .ac-photo-pick');
+    if(ppick)ppick.addEventListener('click',function(e){e.preventDefault();fstat('acPhotoStatus','Choose a picture...','');pfile.click();});
+    pfile.addEventListener('input',function(){if(pfile.files&&pfile.files[0])pfile.dispatchEvent(new Event('change'));});
+  }
   if(pfile)pfile.addEventListener('change',function(){
-    var f=pfile.files&&pfile.files[0];pfile.value='';if(!f)return;
+    var f=pfile.files&&pfile.files[0];pfile.value='';if(!f){if($('acPhotoStatus')&&/^Choose a picture/.test($('acPhotoStatus').textContent))fstat('acPhotoStatus','','');return;}
     /* any picture the phone or browser can show is fine (iPhone HEIC photos too): it is redrawn as a small square JPEG before it is sent */
     if(f.type&&!/^image\//.test(f.type)){fstat('acPhotoStatus','Choose a photo or picture file.','err');return;}
     if(f.size>25*1024*1024){fstat('acPhotoStatus','That picture is very large. Please choose one under 25MB.','err');return;}
