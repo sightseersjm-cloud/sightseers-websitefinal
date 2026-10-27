@@ -130,6 +130,8 @@ img{max-width:100%;display:block}
 .list{list-style:none}
 .list li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed var(--line);font-size:15px}
 .list li:last-child{border-bottom:0}
+.plain{padding-left:22px}.plain li{padding:5px 0;font-size:15px;color:#33475b}
+.route{font-size:15.5px;font-weight:700;color:var(--navy)}.small{font-size:14.5px;color:var(--mut);margin-top:6px}
 .list li::before{content:'\\2713';position:absolute;left:2px;color:var(--orange);font-weight:800}
 .best{margin-top:14px;font-size:14px;color:var(--mut)}.best b{color:var(--navy);margin-right:6px}
 .facts{width:100%;border-collapse:collapse;font-size:14.5px}
@@ -180,6 +182,15 @@ function renderPage(t, ctx) {
   const wa = 'https://wa.me/' + PHONE.tel.slice(1) + '?text=' + encodeURIComponent("Hi Sight Seers, I'm interested in " + t.title + ' (' + t.country + ').');
   const kind = t.type === 'water' ? 'Water experience' : 'Land experience';
   const highlights = (t.highlights || []).map(h => `<li>${esc(h)}</li>`).join('');
+  /* Optional richer detail (itinerary route, inclusions, extras, extra sections, fact rows) for experiences whose supplier text we hold. */
+  const listOf = x => (x || []).map(h => `<li>${esc(h)}</li>`).join('');
+  const detail = [
+    t.route ? `<h2 style="margin-top:28px">Suggested itinerary</h2><p class="route">${esc(t.route)}</p>${t.routeNote ? `<p class="small">${esc(t.routeNote)}</p>` : ''}` : '',
+    (t.includes || []).length ? `<h2 style="margin-top:28px">What&rsquo;s included</h2><ul class="list">${listOf(t.includes)}</ul>` : '',
+    (t.extras || []).length ? `<h2 style="margin-top:28px">Optional extras</h2>${t.extrasNote ? `<p class="small">${esc(t.extrasNote)}</p>` : ''}<ul class="plain">${listOf(t.extras)}</ul>${t.extrasFoot ? `<p class="small">${esc(t.extrasFoot)}</p>` : ''}` : '',
+    (t.more || []).map(m => `<h2 style="margin-top:28px">${esc(m.h)}</h2><p class="small">${esc(m.p)}</p>`).join('')
+  ].join('');
+  const extraFacts = (t.facts || []).map(f => `<tr><th scope="row">${esc(f[0])}</th><td>${esc(f[1])}</td></tr>`).join('');
   const rel = related(t, ctx.all).map(o => {
     const p = priceInfo(o);
     return `<a href="/tours/${esc(ctx.slugOf(o))}"><img src="${esc(o.image)}" alt="${esc(o.title)}" loading="lazy" width="460" height="280"><div class="b"><h3>${esc(o.title)}</h3><p>${esc([o.area, o.duration].filter(Boolean).join(' · '))}</p><p class="p">${esc(p.line)}</p></div></a>`;
@@ -257,6 +268,7 @@ ${CSS}
       <h2>About this experience</h2>
       <p class="lede">${esc(t.desc)}</p>
       ${highlights ? `<h2 style="margin-top:28px">Highlights</h2><ul class="list">${highlights}</ul>` : ''}
+      ${detail}
       ${t.best ? `<p class="best"><b>Best for</b>${esc(t.best)}</p>` : ''}
 
       <h2 style="margin-top:30px">Good to know</h2>
@@ -264,6 +276,7 @@ ${CSS}
         <tr><th scope="row">Where</th><td>${esc(where)}</td></tr>
         ${t.duration ? `<tr><th scope="row">${isTime(t.duration) ? 'Duration' : 'Style'}</th><td>${esc(t.duration)}</td></tr>` : ''}
         <tr><th scope="row">Type</th><td>${esc(kind)}</td></tr>
+        ${extraFacts}
         <tr><th scope="row">Price</th><td>${esc(price.line)}${price.has ? ' (confirmed for your date and group size)' : ''}</td></tr>
       </tbody></table>
 
