@@ -55,7 +55,14 @@ module.exports = async function router(req, res) {
   }
 
   const path = (req.url || '').split('?')[0];
-  const segment = path.replace(/^\/api\/?/, '').split('/')[0];
+  let segment = path.replace(/^\/api\/?/, '').split('/')[0];
+  /* /tours/<slug> is rewritten to this function (see vercel.json); the request keeps the address that was asked for */
+  const tourPage = /^\/tours\/([^/]+)\/?$/.exec(path);
+  if (tourPage) {
+    segment = 'tour-page';
+    let slug = tourPage[1]; try { slug = decodeURIComponent(slug); } catch (e) { /* keep as is */ }
+    req.query = Object.assign({}, req.query || {}, { slug });
+  }
   const handler = handlers[segment];
 
   if (!handler) {
