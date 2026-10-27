@@ -1,7 +1,7 @@
 /**
  * api/_lib/newsletter.js
  * The newsletter list. The box at the bottom of the home page saves people here (it used to only email the team).
- * The owner writes and sends the newsletter in their own email tool; the master admin's Newsletter tab shows the list,
+ * The owner writes and sends the newsletter in their own email tool; the website manager's Newsletter tab shows the list,
  * downloads it as a CSV and marks people as unsubscribed. Each subscriber has a signed unsubscribe link for later use.
  *
  * People who subscribed before this list existed were stored as contact messages with the subject

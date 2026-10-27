@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
       if (body.website) return res.status(200).json({ ok: true });            /* a bot filled the hidden box */
       if (!allow('news:' + ip(req), 8, 10 * 60 * 1000)) return res.status(429).json({ error: 'Too many tries. Please wait a few minutes.' });
       const user = getUser(req);
-      const r = await news.subscribe({ email: body.email, name: body.name || (user && user.name) || '', source: body.source, userId: user && user.id !== 'admin-passcode' ? user.id : null });
+      const r = await news.subscribe({ email: body.email, name: body.name || (user && user.name) || '', source: body.source, userId: user ? user.id : null});
       if (r.error) return res.status(400).json({ error: r.error });
       if (r.rec) {
         try {

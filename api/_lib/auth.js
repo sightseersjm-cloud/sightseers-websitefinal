@@ -1,12 +1,6 @@
 const crypto = require('crypto');
 
 const SECRET = process.env.JWT_SECRET || process.env.BLOB_READ_WRITE_TOKEN;
-// The admin passcode is shipped in the public client bundle, so it is not a
-// secret. It only grants the limited 'editor' role (publish site content + images,
-// no access to customer bookings/messages/accounts) at the /api/auth passcode action.
-// It must never be accepted anywhere that creates an admin (signup no longer reads it).
-const ADMIN_CODE = process.env.ADMIN_PASSCODE || 'SightSeers2026!';
-
 if (!SECRET) console.warn('SECURITY WARNING: JWT_SECRET not set — tokens cannot be created');
 
 const ITERATIONS = 210000;
@@ -61,6 +55,8 @@ function verifyToken(token) {
     if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
     const payload = JSON.parse(Buffer.from(body, 'base64url').toString());
     if (payload.exp && payload.exp < Date.now()) return null;
+    /* the shared admin passcode sign-in has been removed: a sign-in it made earlier no longer works */
+    if (payload.id === 'admin-passcode') return null;
     return payload;
   } catch { return null; }
 }
@@ -85,7 +81,7 @@ function requireAdmin(req, res) {
   return user;
 }
 
-/* Content-management guard: full admins AND passcode editors may publish
+/* Content-management guard: full admins AND editors may publish
    site content (blog posts, etc.), but not read customer PII. */
 function requireEditor(req, res) {
   const user = getUser(req);
@@ -97,8 +93,7 @@ function requireEditor(req, res) {
 /* ============================ roles and permissions ============================
    Owners are accounts with role 'admin' and can do everything. Team members are accounts with role 'staff'
    and a list of permissions. Their permissions are read from their account on every request, so changing or
-   removing someone takes effect straight away. The old shared passcode ('editor') keeps its three content
-   permissions until the new admin replaces it. */
+   removing someone takes effect straight away. An older 'editor' account keeps its three content permissions. */
 const PERMS = ['pages', 'catalog', 'blog', 'trips', 'inbox'];
 const PRESETS = {
   content: { label: 'Content editor', perms: ['pages', 'catalog', 'blog'] },
@@ -119,7 +114,6 @@ async function permsOf(user) {
   if (!user) return [];
   if (user.role === 'editor') return ['pages', 'catalog', 'blog'];
   if (user.role === 'admin') {
-    if (user.id === 'admin-passcode') return [];
     const acct = await accountOf(user.id);
     /* "sign out everywhere" ends older sign-ins; an owner is never locked out by a failed read of the account list */
     if (acct && (acct.sessionVersion || 0) !== (user.sv || 0)) return [];
@@ -158,7 +152,7 @@ async function canPublishNow(user) {
   if (!user) return false;
   const have = await permsOf(user);
   if (!have.length) return false;
-  if (user.role === 'admin') return user.id !== 'admin-passcode';
+  if (user.role === 'admin') return true;
   if (user.role === 'staff') { const acct = await accountOf(user.id); return !!acct && acct.needsApproval === false; }
   return false;
 }
@@ -167,7 +161,7 @@ async function canPublishNow(user) {
 async function requireOwner(req, res) {
   const user = getUser(req);
   if (!user) { res.status(401).json({ error: 'Sign in required' }); return null; }
-  if (user.role !== 'admin' || user.id === 'admin-passcode' || !(await permsOf(user)).length) {
+  if (user.role !== 'admin' || !(await permsOf(user)).length) {
     res.status(403).json({ error: 'Only the owner can do this.' });
     return null;
   }
@@ -264,5 +258,5 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml, ADMIN_CODE,
+module.exports = { hashPassword, verifyPassword, validatePassword, createToken, verifyToken, getUser, requireAuth, requireAdmin, requireEditor, uid, escapeHtml,
   PERMS, PRESETS, cleanPerms, permsOf, can, canPublishNow, signPreview, verifyPreview, requirePerm, requireOwner, tokenFor, publicUser, newTotpSecret, totpOk, b32encode, sealSecret, openSecret };

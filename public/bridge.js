@@ -64,11 +64,11 @@
       setToken(res.token);
       try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
-      /* an admin account signing in with the regular button lands in the Travel Club admin (the website admin keeps its own passcode) */
+      /* an admin account signing in with the regular button lands in the admin */
       if (res.user && res.user.role === 'admin') {
         setTimeout(function () {
           try {
-            if (typeof window.nav === 'function') window.nav('club-admin');
+            if (typeof window.nav === 'function') window.nav('manage');
           } catch (e) {}
         }, 350);
       }
@@ -91,16 +91,6 @@
   }
   function getMyBlogRequests() { return api('blog?type=my-requests', 'GET'); }
 
-  // Exchange the admin passcode for a real server token so the passcode alone
-  // is enough to publish edits/uploads to the live site (no separate account needed).
-  function passcodeLogin(passcode) {
-    return api('auth', 'POST', { action: 'passcode', passcode: passcode }).then(function (res) {
-      setToken(res.token);
-      try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
-      document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
-      return res;
-    });
-  }
 
   function signout() {
     setToken(null);
@@ -522,7 +512,6 @@
 
     signup: signup,
     signin: signin,
-    passcodeLogin: passcodeLogin,
     signout: signout,
     me: me,
     updateProfile: updateProfile,
@@ -630,7 +619,7 @@
       document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
       if (typeof window.nav === 'function') window.nav('account');
       if (res.user && res.user.role === 'admin') {
-        setTimeout(function () { try { window.nav('club-admin'); } catch (e) {} }, 350);
+        setTimeout(function () { try { window.nav('manage'); } catch (e) {} }, 350);
       }
     }).catch(function () { setToken(''); say('We could not finish signing you in. Please try again.', false); });
   }

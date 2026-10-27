@@ -17,7 +17,7 @@ Travel Points, accounts, bookings and the existing account area are unchanged. T
 | Application sheet | "Apply to lead a trip" opens a four step sheet in the style of the Leaders in Jamaica application (frosted sheet on desktop, bottom sheet on phones). See below. |
 | `/trip/<slug>` | A personal trip page: title, summary, dates, price as written by an admin, what is included, the organizer (if shown), the request form, a share link. Served by the existing single page app; no new file per trip. |
 | Account, **Group trips** tab | The member dashboard. See "The dashboard" below. |
-| Admin portal, **Travel Club trips** | Applications, Trips, Requests and Partner links. Needs a real admin sign-in. |
+| Website manager (`/manage`), **Trips and Travel Club** | Applications, Trips, Requests and Partner links. Needs a real team sign-in. |
 | `api/_handlers/trips.js` | The API, registered as `trips` in `api/[...route].js` (no new serverless function, so the 12 function limit is untouched). |
 
 ## The application (four steps)
@@ -29,7 +29,7 @@ Every "Apply to lead a trip" button opens the same sheet. Each step is checked b
 3. **The trip.** Where they would like to go (Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, the Dominican Republic, Curacao, or not sure yet), the exact number of people they would invite (a whole number from 1 to 1000, typed into a box), the kind of trip (adventure, villa and relaxation, celebration, wellness or fitness, culture and food, group retreat or learning; several allowed) and when.
 4. **In your own words.** Why they want to lead a trip (20 to 700 characters), anything else we should know, and consent to be contacted about the application.
 
-All answers are saved with the application and shown to the team in the admin portal. The applicant gets a confirmation reference (TL-...) and an email; the team gets the full answers by email. The older Travel Points sign-up logic is not triggered by it.
+All answers are saved with the application and shown to the team in the website manager (`/manage`). The applicant gets a confirmation reference (TL-...) and an email; the team gets the full answers by email. The older Travel Points sign-up logic is not triggered by it.
 
 ## The dashboard (Account, Group trips tab)
 
@@ -47,7 +47,7 @@ Applicants never see the team's private notes, who reviewed the application, or 
 
 ## Partner links: travel insurance and eSIM
 
-The two cards under **Before you go** are written by an admin, not by code. In the admin portal, open **Travel Club trips**, then **Partner links**:
+The two cards under **Before you go** are written by an admin, not by code. In the website manager (`/manage`), open **Trips and Travel Club**, then **Partner links**:
 
 - Paste your referral link for each partner. It must start with `https://`. Anything else is refused.
 - **eSIM is Saily** by default (`https://go.saily.site/aff_c?offer_id=101&aff_id=14170`, shown with the Saily logo from `public/logos/saily.png`; Saily is also on the Partners page). Paste your own Saily referral link to replace the plain address, or leave the box empty to fall back to https://saily.com/.
@@ -71,7 +71,7 @@ To change the address, search `Design_Reference.html` for `0029VbCaiVTGehERQ13cp
 
 ## Running it
 
-1. **An application arrives.** The team is emailed and the applicant gets a confirmation. Open the admin portal, **Travel Club trips**, **Applications**.
+1. **An application arrives.** The team is emailed and the applicant gets a confirmation. Open the website manager (`/manage`), **Trips and Travel Club**, **Applications**.
 2. **Decide.** *Ask for more info*, *Approve* or *Decline*. The message you type is emailed to the applicant and shown in their account. Tick **Draft a trip from this application** when approving, and the application becomes a draft trip led by that person.
 3. **Finish the trip.** In **Trips**, open the draft and fill in the summary, the dates, what is included, the price as you want it shown, and the seats. (A photo address can be entered and is kept with the trip, but the Travel Club boxes and trip pages are designed to work without one.) Put the **agreed reward** in the private field. Set the status to **Open** when the offer is agreed. A trip cannot open without a summary and dates.
 4. **Share.** The trip is now public at `/trip/<slug>` and listed on `/travel-club`. The organizer sees the same link in their account under **Group trips** and can add a tag (for example `instagram`) to see where sign-ups come from.
@@ -136,8 +136,8 @@ Four JSON documents in the existing Vercel Blob store: `club-trips`, `club-appli
 
 - **Applying creates an account.** Step 1 of the application asks signed-out applicants to choose a password. When the full application is submitted, an account is created for that email (if there is none) and the applicant is signed in and taken to Account > Group trips, where the application shows as pending. An email address that already has an account keeps its own password and is not signed in by the application. An incomplete application creates nothing. (An API caller that sends no password gets an account with an unknown password and an email telling them to use Forgot password.)
 - **Forgot password** works for every account: Sign in > Forgot password > enter the email > a 6-digit code is emailed (valid 30 minutes) > choose a new password.
-- **You are told about every application.** You get an email, and the next time you open your account or the Travel Club admin you get a popup per new application with a "Review application" button.
-- **Travel Club admin** is its own page (sign in with the owner email and password through the regular Sign in button; the website admin keeps its passcode). Tabs: Overview, Applications, Accounts, Trips, Requests, Partner links. **Accounts** lists every account with name, email, phone, source, join date, Travel Club status and trips led or joined, with search and a CSV download. Passwords are never shown.
+- **You are told about every application.** You get an email, and the next time you open your account or the website manager you get a popup per new application with a "Review application" button.
+- **Travel Club admin** (now part of the website manager at `/manage`, under **Trips and Travel Club**). Tabs: Overview, Applications, Accounts, Trips, Requests, Partner links. **Accounts** lists every account with name, email, phone, source, join date, Travel Club status and trips led or joined, with search and a CSV download. Passwords are never shown.
 - **Approved departures** is a schedule panel on the Travel Club page: one row per open trip (date, title, leader, places left or waitlist) with live totals. When no trip is open it says the next departures are being announced and offers the notify form.
 - **Start Planning and the Travel Form are one page.** `/contact` redirects to `/booking`.
 - Night mode was removed.
@@ -145,12 +145,12 @@ Four JSON documents in the existing Vercel Blob store: `club-trips`, `club-appli
 
 ## Update: invite kit, automatic emails, trip updates, passport checklist, reward log
 
-All owner controls are in the **master admin** (Travel Club admin). New tabs: **Rewards**, **Destinations**, **Updates**, **Automatic emails**.
+All owner controls are in the website manager (`/manage`), **Trips and Travel Club**. New tabs: **Rewards**, **Destinations**, **Updates**, **Automatic emails**.
 
 ### Invite kit (leader dashboard)
 Every live trip card has an **Invite kit**: a ready message (trip title, dates, place and the trip link, editable), **Copy message**, **Share on WhatsApp**, a **QR code** with **Download QR code**, and **Download share card** (a 1080 x 1350 PNG with the logo, the trip and the QR). It builds itself from the trip, so the leader sets nothing up. Adding a source tag ("instagram") updates the link in the message and the QR together. The QR library is the MIT-licensed `qrcode-generator`, served from `/vendor/qrcode.js` and loaded only when a kit is opened. Draft trips have no kit.
 
-### Automatic emails (master admin > Automatic emails)
+### Automatic emails (website manager > Trips and Travel Club > Automatic emails)
 | Email | When | Default |
 | --- | --- | --- |
 | **Waitlist promotion** | A place opens (a cancellation, a deleted request, more seats, a trip reopened): the person who waited longest moves up to "new" and is emailed. People who asked earlier and are still waiting for confirmation keep their place first. | **On** |
@@ -161,7 +161,7 @@ Every live trip card has an **Invite kit**: a ready message (trip title, dates, 
 - **Preview what would send today** lists every email and recipient and changes nothing (it shows everything as if all three switches were on). **Run today's emails now** runs the job on demand, following the switches.
 - Every send is marked first (per traveler per milestone, per trip per week), so retries and repeat runs never double-send.
 
-### Trip updates and advisories (master admin > Updates)
+### Trip updates and advisories (website manager > Trips and Travel Club > Updates)
 - A leader (or you) posts an update on **one trip**. Everyone who joined sees it under their request on their dashboard and gets an email (optional per post). Waitlisted and cancelled people get nothing. You get a copy of every leader post. Leaders can delete their own posts, you can delete any. Posting is limited to 12 an hour per person.
 - An **advisory** is the same message sent to every upcoming trip set to one **country** (matched to the country on each trip, ignoring case and accents), one email per person even if they are on several of those trips, leaders included. **Preview who would get it** lists the trips and people first; Send is a second, deliberate step and only sends exactly what was previewed.
 - Updates belong to a trip, never to a country; the country only decides which trips an advisory reaches. Deleting a trip removes its updates.
@@ -170,11 +170,11 @@ Every live trip card has an **Invite kit**: a ready message (trip title, dates, 
 - **Optional** fields on the Profile and on the join form: the **country on your passport** and the **month it expires**. Never a passport number (the server stores only these two). Signed-in people have them pre-filled.
 - Each active request (not waitlisted or cancelled) on the traveler's dashboard has a **Before you go** checklist with saved ticks: check your passport, read the entry rules for the destination, travel insurance and eSIM (your partner links), join the group chat. If no passport country is known it offers a one-field form.
 - The passport check uses only dates we hold: expired before the trip ends, within six months of the trip, or fine. It never invents a country's validity rule. A Jamaican passport that needs renewing gets a link to Passport Renewal.
-- **Entry rules come only from what you approve** (Destinations tab). Seven destinations were drafted from official government and tourism pages on 2026-10-15 (Jamaica, Belize, The Bahamas, Saint Lucia, Dominican Republic, Barbados, Curaçao) for United States, Canadian, British and Jamaican passports, in `api/_data/club-entry-drafts.json`. **On 2026-10-16 the owner approved every entry that has a summary and an official link: 26 of the 27 passport entries and all seven general cards.** The one still a draft is the Dominican Republic entry for Jamaican passports, which has no content (the research found no answer) and cannot be approved while it is empty. Entries the research was unsure of keep a review note in the Destinations tab (medium or low confidence, temporary rules such as the Dominican Republic exception to 31 December 2026, the current health notice in the Bahamas, and places where official pages disagree on length of stay); the traveler-facing text already says where a stay length could not be confirmed, and every card tells travelers to confirm on the official page. A second verification pass against the official pages was started but did not run (usage limit); it can be re-run, and any entry can be unapproved or edited in the master admin at any time. You cannot approve an entry without a summary and at least one official https link. Your edits and approvals are stored in `club-destinations` and override the drafts field by field; "Reset to the research draft" undoes them.
+- **Entry rules come only from what you approve** (Destinations tab). Seven destinations were drafted from official government and tourism pages on 2026-10-15 (Jamaica, Belize, The Bahamas, Saint Lucia, Dominican Republic, Barbados, Curaçao) for United States, Canadian, British and Jamaican passports, in `api/_data/club-entry-drafts.json`. **On 2026-10-16 the owner approved every entry that has a summary and an official link: 26 of the 27 passport entries and all seven general cards.** The one still a draft is the Dominican Republic entry for Jamaican passports, which has no content (the research found no answer) and cannot be approved while it is empty. Entries the research was unsure of keep a review note in the Destinations tab (medium or low confidence, temporary rules such as the Dominican Republic exception to 31 December 2026, the current health notice in the Bahamas, and places where official pages disagree on length of stay); the traveler-facing text already says where a stay length could not be confirmed, and every card tells travelers to confirm on the official page. A second verification pass against the official pages was started but did not run (usage limit); it can be re-run, and any entry can be unapproved or edited in the website manager at any time. You cannot approve an entry without a summary and at least one official https link. Your edits and approvals are stored in `club-destinations` and override the drafts field by field; "Reset to the research draft" undoes them.
 - A passport nobody has prepared (for example Nigeria) gets an honest "we have not prepared entry details for ... yet" message, never a guess. The Destinations tab lists which passports travelers have told us about and whether anything is approved for them, so you know what to research next.
 - A trip finds its destination by the **country** set on the trip.
 
-### Reward log (master admin > Rewards)
+### Reward log (website manager > Trips and Travel Club > Rewards)
 Record each reward paid to a leader: amount and currency (USD, JMD, CAD, GBP, EUR), how it was paid, a reference, the date, a note, whether to email the leader, and whether to mark the trip's reward as paid. The leader sees what you record under "Your reward" on their trip card. Records are kept if the trip is later deleted. **This only records payments made outside the site; it moves no money.**
 
 ### Still on hold: deposits
@@ -199,12 +199,12 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 ### Update: joining first, prices on the board, Not included, the phone Ask to join bar
 - **Travel Club page order**: the departures band ("Join a trip") now comes straight after the top banner, then "Apply to lead a trip", then how leading works and the questions. The banner itself is unchanged.
 - **Departures board**: each trip shows its price as written in the trip's "Price as shown" (for example "From US$1,250 per person"). A trip with no price shows none.
-- **Not included**: a second list beside "What is included" on the trip page (stacked on phones). The leader fills it in the Trip details box on their dashboard, and the owner in the trip form in the master admin. Up to 10 lines of 140 characters. A screen that does not send the list (an older admin tab, for instance) keeps what is saved. A trip with only a Not included list shows that list alone.
+- **Not included**: a second list beside "What is included" on the trip page (stacked on phones). The leader fills it in the Trip details box on their dashboard, and the owner in the trip form in the website manager. Up to 10 lines of 140 characters. A screen that does not send the list (an older admin tab, for instance) keeps what is saved. A trip with only a Not included list shows that list alone.
 - **Ask to join bar on phones** (screens up to 900px wide): a bar pinned to the bottom of the trip page with the price, places left and an "Ask to join" button (or "Join the waitlist" on a full trip). Tapping it scrolls to the form with the name box ready. It steps aside while the form is on screen, disappears once the request is sent, and only shows on trip pages. The chat button moves up while it shows.
 - Data added: `notIncluded` on a trip.
 
 ### Update: day by day, and trip themes
-- **Day by day** (optional): a numbered timeline under "About this trip" on the trip page. Each day has a short title and a line or two. The leader writes it in the Trip details box on their dashboard ("Add a day", "Remove"), and the owner in the trip form in the master admin. Up to 14 days, titles of 80 and details of 400 characters, shown as plain text. When the trip has a start date each day gets its date (for example "Day 2 · Sat, Mar 13"); a day after the trip's end date, or a trip with no dates yet, shows just "Day 2", never a guessed date. A trip with only a plan (no description yet) no longer says "Trip details coming soon".
+- **Day by day** (optional): a numbered timeline under "About this trip" on the trip page. Each day has a short title and a line or two. The leader writes it in the Trip details box on their dashboard ("Add a day", "Remove"), and the owner in the trip form in the website manager. Up to 14 days, titles of 80 and details of 400 characters, shown as plain text. When the trip has a start date each day gets its date (for example "Day 2 · Sat, Mar 13"); a day after the trip's end date, or a trip with no dates yet, shows just "Day 2", never a guessed date. A trip with only a plan (no description yet) no longer says "Trip details coming soon".
 - **Themes** (optional): one of Yacht and party, Girls trip, Guys trip, Festival, Birthday, Family, Wellness, Adventure, Food and culture, Alumni and Greek life. The server refuses anything else. Set by the leader (Trip details box) or the owner (trip form). It shows as a small label above the trip title on the departures board and as the first fact in the trip page banner.
 - A save that does not send these (an older admin tab, for instance) keeps what is saved.
 - Data added: `itinerary` (a list of { title, text }) and `theme` on a trip.
@@ -219,7 +219,7 @@ No deposit or payment collection for Travel Club trips has been built. It waits 
 - **Who**: everyone on the list (sign-ups under the departures, kept as requests with no trip), one email per address, skipping anyone who stopped these emails and anyone who already asked to join that trip. Each person gets their own email, so nobody sees another address.
 - **What it says**: the trip title, summary, dates, place, price, theme, leader and number of places (only what is filled in), a "See the trip and ask to join" button, "Asking to join is free... before anything is charged", and a "Stop these emails" link (also sent as a List-Unsubscribe header).
 - **Stop these emails**: a signed one-click link (`/api/trips?unsub=...&k=...`); it marks every list sign-up with that address as cancelled and shows a short confirmation page. A wrong or edited link does nothing.
-- **Owner controls**: master admin > Automatic emails > "New trips: email the 'Be first to hear' list" (on by default, since people asked for these; shows how many are on the list). Each trip in the Trips tab says whether its email went out and to how many; an open trip that was never announced (for example one opened before this change) has an "Email them about this trip" button. It goes out once per trip.
+- **Owner controls**: website manager > Trips and Travel Club > Automatic emails > "New trips: email the 'Be first to hear' list" (on by default, since people asked for these; shows how many are on the list). Each trip in the Trips tab says whether its email went out and to how many; an open trip that was never announced (for example one opened before this change) has an "Email them about this trip" button. It goes out once per trip.
 - Sent through Resend's batch endpoint, 100 per call. Data added: `announcedAt`, `announcedCount` (and `announcedFailed` if any were refused) on a trip; `unsubscribedAt` on a list sign-up.
 
 ### Update: the sign-up in more places
@@ -233,7 +233,7 @@ Someone already on the list is told "You are already on the list" and nothing is
 ### Update: the newsletter list
 - The box at the bottom of the home page ("Subscribe to Our Newsletter") now **saves people to a list** (`newsletter-subscribers`) through `/api/newsletter`. Before, it only emailed the team and left a contact message. The team still gets a short "New newsletter subscriber" email. The box itself looks the same.
 - The people who subscribed the old way (contact messages with the subject "Newsletter Subscription") are brought into the list the first time it is read, once each, with their original date.
-- **Master admin > Newsletter**: everyone, newest first, with where they signed up; **Download the list (CSV)** (only people still subscribed: email, name, subscribed_on, where) to import into your email tool; **Copy all emails**; **Mark unsubscribed** / **Subscribe again**; **Delete**.
+- **Website manager > Trips and Travel Club > Newsletter**: everyone, newest first, with where they signed up; **Download the list (CSV)** (only people still subscribed: email, name, subscribed_on, where) to import into your email tool; **Copy all emails**; **Mark unsubscribed** / **Subscribe again**; **Delete**.
 - The owner writes and sends the newsletter in their own email tool for now. A signed unsubscribe link (`/api/newsletter?unsub=...&k=...`) exists for each subscriber, ready for when newsletters are sent from the site.
 - Same email twice is not added twice; a bad email is refused; a hidden box catches bots; someone who unsubscribed can subscribe again.
 
@@ -243,3 +243,7 @@ Someone already on the list is told "You are already on the list" and nothing is
 - **Shortcuts**: Browse tours, Start planning, Saved tours for a new member; Join another trip first when they have a trip; Review cart (n) only when the cart has items. "Write for our blog" is a small link below.
 - The member's own trips now carry the trip photo, place and theme (`tripImage`, `tripDestination`, `tripTheme` in the dashboard data; `country`, `image`, `startDate` on trips they lead).
 - **Profile photo on iPhone**: the photo picker did not open on iPhone, because the file box was hidden outright. It is now kept out of sight without being hidden, takes any picture (HEIC included: it is redrawn as a small JPEG before upload), up to 25MB.
+
+## Update: the old admin pages are gone
+
+The old Admin Portal (passcode page) and the separate Travel Club admin page were deleted. Everything they did for Travel Club now lives in the website manager at `/manage` (sign in with a team email and password), under **Trips and Travel Club**. `/admin` and `/club-admin` redirect to `/manage`. The shared admin passcode no longer exists anywhere: the server rejects it and the page code no longer contains it. If you set an `ADMIN_PASSCODE` environment variable in Vercel, it is not used and can be deleted.

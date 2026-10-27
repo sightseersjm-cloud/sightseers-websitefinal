@@ -354,7 +354,7 @@ function applicationMails(rec) {
   return Promise.all([
     mail(rec.email, 'We have your Travel Club application', 'Lead a trip',
       `<p>Thanks, ${trip.esc(rec.name.split(' ')[0])}. We have your application to lead a trip with Sight Seers. A member of the team will review it and get back to you by email. Every trip is approved by Sight Seers before it opens, and nothing is promoted until the package and your reward are agreed in writing.</p>${trip.detailTable([['Reference', rec.ref], ['Who you lead', rec.communityType], ['Community or group', rec.communityName], ['People they would invite', rec.inviteCount != null ? String(rec.inviteCount) : rec.groupSize]])}`),
-    sendEmail({ replyTo: rec.email, subject: '[' + rec.ref + '] Travel Club application: ' + rec.communityName, html: trip.shell('New application to lead a trip', `<p>Review it in the admin portal under Travel Club trips.</p>${trip.detailTable(rows)}`, ' ') })
+    sendEmail({ replyTo: rec.email, subject: '[' + rec.ref + '] Travel Club application: ' + rec.communityName, html: trip.shell('New application to lead a trip', `<p>Review it in the website manager (/manage) under Trips and Travel Club.</p>${trip.detailTable(rows)}`, ' ') })
   ]);
 }
 
@@ -490,7 +490,7 @@ module.exports = async function handler(req, res) {
           });
         /* popups for the dashboard: an approval, a trip going live, a group chat ready to join; for the owner, each new application and new website requests */
         const notices = [];
-        if (user.role === 'admin' && user.id !== 'admin-passcode') {
+        if (user.role === 'admin') {
           try {
             const items = (await inboxLib.collect(db)).filter(i => i.status === 'new');
             const seenDoc = (await db.getCollection(SETTINGS)).find(x => x.id === 'inboxSeen');
@@ -499,7 +499,7 @@ module.exports = async function handler(req, res) {
             if (fresh.length) notices.push({ key: 'inbox:' + fresh[0].createdAt, kind: 'inbox', count: fresh.length, types: Object.keys(fresh.reduce((m, i) => { m[i.type] = 1; return m; }, {})).slice(0, 4) });
           } catch (e) { console.error('inbox notice', e && e.message); }
         }
-        if (user.role === 'admin' && user.id !== 'admin-passcode') {
+        if (user.role === 'admin') {
           /* one popup for all the applications waiting, never one per application */
           const waiting = applications.filter(a => (a.status === 'pending') && !a.adminSeen).sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
           if (waiting.length) notices.push({ key: 'adm:' + waiting.slice(0, 50).map(a => a.ref).join(','), kind: 'adminapps', count: waiting.length,
@@ -571,7 +571,7 @@ module.exports = async function handler(req, res) {
         name: contact.name, email: contact.email, phone: contact.phone, partySize, guests: partySize > 1 ? guests : [],
         message: str(body.message, 1200), source: str(body.source, 40), shareContact: !!body.shareContact,
         passportCountry: entryLib.cleanPassport(body.passportCountry), passportExpiry: entryLib.cleanExpiry(body.passportExpiry),
-        userId: user && user.id !== 'admin-passcode' ? user.id : null,
+        userId: user ? user.id : null,
         status: full ? 'waitlist' : 'new', note: '', createdAt: new Date().toISOString()
       };
       await db.addToCollection(INTERESTS, rec);
@@ -622,7 +622,7 @@ module.exports = async function handler(req, res) {
         channels: manyOf(body.channels, CHANNELS), experience: oneOf(str(body.experience, 60), EXPERIENCE, ''),
         inviteCount, groupSize: oneOf(str(body.groupSize, 20), GROUP_SIZES, ''), styles: manyOf(body.styles, STYLES),
         destination: str(body.destination, 120), timing: str(body.timing, 120), message: str(body.message, 2000), notes: str(body.notes, 600),
-        userId: user && user.id !== 'admin-passcode' ? user.id : null,
+        userId: user ? user.id : null,
         status: 'pending', reply: '', note: '', tripId: null, createdAt: new Date().toISOString()
       };
       /* applying also opens a Sight Seers account for that email (if there is none) and signs the applicant in, so they
@@ -664,7 +664,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: the applicant changes the number of people they would invite ===== */
     if (action === 'application-invite') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to change this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to change this.' });
       const raw = body.inviteCount;
       const n = (typeof raw === 'number' || typeof raw === 'string') && String(raw).trim() !== '' ? Number(raw) : NaN;
       if (!Number.isInteger(n) || n < 1 || n > 1000) return res.status(400).json({ error: 'Enter the number of people you would invite as a whole number from 1 to 1000.' });
@@ -680,7 +680,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: the leader deletes their own trip, or their own application (with any trip made from it) ===== */
     if (action === 'trip-delete-mine' || action === 'application-delete-mine') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       const mailAddr = lower(user.email, 120);
       const [tripsAll, apps, ints] = await Promise.all([db.getCollection(TRIPS), db.getCollection(APPS), db.getCollection(INTERESTS)]);
       const isMine = a => a.email === mailAddr || (a.userId && a.userId === user.id);
@@ -711,7 +711,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: the leader writes what their trip involves (summary, details, what is and is not included); it shows on the public trip page at once ===== */
     if (action === 'trip-info-save') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       if (!allow('info:' + user.id, 30, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of edits in an hour. Please wait a little and try again.' });
       const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
       const isOwner = user.role === 'admin';
@@ -737,7 +737,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: tick a before-you-go checklist item on one of my own trip requests ===== */
     if (action === 'checklist-tick') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       const key = str(body.key, 20);
       if (['passport', 'entry', 'insurance', 'esim', 'chat'].indexOf(key) < 0) return res.status(400).json({ error: 'Unknown checklist item.' });
       const mailAddr = lower(user.email, 120);
@@ -751,7 +751,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: post an update on a trip (its leader, or the owner), or take one down ===== */
     if (action === 'trip-update-post' || action === 'trip-update-delete') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       const isOwner = user.role === 'admin';
       if (action === 'trip-update-post') {
         if (!allow('update:' + user.id, 12, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of updates in an hour. Please wait a little before posting another.' });
@@ -774,7 +774,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: the leader adds their WhatsApp group or channel link; joiners are emailed it ===== */
     if (action === 'trip-group-link') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       const link = groupLinkOf(body.groupLink);
       if (str(body.groupLink, 400) && !link) return res.status(400).json({ error: 'Paste the full invite link, starting with https://' });
       const [trips, interests] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS)]);
@@ -793,7 +793,7 @@ module.exports = async function handler(req, res) {
     /* ===== signed in: mark a dashboard popup as seen ===== */
     if (action === 'notice-seen') {
       const user = getUser(req);
-      if (!user || user.id === 'admin-passcode') return res.status(401).json({ error: 'Sign in required' });
+      if (!user) return res.status(401).json({ error: 'Sign in required' });
       const key = str(body.key, 80), mailAddr = lower(user.email, 120);
       if (key.indexOf('inbox:') === 0) {
         if (user.role === 'admin') {

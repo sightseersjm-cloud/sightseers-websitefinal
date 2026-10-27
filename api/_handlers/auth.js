@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, requireOwner, permsOf, tokenFor, publicUser, PERMS, PRESETS, cleanPerms, newTotpSecret, totpOk, sealSecret, openSecret, uid, ADMIN_CODE } = require('../_lib/auth');
+const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth, requireAdmin, requireOwner, permsOf, tokenFor, publicUser, PERMS, PRESETS, cleanPerms, newTotpSecret, totpOk, sealSecret, openSecret, uid } = require('../_lib/auth');
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const social = require('../_lib/social');
 const { geo } = require('../_lib/geo');
@@ -74,7 +74,7 @@ module.exports = async function handler(req, res) {
       return res.status(409).json({ error: 'An account with that email already exists' });
     }
 
-    /* Signing up never makes an admin. The admin passcode is in the public page, so it must not be able to create an admin account. Admins come from the owner login or an existing admin. */
+    /* Signing up never makes an admin. Signing up must never be able to create an admin account. Admins come from the owner login or an existing admin. */
     const isAdmin = false;
     const user = {
       id: uid(),
@@ -160,34 +160,9 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, token, user: safe });
   }
 
-  // Exchange the admin passcode (checked against the server's ADMIN_PASSCODE env var)
-  // for an admin token. Lets the passcode alone publish edits to the live site.
-  if (action === 'passcode') {
-    const { passcode } = req.body;
-    if (!checkRate('passcode:' + clientIp)) {
-      return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
-    }
-    if (!ADMIN_CODE) {
-      return res.status(500).json({ error: 'Admin passcode is not configured on the server (set ADMIN_PASSCODE in Vercel).' });
-    }
-    if (!passcode || String(passcode) !== ADMIN_CODE) {
-      return res.status(401).json({ error: 'Incorrect admin passcode' });
-    }
-    // 'editor' can publish site content + images, but cannot read customer PII
-    // (bookings, contact messages) or manage user accounts — those need a real admin login.
-    const editorUser = { id: 'admin-passcode', email: 'editor@sightseerscaribbean.com', name: 'Site Editor', role: 'editor' };
-    const token = createToken(editorUser);
-    return res.status(200).json({ ok: true, token, user: editorUser });
-  }
-
   if (action === 'me') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    // Passcode-login editors have a synthetic id with no DB record — return
-    // the token payload directly so checkAuth() doesn't wipe the session.
-    if (caller.id === 'admin-passcode') {
-      return res.status(200).json({ ok: true, user: { id: caller.id, email: caller.email, name: caller.name, role: caller.role } });
-    }
     const users = await db.getCollection('users');
     const user = users.find(u => u.id === caller.id);
     if (!user) return res.status(404).json({ error: 'Account not found' });
@@ -223,7 +198,6 @@ module.exports = async function handler(req, res) {
   if (action === 'avatar' || action === 'avatar-remove') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to add a photo.' });
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === caller.id);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });
@@ -421,7 +395,6 @@ module.exports = async function handler(req, res) {
   if (action === 'signout-all') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to do this.' });
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === caller.id);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });
@@ -434,7 +407,6 @@ module.exports = async function handler(req, res) {
   if (action === '2fa-setup' || action === '2fa-enable' || action === '2fa-disable') {
     const caller = requireAuth(req, res);
     if (!caller) return;
-    if (caller.id === 'admin-passcode') return res.status(400).json({ error: 'Sign in with your own account to do this.' });
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => u.id === caller.id);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });

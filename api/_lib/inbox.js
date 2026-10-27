@@ -1,7 +1,7 @@
 /**
  * api/_lib/inbox.js
  * One inbox for every request that comes in through the website forms. The forms keep saving to their own
- * collections (and still email the team); this reads them all into one list the master admin can work through,
+ * collections (and still email the team); this reads them all into one list the website manager can work through,
  * with a status and a private note kept on each record (inboxStatus / inboxNote).
  * Travel Club applications and join requests have their own admin tabs and are not repeated here.
  */

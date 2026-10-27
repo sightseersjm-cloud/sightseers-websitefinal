@@ -1,7 +1,7 @@
 /**
  * api/_lib/club-payouts.js
  * A simple log of the rewards Sight Seers has paid to Travel Club leaders ('club-payouts').
- * The owner records each payment in the master admin (what, how, when, a reference); the leader sees their own on their trip card.
+ * The owner records each payment in the website manager (what, how, when, a reference); the leader sees their own on their trip card.
  * This only RECORDS payments made outside the site. Nothing here moves money.
  */
 

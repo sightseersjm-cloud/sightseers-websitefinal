@@ -11,6 +11,26 @@
   "installCommand": "npm install",
   "redirects": [
     {
+      "source": "/admin",
+      "destination": "/manage",
+      "permanent": false
+    },
+    {
+      "source": "/admin/",
+      "destination": "/manage",
+      "permanent": false
+    },
+    {
+      "source": "/club-admin",
+      "destination": "/manage#trips",
+      "permanent": false
+    },
+    {
+      "source": "/club-admin/",
+      "destination": "/manage#trips",
+      "permanent": false
+    },
+    {
       "source": "/contact",
       "destination": "/booking",
       "permanent": true

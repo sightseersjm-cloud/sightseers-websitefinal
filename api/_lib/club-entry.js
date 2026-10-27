@@ -6,7 +6,7 @@
  *
  * The starting text lives in api/_data/club-entry-drafts.json. It was drafted from official government and tourism pages.
  * A traveler sees an entry only once it is approved: the owner approved the entries that have a summary and an official link,
- * and can unapprove or edit any of them in the master admin (Destinations tab).
+ * and can unapprove or edit any of them in the website manager (Destinations tab).
  * The owner's edits and approvals are stored in 'club-destinations' and override the drafts field by field.
  * Nothing is invented: an entry cannot be approved without a summary and at least one official link, and a passport nobody
  * has prepared gets no card, never a guess. The only thing collected from travelers is the passport's country, never a passport number.

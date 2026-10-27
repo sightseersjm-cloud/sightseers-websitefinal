@@ -90,7 +90,7 @@ module.exports = async function handler(req, res) {
 
     const user = await requirePerm(req, res, 'pages', 'catalog', 'blog');
     if (!user) return;
-    const owner = user.role === 'admin' && user.id !== 'admin-passcode';
+    const owner = user.role === 'admin';
 
     if (view === 'map') return res.status(200).json({ ok: true, map: edit.SITE_FIELDS });
 
@@ -198,7 +198,7 @@ module.exports = async function handler(req, res) {
     if (!user) return;
     const drafts = await db.getCollection('site-drafts');
     const d = drafts.find(x => x.id === body.id);
-    const owner = user.role === 'admin' && user.id !== 'admin-passcode';
+    const owner = user.role === 'admin';
     if (!d || (!owner && d.by.id !== user.id)) return res.status(404).json({ error: 'We could not find those changes.' });
     if (d.status !== 'pending') return res.status(409).json({ error: 'Those changes have already been decided.' });
     return res.status(200).json({ ok: true, token: signPreview(d.id, 7), page: (d.changes.find(c => c.page) || {}).page || 'home' });

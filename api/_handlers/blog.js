@@ -105,7 +105,7 @@ module.exports = async function handler(req, res) {
           ${request.excerpt ? `<p style="margin:12px 0 4px;font-weight:bold">Excerpt</p><p style="margin:0;color:#4a5a68">${escapeHtml(request.excerpt)}</p>` : ''}
           <p style="margin:14px 0 4px;font-weight:bold">Article</p>
           <div style="white-space:pre-wrap;color:#4a5a68;border-left:3px solid #e2e8ee;padding-left:12px">${escapeHtml((request.content || '').slice(0, 4000))}</div>
-          <p style="color:#888;font-size:12px;margin-top:18px">Open your admin portal to approve &amp; publish it, or reject it.</p>
+          <p style="color:#888;font-size:12px;margin-top:18px">Open the website manager (/manage) and go to Blog requests to approve &amp; publish it, or reject it.</p>
         </div>`
       }).catch(() => {});
 

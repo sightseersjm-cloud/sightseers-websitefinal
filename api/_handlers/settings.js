@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
 
     if (!key) return res.status(400).json({ error: 'Key required' });
 
-    // Content editors (passcode login) and full admins can write site content.
+    // Team members with the right access and the owner can write site content.
     if (adminKeys.includes(key) && (!user || !(await can(user, 'pages', 'catalog', 'blog')))) {
       return res.status(403).json({ error: 'Admin access required for this setting' });
     }

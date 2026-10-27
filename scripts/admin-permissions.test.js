@@ -4,8 +4,7 @@ const Module=require('module');const crypto=require('crypto');
 const store=new Map();
 const blob={put:async(p,b)=>{store.set(p,Buffer.from(b));return{}},get:async p=>store.has(p)?{statusCode:200,stream:new Response(store.get(p)).body}:{statusCode:404},del:async p=>{store.delete(p)},list:async()=>({blobs:[]})};
 const o=Module._load;Module._load=function(r,...a){return r==='@vercel/blob'?blob:o.call(this,r,...a)};
-process.env.BLOB_READ_WRITE_TOKEN='x';process.env.JWT_SECRET='test-secret-test-secret-test-secret-12345';process.env.ADMIN_PASSCODE='TestCode123!';
-process.env.OWNER_EMAIL='owner@example.com';process.env.OWNER_PASSWORD='OwnerPass123!';
+process.env.BLOB_READ_WRITE_TOKEN='x';process.env.JWT_SECRET='test-secret-test-secret-test-secret-12345';process.env.OWNER_EMAIL='owner@example.com';process.env.OWNER_PASSWORD='OwnerPass123!';
 const root=require('path').resolve(__dirname,'..')+'/';
 const H={auth:require(root+'api/_handlers/auth'),inbox:require(root+'api/_handlers/inbox'),content:require(root+'api/_handlers/content'),stays:require(root+'api/_handlers/stays'),bookings:require(root+'api/_handlers/bookings')};
 function call(h,method,url,body,token,ip){return new Promise(r=>{const res={headers:{},status(c){this.code=c;return this},json(x){r({code:this.code,body:x})},end(x){r({code:this.code,body:x})},setHeader(){}};
@@ -37,10 +36,10 @@ let fails=0;const ok=(name,cond,extra)=>{console.log((cond?'PASS ':'FAIL ')+name
  r=await call('auth','POST','/api/auth',{action:'reset-password',email:'kim@example.com',code:kc,newPassword:'Kim12345678!'});const kim=r.body.token;
  ok('trips manager CAN read the inbox',(await call('inbox','GET','/api/inbox',{},kim)).code!==403);
  ok('trips manager CANNOT edit page content',(await call('content','POST','/api/content',{},kim)).code===403);
- // legacy passcode editor
- r=await call('auth','POST','/api/auth',{action:'passcode',passcode:'TestCode123!'});const pass=r.body.token;
- ok('old passcode still edits content',(await call('content','POST','/api/content',{},pass)).code!==403);
- ok('old passcode still cannot read the inbox',(await call('inbox','GET','/api/inbox',{},pass)).code===403);
+ // the old shared passcode sign-in is gone
+ r=await call('auth','POST','/api/auth',{action:'passcode',passcode:'TestCode123!'});ok('the shared passcode sign-in no longer exists',r.code===400&&!r.body.token);
+ const oldTok=require(root+'api/_lib/auth').createToken({id:'admin-passcode',email:'editor@sightseerscaribbean.com',name:'Site Editor',role:'editor'});
+ ok('a passcode sign-in made before it was removed no longer works',(await call('content','POST','/api/content',{},oldTok)).code===401);
  // a normal member
  r=await call('auth','POST','/api/auth',{action:'signup',name:'Guest',email:'g@example.com',password:'Guest12345!',adminCode:'TestCode123!'});const guest=r.body.token;
  ok('signup never makes an admin',r.body.user.role==='guest');

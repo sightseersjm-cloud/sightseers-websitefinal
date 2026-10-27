@@ -4,8 +4,7 @@ const Module = require('module');
 const store = new Map();
 const blob = { put: async (p, b) => { store.set(p, Buffer.from(b)); return {}; }, get: async p => store.has(p) ? { statusCode: 200, stream: new Response(store.get(p)).body } : { statusCode: 404 }, del: async p => { store.delete(p); }, list: async () => ({ blobs: [] }) };
 const o = Module._load; Module._load = function (r, ...a) { return r === '@vercel/blob' ? blob : o.call(this, r, ...a); };
-process.env.BLOB_READ_WRITE_TOKEN = 'x'; process.env.JWT_SECRET = 'test-secret-test-secret-test-secret-12345'; process.env.ADMIN_PASSCODE = 'TestCode123!';
-process.env.OWNER_EMAIL = 'owner@example.com'; process.env.OWNER_PASSWORD = 'OwnerPass123!';
+process.env.BLOB_READ_WRITE_TOKEN = 'x'; process.env.JWT_SECRET = 'test-secret-test-secret-test-secret-12345'; process.env.OWNER_EMAIL = 'owner@example.com'; process.env.OWNER_PASSWORD = 'OwnerPass123!';
 const root = require('path').resolve(__dirname, '..') + '/';
 const H = { auth: require(root + 'api/_handlers/auth'), edit: require(root + 'api/_handlers/site-edit'), settings: require(root + 'api/_handlers/settings') };
 function call(h, method, url, body, token, query) {
@@ -171,10 +170,9 @@ let fails = 0; const ok = (name, cond, extra) => { console.log((cond ? 'PASS ' :
   r = await post({ action: 'draft-approve', id: dr.id }, owner); s = await live();
   ok('approving puts the in-place change live', r.code === 200 && s.ss_text_edits_v1.home['Plan your trip'] === 'Needs a look');
 
-  // --- the old passcode can no longer publish through the new system
-  r = await call('auth', 'POST', '/api/auth', { action: 'passcode', passcode: 'TestCode123!' }); const pass = r.body.token;
-  r = await post({ action: 'save', changes: [{ id: 'adminToursSub', value: 'Passcode wording', label: 'x', page: 'tours' }] }, pass);
-  ok('the old shared passcode can only send changes for approval', r.code === 200 && r.body.live === false);
+  // --- the old shared passcode sign-in has been removed
+  r = await call('auth', 'POST', '/api/auth', { action: 'passcode', passcode: 'TestCode123!' });
+  ok('the shared passcode can no longer sign in', r.code === 400 && !r.body.token);
 
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
