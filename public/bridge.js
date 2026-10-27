@@ -26,6 +26,8 @@
 
   function setToken(token) {
     try { if (token) localStorage.setItem(TOKEN_KEY, token); else localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    /* signing in counts as activity */
+    if (token && typeof idleTouch === 'function') { try { idleTouch(true); } catch (e) {} }
   }
 
   function authHeaders() {
@@ -417,12 +419,99 @@
     });
   }
 
+  /* ── Sign out after a while of doing nothing ──────────────────────────
+     Anyone signed in on the website (a customer, a team member browsing the site) is signed out after 30 minutes without a
+     click, key press, scroll or touch, with a one minute warning. A team member's own limit from the admin's "My sign-in"
+     screen is used for them. The admin screen (/manage) keeps its own timer. */
+  var IDLE_ACT = 'ss_site_last_active', IDLE_DEFAULT_MIN = 30, IDLE_WARN_MS = 60000, idleLast = 0, idleWrote = 0, idleInt = 0;
+
+  function idleMinutes() {
+    var staff = false;
+    try { var u = JSON.parse(localStorage.getItem(USER_KEY) || 'null'); staff = !!u && (u.role === 'admin' || u.role === 'staff' || u.role === 'editor'); } catch (e) {}
+    if (staff) {
+      try { var v = parseInt(localStorage.getItem('ss_mg_idle_min'), 10); if (v >= 0) return v; } catch (e) {}
+    }
+    return IDLE_DEFAULT_MIN;
+  }
+  function idleLastActive() {
+    var v = 0;
+    try { v = parseInt(localStorage.getItem(IDLE_ACT), 10) || 0; } catch (e) {}
+    return Math.max(idleLast, v);
+  }
+  function idleTouch(force) {
+    var n = Date.now(); idleLast = n;
+    if (force || n - idleWrote > 5000) { idleWrote = n; try { localStorage.setItem(IDLE_ACT, String(n)); } catch (e) {} }
+  }
+  function idleOnAdmin() {
+    try { return /^\/manage/.test(location.pathname) || !!document.querySelector('#p-manage.on'); } catch (e) { return false; }
+  }
+  function idleWarnEl() { return document.getElementById('ssIdleWarn'); }
+  function idleWarn(secs) {
+    var w = idleWarnEl();
+    if (!w) {
+      w = document.createElement('div');
+      w.id = 'ssIdleWarn'; w.setAttribute('role', 'alertdialog'); w.setAttribute('aria-live', 'assertive');
+      w.setAttribute('style', 'position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,32,54,.7);font-family:Raleway,Arial,sans-serif');
+      w.innerHTML = '<div style="max-width:420px;width:100%;background:#fff;padding:26px;border-top:3px solid #ef8731;box-shadow:0 24px 60px rgba(0,0,0,.4)">'
+        + '<h3 style="margin:0 0 8px;font:700 22px Georgia,serif;color:#062e4b">Still there?</h3>'
+        + '<p style="margin:0 0 16px;color:#33475b;line-height:1.55;font-size:15px">For your security you will be signed out in <b id="ssIdleSecs"></b> seconds because nothing has happened for a while.</p>'
+        + '<button type="button" id="ssIdleStay" style="background:#70c257;color:#06314f;border:0;padding:12px 20px;font:800 14px Raleway,Arial,sans-serif;cursor:pointer;margin-right:8px">Stay signed in</button>'
+        + '<button type="button" id="ssIdleOut" style="background:#fff;color:#0a3f66;border:1px solid rgba(6,46,75,.3);padding:12px 20px;font:700 14px Raleway,Arial,sans-serif;cursor:pointer">Sign out now</button></div>';
+      w.addEventListener('click', function (e) {
+        var id = e.target && e.target.id;
+        if (id === 'ssIdleStay') { idleTouch(true); w.remove(); }
+        else if (id === 'ssIdleOut') idleSignOut(false);
+      });
+      document.body.appendChild(w);
+    }
+    var sp = document.getElementById('ssIdleSecs'); if (sp) sp.textContent = secs;
+  }
+  function idleSignOut(idle) {
+    var w = idleWarnEl(); if (w) w.remove();
+    signout();
+    if (idle) {
+      try { sessionStorage.setItem('ss_idle_msg', '1'); } catch (e) {}
+      idleShowNotice();
+    }
+  }
+  function idleShowNotice() {
+    var shown = false;
+    try { shown = sessionStorage.getItem('ss_idle_msg') === '1'; sessionStorage.removeItem('ss_idle_msg'); } catch (e) {}
+    if (!shown) return;
+    var m = 'You were signed out because the page was left alone for a while. Please sign in again.';
+    if (typeof window.toast === 'function') { try { window.toast(m); return; } catch (e) {} }
+    var n = document.createElement('div');
+    n.setAttribute('role', 'status');
+    n.setAttribute('style', 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147482000;background:#062e4b;color:#fff;padding:14px 20px;max-width:90vw;font:600 14px/1.45 Raleway,Arial,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35)');
+    n.textContent = m; document.body.appendChild(n);
+    setTimeout(function () { n.remove(); }, 9000);
+  }
+  function idleCheck() {
+    if (!getToken() || idleOnAdmin()) { var w0 = idleWarnEl(); if (w0) w0.remove(); return; }
+    var lim = idleMinutes() * 60000; if (!lim) return;
+    var idle = Date.now() - idleLastActive();
+    if (idle >= lim) { idleSignOut(true); return; }
+    if (idle >= lim - IDLE_WARN_MS) idleWarn(Math.max(1, Math.ceil((lim - idle) / 1000)));
+    else { var w = idleWarnEl(); if (w) w.remove(); }
+  }
+  function idleStart() {
+    if (!idleLastActive()) idleTouch(true);
+    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'wheel'].forEach(function (ev) {
+      document.addEventListener(ev, function () { if (getToken() && !idleWarnEl()) idleTouch(); }, { passive: true, capture: true });
+    });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) idleCheck(); });
+    window.addEventListener('focus', idleCheck);
+    clearInterval(idleInt); idleInt = setInterval(idleCheck, 1000);
+    idleShowNotice();
+    idleCheck();
+  }
   /* ── Init ──────────────────────────── */
 
   document.addEventListener('DOMContentLoaded', function () {
     syncFromServer();
     patchLocalStorage();
     checkAuth();
+    idleStart();
   });
 
   /* ── Public API ────────────────────── */

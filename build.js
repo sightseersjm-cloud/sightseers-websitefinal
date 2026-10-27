@@ -132,6 +132,16 @@ function writeBuilderCatalog(source) {
 
 writeBuilderCatalog(html);
 
+/** The experience list for the pages the server makes on request (/api/tour-page) and for the trip builder's prices, plus the catalog
+ *  rules the browser uses to lay the owner's edits over the same list. */
+function writeCuratedData(source) {
+  const list = parseCuratedTours(source).filter(t => t.type === 'water' || t.type === 'land');
+  fs.writeFileSync(path.join(__dirname, 'api', '_data', 'curated-tours.json'), JSON.stringify(list) + '\n', 'utf8');
+  fs.copyFileSync(path.join(__dirname, 'api', '_lib', 'catalog.js'), path.join(__dirname, 'public', 'ss-catalog.js'));
+  console.log('\uD83D\uDCD6  Catalog data: ' + list.length + ' experiences for the server, ss-catalog.js for the browser');
+}
+writeCuratedData(html);
+
 /**
  * The same experience can be priced in two places: the V-Tour session records
  * in Design_Reference.html, and tours-data.json, which generates the static
@@ -327,7 +337,7 @@ function isRoutePage(file) {
   finally { fs.closeSync(fd); }
 }
 
-const BRIDGE = '\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
+const BRIDGE = '\n  <script src="/ss-catalog.js"></script>\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
 // Add loading="lazy" and decoding="async" to all images except hero
@@ -370,6 +380,6 @@ console.log(`🖼️  Added lazy loading to ${lazyCount} images`);
   catch (err) { console.error(`\n❌  Route pages: ${err.message}\n`); process.exit(1); }
   try {
     const r = tourPages.writeTourPages({ curated: curatedTours, slugOf: tourSlug, publicDir, today: new Date().toISOString().slice(0, 10) });
-    console.log(`\uD83E\uDDED  Experience pages: ${r.written} written under public/tours/<slug>/index.html, ${r.written} URLs in public/sitemap.xml` + (r.removed ? `, ${r.removed} stale removed` : ''));
+    console.log(`\uD83E\uDDED  Experience pages: ${r.written} served by /api/tour-page, ${r.written} URLs in public/sitemap.xml` + (r.removed ? `, ${r.removed} static pages removed` : ''));
   } catch (err) { console.error(`\n❌  Experience pages: ${err.message}\n`); process.exit(1); }
 })();

@@ -68,6 +68,10 @@
   ],
   "rewrites": [
     {
+      "source": "/tours/:slug",
+      "destination": "/api/tour-page?slug=:slug"
+    },
+    {
       "source": "/((?!api/|logos/|panos/|models/|assets/|vendor/|virtual-tours(?:$|/)|.*\\.[a-zA-Z0-9]+$).*)",
       "destination": "/index.html"
     }

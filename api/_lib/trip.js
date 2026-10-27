@@ -35,8 +35,9 @@ function round2(n) { return Math.round(n * 100) / 100; }
  * Price a group trip. `input`: { country, guests, items: [title], transfers: bool }
  * Returns { ok:true, ... } or { ok:false, error }.
  */
-function quote(input) {
+function quote(input, itemsOverride) {
   input = input || {};
+  const ITEMS = itemsOverride || CATALOG.items;
   const country = String(input.country || '');
   const guests = parseInt(input.guests, 10);
   if (!(guests >= MIN_GUESTS && guests <= MAX_GUESTS)) {
@@ -53,7 +54,7 @@ function quote(input) {
   for (const title of titles) {
     if (seen.has(title)) continue;
     seen.add(title);
-    const it = CATALOG.items[title];
+    const it = ITEMS[title];
     if (!it || it.country !== country) return { ok: false, error: 'Unknown experience: ' + title };
     if (!(it.price > 0)) { lines.push({ title, area: it.area, unit: 'request', price: 0, qty: 0, amount: 0 }); onRequest++; continue; }
     let qty, unit;

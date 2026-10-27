@@ -1,5 +1,5 @@
 const db = require('../_lib/db');
-const { getUser, requirePerm, requireOwner, canPublishNow, signPreview, verifyPreview, escapeHtml } = require('../_lib/auth');
+const { getUser, requirePerm, requireOwner, canPublishNow, signPreview, verifyPreview, escapeHtml, can } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 const edit = require('../_lib/siteEdit');
 const { readSettings } = require('../_lib/siteStore');
@@ -81,6 +81,7 @@ module.exports = async function handler(req, res) {
       const draft = id ? (await db.getCollection('site-drafts')).find(d => d.id === id) : null;
       if (!draft || draft.status !== 'pending') return res.status(404).json({ error: 'This preview link has expired or the changes have already been decided.' });
       return res.status(200).json({ ok: true, by: draft.by.name, note: draft.note, changes: draft.changes.map(c => {
+        if (c.id === edit.CAT_ID) return { id: c.id, kind: c.kind, after: c.after, page: c.page, store: edit.CAT, list: c.list, key: c.key };
         if (c.id === edit.TEXT_ID) return { id: c.id, kind: c.kind, after: c.after, page: c.page, store: edit.TEXT, scope: c.scope, orig: c.orig };
         const loc = c.id === edit.SECTIONS_ID ? { store: edit.DYN, key: '' } : edit.where(c.id);
         return { id: c.id, kind: c.kind, after: c.after, page: c.page, store: loc && loc.store, key: loc && loc.key };
@@ -120,15 +121,24 @@ module.exports = async function handler(req, res) {
   const body = req.body || {};
   const action = body.action;
 
+  /* changes to the experience catalog need the tours permission; everything else needs the pages permission */
+  async function mayChange(req, res, user, list) {
+    const arr = Array.isArray(list) ? list : [];
+    if (arr.some(c => c && c.id === edit.CAT_ID) && !(await can(user, 'catalog'))) { res.status(403).json({ error: 'You do not have access to change tours and stays.' }); return false; }
+    if (arr.some(c => !c || c.id !== edit.CAT_ID) && !(await can(user, 'pages'))) { res.status(403).json({ error: 'You do not have access to change pages and photos.' }); return false; }
+    return true;
+  }
+
   if (action === 'save') {
-    const user = await requirePerm(req, res, 'pages');
+    const user = await requirePerm(req, res, 'pages', 'catalog');
     if (!user) return;
+    if (!(await mayChange(req, res, user, body.changes))) return;
     return submit(req, res, user, body.changes, body.note);
   }
 
   /* put an earlier version back: one field, or everything one save changed */
   if (action === 'restore') {
-    const user = await requirePerm(req, res, 'pages');
+    const user = await requirePerm(req, res, 'pages', 'catalog');
     if (!user) return;
     const hist = await db.getCollection('site-history');
     const entries = body.group ? hist.filter(h => h.group === body.group) : hist.filter(h => h.id === body.id);
@@ -136,12 +146,14 @@ module.exports = async function handler(req, res) {
     const list = [];
     for (const h of entries) {
       if (h.count) continue;
+      if (h.kind === 'c') { list.push({ id: edit.CAT_ID, kind: 'c', list: h.list, key: h.key, value: h.before && typeof h.before === 'object' ? h.before : {}, label: 'Put back: ' + (h.label || 'experience'), page: 'tours', before: h.after, keepEmpty: true }); continue; }
       if (h.kind === 't' || h.kind === 'ti') { list.push({ id: edit.TEXT_ID, kind: h.kind, scope: h.scope, orig: h.kind === 'ti' ? String(h.orig || '').replace(/^img:/, '') : h.orig, value: typeof h.before === 'string' ? h.before : '', label: 'Put back: ' + (h.label || 'wording'), page: h.page, before: typeof h.after === 'string' ? h.after : '', keepEmpty: true }); continue; }
       list.push({ id: h.fieldId, kind: h.kind === 'sections' ? 'sections' : (h.kind === 'image' ? 'image' : 'text'), value: h.before, label: 'Put back: ' + (h.label || h.fieldId), page: h.page, before: typeof h.after === 'string' ? h.after : '' });
     }
     /* text that had no earlier saved version cannot be put back from here: "Put back the original" handles that */
     const usable = list.filter(c => c.keepEmpty || (c.value !== '' && c.value !== undefined && c.value !== null));
     if (!usable.length) return res.status(400).json({ error: 'There is no earlier version to put back. Use "Put back the original" on that item instead.' });
+    if (!(await mayChange(req, res, user, usable))) return;
     return submit(req, res, user, usable, 'Put an earlier version back', { via: 'restore', restoredFrom: body.group || body.id });
   }
 
@@ -159,7 +171,7 @@ module.exports = async function handler(req, res) {
       tellAuthor(req, d, false, d.reason);
       return res.status(200).json({ ok: true });
     }
-    const list = d.changes.map(c => Object.assign({ id: c.id, kind: c.kind, value: c.after, label: c.label, page: c.page, before: typeof c.before === 'string' ? c.before : '' }, c.id === edit.TEXT_ID ? { scope: c.scope, orig: c.kind === 'ti' ? String(c.orig || '').replace(/^img:/, '') : c.orig } : {}));
+    const list = d.changes.map(c => Object.assign({ id: c.id, kind: c.kind, value: c.after, label: c.label, page: c.page, before: typeof c.before === 'string' ? c.before : '' }, c.id === edit.TEXT_ID ? { scope: c.scope, orig: c.kind === 'ti' ? String(c.orig || '').replace(/^img:/, '') : c.orig } : c.id === edit.CAT_ID ? { list: c.list, key: c.key } : {}));
     const p = await prepare(list);
     if (p.error) return res.status(400).json({ error: p.error });
     if (p.changes.length) await edit.publish(p.changes, d.by, { via: 'approved', approvedBy: edit.who(owner), note: d.note });
@@ -182,7 +194,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (action === 'preview-link') {
-    const user = await requirePerm(req, res, 'pages');
+    const user = await requirePerm(req, res, 'pages', 'catalog');
     if (!user) return;
     const drafts = await db.getCollection('site-drafts');
     const d = drafts.find(x => x.id === body.id);

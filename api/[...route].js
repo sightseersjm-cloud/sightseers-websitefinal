@@ -35,6 +35,7 @@ const handlers = {
   'stays':           require('./_handlers/stays'),
   'stripe-checkout': require('./_handlers/stripe-checkout'),
   'tours':           require('./_handlers/tours'),
+  'tour-page':       require('./_handlers/tour-page'),
   'trips':           require('./_handlers/trips'),
   'track':           require('./_handlers/track'),
   'verify-token':    require('./_handlers/verify-token'),

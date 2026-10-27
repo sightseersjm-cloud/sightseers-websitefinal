@@ -54307,6 +54307,7 @@ function vtXRStatus(msg){
     setTimeout(function(){window.setCuratedType(type);},380);
   };
   window.renderTours=function(){render();renderMba();};
+  window.__exRender=function(){render();renderMba();};
 
   document.addEventListener('click',function(e){
     var t=e.target;if(!t||!t.closest)return;
@@ -55362,6 +55363,7 @@ html body #p-tours #tpSubnav{font-size:10.5px}
     setTimeout(function(){window.setCuratedType(type);},380);
   };
   window.renderTours=function(){render();renderMba();};
+  window.__bxRefresh=function(){var c=$('bxCountry');if(c)c.innerHTML='';render();renderMba();};
 
   document.addEventListener('click',function(e){
     var t=e.target;if(!t||!t.closest)return;
@@ -60879,6 +60881,43 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
   if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
 })();
 </script>
+<script id="ss-catalog-script">
+/* Experiences the owner edited, hid or added in the admin: laid over the list written in the site's code (CURATED_TOURS), in place,
+   so everything that reads that list (the All Experiences page, the explorer, the group trip builder) shows the same thing. */
+(function(){
+  var BASE=null, LIVE=null;
+  function empty(d){ return !d||(!Object.keys(d.edits||{}).length&&!Object.keys(d.hidden||{}).length&&!(d.added||[]).length); }
+  function again(){
+    ['__exRender','__bxRefresh','gbRender'].forEach(function(f){ try{ if(typeof window[f]==='function') window[f](); }catch(e){} });
+    try{ document.dispatchEvent(new CustomEvent('ss-catalog-applied')); }catch(e){}
+  }
+  function apply(doc){
+    var arr=window.CURATED_TOURS, C=window.SSCatalog;
+    if(!arr||!C) return false;
+    if(!BASE){ if(empty(doc)) return false; BASE=JSON.parse(JSON.stringify(arr)); }
+    var eff=C.effective('experiences',BASE,doc);
+    Array.prototype.splice.apply(arr,[0,arr.length].concat(eff));
+    again();
+    return true;
+  }
+  window.ssCatalogApply=function(doc){ LIVE=doc||null; return apply(LIVE); };
+  window.ssCatalogDoc=function(){ return LIVE; };
+  /* the list as it is written in the code, before any edit: the admin compares against it */
+  window.ssCatalogBase=function(){ if(!BASE&&window.CURATED_TOURS) BASE=JSON.parse(JSON.stringify(window.CURATED_TOURS)); return BASE||[]; };
+  /* a preview link, or the admin showing a change before visitors see it: one more state laid over what is live */
+  window.ssCatalogPreview=function(changes){
+    var C=window.SSCatalog; if(!C) return;
+    var doc=JSON.parse(JSON.stringify(C.docOf(LIVE)));
+    (changes||[]).forEach(function(c){ if(c&&c.list==='experiences'&&c.key){ var r=C.putState(doc,c.key,c.after||{}); if(r.doc) doc=r.doc; } });
+    apply(doc);
+  };
+  function start(){
+    var p=(window.__ssSettings?window.__ssSettings():fetch('/api/settings').then(function(r){ return r.json(); }));
+    p.then(function(d){ var c=d&&d.ss_catalog_v1; if(c&&c.experiences) window.ssCatalogApply(c.experiences); }).catch(function(){});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+</script>
 <script id="ss-text-edits-script">
 /* Words and photos changed in place from the admin ("Edit on the page"). They are saved as: page (or * for the whole site) -> the original wording
    (or "img:" + the original photo address) -> the new value. This finds each original on the page and swaps in the new one. */
@@ -60991,6 +61030,7 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       (x.d.changes||[]).forEach(function(c){
         if(c.store==='ss_dynamic_sections_v1') pv.dyn=c.after;
         else if(c.store==='ss_text_edits_v1'){ (pv.text=pv.text||[]).push(c); }
+        else if(c.store==='ss_catalog_v1'){ (pv.cat=pv.cat||[]).push(c); }
         else if(c.store==='ss_site_settings') pv.site[c.key]=c.after;
         else if(c.key) pv.pe[c.key]=c.after;
       });
@@ -60999,6 +61039,7 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       try{ if(typeof applyPageEditorSettings==='function') applyPageEditorSettings(); }catch(e){}
       try{ if(typeof window.ssReapplyDynamicSections==='function') window.ssReapplyDynamicSections(); }catch(e){}
       try{ if(window.ssTextEdits&&pv.text) window.ssTextEdits.add(pv.text); }catch(e){}
+      try{ if(window.ssCatalogPreview&&pv.cat) window.ssCatalogPreview(pv.cat); }catch(e){}
       bar('Preview only. '+(x.d.by||'Someone')+' has changes waiting for approval. Only people with this link can see them.');
     }).catch(function(){ bar('The preview could not be loaded. Please try again.',true); });
   }
@@ -61141,7 +61182,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'live',t:'Edit on the page',show:function(){return can('pages');}},
       {id:'pages',t:'Pages and sections',show:function(){return can('pages');},bd:'pages'},
       {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}},
-      {id:'catalog',t:'Tours, stays and blog',show:function(){return can('catalog','blog');}}]},
+      {id:'catalog',t:'Tours and experiences',show:function(){return can('catalog','blog');}}]},
     {h:'People and trips',items:[
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
       {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'}]},
@@ -61149,7 +61190,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours, stays and blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -62197,6 +62238,305 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(t.name==='exScope'&&ED.sel){ED.sel.scope=t.value;}
   });
   R.addEventListener('input',function(e){if(e.target.id==='exText'&&ED.sel)ED.sel.cur=e.target.value;});
+})();
+</script>
+<style id="manage-catalog-style">
+.cx-wrap{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
+.cx-list{background:#fff;border:1px solid rgba(6,46,75,.16);position:sticky;top:12px}
+.cx-lh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px 10px}
+.cx-filt{display:grid;gap:8px;padding:0 14px 12px}
+.cx-filt input,.cx-filt select{width:100%;height:42px;padding:0 12px;border:1px solid rgba(6,46,75,.22);border-radius:0;background:#fff;font:600 14px Raleway,Arial,sans-serif;color:#12293d}
+.cx-rows{max-height:calc(100vh - 330px);overflow:auto;border-top:1px solid rgba(6,46,75,.1)}
+.cx-row{display:block;width:100%;text-align:left;padding:11px 14px;border:0;border-bottom:1px solid rgba(6,46,75,.08);background:#fff;cursor:pointer;font-family:Raleway,Arial,sans-serif}
+.cx-row:hover{background:#f2f7fb}
+.cx-row.on{background:#e8f1f9;box-shadow:inset 3px 0 0 #0a4a78}
+.cx-row.off .cx-t{opacity:.55;text-decoration:line-through}
+.cx-t{display:block;font-weight:700;font-size:14.5px;color:#062e4b;line-height:1.3}
+.cx-m{display:block;font-size:12.5px;color:#5c6f82;margin-top:2px}
+.cx-chips{display:flex;gap:5px;margin-top:5px}
+.cx-chips i{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;background:#eef3f8;color:#0a3f66}
+.cx-chips i.g{background:#e3f4dc;color:#2a6b1f}.cx-chips i.o{background:#fdeedd;color:#9a4d0c}.cx-chips i.r{background:#f8e0e0;color:#8a1c1c}
+.cx-edit{background:#fff;border:1px solid rgba(6,46,75,.16);padding:22px 24px 26px;min-height:300px}
+.cx-empty{color:#5c6f82}.cx-empty h3{margin:0 0 8px;font-family:'Playfair Display',serif;color:#062e4b}
+.cx-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:6px}
+.cx-head h2{margin:0;font-family:'Playfair Display',serif;font-size:24px;color:#062e4b}
+.cx-sec{padding:18px 0 4px;border-top:1px solid rgba(6,46,75,.1);margin-top:16px}
+.cx-sec h3{margin:0 0 12px;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#0a4a78}
+.cx-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cx-three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.cx-photo{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.cx-photo img{width:200px;height:130px;object-fit:cover;border:1px solid rgba(6,46,75,.15)}
+.cx-noimg{width:200px;height:130px;display:flex;align-items:center;justify-content:center;background:#eef3f8;color:#5c6f82;font-weight:700;font-size:13px}
+.cx-pair{display:grid;grid-template-columns:200px 1fr auto;gap:10px;align-items:start;margin-bottom:10px}
+.cx-fact{display:grid;grid-template-columns:200px 1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+.cx-edit input,.cx-edit select,.cx-edit textarea{width:100%;padding:10px 12px;border:1px solid rgba(6,46,75,.22);border-radius:0;background:#fff;font:500 15px/1.45 Raleway,Arial,sans-serif;color:#12293d}
+.cx-edit input,.cx-edit select{height:44px;padding:0 12px}
+.cx-edit textarea{resize:vertical}
+.cx-edit input:focus,.cx-edit select:focus,.cx-edit textarea:focus{outline:0;border-color:#0a4a78;box-shadow:0 0 0 3px rgba(10,74,120,.12)}
+.cx-bar{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid rgba(6,46,75,.1);position:sticky;bottom:0;background:#fff}
+.mg-btn.danger{color:#8a1c1c;border-color:rgba(138,28,28,.4)}
+@media (max-width:1000px){.cx-wrap{grid-template-columns:minmax(0,1fr)}.cx-list{position:static}.cx-rows{max-height:340px}.cx-two,.cx-three{grid-template-columns:minmax(0,1fr)}.cx-pair,.cx-fact{grid-template-columns:minmax(0,1fr)}}
+#mgRoot .cx-head h2{text-transform:none;letter-spacing:0;font-size:24px;font-weight:700;color:#062e4b;font-family:'Playfair Display',serif}
+</style>
+<script id="manage-catalog-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api,can=MG.can,isOwner=MG.isOwner,msg=MG.msg;
+  var C=function(){return window.SSCatalog;};
+  var CX=MG.CX={tab:'experiences',doc:null,base:null,sel:null,form:null,q:'',country:'all',status:'all',shown:40,busy:false,err:'',toast:'',drafts:0};
+
+  function needsApproval(){return !isOwner()&&S.user&&S.user.needsApproval!==false;}
+  function short(v,n){v=String(v==null?'':v);return v.length>n?v.slice(0,n)+'…':v;}
+  function clone(o){return JSON.parse(JSON.stringify(o));}
+  function baseList(){
+    if(CX.base)return CX.base;
+    var arr=window.ssCatalogBase?window.ssCatalogBase():[];
+    CX.base=arr.filter(function(t){return t.type==='water'||t.type==='land';});
+    return CX.base;
+  }
+  function docNow(){return C().docOf(CX.doc);}
+  /* every experience, hidden ones included: [{item, key, hidden, edited, added}] */
+  function rows(){
+    var d=docNow(),open=Object.assign({},d,{hidden:{}});
+    var all=C().effective('experiences',baseList(),open).filter(function(t){return t.type==='water'||t.type==='land';});
+    return all.map(function(t){
+      var k=t.origKey;
+      return {item:t,key:k,hidden:!!d.hidden[k],edited:!!d.edits[k],added:!!t.added};
+    });
+  }
+  function find(key){var r=rows();for(var i=0;i<r.length;i++)if(r[i].key===key)return r[i];return null;}
+  function baseOf(key){var b=baseList();for(var i=0;i<b.length;i++)if((b[i].origKey||b[i].title)===key)return b[i];return null;}
+
+  /* ---------- load ---------- */
+  function load(){
+    return api('settings?fresh=1').then(function(d){
+      var cat=d&&d.ss_catalog_v1;CX.doc=(cat&&cat.experiences)||C().emptyDoc();CX.base=null;baseList();
+    });
+  }
+
+  /* ---------- the screen ---------- */
+  function screenCatalog(){
+    if(!CX.doc)return '<h1>Tours and experiences</h1><p class="mg-sub">Loading…</p>';
+    var list=rows(),q=CX.q.trim().toLowerCase();
+    var countries=C().COUNTRIES;
+    var vis=list.filter(function(r){
+      var t=r.item;
+      if(CX.country!=='all'&&t.country!==CX.country)return false;
+      if(CX.status==='edited'&&!r.edited)return false;
+      if(CX.status==='hidden'&&!r.hidden)return false;
+      if(CX.status==='added'&&!r.added)return false;
+      if(q&&(t.title+' '+t.country+' '+(t.area||'')).toLowerCase().indexOf(q)<0)return false;
+      return true;
+    });
+    var counts={edited:list.filter(function(r){return r.edited;}).length,hidden:list.filter(function(r){return r.hidden;}).length,added:list.filter(function(r){return r.added;}).length};
+    var rowsHtml=vis.slice(0,CX.shown).map(function(r){
+      var t=r.item,on=CX.sel===r.key;
+      return '<button type="button" class="cx-row'+(on?' on':'')+(r.hidden?' off':'')+'" data-cx-pick="'+esc(r.key)+'"><span class="cx-t">'+esc(t.title)+'</span><span class="cx-m">'+esc(t.country)+(t.area?' · '+esc(t.area):'')+' · '+esc(t.priceLabel||'Price on request')+'</span>'
+        +'<span class="cx-chips">'+(r.added?'<i class="g">New</i>':'')+(r.edited?'<i class="o">Edited</i>':'')+(r.hidden?'<i class="r">Hidden</i>':'')+'</span></button>';
+    }).join('')||'<p class="mg-hint" style="padding:12px">Nothing matches.</p>';
+    var more=vis.length>CX.shown?'<button type="button" class="mg-btn sm ghost" id="cxMore" style="margin:10px 12px">Show '+Math.min(40,vis.length-CX.shown)+' more</button>':'';
+    var filt='<div class="cx-filt"><input id="cxQ" type="search" placeholder="Search by name, island or area" value="'+esc(CX.q)+'" aria-label="Search">'
+      +'<select id="cxCountry" aria-label="Island"><option value="all">All islands</option>'+countries.map(function(c){return '<option'+(CX.country===c?' selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select>'
+      +'<select id="cxStatus" aria-label="Show"><option value="all">Everything ('+list.length+')</option><option value="edited"'+(CX.status==='edited'?' selected':'')+'>Edited ('+counts.edited+')</option><option value="hidden"'+(CX.status==='hidden'?' selected':'')+'>Hidden ('+counts.hidden+')</option><option value="added"'+(CX.status==='added'?' selected':'')+'>Added by you ('+counts.added+')</option></select></div>';
+    return '<h1>Tours and experiences</h1><p class="mg-sub">'+(needsApproval()?'Change prices, wording, photos and what is included. Your changes go to the owner for approval before they appear on the website.':'Change prices, wording, photos and what is included for every experience, add new ones or take some off the website. Changes go live as soon as you save, and can be put back.')+'</p>'
+      +(CX.toast?'<div class="mg-msg on ok" role="status">'+esc(CX.toast)+'</div>':'')
+      +'<div class="cx-wrap"><aside class="cx-list"><div class="cx-lh"><b>'+list.length+' experiences</b><button type="button" class="mg-btn sm ok" id="cxNew">Add an experience</button></div>'+filt+'<div class="cx-rows">'+rowsHtml+more+'</div></aside>'
+      +'<section class="cx-edit" id="cxEdit">'+formHtml()+'</section></div>';
+  }
+
+  /* ---------- the form for one experience ---------- */
+  function startForm(key){
+    var r=key?find(key):null;
+    if(key&&!r)return;
+    CX.sel=key||null;CX.err='';
+    if(!key){
+      CX.form={isNew:true,key:'n'+Math.random().toString(36).slice(2,9),f:{title:'',country:'Jamaica',type:'land',area:'',duration:'',label:'',hero:'',desc:'',best:'',image:'',priceValue:'',per:'person',cap:'',highlights:[],includes:[],extras:[],extrasNote:'',extrasFoot:'',route:'',routeNote:'',more:[],facts:[]},hidden:false};
+      return;
+    }
+    var t=r.item;
+    CX.form={isNew:false,added:r.added,key:r.key,hidden:r.hidden,f:{title:t.title||'',country:t.country||'',type:t.type||'land',area:t.area||'',duration:t.duration||'',label:t.label||'',hero:t.hero||'',desc:t.desc||'',best:t.best||'',image:t.image||'',priceValue:Number(t.priceValue)>0?t.priceValue:'',per:t.per==='group'?'group':'person',cap:t.cap||'',highlights:(t.highlights||[]).slice(),includes:(t.includes||[]).slice(),extras:(t.extras||[]).slice(),extrasNote:t.extrasNote||'',extrasFoot:t.extrasFoot||'',route:t.route||'',routeNote:t.routeNote||'',more:clone(t.more||[]),facts:clone(t.facts||[])}};
+  }
+  function lines(a){return (a||[]).join('\n');}
+  function fld(id,label,input,hint){return '<div class="mg-fld"><label for="'+id+'">'+esc(label)+'</label>'+input+(hint?'<div class="mg-hint">'+hint+'</div>':'')+'</div>';}
+  function txt(id,v,ph,max){return '<input id="'+id+'" data-cx="'+id.slice(2)+'" value="'+esc(v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+(max?' maxlength="'+max+'"':'')+' autocomplete="off">';}
+  function area(id,v,rows,ph,max){return '<textarea id="'+id+'" data-cx="'+id.slice(2)+'" rows="'+(rows||3)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+(max?' maxlength="'+max+'"':'')+'>'+esc(v)+'</textarea>';}
+  function formHtml(){
+    var F=CX.form;
+    if(!F)return '<div class="cx-empty"><h3>Choose an experience</h3><p>Pick one from the list to change its price, wording, photo, highlights and what is included. Or add a new experience.</p></div>';
+    var f=F.f,isAdded=F.isNew||F.added,base=F.isNew?null:baseOf(F.key);
+    var areas=[];try{areas=(window.__exAreas&&window.__exAreas[f.country])||[];}catch(e){}
+    var h='<div class="cx-head"><div><h2>'+(F.isNew?'New experience':esc(f.title||'Experience'))+'</h2>'+(F.isNew?'':'<p class="mg-hint" style="margin:2px 0 0">'+(F.added?'Added by you':'Comes with the website')+(F.hidden?' · <b>Hidden from the website</b>':'')+'</p>')+'</div>'
+      +(F.isNew?'':'<a class="mg-btn sm ghost" id="cxView" href="#" data-cx-view="1">See the page</a>')+'</div>';
+    h+='<div class="cx-sec"><h3>The basics</h3>'
+      +fld('cxtitle','Name',txt('cxtitle',f.title,'',120))
+      +(isAdded?'<div class="cx-two">'+fld('cxcountry','Island','<select id="cxcountry" data-cx="country">'+C().COUNTRIES.map(function(c){return '<option'+(f.country===c?' selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select>')
+        +fld('cxtype','On water or on land','<select id="cxtype" data-cx="type"><option value="land"'+(f.type==='land'?' selected':'')+'>On land</option><option value="water"'+(f.type==='water'?' selected':'')+'>On water</option></select>')+'</div>'
+        :'<p class="mg-hint" style="margin:-6px 0 12px">'+esc(f.country)+' · '+(f.type==='water'?'on water':'on land')+'</p>')
+      +'<div class="cx-two">'+fld('cxarea','Area','<input id="cxarea" data-cx="area" value="'+esc(f.area)+'" maxlength="80" list="cxAreas" autocomplete="off"><datalist id="cxAreas">'+areas.map(function(a){return '<option value="'+esc(a)+'">';}).join('')+'</datalist>')
+        +fld('cxduration','How long',txt('cxduration',f.duration,'For example: 6 to 8 hours',60))+'</div>'
+      +fld('cxhero','One-line summary',txt('cxhero',f.hero,'Shown under the name on the cards',200))
+      +fld('cxdesc','Description',area('cxdesc',f.desc,6,'',1500))
+      +fld('cxbest','Best for',txt('cxbest',f.best,'For example: Families · Culture lovers',160),'Separate groups with a dot.')+'</div>';
+    h+='<div class="cx-sec"><h3>Price</h3><div class="cx-three">'
+      +fld('cxpriceValue','Price from (US$)','<input id="cxpriceValue" data-cx="priceValue" inputmode="decimal" value="'+esc(f.priceValue)+'" placeholder="0">','Leave empty for "Price on request".')
+      +fld('cxper','Priced per','<select id="cxper" data-cx="per"><option value="person"'+(f.per==='person'?' selected':'')+'>Person</option><option value="group"'+(f.per==='group'?' selected':'')+'>Group or boat</option></select>')
+      +(f.per==='group'?fld('cxcap','Up to how many guests','<input id="cxcap" data-cx="cap" inputmode="numeric" value="'+esc(f.cap)+'" placeholder="For example: 8">','The group trip builder books one for every this many guests.'):'<div></div>')+'</div></div>';
+    h+='<div class="cx-sec"><h3>Photo</h3><div class="cx-photo">'+(f.image?'<img src="'+esc(f.image)+'" alt="">':'<div class="cx-noimg">No photo yet</div>')+'<div><button type="button" class="mg-btn sm" id="cxPhoto">'+(f.image?'Change photo':'Choose a photo')+'</button>'+(!F.isNew&&base&&f.image!==base.image?' <button type="button" class="mg-btn sm ghost" id="cxPhotoOrig">Put back the original</button>':'')+'</div></div></div>';
+    h+='<div class="cx-sec"><h3>What guests get</h3>'
+      +fld('cxhighlights','Highlights',area('cxhighlights',lines(f.highlights),5,'',3000),'One per line, up to 12.')
+      +fld('cxincludes','What is included',area('cxincludes',lines(f.includes),5,'',3400),'One per line. Shown as a ticked list on the experience page.')
+      +fld('cxextras','Optional extras (cost extra)',area('cxextras',lines(f.extras),4,'',3400),'One per line.')
+      +'<div class="cx-two">'+fld('cxextrasNote','Note above the extras',txt('cxextrasNote',f.extrasNote,'',300))+fld('cxextrasFoot','Note below the extras',txt('cxextrasFoot',f.extrasFoot,'',300))+'</div></div>';
+    h+='<div class="cx-sec"><h3>Itinerary</h3>'
+      +fld('cxroute','Suggested route',txt('cxroute',f.route,'Pickup → First stop → Lunch → Drop-off',400))
+      +fld('cxrouteNote','Note under the route',txt('cxrouteNote',f.routeNote,'',400))+'</div>';
+    h+='<div class="cx-sec"><h3>More sections</h3><p class="mg-hint" style="margin:-6px 0 10px">For things like airport pickup, what to bring or before you book. Each has a heading and a short paragraph.</p>'
+      +f.more.map(function(m,i){return '<div class="cx-pair"><input data-cx-more-h="'+i+'" value="'+esc(m.h)+'" placeholder="Heading" maxlength="80"><textarea data-cx-more-p="'+i+'" rows="3" placeholder="Paragraph" maxlength="900">'+esc(m.p)+'</textarea><button type="button" class="mg-btn sm ghost" data-cx-more-del="'+i+'">Remove</button></div>';}).join('')
+      +(f.more.length<8?'<button type="button" class="mg-btn sm" id="cxMoreAdd">Add a section</button>':'')+'</div>';
+    h+='<div class="cx-sec"><h3>Quick facts</h3><p class="mg-hint" style="margin:-6px 0 10px">Extra rows in the "Good to know" table, such as group size or pickup.</p>'
+      +f.facts.map(function(m,i){return '<div class="cx-fact"><input data-cx-fact-l="'+i+'" value="'+esc(m[0])+'" placeholder="Label" maxlength="40"><input data-cx-fact-v="'+i+'" value="'+esc(m[1])+'" placeholder="Value" maxlength="200"><button type="button" class="mg-btn sm ghost" data-cx-fact-del="'+i+'">Remove</button></div>';}).join('')
+      +(f.facts.length<8?'<button type="button" class="mg-btn sm" id="cxFactAdd">Add a fact</button>':'')+'</div>';
+    h+='<div class="mg-msg'+(CX.err?' on err':'')+'" id="cxMsg" role="alert">'+esc(CX.err)+'</div>'
+      +'<div class="cx-bar"><button type="button" class="mg-btn ok" id="cxSave">'+(needsApproval()?'Send for approval':(F.isNew?'Add and publish':'Save and publish'))+'</button>'
+      +'<button type="button" class="mg-btn ghost" id="cxCancel">Cancel</button>'
+      +(F.isNew?'':'<button type="button" class="mg-btn ghost" id="cxHide">'+(F.hidden?'Show on the website':'Take off the website')+'</button>')
+      +(!F.isNew&&!F.added&&find(F.key)&&find(F.key).edited?'<button type="button" class="mg-btn ghost" id="cxOrig">Put back all the original details</button>':'')
+      +(F.added?'<button type="button" class="mg-btn ghost danger" id="cxDel">Delete</button>':'')+'</div>';
+    return h;
+  }
+
+  /* ---------- from the form to a state ---------- */
+  function listOf(v){return String(v||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);}
+  function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+  function stateFromForm(){
+    var F=CX.form,f=F.f;
+    var vals={title:f.title.trim(),area:f.area.trim(),duration:f.duration.trim(),label:f.label.trim(),hero:f.hero.trim(),desc:f.desc.trim(),best:f.best.trim(),image:f.image.trim(),
+      priceValue:f.priceValue===''?0:Number(f.priceValue),per:f.per,cap:f.per==='group'&&f.cap!==''?Number(f.cap):null,
+      highlights:f.highlights,includes:f.includes,extras:f.extras,extrasNote:f.extrasNote.trim(),extrasFoot:f.extrasFoot.trim(),route:f.route.trim(),routeNote:f.routeNote.trim(),
+      more:f.more.filter(function(m){return m.h.trim()&&m.p.trim();}).map(function(m){return {h:m.h.trim(),p:m.p.trim()};}),
+      facts:f.facts.filter(function(m){return m[0].trim()&&m[1].trim();}).map(function(m){return [m[0].trim(),m[1].trim()];})};
+    if(F.isNew||F.added){
+      var a=Object.assign({},vals,{country:f.country,type:f.type});
+      if(!a.cap)delete a.cap;
+      return {added:a,hidden:F.hidden||undefined};
+    }
+    var base=baseOf(F.key)||{},edits={};
+    Object.keys(vals).forEach(function(k){
+      var b=base[k],v=vals[k];
+      if(k==='priceValue'){b=Number(b)>0?Number(b):0;if(v!==b)edits[k]=v;return;}
+      if(k==='per'){b=base.per==='group'?'group':'person';if(v!==b)edits[k]=v;return;}
+      if(k==='cap'){b=base.cap||null;if(v!==b)edits[k]=v;return;}
+      if(Array.isArray(v)){if(!same(v,b||[]))edits[k]=v;return;}
+      if(String(v)!==String(b==null?'':b))edits[k]=v;
+    });
+    var st={};
+    if(Object.keys(edits).length){
+      /* a price change always carries who it is priced per, so it reads the same wherever it is shown */
+      if(edits.priceValue!==undefined||edits.per!==undefined||edits.cap!==undefined){edits.priceValue=vals.priceValue;edits.per=vals.per;edits.cap=vals.cap;}
+      st.edits=edits;
+    }
+    if(F.hidden)st.hidden=true;
+    return st;
+  }
+
+  /* ---------- saving ---------- */
+  function send(key,state,label,okText){
+    var b=document.getElementById('cxSave');if(b)b.disabled=true;
+    CX.busy=true;
+    api('site-edit',{action:'save',changes:[{id:'@c',list:'experiences',key:key,value:state,label:label,before:C().stateOf(CX.doc,key)}]}).then(function(d){
+      CX.busy=false;
+      if(d.unchanged){CX.toast='Nothing was different, so nothing changed.';}
+      else if(d.live){
+        var cs=C().cleanState('experiences',key,state),put=C().putState(CX.doc,key,cs.value||state);if(put.doc)CX.doc=put.doc;
+        try{window.ssCatalogApply(CX.doc);}catch(e){}
+        CX.toast=okText||'Published. It is live on the website now. The experience page can take a few minutes to refresh for visitors.';
+      }else{CX.toast='Sent to the owner for approval. You will get an email when it is decided.';CX.drafts=1;if(MG.PG){MG.PG.drafts=null;}}
+      CX.form=null;CX.sel=null;CX.err='';MG.loadHome&&MG.loadHome();
+      var pg=document.getElementById('mgPage');if(pg&&S.screen==='catalog'){pg.innerHTML=screenCatalog();window.scrollTo(0,0);}
+      setTimeout(function(){CX.toast='';var p2=document.getElementById('mgPage');var m=p2&&p2.querySelector('.mg-msg.on.ok');if(m&&S.screen==='catalog')m.remove();},9000);
+    }).catch(function(e){CX.busy=false;CX.err=e.message;var m=document.getElementById('cxMsg');if(m){m.textContent=e.message;m.className='mg-msg on err';}if(b)b.disabled=false;});
+  }
+  function save(){
+    var F=CX.form;if(!F)return;
+    var f=F.f;
+    if(!f.title.trim()){CX.err='Give it a name.';return fail();}
+    if(F.isNew||F.added){
+      if(!f.image.trim()){CX.err='Choose a photo.';return fail();}
+      if(!f.desc.trim()){CX.err='Write a short description.';return fail();}
+    }
+    if(f.priceValue!==''&&!(Number(f.priceValue)>=0)){CX.err='The price must be a number.';return fail();}
+    if(f.per==='group'&&f.cap!==''&&!(Number(f.cap)>=1)){CX.err='"Up to how many guests" must be a number.';return fail();}
+    send(F.key,stateFromForm(),'Experience: '+short(f.title,70));
+  }
+  function fail(){var m=document.getElementById('cxMsg');if(m){m.textContent=CX.err;m.className='mg-msg on err';m.scrollIntoView({block:'nearest'});}}
+
+  /* ---------- wiring ---------- */
+  MG.screens.catalog=screenCatalog;
+  MG.after.catalog=function(){
+    if(!C())return;
+    load().then(function(){var p=document.getElementById('mgPage');if(p&&S.screen==='catalog')p.innerHTML=screenCatalog();}).catch(function(e){var p=document.getElementById('mgPage');if(p)p.insertAdjacentHTML('beforeend','<div class="mg-msg on err">'+esc(e.message)+'</div>');});
+  };
+  function refresh(){var p=document.getElementById('mgPage');if(p&&S.screen==='catalog'){var y=window.scrollY;p.innerHTML=screenCatalog();window.scrollTo(0,y);}}
+  function refreshForm(){var e=document.getElementById('cxEdit');if(e)e.innerHTML=formHtml();}
+  MG.leave=(function(prev){return function(from){if(from==='catalog'&&CX.form&&CX.dirty){return confirm('You have changes that are not saved yet. Leave without saving them?');}return prev?prev(from):true;};})(MG.leave);
+
+  R.addEventListener('click',function(e){
+    if(S.screen!=='catalog')return;
+    var t=e.target.closest('button,a');if(!t)return;
+    var ds=t.dataset;
+    if(ds.cxPick){startForm(ds.cxPick);CX.dirty=false;refresh();var ed=document.getElementById('cxEdit');if(ed&&window.innerWidth<1000)ed.scrollIntoView({behavior:'smooth',block:'start'});return;}
+    if(t.id==='cxNew'){startForm(null);CX.dirty=false;refresh();var ed2=document.getElementById('cxEdit');if(ed2&&window.innerWidth<1000)ed2.scrollIntoView({behavior:'smooth',block:'start'});return;}
+    if(t.id==='cxMore'){CX.shown+=40;refresh();return;}
+    if(t.id==='cxCancel'){CX.form=null;CX.sel=null;CX.dirty=false;CX.err='';refresh();return;}
+    if(t.id==='cxSave')return save();
+    if(t.id==='cxPhoto'){MG.changer({title:'Choose a photo for this experience',current:CX.form.f.image,simple:true,folder:'tours',onUse:function(r){CX.form.f.image=r.url;CX.dirty=true;refreshForm();}});return;}
+    if(t.id==='cxPhotoOrig'){var b0=baseOf(CX.form.key);CX.form.f.image=b0?b0.image:'';CX.dirty=true;refreshForm();return;}
+    if(t.id==='cxMoreAdd'){CX.form.f.more.push({h:'',p:''});CX.dirty=true;refreshForm();return;}
+    if(ds.cxMoreDel!==undefined){CX.form.f.more.splice(+ds.cxMoreDel,1);CX.dirty=true;refreshForm();return;}
+    if(t.id==='cxFactAdd'){CX.form.f.facts.push(['','']);CX.dirty=true;refreshForm();return;}
+    if(ds.cxFactDel!==undefined){CX.form.f.facts.splice(+ds.cxFactDel,1);CX.dirty=true;refreshForm();return;}
+    if(t.id==='cxHide'){
+      var F=CX.form;F.hidden=!F.hidden;
+      if(!confirm(F.hidden?'Take this experience off the website? Visitors will no longer see it or its page. You can show it again at any time.':'Show this experience on the website again?')){F.hidden=!F.hidden;return;}
+      send(F.key,stateFromForm(),(F.hidden?'Hide: ':'Show: ')+short(F.f.title,70),F.hidden?'Taken off the website.':'Back on the website.');return;
+    }
+    if(t.id==='cxOrig'){
+      if(!confirm('Put back every original detail of this experience (name, price, wording, photo, lists)?'))return;
+      var st=CX.form.hidden?{hidden:true}:{};send(CX.form.key,st,'Put back original: '+short(CX.form.f.title,60),'Put back. The original details are live again.');return;
+    }
+    if(t.id==='cxDel'){
+      if(!confirm('Delete this experience you added? This takes it off the website for good.'))return;
+      send(CX.form.key,{},'Delete: '+short(CX.form.f.title,70),'Deleted.');return;
+    }
+    if(ds.cxView){
+      e.preventDefault();var r=find(CX.form.key),sl=r?C().slugOf(r.item):'';if(sl)window.open('/tours/'+sl+'?v='+Date.now(),'_blank','noopener');return;
+    }
+  });
+  R.addEventListener('input',function(e){
+    if(S.screen!=='catalog')return;
+    var t=e.target;
+    if(t.id==='cxQ'){CX.q=t.value;CX.shown=40;var p=t.selectionStart;refresh();var q=document.getElementById('cxQ');if(q){q.focus();q.setSelectionRange(p,p);}return;}
+    if(!CX.form||!t.dataset)return;
+    var f=CX.form.f,k=t.dataset.cx;
+    if(k){
+      if(k==='highlights'||k==='includes'||k==='extras')f[k]=listOf(t.value);
+      else f[k]=t.value;
+      CX.dirty=true;return;
+    }
+    if(t.dataset.cxMoreH!==undefined){f.more[+t.dataset.cxMoreH].h=t.value;CX.dirty=true;return;}
+    if(t.dataset.cxMoreP!==undefined){f.more[+t.dataset.cxMoreP].p=t.value;CX.dirty=true;return;}
+    if(t.dataset.cxFactL!==undefined){f.facts[+t.dataset.cxFactL][0]=t.value;CX.dirty=true;return;}
+    if(t.dataset.cxFactV!==undefined){f.facts[+t.dataset.cxFactV][1]=t.value;CX.dirty=true;return;}
+  });
+  R.addEventListener('change',function(e){
+    if(S.screen!=='catalog')return;
+    var t=e.target;
+    if(t.id==='cxCountry'){CX.country=t.value;CX.shown=40;refresh();return;}
+    if(t.id==='cxStatus'){CX.status=t.value;CX.shown=40;refresh();return;}
+    if(CX.form&&t.dataset&&t.dataset.cx==='per'){CX.form.f.per=t.value;CX.dirty=true;refreshForm();return;}
+    if(CX.form&&t.dataset&&t.dataset.cx==='country'){CX.form.f.country=t.value;CX.dirty=true;refreshForm();return;}
+  });
 })();
 </script>
 <style id="manage-inbox-style">

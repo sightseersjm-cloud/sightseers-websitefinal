@@ -4,10 +4,12 @@
 const db = require('./db');
 const { readSettings, writeSettings } = require('./siteStore');
 const { uid } = require('./auth');
+const catalog = require('./catalog');
 
 const PE = 'ss_page_editor_settings';   // wording and photos tied to a place on a page
 const SITE = 'ss_site_settings';        // brand, phones, home hero and a few home-page blocks
 const DYN = 'ss_dynamic_sections_v1';   // sections added to a page
+const CAT = 'ss_catalog_v1';            // experiences hidden, edited or added: { experiences: { edits, hidden, added } }
 const TEXT = 'ss_text_edits_v1';        // any word or photo changed in place: { page or '*': { original text or 'img:' + original photo: new value } }
 
 /* admin field id -> the key the site reads it from in the SITE store. Anything not listed lives in PE under its own id. */
@@ -29,6 +31,8 @@ const KEEP_SECTION_SNAPSHOTS = 30;
 
 const SECTIONS_ID = '@sections';
 const TEXT_ID = '@t';
+const CAT_ID = '@c';
+const catFieldId = (list, key) => CAT_ID + ':' + list + ':' + shortHash(key);
 const MAX_TEXT_EDITS = 3000;
 const normText = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
 const shortHash = v => require('crypto').createHash('sha1').update(String(v)).digest('hex').slice(0, 8);
@@ -74,6 +78,12 @@ function cleanChange(c) {
   if (c.id === SECTIONS_ID) {
     const r = cleanSections(c.value);
     return r.error ? r : { id: SECTIONS_ID, kind: 'sections', value: r.value, label: label || 'Added sections', page };
+  }
+  if (c.id === CAT_ID) {
+    const list = String(c.list || '');
+    const r = catalog.cleanState(list, c.key, c.value);
+    if (r.error) return r;
+    return { id: CAT_ID, kind: 'c', list, key: String(c.key), value: r.value, label: label || 'Experience', page: 'tours', before: c.before && typeof c.before === 'object' ? c.before : {} };
   }
   if (c.id === TEXT_ID) {
     const scope = c.scope === '*' ? '*' : String(c.scope || '').replace(/[^a-z0-9-]/gi, '').slice(0, 40);
@@ -125,6 +135,16 @@ async function publish(changes, user, meta) {
   const made = [];
   for (const c of changes) {
     let store, key, now, was;
+    if (c.id === CAT_ID) {
+      store = CAT;
+      const doc = settings[CAT] && typeof settings[CAT] === 'object' && !Array.isArray(settings[CAT]) ? settings[CAT] : {};
+      was = catalog.stateOf(doc[c.list], c.key);
+      const put = catalog.putState(doc[c.list], c.key, c.value);
+      doc[c.list] = put.doc; settings[CAT] = doc; now = c.value;
+      made.push({ id: uid(), group, at, by: who(user), fieldId: catFieldId(c.list, c.key), store, kind: 'c', label: c.label, page: 'tours', list: c.list, key: c.key, before: was, after: now,
+        via: meta.via || 'direct', note: meta.note || '', approvedBy: meta.approvedBy || null, restoredFrom: meta.restoredFrom || null });
+      continue;
+    }
     if (c.id === TEXT_ID) {
       store = TEXT;
       const doc = settings[TEXT] && typeof settings[TEXT] === 'object' && !Array.isArray(settings[TEXT]) ? settings[TEXT] : {};
@@ -161,6 +181,7 @@ async function publish(changes, user, meta) {
 
 /* what a change would replace right now, so the person approving sees the real before and after */
 function liveValue(settings, c) {
+  if (c.id === CAT_ID) { const d = settings[CAT]; return catalog.stateOf(d && d[c.list], c.key); }
   if (c.id === TEXT_ID) { const d = settings[TEXT]; const sc = d && d[c.scope]; return sc && sc[c.orig] !== undefined ? sc[c.orig] : ''; }
   if (c.id === SECTIONS_ID) return Array.isArray(settings[DYN]) ? settings[DYN] : [];
   const loc = where(c.id);
@@ -171,11 +192,11 @@ async function currentValue(c) { return liveValue(await readSettings(), c); }
 
 async function makeDraft(changes, user, note) {
   const draft = { id: uid(), at: new Date().toISOString(), by: who(user), note: String(note || '').slice(0, 400), status: 'pending',
-    changes: changes.map(c => Object.assign({ id: c.id, kind: c.kind, label: c.label, page: c.page, before: c.before || '', after: c.value }, c.id === TEXT_ID ? { scope: c.scope, orig: c.orig } : {})) };
+    changes: changes.map(c => Object.assign({ id: c.id, kind: c.kind, label: c.label, page: c.page, before: c.before || '', after: c.value }, c.id === TEXT_ID ? { scope: c.scope, orig: c.orig } : c.id === CAT_ID ? { list: c.list, key: c.key } : {})) };
   const drafts = await db.getCollection('site-drafts');
   drafts.push(draft);
   await db.setCollection('site-drafts', drafts.slice(-300));
   return draft;
 }
 
-module.exports = { PE, SITE, DYN, TEXT, TEXT_ID, MAX_TEXT_EDITS, countTextEdits, textFieldId, SITE_FIELDS, PAGES, SECTIONS_ID, where, okUrl, cleanChange, cleanSections, publish, currentValue, liveValue, makeDraft, who };
+module.exports = { PE, SITE, DYN, TEXT, TEXT_ID, CAT, CAT_ID, MAX_TEXT_EDITS, countTextEdits, textFieldId, SITE_FIELDS, PAGES, SECTIONS_ID, where, okUrl, cleanChange, cleanSections, publish, currentValue, liveValue, makeDraft, who };
