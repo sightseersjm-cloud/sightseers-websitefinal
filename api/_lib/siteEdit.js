@@ -8,6 +8,7 @@ const { uid } = require('./auth');
 const PE = 'ss_page_editor_settings';   // wording and photos tied to a place on a page
 const SITE = 'ss_site_settings';        // brand, phones, home hero and a few home-page blocks
 const DYN = 'ss_dynamic_sections_v1';   // sections added to a page
+const TEXT = 'ss_text_edits_v1';        // any word or photo changed in place: { page or '*': { original text or 'img:' + original photo: new value } }
 
 /* admin field id -> the key the site reads it from in the SITE store. Anything not listed lives in PE under its own id. */
 const SITE_FIELDS = {
@@ -27,6 +28,12 @@ const KEEP_HISTORY = 1500;
 const KEEP_SECTION_SNAPSHOTS = 30;
 
 const SECTIONS_ID = '@sections';
+const TEXT_ID = '@t';
+const MAX_TEXT_EDITS = 3000;
+const normText = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+const shortHash = v => require('crypto').createHash('sha1').update(String(v)).digest('hex').slice(0, 8);
+const textFieldId = (scope, orig) => TEXT_ID + ':' + scope + ':' + shortHash(orig);
+const countTextEdits = doc => Object.keys(doc || {}).reduce((n, k) => n + Object.keys(doc[k] || {}).length, 0);
 
 function where(id) {
   const m = /^(admin[A-Za-z0-9]{2,80})(__alt|__focus)?$/.exec(String(id || ''));
@@ -68,6 +75,21 @@ function cleanChange(c) {
     const r = cleanSections(c.value);
     return r.error ? r : { id: SECTIONS_ID, kind: 'sections', value: r.value, label: label || 'Added sections', page };
   }
+  if (c.id === TEXT_ID) {
+    const scope = c.scope === '*' ? '*' : String(c.scope || '').replace(/[^a-z0-9-]/gi, '').slice(0, 40);
+    if (!scope) return { error: 'That change did not say which page it belongs to.' };
+    const isImg = c.kind === 'ti';
+    let orig = isImg ? String(c.orig || '').trim() : normText(c.orig);
+    if (isImg) {
+      if (!okUrl(orig)) return { error: 'That photo could not be identified.' };
+      orig = 'img:' + orig;
+    } else if (!orig || orig.length > 600 || /^img:/.test(orig)) return { error: 'That wording could not be identified.' };
+    let value = typeof c.value === 'string' ? c.value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '') : null;
+    if (value === null) return { error: 'The new value must be text.' };
+    if (isImg) { value = value.trim(); if (value && !okUrl(value)) return { error: 'A photo must be a web address starting with https:// or a path on this site.' }; }
+    else { value = value.replace(/\s+/g, ' ').trim(); if (value.length > 1200) return { error: 'That text is too long.' }; }
+    return { id: TEXT_ID, kind: isImg ? 'ti' : 't', scope, orig, value, label: label || (isImg ? 'Photo' : 'Wording'), page: scope === '*' ? '' : scope, before: normText(c.before).slice(0, MAX_TEXT) };
+  }
   const loc = where(c.id);
   if (!loc) return { error: 'That field is not one that can be changed here.' };
   let value = c.value;
@@ -103,6 +125,18 @@ async function publish(changes, user, meta) {
   const made = [];
   for (const c of changes) {
     let store, key, now, was;
+    if (c.id === TEXT_ID) {
+      store = TEXT;
+      const doc = settings[TEXT] && typeof settings[TEXT] === 'object' && !Array.isArray(settings[TEXT]) ? settings[TEXT] : {};
+      const sc = doc[c.scope] && typeof doc[c.scope] === 'object' ? doc[c.scope] : {};
+      was = sc[c.orig] !== undefined ? sc[c.orig] : '';
+      if (c.value === '') delete sc[c.orig]; else sc[c.orig] = c.value;
+      if (Object.keys(sc).length) doc[c.scope] = sc; else delete doc[c.scope];
+      settings[TEXT] = doc; now = c.value;
+      made.push({ id: uid(), group, at, by: who(user), fieldId: textFieldId(c.scope, c.orig), store, kind: c.kind, label: c.label, page: c.page || '', scope: c.scope, orig: c.orig, before: was, after: now,
+        via: meta.via || 'direct', note: meta.note || '', approvedBy: meta.approvedBy || null, restoredFrom: meta.restoredFrom || null });
+      continue;
+    }
     if (c.id === SECTIONS_ID) { store = DYN; was = Array.isArray(settings[DYN]) ? settings[DYN] : []; settings[DYN] = c.value; now = c.value; }
     else {
       store = c.store; key = c.key;
@@ -127,6 +161,7 @@ async function publish(changes, user, meta) {
 
 /* what a change would replace right now, so the person approving sees the real before and after */
 function liveValue(settings, c) {
+  if (c.id === TEXT_ID) { const d = settings[TEXT]; const sc = d && d[c.scope]; return sc && sc[c.orig] !== undefined ? sc[c.orig] : ''; }
   if (c.id === SECTIONS_ID) return Array.isArray(settings[DYN]) ? settings[DYN] : [];
   const loc = where(c.id);
   const doc = (loc && settings[loc.store]) || {};
@@ -136,11 +171,11 @@ async function currentValue(c) { return liveValue(await readSettings(), c); }
 
 async function makeDraft(changes, user, note) {
   const draft = { id: uid(), at: new Date().toISOString(), by: who(user), note: String(note || '').slice(0, 400), status: 'pending',
-    changes: changes.map(c => ({ id: c.id, kind: c.kind, label: c.label, page: c.page, before: c.before || '', after: c.value })) };
+    changes: changes.map(c => Object.assign({ id: c.id, kind: c.kind, label: c.label, page: c.page, before: c.before || '', after: c.value }, c.id === TEXT_ID ? { scope: c.scope, orig: c.orig } : {})) };
   const drafts = await db.getCollection('site-drafts');
   drafts.push(draft);
   await db.setCollection('site-drafts', drafts.slice(-300));
   return draft;
 }
 
-module.exports = { PE, SITE, DYN, SITE_FIELDS, PAGES, SECTIONS_ID, where, okUrl, cleanChange, cleanSections, publish, currentValue, liveValue, makeDraft, who };
+module.exports = { PE, SITE, DYN, TEXT, TEXT_ID, MAX_TEXT_EDITS, countTextEdits, textFieldId, SITE_FIELDS, PAGES, SECTIONS_ID, where, okUrl, cleanChange, cleanSections, publish, currentValue, liveValue, makeDraft, who };

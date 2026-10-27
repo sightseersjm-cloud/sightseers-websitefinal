@@ -16,6 +16,10 @@ async function prepare(list) {
     if (c.error) return { error: c.error };
     const now = await edit.currentValue(c);
     if (JSON.stringify(now) !== JSON.stringify(c.value)) clean.push(c);
+    if (c.id === edit.TEXT_ID && c.value !== '' && now === '') {
+      const live = await readSettings();
+      if (edit.countTextEdits(live[edit.TEXT]) + clean.filter(x => x.id === edit.TEXT_ID && x.value !== '').length > edit.MAX_TEXT_EDITS) return { error: 'The site already holds as many in-page changes as it can (' + edit.MAX_TEXT_EDITS + '). Put some back to the original first.' };
+    }
   }
   return { changes: clean };
 }
@@ -77,6 +81,7 @@ module.exports = async function handler(req, res) {
       const draft = id ? (await db.getCollection('site-drafts')).find(d => d.id === id) : null;
       if (!draft || draft.status !== 'pending') return res.status(404).json({ error: 'This preview link has expired or the changes have already been decided.' });
       return res.status(200).json({ ok: true, by: draft.by.name, note: draft.note, changes: draft.changes.map(c => {
+        if (c.id === edit.TEXT_ID) return { id: c.id, kind: c.kind, after: c.after, page: c.page, store: edit.TEXT, scope: c.scope, orig: c.orig };
         const loc = c.id === edit.SECTIONS_ID ? { store: edit.DYN, key: '' } : edit.where(c.id);
         return { id: c.id, kind: c.kind, after: c.after, page: c.page, store: loc && loc.store, key: loc && loc.key };
       }) });
@@ -131,10 +136,11 @@ module.exports = async function handler(req, res) {
     const list = [];
     for (const h of entries) {
       if (h.count) continue;
+      if (h.kind === 't' || h.kind === 'ti') { list.push({ id: edit.TEXT_ID, kind: h.kind, scope: h.scope, orig: h.kind === 'ti' ? String(h.orig || '').replace(/^img:/, '') : h.orig, value: typeof h.before === 'string' ? h.before : '', label: 'Put back: ' + (h.label || 'wording'), page: h.page, before: typeof h.after === 'string' ? h.after : '', keepEmpty: true }); continue; }
       list.push({ id: h.fieldId, kind: h.kind === 'sections' ? 'sections' : (h.kind === 'image' ? 'image' : 'text'), value: h.before, label: 'Put back: ' + (h.label || h.fieldId), page: h.page, before: typeof h.after === 'string' ? h.after : '' });
     }
     /* text that had no earlier saved version cannot be put back from here: "Put back the original" handles that */
-    const usable = list.filter(c => c.value !== '' && c.value !== undefined && c.value !== null);
+    const usable = list.filter(c => c.keepEmpty || (c.value !== '' && c.value !== undefined && c.value !== null));
     if (!usable.length) return res.status(400).json({ error: 'There is no earlier version to put back. Use "Put back the original" on that item instead.' });
     return submit(req, res, user, usable, 'Put an earlier version back', { via: 'restore', restoredFrom: body.group || body.id });
   }
@@ -153,7 +159,7 @@ module.exports = async function handler(req, res) {
       tellAuthor(req, d, false, d.reason);
       return res.status(200).json({ ok: true });
     }
-    const list = d.changes.map(c => ({ id: c.id, kind: c.kind, value: c.after, label: c.label, page: c.page, before: typeof c.before === 'string' ? c.before : '' }));
+    const list = d.changes.map(c => Object.assign({ id: c.id, kind: c.kind, value: c.after, label: c.label, page: c.page, before: typeof c.before === 'string' ? c.before : '' }, c.id === edit.TEXT_ID ? { scope: c.scope, orig: c.kind === 'ti' ? String(c.orig || '').replace(/^img:/, '') : c.orig } : {}));
     const p = await prepare(list);
     if (p.error) return res.status(400).json({ error: p.error });
     if (p.changes.length) await edit.publish(p.changes, d.by, { via: 'approved', approvedBy: edit.who(owner), note: d.note });

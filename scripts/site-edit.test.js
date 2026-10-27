@@ -143,6 +143,34 @@ let fails = 0; const ok = (name, cond, extra) => { console.log((cond ? 'PASS ' :
   r = await call('settings', 'GET', '/api/settings', {}, owner, { fresh: '1' }); ok('a signed-in team member can ask for the latest', r.body.ss_site_settings.heroTitle === 'Changed behind the back');
   ok('saving always starts from the latest, never the held copy', (await post({ action: 'save', changes: [{ id: 'adminHeroEm', kind: 'text', value: 'Fresh base', label: 'x', page: 'home' }] }, owner)).body.live === true && JSON.parse(store.get('ss-admin/settings.json').toString()).ss_site_settings.heroTitle === 'Changed behind the back');
 
+  // --- any word or photo changed in place on a page
+  const T = (v, extra) => Object.assign({ id: '@t', kind: 't', scope: 'home', orig: 'Plan your trip', value: v, label: 'Wording: Plan your trip', page: 'home', before: 'Plan your trip' }, extra || {});
+  r = await post({ action: 'save', changes: [T('Start planning today')] }, owner);
+  s = await live(); ok('an in-place word change goes live for one page', r.body.live === true && s.ss_text_edits_v1.home['Plan your trip'] === 'Start planning today');
+  r = await post({ action: 'save', changes: [T('  Start   planning\ttoday ')] }, owner); ok('extra spaces make no difference', r.body.unchanged === true);
+  r = await post({ action: 'save', changes: [T('Book now', { scope: '*', page: '' })] }, owner);
+  s = await live(); ok('a whole-site change is stored under *', s.ss_text_edits_v1['*']['Plan your trip'] === 'Book now');
+  ok('an empty page scope is refused', (await post({ action: 'save', changes: [T('x', { scope: '' })] }, owner)).code === 400);
+  ok('wording that is too long is refused', (await post({ action: 'save', changes: [T('x'.repeat(1300))] }, owner)).code === 400);
+  ok('a photo change needs a safe address', (await post({ action: 'save', changes: [{ id: '@t', kind: 'ti', scope: 'home', orig: 'javascript:1', value: 'https://example.com/n.jpg' }] }, owner)).code === 400);
+  r = await post({ action: 'save', changes: [{ id: '@t', kind: 'ti', scope: 'home', orig: '/assets/a.jpg', value: 'https://example.com/n.jpg', label: 'Photo: a.jpg', page: 'home' }] }, owner);
+  s = await live(); ok('a photo swap is stored against the original photo', s.ss_text_edits_v1.home['img:/assets/a.jpg'] === 'https://example.com/n.jpg');
+  ok('a script cannot be the new photo', (await post({ action: 'save', changes: [{ id: '@t', kind: 'ti', scope: 'home', orig: '/assets/a.jpg', value: 'javascript:alert(1)' }] }, owner)).code === 400);
+  r = await get({ view: 'history' }, owner); const th = r.body.history.find(h => h.kind === 't' && h.scope === 'home' && h.after === 'Start planning today');
+  ok('history keeps the page and the original wording', !!th && th.orig === 'Plan your trip');
+  r = await post({ action: 'restore', id: th.id }, owner); s = await live();
+  ok('an in-place change can be put back to the original', r.code === 200 && !(s.ss_text_edits_v1.home && s.ss_text_edits_v1.home['Plan your trip']));
+  r = await post({ action: 'save', changes: [T('')] }, owner); ok('an empty value on something never changed does nothing', r.body.unchanged === true);
+  r = await post({ action: 'save', changes: [T('Needs a look')] }, writer);
+  ok('a team member who needs approval sends an in-place change as a draft', r.body.live === false && !!r.body.draftId);
+  s = await live(); ok('the draft is not live', !(s.ss_text_edits_v1.home && s.ss_text_edits_v1.home['Plan your trip']));
+  r = await get({ view: 'drafts' }, owner); const dr = r.body.pending.find(d => d.changes.some(c => c.id === '@t'));
+  ok('the owner sees the draft with the original wording', !!dr && dr.changes[0].orig === 'Plan your trip' && dr.changes[0].now === '');
+  r = await post({ action: 'preview-link', id: dr.id }, owner); r = await get({ view: 'preview', token: r.body.token }, null);
+  ok('the preview link carries the page and original', r.code === 200 && r.body.changes[0].scope === 'home' && r.body.changes[0].orig === 'Plan your trip' && r.body.changes[0].store === 'ss_text_edits_v1');
+  r = await post({ action: 'draft-approve', id: dr.id }, owner); s = await live();
+  ok('approving puts the in-place change live', r.code === 200 && s.ss_text_edits_v1.home['Plan your trip'] === 'Needs a look');
+
   // --- the old passcode can no longer publish through the new system
   r = await call('auth', 'POST', '/api/auth', { action: 'passcode', passcode: 'TestCode123!' }); const pass = r.body.token;
   r = await post({ action: 'save', changes: [{ id: 'adminToursSub', value: 'Passcode wording', label: 'x', page: 'tours' }] }, pass);

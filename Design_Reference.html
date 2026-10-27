@@ -60879,6 +60879,98 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
   if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
 })();
 </script>
+<script id="ss-text-edits-script">
+/* Words and photos changed in place from the admin ("Edit on the page"). They are saved as: page (or * for the whole site) -> the original wording
+   (or "img:" + the original photo address) -> the new value. This finds each original on the page and swaps in the new one. */
+(function(){
+  if(window.ssTextEdits) return;
+  var MAP={}, SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1,INPUT:1,SELECT:1,OPTION:1,TEMPLATE:1,SVG:1,CODE:1};
+  var busy=false, timer=0, has=false, obs=null;
+  function norm(s){ return String(s).replace(/\s+/g,' ').trim(); }
+  function scopeOf(el){ var pg=el&&el.closest&&el.closest('.page'); return pg&&pg.id?pg.id.replace(/^p-/,''):'*'; }
+  function skipped(el){ return !el||!!(el.closest&&el.closest('#p-manage,#p-admin,[contenteditable="true"],.ss-noedit,#ssPreviewBar')); }
+  function lookup(scope,key){
+    var a=MAP[scope]; if(a&&Object.prototype.hasOwnProperty.call(a,key)) return a[key];
+    var b=MAP['*']; if(b&&Object.prototype.hasOwnProperty.call(b,key)) return b[key];
+    return undefined;
+  }
+  function recount(){ has=false; for(var k in MAP){ if(MAP[k]&&Object.keys(MAP[k]).length){ has=true; break; } } }
+  function setText(n,v){
+    var cur=n.nodeValue, lead=(/^\s*/.exec(cur)||[''])[0], trail=(/\s*$/.exec(cur)||[''])[0];
+    var next=(v===undefined?(n.__ssOrigRaw!==undefined?n.__ssOrigRaw:cur):lead+v+trail);
+    if(next!==cur) n.nodeValue=next;
+  }
+  function processText(n){
+    var par=n.parentElement; if(!par||SKIP[par.tagName&&par.tagName.toUpperCase()]||skipped(par)) return;
+    var raw=n.nodeValue; if(!raw||!/\S/.test(raw)) return;
+    var key=n.__ssOrig!==undefined?n.__ssOrig:norm(raw), v=lookup(scopeOf(par),key);
+    if(v!==undefined){
+      if(n.__ssOrig===undefined){ n.__ssOrig=key; n.__ssOrigRaw=raw; }
+      setText(n,v);
+    }else if(n.__ssOrig!==undefined){ setText(n,undefined); delete n.__ssOrig; delete n.__ssOrigRaw; }
+  }
+  function walkText(root){
+    if(root&&root.nodeType===3){ processText(root); return; }
+    var w=document.createTreeWalker(root||document.body,NodeFilter.SHOW_TEXT,null),n,list=[];
+    while((n=w.nextNode())) list.push(n);
+    list.forEach(processText);
+  }
+  function bgUrl(v){ var m=/url\((['"]?)(.*?)\1\)/.exec(v||''); return m?m[2]:''; }
+  function walkImages(root){
+    (root||document).querySelectorAll('img[src],[style*="url("]').forEach(function(el){
+      if(skipped(el)) return;
+      var scope=scopeOf(el);
+      if(el.tagName==='IMG'){
+        var cur=el.getAttribute('src'), key=el.__ssImgOrig!==undefined?el.__ssImgOrig:cur, v=lookup(scope,'img:'+key);
+        if(v!==undefined){ if(el.__ssImgOrig===undefined) el.__ssImgOrig=cur; if(cur!==v){ el.setAttribute('src',v); el.removeAttribute('srcset'); } }
+        else if(el.__ssImgOrig!==undefined){ el.setAttribute('src',el.__ssImgOrig); delete el.__ssImgOrig; }
+      }else{
+        var raw=el.style&&el.style.backgroundImage, cu=bgUrl(raw), k2=el.__ssBgOrig!==undefined?el.__ssBgOrig:cu;
+        if(!k2) return;
+        var v2=lookup(scope,'img:'+k2);
+        if(v2!==undefined){ if(el.__ssBgOrig===undefined) el.__ssBgOrig=cu; if(cu!==v2) el.style.backgroundImage='url("'+v2.replace(/"/g,'%22')+'")'; }
+        else if(el.__ssBgOrig!==undefined){ el.style.backgroundImage='url("'+el.__ssBgOrig+'")'; delete el.__ssBgOrig; }
+      }
+    });
+  }
+  function apply(root){
+    if(!has&&!window.__ssTextEditsDirty) return;
+    busy=true;
+    try{ walkText(root); if(!root||root.nodeType===1) walkImages(root); }catch(e){}
+    if(obs) obs.takeRecords();
+    busy=false;
+  }
+  /* after the first full pass only what the page adds is looked at, so a busy page is not scanned over and over */
+  var pending=[];
+  function flush(){
+    var list=pending; pending=[];
+    if(!has&&!window.__ssTextEditsDirty) return;
+    var seen=[]; list.forEach(function(n){ if(n&&n.isConnected&&seen.indexOf(n)<0) seen.push(n); });
+    if(seen.length>400){ apply(); return; }
+    seen.forEach(function(n){ if(n.isConnected) apply(n); });
+  }
+  function later(){ clearTimeout(timer); timer=setTimeout(flush,120); }
+  function load(d){
+    var m=d&&d.ss_text_edits_v1; if(!m||typeof m!=='object') return;
+    Object.keys(m).forEach(function(sc){ if(m[sc]&&typeof m[sc]==='object'){ MAP[sc]=MAP[sc]||{}; Object.keys(m[sc]).forEach(function(k){ MAP[sc][k]=m[sc][k]; }); } });
+    recount(); apply();
+  }
+  window.ssTextEdits={
+    map:function(){ return MAP; },
+    /* the admin and the preview use these */
+    set:function(scope,orig,value){ MAP[scope]=MAP[scope]||{}; if(value===''||value==null) delete MAP[scope][orig]; else MAP[scope][orig]=value; if(!Object.keys(MAP[scope]).length) delete MAP[scope]; recount(); window.__ssTextEditsDirty=true; apply(); },
+    add:function(list){ (list||[]).forEach(function(c){ if(c&&c.scope&&c.orig){ MAP[c.scope]=MAP[c.scope]||{}; if(c.after==='') delete MAP[c.scope][c.orig]; else MAP[c.scope][c.orig]=c.after; } }); recount(); apply(); },
+    apply:apply, norm:norm, scopeOf:scopeOf, skipped:skipped
+  };
+  function start(){
+    var p=(window.__ssSettings?window.__ssSettings():fetch('/api/settings').then(function(r){ return r.json(); }));
+    p.then(load).catch(function(){});
+    try{ obs=new MutationObserver(function(recs){ if(busy||(!has&&!window.__ssTextEditsDirty)) return; recs.forEach(function(r){ for(var i=0;i<r.addedNodes.length;i++) pending.push(r.addedNodes[i]); }); if(pending.length) later(); }); obs.observe(document.body,{childList:true,subtree:true}); }catch(e){}
+    document.addEventListener('ss-settings-synced',function(e){ if(e&&e.detail) load(e.detail); });
+  }
+  if(document.body) start(); else document.addEventListener('DOMContentLoaded',start);
+})();
+</script>
 <script id="ss-preview-script">
 /* Preview link: shows the page with someone's waiting changes applied, only in this browser tab. Nothing is saved or published. */
 (function(){
@@ -60898,6 +60990,7 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       var pv={pe:{},site:{}};
       (x.d.changes||[]).forEach(function(c){
         if(c.store==='ss_dynamic_sections_v1') pv.dyn=c.after;
+        else if(c.store==='ss_text_edits_v1'){ (pv.text=pv.text||[]).push(c); }
         else if(c.store==='ss_site_settings') pv.site[c.key]=c.after;
         else if(c.key) pv.pe[c.key]=c.after;
       });
@@ -60905,6 +60998,7 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       try{ if(typeof applySiteSettings==='function') applySiteSettings(); }catch(e){}
       try{ if(typeof applyPageEditorSettings==='function') applyPageEditorSettings(); }catch(e){}
       try{ if(typeof window.ssReapplyDynamicSections==='function') window.ssReapplyDynamicSections(); }catch(e){}
+      try{ if(window.ssTextEdits&&pv.text) window.ssTextEdits.add(pv.text); }catch(e){}
       bar('Preview only. '+(x.d.by||'Someone')+' has changes waiting for approval. Only people with this link can see them.');
     }).catch(function(){ bar('The preview could not be loaded. Please try again.',true); });
   }
@@ -60912,6 +61006,7 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
 })();
 </script>
 <style id="manage-style">
+#mgIdleWarn{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,32,54,.7)}#mgIdleWarn .mg-idle{max-width:420px;width:100%;background:#fff;padding:26px;border-top:3px solid #ef8731;box-shadow:0 24px 60px rgba(0,0,0,.4)}#mgIdleWarn h3{margin:0 0 8px;font-family:'Playfair Display',serif;font-size:22px;color:#062e4b}#mgIdleWarn p{margin:0 0 16px;color:#33475b;line-height:1.55}
 /* the new admin lives at /manage: its own full-screen app, so the public menu, footer and chat button step aside */
 body:has(#p-manage.on) .topbar,body:has(#p-manage.on) #navbar,body:has(#p-manage.on) #mobNav,body:has(#p-manage.on) footer,body:has(#p-manage.on) #scrollTop,body:has(#p-manage.on) #ssBotLauncher,body:has(#p-manage.on) #ssBotPanel,body:has(#p-manage.on) #cartOverlay,body:has(#p-manage.on) #cartPanel,body:has(#p-manage.on) .skip-link{display:none!important}
 /* the public site clips sideways overflow on the page itself, which stops anything in the admin from sticking while it scrolls */
@@ -61023,7 +61118,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   /* ---------- sign-in, invitation, no access ---------- */
   function authShell(inner){return '<div class="mg-auth"><div class="mg-card">'+inner+'</div></div>';}
   function viewSignin(need2fa){
-    return authShell('<h1>Admin sign in</h1><p class="mg-sub">Use your own email and password. Your team and role are set by the owner.</p>'
+    return authShell('<h1>Admin sign in</h1>'+(S.msg?'<div class="mg-msg on ok" role="status">'+esc(S.msg)+'</div>':'')+'<p class="mg-sub">Use your own email and password. Your team and role are set by the owner.</p>'
       +'<form id="mgSignin" novalidate><div class="mg-fld"><label for="mgEmail">Email</label><input id="mgEmail" type="email" autocomplete="username" required></div>'
       +'<div class="mg-fld"><label for="mgPass">Password</label><input id="mgPass" type="password" autocomplete="current-password" required></div>'
       +(need2fa?'<div class="mg-fld"><label for="mgCode">6-digit code from your authenticator app</label><input id="mgCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>':'')
@@ -61043,6 +61138,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   var NAV=[
     {h:'',items:[{id:'home',t:'Home',show:function(){return true;}}]},
     {h:'Website',items:[
+      {id:'live',t:'Edit on the page',show:function(){return can('pages');}},
       {id:'pages',t:'Pages and sections',show:function(){return can('pages');},bd:'pages'},
       {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}},
       {id:'catalog',t:'Tours, stays and blog',show:function(){return can('catalog','blog');}}]},
@@ -61053,7 +61149,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',pages:'Pages and sections',photos:'Photo library',catalog:'Tours, stays and blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours, stays and blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -61123,6 +61219,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     }
     return '<h1>My sign-in</h1><p class="mg-sub">Keep your admin account safe.</p><div class="mg-grid g2">'
       +'<div class="mg-card" style="padding:20px"><h3 style="margin:0 0 8px;color:var(--navy)">Two-step sign-in</h3>'+two+'<div class="mg-msg" id="mgTwoMsg" role="alert"></div></div>'
+      +'<div class="mg-card" style="padding:20px"><h3 style="margin:0 0 8px;color:var(--navy)">Automatic sign-out</h3><p>Signs you out of the admin on this device when nothing has been touched for a while. You get a one minute warning first.</p><div class="mg-fld" style="max-width:260px"><label for="mgIdleSel">Sign out after</label><select id="mgIdleSel">'+[[10,'10 minutes'],[15,'15 minutes'],[30,'30 minutes'],[60,'1 hour'],[120,'2 hours'],[0,'Never (not recommended)']].map(function(o){return '<option value="'+o[0]+'"'+(idleMin()===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></div></div>'
       +'<div class="mg-card" style="padding:20px"><h3 style="margin:0 0 8px;color:var(--navy)">Sign out everywhere</h3><p>Lost a phone or used a shared computer? This signs this account out of every other device. You stay signed in here.</p><button class="mg-btn" id="mgSignoutAll">Sign out everywhere else</button><div class="mg-msg" id="mgAllMsg" role="alert"></div>'
       +'<h3 style="margin:22px 0 8px;color:var(--navy)">Change password</h3><div class="mg-fld"><label for="mgPw0">Current password</label><input id="mgPw0" type="password" autocomplete="current-password"></div><div class="mg-fld"><label for="mgPw1">New password</label><input id="mgPw1" type="password" autocomplete="new-password"></div><button class="mg-btn" id="mgPwSave">Change password</button><div class="mg-msg" id="mgPwMsg" role="alert"></div></div></div>';
   }
@@ -61166,7 +61263,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(MG.homeJobs)MG.homeJobs().forEach(function(j){jobs.push(j);});
     Promise.all(jobs).then(function(){if(S.state==='app'){var pg=document.getElementById('mgPage');if(S.screen==='home'&&pg)pg.innerHTML=viewHome();var sb=document.querySelector('#p-manage .mg-nav');if(sb){/* refresh the badges only */var tmp=document.createElement('div');tmp.innerHTML=viewApp();var nn=tmp.querySelector('.mg-nav');if(nn)sb.innerHTML=nn.innerHTML;}}});
   }
-  function enter(user,perms){S.user=user;S.perms=perms||user.perms||[];if(!S.perms.length){S.state='noaccess';render();return;}S.state='app';var h=(location.hash||'').replace('#','');S.screen=TITLES[h]?h:'home';var ok=NAV.some(function(g){return g.items.some(function(i){return i.id===S.screen&&i.show();});});if(!ok)S.screen='home';render();if(S.screen==='team')loadTeam();loadHome();}
+  function enter(user,perms){S.user=user;S.perms=perms||user.perms||[];if(!S.perms.length){S.state='noaccess';render();return;}S.state='app';S.msg='';idleStart();var h=(location.hash||'').replace('#','');S.screen=TITLES[h]?h:'home';var ok=NAV.some(function(g){return g.items.some(function(i){return i.id===S.screen&&i.show();});});if(!ok)S.screen='home';render();if(S.screen==='team')loadTeam();loadHome();}
   function boot(){
     var q=new URLSearchParams(location.search);
     if(q.get('invite')&&q.get('code')){S.invite={email:q.get('invite'),code:q.get('code')};S.state='invite';render();return;}
@@ -61174,7 +61271,42 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     S.state='loading';render();
     auth('me').then(function(d){enter(d.user,d.user.perms);}).catch(function(e){if(e.status===401||e.status===404){try{localStorage.removeItem('ss_auth_token');}catch(x){}S.state='signin';}else S.state='signin';render();});
   }
-  function signOut(){try{localStorage.removeItem('ss_auth_token');localStorage.removeItem('ss_current_user');}catch(e){}try{if(typeof updateAccountUI==='function')updateAccountUI();}catch(e){}S.user=null;S.perms=[];S.home=null;S.team=null;S.state='signin';S.need2fa=false;render();}
+  /* ---------- sign out after a while of doing nothing ---------- */
+  var IDLE_KEY='ss_mg_idle_min',ACT_KEY='ss_mg_last_active',WARN_MS=60000,idleTimer=0,lastWrite=0;
+  function idleMin(){try{var v=parseInt(localStorage.getItem(IDLE_KEY),10);return v>=0?v:30;}catch(e){return 30;}}
+  function lastAct(){var s=S.lastAct||0,v=0;try{v=parseInt(localStorage.getItem(ACT_KEY),10)||0;}catch(e){}return Math.max(s,v);}
+  function touch(force){
+    var n=Date.now();S.lastAct=n;
+    if(force||n-lastWrite>5000){lastWrite=n;try{localStorage.setItem(ACT_KEY,String(n));}catch(e){}}
+    var w=document.getElementById('mgIdleWarn');if(w&&n-lastAct()<1000)w.remove();
+  }
+  MG.touch=touch;
+  function idleWarn(secs){
+    var w=document.getElementById('mgIdleWarn');
+    if(!w){w=document.createElement('div');w.id='mgIdleWarn';w.setAttribute('role','alertdialog');w.setAttribute('aria-live','assertive');
+      w.innerHTML='<div class="mg-idle"><h3>Still there?</h3><p>For your security you will be signed out in <b id="mgIdleSecs"></b> seconds because nothing has happened for a while.</p><div><button type="button" class="mg-btn ok" id="mgIdleStay">Stay signed in</button> <button type="button" class="mg-btn ghost" id="mgIdleOut">Sign out now</button></div></div>';
+      P.appendChild(w);}
+    var sp=document.getElementById('mgIdleSecs');if(sp)sp.textContent=secs;
+  }
+  function idleCheck(){
+    if(S.state!=='app')return;
+    var lim=idleMin()*60000;if(!lim)return;
+    var idle=Date.now()-lastAct();
+    if(idle>=lim){S.msg='You were signed out because the admin was left alone for '+idleMin()+' minutes.';signOut();return;}
+    if(idle>=lim-WARN_MS)idleWarn(Math.max(1,Math.ceil((lim-idle)/1000)));
+  }
+  function idleStart(){
+    touch(true);clearInterval(idleTimer);idleTimer=setInterval(idleCheck,1000);
+    if(!S.idleBound){S.idleBound=true;
+      ['mousemove','mousedown','keydown','touchstart','scroll','wheel'].forEach(function(ev){document.addEventListener(ev,function(){if(S.state==='app'&&!document.getElementById('mgIdleWarn'))touch();},{passive:true,capture:true});});
+      document.addEventListener('visibilitychange',function(){if(!document.hidden)idleCheck();});
+      window.addEventListener('focus',idleCheck);
+    }
+  }
+  P.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;if(b.id==='mgIdleStay'){touch(true);var w=document.getElementById('mgIdleWarn');if(w)w.remove();}else if(b.id==='mgIdleOut'){signOut();}});
+  P.addEventListener('change',function(e){if(e.target&&e.target.id==='mgIdleSel'){try{localStorage.setItem(IDLE_KEY,e.target.value);}catch(x){}touch(true);}});
+  function idleStop(){clearInterval(idleTimer);var w=document.getElementById('mgIdleWarn');if(w)w.remove();}
+  function signOut(){idleStop();try{localStorage.removeItem('ss_auth_token');localStorage.removeItem('ss_current_user');}catch(e){}try{if(typeof updateAccountUI==='function')updateAccountUI();}catch(e){}S.user=null;S.perms=[];S.home=null;S.team=null;S.state='signin';S.need2fa=false;render();}
 
   R.addEventListener('submit',function(e){
     var f=e.target;e.preventDefault();
@@ -61631,7 +61763,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   /* ---------- waiting for approval ---------- */
   function loadDrafts(){return api('site-edit?view=drafts').then(function(d){PG.drafts=d;if(S.home){S.home.drafts=d.pending.length;S.home.badge&&(S.home.badge.pages=d.pending.length);}return d;});}
   function changeHtml(c){
-    var ba=function(v){return c.kind==='image'&&isUrl(v)?'<img class="hs-img" src="'+esc(v)+'" alt="">':c.kind==='sections'?'<span class="hs-t">'+(Array.isArray(v)?v.length:0)+' added section(s)</span>':'<span class="hs-t">'+esc(short(v,220))+'</span>';};
+    var ba=function(v){if((c.kind==='t'||c.kind==='ti')&&(v===''||v==null))v=String(c.orig||c.before||'').replace(/^img:/,'');return (c.kind==='image'||c.kind==='ti')&&isUrl(v)?'<img class="hs-img" src="'+esc(v)+'" alt="">':c.kind==='sections'?'<span class="hs-t">'+(Array.isArray(v)?v.length:0)+' added section(s)</span>':'<span class="hs-t">'+esc(short(v,220))+'</span>';};
     var nm=c.label||c.id;
     return '<li><b>'+esc(nm)+'</b><div class="hs-c"><div><small>Live now</small>'+ba(c.now!==undefined?c.now:c.before)+'</div><div><small>New</small>'+ba(c.after)+'</div></div></li>';
   }
@@ -61662,7 +61794,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     PG.hist.forEach(function(h){if(idx[h.group]==null){idx[h.group]=groups.length;groups.push({id:h.group,at:h.at,by:h.by,via:h.via,note:h.note,approvedBy:h.approvedBy,items:[]});}groups[idx[h.group]].items.push(h);});
     return groups.map(function(g){
       var lines=g.items.filter(function(i){return !/__(focus)$/.test(i.fieldId);}).map(function(i){var fi=fieldById(i.fieldId.replace(/__(alt|focus)$/,''));var nm=i.label||(fi&&fi.f.label)||i.fieldId;
-        var ba=function(v){return i.kind==='image'&&isUrl(v)?'<img class="hs-img sm" src="'+esc(v)+'" alt="">':i.count?'<span class="hs-t">'+v+' section(s)</span>':'<span class="hs-t">'+esc(short(v,90))+'</span>';};
+        var ba=function(v){if((i.kind==='t'||i.kind==='ti')&&(v===''||v==null))v=String(i.orig||'').replace(/^img:/,'');return (i.kind==='image'||i.kind==='ti')&&isUrl(v)?'<img class="hs-img sm" src="'+esc(v)+'" alt="">':i.count?'<span class="hs-t">'+v+' section(s)</span>':'<span class="hs-t">'+esc(short(v,90))+'</span>';};
         return '<li><b>'+esc(nm)+'</b><div class="hs-c"><div>'+ba(i.before)+'</div><div class="hs-arrow">&rarr;</div><div>'+ba(i.after)+'</div></div></li>';}).join('');
       return '<div class="mg-card pg-draft"><div class="pg-dh"><div><b>'+esc(g.by&&g.by.name||'Someone')+'</b> · '+esc(ago(g.at))+(g.via==='approved'?' · approved by '+esc(g.approvedBy&&g.approvedBy.name||'the owner'):g.via==='restore'?' · put back':'')+'</div><button type="button" class="mg-btn sm ghost" data-hg-restore="'+esc(g.id)+'">Put all of this back</button></div>'+(g.note?'<p class="pg-note">'+esc(g.note)+'</p>':'')+'<ul class="hs-list">'+lines+'</ul></div>';
     }).join('');
@@ -61833,6 +61965,238 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(t.id==='plF'){PG.libFolder=t.value;var p=document.getElementById('mgPage');if(p)p.innerHTML=screenPhotos();return;}
     if(t.id==='plFile'&&t.files.length)libUpload(t.files);
   });
+})();
+</script>
+<style id="manage-edit-style">
+.ex-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 14px}
+.ex-lab{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#5c6f82}
+.ex-bar select{min-width:220px;height:42px;padding:0 12px;border:1px solid rgba(6,46,75,.25);border-radius:0;background:#fff;font:600 15px Raleway,Arial,sans-serif;color:#12293d}
+.ex-seg{display:inline-flex;border:1px solid rgba(6,46,75,.25)}
+.ex-seg button{height:42px;padding:0 16px;border:0;background:#fff;font:700 14px Raleway,Arial,sans-serif;color:#0a3f66;cursor:pointer}
+.ex-seg button.on{background:#0a3f66;color:#fff}
+.ex-count{margin-left:auto;font-size:13px;font-weight:700;color:#2e8b57}
+.ex-wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.ex-stage{position:relative;background:#dfe8f0;border:1px solid rgba(6,46,75,.2);height:calc(100vh - 230px);min-height:480px;overflow:hidden;display:flex;justify-content:center}
+.ex-stage iframe{max-width:none!important;position:absolute;left:0;top:0;width:100%;height:100%;border:0;background:#fff;transform-origin:0 0}
+.ex-stage.ph iframe{left:50%;width:390px;max-width:100%!important;margin-left:-195px;box-shadow:0 0 0 1px rgba(6,46,75,.25)}
+.ex-load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#5c6f82;background:#eef3f8;z-index:2}
+.ex-panel{position:sticky;top:12px;background:#fff;border:1px solid rgba(6,46,75,.18);padding:20px 20px 22px}
+.ex-panel h3{margin:0 0 12px;font-family:'Playfair Display',serif;font-size:20px;color:#062e4b}
+.ex-panel textarea{width:100%;padding:12px 14px;font:500 16px/1.5 Raleway,Arial,sans-serif;color:#12293d;background:#f2f7fb;border:1px solid rgba(6,46,75,.2);border-radius:0;resize:vertical}
+.ex-panel textarea:focus{outline:0;border-color:#0a4a78;box-shadow:0 0 0 3px rgba(10,74,120,.12);background:#fff}
+.ex-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.ex-empty p,.ex-empty li{font-size:14px;line-height:1.6;color:#5c6f82}
+.ex-empty ul{margin:12px 0 0;padding-left:18px}
+.ex-ph{background:#eef3f8;border:1px solid rgba(6,46,75,.15);margin:0 0 12px}
+.ex-ph img{display:block;width:100%;max-height:220px;object-fit:cover}
+@media (max-width:1000px){.ex-wrap{grid-template-columns:minmax(0,1fr)}.ex-stage{height:62vh;min-height:360px}.ex-panel{position:static}}
+</style>
+<script id="manage-edit-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api,isOwner=MG.isOwner;
+  var LABELS={home:'Home',tours:'Tours',destinations:'Destinations',stays:'Villas and stays',staycountry:'Stays by country','yacht-charters':'Yacht charters',transfers:'Airport transfers','school-tours':'School and university tours','greek-life':'Greek life travel','leaders-jamaica':'Leaders in Jamaica','mba-voyages':'MBA voyages','flagship-programs':'Flagship programs','seven-shores-society':'Seven Shores Society','shore-leave':'Shore Leave','seven-shores-offsite':'Seven Shores offsite','travel-club':'Travel Club','tent-rental':'Tent rental',discoverjamaica:'Discover Jamaica',landmark:'Landmark experiences',gallery:'Gallery',about:'About',partners:'Partners',blog:'Blog',passport:'Passport and travel documents',booking:'Booking and contact',contact:'Contact','privacy-policy':'Privacy policy','terms-of-service':'Terms of service','refund-policy':'Refund policy'};
+  var HIDE={'club-admin':1,admin:1,manage:1,account:1,vtours:1,contact:1};
+  var ED=MG.ED={page:'home',view:'desktop',sel:null,done:0,note:'',frameKey:0,hi:null,selBox:null};
+
+  function routes(){try{return SS_ROUTES;}catch(e){return window.SS_ROUTES||{home:'/'};}}
+  function pageIds(){var r=routes();return Object.keys(r).filter(function(k){return !HIDE[k];});}
+  function label(id){return LABELS[id]||id.replace(/-/g,' ').replace(/^./,function(c){return c.toUpperCase();});}
+  function needsApproval(){return !isOwner()&&S.user&&S.user.needsApproval!==false;}
+  function fw(){var f=document.getElementById('exFrame');return f&&f.contentWindow;}
+  function fdoc(){var w=fw();try{return w&&w.document;}catch(e){return null;}}
+  function short(v,n){v=String(v==null?'':v);return v.length>n?v.slice(0,n)+'…':v;}
+  function isUrl(v){return /^(https:\/\/|\/)/.test(v||'');}
+
+  /* ---------- the screen ---------- */
+  function screenLive(){
+    var ids=pageIds();
+    var opts=ids.map(function(id){return '<option value="'+esc(id)+'"'+(id===ED.page?' selected':'')+'>'+esc(label(id))+'</option>';}).join('');
+    var src=(routes()[ED.page]||'/')+'?ss_edit=1';
+    return '<h1>Edit on the page</h1><p class="mg-sub">'+(needsApproval()?'Click any word or photo on the page and change it. Your changes go to the owner for approval before visitors see them.':'Click any word or photo on the page and change it. It goes live as soon as you save, and every change can be put back.')+'</p>'
+      +'<div class="ex-bar"><label class="ex-lab" for="exPage">Page</label><select id="exPage" aria-label="Choose a page">'+opts+'</select>'
+      +'<div class="ex-seg" role="group" aria-label="Screen size"><button type="button" data-ex-view="desktop" class="'+(ED.view==='desktop'?'on':'')+'">Computer</button><button type="button" data-ex-view="phone" class="'+(ED.view==='phone'?'on':'')+'">Phone</button></div>'
+      +'<span class="ex-count" id="exCount">'+(ED.done?ED.done+' change'+(ED.done===1?'':'s')+' this visit':'')+'</span></div>'
+      +'<div class="ex-wrap"><div class="ex-stage '+(ED.view==='phone'?'ph':'')+'"><div class="ex-load" id="exLoad">Loading the page…</div><iframe id="exFrame" title="Your website" src="'+esc(src)+'"></iframe></div>'
+      +'<aside class="ex-panel" id="exPanel" aria-live="polite">'+panelHtml()+'</aside></div>';
+  }
+  function panelHtml(){
+    var s=ED.sel;
+    if(!s)return '<div class="ex-empty"><h3>Click something on the page</h3><p>Click any word to change it, or click a photo to swap it. Links and buttons will not open while you are here.</p><ul><li>Pick <b>Only on this page</b> to change just that spot.</li><li>Pick <b>Everywhere</b> to change the same wording on every page.</li><li>Prices and lists that come from your tours or stays are changed under <b>Tours, stays and blog</b>.</li></ul></div>';
+    var w=fw(),map=w&&w.ssTextEdits?w.ssTextEdits.map():{},pgScope=s.scope0;
+    var over=function(sc){return map[sc]&&Object.prototype.hasOwnProperty.call(map[sc],s.key)?map[sc][s.key]:undefined;};
+    var live=over(pgScope);var liveSc=pgScope;if(live===undefined){live=over('*');liveSc='*';}
+    var scope='<div class="mg-fld"><label>Where should this change?</label><div class="mg-checks" style="flex-direction:column;gap:8px">'
+      +(pgScope!=='*'?'<label><input type="radio" name="exScope" value="'+esc(pgScope)+'"'+(s.scope===pgScope?' checked':'')+'> Only on the '+esc(label(pgScope))+' page</label>':'')
+      +'<label><input type="radio" name="exScope" value="*"'+(s.scope==='*'?' checked':'')+'> Everywhere it appears on the website</label></div></div>';
+    if(s.type==='t'){
+      return '<h3>Change this wording</h3><div class="mg-fld"><label for="exText">What visitors will read</label><textarea id="exText" rows="'+Math.min(8,Math.max(3,Math.ceil(s.cur.length/34)))+'" maxlength="1200">'+esc(s.cur)+'</textarea></div>'
+        +(live!==undefined?'<p class="mg-hint">The first wording was: <i>'+esc(short(s.key,200))+'</i></p>':'')
+        +scope
+        +'<div class="mg-msg" id="exMsg" role="alert"></div>'
+        +'<div class="ex-acts"><button type="button" class="mg-btn ok" id="exSave">'+(needsApproval()?'Send for approval':'Save and publish')+'</button><button type="button" class="mg-btn ghost" id="exClear">Cancel</button>'
+        +(live!==undefined?'<button type="button" class="mg-btn ghost" id="exOrig" data-sc="'+esc(liveSc)+'">Put back the original</button>':'')+'</div>';
+    }
+    return '<h3>Change this photo</h3><div class="ex-ph"><img src="'+esc(s.cur)+'" alt=""></div>'
+      +(live!==undefined?'<p class="mg-hint">This is not the original photo.</p>':'')
+      +scope
+      +'<div class="mg-msg" id="exMsg" role="alert"></div>'
+      +'<div class="ex-acts"><button type="button" class="mg-btn ok" id="exPhoto">Choose another photo</button><button type="button" class="mg-btn ghost" id="exClear">Cancel</button>'
+      +(live!==undefined?'<button type="button" class="mg-btn ghost" id="exOrig" data-sc="'+esc(liveSc)+'">Put back the original photo</button>':'')+'</div>';
+  }
+  function setPanel(){var p=document.getElementById('exPanel');if(p)p.innerHTML=panelHtml();}
+  function setMsg(t,kind){var m=document.getElementById('exMsg');if(!m)return;m.textContent=t||'';m.className='mg-msg'+(t?' on '+(kind||'err'):'');}
+  function countUp(){ED.done++;var c=document.getElementById('exCount');if(c)c.textContent=ED.done+' change'+(ED.done===1?'':'s')+' this visit';}
+
+  /* the computer view is a real desktop-width page, shrunk to fit the space; the phone view is a 390 pixel wide page */
+  function fit(){
+    var st=document.querySelector('.ex-stage'),f=document.getElementById('exFrame');if(!st||!f)return;
+    if(ED.view==='phone'){f.style.width='';f.style.height='';f.style.transform='';return;}
+    var W=1280,k=Math.min(1,st.clientWidth/W);
+    f.style.width=W+'px';f.style.height=(st.clientHeight/k)+'px';f.style.transform='scale('+k+')';
+  }
+  window.addEventListener('resize',function(){if(S.screen==='live'){fit();setTimeout(refreshSel,50);}});
+
+  /* ---------- the page in the frame ---------- */
+  function textAt(doc,x,y){
+    var r=null;
+    if(doc.caretRangeFromPoint)r=doc.caretRangeFromPoint(x,y);
+    else if(doc.caretPositionFromPoint){var cp=doc.caretPositionFromPoint(x,y);if(cp){r=doc.createRange();r.setStart(cp.offsetNode,cp.offset);}}
+    if(!r)return null;
+    var n=r.startContainer;if(!n||n.nodeType!==3||!/\S/.test(n.nodeValue))return null;
+    var par=n.parentElement,w=fw();if(!par||!w||!w.ssTextEdits)return null;
+    if(/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|INPUT|SELECT|OPTION|TEMPLATE)$/i.test(par.tagName)||w.ssTextEdits.skipped(par))return null;
+    var rg=doc.createRange();rg.selectNodeContents(n);var rs=rg.getClientRects(),ok=false;
+    for(var i=0;i<rs.length;i++){var q=rs[i];if(x>=q.left-3&&x<=q.right+3&&y>=q.top-3&&y<=q.bottom+3){ok=true;break;}}
+    return ok?n:null;
+  }
+  function bgOf(el,w){var cs=w.getComputedStyle(el),m=/url\((['"]?)(.*?)\1\)/.exec(el.style&&el.style.backgroundImage||'');return m?m[2]:'';}
+  function imgAt(doc,x,y){
+    var w=fw(),els=doc.elementsFromPoint?doc.elementsFromPoint(x,y):[];
+    for(var i=0;i<els.length;i++){
+      var el=els[i];if(el.id==='ssxHi'||el.id==='ssxSel')continue;
+      if(w.ssTextEdits.skipped(el))continue;
+      if(el.tagName==='IMG'&&el.getAttribute('src'))return {el:el,url:el.__ssImgOrig!==undefined?el.__ssImgOrig:el.getAttribute('src'),cur:el.getAttribute('src'),kind:'img'};
+      var b=el.style&&el.style.backgroundImage?bgOf(el,w):'';
+      if(b)return {el:el,url:el.__ssBgOrig!==undefined?el.__ssBgOrig:b,cur:b,kind:'bg'};
+    }
+    return null;
+  }
+  function box(doc,id,color,dash){
+    var b=doc.getElementById(id);if(b)return b;
+    b=doc.createElement('div');b.id=id;b.setAttribute('style','position:fixed;z-index:2147483600;pointer-events:none;border:2px '+(dash?'dashed':'solid')+' '+color+';background:'+(dash?'rgba(10,74,120,.08)':'rgba(112,194,87,.12)')+';display:none;transition:all .08s');
+    doc.body.appendChild(b);return b;
+  }
+  function place(b,rect){if(!rect){b.style.display='none';return;}b.style.display='block';b.style.left=(rect.left-3)+'px';b.style.top=(rect.top-2)+'px';b.style.width=(rect.width+6)+'px';b.style.height=(rect.height+4)+'px';}
+  function rectOfNode(doc,n){var rg=doc.createRange();rg.selectNodeContents(n);var rs=rg.getClientRects();if(!rs.length)return null;var l=1e9,t=1e9,r=-1e9,b=-1e9;for(var i=0;i<rs.length;i++){l=Math.min(l,rs[i].left);t=Math.min(t,rs[i].top);r=Math.max(r,rs[i].right);b=Math.max(b,rs[i].bottom);}return {left:l,top:t,width:r-l,height:b-t};}
+  function rectOf(doc,sel){if(!sel)return null;if(sel.node&&sel.node.isConnected)return rectOfNode(doc,sel.node);if(sel.el&&sel.el.isConnected){var q=sel.el.getBoundingClientRect();return {left:q.left,top:q.top,width:q.width,height:q.height};}return null;}
+  function refreshSel(){var d=fdoc();if(!d||!d.body)return;place(box(d,'ssxSel','#2e8b57',false),rectOf(d,ED.sel));}
+
+  function installFrame(){
+    var f=document.getElementById('exFrame'),w=fw(),d=fdoc();
+    if(!f||!w||!d||!d.body||!w.ssTextEdits||!w.nav){return false;}
+    if(d.__ssxReady)return true;
+    d.__ssxReady=true;
+    var st=d.createElement('style');
+    st.textContent='html,body{cursor:text!important}.ss-bot-launcher,#ssPromoBar,.cookie-banner,#chatBot,[class*="chatbot"]{display:none!important}img,[style*="url("]{cursor:copy}';
+    d.head.appendChild(st);
+    var hi=box(d,'ssxHi','#0a4a78',true);
+    d.addEventListener('mousemove',function(e){
+      var n=textAt(d,e.clientX,e.clientY);
+      if(n){place(hi,rectOfNode(d,n));hi.style.borderColor='#0a4a78';return;}
+      var im=imgAt(d,e.clientX,e.clientY);
+      if(im){var q=im.el.getBoundingClientRect();place(hi,{left:q.left,top:q.top,width:q.width,height:q.height});hi.style.borderColor='#ef8731';return;}
+      hi.style.display='none';
+    },true);
+    d.addEventListener('mouseleave',function(){hi.style.display='none';},true);
+    var stop=function(e){e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();};
+    ['mousedown','mouseup','pointerdown','pointerup','touchstart','touchend','dblclick','submit','auxclick','contextmenu'].forEach(function(t){d.addEventListener(t,function(e){if(e.target&&e.target.closest&&e.target.closest('#ssxHi'))return;stop(e);},true);});
+    d.addEventListener('click',function(e){
+      stop(e);
+      var n=textAt(d,e.clientX,e.clientY);
+      if(n){
+        var par=n.parentElement,sc=w.ssTextEdits.scopeOf(par),key=n.__ssOrig!==undefined?n.__ssOrig:w.ssTextEdits.norm(n.nodeValue);
+        ED.sel={type:'t',node:n,key:key,cur:w.ssTextEdits.norm(n.nodeValue),scope0:sc,scope:sc};
+      }else{
+        var im=imgAt(d,e.clientX,e.clientY);
+        if(!im){ED.sel=null;setPanel();refreshSel();return;}
+        var sc2=w.ssTextEdits.scopeOf(im.el);
+        ED.sel={type:'i',el:im.el,kind:im.kind,key:'img:'+im.url,url:im.url,cur:im.cur,scope0:sc2,scope:sc2};
+      }
+      setPanel();refreshSel();
+      var t=document.getElementById('exText');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}
+    },true);
+    ['mousemove','keydown','wheel','click'].forEach(function(t){d.addEventListener(t,function(){if(MG.touch)MG.touch();},true);});
+    d.addEventListener('keydown',function(e){if(e.key==='Escape'){ED.sel=null;setPanel();refreshSel();}},true);
+    w.addEventListener('scroll',refreshSel,true);w.addEventListener('resize',refreshSel);
+    /* when the person goes to another page inside the frame (it cannot happen by clicking, but the site can move itself) keep the picker in step */
+    return true;
+  }
+  function onFrameLoad(){
+    var tries=0,iv=setInterval(function(){
+      tries++;
+      if(installFrame()){clearInterval(iv);fit();var l=document.getElementById('exLoad');if(l)l.style.display='none';
+        var s=document.getElementById('exFrame');
+        /* keep the page picker honest and make sure the first paint is seen */
+        setTimeout(function(){try{fw().ssTextEdits.apply();}catch(e){}refreshSel();},400);}
+      else if(tries>80){clearInterval(iv);var l2=document.getElementById('exLoad');if(l2)l2.textContent='The page could not be loaded. Try choosing it again.';}
+    },150);
+  }
+
+  /* ---------- saving ---------- */
+  function send(change,after,okMsg){
+    var save=document.getElementById('exSave')||document.getElementById('exPhoto');
+    api('site-edit',{action:'save',changes:[change],note:ED.note||''}).then(function(d){
+      var w=fw();
+      if(d.unchanged){setMsg('That is the same as what is already there.','ok');return;}
+      /* show it on the page in the frame either way (a draft is only shown here, not to visitors) */
+      if(w&&w.ssTextEdits){w.ssTextEdits.set(change.scope,change.kind==='ti'?'img:'+change.orig:change.orig,change.value);}
+      countUp();
+      MG.loadHome&&MG.loadHome();
+      ED.sel=null;setPanel();refreshSel();
+      var p=document.getElementById('exPanel');
+      if(p)p.insertAdjacentHTML('afterbegin','<div class="mg-msg on ok" role="status">'+esc(d.live?okMsg||'Published. It is live on the website now.':'Sent to the owner for approval. You will get an email when it is decided. Until then it is only shown here.')+'</div>');
+      if(MG.PG){MG.PG.hist=null;MG.PG.drafts=null;}
+    }).catch(function(e){setMsg(e.message,'err');var b=document.getElementById('exSave')||document.getElementById('exPhoto');if(b)b.disabled=false;});
+    if(save)save.disabled=true;
+  }
+  function saveText(value,scopeOverride,revert){
+    var s=ED.sel;if(!s)return;
+    var scope=scopeOverride||s.scope,v=String(value).replace(/\s+/g,' ').trim();
+    if(!revert){
+      if(!v){setMsg('The wording cannot be empty. Use "Put back the original" to go back to the first wording.','err');return;}
+      if(v===s.key)revert=true;
+    }
+    send({id:'@t',kind:'t',scope:scope,orig:s.key,value:revert?'':v,label:'Wording: '+short(s.key,60),page:scope==='*'?'':scope,before:s.key},null,revert?'Put back. The first wording is live again.':null);
+  }
+  function savePhoto(url,scopeOverride,revert){
+    var s=ED.sel;if(!s)return;var scope=scopeOverride||s.scope,orig=s.key.replace(/^img:/,'');
+    send({id:'@t',kind:'ti',scope:scope,orig:orig,value:revert?'':url,label:'Photo: '+short(orig.split('/').pop(),60),page:scope==='*'?'':scope,before:orig},null,revert?'Put back. The first photo is live again.':null);
+  }
+
+  /* ---------- wiring ---------- */
+  MG.screens.live=screenLive;
+  MG.after.live=function(){var f=document.getElementById('exFrame');if(f)f.addEventListener('load',onFrameLoad);};
+  R.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t||S.screen!=='live')return;
+    if(t.dataset.exView){ED.view=t.dataset.exView;var st=document.querySelector('.ex-stage');if(st)st.classList.toggle('ph',ED.view==='phone');document.querySelectorAll('[data-ex-view]').forEach(function(b){b.classList.toggle('on',b.dataset.exView===ED.view);});fit();setTimeout(refreshSel,80);return;}
+    if(t.id==='exClear'){ED.sel=null;setPanel();refreshSel();return;}
+    if(t.id==='exSave'){var v=(document.getElementById('exText')||{}).value||'';saveText(v);return;}
+    if(t.id==='exOrig'){var sc=t.dataset.sc;if(ED.sel&&ED.sel.type==='t')saveText('',sc,true);else savePhoto('',sc,true);return;}
+    if(t.id==='exPhoto'){
+      var s=ED.sel;if(!s)return;
+      MG.changer({title:'Change this photo',current:s.cur,simple:true,onUse:function(r){savePhoto(r.url);}});return;
+    }
+  });
+  R.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.id==='exPage'){ED.page=t.value;ED.sel=null;var w=fw();setPanel();
+      try{if(w&&w.nav&&w.ssTextEdits){w.nav(ED.page);setTimeout(function(){try{w.ssTextEdits.apply();}catch(x){}refreshSel();},500);return;}}catch(x){}
+      var f=document.getElementById('exFrame');if(f)f.src=(routes()[ED.page]||'/')+'?ss_edit=1';return;}
+    if(t.name==='exScope'&&ED.sel){ED.sel.scope=t.value;}
+  });
+  R.addEventListener('input',function(e){if(e.target.id==='exText'&&ED.sel)ED.sel.cur=e.target.value;});
 })();
 </script>
 <style id="manage-inbox-style">
