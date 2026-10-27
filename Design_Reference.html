@@ -57551,12 +57551,39 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert p{margin:0;font-size:14px;line-height:1.55;color:var(--tc-mut)}
 #p-travel-club [data-tc-join][hidden]{display:none!important}
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
-.tc-pop-ov{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,40,66,.62);overflow:auto}
-.tc-pop-ov .tc-alert{position:relative;margin:0;width:100%;max-width:520px;grid-template-columns:minmax(0,1fr);gap:14px;padding:28px 26px 24px;border-radius:0;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.35)}
-.tc-pop-ov .tc-form--alert{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-@media (max-width:560px){.tc-pop-ov .tc-form--alert{grid-template-columns:minmax(0,1fr)}}
-.tc-pop-x{position:absolute;top:8px;right:10px;width:36px;height:36px;border:0;background:transparent;font-size:28px;line-height:1;color:#0a3f66;cursor:pointer}
+.tc-pop-ov{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,32,54,.66);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow:auto;animation:tcPopBg .25s ease both}
+.tc-pop-ov .tc-alert{position:relative;margin:0;width:100%;max-width:540px;display:block;padding:0;overflow:hidden;border:0;border-top:3px solid #ef8731;border-radius:0;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:tcPopIn .42s cubic-bezier(.2,.9,.25,1.15) both}
+.tc-pop-ov .tc-alert-copy{position:relative;padding:28px 58px 24px 28px;background:linear-gradient(135deg,#062e4b 0%,#0a4a78 100%);overflow:hidden;--mx:80%;--my:0px}
+.tc-pop-ov .tc-alert-copy::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx) var(--my),rgba(255,255,255,.16),transparent 70%);pointer-events:none;transition:opacity .3s}
+.tc-pop-ov .tc-alert h3{position:relative;color:#fff!important;font-size:24px;margin:0 0 8px}
+.tc-pop-ov .tc-alert p{position:relative;color:rgba(255,255,255,.84)}
+.tc-pop-ov .tc-alert p a.tc-inl{color:#f5a04b!important}
+.tc-pop-ov .tc-form--alert{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 14px;padding:24px 28px 28px;align-items:start}
+.tc-pop-ov .tc-field{margin:0 0 6px}
+.tc-pop-ov .tc-field input{background:#fff;border:1px solid rgba(6,46,75,.22);transition:border-color .2s,box-shadow .2s,transform .2s}
+.tc-pop-ov .tc-field input:focus{border-color:#0a4a78;box-shadow:0 0 0 4px rgba(10,74,120,.12);transform:translateY(-1px)}
+.tc-pop-ov .tc-check{margin-top:4px}
+.tc-pop-ov .tc-fbtn{position:relative;overflow:hidden;width:100%;justify-self:stretch;height:50px;margin-top:6px;transition:transform .15s,box-shadow .25s,filter .2s}
+.tc-pop-ov .tc-fbtn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);transition:left .6s}
+.tc-pop-ov .tc-fbtn:hover:not(:disabled)::after{left:130%}
+.tc-pop-ov .tc-fbtn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 24px rgba(239,135,49,.35)}
+.tc-pop-ov .tc-fbtn:active:not(:disabled){transform:translateY(0) scale(.98)}
+.tc-pop-x{position:absolute;top:10px;right:12px;z-index:2;width:38px;height:38px;border:0;background:rgba(255,255,255,.1);font-size:26px;line-height:1;color:#fff;cursor:pointer;transition:background .2s,transform .25s}
+.tc-pop-x:hover{background:rgba(255,255,255,.24);transform:rotate(90deg)}
+.tc-pop-check{grid-column:1/-1;justify-self:center;width:76px;height:76px;margin:6px 0 4px}
+.tc-pop-check svg{width:100%;height:100%;overflow:visible}
+.tc-pop-check circle{fill:none;stroke:#70c257;stroke-width:3;stroke-dasharray:145;stroke-dashoffset:145;animation:tcDraw .6s .05s ease forwards}
+.tc-pop-check path{fill:none;stroke:#70c257;stroke-width:4;stroke-linecap:square;stroke-dasharray:40;stroke-dashoffset:40;animation:tcDraw .4s .55s ease forwards}
+.tc-pop-ov .is-done .tc-field,.tc-pop-ov .is-done .tc-check,.tc-pop-ov .is-done .tc-fbtn{display:none}
+.tc-pop-ov .is-done .tc-status{text-align:center;font-size:16px;font-weight:700;padding:0 0 6px}
+.tc-pop-cf{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.tc-pop-ov .tc-status:empty{display:none}
 html.tc-pop-open{overflow:hidden}
+@keyframes tcPopBg{from{opacity:0}to{opacity:1}}
+@keyframes tcPopIn{from{opacity:0;transform:translateY(26px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes tcDraw{to{stroke-dashoffset:0}}
+@media (max-width:560px){.tc-pop-ov .tc-form--alert{grid-template-columns:minmax(0,1fr);padding:20px 20px 24px}.tc-pop-ov .tc-alert-copy{padding:24px 54px 20px 20px}}
+@media (prefers-reduced-motion:reduce){.tc-pop-ov,.tc-pop-ov .tc-alert,.tc-pop-check circle,.tc-pop-check path{animation-duration:.01ms!important}.tc-pop-ov .tc-fbtn::after{display:none}}
 /* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
 .tch{position:relative;padding:56px 0 84px;background:linear-gradient(180deg,#eef5fa 0%,#f8fbff 100%);overflow-x:clip}
 .tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.86fr);gap:56px;align-items:center;width:100vw;max-width:none;margin:0 0 0 calc(50% - 50vw);padding:72px max(clamp(26px,4vw,52px),calc((100% - 960px)/2)) 72px;border:0;border-top:4px solid #ef8731;border-bottom:4px solid #ef8731;border-radius:0;background:#0a3f66;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 0 64px rgba(255,255,255,.95),0 32px 70px rgba(6,58,99,.22);isolation:isolate;overflow:hidden}
@@ -58557,24 +58584,51 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     openAlertPop();
   });
   /* "Tell me first" opens the sign-up form as a pop-up. The same card (and the same submit code) moves into the pop-up, then goes back to its place on close. */
-  var alertHome=null,alertOv=null,alertTimer=0;
+  var alertHome=null,alertOv=null,alertTimer=0,alertRaf=0,alertWatch=false,alertDone=false;
   function closeAlertPop(){
-    clearTimeout(alertTimer);var c=$('tcAlertCard');
+    clearTimeout(alertTimer);cancelAnimationFrame(alertRaf);var c=$('tcAlertCard');
+    if(c){c.classList.remove('is-done');var k=c.querySelector('.tc-pop-check');if(k)k.parentNode.removeChild(k);var x=c.querySelector('.tc-pop-x');if(x)x.parentNode.removeChild(x);}
     if(c&&alertHome&&alertHome.parentNode){alertHome.parentNode.insertBefore(c,alertHome);alertHome.parentNode.removeChild(alertHome);}
     alertHome=null;if(alertOv&&alertOv.parentNode)alertOv.parentNode.removeChild(alertOv);alertOv=null;
     document.documentElement.classList.remove('tc-pop-open');document.removeEventListener('keydown',alertKey);
   }
   function alertKey(e){if(e.key==='Escape')closeAlertPop();}
+  /* confetti: a short burst from the top of the box, brand colours, square-cut pieces */
+  function alertConfetti(){
+    if(reduced||!alertOv)return;
+    var cv=document.createElement('canvas');cv.className='tc-pop-cf';alertOv.appendChild(cv);
+    var dpr=Math.min(window.devicePixelRatio||1,2),W=cv.width=innerWidth*dpr,H=cv.height=innerHeight*dpr,g=cv.getContext('2d');
+    var r=$('tcAlertCard').getBoundingClientRect(),ox=(r.left+r.width/2)*dpr,oy=(r.top+r.height*.28)*dpr;
+    var cols=['#062e4b','#0a4a78','#4aa3df','#ef8731','#f5c242','#70c257'],P=[],i;
+    for(i=0;i<150;i++){var an=-Math.PI/2+(Math.random()-.5)*Math.PI*1.15,sp=(7+Math.random()*10)*dpr;
+      P.push({x:ox,y:oy,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,w:(5+Math.random()*6)*dpr,h:(3+Math.random()*4)*dpr,a:Math.random()*6.28,va:(Math.random()-.5)*.35,c:cols[i%cols.length],t:0,life:110+Math.random()*60});}
+    (function tick(){
+      g.clearRect(0,0,W,H);var live=0;
+      P.forEach(function(q){q.t++;if(q.t>q.life)return;live++;q.vx*=.985;q.vy=q.vy*.985+.34*dpr;q.x+=q.vx;q.y+=q.vy;q.a+=q.va;
+        g.globalAlpha=Math.max(0,Math.min(1,(q.life-q.t)/30));g.fillStyle=q.c;g.save();g.translate(q.x,q.y);g.rotate(q.a);g.fillRect(-q.w/2,-q.h/2,q.w,q.h);g.restore();});
+      if(live&&alertOv){alertRaf=requestAnimationFrame(tick);}else if(cv.parentNode){cv.parentNode.removeChild(cv);}
+    })();
+  }
+  function alertCelebrate(isNew){
+    var c=$('tcAlertCard'),f=$('tcAlertForm');if(!c||!f||alertDone)return;alertDone=true;
+    c.classList.add('is-done');
+    var k=document.createElement('div');k.className='tc-pop-check';k.innerHTML='<svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="23"/><path d="M15 27l8 8 15-17"/></svg>';f.insertBefore(k,f.firstChild);
+    if(isNew)alertConfetti();
+    clearTimeout(alertTimer);alertTimer=setTimeout(closeAlertPop,isNew?3600:2600);
+  }
   function openAlertPop(){
     var c=$('tcAlertCard');if(!c||alertOv)return;
+    alertDone=false;
     alertHome=document.createComment('tcAlertCard');c.parentNode.insertBefore(alertHome,c);
     alertOv=document.createElement('div');alertOv.className='tc-pop-ov';alertOv.setAttribute('role','dialog');alertOv.setAttribute('aria-modal','true');alertOv.setAttribute('aria-label','Be first to hear about new trips');
     var x=document.createElement('button');x.type='button';x.className='tc-pop-x';x.setAttribute('aria-label','Close');x.innerHTML='&times;';x.addEventListener('click',closeAlertPop);
     c.classList.add('tc-in');c.appendChild(x);alertOv.appendChild(c);
     alertOv.addEventListener('click',function(e){if(e.target===alertOv)closeAlertPop();});
+    /* a soft light follows the pointer across the header of the box */
+    c.addEventListener('pointermove',function(e){var h=c.querySelector('.tc-alert-copy');if(!h)return;var r=h.getBoundingClientRect();h.style.setProperty('--mx',(e.clientX-r.left)+'px');h.style.setProperty('--my',(e.clientY-r.top)+'px');});
     document.body.appendChild(alertOv);document.documentElement.classList.add('tc-pop-open');document.addEventListener('keydown',alertKey);
     var st=$('tcAlStatus');
-    if(st&&window.MutationObserver)new MutationObserver(function(){if(alertOv&&/^(Thanks|You are already)/.test(st.textContent||'')){clearTimeout(alertTimer);alertTimer=setTimeout(closeAlertPop,2600);}}).observe(st,{childList:true,characterData:true,subtree:true});
+    if(st&&!alertWatch&&window.MutationObserver){alertWatch=true;new MutationObserver(function(){var t=st.textContent||'';if(alertOv&&/^(Thanks|You are already)/.test(t))alertCelebrate(/^Thanks/.test(t));}).observe(st,{childList:true,characterData:true,subtree:true});}
     setTimeout(function(){try{$('tcAlName').focus({preventScroll:true});}catch(e){}},60);
   }
   /* a warning goes away as soon as the person changes something */
