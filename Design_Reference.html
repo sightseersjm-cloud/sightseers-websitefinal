@@ -57453,7 +57453,7 @@ body.theme-night #p-account .ac-panel{background:linear-gradient(180deg,#0e3050 
 /* ═════════ Travel Club: the program page, a trip page, the organizer space and the admin manager ═════════
    The Flagship Programs look: a dark title band with a boxed kicker and a Playfair heading, then a light page of white
    cards with orange tags, fact chips and "Quick look" drop-downs. Square corners, no icon badges. */
-#p-travel-club,#p-trip{--tc-ink:#12293d;--tc-mut:#5c6f82;--tc-head:#062e4b;--tc-card:#fff;--tc-bg:#f7fafc;--tc-soft:#f2f7fb;--tc-line:rgba(6,46,75,.10);--tc-chip:rgba(6,46,75,.05);--tc-o:#ef8731;--tc-o2:#f5a04b;--tc-g:#70c257;
+#p-travel-club,#p-trip,.tc-pop-ov{--tc-ink:#12293d;--tc-mut:#5c6f82;--tc-head:#062e4b;--tc-card:#fff;--tc-bg:#f7fafc;--tc-soft:#f2f7fb;--tc-line:rgba(6,46,75,.10);--tc-chip:rgba(6,46,75,.05);--tc-o:#ef8731;--tc-o2:#f5a04b;--tc-g:#70c257;
   --tc-shadow:0 1px 2px rgba(6,46,75,.05),0 18px 44px rgba(6,46,75,.09);--tc-shadow-h:0 1px 2px rgba(6,46,75,.06),0 30px 64px rgba(6,46,75,.18);
   background:var(--tc-bg);font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--tc-ink)}
 body.theme-night #p-travel-club,body.theme-night #p-trip{--tc-ink:#e6eff8;--tc-mut:#b3c5d7;--tc-head:#fff;--tc-card:#0c2b46;--tc-bg:#06223a;--tc-soft:#0a2c48;--tc-line:rgba(255,255,255,.12);--tc-chip:rgba(255,255,255,.08);
@@ -57551,6 +57551,12 @@ body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-ni
 .tc-alert p{margin:0;font-size:14px;line-height:1.55;color:var(--tc-mut)}
 #p-travel-club [data-tc-join][hidden]{display:none!important}
 .tc-alert p a.tc-inl{color:var(--tc-o)!important;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.tc-pop-ov{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,40,66,.62);overflow:auto}
+.tc-pop-ov .tc-alert{position:relative;margin:0;width:100%;max-width:520px;grid-template-columns:minmax(0,1fr);gap:14px;padding:28px 26px 24px;border-radius:0;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.tc-pop-ov .tc-form--alert{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:560px){.tc-pop-ov .tc-form--alert{grid-template-columns:minmax(0,1fr)}}
+.tc-pop-x{position:absolute;top:8px;right:10px;width:36px;height:36px;border:0;background:transparent;font-size:28px;line-height:1;color:#0a3f66;cursor:pointer}
+html.tc-pop-open{overflow:hidden}
 /* home page Travel Club: a simple split layout. An elevated photo that leans toward the pointer, then the words and one button. */
 .tch{position:relative;padding:56px 0 84px;background:linear-gradient(180deg,#eef5fa 0%,#f8fbff 100%);overflow-x:clip}
 .tch-wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.86fr);gap:56px;align-items:center;width:100vw;max-width:none;margin:0 0 0 calc(50% - 50vw);padding:72px max(clamp(26px,4vw,52px),calc((100% - 960px)/2)) 72px;border:0;border-top:4px solid #ef8731;border-bottom:4px solid #ef8731;border-radius:0;background:#0a3f66;box-shadow:0 0 0 6px rgba(255,255,255,.8),0 0 64px rgba(255,255,255,.95),0 32px 70px rgba(6,58,99,.22);isolation:isolate;overflow:hidden}
@@ -58548,8 +58554,29 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   });
   document.addEventListener('click',function(e){
     var j=e.target.closest&&e.target.closest('[data-list-jump]');if(!j)return;
-    var c=$('tcAlertCard');if(!c)return;c.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});setTimeout(function(){try{$('tcAlName').focus({preventScroll:true});}catch(x){}},500);
+    openAlertPop();
   });
+  /* "Tell me first" opens the sign-up form as a pop-up. The same card (and the same submit code) moves into the pop-up, then goes back to its place on close. */
+  var alertHome=null,alertOv=null,alertTimer=0;
+  function closeAlertPop(){
+    clearTimeout(alertTimer);var c=$('tcAlertCard');
+    if(c&&alertHome&&alertHome.parentNode){alertHome.parentNode.insertBefore(c,alertHome);alertHome.parentNode.removeChild(alertHome);}
+    alertHome=null;if(alertOv&&alertOv.parentNode)alertOv.parentNode.removeChild(alertOv);alertOv=null;
+    document.documentElement.classList.remove('tc-pop-open');document.removeEventListener('keydown',alertKey);
+  }
+  function alertKey(e){if(e.key==='Escape')closeAlertPop();}
+  function openAlertPop(){
+    var c=$('tcAlertCard');if(!c||alertOv)return;
+    alertHome=document.createComment('tcAlertCard');c.parentNode.insertBefore(alertHome,c);
+    alertOv=document.createElement('div');alertOv.className='tc-pop-ov';alertOv.setAttribute('role','dialog');alertOv.setAttribute('aria-modal','true');alertOv.setAttribute('aria-label','Be first to hear about new trips');
+    var x=document.createElement('button');x.type='button';x.className='tc-pop-x';x.setAttribute('aria-label','Close');x.innerHTML='&times;';x.addEventListener('click',closeAlertPop);
+    c.classList.add('tc-in');c.appendChild(x);alertOv.appendChild(c);
+    alertOv.addEventListener('click',function(e){if(e.target===alertOv)closeAlertPop();});
+    document.body.appendChild(alertOv);document.documentElement.classList.add('tc-pop-open');document.addEventListener('keydown',alertKey);
+    var st=$('tcAlStatus');
+    if(st&&window.MutationObserver)new MutationObserver(function(){if(alertOv&&/^(Thanks|You are already)/.test(st.textContent||'')){clearTimeout(alertTimer);alertTimer=setTimeout(closeAlertPop,2600);}}).observe(st,{childList:true,characterData:true,subtree:true});
+    setTimeout(function(){try{$('tcAlName').focus({preventScroll:true});}catch(e){}},60);
+  }
   /* a warning goes away as soon as the person changes something */
   ['input','change'].forEach(function(ev){document.addEventListener(ev,function(e){var f=e.target.closest&&e.target.closest('[data-list-form]');if(!f)return;var m=f.querySelector('.tc-listmsg');if(m&&m.classList.contains('err'))m.textContent='';});});
   document.addEventListener('submit',function(e){
