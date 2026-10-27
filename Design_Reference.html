@@ -58804,7 +58804,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       if(!$('tcAlConsent').checked){setMsg(st,'Please tick the box so we can email you.','err');return;}
       var b=$('tcAlBtn');b.disabled=true;b.textContent='Sending...';setMsg(st,'','');
       api('trips','POST',{action:'interest',name:name,email:email,partySize:parseInt($('tcAlParty').value,10)||1,consent:true,website:$('tcAlHp').value,source:'travel-club'}).then(function(res){
-        setMsg(st,res.already?'You are already on the list. We will email you when a departure opens.':'Thanks, '+first(name)+'. We will email you when a departure opens.','ok');
+        setMsg(st,res.already?(res.resent?'You are already on the list. We have just sent your confirmation to your inbox again, so check your spam folder if you cannot see it.':'You are already on the list. We will email you when a departure opens. Your confirmation was sent a moment ago, so check your inbox and spam folder.'):'Thanks, '+first(name)+'. We will email you when a departure opens.','ok');
         b.textContent='You are on the list';track('travel_club_alert');
       }).catch(function(err){setMsg(st,err.message,'err');b.disabled=false;b.textContent='Tell me first';});
     });

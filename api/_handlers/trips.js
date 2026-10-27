@@ -273,6 +273,7 @@ function rosterLine(rec) {
 }
 function interestMails(rec, t, extra) {
   extra = extra || {};
+  const guestOnly = !!extra.guestOnly;
   const rows = [['Reference', rec.ref], ['Trip', rec.tripTitle || 'No trip chosen yet: wants to hear when one opens'], ['Name', rec.name], ['Email', rec.email], ['Phone / WhatsApp', rec.phone],
     ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName], ['Shares contact with leader', t ? (rec.shareContact ? 'Yes' : 'No') : '']];
   const led = t && t.organizerName ? ' It is led by ' + trip.esc(t.organizerName) + '.' : '';
@@ -281,9 +282,9 @@ function interestMails(rec, t, extra) {
     : `<p>Thanks, ${trip.esc(firstName(rec.name))}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
   const jobs = [
     safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
-    safe('interest admin', adminMail('[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), 'New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, rec.email))
+    ...(guestOnly ? [] : [safe('interest admin', adminMail('[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), 'New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, rec.email))])
   ];
-  if (t && t.organizerEmail && t.organizerEmail !== rec.email) {
+  if (!guestOnly && t && t.organizerEmail && t.organizerEmail !== rec.email) {
     jobs.push(safe('interest leader', mail(t.organizerEmail, 'New traveler on ' + t.title, 'Someone joined your trip',
       `<p>${trip.esc(firstName(rec.name))} ${rec.status === 'waitlist' ? 'joined the waitlist for' : 'joined'} <b>${trip.esc(t.title)}</b>${rec.source ? ' (from your link tagged <b>' + trip.esc(rec.source) + '</b>)' : ''}.</p>${trip.detailTable(rosterLine(rec).concat(extra.goalLine ? [['Your goal', extra.goalLine]] : []))}${rec.shareContact ? '' : '<p style="color:#555">This traveler chose not to share contact details. Add your group chat link in your dashboard so they can join it.</p>'}${button(SITE + '/account', 'Open my dashboard')}`)));
   }
@@ -551,7 +552,17 @@ module.exports = async function handler(req, res) {
         if (!t || (t.status !== 'open' && t.status !== 'full')) return res.status(404).json({ error: 'That trip is not open right now.' });
       }
       const dupe = interests.find(i => i.email === contact.email && (i.tripId || null) === (t ? t.id : null) && i.status !== 'cancelled');
-      if (dupe) return res.status(200).json({ ok: true, already: true, ref: dupe.ref });
+      if (dupe) {
+        /* someone who is already on the list and asks again gets their confirmation sent once more (at most one per address every 10 minutes), and nobody else is emailed */
+        const last = Date.parse(dupe.confirmResentAt || dupe.createdAt || '') || 0;
+        let resent = false;
+        if (Date.now() - last > 10 * 60 * 1000) {
+          resent = true;
+          await db.updateInCollection(INTERESTS, dupe.id, { confirmResentAt: new Date().toISOString() });
+          await interestMails(dupe, t, { guestOnly: true });
+        }
+        return res.status(200).json({ ok: true, already: true, resent, ref: dupe.ref });
+      }
       const user = getUser(req);
       const full = t && (t.status === 'full' || (t.seatsTotal && travelersCounted(interests, t.id) + partySize > t.seatsTotal));
       const rec = {
