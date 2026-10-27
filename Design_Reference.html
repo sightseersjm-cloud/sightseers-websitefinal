@@ -9402,6 +9402,52 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js"></script>
 <!-- Supabase real-time chat -->
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style id="critical-above-fold">
+/* These few rules style the top of the page (the banner, the back button, which page shows). They are repeated here, ahead of the page, because the
+   rest of the styles sit far down a very large file and the top of the page used to appear unstyled for a moment while that file arrived. */
+.page:not(.on){display:none!important;height:0!important;overflow:hidden!important;padding:0!important;margin:0!important;border:none!important;visibility:hidden!important}
+/* ── Promotional Banner ── */
+.ss-promo-banner{position:relative;z-index:10;background:linear-gradient(135deg,#ef8731,#e57320);padding:0;display:flex;align-items:center;justify-content:center}
+.ss-promo-inner{display:flex;align-items:center;gap:14px;padding:12px 48px 12px 20px;flex-wrap:wrap;justify-content:center}
+.ss-promo-text{color:#fff;font-size:13px;font-weight:700;letter-spacing:.4px}
+.ss-promo-sep{opacity:.7;margin:0 2px}
+.ss-promo-cta{color:#fff;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;text-decoration:none;border:1px solid rgba(255,255,255,.5);padding:5px 14px;border-radius:0;transition:all .2s;white-space:nowrap}
+.ss-promo-cta:hover{background:#fff;color:var(--orange);border-color:#fff}
+.ss-promo-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;transition:color .2s}
+.ss-promo-close:hover{color:#fff}
+@media(max-width:768px){
+  .ss-promo-inner{gap:8px;padding:10px 40px 10px 14px}
+  .ss-promo-text{font-size:11px}
+  .ss-promo-cta{font-size:9px;padding:4px 10px}
+  .ss-promo-close{right:6px;font-size:16px}
+}
+@media(max-width:480px){
+  .ss-promo-inner{padding:8px 36px 8px 12px}
+  .ss-promo-text{font-size:10px;letter-spacing:.2px;text-align:center}
+  .ss-promo-close{right:4px;font-size:14px}
+}
+
+/* The Back button in the phone header. It only shows on inner pages, and it matches the round buttons beside it: a
+   slim circle with a chevron. Phones only: a narrow screen, or a phone held sideways (a touch screen that is short). */
+.nav-back{display:none}
+@media (max-width:767px),(pointer:coarse) and (max-height:480px) and (max-width:1024px){
+  body.ss-has-back .nav-back{display:inline-flex}
+  body.ss-has-back .nav-wrap{grid-template-columns:auto minmax(0,1fr) auto!important}
+  .nav-back{position:relative;z-index:4;align-items:center;justify-content:center;width:32px;height:32px;min-width:0;min-height:0;padding:0;margin-right:6px;border-radius:50%;border:1px solid rgba(6,58,99,.12);background:linear-gradient(135deg,#eef6ff,#fff7ef);color:#063a63;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,color .2s,transform .15s}
+  .nav-back svg{width:16px;height:16px;flex:none;display:block}
+  /* The circle looks small, but the area that answers a tap stays 44px square. */
+  .nav-back::after{content:'';position:absolute;top:-8px;right:-8px;bottom:-8px;left:-8px}
+  .nav-back .nb-chev{margin-left:-1px}
+  .nav-back .nb-chev path{stroke-width:2.6}
+  .nav-back .nb-home{display:none}
+  .nav-back.is-home .nb-chev{display:none}
+  .nav-back.is-home .nb-home{display:block}
+  .nav-back:active{background:linear-gradient(135deg,var(--navy),#0f5672);color:#fff;border-color:transparent;transform:scale(.94)}
+  .nav-back:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+  body.theme-night .nav-back{background:#0d3d5e;color:#f5f5f7;border-color:rgba(255,255,255,.12)}
+  body.theme-night .nav-back:active{background:#14587f}
+}
+</style>
 </head>
 <body>
 
