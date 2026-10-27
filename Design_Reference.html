@@ -11316,7 +11316,7 @@ body.theme-night .page .tag{
               <li><span>Photography and custom extras can be arranged</span></li>
               <li><span>Easy to pair with transfers and celebration planning</span></li>
             </ul>
-            <div class="yacht-luxe-price">Starting from $500 USD</div>
+            <div class="yacht-luxe-price">Starting from $1,200 USD</div>
             <div class="yacht-luxe-btns">
               <button class="btn-primary" type="button" onclick="openYachtBooking('Proposal / Special Moment Charter','Yacht Charter','Interested in the Proposal / Special Moment Charter package.')">Book Charter</button>
               <button class="btn-secondary" type="button" onclick="openLinkedStartPlanning();"><i class="fas fa-pen"></i>Custom Inquiry</button>
@@ -11344,7 +11344,7 @@ body.theme-night .page .tag{
               <li><span>Works with transfers and island itinerary support</span></li>
               <li><span>Custom timing and charter flow available</span></li>
             </ul>
-            <div class="yacht-luxe-price">Starting from $600 USD</div>
+            <div class="yacht-luxe-price">Starting from $1,200 USD</div>
             <div class="yacht-luxe-btns">
               <button class="btn-primary" type="button" onclick="openYachtBooking('Island Group Cruise','Yacht Charter','Interested in the Island Group Cruise package.')">Book Charter</button>
               <button class="btn-secondary" type="button" onclick="openLinkedStartPlanning();"><i class="fas fa-pen"></i>Custom Inquiry</button>
@@ -11372,7 +11372,7 @@ body.theme-night .page .tag{
               <li><span>Ideal for professionals and private event moments</span></li>
               <li><span>Can include transfer coordination and custom touches</span></li>
             </ul>
-            <div class="yacht-luxe-price">Starting from $900 USD</div>
+            <div class="yacht-luxe-price">Starting from $1,200 USD</div>
             <div class="yacht-luxe-btns">
               <button class="btn-primary" type="button" onclick="openYachtBooking('Luxury Executive Charter','Yacht Charter','Interested in the Luxury Executive Charter package.')">Book Charter</button>
               <button class="btn-secondary" type="button" onclick="openLinkedStartPlanning();"><i class="fas fa-pen"></i>Custom Inquiry</button>
@@ -11400,7 +11400,7 @@ body.theme-night .page .tag{
               <li><span>Can include premium décor, catering and add-ons</span></li>
               <li><span>Pairs well with executive transfers and full itinerary planning</span></li>
             </ul>
-            <div class="yacht-luxe-price">Starting from $1,100 USD</div>
+            <div class="yacht-luxe-price">Starting from $1,200 USD</div>
             <div class="yacht-luxe-btns">
               <button class="btn-primary" type="button" onclick="openYachtBooking('Elite Celebration Charter','Yacht Charter','Interested in the Elite Celebration Charter package.')">Book Charter</button>
               <button class="btn-secondary" type="button" onclick="openLinkedStartPlanning();"><i class="fas fa-pen"></i>Custom Inquiry</button>
@@ -57507,7 +57507,8 @@ body.theme-night #p-travel-club,body.theme-night #p-trip{--tc-ink:#e6eff8;--tc-m
 .tc-path::after,.tc-dcard::after,.tc-steps>li::after,.tc-apply::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(240px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.34),transparent 62%)}
 body.theme-night .tc-path::after,body.theme-night .tc-dcard::after,body.theme-night .tc-steps>li::after,body.theme-night .tc-apply::after{background:radial-gradient(240px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.1),transparent 62%)}
 .tc-path:hover::after,.tc-dcard:hover::after,.tc-steps>li:hover::after,.tc-apply:hover::after{opacity:1}
-.tc-anim .tc-card:not(.tc-in){opacity:0;--ty:22px}
+/* the cards that the reveal script skips (the sign-up card, panels and blocks) must never be left hidden */
+.tc-anim .tc-card:not(.tc-in):not(.tc-alert):not(.tc-panel):not(.tp-block){opacity:0;--ty:22px}
 
 /* the two paths */
 .tc-paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding-top:30px}
