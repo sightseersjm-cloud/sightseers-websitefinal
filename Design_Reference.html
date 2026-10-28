@@ -52787,3 +52787,27 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   });
 })();
 </script>
+<style id="ss-lift-css">
+/* the soft lift and tilt a box makes under the pointer (as on Flagship Programs), for the boxes on the other pages; only for a mouse, never when motion is reduced */
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .ss-lift{transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,border-color .2s!important;will-change:transform}
+  .ss-lift:hover{transform:perspective(900px) translateY(-6px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))!important}
+}
+</style>
+<script id="ss-lift-script">
+(function(){
+  if(!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var SEL='.bx-card,.dest-explorer-card,.dest-package-card,.mba-getaway-card,.stay-card,.bdos-itin-card,.yacht-luxe-card,.yacht-luxe-summary-card,.transfer-card,.transfers-stat-card,.special-point,.testi-stat,.team-gloss-card,.about-what-panel,.passport-check';
+  function lift(e){return e.target&&e.target.closest&&e.target.closest(SEL);}
+  document.addEventListener('pointerover',function(e){var t=lift(e);if(t&&!t.classList.contains('ss-lift'))t.classList.add('ss-lift');},{passive:true});
+  document.addEventListener('pointermove',function(e){
+    var t=lift(e);if(!t||t.closest('#p-manage'))return;
+    var r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height,amt=r.width>460?3.2:6;
+    t.style.setProperty('--ry',((x-.5)*amt).toFixed(2)+'deg');t.style.setProperty('--rx',((.5-y)*amt).toFixed(2)+'deg');
+  },{passive:true});
+  document.addEventListener('pointerout',function(e){
+    var t=lift(e);if(!t||(e.relatedTarget&&t.contains(e.relatedTarget)))return;
+    t.style.removeProperty('--rx');t.style.removeProperty('--ry');
+  },{passive:true});
+})();
+</script>
