@@ -20,12 +20,16 @@
   var LISTS = {
     experiences: { noun: 'experience', page: 'tours', max: 120 },
     packages: { noun: 'package', page: 'destinations', max: 60 },
-    stays: { noun: 'stay', page: 'stays', max: 80 }
+    stays: { noun: 'stay', page: 'stays', max: 80 },
+    yachts: { noun: 'yacht charter', page: 'yacht-charters', max: 20 },
+    transfers: { noun: 'transfer service', page: 'transfers', max: 12 },
+    gallery: { noun: 'gallery photo', page: 'gallery', max: 150 }
   };
   var MAX_ADDED = 120;
   var CONTROL = /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g;
 
-  /* what may be changed, and how long each may be. kind: t text, n number, u photo address, s choice, l list of lines, ul list of photo addresses, m extra sections, f fact rows */
+  /* what may be changed, and how long each may be. kind: t text, n number, u photo address, s choice, l list of lines, ul list of photo addresses, m extra sections, f fact rows.
+     req: true on a text field means it can never be saved empty. */
   var FIELDS = {
     experiences: {
       title: { kind: 't', max: 120, label: 'Name' },
@@ -72,13 +76,41 @@
       copy: { kind: 't', max: 500, label: 'Description' },
       highlights: { kind: 'l', max: 4, each: 60, label: 'Highlights' },
       gallery: { kind: 'ul', max: 8, label: 'More photos' }
+    },
+    yachts: {
+      name: { kind: 't', max: 80, req: true, label: 'Name' },
+      category: { kind: 's', of: ['private', 'group', 'luxury'], label: 'Kind of charter' },
+      sub: { kind: 't', max: 80, label: 'Line under the name' },
+      pills: { kind: 'l', max: 4, each: 40, label: 'Small tags' },
+      blurb: { kind: 't', max: 400, label: 'Description' },
+      bullets: { kind: 'l', max: 6, each: 140, label: 'What it offers' },
+      price: { kind: 't', max: 60, label: 'Price' },
+      img: { kind: 'u', label: 'Main photo' },
+      gallery: { kind: 'ul', max: 8, label: 'More photos' }
+    },
+    transfers: {
+      name: { kind: 't', max: 80, req: true, label: 'Name' },
+      category: { kind: 's', of: ['airport', 'executive', 'group'], label: 'Kind of transfer' },
+      badge: { kind: 't', max: 40, label: 'Label on the photo' },
+      sub: { kind: 't', max: 80, label: 'Line under the name' },
+      blurb: { kind: 't', max: 400, label: 'Description' },
+      bullets: { kind: 'l', max: 6, each: 140, label: 'What it offers' },
+      img: { kind: 'u', label: 'Photo' }
+    },
+    gallery: {
+      country: { kind: 's', of: COUNTRIES, label: 'Island' },
+      src: { kind: 'u', label: 'Photo' },
+      label: { kind: 't', max: 100, req: true, label: 'Caption' }
     }
   };
   /* what an added item must have, in the order the person is told about it */
   var REQUIRED = {
     experiences: [['title', 'Give it a name.'], ['country', 'Choose the island.'], ['image', 'Choose a photo.'], ['desc', 'Write a short description.']],
     packages: [['title', 'Give it a name.'], ['destination', 'Choose the island.'], ['img', 'Choose a photo.'], ['blurb', 'Write a short summary.']],
-    stays: [['title', 'Give it a name.'], ['country', 'Choose the island.'], ['type', 'Choose villa or vacation rental.'], ['img', 'Choose a photo.'], ['copy', 'Write a short description.']]
+    stays: [['title', 'Give it a name.'], ['country', 'Choose the island.'], ['type', 'Choose villa or vacation rental.'], ['img', 'Choose a photo.'], ['copy', 'Write a short description.']],
+    yachts: [['name', 'Give it a name.'], ['category', 'Choose the kind of charter.'], ['img', 'Choose a photo.'], ['blurb', 'Write a short description.']],
+    transfers: [['name', 'Give it a name.'], ['category', 'Choose the kind of transfer.'], ['img', 'Choose a photo.'], ['blurb', 'Write a short description.']],
+    gallery: [['country', 'Choose the island.'], ['src', 'Choose a photo.'], ['label', 'Write a short caption.']]
   };
   /* only for experiences the owner adds */
   var ADDED_ONLY = { experiences: { country: { kind: 's', of: COUNTRIES, label: 'Island' }, type: { kind: 's', of: ['water', 'land'], label: 'On water or on land' } } };
@@ -101,7 +133,7 @@
       if (v === null || v === undefined) continue;
       if (f.kind === 't') {
         v = text(v, f.max);
-        if (k === 'title' && !v) return { error: 'The name cannot be empty.' };
+        if ((k === 'title' || f.req) && !v) return { error: (k === 'title' ? 'The name' : 'The ' + f.label.toLowerCase()) + ' cannot be empty.' };
         out[k] = v;
       } else if (f.kind === 'n') {
         if (v === '' ) { out[k] = k === 'cap' ? null : 0; continue; }
@@ -241,10 +273,18 @@
   }
 
   /* the same for packages and stays: edits laid over the item, hidden ones left out, added ones at the end */
-  function keyOf(list, b) { return list === 'packages' ? String(b.destination || '') + '|' + String(b.title || '') : String(b.id != null ? b.id : b.title); }
+  function keyOf(list, b) {
+    if (list === 'packages') return String(b.destination || '') + '|' + String(b.title || '');
+    if (list === 'gallery') return String(b.country || '') + '|' + String(b.src || '');
+    if (list === 'yachts' || list === 'transfers') return String(b.name || '');
+    return String(b.id != null ? b.id : b.title);
+  }
   var DEFAULTS = {
     packages: { tag: 'Curated Package', type: 'Curated Package', duration: '', price: 'Price on request', blurb: '', highlights: [] },
-    stays: { price: 'Rate on request', copy: '', highlights: [] }
+    stays: { price: 'Rate on request', copy: '', highlights: [] },
+    yachts: { sub: '', pills: [], bullets: [], price: 'Price on request', gallery: [] },
+    transfers: { badge: '', sub: '', bullets: [] },
+    gallery: {}
   };
   function finish(list, item) {
     if (list === 'stays') { item.tag = item.type === 'villa' ? 'Villa' : 'Vacation Rentals'; if (item.id == null) item.id = item.origKey; }
@@ -257,7 +297,13 @@
       var item = clone(b);
       item.origKey = key;
       var e = doc.edits[key];
-      if (e) { var c = cleanFields(list, e, false).value; for (var k in c) item[k] = c[k]; }
+      if (e) {
+        var c = cleanFields(list, e, false).value;
+        for (var k in c) item[k] = c[k];
+        /* the photo description, the transfer's kind and the planning note were written for the old name or kind, so they follow the new one */
+        if (c.name !== undefined && c.name !== b.name) { delete item.alt; delete item.note; }
+        if (c.category !== undefined && c.category !== b.category) delete item.type;
+      }
       finish(list, item);
       out.push(item);
     });

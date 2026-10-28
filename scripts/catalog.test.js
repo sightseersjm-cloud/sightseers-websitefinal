@@ -150,6 +150,44 @@ const C = (key, value, extra) => Object.assign({ id: '@c', list: 'experiences', 
   ok('the site holds at most 80 added stays', /stays than the site can hold \(80\)/.test(over || ''), over);
   ok('the content editor can change packages and stays, a blogger cannot', (await post({ action: 'save', changes: [T('4', { edits: { price: 'from $1 / night' } })] }, writer)).code === 200 && (await post({ action: 'save', changes: [T('4', { edits: { price: 'from $2 / night' } })] }, blogger)).code === 403);
 
+  // --- yacht charters, transfers and Island Memories photos
+  const L = (list, key, value, label) => ({ id: '@c', list, key, value, label: label || list + ': ' + key });
+  const YB = [{ category: 'private', img: '/a.jpg', alt: 'Sunset', badge: 'Private Charter', name: 'Sunset Private Charter', sub: 'Sub', pills: ['A'], blurb: 'b', bullets: ['x'], price: 'Starting from $350 USD' },
+    { category: 'group', img: '/b.jpg', name: 'Island Group Cruise', sub: 'S', pills: [], blurb: 'b', bullets: [], price: 'p' }];
+  r = await post({ action: 'save', changes: [L('yachts', 'Sunset Private Charter', { edits: { price: 'Starting from $400 USD', pills: ['Sunset', 'Drinks'], name: 'Sunset Private Sail' } })] }, owner); s = await live();
+  ok('the owner edits a yacht charter', r.body.live === true && s.ss_catalog_v1.yachts.edits['Sunset Private Charter'].price === 'Starting from $400 USD');
+  let ye = catalog.effective('yachts', YB, s.ss_catalog_v1.yachts);
+  ok('the site shows the yacht edit and keeps the original key', ye[0].name === 'Sunset Private Sail' && ye[0].origKey === 'Sunset Private Charter' && ye[0].pills.length === 2);
+  ok('a renamed charter does not keep the photo description written for the old name', ye[0].alt === undefined && ye[1].name === 'Island Group Cruise');
+  ok('a yacht name cannot be emptied', (await post({ action: 'save', changes: [L('yachts', 'Sunset Private Charter', { edits: { name: '  ' } })] }, owner)).code === 400);
+  ok('a yacht must be one of the three kinds', (await post({ action: 'save', changes: [L('yachts', 'Sunset Private Charter', { edits: { category: 'party' } })] }, owner)).code === 400);
+  ok('a yacht has at most four small tags', (await post({ action: 'save', changes: [L('yachts', 'Island Group Cruise', { edits: { pills: ['a', 'b', 'c', 'd', 'e'] } })] }, owner)).code === 200 && (await live()).ss_catalog_v1.yachts.edits['Island Group Cruise'].pills.length === 4);
+  ok('an added yacht needs a photo', (await post({ action: 'save', changes: [L('yachts', 'nyacht01', { added: { name: 'Sunrise Sail', category: 'private', blurb: 'Early.' } })] }, owner)).code === 400);
+  r = await post({ action: 'save', changes: [L('yachts', 'nyacht01', { added: { name: 'Sunrise Sail', category: 'luxury', img: '/c.jpg', blurb: 'Early.' } })] }, owner); s = await live();
+  ye = catalog.effective('yachts', YB, s.ss_catalog_v1.yachts);
+  ok('an added yacht comes last with the card fields filled in', r.body.live === true && ye[2].added === true && ye[2].price === 'Price on request' && Array.isArray(ye[2].pills) && ye[2].category === 'luxury');
+  r = await get({ view: 'history', limit: 50 }, owner);
+  const yh = r.body.history.find(x => x.kind === 'c' && x.list === 'yachts' && x.key === 'nyacht01');
+  ok('history knows it was a yacht charter, on the yacht charters page', !!yh && yh.page === 'yacht-charters');
+
+  const TB = [{ category: 'airport', img: '/t.jpg', alt: 'Airport pickup transfer', badge: 'Arrival Ready', name: 'Airport Pickup', sub: 'Airport Transfer', blurb: 'b', bullets: [], type: 'Airport Transfer', note: 'Interested in airport pickup.' }];
+  r = await post({ action: 'save', changes: [L('transfers', 'Airport Pickup', { edits: { name: 'Airport Meet and Greet', category: 'executive' } })] }, owner); s = await live();
+  const te = catalog.effective('transfers', TB, s.ss_catalog_v1.transfers);
+  ok('a renamed transfer drops the note and photo description written for the old name, and a new kind drops the old type', r.body.live === true && te[0].name === 'Airport Meet and Greet' && te[0].alt === undefined && te[0].note === undefined && te[0].type === undefined);
+  ok('the site holds at most 12 added transfers', (() => { let d = catalog.emptyDoc(), e = null; for (let i = 0; i < 13 && !e; i++) { const pt = catalog.putState(d, 'n' + 'abcde' + i, { added: { name: 'T' + i } }, 'transfers'); if (pt.error) e = pt.error; else d = pt.doc; } return /transfer services than the site can hold \(12\)/.test(e || ''); })());
+
+  const GB = [{ country: 'Jamaica', src: '/assets/gallery/a.jpg', label: 'Rafting', h: 'wide' }, { country: 'Jamaica', src: '/assets/gallery/b.jpg', label: 'Falls', h: 'tall' }, { country: 'Belize', src: '/assets/gallery/c.jpg', label: 'Reef' }];
+  ok('a photo in Island Memories is known by its island and its address', catalog.keyOf('gallery', GB[0]) === 'Jamaica|/assets/gallery/a.jpg');
+  r = await post({ action: 'save', changes: [L('gallery', 'Jamaica|/assets/gallery/a.jpg', { edits: { label: 'Bamboo rafting at dawn', country: 'Belize' } }), L('gallery', 'Jamaica|/assets/gallery/b.jpg', { hidden: true }), L('gallery', 'ngal001', { added: { country: 'Belize', src: '/assets/gallery/new.jpg', label: 'Cave tubing' } })] }, owner); s = await live();
+  const ge = catalog.effective('gallery', GB, s.ss_catalog_v1.gallery);
+  ok('Island Memories shows the caption and island edits, leaves the hidden photo out and puts added photos last', r.body.live === true && ge.length === 3 && ge[0].label === 'Bamboo rafting at dawn' && ge[0].country === 'Belize' && ge.some(x => x.added && x.src === '/assets/gallery/new.jpg') && !ge.some(x => x.label === 'Falls'));
+  ok('an added gallery photo needs a caption', (await post({ action: 'save', changes: [L('gallery', 'ngal002', { added: { country: 'Belize', src: '/assets/gallery/x.jpg' } })] }, owner)).code === 400);
+  ok('a gallery caption cannot be emptied', (await post({ action: 'save', changes: [L('gallery', 'Belize|/assets/gallery/c.jpg', { edits: { label: '' } })] }, owner)).code === 400);
+  ok('the site holds at most 150 added gallery photos', (() => { let d = catalog.emptyDoc(), e = null; for (let i = 0; i < 151 && !e; i++) { const pt = catalog.putState(d, 'n' + 'abcde' + i, { added: { label: 'x' } }, 'gallery'); if (pt.error) e = pt.error; else d = pt.doc; } return /gallery photos than the site can hold \(150\)/.test(e || ''); })());
+
+  ok('a list that does not exist is refused', (await post({ action: 'save', changes: [L('hotels', 'x', { edits: { name: 'y' } })] }, owner)).code === 400);
+  ok('the content editor can change yacht charters, a blogger cannot', (await post({ action: 'save', changes: [L('yachts', 'Island Group Cruise', { edits: { price: 'p2' } })] }, writer)).code === 200 && (await post({ action: 'save', changes: [L('yachts', 'Island Group Cruise', { edits: { price: 'p3' } })] }, blogger)).code === 403);
+
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })();

@@ -16520,6 +16520,20 @@ body.theme-night .page .tag{
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
+  /* the admin reads the photos as one list and puts the edited list back (see ss-catalog-script) */
+  window.ssMemory = {
+    flat: function(){
+      const out = [];
+      Object.keys(ALBUM_DATA).forEach(c => ALBUM_DATA[c].photos.forEach(p => out.push({country:c, src:p.src, label:p.label, h:p.h})));
+      return out;
+    },
+    set: function(list){
+      Object.keys(ALBUM_DATA).forEach(c => { ALBUM_DATA[c].photos.length = 0; });
+      list.forEach(p => { if(ALBUM_DATA[p.country]) ALBUM_DATA[p.country].photos.push({src:p.src, label:p.label, h:p.h || 'wide'}); });
+    },
+    refresh: init
+  };
+
   const origNav = window.nav;
   if(typeof origNav==='function' && !window.__memAlbumNavPatched){
     window.__memAlbumNavPatched=true;
@@ -38695,19 +38709,25 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="assistant-yacht-refresh-filters">
 document.addEventListener('DOMContentLoaded', function(){
   const chips = document.querySelectorAll('.yacht-luxe-chip');
-  const cards = document.querySelectorAll('#yachtGrid .yacht-luxe-card, #yachtGrid .yacht-card');
-  if(!chips.length || !cards.length) return;
+  if(!chips.length) return;
+  /* the cards are looked up each time, because the admin can change, add or hide a charter after the page has loaded */
+  function show(filter){
+    document.querySelectorAll('#yachtGrid .yacht-luxe-card, #yachtGrid .yacht-card').forEach(card => {
+      const cat = card.getAttribute('data-yacht-category');
+      card.style.display = (filter === 'all' || filter === cat) ? '' : 'none';
+    });
+  }
   chips.forEach(chip => {
     chip.addEventListener('click', function(){
       chips.forEach(c => c.classList.remove('active'));
       this.classList.add('active');
-      const filter = this.getAttribute('data-yacht-filter');
-      cards.forEach(card => {
-        const cat = card.getAttribute('data-yacht-category');
-        card.style.display = (filter === 'all' || filter === cat) ? '' : 'none';
-      });
+      show(this.getAttribute('data-yacht-filter'));
     });
   });
+  window.ssYachtFilter = function(){
+    const on = document.querySelector('.yacht-luxe-chip.active');
+    show(on ? on.getAttribute('data-yacht-filter') : 'all');
+  };
 });
 </script>
 
@@ -49530,6 +49550,24 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
   if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
 })();
 </script>
+<script id="ss-card-data">
+/* The yacht charter cards and the transfer cards as data. The page has the same cards written out in full; this is what the admin changes
+   (hide, edit, add) and what api/_lib/cards.js turns back into cards. scripts/cards.test.js checks that the two match. */
+window.SS_CARD_DATA={
+ yachts:[
+  {"category": "private", "img": "/assets/yachts/sunset-cruise.jpg", "badge": "Private Charter", "name": "Sunset Private Charter", "sub": "2 to 6 Guests • 3 to 4 Hours", "pills": ["Sunset Cruise", "Music + Drinks", "Optional Décor"], "blurb": "A soft luxury sea experience for couples, date moments, proposals and intimate celebrations with the Sight Seers touch.", "gallery": [], "bullets": ["Private catamaran or boat option", "Perfect for sunset moments and romantic escapes", "Can be paired with transfers and custom add-ons"], "price": "Starting from $350 USD"},
+  {"category": "private", "img": "/assets/yachts/empress-kool-runnings-salon.jpg", "alt": "Proposal Special Moment Charter", "badge": "Private Charter", "name": "Proposal / Special Moment Charter", "sub": "Curated Setup • High Emotion", "pills": ["Décor Setup", "Photography Optional", "Curated Moment"], "blurb": "Designed for proposals, anniversaries and milestone moments with a more intimate, styled and memorable charter experience.", "gallery": ["/assets/yachts/empress-kool-runnings-salon.jpg", "/assets/yachts/empress-kool-runnings-aerial.jpg", "/assets/yachts/empress-kool-runnings-bow-guests.jpg", "/assets/yachts/empress-kool-runnings-lounge.jpg"], "bullets": ["Decor setup available for special moments", "Photography and custom extras can be arranged", "Easy to pair with transfers and celebration planning"], "price": "Starting from $1,200 USD"},
+  {"category": "group", "img": "/assets/yachts/sofisti-kat-exterior.jpg", "badge": "Group Charter", "name": "Island Group Cruise", "sub": "6 to 20+ Guests • Celebration Ready", "pills": ["Group Vibe", "Swimming Stops", "Party Friendly"], "blurb": "Made for birthdays, friend groups, family outings and celebration travel with more space, more energy and smoother charter coordination.", "gallery": ["/assets/yachts/sofisti-kat-exterior.jpg", "/assets/yachts/sofisti-kat-covered-lounge.jpg", "/assets/yachts/sofisti-kat-outdoor-dining.jpg", "/assets/yachts/sofisti-kat-dining-salon.jpg"], "bullets": ["Great for larger groups and social sea days", "Works with transfers and island itinerary support", "Custom timing and charter flow available"], "price": "Starting from $1,200 USD"},
+  {"category": "luxury", "img": "/assets/yachts/empress-kool-runnings-aerial.jpg", "badge": "Luxury Charter", "name": "Luxury Executive Charter", "sub": "Premium Hosting • Private Feel", "pills": ["Premium Service", "VIP Feel", "Private Crew Style"], "blurb": "A refined charter option for premium guests, polished hosting and elevated island plans that call for a stronger luxury finish.", "gallery": ["/assets/yachts/empress-kool-runnings-aerial.jpg", "/assets/yachts/empress-kool-runnings-bow-guests.jpg", "/assets/yachts/empress-kool-runnings-salon.jpg", "/assets/yachts/empress-kool-runnings-lounge.jpg"], "bullets": ["Luxury feel for premium guests and hosted experiences", "Ideal for professionals and private event moments", "Can include transfer coordination and custom touches"], "price": "Starting from $1,200 USD"},
+  {"category": "luxury", "img": "/assets/yachts/fancy-kat-exterior.jpg", "badge": "Luxury Charter", "name": "Elite Celebration Charter", "sub": "Styled Hosting • Premium Add-Ons", "pills": ["Champagne Welcome", "Styled Setup", "Premium Hosting"], "blurb": "Created for birthdays, anniversaries, premium celebrations and guests who want a more elevated charter atmosphere.", "gallery": ["/assets/yachts/fancy-kat-exterior.jpg", "/assets/yachts/fancy-kat-bow-seating.jpg", "/assets/yachts/fancy-kat-forward-deck.jpg", "/assets/yachts/fancy-kat-dining-lounge.jpg"], "bullets": ["Great for upscale celebrations and hosted moments", "Can include premium décor, catering and add-ons", "Pairs well with executive transfers and full itinerary planning"], "price": "Starting from $1,200 USD"}
+ ],
+ transfers:[
+  {"category": "airport", "img": "/assets/transfers/airport-sprinter.jpg", "alt": "Airport pickup transfer", "badge": "Arrival Ready", "name": "Airport Pickup & Drop-Off", "sub": "Airport Transfer", "blurb": "A polished airport transfer option for smooth arrivals, departures and direct movement between the airport, hotel, villa or meeting point.", "bullets": ["MBJ and NMIA pickup support", "Ideal for couples, families and solo travelers", "Easy pairing with tours, stays and arrival day plans"], "type": "Airport Transfer", "note": "Interested in airport pickup and drop-off support with Sight Seers."},
+  {"category": "executive", "img": "/assets/transfers/executive-escalade.jpg", "alt": "Executive transfer", "badge": "Premium Ride", "name": "Executive Transfers", "sub": "Private Movement", "blurb": "A more polished transport option for VIP guests, professionals, elevated itineraries and premium island movement.", "bullets": ["Private point-to-point support", "Works for dining, meetings and event movement", "Designed for a more refined guest feel"], "type": "Executive Transfer", "note": "Interested in executive transfer support with Sight Seers."},
+  {"category": "group", "img": "/assets/transfers/group-coach-53-seater.jpg", "alt": "Group transfers", "badge": "Group Ready", "name": "Group Transfers", "sub": "Coordinated Movement", "blurb": "Built for family groups, retreats, celebrations and guest movement that needs timing, structure and less stress.", "bullets": ["Move guests together more smoothly", "Great for weddings, retreats and parties", "Easy to pair with tours and vacation plans", "Coach Buses 53 Seater", "37 Seater", "Coaster 28 Seater"], "type": "Group Transfer", "note": "Interested in group transfer support with Sight Seers."}
+ ]
+};
+</script>
 <style id="ss-discovery-call-style">
 #p-booking .tp-call-sub{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5c6f82;margin-bottom:6px}
 #p-booking .tp-call input[type=date]{min-height:46px}
@@ -49561,9 +49599,10 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
 <script id="ss-catalog-script">
 /* What the owner edited, hid or added in the admin, laid over the lists written in the site's code, in place, so everything that reads a list
    (the All Experiences page, the explorer, the group trip builder, the destination packages, the stays pages) shows the same thing.
-   Three lists: "experiences" (CURATED_TOURS), "packages" (DESTINATION_PACKAGE_DATA, kept as a list per island) and "stays" (STAYS). */
+   Six lists: "experiences" (CURATED_TOURS), "packages" (DESTINATION_PACKAGE_DATA, kept as a list per island), "stays" (STAYS), "yachts" and "transfers"
+   (SS_CARD_DATA, drawn with SSCards) and "gallery" (the Island Memories albums, through ssMemory). */
 (function(){
-  var BASE={}, LIVE={}, LISTS=['experiences','packages','stays'];
+  var BASE={}, LIVE={}, LISTS=['experiences','packages','stays','yachts','transfers','gallery'];
   function copy(x){ return JSON.parse(JSON.stringify(x)); }
   function empty(d){ return !d||(!Object.keys(d.edits||{}).length&&!Object.keys(d.hidden||{}).length&&!(d.added||[]).length); }
   function flat(data){
@@ -49579,14 +49618,18 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       if(list==='experiences') src=window.CURATED_TOURS;
       else if(list==='stays') src=STAYS;
       else if(list==='packages') src=flat(DESTINATION_PACKAGE_DATA);
+      else if(list==='yachts') src=window.SS_CARD_DATA.yachts;
+      else if(list==='transfers') src=window.SS_CARD_DATA.transfers;
+      else if(list==='gallery') src=window.ssMemory.flat();
     }catch(e){}
     if(!src) return [];
     BASE[list]=copy(src);
     return BASE[list];
   }
   function again(list){
-    var fns={ experiences:['__exRender','__bxRefresh','gbRender'], packages:['renderDests'], stays:['renderStays','renderStayCountryPage'] }[list]||[];
+    var fns={ experiences:['__exRender','__bxRefresh','gbRender'], packages:['renderDests'], stays:['renderStays','renderStayCountryPage'], yachts:['ssYachtFilter'] }[list]||[];
     fns.forEach(function(f){ try{ if(typeof window[f]==='function') window[f](); }catch(e){} });
+    if(list==='gallery'){ try{ window.ssMemory.refresh(); }catch(e){} }
     try{ document.dispatchEvent(new CustomEvent('ss-catalog-applied',{detail:{list:list}})); }catch(e){}
   }
   function put(list,eff){
@@ -49599,6 +49642,11 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
       Object.keys(DESTINATION_PACKAGE_DATA).forEach(function(k){ delete DESTINATION_PACKAGE_DATA[k]; });
       order.forEach(function(k){ DESTINATION_PACKAGE_DATA[k]=by[k]||[]; });
     }
+    else if(list==='yachts'||list==='transfers'){
+      var S=window.SSCards, grid=document.getElementById(list==='yachts'?'yachtGrid':'transfersGridPremium');
+      if(S&&grid) grid.innerHTML=eff.map(function(c){ return list==='yachts'?S.yachtCard(c):S.transferCard(c); }).join('');
+    }
+    else if(list==='gallery'){ window.ssMemory.set(eff); }
   }
   function apply(list,doc){
     var C=window.SSCatalog; if(!C) return false;
@@ -49896,10 +49944,15 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     {h:'Website',items:[
       {id:'live',t:'Edit on the page',show:function(){return can('pages');}},
       {id:'pages',t:'Pages and sections',show:function(){return can('pages');},bd:'pages'},
-      {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}},
+      {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}}]},
+    {h:'What you sell',items:[
       {id:'catalog',t:'Tours and experiences',show:function(){return can('catalog');}},
       {id:'packages',t:'Destination packages',show:function(){return can('catalog');}},
       {id:'stays',t:'Villas and stays',show:function(){return can('catalog');}},
+      {id:'yachts',t:'Yacht charters',show:function(){return can('catalog');}},
+      {id:'transfers',t:'Transfers',show:function(){return can('catalog');}}]},
+    {h:'Galleries and blog',items:[
+      {id:'gallery',t:'Island Memories',show:function(){return can('catalog');}},
       {id:'blog',t:'Blog',show:function(){return can('blog');}}]},
     {h:'People and trips',items:[
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
@@ -49908,7 +49961,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -50519,7 +50572,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function catWords(list,st){
     st=st&&typeof st==='object'?st:{};
     var F=(window.SSCatalog&&window.SSCatalog.FIELDS&&window.SSCatalog.FIELDS[list])||{},out=[];
-    if(st.added)out.push('New: '+short(st.added.title||'',70));
+    if(st.added)out.push('New: '+short(st.added.title||st.added.name||st.added.label||'',70));
     var e=st.edits||{};
     Object.keys(e).forEach(function(k){
       var f=F[k]||{label:k,kind:'t'},v=e[k],txt;
@@ -52039,6 +52092,11 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-manage .ls-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:0 0 10px}
 #p-manage .ls-th{border:1px solid var(--line);background:#fff;padding:6px;display:flex;flex-direction:column;gap:6px}
 #p-manage .ls-th img{display:block;width:100%;height:86px;object-fit:cover}
+#p-manage .cx-row.has-th{display:flex;align-items:center;gap:12px}
+#p-manage .ls-rth{flex:0 0 58px;width:58px;height:44px;object-fit:cover;background:#e8eef4;border-radius:0;display:block}
+#p-manage .ls-rtx{flex:1;min-width:0;display:block}
+#p-manage .cx-head{flex-wrap:wrap;gap:8px 14px}
+#p-manage .cx-head>div{flex:1 1 200px;min-width:0}
 </style>
 <script id="manage-lists-script">
 (function(){
@@ -52054,6 +52112,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function listOf(v){return String(v||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);}
   function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
   function islands(){return C().COUNTRIES.map(function(c){return [c,c];});}
+  function nameOf(c,t){var v=t[c.nameField||'title'];return String(v==null?'':v);}
 
   var CFG={
     packages:{
@@ -52099,6 +52158,65 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           {n:'highlights',k:'lines',label:'Highlights',rows:3,hint:'One per line, up to 4.'}]},
         {h:'More photos',fields:[{n:'gallery',k:'urls',label:'Photos of the property',pick:'Add a photo of this stay',hint:'Shown as small pictures under the description. If you add none, the website shows a standard set of stock photos instead, so adding the real ones is worth doing.'}]}
       ]
+    },
+    yachts:{
+      id:'yachts',addLabel:'Add a charter',title:'Yacht charters',noun:'yacht charter',Noun:'Yacht charter',nameField:'name',folder:'site-images',groupField:'category',groupLabel:'All kinds',groupAria:'Kind of charter',
+      groups:function(){return [['private','Private charter'],['group','Group charter'],['luxury','Luxury charter']];},
+      intro:'The charters on the Yacht Charters page. Change the wording, price and photos, add a charter or take one off the website.',
+      page:'/yacht-charters',pageLabel:'See the Yacht Charters page',
+      thumb:function(t){return t.img;},
+      blank:function(){return {name:'',category:'private',sub:'',price:'',img:'',blurb:'',pills:[],bullets:[],gallery:[]};},
+      meta:function(t){return ({private:'Private charter',group:'Group charter',luxury:'Luxury charter'}[t.category]||'')+(t.price?' · '+t.price:'');},
+      find:function(t){return [t.name,t.sub,t.price,t.blurb].join(' ');},
+      sections:[
+        {h:'The basics',fields:[
+          {n:'name',k:'text',label:'Name',max:80},
+          {n:'category',k:'select',label:'Kind of charter',opts:function(){return [['private','Private charter'],['group','Group charter'],['luxury','Luxury charter']];},half:1,hint:'Sets the label on the photo and which filter button shows it.'},
+          {n:'price',k:'text',label:'Price',max:60,ph:'For example: Starting from $350 USD',half:1},
+          {n:'sub',k:'text',label:'Line under the name',max:80,ph:'For example: Sunset • Private • Customizable',hint:'Shown over the photo. Leave empty to show nothing.'}]},
+        {h:'Photo',fields:[{n:'img',k:'photo',label:'Main photo',pick:'Choose the main photo for this charter'}]},
+        {h:'The words',fields:[
+          {n:'blurb',k:'area',label:'Description',rows:3,max:400},
+          {n:'pills',k:'lines',label:'Small tags',rows:3,hint:'One per line, up to 4. Shown above the description. Leave empty to show none.'},
+          {n:'bullets',k:'lines',label:'What it offers',rows:4,hint:'One per line, up to 6.'}]},
+        {h:'More photos',fields:[{n:'gallery',k:'urls',label:'Photos of the charter',pick:'Add a photo of this charter',hint:'Shown as small pictures under the description; a click opens them all. Leave empty to show none.'}]}
+      ]
+    },
+    transfers:{
+      id:'transfers',addLabel:'Add a service',title:'Transfers',noun:'transfer service',Noun:'Transfer',nameField:'name',folder:'site-images',groupField:'category',groupLabel:'All kinds',groupAria:'Kind of transfer',
+      groups:function(){return [['airport','Airport transfer'],['executive','Executive transfer'],['group','Group transfer']];},
+      intro:'The services on the Airport Transfers page. Change the wording and photo, add a service or take one off the website.',
+      page:'/airport-transfers',pageLabel:'See the Airport Transfers page',
+      thumb:function(t){return t.img;},
+      blank:function(){return {name:'',category:'airport',badge:'',sub:'',img:'',blurb:'',bullets:[]};},
+      meta:function(t){return {airport:'Airport transfer',executive:'Executive transfer',group:'Group transfer'}[t.category]||'';},
+      find:function(t){return [t.name,t.sub,t.badge,t.blurb].join(' ');},
+      sections:[
+        {h:'The basics',fields:[
+          {n:'name',k:'text',label:'Name',max:80},
+          {n:'category',k:'select',label:'Kind of transfer',opts:function(){return [['airport','Airport transfer'],['executive','Executive transfer'],['group','Group transfer']];},half:1,hint:'Used in the planning request that opens when a visitor taps Custom Inquiry.'},
+          {n:'badge',k:'text',label:'Label on the photo',max:40,ph:'For example: Arrival Ready',half:1,hint:'Leave empty to show no label.'},
+          {n:'sub',k:'text',label:'Line under the name',max:80,ph:'For example: Airport Transfer',hint:'Leave empty to show nothing.'}]},
+        {h:'Photo',fields:[{n:'img',k:'photo',label:'Photo',pick:'Choose a photo for this service'}]},
+        {h:'The words',fields:[
+          {n:'blurb',k:'area',label:'Description',rows:3,max:400},
+          {n:'bullets',k:'lines',label:'What it offers',rows:4,hint:'One per line, up to 6.'}]}
+      ]
+    },
+    gallery:{
+      id:'gallery',title:'Island Memories',noun:'photo',Noun:'Photo',nameField:'label',folder:'gallery',groupField:'country',groupLabel:'All islands',
+      intro:'The photos in the Island Memories gallery, by island. Change a caption or the island, swap a photo, add photos or take one off the website.',
+      page:'/gallery',pageLabel:'See the Gallery page',
+      thumb:function(t){return t.src;},
+      blank:function(){return {country:'Jamaica',src:'',label:''};},
+      meta:function(t){return t.country||'';},
+      find:function(t){return [t.label,t.country].join(' ');},
+      sections:[
+        {h:'The photo',fields:[{n:'src',k:'photo',label:'Photo',pick:'Choose a photo for the gallery'}]},
+        {h:'The details',fields:[
+          {n:'label',k:'text',label:'Caption',max:100,half:1,hint:'Shown when the photo is opened.'},
+          {n:'country',k:'select',label:'Island',opts:islands,half:1,hint:'The album the photo is in.'}]}
+      ]
     }
   };
   var L={};
@@ -52135,16 +52253,17 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var counts={edited:list.filter(function(r){return r.edited;}).length,hidden:list.filter(function(r){return r.hidden;}).length,added:list.filter(function(r){return r.added;}).length};
     var rowsHtml=vis.slice(0,st.shown).map(function(r){
       var on=st.sel===r.key;
-      return '<button type="button" class="cx-row'+(on?' on':'')+(r.hidden?' off':'')+'" data-ls-pick="'+esc(r.key)+'"><span class="cx-t">'+esc(r.item.title)+'</span><span class="cx-m">'+esc(c.meta(r.item))+'</span>'
-        +'<span class="cx-chips">'+(r.added?'<i class="g">New</i>':'')+(r.edited?'<i class="o">Edited</i>':'')+(r.hidden?'<i class="r">Hidden</i>':'')+'</span></button>';
+      var th=c.thumb?c.thumb(r.item):'';
+      return '<button type="button" class="cx-row'+(th?' has-th':'')+(on?' on':'')+(r.hidden?' off':'')+'" data-ls-pick="'+esc(r.key)+'">'+(th?'<img class="ls-rth" src="'+esc(th)+'" alt="" loading="lazy">':'')+'<span class="ls-rtx"><span class="cx-t">'+esc(nameOf(c,r.item))+'</span><span class="cx-m">'+esc(c.meta(r.item))+'</span>'
+        +'<span class="cx-chips">'+(r.added?'<i class="g">New</i>':'')+(r.edited?'<i class="o">Edited</i>':'')+(r.hidden?'<i class="r">Hidden</i>':'')+'</span></span></button>';
     }).join('')||'<p class="mg-hint" style="padding:12px">Nothing matches.</p>';
     var more=vis.length>st.shown?'<button type="button" class="mg-btn sm ghost" data-ls-more="1" style="margin:10px 12px">Show '+Math.min(40,vis.length-st.shown)+' more</button>':'';
     var filt='<div class="cx-filt"><input id="lsQ" type="search" placeholder="Search" value="'+esc(st.q)+'" aria-label="Search">'
-      +'<select id="lsGroup" aria-label="Island"><option value="all">'+esc(c.groupLabel)+'</option>'+C().COUNTRIES.map(function(x){return '<option'+(st.group===x?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'
+      +'<select id="lsGroup" aria-label="'+esc(c.groupAria||'Island')+'"><option value="all">'+esc(c.groupLabel)+'</option>'+(c.groups?c.groups():islands()).map(function(x){return '<option value="'+esc(x[0])+'"'+(st.group===x[0]?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select>'
       +'<select id="lsStatus" aria-label="Show"><option value="all">Everything ('+list.length+')</option><option value="edited"'+(st.status==='edited'?' selected':'')+'>Edited ('+counts.edited+')</option><option value="hidden"'+(st.status==='hidden'?' selected':'')+'>Hidden ('+counts.hidden+')</option><option value="added"'+(st.status==='added'?' selected':'')+'>Added by you ('+counts.added+')</option></select></div>';
     return '<h1>'+esc(c.title)+'</h1><p class="mg-sub">'+(needsApproval()?esc(c.intro)+' Your changes go to the owner for approval before they appear on the website.':esc(c.intro)+' Changes go live as soon as you save, and can be put back.')+'</p>'
       +(st.toast?'<div class="mg-msg on ok" role="status">'+esc(st.toast)+'</div>':'')
-      +'<div class="cx-wrap"><aside class="cx-list"><div class="cx-lh"><b>'+list.length+' '+(list.length===1?c.noun:c.noun+'s')+'</b><button type="button" class="mg-btn sm ok" data-ls-new="1">Add a '+esc(c.noun)+'</button></div>'+filt+'<div class="cx-rows">'+rowsHtml+more+'</div></aside>'
+      +'<div class="cx-wrap"><aside class="cx-list"><div class="cx-lh"><b>'+list.length+' '+(list.length===1?c.noun:c.noun+'s')+'</b><button type="button" class="mg-btn sm ok" data-ls-new="1">'+esc(c.addLabel||'Add a '+c.noun)+'</button></div>'+filt+'<div class="cx-rows">'+rowsHtml+more+'</div></aside>'
       +'<section class="cx-edit" id="lsEdit">'+formHtml(c)+'</section></div>';
   }
 
@@ -52176,7 +52295,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var st=L[c.id],F=st.form;
     if(!F)return '<div class="cx-empty"><h3>Choose a '+esc(c.noun)+'</h3><p>Pick one from the list to change it, or add a new '+esc(c.noun)+'.</p></div>';
     var f=F.f,r=F.isNew?null:find(c,F.key);
-    var h='<div class="cx-head"><div><h2>'+(F.isNew?'New '+esc(c.noun):esc(f.title||c.Noun))+'</h2>'+(F.isNew?'':'<p class="mg-hint" style="margin:2px 0 0">'+(F.added?'Added by you':'Comes with the website')+(F.hidden?' · <b>Hidden from the website</b>':'')+'</p>')+'</div>'
+    var h='<div class="cx-head"><div><h2>'+(F.isNew?'New '+esc(c.noun):esc(f[c.nameField||'title']||c.Noun))+'</h2>'+(F.isNew?'':'<p class="mg-hint" style="margin:2px 0 0">'+(F.added?'Added by you':'Comes with the website')+(F.hidden?' · <b>Hidden from the website</b>':'')+'</p>')+'</div>'
       +'<a class="mg-btn sm ghost" href="'+esc(c.page)+'" target="_blank" rel="noopener">'+esc(c.pageLabel)+'</a></div>';
     c.sections.forEach(function(sec){
       var inner='',pend=[];
@@ -52231,6 +52350,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       else if(d.live){
         var cs=C().cleanState(c.id,key,state),put=C().putState(st.doc,key,cs.value||state,c.id);if(put.doc)st.doc=put.doc;
         try{window.ssCatalogApplyList(c.id,st.doc);}catch(e){}
+        if(state&&state.added)st.shown=Math.max(st.shown,rows(c).length);   // a new item goes last, so show the whole list to let it be seen
         st.toast=okText||'Published. It is live on the website now.';
       }else{st.toast='Sent to the owner for approval. You will get an email when it is decided.';if(MG.PG)MG.PG.drafts=null;}
       st.form=null;st.sel=null;st.err='';st.dirty=false;MG.loadHome&&MG.loadHome();
@@ -52241,12 +52361,12 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function save(c){
     var st=L[c.id],F=st.form;if(!F)return;
     var f=F.f;
-    if(!String(f.title||'').trim())return fail(c,'Give it a name.');
+    var nf=c.nameField||'title',need=C().REQUIRED[c.id]||[];
+    if(!String(f[nf]||'').trim()){var nm=need.filter(function(x){return x[0]===nf;})[0];return fail(c,nm?nm[1]:'Give it a name.');}
     if(F.isNew||F.added){
-      var need=C().REQUIRED[c.id]||[];
       for(var i=0;i<need.length;i++){var v=f[need[i][0]];if(v==null||String(v).trim()==='')return fail(c,need[i][1]);}
     }
-    send(c,F.key,stateFromForm(c),c.Noun+': '+short(f.title,70));
+    send(c,F.key,stateFromForm(c),c.Noun+': '+short(f[nf],70));
   }
 
   /* ---------- wiring ---------- */
@@ -52283,15 +52403,15 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(ds.lsHide){
       F.hidden=!F.hidden;
       if(!confirm(F.hidden?'Take this '+c.noun+' off the website? Visitors will no longer see it. You can show it again at any time.':'Show this '+c.noun+' on the website again?')){F.hidden=!F.hidden;return;}
-      send(c,F.key,stateFromForm(c),(F.hidden?'Hide: ':'Show: ')+short(F.f.title,70),F.hidden?'Taken off the website.':'Back on the website.');return;
+      send(c,F.key,stateFromForm(c),(F.hidden?'Hide: ':'Show: ')+short(F.f[c.nameField||'title'],70),F.hidden?'Taken off the website.':'Back on the website.');return;
     }
     if(ds.lsOrig){
       if(!confirm('Put back every original detail of this '+c.noun+' (wording, price, photos)?'))return;
-      send(c,F.key,F.hidden?{hidden:true}:{},'Put back original: '+short(F.f.title,60),'Put back. The original details are live again.');return;
+      send(c,F.key,F.hidden?{hidden:true}:{},'Put back original: '+short(F.f[c.nameField||'title'],60),'Put back. The original details are live again.');return;
     }
     if(ds.lsDel){
       if(!confirm('Delete this '+c.noun+' you added? This takes it off the website for good.'))return;
-      send(c,F.key,{},'Delete: '+short(F.f.title,70),'Deleted.');return;
+      send(c,F.key,{},'Delete: '+short(F.f[c.nameField||'title'],70),'Deleted.');return;
     }
   });
   R.addEventListener('input',function(e){

@@ -138,6 +138,7 @@ function writeCuratedData(source) {
   const list = parseCuratedTours(source).filter(t => t.type === 'water' || t.type === 'land');
   fs.writeFileSync(path.join(__dirname, 'api', '_data', 'curated-tours.json'), JSON.stringify(list) + '\n', 'utf8');
   fs.copyFileSync(path.join(__dirname, 'api', '_lib', 'catalog.js'), path.join(__dirname, 'public', 'ss-catalog.js'));
+  fs.copyFileSync(path.join(__dirname, 'api', '_lib', 'cards.js'), path.join(__dirname, 'public', 'ss-cards.js'));
   console.log('\uD83D\uDCD6  Catalog data: ' + list.length + ' experiences for the server, ss-catalog.js for the browser');
 }
 writeCuratedData(html);
@@ -337,7 +338,7 @@ function isRoutePage(file) {
   finally { fs.closeSync(fd); }
 }
 
-const BRIDGE = '\n  <script src="/ss-catalog.js"></script>\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
+const BRIDGE = '\n  <script src="/ss-catalog.js"></script>\n  <script src="/ss-cards.js"></script>\n  <!-- Vercel Bridge -->\n  <script src="/bridge.js" defer></script>';
 html = html.includes('<head>') ? html.replace('<head>', '<head>' + BRIDGE) : BRIDGE + '\n' + html;
 
 // Add loading="lazy" and decoding="async" to all images except hero
