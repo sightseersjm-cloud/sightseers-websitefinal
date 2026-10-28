@@ -1941,6 +1941,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .passport-file-meta.ok{color:#2f7d32}
 .passport-file-meta.warn{color:#b26c14}
 .passport-side-card{background:linear-gradient(180deg,#fff 0%,#f8fcf8 100%)}
+.pp-ec{margin:6px 0 10px;padding:16px 18px 4px;border:1px solid var(--border);background:#fafcfe}
+.pp-ec-h{margin:0 0 14px;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
+@media(max-width:640px){.pp-ec .form-row{grid-template-columns:1fr}}
 .passport-checklist{display:grid;gap:14px;margin:20px 0 26px}
 .passport-check{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:22px;background:#fbfcfe;border:1px solid rgba(6,58,99,.08)}
 .passport-check i{width:40px;height:40px;border-radius:14px;background:rgba(112,194,87,.12);color:var(--green);display:flex;align-items:center;justify-content:center;min-width:40px;font-size:16px}
@@ -16655,7 +16658,7 @@ body.theme-night .page .tag{
             <label class="passport-upload" for="passPhotoUpload">
               <div>
                 <strong>Upload passport-size photo</strong>
-                <span>Passport-style images work best when the crop is square and the face is centered with a clear background.</span>
+                <span>Jamaican passport size is 35 × 45 mm (portrait). Face centered, plain light background. We check the size when you add it.</span>
               </div>
               <div class="passport-upload-ico"></div>
             </label>
@@ -16663,9 +16666,33 @@ body.theme-night .page .tag{
             <div class="passport-file-meta" id="passPhotoMeta">No passport photo uploaded yet.</div>
             <div class="passport-photo-stage" id="passportPhotoStage">
               <div class="passport-photo-preview" id="passportPhotoPreview"><small>Preview</small></div>
-              <div class="passport-photo-body"><div class="passport-mini" id="passportPhotoHint"><strong>Tip:</strong> A square upload gives the cleanest passport-size result.</div></div>
+              <div class="passport-photo-body"><div class="passport-mini" id="passportPhotoHint"><strong>Size:</strong> a passport photo is 35 × 45 mm (portrait). We check the size when you add it.</div></div>
               <button type="button" class="passport-photo-remove" id="passportPhotoRemove" onclick="clearPassportPhoto()" aria-label="Remove photo" hidden>&times;</button>
             </div>
+          </div>
+          <div class="pp-ec">
+            <h4 class="pp-ec-h">Emergency contact 1 *</h4>
+            <div class="form-row">
+              <div class="fg"><label for="passEc1Name">Full name</label><input type="text" id="passEc1Name" autocomplete="off"></div>
+              <div class="fg"><label for="passEc1Rel">Relationship to you</label><input type="text" id="passEc1Rel" placeholder="For example: mother, spouse, friend" autocomplete="off"></div>
+            </div>
+            <div class="form-row">
+              <div class="fg"><label for="passEc1Phone">Phone / WhatsApp</label><input type="tel" id="passEc1Phone" autocomplete="off"></div>
+              <div class="fg"><label for="passEc1Email">Email address</label><input type="email" id="passEc1Email" autocomplete="off"></div>
+            </div>
+            <div class="fg"><label for="passEc1Addr">Home address</label><input type="text" id="passEc1Addr" placeholder="Street, town or city, country" autocomplete="off"></div>
+          </div>
+          <div class="pp-ec">
+            <h4 class="pp-ec-h">Emergency contact 2 *</h4>
+            <div class="form-row">
+              <div class="fg"><label for="passEc2Name">Full name</label><input type="text" id="passEc2Name" autocomplete="off"></div>
+              <div class="fg"><label for="passEc2Rel">Relationship to you</label><input type="text" id="passEc2Rel" placeholder="For example: mother, spouse, friend" autocomplete="off"></div>
+            </div>
+            <div class="form-row">
+              <div class="fg"><label for="passEc2Phone">Phone / WhatsApp</label><input type="tel" id="passEc2Phone" autocomplete="off"></div>
+              <div class="fg"><label for="passEc2Email">Email address</label><input type="email" id="passEc2Email" autocomplete="off"></div>
+            </div>
+            <div class="fg"><label for="passEc2Addr">Home address</label><input type="text" id="passEc2Addr" placeholder="Street, town or city, country" autocomplete="off"></div>
           </div>
           <div class="passport-cta-row">
             <button class="auth-submit" onclick="submitPassportRenewal()">Submit Renewal Request</button>
@@ -16679,7 +16706,8 @@ body.theme-night .page .tag{
           <div class="passport-checklist">
             <div class="passport-check"><div><strong>Passport biography page</strong><span>Upload a clear picture or PDF showing the information page of the current passport.</span></div></div>
             <div class="passport-check"><div><strong>Birth certificate number (IA No.)</strong><span>Enter the IA No. exactly as it appears so the renewal handoff stays clean and organized.</span></div></div>
-            <div class="passport-check"><div><strong>Digital passport-size photo</strong><span>Use a centered image with a clean background. The preview checks whether the upload is close to a passport-style square crop.</span></div></div>
+            <div class="passport-check"><div><strong>Digital passport-size photo</strong><span>35 × 45 mm (portrait), face centered, plain light background. The form checks the shape and size and tells you if it needs a crop.</span></div></div>
+            <div class="passport-check"><div><strong>Two emergency contacts</strong><span>Name, relationship, phone, email and home address for two people we can reach if we cannot reach you.</span></div></div>
             <div class="passport-check"><div><strong>Contact details</strong><span>Name, email, and WhatsApp help your team follow up quickly after the guest uploads everything.</span></div></div>
           </div>
         </div>
@@ -28937,6 +28965,23 @@ function handlePassportBioUpload(){
   meta.className='passport-file-meta';
   meta.textContent=file ? `${file.name} selected.` : 'No biography page uploaded yet.';
 }
+/* Judges the passport photo against the Jamaican passport size (35 x 45 mm, portrait, face about 55 to 78% of the height).
+   It reports what it can measure: the shape, the pixels and the file. Where the browser can find faces it also checks the face size. */
+var PP_RATIO=35/45, PP_MIN_W=413, PP_MIN_H=531, PP_GOOD_W=827, PP_GOOD_H=1063;
+function ssPassportPhotoVerdict(w,h,bytes,type){
+  var lines=[],level='ok',ratio=w/h;
+  function worse(l){ if(l==='bad'||(l==='warn'&&level==='ok')) level=l; }
+  if(!/^image\/(jpe?g|png|webp)$/i.test(type||'')){ lines.push('Use a JPG or PNG photo.'); worse('warn'); }
+  if(Math.abs(ratio-PP_RATIO)/PP_RATIO<=0.06){ lines.push('Shape is right: 35 × 45 mm portrait.'); }
+  else if(ratio>1.05){ lines.push('This photo is wider than it is tall. A passport photo is portrait, 35 mm wide by 45 mm tall. Please crop it.'); worse('warn'); }
+  else if(Math.abs(ratio-1)<=0.06){ lines.push('This photo is square. The Jamaican passport size is portrait, 35 mm wide by 45 mm tall. Please crop it a little taller.'); worse('warn'); }
+  else { lines.push('The shape is '+Math.round(ratio*100)/100+' (width ÷ height). It should be about 0.78, which is 35 × 45 mm.'); worse('warn'); }
+  if(w<300||h<300){ lines.push('Too small ('+w+' × '+h+' px). It would print blurry. Please send a larger photo.'); worse('bad'); }
+  else if(w<PP_MIN_W||h<PP_MIN_H){ lines.push('Small ('+w+' × '+h+' px). At least '+PP_MIN_W+' × '+PP_MIN_H+' px is needed, and '+PP_GOOD_W+' × '+PP_GOOD_H+' px is best.'); worse('warn'); }
+  else if(w<PP_GOOD_W||h<PP_GOOD_H){ lines.push('Size is acceptable ('+w+' × '+h+' px). '+PP_GOOD_W+' × '+PP_GOOD_H+' px or more is best.'); }
+  else { lines.push('Size is good ('+w+' × '+h+' px).'); }
+  return {level:level,lines:lines,summary:lines.join(' ')};
+}
 function handlePassportPhotoUpload(){
   const input=document.getElementById('passPhotoUpload');
   const meta=document.getElementById('passPhotoMeta');
@@ -28946,12 +28991,13 @@ function handlePassportPhotoUpload(){
   const removeBtn=document.getElementById('passportPhotoRemove');
   if(!input||!meta||!stage||!preview||!hint) return;
   const file=input.files && input.files[0];
+  window.__ppPhotoCheck=null;
   if(!file){
     meta.className='passport-file-meta';
     meta.textContent='No passport photo uploaded yet.';
     stage.classList.remove('on');
     preview.innerHTML='<small>Preview</small>';
-    hint.innerHTML='<strong>Tip:</strong> A square upload gives the cleanest passport-size result.';
+    hint.innerHTML='<strong>Size:</strong> a passport photo is 35 × 45 mm (portrait). We check the size when you add it.';
     if(removeBtn) removeBtn.hidden=true;
     return;
   }
@@ -28962,23 +29008,50 @@ function handlePassportPhotoUpload(){
   reader.onload=e=>{
     const img=new Image();
     img.onload=()=>{
-      const ratio=img.width/img.height;
-      const square=Math.abs(ratio-1)<=0.12;
+      const v=ssPassportPhotoVerdict(img.width,img.height,file.size,file.type);
+      window.__ppPhotoCheck=v;
       preview.innerHTML=`<img src="${e.target.result}" alt="Passport photo attachment">`;
       stage.classList.add('on');
-      meta.className='passport-file-meta '+(square?'ok':'warn');
+      meta.className='passport-file-meta '+(v.level==='ok'?'ok':'warn');
       meta.textContent=`${file.name} • ${img.width}×${img.height}px • ${sizeKb} KB`;
-      hint.innerHTML=square
-        ? `<strong>${file.name}</strong><br>Attached &bull; passport-ready square crop.`
-        : `<strong>${file.name}</strong><br>Attached &bull; ${img.width}×${img.height}px. A square crop looks best, but you can still send this.`;
+      const draw=function(extra){
+        const all=v.lines.concat(extra?[extra]:[]);
+        const head=v.level==='ok'&&!extra?'Passport size looks right.':(v.level==='bad'?'This photo will not work.':'Please check this photo.');
+        hint.innerHTML=`<strong>${head}</strong><br>`+all.map(function(t){return String(t).replace(/</g,'&lt;');}).join('<br>');
+        hint.style.color=v.level==='bad'?'#b42318':(v.level==='warn'||extra?'#a55a0a':'');
+      };
+      draw('');
       if(removeBtn) removeBtn.hidden=false;
+      /* where the browser can find faces (Chrome and Edge), also check the face is about the right size in the frame */
+      try{
+        if(window.FaceDetector){
+          new window.FaceDetector({fastMode:true,maxDetectedFaces:3}).detect(img).then(function(fs){
+            if(window.__ppPhotoCheck!==v) return;
+            var extra='';
+            if(!fs.length){ extra='We could not see a face. Use a clear, front-facing photo.'; v.level=v.level==='bad'?'bad':'warn'; }
+            else if(fs.length>1){ extra='More than one face was found. Only you should be in the photo.'; v.level=v.level==='bad'?'bad':'warn'; }
+            else{
+              var fr=fs[0].boundingBox.height/img.height;
+              /* the detector box is the face only; the chin-to-crown height is about 1.25 times that */
+              var chinCrown=Math.min(1,fr*1.25);
+              if(chinCrown<0.55){ extra='Your face looks small in the frame. Crop closer, so the head fills about 55 to 78% of the height.'; v.level=v.level==='bad'?'bad':'warn'; }
+              else if(chinCrown>0.8){ extra='Your face looks too large in the frame. Leave a little more space around the head.'; v.level=v.level==='bad'?'bad':'warn'; }
+              else extra='Face size in the frame looks right.';
+            }
+            v.lines.push(extra);v.summary=v.lines.join(' ');
+            meta.className='passport-file-meta '+(v.level==='ok'?'ok':'warn');
+            draw('');
+          }).catch(function(){});
+        }
+      }catch(err){}
     };
     img.onerror=()=>{
+      window.__ppPhotoCheck={level:'warn',lines:['We could not read this photo to check its size.'],summary:'The photo could not be read for a size check.'};
       preview.innerHTML='<small>File</small>';
       stage.classList.add('on');
-      meta.className='passport-file-meta';
+      meta.className='passport-file-meta warn';
       meta.textContent=`${file.name} attached.`;
-      hint.innerHTML=`<strong>${file.name}</strong><br>Attached &bull; ${sizeKb} KB.`;
+      hint.innerHTML=`<strong>We could not check this photo.</strong><br>Please use a JPG or PNG of about 35 × 45 mm (portrait).`;
       if(removeBtn) removeBtn.hidden=false;
     };
     img.src=e.target.result;
@@ -29030,6 +29103,12 @@ function submitPassportRenewal(){
     toast('Please complete all required passport renewal fields before submitting.');
     return;
   }
+  if(window.__ppPhotoCheck&&window.__ppPhotoCheck.level==='bad'){toast('Your passport photo is too small to use. Please add a larger photo.');return;}
+  var ec=[1,2].map(function(n){var v=function(k){var e=document.getElementById('passEc'+n+k);return e?e.value.trim():'';};return {name:v('Name'),relationship:v('Rel'),phone:v('Phone'),email:v('Email'),address:v('Addr')};});
+  for(var i=0;i<ec.length;i++){var c=ec[i];
+    if(!c.name||!c.relationship||!c.phone||!c.email||!c.address){toast('Please complete every detail for emergency contact '+(i+1)+': name, relationship, phone, email and address.');return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)){toast('Please check the email address for emergency contact '+(i+1)+'.');return;}
+  }
   var btn=document.querySelector('#p-passport .auth-submit');
   var origBtn=btn?btn.innerHTML:'';
   function restore(){ if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents='';} }
@@ -29041,7 +29120,7 @@ function submitPassportRenewal(){
       if(e2||!photoData||!photoData.b64){ restore(); toast('Could not read your passport photo, please try another image.'); return; }
       var approxKb=Math.round((bioData.b64.length+photoData.b64.length)*0.75/1024);
       if(approxKb>4200){ restore(); toast('Your files are a little large to email. Please upload smaller images (about 3 MB or less each).'); return; }
-      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,ia:ia,bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
+      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,ia:ia,contacts:ec,photoCheck:(window.__ppPhotoCheck&&window.__ppPhotoCheck.summary)||'',bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
         .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error(d&&d.error?d.error:'Request failed'); return d; }); })
         .then(function(){
           if(btn){ btn.innerHTML='Request Sent!'; setTimeout(restore,4000); }

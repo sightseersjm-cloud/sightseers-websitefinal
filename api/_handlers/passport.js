@@ -42,9 +42,21 @@ module.exports = async function handler(req, res) {
     const ia = (b.ia || '').trim();
     const bio = b.bio || {};
     const photo = b.photo || {};
+    const photoCheck = String(b.photoCheck || '').slice(0, 600);
 
     if (!name || !email || !phone || !ia || !bio.b64 || !photo.b64) {
       return res.status(400).json({ error: 'All fields and both files are required.' });
+    }
+    /* two emergency contacts, each with every detail */
+    const clip = v => String(v || '').trim().slice(0, 200);
+    const contacts = (Array.isArray(b.contacts) ? b.contacts : []).slice(0, 2).map(c => ({
+      name: clip(c && c.name), relationship: clip(c && c.relationship), phone: clip(c && c.phone), email: clip(c && c.email).toLowerCase(), address: clip(c && c.address)
+    }));
+    if (contacts.length !== 2 || contacts.some(c => !c.name || !c.relationship || !c.phone || !c.email || !c.address)) {
+      return res.status(400).json({ error: 'Please give two emergency contacts, each with a name, relationship, phone, email and address.' });
+    }
+    if (contacts.some(c => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email))) {
+      return res.status(400).json({ error: 'Please check the email address of each emergency contact.' });
     }
 
     const bioName = safeName(bio.name, bio.type, 'biography-page');
@@ -56,13 +68,14 @@ module.exports = async function handler(req, res) {
       id: uid(),
       userId: user ? user.id : null,
       name, email: email.toLowerCase(), phone, ia,
+      contacts, photoCheck,
       bioFile: bioName, photoFile: photoName,
       status: 'new',
       createdAt: new Date().toISOString()
     };
     try { await db.addToCollection('passport-requests', rec); } catch (e) { /* logging is best-effort */ }
 
-    await sendEmail({
+    const sent = await sendEmail({
       subject: `Passport Renewal Request: ${escapeHtml(name)}`,
       replyTo: email,
       attachments: [
@@ -78,10 +91,25 @@ module.exports = async function handler(req, res) {
           <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Birth Certificate No. (IA No.)</td><td style="padding:8px">${escapeHtml(ia)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(rec.createdAt).toLocaleString('en-US', { timeZone: 'America/Jamaica' })}</td></tr>
         </table>
+        ${contacts.map((c, i) => `
+        <h3 style="color:#0d5371;margin:22px 0 6px;font-family:sans-serif">Emergency contact ${i + 1}</h3>
+        <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
+          <tr><td style="padding:8px;font-weight:bold;width:190px">Name</td><td style="padding:8px">${escapeHtml(c.name)}</td></tr>
+          <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Relationship</td><td style="padding:8px">${escapeHtml(c.relationship)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold">Phone / WhatsApp</td><td style="padding:8px">${escapeHtml(c.phone)}</td></tr>
+          <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(c.email)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold">Address</td><td style="padding:8px">${escapeHtml(c.address)}</td></tr>
+        </table>`).join('')}
+        ${photoCheck ? `<p style="margin:18px 0 0;font-size:14px;font-family:sans-serif"><strong>Photo size check (done on the applicant's device):</strong> ${escapeHtml(photoCheck)}</p>` : ''}
         <p style="margin-top:16px;font-size:14px">The applicant's <strong>biography page</strong> and <strong>passport photo</strong> are attached to this email.</p>
         <p style="color:#888;font-size:12px;margin-top:20px">Submitted via the passport renewal form on sightseerscaribbean.com</p>`
     });
 
+    /* the files live only in this email, so a failed send must not look like success */
+    if (!sent || sent.ok === false) {
+      try { await db.updateInCollection('passport-requests', rec.id, { status: 'email-failed' }); } catch (e) { /* best-effort */ }
+      return res.status(502).json({ error: 'We could not send your request just now. Please try again, or email info@sightseerscaribbean.com.' });
+    }
     return res.status(201).json({ ok: true, id: rec.id });
   } catch (err) {
     console.error('Passport error:', err && err.message, err && err.stack);
