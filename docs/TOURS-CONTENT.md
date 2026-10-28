@@ -63,5 +63,4 @@ title, type and duration state, and, where a package mirrors a tour, what the re
 are not known (stays and weekends) the text says they are confirmed in the quote. Titles, tags, prices and photos are unchanged. One phrase on the
 Greek Life page ("conversion-focused") was also removed.
 
-Not changed, but worth a decision: the card tags ("Best Seller", "Top Rated", "Most Requested", "Island Favorite") are popularity claims nothing in
-the code can back up, and the booking page has urgency messages ("High demand this week", "Weekend slots are filling quickly").
+Removed (owner decision): the popularity tags ("Best Seller", "Popular", "Top Rated", "Most Requested", "Island Favorite") and the booking page urgency messages. Cards with no tag show no badge; a tag can still be typed in /manage if it is true.

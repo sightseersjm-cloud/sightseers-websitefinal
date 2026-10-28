@@ -15,7 +15,7 @@ process.env.BLOB_READ_WRITE_TOKEN = 'x'; process.env.JWT_SECRET = 'test-secret-t
 process.env.OWNER_EMAIL = 'owner@example.com'; process.env.OWNER_PASSWORD = 'OwnerPass123!';
 delete process.env.ADMIN_PASSCODE; delete process.env.RESEND_API_KEY;
 const root = require('path').resolve(__dirname, '..') + '/';
-const H = { auth: require(root + 'api/_handlers/auth'), edit: require(root + 'api/_handlers/site-edit'), settings: require(root + 'api/_handlers/settings'), backup: require(root + 'api/_handlers/backup') };
+const H = { auth: require(root + 'api/_handlers/auth'), edit: require(root + 'api/_handlers/site-edit'), settings: require(root + 'api/_handlers/settings'), backup: require(root + 'api/_handlers/backup'), bcron: require(root + 'api/_handlers/backup-cron') };
 const db = require(root + 'api/_lib/db');
 function call(h, method, url, body, token, query) {
   return new Promise(r => {
@@ -121,6 +121,17 @@ const PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAM
   r = await get({ action: 'list' }, owner);
   ok('only the newest twelve backups are kept', r.body.backups.length === 12 && [...store.keys()].filter(k => k.startsWith('ss-admin/backups/')).length === 12);
   ok('the newest comes first', r.body.backups.every((b, i, a) => !i || String(a[i - 1].at) >= String(b.at)));
+
+  // --- the weekly automatic backup
+  process.env.CRON_SECRET = 'cron-secret-for-test';
+  const cron = tok => call('bcron', 'GET', '/api/backup-cron', {}, tok);
+  ok('the weekly job refuses a visitor and a wrong key', (await cron()).code === 401 && (await cron('nope')).code === 401);
+  r = await cron('cron-secret-for-test');
+  ok('with the key it saves a weekly backup', r.code === 200 && r.body.backup.kind === 'weekly');
+  for (let i = 0; i < 10; i++) { await wait(3); await cron('cron-secret-for-test'); }
+  r = await get({ action: 'list' }, owner);
+  const wk = r.body.backups.filter(b => b.kind === 'weekly'), others = r.body.backups.filter(b => b.kind !== 'weekly');
+  ok('only the newest eight weekly backups are kept, and they never push out the saved ones', wk.length === 8 && others.length === 12);
 
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);

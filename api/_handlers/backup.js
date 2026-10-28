@@ -22,7 +22,8 @@ const KEPT = ACTIVE.concat(['ss_customer_gallery', 'ss_master_tours_manager_v1',
 const COLLECTIONS = ['blog-posts', 'sections', 'tours', 'stays', 'gallery', 'image-meta', 'site-history'];
 const MAX_RESPONSE = 4 * 1024 * 1024;       // a serverless response can be 4.5 MB
 const MAX_PHOTO = 4 * 1024 * 1024;
-const KINDS = ['manual', 'before-restore', 'before-lighten'];
+const KINDS = ['manual', 'before-restore', 'before-lighten', 'weekly'];
+const KEEP_WEEKLY = 8;
 const PHOTO_NAMES = { heroImg1: 'Home hero photo 1', heroImg2: 'Home hero photo 2', heroImg3: 'Home hero photo 3', aboutImage: 'About photo', jamaicaImage: 'Jamaica photo' };
 const EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg' };
 
@@ -30,7 +31,7 @@ const size = v => Buffer.byteLength(JSON.stringify(v === undefined ? null : v));
 const pick = (all, keys) => { const o = {}; keys.forEach(k => { if (all && all[k] !== undefined) o[k] = all[k]; }); return o; };
 const who = u => ({ name: u.name || u.email || 'The owner', email: u.email || '' });
 const stamp = at => at.replace(/[:.]/g, '-');
-const SNAP_NAME = /^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z-(manual|before-restore|before-lighten)\.json$/;
+const SNAP_NAME = /^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z-(manual|before-restore|before-lighten|weekly)\.json$/;
 const DANGEROUS = /^\s*(javascript|vbscript):|^\s*data:(?!image\/)/i;
 
 function backupOf(settings, user, kind) {
@@ -54,7 +55,7 @@ async function snapshots() {
     const { blobs } = await list({ prefix: PREFIX });
     return (blobs || []).filter(b => SNAP_NAME.test(String(b.pathname).slice(PREFIX.length))).map(b => {
       const name = String(b.pathname).slice(PREFIX.length);
-      return { name, url: b.url, at: b.uploadedAt || '', bytes: b.size || 0, kind: (/-(manual|before-restore|before-lighten)\.json$/.exec(name) || [])[1] };
+      return { name, url: b.url, at: b.uploadedAt || '', bytes: b.size || 0, kind: (/-(manual|before-restore|before-lighten|weekly)\.json$/.exec(name) || [])[1] };
     }).sort((a, b) => String(b.at).localeCompare(String(a.at)) || (a.name < b.name ? 1 : -1));
   } catch (e) { return []; }
 }
@@ -65,7 +66,9 @@ async function saveSnapshot(settings, user, kind) {
   const body = JSON.stringify(bk);
   await put(PREFIX + name, body, { access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: false });
   const all = await snapshots();
-  for (const old of all.slice(KEEP)) { try { await del(old.url); } catch (e) { /* the next backup tries again */ } }
+  /* the weekly ones are pruned on their own, so they never push out the ones the owner saved */
+  const old2 = all.filter(b => b.kind === 'weekly').slice(KEEP_WEEKLY).concat(all.filter(b => b.kind !== 'weekly').slice(KEEP));
+  for (const old of old2) { try { await del(old.url); } catch (e) { /* the next backup tries again */ } }
   return { name, kind, at: bk.createdAt, bytes: Buffer.byteLength(body) };
 }
 
@@ -268,3 +271,7 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.KINDS = KINDS;
+/* the weekly job (api/backup-cron.js) saves through this, with no signed-in person */
+module.exports.saveWeekly = async function () {
+  return saveSnapshot(await readSettings(), { name: 'Automatic weekly backup' }, 'weekly');
+};

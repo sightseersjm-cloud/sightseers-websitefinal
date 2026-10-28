@@ -6,6 +6,10 @@
     {
       "path": "/api/club-cron",
       "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/backup-cron",
+      "schedule": "0 7 * * 1"
     }
   ],
   "installCommand": "npm install",

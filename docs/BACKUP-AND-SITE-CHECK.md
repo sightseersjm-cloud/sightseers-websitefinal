@@ -14,6 +14,9 @@ sign-in codes, customer records or any secret.
   ones are removed when a new one is saved.
 - **Download a backup file** returns the settings and collections as one JSON file (the change history is left out if the file would be over 4 MB).
 
+## The weekly automatic backup
+Every Monday (07:00 UTC) the website saves a backup by itself ("Automatic weekly backup" in the list). It uses the same `CRON_SECRET` as the Travel Club daily job (`vercel.json` crons, `/api/backup-cron`; without the key it refuses). The newest 8 weekly backups are kept and never push out the ones you saved yourself (newest 12).
+
 ## Restoring
 
 "Put this back" (a saved backup) or "Put back a backup from a file" restores only the six content settings, and only the ones present in the

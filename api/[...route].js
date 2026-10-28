@@ -19,6 +19,7 @@ const handlers = {
   'bookings':        require('./_handlers/bookings'),
   'contact':         require('./_handlers/contact'),
   'club-cron':       require('./_handlers/club-cron'),
+  'backup-cron':     require('./_handlers/backup-cron'),
   'content':         require('./_handlers/content'),
   'gallery':         require('./_handlers/gallery'),
   'group-trip':      require('./_handlers/group-trip'),
