@@ -41,7 +41,7 @@ const SOURCES = {
   passport: {
     collection: 'passport-requests',
     done: ['done', 'completed'],
-    map: r => ({ type: 'Passport renewal', title: 'Passport renewal request', name: r.name, email: r.email, phone: r.phone, summary: r.ia ? 'IA No. ' + r.ia : '', details: line(['Biography page: ' + (r.bioFile || ''), 'Photo: ' + (r.photoFile || '')].concat((r.contacts || []).map((c, n) => 'Emergency contact ' + (n + 1) + ': ' + [c.name, c.relationship, c.phone, c.email, c.address].filter(Boolean).join(', ')))) })
+    map: r => ({ type: 'Passport renewal', title: 'Passport renewal request', name: r.name, email: r.email, phone: r.phone, summary: r.ia ? 'IA No. ' + r.ia : '', details: line([r.address ? 'Address: ' + r.address : '', 'Biography page: ' + (r.bioFile || ''), 'Photo: ' + (r.photoFile || '')].concat((r.contacts || []).map((c, n) => 'Emergency contact ' + (n + 1) + ': ' + [c.name, c.relationship, c.phone, c.email, c.address].filter(Boolean).join(', ')))) })
   },
   waitlist: {
     collection: 'vtours-waitlist',

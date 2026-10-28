@@ -16633,13 +16633,14 @@ body.theme-night .page .tag{
         <div class="passport-card reveal">
           <div class="passport-badge">Renewal Request Form</div>
           <h2 class="fw-title">Submit your Jamaican passport renewal request</h2>
-          <p class="fw-sub">Use this tab to prepare your renewal with the core items you asked for: your passport biography page, your birth certificate number (IA No.), and a digital passport-size photograph. Add your contact details so your team can follow up quickly.</p>
+          <p class="fw-sub">Use this tab to prepare your renewal with the core items you asked for: your home address, your passport biography page, your birth certificate number (IA No.), and a digital passport-size photograph. Add your contact details so your team can follow up quickly.</p>
           <div class="form-success" id="passportMsg">Thank you, your passport renewal request, including your biography page and passport photo, has been sent to our team. We'll follow up shortly by email or WhatsApp.</div>
           <div class="form-row">
             <div class="fg"><label for="passName">Full Name *</label><input type="text" id="passName"></div>
             <div class="fg"><label for="passEmail">Email *</label><input type="email" id="passEmail"></div>
           </div>
           <div class="fg"><label for="passPhone">Phone / WhatsApp *</label><input type="tel" id="passPhone"></div>
+          <div class="fg"><label for="passAddress">Your home address *</label><input type="text" id="passAddress" placeholder="Street, town or city, parish or state, country" autocomplete="street-address"></div>
           <div class="fg">
             <label>Picture of your passport biography page *</label>
             <label class="passport-upload" for="passBioUpload">
@@ -29097,9 +29098,10 @@ function submitPassportRenewal(){
   var email=document.getElementById('passEmail')&&document.getElementById('passEmail').value.trim();
   var phone=document.getElementById('passPhone')&&document.getElementById('passPhone').value.trim();
   var ia=document.getElementById('passIaNo')&&document.getElementById('passIaNo').value.trim();
+  var address=document.getElementById('passAddress')&&document.getElementById('passAddress').value.trim();
   var bio=document.getElementById('passBioUpload')&&document.getElementById('passBioUpload').files&&document.getElementById('passBioUpload').files[0];
   var photo=document.getElementById('passPhotoUpload')&&document.getElementById('passPhotoUpload').files&&document.getElementById('passPhotoUpload').files[0];
-  if(!name||!email||!phone||!ia||!bio||!photo){
+  if(!name||!email||!phone||!address||!ia||!bio||!photo){
     toast('Please complete all required passport renewal fields before submitting.');
     return;
   }
@@ -29113,14 +29115,14 @@ function submitPassportRenewal(){
   var origBtn=btn?btn.innerHTML:'';
   function restore(){ if(btn){btn.innerHTML=origBtn;btn.style.pointerEvents='';} }
   if(btn){btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending…';btn.style.pointerEvents='none';}
-  try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift({name:name,email:email,phone:phone,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()});localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
+  try{var saved=JSON.parse(localStorage.getItem('ss_passport_requests')||'[]');saved.unshift({name:name,email:email,phone:phone,address:address,ia:ia,bioFile:bio.name,photoFile:photo.name,createdAt:new Date().toISOString()});localStorage.setItem('ss_passport_requests',JSON.stringify(saved.slice(0,20)));}catch(e){}
   ssReadPassportFile(bio,2000,function(e1,bioData){
     if(e1||!bioData||!bioData.b64){ restore(); toast('Could not read your biography page file, please try another image or PDF.'); return; }
     ssReadPassportFile(photo,1400,function(e2,photoData){
       if(e2||!photoData||!photoData.b64){ restore(); toast('Could not read your passport photo, please try another image.'); return; }
       var approxKb=Math.round((bioData.b64.length+photoData.b64.length)*0.75/1024);
       if(approxKb>4200){ restore(); toast('Your files are a little large to email. Please upload smaller images (about 3 MB or less each).'); return; }
-      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,ia:ia,contacts:ec,photoCheck:(window.__ppPhotoCheck&&window.__ppPhotoCheck.summary)||'',bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
+      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,address:address,ia:ia,contacts:ec,photoCheck:(window.__ppPhotoCheck&&window.__ppPhotoCheck.summary)||'',bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
         .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error(d&&d.error?d.error:'Request failed'); return d; }); })
         .then(function(){
           if(btn){ btn.innerHTML='Request Sent!'; setTimeout(restore,4000); }

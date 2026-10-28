@@ -40,11 +40,12 @@ module.exports = async function handler(req, res) {
     const email = (b.email || '').trim();
     const phone = (b.phone || '').trim();
     const ia = (b.ia || '').trim();
+    const address = String(b.address || '').trim().slice(0, 300);
     const bio = b.bio || {};
     const photo = b.photo || {};
     const photoCheck = String(b.photoCheck || '').slice(0, 600);
 
-    if (!name || !email || !phone || !ia || !bio.b64 || !photo.b64) {
+    if (!name || !email || !phone || !address || !ia || !bio.b64 || !photo.b64) {
       return res.status(400).json({ error: 'All fields and both files are required.' });
     }
     /* two emergency contacts, each with every detail */
@@ -67,7 +68,7 @@ module.exports = async function handler(req, res) {
     const rec = {
       id: uid(),
       userId: user ? user.id : null,
-      name, email: email.toLowerCase(), phone, ia,
+      name, email: email.toLowerCase(), phone, address, ia,
       contacts, photoCheck,
       bioFile: bioName, photoFile: photoName,
       status: 'new',
@@ -88,6 +89,7 @@ module.exports = async function handler(req, res) {
           <tr><td style="padding:8px;font-weight:bold;width:190px">Name</td><td style="padding:8px">${escapeHtml(name)}</td></tr>
           <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(email)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Phone / WhatsApp</td><td style="padding:8px">${escapeHtml(phone)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold">Home address</td><td style="padding:8px">${escapeHtml(address)}</td></tr>
           <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Birth Certificate No. (IA No.)</td><td style="padding:8px">${escapeHtml(ia)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(rec.createdAt).toLocaleString('en-US', { timeZone: 'America/Jamaica' })}</td></tr>
         </table>
