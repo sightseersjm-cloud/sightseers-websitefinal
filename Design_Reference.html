@@ -24104,7 +24104,7 @@ vtSessionAction=function(el,type){
                   <button type="button" role="tab" id="acTabSignup" aria-selected="false" onclick="switchAuthTab('signup')">Create account</button>
                 </div>
                 <h3 class="ac-panel-title" id="acPanelTitle">Welcome back</h3>
-                <p class="ac-panel-sub" id="acPanelSub">Sign in to see your points, saved tours and booking history.</p>
+                <p class="ac-panel-sub" id="acPanelSub">Sign in to see your points, trips and booking history.</p>
 
                 <form id="acAuthForm" novalidate>
                   <div class="ac-field auth-extra-fields" id="authExtraFields" style="display:none">
@@ -24201,7 +24201,6 @@ vtSessionAction=function(el,type){
               <button type="button" role="tab" id="acTab-trips" data-tab="trips" aria-selected="false" aria-controls="acPane-trips">Trips &amp; history</button>
               <button type="button" role="tab" id="acTab-groups" data-tab="groups" aria-selected="false" aria-controls="acPane-groups">Group trips</button>
               <button type="button" role="tab" id="acTab-club" data-tab="club" aria-selected="false" aria-controls="acPane-club">Travel Club</button>
-              <button type="button" role="tab" id="acTab-saved" data-tab="saved" aria-selected="false" aria-controls="acPane-saved">Saved</button>
               <button type="button" role="tab" id="acTab-profile" data-tab="profile" aria-selected="false" aria-controls="acPane-profile">Profile</button>
             </div>
 
@@ -24210,9 +24209,6 @@ vtSessionAction=function(el,type){
               <div class="ac-stats" hidden>
                 <button type="button" class="ac-stat" data-tab-go="club">
                   <strong id="dashPoints">0</strong><span class="ac-stat-lab">Travel Points</span>
-                </button>
-                <button type="button" class="ac-stat" data-tab-go="saved">
-                  <strong id="dashSavedCount">0</strong><span class="ac-stat-lab">Saved Tours</span>
                 </button>
                 <button type="button" class="ac-stat" onclick="return forceAccountAction('cart', event)">
                   <strong id="dashCartCount">0</strong><span class="ac-stat-lab">Items in Cart</span>
@@ -24285,7 +24281,7 @@ vtSessionAction=function(el,type){
                     <div class="ac-step" data-tier="Voyager"><strong>Voyager</strong><small>From 250 points</small></div>
                     <div class="ac-step" data-tier="Pioneer"><strong>Pioneer</strong><small>From 750 points</small></div>
                   </div>
-                  <p class="ac-note">Your Travel Points and saved tours are kept in this browser for now, so they stay with you on this device.</p>
+                  <p class="ac-note">Your Travel Points are kept in this browser for now, so they stay with you on this device.</p>
                 </div>
                 <div class="ac-earn" id="acEarn">
                   <span class="ac-eyebrow">The Travel Club</span>
@@ -24314,14 +24310,6 @@ vtSessionAction=function(el,type){
               <div class="ac-section ac-gsec">
                 <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Before you go</span><h4>Travel insurance and eSIM</h4><p>Two things worth sorting out before you fly.</p></div></div>
                 <div id="acGroupsPartners"></div>
-              </div>
-            </div>
-
-            <!-- Saved tours -->
-            <div class="ac-pane" id="acPane-saved" role="tabpanel" aria-labelledby="acTab-saved" hidden>
-              <div class="ac-section" id="acSaved">
-                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Saved tours</span><h4>Your shortlist</h4><p>Tours you have saved with the heart.</p></div><button type="button" class="ac-link" onclick="nav('tours')">Browse more tours</button></div>
-                <div class="ac-saved-grid" id="dashSavedTours"></div>
               </div>
             </div>
 
@@ -24360,7 +24348,7 @@ vtSessionAction=function(el,type){
                 <div class="ac-section ac-signout-card">
                   <span class="ac-eyebrow ac-eyebrow--dark">Session</span>
                   <h4>Sign out</h4>
-                  <p>Signing out ends your session on this device. Your Travel Points and saved tours stay here for next time you sign in.</p>
+                  <p>Signing out ends your session on this device. Your Travel Points stay here for next time you sign in.</p>
                   <button type="button" class="ac-cta ac-cta--ghost-dark" id="acSignOut2">Sign out</button>
                 </div>
               </div>
@@ -26322,7 +26310,6 @@ function renderTours(filter,gridId){
     <div class="tour-card reveal ${isMba?'mba-card':''}" onclick="openTour(${t.id})">
       <div class="tc-media">
         <img src="${t.img}" alt="${t.title}" loading="lazy">
-        <button class="tc-save${isTourSaved(t.id)?' on':''}" data-save-tour="${t.id}" title="Save to your Travel Club" aria-label="Save tour" onclick="toggleSavedTour(${t.id},event)"></button>
         <div class="tc-topbar">
           ${t.tag?`<span class="tc-tag">${t.tag}</span>`:''}
           <span class="tc-price-pill">${pricePill}</span>
@@ -46075,7 +46062,7 @@ body.theme-night #p-account .ac-rules span.ok{color:#9be8a8;background:rgba(111,
     if(su)su.setAttribute('aria-selected',String(m==='signup'));
     var t=$('acPanelTitle'),s=$('acPanelSub');
     if(t)t.textContent=m==='signup'?'Create your account':'Welcome back';
-    if(s)s.textContent=m==='signup'?'Join free and start with 100 Travel Points.':'Sign in to see your points, saved tours and booking history.';
+    if(s)s.textContent=m==='signup'?'Join free and start with 100 Travel Points.':'Sign in to see your points, trips and booking history.';
     var b=$('authMainBtn');
     if(b){b.classList.remove('ac-busy');b.disabled=false;b.innerHTML='<span class="ac-btn-label">'+(m==='signup'?'Create account':'Sign in')+'</span><span class="ac-spin" aria-hidden="true"></span>';}
     var pw=$('unifiedPassword');
@@ -48842,15 +48829,12 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function nxShortcuts(hasTrip){
     var cart=parseInt(((document.getElementById('dashCartCount')||{}).textContent||'0').replace(/[^\d]/g,''),10)||0;
-    var saved=parseInt(((document.getElementById('dashSavedCount')||{}).textContent||'0').replace(/[^\d]/g,''),10)||0;
     function sc(title,body,cta,attrs){return '<button type="button" class="g-sc" '+attrs+'><strong>'+title+'</strong><small>'+body+'</small><em>'+cta+' <i>&rarr;</i></em></button>';}
     var list=[],also=['<button type="button" onclick="return forceAccountAction(\'blog\', event)">Write for our blog</button>'];
     if(hasTrip)list.push(sc('Join another trip','Group trips with places open.','See departures','data-nx="departures"'));
     list.push(sc('Browse tours','Curated tours across the islands.','Explore','onclick="return forceAccountAction(\'tours\', event)"'));
     if(cart)list.push(sc('Review cart ('+cart+')','Finish booking what you picked.','Open cart','onclick="return forceAccountAction(\'cart\', event)"'));
     else list.push(sc('Start planning','Tell us your dates and your group.','Start now','onclick="return forceAccountAction(\'booking\', event)"'));
-    if(list.length<3)list.push(sc('Saved tours'+(saved?' ('+saved+')':''),'Tours you kept for later.','Open saved','data-tab-go="saved"'));
-    else also.push('<button type="button" data-tab-go="saved">Saved tours'+(saved?' ('+saved+')':'')+'</button>');
     if(cart&&!hasTrip)also.push('<button type="button" onclick="return forceAccountAction(\'booking\', event)">Start planning</button>');
     var sh=$('acShort'),al=$('acAlso');if(sh)sh.innerHTML=list.join('');if(al)al.innerHTML='Also: '+also.join(' &middot; ');
   }
