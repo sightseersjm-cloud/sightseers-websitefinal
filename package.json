@@ -11,7 +11,8 @@
     "test:paused": "node scripts/storage-paused.test.js",
     "test:catalog": "node scripts/catalog.test.js",
     "test:css": "node scripts/css-scope.test.js",
-    "test:cards": "node scripts/cards.test.js"
+    "test:cards": "node scripts/cards.test.js",
+    "test:backup": "node scripts/backup.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

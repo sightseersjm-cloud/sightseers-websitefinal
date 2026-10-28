@@ -14,6 +14,7 @@
 
 const handlers = {
   'auth':            require('./_handlers/auth'),
+  'backup':          require('./_handlers/backup'),
   'blog':            require('./_handlers/blog'),
   'bookings':        require('./_handlers/bookings'),
   'contact':         require('./_handlers/contact'),
