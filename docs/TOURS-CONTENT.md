@@ -42,3 +42,14 @@ Spelling follows the file (Caribbean English: snorkelling, personalised, program
 The "Internal pricing review" pages and the "Website-based package draft" footers in the file are working notes for the owner, not customer copy.
 The file asks for supplier scope, per-person rates, currency, transfer coverage, minimum group size and cancellation terms to be confirmed before
 publishing; that confirmation is the owner's.
+
+## Packages that quote tour prices (follow-up, 28 October 2026)
+
+- The seven 5-day island itineraries (`api/_data/packages.json`, copied into the page as `window.CARIB`, and written out again in the `bdos-itin-card`
+  markup) list tours day by day with a "from $X" price. 25 of those lines are one of the 130 tours by exact title; each now shows that tour's new
+  price. The three places must stay identical: change `packages.json`, then rewrite `window.CARIB=` from it and the card lines to match.
+- Left as they were: "Turtle Bay Snorkel & Blue Room Style Escape" ("from $99" in Curaçao's itinerary; the tour itself is now "Price on request"),
+  lines that are a variant of a tour rather than the tour (for example "Transfer to Ocho Rios + ATV, River & Blue Hole Combo, from $229"), and each
+  itinerary's own "from $718"-style total.
+- Three Destinations-page packages that mirror a tour follow its new price: 3 Islands Pigs, Snorkel & Turtles ($165.10), Private Beach Club & Snorkel
+  Day ($180.70) and Catamaran Snorkel Cruise with Lunch ($149.50). The other 25 Destinations packages are their own products and keep their prices.
