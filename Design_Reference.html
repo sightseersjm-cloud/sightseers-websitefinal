@@ -1941,6 +1941,9 @@ button{font-family:'Raleway',sans-serif;cursor:pointer}
 .passport-file-meta.ok{color:#2f7d32}
 .passport-file-meta.warn{color:#b26c14}
 .passport-side-card{background:linear-gradient(180deg,#fff 0%,#f8fcf8 100%)}
+.pp-ship-opts{display:grid;gap:8px;margin:2px 0 10px}
+.pp-radio{display:flex;align-items:center;gap:10px;margin:0;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--dark);cursor:pointer}
+.pp-radio input{width:auto;margin:0;accent-color:#ef8731}
 .pp-ec{margin:6px 0 10px;padding:16px 18px 4px;border:1px solid var(--border);background:#fafcfe}
 .pp-ec-h{margin:0 0 14px;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
 @media(max-width:640px){.pp-ec .form-row{grid-template-columns:1fr}}
@@ -16641,6 +16644,14 @@ body.theme-night .page .tag{
           </div>
           <div class="fg"><label for="passPhone">Phone / WhatsApp *</label><input type="tel" id="passPhone"></div>
           <div class="fg"><label for="passAddress">Your home address *</label><input type="text" id="passAddress" placeholder="Street, town or city, parish or state, country" autocomplete="street-address"></div>
+          <div class="fg pp-ship">
+            <label>Should the renewed passport be shipped to this address? *</label>
+            <div class="pp-ship-opts">
+              <label class="pp-radio"><input type="radio" name="passShip" id="passShipSame" value="same" checked onchange="togglePassportShip()"><span>Yes, ship it to this address</span></label>
+              <label class="pp-radio"><input type="radio" name="passShip" id="passShipOther" value="other" onchange="togglePassportShip()"><span>No, ship it to a different address</span></label>
+            </div>
+            <input type="text" id="passShipAddress" placeholder="Shipping address: street, town or city, parish or state, country" autocomplete="off" hidden>
+          </div>
           <div class="fg">
             <label>Picture of your passport biography page *</label>
             <label class="passport-upload" for="passBioUpload">
@@ -29093,12 +29104,15 @@ function ssReadPassportFile(file,maxDim,cb){
     }catch(err){ rawRead(); }
   } else { rawRead(); }
 }
+function togglePassportShip(){var o=document.getElementById('passShipOther'),i=document.getElementById('passShipAddress');if(!i)return;i.hidden=!(o&&o.checked);if(!i.hidden)i.focus();}
 function submitPassportRenewal(){
   var name=document.getElementById('passName')&&document.getElementById('passName').value.trim();
   var email=document.getElementById('passEmail')&&document.getElementById('passEmail').value.trim();
   var phone=document.getElementById('passPhone')&&document.getElementById('passPhone').value.trim();
   var ia=document.getElementById('passIaNo')&&document.getElementById('passIaNo').value.trim();
   var address=document.getElementById('passAddress')&&document.getElementById('passAddress').value.trim();
+  var shipOther=!!(document.getElementById('passShipOther')&&document.getElementById('passShipOther').checked);
+  var shipAddress=shipOther?(document.getElementById('passShipAddress').value||'').trim():address;
   var bio=document.getElementById('passBioUpload')&&document.getElementById('passBioUpload').files&&document.getElementById('passBioUpload').files[0];
   var photo=document.getElementById('passPhotoUpload')&&document.getElementById('passPhotoUpload').files&&document.getElementById('passPhotoUpload').files[0];
   if(!name||!email||!phone||!address||!ia||!bio||!photo){
@@ -29106,6 +29120,7 @@ function submitPassportRenewal(){
     return;
   }
   if(window.__ppPhotoCheck&&window.__ppPhotoCheck.level==='bad'){toast('Your passport photo is too small to use. Please add a larger photo.');return;}
+  if(shipOther&&shipAddress.length<8){toast('Please enter the address the passport should be shipped to.');return;}
   var ec=[1,2].map(function(n){var v=function(k){var e=document.getElementById('passEc'+n+k);return e?e.value.trim():'';};return {name:v('Name'),relationship:v('Rel'),phone:v('Phone'),email:v('Email'),address:v('Addr')};});
   for(var i=0;i<ec.length;i++){var c=ec[i];
     if(!c.name||!c.relationship||!c.phone||!c.email||!c.address){toast('Please complete every detail for emergency contact '+(i+1)+': name, relationship, phone, email and address.');return;}
@@ -29122,7 +29137,7 @@ function submitPassportRenewal(){
       if(e2||!photoData||!photoData.b64){ restore(); toast('Could not read your passport photo, please try another image.'); return; }
       var approxKb=Math.round((bioData.b64.length+photoData.b64.length)*0.75/1024);
       if(approxKb>4200){ restore(); toast('Your files are a little large to email. Please upload smaller images (about 3 MB or less each).'); return; }
-      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,address:address,ia:ia,contacts:ec,photoCheck:(window.__ppPhotoCheck&&window.__ppPhotoCheck.summary)||'',bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
+      fetch('/api/passport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,address:address,shipTo:{same:!shipOther,address:shipAddress},ia:ia,contacts:ec,photoCheck:(window.__ppPhotoCheck&&window.__ppPhotoCheck.summary)||'',bio:{name:bioData.name,type:bioData.type,b64:bioData.b64},photo:{name:photoData.name,type:photoData.type,b64:photoData.b64}})})
         .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error(d&&d.error?d.error:'Request failed'); return d; }); })
         .then(function(){
           if(btn){ btn.innerHTML='Request Sent!'; setTimeout(restore,4000); }

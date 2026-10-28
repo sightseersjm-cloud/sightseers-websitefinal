@@ -48,6 +48,12 @@ module.exports = async function handler(req, res) {
     if (!name || !email || !phone || !address || !ia || !bio.b64 || !photo.b64) {
       return res.status(400).json({ error: 'All fields and both files are required.' });
     }
+    /* where the renewed passport is to be shipped: the home address, or another one */
+    const shipSame = !(b.shipTo && b.shipTo.same === false);
+    const shipAddress = shipSame ? address : String((b.shipTo && b.shipTo.address) || '').trim().slice(0, 300);
+    if (!shipAddress || (!shipSame && shipAddress.length < 8)) {
+      return res.status(400).json({ error: 'Please give the address the passport should be shipped to.' });
+    }
     /* two emergency contacts, each with every detail */
     const clip = v => String(v || '').trim().slice(0, 200);
     const contacts = (Array.isArray(b.contacts) ? b.contacts : []).slice(0, 2).map(c => ({
@@ -68,7 +74,7 @@ module.exports = async function handler(req, res) {
     const rec = {
       id: uid(),
       userId: user ? user.id : null,
-      name, email: email.toLowerCase(), phone, address, ia,
+      name, email: email.toLowerCase(), phone, address, shipSame, shipAddress, ia,
       contacts, photoCheck,
       bioFile: bioName, photoFile: photoName,
       status: 'new',
@@ -90,7 +96,8 @@ module.exports = async function handler(req, res) {
           <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${escapeHtml(email)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Phone / WhatsApp</td><td style="padding:8px">${escapeHtml(phone)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Home address</td><td style="padding:8px">${escapeHtml(address)}</td></tr>
-          <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Birth Certificate No. (IA No.)</td><td style="padding:8px">${escapeHtml(ia)}</td></tr>
+          <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Ship the passport to</td><td style="padding:8px">${shipSame ? 'The home address above' : escapeHtml(shipAddress)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold">Birth Certificate No. (IA No.)</td><td style="padding:8px">${escapeHtml(ia)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold">Received</td><td style="padding:8px">${new Date(rec.createdAt).toLocaleString('en-US', { timeZone: 'America/Jamaica' })}</td></tr>
         </table>
         ${contacts.map((c, i) => `

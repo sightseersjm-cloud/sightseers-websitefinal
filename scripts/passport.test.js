@@ -16,7 +16,9 @@ const send = body => new Promise(r => { const res = { status(c) { this.c = c; re
   handler({ method: 'POST', headers: {}, body: Object.assign({ name: 'Test Person', email: 't@example.com', phone: '+1 876 555 0000', ia: 'IA123', address: '5 Palm Street, Ocho Rios, St Ann, Jamaica', bio: { name: 'bio.png', type: 'image/png', b64: PNG }, photo: { name: 'p.png', type: 'image/png', b64: PNG } }, body) }, res); });
 
 (async () => {
-  let r = await send({ address: '', contacts: [C1, C2] });
+  let r = await send({ shipTo: { same: false, address: 'x' }, contacts: [C1, C2] });
+  ok('a different shipping address must be a real address', r.code === 400 && /shipped/i.test(r.body.error));
+  r = await send({ address: '', contacts: [C1, C2] });
   ok('the applicant address is required', r.code === 400);
   r = await send({});
   ok('a request with no emergency contacts is refused', r.code === 400 && /emergency/i.test(r.body.error));
@@ -30,7 +32,11 @@ const send = body => new Promise(r => { const res = { status(c) { this.c = c; re
   r = await send({ contacts: [C1, C2], photoCheck: 'Shape is right: 35 × 45 mm portrait.' });
   const html = calls[0] && calls[0].html || '';
   ok('a complete request is accepted and emailed with both files', r.code === 201 && calls[0].attachments.length === 2);
-  ok('the applicant address is in the email', /5 Palm Street/.test(html));
+  ok('the applicant address is in the email, and the passport goes there', /5 Palm Street/.test(html) && /home address above/i.test(html));
+  calls.length = 0;
+  r = await send({ shipTo: { same: false, address: '9 Beach Road, Negril, Westmoreland, Jamaica' }, contacts: [C1, C2] });
+  ok('a different shipping address reaches the team email', r.code === 201 && /9 Beach Road/.test(calls[0].html));
+  calls.length = 0; await send({ contacts: [C1, C2], photoCheck: 'Shape is right: 35 × 45 mm portrait.' });
   ok('both emergency contacts are in the email, with their details', /Emergency contact 1/.test(html) && /Emergency contact 2/.test(html) && /ann@example\.com/.test(html) && /2 Ocean Drive/.test(html) && /\+1 305 555 0002/.test(html));
   ok('the photo size check is passed on to the team', /Photo size check/.test(html) && /35 × 45 mm portrait/.test(html));
   failMail = true;
