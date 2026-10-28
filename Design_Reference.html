@@ -47917,8 +47917,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var c=$('tcAlertCard'),f=$('tcAlertForm');if(!c||!f||alertDone)return;alertDone=true;
     c.classList.add('is-done');
     var k=document.createElement('div');k.className='tc-pop-check';k.innerHTML='<svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="23"/><path d="M15 27l8 8 15-17"/></svg>';f.insertBefore(k,f.firstChild);
-    if(isNew)alertConfetti();
-    clearTimeout(alertTimer);alertTimer=setTimeout(closeAlertPop,isNew?3600:2600);
+    alertConfetti();
+    clearTimeout(alertTimer);alertTimer=setTimeout(closeAlertPop,3600);
   }
   function openAlertPop(){
     var c=$('tcAlertCard');if(!c||alertOv)return;
