@@ -13624,25 +13624,30 @@ body.theme-night #p-flagship-programs{
             <div class="tcd-filters" id="tcdFilters" role="group" aria-label="Filter departures"></div>
             <a class="tcd-cta" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">Follow our WhatsApp Channel <span aria-hidden="true">&rarr;</span></a>
           </aside>
-          <div class="tcd-list" id="tcDepartures" aria-live="polite"></div>
+          <div class="tcd-right">
+            <div class="tcd-list" id="tcDepartures" aria-live="polite"></div>
+            <div class="tcd-notify">
+              <div class="tcd-notify-txt"><strong>Be first to hear about new trips</strong><span>We email you the moment a new departure opens.</span></div>
+              <button type="button" class="tcd-cta" data-list-jump>Tell me first <span aria-hidden="true">&rarr;</span></button>
+            </div>
+            <div class="tc-card tc-alert tcd-alert" id="tcAlertCard">
+              <div class="tc-alert-copy">
+                <h3>Be first to hear about new trips</h3>
+                <p>Leave your email and we will tell you the moment a new departure opens.</p>
+              </div>
+              <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
+                <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
+                <div class="tc-field"><label for="tcAlEmail">Email</label><input id="tcAlEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
+                <input id="tcAlParty" type="hidden" value="1">
+                <label class="tc-check"><input id="tcAlConsent" type="checkbox"><span>Email me about Travel Club departures</span></label>
+                <input class="tc-hp" id="tcAlHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me first</button>
+                <div class="tc-status" id="tcAlStatus" role="status" aria-live="polite"></div>
+              </form>
+            </div>
+          </div>
         </div>
         <div class="tcd-foot"><span>Green means places are open, orange means a waitlist. Nothing is charged until we confirm with you.</span><button type="button" class="tcd-cta" data-tc-apply>Lead your own trip <span aria-hidden="true">&rarr;</span></button></div>
-      </div>
-
-      <div class="tc-card tc-alert" id="tcAlertCard">
-        <div class="tc-alert-copy">
-          <h3>Be first to hear about new trips</h3>
-          <p>Leave your email and we will tell you the moment a new departure opens.</p>
-        </div>
-        <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
-          <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
-          <div class="tc-field"><label for="tcAlEmail">Email</label><input id="tcAlEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
-          <input id="tcAlParty" type="hidden" value="1">
-          <label class="tc-check"><input id="tcAlConsent" type="checkbox"><span>Email me about Travel Club departures</span></label>
-          <input class="tc-hp" id="tcAlHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <button type="submit" class="tc-fbtn" id="tcAlBtn">Tell me first</button>
-          <div class="tc-status" id="tcAlStatus" role="status" aria-live="polite"></div>
-        </form>
       </div>
     </div>
 
@@ -46629,6 +46634,17 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-tag--wait{background:#ef8731;color:#fff}
 .tcd-go{font:800 11px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8fd978;white-space:nowrap;opacity:1;transition:transform .3s,opacity .3s}
 .tcd-row:hover .tcd-go{opacity:1;transform:translateX(4px)}
+.tcd-right{display:flex;flex-direction:column;gap:20px;min-width:0}
+@media(min-width:901px){.tcd-right .tcd-list{contain:none;max-height:min(420px,52vh)}}
+/* the sign-up form lives in its pop-up; here it is one small line under the departures */
+.tcd-right .tcd-alert{display:none}
+.tc-pop-ov .tc-alert.tcd-alert{display:block}
+.tcd-notify{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 18px;padding:14px 18px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+.tcd-notify-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tcd-notify-txt strong{font:800 13px 'Raleway',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.tcd-notify-txt span{font-size:13px;line-height:1.45;color:rgba(255,255,255,.76)}
+.tcd .tcd-notify .tcd-cta{padding:10px 14px;font-size:11.5px!important}
+@media(max-width:560px){.tcd-notify{flex-direction:column;align-items:stretch}.tcd .tcd-notify .tcd-cta{justify-content:center}}
 /* with no departures the counters and the colour key have nothing to count or explain */
 .tcd-none .tcd-stats,.tcd-none .tcd-foot>span{display:none}
 .tcd-none .tcd-foot{justify-content:flex-end}
@@ -48063,7 +48079,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var list=(res&&res.trips)||[];
       dep.at=Date.now();
       depStats(list);
-      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. The form below tells you the moment one opens.</p></div>';
+      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them.</p></div>';
       g.scrollTop=0;depMore();
       if(window.ixDepFilters)window.ixDepFilters();
     }).catch(function(){
