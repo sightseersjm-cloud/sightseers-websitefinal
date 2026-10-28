@@ -88,3 +88,11 @@ Reach Falls; St. Catherine shows Hellshire, which its card already names.
 | Manchester | Mandeville Courthouse | `discover-jamaica/jamaica-manchester-*` | 1200x600 (original 1200x802) | [page](https://jamaica-gleaner.com/article/art-leisure/20251214/mandevilles-oldest-landmark) | [image](https://jamaica-gleaner.com/sites/default/files/media/article_images/2025/12/14/3302881/8415415.jpg) |
 | Clarendon | Milk River Mineral Bath Hotel & Spa | `discover-jamaica/jamaica-clarendon-*` | 940x470 (original 940x788) | [page](https://wellnessinja.com/taxonomy/term/64?page=1) | [image](https://wellnessinja.com/sites/default/files/listings/Pics_4.png) |
 | St. Catherine | Hellshire Bay Beach | `discover-jamaica/jamaica-catherine-*` | 1200x600 (original 1200x900) | [page](https://www.bigupwibeachja.org/beaches/details/15/115-hellshire-bay-beach) | [image](https://www.bigupwibeachja.org/images/beach-photos/YpQcvrtp9kL3.jpg) |
+
+## The About page photo
+
+The "Our Story" photo on the About page (the giraffe photo, with the scuba photo inset) is controlled only by the **About Story Image** setting
+(`adminAboutStoryImage`), or by Edit on the page. The older **Home About Image** setting (`ss_site_settings.aboutImage`) used to be laid over the
+same photo, so two settings fought over one picture and whichever the page applied last won. It no longer touches the photo and its field is gone
+from the Pages screen. A value already stored under `aboutImage` is simply ignored (it is a large inline photo, so "Make the site lighter" in
+Backup and site check will move it to a file, or it can be left).

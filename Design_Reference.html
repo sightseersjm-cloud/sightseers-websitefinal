@@ -25248,7 +25248,6 @@ const ADMIN_SECTION_SCHEMA=[
     {id:'adminHeroImg1',label:'Hero Slide 1 Image',type:'image',full:true,size:'1600 × 900 px or wider',help:'Best for the first homepage hero slide.'},
     {id:'adminHeroImg2',label:'Hero Slide 2 Image',type:'image',full:true,size:'1600 × 900 px or wider',help:'Best for the Travel in Style slide.'},
     {id:'adminHeroImg3',label:'Hero Slide 3 Image',type:'image',full:true,size:'1600 × 900 px or wider',help:'Best for the third homepage hero slide.'},
-    {id:'adminAboutImage',label:'Home About Image',type:'image',full:true,size:'1200 × 1400 px portrait',help:'Works best for the large island/lifestyle image in the home about section.'},
     {id:'adminJamaicaImage',label:'Discover Jamaica Island Image',type:'image',full:true,size:'1400 × 800 px transparent PNG/WebP preferred',help:'Use island art sized to sit cleanly inside the Jamaica landmark stage.'},
     {id:'adminJamaicaTitle',label:'Discover Jamaica Heading',type:'text',full:true},
     {id:'adminJamaicaSub',label:'Discover Jamaica Intro',type:'textarea',full:true},
@@ -25562,7 +25561,7 @@ function ssApplyImageExtras(){
     });
     var st=siteSettings||{};
     var slides=document.querySelectorAll('.hero .slide');
-    [['heroImg1',slides[0],'bg'],['heroImg2',slides[1],'bg'],['heroImg3',slides[2],'bg'],['aboutImage',document.querySelector('.about-sec .about-img-main'),'src']].forEach(function(r){
+    [['heroImg1',slides[0],'bg'],['heroImg2',slides[1],'bg'],['heroImg3',slides[2],'bg']].forEach(function(r){
       var f=st[r[0]+'__focus'], a=st[r[0]+'__alt']; if(f===undefined && a===undefined) return;
       if(r[1]) ssImageExtras(r[1],r[2],f,a);
     });
@@ -27705,7 +27704,9 @@ function applySiteSettings(){
   if(heroSlides[0] && siteSettings.heroImg1) heroSlides[0].style.backgroundImage=`url('${siteSettings.heroImg1.replace(/'/g,"%27")}')`;
   if(heroSlides[1] && siteSettings.heroImg2) heroSlides[1].style.backgroundImage=`url('${siteSettings.heroImg2.replace(/'/g,"%27")}')`;
   if(heroSlides[2]){ var _h3=siteSettings.heroImg3||''; if(!_h3 || _h3.indexOf('1122462')>-1 || _h3.indexOf('pexels')>-1) _h3='/assets/hero/white-party-v3.jpg'; heroSlides[2].style.backgroundImage=`url('${_h3.replace(/'/g,"%27")}')`; }
-  const aboutImg=document.querySelector('.about-sec .about-img-main'); if(aboutImg && siteSettings.aboutImage) aboutImg.src=siteSettings.aboutImage;
+  /* The About page's story photo is controlled only by the "About Story Image" page setting (adminAboutStoryImage), or by Edit on the page.
+     The old "Home About Image" setting (siteSettings.aboutImage) used to be laid over it here, so two settings fought over one photo and the
+     one applied last won. It no longer touches the photo. */
   const jamaicaImg=document.querySelector('.jm3d-island-img');
   if(jamaicaImg){
     if(siteSettings.jamaicaImage && siteSettings.jamaicaImage.includes('jamaica-island')){
@@ -52485,7 +52486,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     {id:'transfers',screen:'transfers',noun:'Transfer',name:'name',photos:[['img','photo']],need:['blurb'],needT:'a description'},
     {id:'gallery',screen:'gallery',noun:'Gallery photo',name:'label',photos:[['src','photo']],need:[],needT:''}
   ];
-  var SITE_PHOTOS={heroImg1:'Home hero photo 1',heroImg2:'Home hero photo 2',heroImg3:'Home hero photo 3',aboutImage:'About photo',jamaicaImage:'Jamaica photo'};
+  var SITE_PHOTOS={heroImg1:'Home hero photo 1',heroImg2:'Home hero photo 2',heroImg3:'Home hero photo 3',jamaicaImage:'Jamaica photo'};
 
   function kb(n){return n>=1048576?(Math.round(n/104857.6)/10)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
   function when(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})+' at '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
