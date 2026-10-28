@@ -27,7 +27,7 @@ function esc(x) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 function money(n) {
-  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: Number(n || 0) % 1 ? 2 : 0, maximumFractionDigits: 2 });
 }
 function round2(n) { return Math.round(n * 100) / 100; }
 

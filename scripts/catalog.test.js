@@ -37,7 +37,7 @@ const C = (key, value, extra) => Object.assign({ id: '@c', list: 'experiences', 
   const blogger = await member('Bo Blogger', 'bo@example.com', 'blog');
 
   // --- before any edit the page is made from the code's own list
-  r = await page(SLUG); ok('an experience page is made on request', r.code === 200 && /Good Bajan Day/.test(r.body) && /panoramic east-coast views/.test(r.body) && /Cache-Control/i.test(Object.keys(r.headers).join()));
+  r = await page(SLUG); ok('an experience page is made on request', r.code === 200 && /Good Bajan Day/.test(r.body) && /Optional St. Nicholas Abbey or Harrison.s Cave visit/.test(r.body) && /Cache-Control/i.test(Object.keys(r.headers).join()));
   ok('the page has a canonical address and the real price', /rel="canonical" href="https:\/\/www.sightseerscaribbean.com\/tours\/good-bajan-day-highlights-tour"/.test(r.body));
   ok('an unknown address is a 404', (await page('no-such-tour')).code === 404 && (await page('../etc')).code === 404);
 
@@ -48,7 +48,7 @@ const C = (key, value, extra) => Object.assign({ id: '@c', list: 'experiences', 
   ok('it is stored under the original title', s.ss_catalog_v1.experiences.edits[KEY].priceValue === 400);
   r = await page(SLUG);
   ok('the page shows the edit and keeps its web address', r.code === 200 && /Good Bajan Day: Private Highlights/.test(r.body) && /\$400/.test(r.body) && /per group/.test(r.body) && /Private transport/.test(r.body));
-  ok('the old highlights are replaced', /Cherry Tree Hill sunrise/.test(r.body) && !/panoramic east-coast views/.test(r.body));
+  ok('the old highlights are replaced', /Cherry Tree Hill sunrise/.test(r.body) && !/Optional St. Nicholas Abbey or Harrison.s Cave visit/.test(r.body));
   r = await post({ action: 'save', changes: [C(KEY, { edits: { title: 'Good Bajan Day: Private Highlights', priceValue: 400, per: 'group', cap: 5, includes: ['Private transport', 'Driver-guide'], highlights: ['Cherry Tree Hill sunrise', 'Bathsheba'] } })] }, owner);
   ok('saving the same thing again changes nothing', r.body.unchanged === true);
 
@@ -92,7 +92,7 @@ const C = (key, value, extra) => Object.assign({ id: '@c', list: 'experiences', 
   ok('history keeps the list, the key and the before and after', !!h && h.list === 'experiences' && !h.before.edits);
   r = await post({ action: 'restore', id: h.id }, owner); s = await live();
   ok('an earlier state can be put back (here: back to the original)', r.code === 200 && !(s.ss_catalog_v1.experiences.edits || {})[KEY]);
-  r = await page(SLUG); ok('the page is back to the code\'s version', /A Good Bajan Day Highlights Tour/.test(r.body) && /panoramic east-coast views/.test(r.body));
+  r = await page(SLUG); ok('the page is back to the code\'s version', /A Good Bajan Day Highlights Tour/.test(r.body) && /Optional St. Nicholas Abbey or Harrison.s Cave visit/.test(r.body));
 
   // --- the trip builder
   const items = JSON.parse(JSON.stringify(require(root + 'api/_data/builder-catalog.json').items));

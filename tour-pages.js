@@ -43,7 +43,7 @@ function priceInfo(t) {
   if (!(v > 0)) return { has: false, value: 0, main: 'Price on request', unit: '', line: 'Price on request' };
   const grp = /per group/i.test(String(t.priceLabel || '') + (t.per === 'group' ? ' per group' : ''));
   const unit = grp ? 'per group' + (t.cap ? ' (up to ' + t.cap + ')' : '') : 'per person';
-  const main = '$' + v.toLocaleString('en-US');
+  const main = '$' + v.toLocaleString('en-US', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 });
   return { has: true, value: v, main, unit, line: 'From ' + main + ' ' + unit };
 }
 

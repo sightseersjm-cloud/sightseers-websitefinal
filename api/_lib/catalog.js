@@ -231,7 +231,7 @@
 
   function priceLabel(v, per) {
     if (!(Number(v) > 0)) return 'Price on request';
-    return 'from $' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 }) + (per === 'group' ? ' per group' : '');
+    return 'from $' + Number(v).toLocaleString('en-US', { minimumFractionDigits: Number(v) % 1 ? 2 : 0, maximumFractionDigits: 2 }) + (per === 'group' ? ' per group' : '');
   }
   function slugOf(t) {
     var skip = { with: 1, and: 1, the: 1, of: 1, a: 1, an: 1, in: 1, at: 1, to: 1, for: 1, on: 1, by: 1, from: 1 };
