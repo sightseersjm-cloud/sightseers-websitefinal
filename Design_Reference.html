@@ -13609,7 +13609,7 @@ body.theme-night #p-flagship-programs{
 
   <div class="tc-wrap">
     <div class="tc-sec" id="departures">
-      <div class="tcd" id="tcdPanel">
+      <div class="tcd tcd-none" id="tcdPanel">
         <div class="tcd-bg" aria-hidden="true"></div>
         <div class="tcd-in">
           <aside class="tcd-side">
@@ -13632,7 +13632,7 @@ body.theme-night #p-flagship-programs{
       <div class="tc-card tc-alert" id="tcAlertCard">
         <div class="tc-alert-copy">
           <h3>Be first to hear about new trips</h3>
-          <p>Leave your email and we will tell you the moment a new departure opens. Nothing is charged. Or <a class="tc-inl" href="https://www.whatsapp.com/channel/0029VbCaiVTGehERQ13cpR2v" target="_blank" rel="noopener">follow our WhatsApp Channel</a> to see new departures as they are announced.</p>
+          <p>Leave your email and we will tell you the moment a new departure opens.</p>
         </div>
         <form class="tc-form tc-form--alert" id="tcAlertForm" data-travel-club-bound="1" novalidate>
           <div class="tc-field"><label for="tcAlName">Your name</label><input id="tcAlName" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
@@ -13652,16 +13652,10 @@ body.theme-night #p-flagship-programs{
       <div class="tc-card tc-apply" data-tc-card="apply">
         <div class="tc-apply-main">
           <h3>Four short steps, about five minutes</h3>
-          <p>Tell us about you, your community and the trip you have in mind. A member of the team reads every application and replies by email.</p>
+          <p>Tell us about you, your community and the trip you have in mind.</p>
           <ol class="tc-apply-steps"><li><b>1</b>About you</li><li><b>2</b>Your community</li><li><b>3</b>The trip</li><li><b>4</b>In your own words</li></ol>
           <div class="tc-apply-act"><button type="button" class="tc-fbtn" data-tc-apply>Start your application</button><span class="tc-fine">Nothing is charged.</span></div>
         </div>
-        <ul class="tc-ticks tc-apply-ticks">
-          <li>A member of the team reviews every application</li>
-          <li>You hear from us by email</li>
-          <li>Applying takes no payment</li>
-          <li>Nothing is promoted until the package and your reward are agreed in writing</li>
-        </ul>
       </div>
       <p class="tc-asidenote">Questions first? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> or email <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a>.</p>
     </div>
@@ -13687,7 +13681,7 @@ body.theme-night #p-flagship-programs{
       <h2 class="tc-h2">How leading a trip works</h2>
       <p class="tc-sub">For creators, birthday organizers, alumni representatives, clubs, fitness instructors and other group leaders who already have a community.</p>
       <ol class="tc-steps" data-ix-steps>
-        <li class="tc-card"><span class="tc-num">1</span><h3>Apply</h3><p>Tell us about your group and the trip you have in mind. It takes a few minutes and takes no payment.</p></li>
+        <li class="tc-card"><span class="tc-num">1</span><h3>Apply</h3><p>Send us a short application.</p></li>
         <li class="tc-card"><span class="tc-num">2</span><h3>We review it</h3><p>A member of the team reads your application and talks it through with you by email.</p></li>
         <li class="tc-card"><span class="tc-num">3</span><h3>We agree the offer</h3><p>The package, the dates and your reward are agreed in writing before anything is promoted.</p></li>
         <li class="tc-card"><span class="tc-num">4</span><h3>Share your trip page</h3><p>You get a personal page for your trip. Share it with your community and watch the requests come in from your account.</p></li>
@@ -46635,6 +46629,9 @@ body.theme-night .tcn-steps li:hover{background:#0e3050}
 .tcd-tag--wait{background:#ef8731;color:#fff}
 .tcd-go{font:800 11px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8fd978;white-space:nowrap;opacity:1;transition:transform .3s,opacity .3s}
 .tcd-row:hover .tcd-go{opacity:1;transform:translateX(4px)}
+/* with no departures the counters and the colour key have nothing to count or explain */
+.tcd-none .tcd-stats,.tcd-none .tcd-foot>span{display:none}
+.tcd-none .tcd-foot{justify-content:flex-end}
 .tcd-empty{padding:30px 22px;border-bottom:1px solid rgba(255,255,255,.18)}
 .tcd-empty strong{display:block;margin-bottom:8px;font:800 15px 'Raleway',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#fff}
 .tcd-empty p{margin:0 0 16px;max-width:52ch;font-size:14px;line-height:1.6;color:rgba(255,255,255,.78)}
@@ -46953,7 +46950,7 @@ html body.theme-night .page .tch .tch-link:not(#ss-x) span{color:#fff!important}
 
 /* forms */
 .tc-panel{padding:clamp(20px,3vw,30px)}
-.tc-apply{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:22px;align-items:center;padding:20px 22px;cursor:pointer}
+.tc-apply{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:center;padding:20px 22px;cursor:pointer}
 .tc-apply h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:21px;line-height:1.15;color:var(--tc-head)!important}
 .tc-apply p{margin:0 0 12px;font-size:13.5px;line-height:1.55;color:var(--tc-mut)}
 .tc-apply-steps{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
@@ -48037,6 +48034,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     list.forEach(function(t){if(t.seats&&t.status!=='full')places+=t.seats.left;var d=[t.destination,t.country].filter(Boolean).join(', ');if(d)dests[d]=1;});
     var set=function(id,v){var e=$(id);if(e)e.textContent=v;};
     var cnt=function(id,v){var e=$(id);if(!e)return;if(window.ixCount)window.ixCount(e,v);else e.textContent=v;};
+    var pn=$('tcdPanel');if(pn)pn.classList.toggle('tcd-none',!list.length);
     cnt('tcdN1',list.length);cnt('tcdN2',Object.keys(dests).length);cnt('tcdN3',places);
   }
   /* the list scrolls inside the panel (no visible scrollbar); a soft fade at the bottom shows there are more trips below */
@@ -48065,7 +48063,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       var list=(res&&res.trips)||[];
       dep.at=Date.now();
       depStats(list);
-      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. Leave your email and we will tell you the moment one opens.</p><button type="button" class="tcd-cta" data-list-jump>Tell me first <span aria-hidden="true">&rarr;</span></button></div>';
+      g.innerHTML=list.length?list.map(depCard).join(''):'<div class="tcd-empty"><strong>Next departures are being announced</strong><p>Trips appear here as soon as Sight Seers approves them. The form below tells you the moment one opens.</p></div>';
       g.scrollTop=0;depMore();
       if(window.ixDepFilters)window.ixDepFilters();
     }).catch(function(){
