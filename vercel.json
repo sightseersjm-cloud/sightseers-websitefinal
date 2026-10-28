@@ -92,6 +92,14 @@
   ],
   "rewrites": [
     {
+      "source": "/api/auth/avatar/:file",
+      "destination": "/api/auth"
+    },
+    {
+      "source": "/api/auth/:provider/:step",
+      "destination": "/api/auth"
+    },
+    {
       "source": "/tours/:slug",
       "destination": "/api/tour-page?slug=:slug"
     },
