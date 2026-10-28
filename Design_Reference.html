@@ -43729,8 +43729,8 @@ function vtXRStatus(msg){
   function unitLabel(t){
     if(!(Number(t.priceValue)>0))return {main:'On request',sub:''};
     var usd=function(v){v=Number(v);return '$'+v.toLocaleString('en-US',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2});};
-    if(t.per==='group')return {main:usd(t.priceValue),sub:'per group'+(t.cap?' (up to '+t.cap+')':'')};
-    return {main:usd(t.priceValue),sub:'per person'};
+    if(t.per==='group')return {main:'From '+usd(t.priceValue),sub:'per group'+(t.cap?' (up to '+t.cap+')':'')};
+    return {main:'From '+usd(t.priceValue),sub:'per person'};
   }
   /* same maths as api/_lib/trip.js */
   function calc(){
@@ -44559,7 +44559,7 @@ html body #p-tours #tpSubnav{font-size:10.5px}
   function priceText(t){
     if(!(pv(t)>0))return {main:'Price on request',sub:''};
     var grp=/per group/i.test(String(t.priceLabel||'')+(t.per==='group'?' per group':''));
-    return {main:'$'+pv(t).toLocaleString('en-US',{minimumFractionDigits:pv(t)%1?2:0,maximumFractionDigits:2}),sub:grp?'per group'+(t.cap?' (up to '+t.cap+')':''):'per person'};
+    return {main:'From $'+pv(t).toLocaleString('en-US',{minimumFractionDigits:pv(t)%1?2:0,maximumFractionDigits:2}),sub:grp?'per group'+(t.cap?' (up to '+t.cap+')':''):'per person'};
   }
   function filtered(){
     var q=st.q.trim().toLowerCase();
