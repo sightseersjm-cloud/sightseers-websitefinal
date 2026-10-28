@@ -410,10 +410,10 @@
   }
 
   /* ── Sign out after a while of doing nothing ──────────────────────────
-     Anyone signed in on the website (a customer, a team member browsing the site) is signed out after 30 minutes without a
+     Anyone signed in on the website (a customer, a team member browsing the site) is signed out after 10 minutes without a
      click, key press, scroll or touch, with a one minute warning. A team member's own limit from the admin's "My sign-in"
      screen is used for them. The admin screen (/manage) keeps its own timer. */
-  var IDLE_ACT = 'ss_site_last_active', IDLE_DEFAULT_MIN = 30, IDLE_WARN_MS = 60000, idleLast = 0, idleWrote = 0, idleInt = 0;
+  var IDLE_ACT = 'ss_site_last_active', IDLE_DEFAULT_MIN = 10, IDLE_WARN_MS = 60000, idleLast = 0, idleWrote = 0, idleInt = 0;
 
   function idleMinutes() {
     var staff = false;

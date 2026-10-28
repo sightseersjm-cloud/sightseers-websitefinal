@@ -106,6 +106,50 @@ const C = (key, value, extra) => Object.assign({ id: '@c', list: 'experiences', 
   const eff2 = catalog.builderItems(items, BASE, s.ss_catalog_v1.experiences);
   ok('a hidden experience can no longer be priced', trip.quote({ country: 'Barbados', guests: 10, items: [KEY], transfers: false }, eff2).ok === false);
 
+  // --- destination packages
+  const P = (key, value, extra) => Object.assign({ id: '@c', list: 'packages', key, value, label: 'Package: ' + key }, extra || {});
+  const PKEY = 'Jamaica|Bamboo Rafting Signature Day';
+  r = await post({ action: 'save', changes: [P(PKEY, { edits: { price: 'from $120', tag: 'Guest Favorite', highlights: ['Bamboo rafting', 'Lunch by the river'], inclusions: ['Guide', 'Lunch'] } })] }, owner);
+  ok('the owner edits a destination package', r.code === 200 && r.body.live === true, JSON.stringify(r.body));
+  s = await live();
+  ok('a package edit is stored under island and original name', s.ss_catalog_v1.packages.edits[PKEY].price === 'from $120' && s.ss_catalog_v1.packages.edits[PKEY].inclusions.length === 2);
+  ok('a package edit does not touch the experiences', !s.ss_catalog_v1.experiences || !Object.keys(s.ss_catalog_v1.experiences.edits || {}).some(k => /Bamboo/.test(k)));
+  ok('a package needs an island we serve', (await post({ action: 'save', changes: [P(PKEY, { edits: { destination: 'Mars' } })] }, owner)).code === 400);
+  ok('an added package needs a photo', (await post({ action: 'save', changes: [P('npkg001', { added: { title: 'New package', destination: 'Belize', blurb: 'A short summary.' } })] }, owner)).code === 400);
+  ok('an added package needs a summary', (await post({ action: 'save', changes: [P('npkg001', { added: { title: 'New package', destination: 'Belize', img: '/assets/x.jpg' } })] }, owner)).code === 400);
+  r = await post({ action: 'save', changes: [P('npkg001', { added: { title: 'Cave Tubing Day', destination: 'Belize', img: '/assets/x.jpg', blurb: 'Tube through the caves.', highlights: ['Caves', 'Lunch'] } })] }, owner);
+  s = await live();
+  ok('an added package is stored with the code of its own', r.body.live === true && s.ss_catalog_v1.packages.added[0].id === 'npkg001' && s.ss_catalog_v1.packages.added[0].destination === 'Belize');
+  const pe = catalog.effective('packages', [{ destination: 'Jamaica', title: 'Bamboo Rafting Signature Day', tag: 'Most Requested', type: 'Curated Package', duration: 'Half day', price: 'from $107', img: '/assets/a.jpg', blurb: 'River.', highlights: ['Rafting'] }, { destination: 'Belize', title: 'Other', price: 'from $1', img: '/b.jpg', blurb: 'x', highlights: [] }], s.ss_catalog_v1.packages);
+  ok('the site shows the package edit', pe[0].price === 'from $120' && pe[0].tag === 'Guest Favorite' && pe[0].origKey === PKEY && pe[0].type === 'Curated Package');
+  ok('an added package comes last with the card fields filled in', pe.length === 3 && pe[2].added === true && pe[2].tag === 'Curated Package' && pe[2].price === 'Price on request' && pe[2].destination === 'Belize');
+  r = await post({ action: 'save', changes: [P(PKEY, { edits: { price: 'from $120', tag: 'Guest Favorite', highlights: ['Bamboo rafting', 'Lunch by the river'], inclusions: ['Guide', 'Lunch'] }, hidden: true })] }, owner); s = await live();
+  ok('a package can be taken off the website', r.body.live === true && catalog.effective('packages', [{ destination: 'Jamaica', title: 'Bamboo Rafting Signature Day' }], s.ss_catalog_v1.packages).filter(x => !x.added).length === 0);
+  r = await get({ view: 'history', limit: 50 }, owner);
+  const ph = r.body.history.find(x => x.kind === 'c' && x.list === 'packages' && x.key === PKEY);
+  ok('history knows it was a package, on the destinations page', !!ph && ph.page === 'destinations');
+  r = await post({ action: 'restore', group: ph.group }, owner); s = await live();
+  ok('a package change can be put back', r.code === 200 && r.body.live !== false);
+
+  // --- stays
+  const T = (key, value, extra) => Object.assign({ id: '@c', list: 'stays', key, value, label: 'Stay: ' + key }, extra || {});
+  r = await post({ action: 'save', changes: [T('2', { edits: { title: 'Ocho Rios Seaview Villa (renovated)', price: 'from $700 / night', highlights: ['Private pool', 'Chef on request'], gallery: ['https://example.com/a.jpg', '/assets/b.jpg'] } })] }, owner);
+  s = await live();
+  ok('the owner edits a stay', r.body.live === true && s.ss_catalog_v1.stays.edits['2'].price === 'from $700 / night' && s.ss_catalog_v1.stays.edits['2'].gallery.length === 2);
+  ok('a stay gallery must be photo addresses', (await post({ action: 'save', changes: [T('2', { edits: { gallery: ['javascript:alert(1)'] } })] }, owner)).code === 400);
+  ok('a stay has at most four highlights', (await post({ action: 'save', changes: [T('3', { edits: { highlights: ['a', 'b', 'c', 'd', 'e', 'f'] } })] }, owner)).code === 200 && (await live()).ss_catalog_v1.stays.edits['3'].highlights.length === 4);
+  ok('an added stay needs to say villa or vacation rental', (await post({ action: 'save', changes: [T('nstay01', { added: { title: 'Hill house', country: 'Jamaica', img: '/a.jpg', copy: 'Nice.' } })] }, owner)).code === 400);
+  r = await post({ action: 'save', changes: [T('nstay01', { added: { title: 'Hill house', country: 'Jamaica', type: 'villa', img: '/a.jpg', copy: 'Nice.', price: 'from $300 / night' } })] }, owner); s = await live();
+  const se = catalog.effective('stays', [{ id: 2, title: 'Ocho Rios Seaview Villa', country: 'Jamaica', type: 'villa', tag: 'Villa', price: 'from $620 / night', img: '/x.jpg', copy: 'c', highlights: [] }], s.ss_catalog_v1.stays);
+  ok('the site shows the stay edit and keeps its id', se[0].title === 'Ocho Rios Seaview Villa (renovated)' && se[0].id === 2 && se[0].origKey === '2' && se[0].tag === 'Villa');
+  ok('an added stay gets its tag from its kind and an id of its own', se[1].added === true && se[1].tag === 'Villa' && se[1].id === 'nstay01');
+  const se2 = catalog.effective('stays', [{ id: 2, title: 'A', country: 'Jamaica', type: 'villa', tag: 'Villa', price: 'p', img: '/x.jpg', copy: 'c', highlights: [] }], { edits: { '2': { type: 'airbnb' } }, hidden: {}, added: [] });
+  ok('changing the kind of a stay changes its tag', se2[0].tag === 'Vacation Rentals');
+  let doc = catalog.emptyDoc(), over = null;
+  for (let i = 0; i < 81 && !over; i++) { const put = catalog.putState(doc, 'n' + 'abcde' + i, { added: { title: 'S' + i } }, 'stays'); if (put.error) over = put.error; else doc = put.doc; }
+  ok('the site holds at most 80 added stays', /stays than the site can hold \(80\)/.test(over || ''), over);
+  ok('the content editor can change packages and stays, a blogger cannot', (await post({ action: 'save', changes: [T('4', { edits: { price: 'from $1 / night' } })] }, writer)).code === 200 && (await post({ action: 'save', changes: [T('4', { edits: { price: 'from $2 / night' } })] }, blogger)).code === 403);
+
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })();

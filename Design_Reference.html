@@ -13845,7 +13845,6 @@ body.theme-night #p-flagship-programs{
   #p-tent-rental .tr-checkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
   #p-tent-rental .tr-checkitem{display:flex;align-items:center;gap:10px;background:var(--tr-fill);border-radius:12px;padding:11px 14px;box-shadow:inset 0 0 0 1px var(--tr-hair);font-size:14px}
   #p-tent-rental .tr-checkitem input{width:17px;height:17px;accent-color:var(--tr-green2);flex:0 0 auto}
-  #p-tent-rental .tr-office{background:var(--tr-fill);border-radius:22px;padding:26px 24px;margin-top:34px}
   @media(max-width:760px){#p-tent-rental .tr-grid2,#p-tent-rental .tr-wear{grid-template-columns:1fr}}
 </style>
 
@@ -14058,23 +14057,6 @@ body.theme-night #p-flagship-programs{
       </div>
       <p class="tr-sub" style="font-size:13px;margin-top:10px">On submit, a PDF copy of your signed agreement is emailed to Sight Seers and downloaded for your records.</p>
 
-      <div class="tr-office">
-        <div class="tr-eyebrow">Office use</div><h2 class="tr-h2" style="font-size:24px">Return inspection</h2>
-        <div class="tr-grid2">
-          <div class="tr-card white"><div class="tr-f" style="margin:0"><label>Date and time returned</label><input class="tr-in"></div></div>
-          <div class="tr-card white"><div class="tr-f" style="margin:0"><label>Inspected by</label><input class="tr-in"></div></div>
-        </div>
-        <div class="tr-f" style="margin:16px 0 6px"><label>Condition on return</label></div>
-        <div class="tr-checkgrid">
-          <label class="tr-checkitem"><input type="checkbox">Complete</label>
-          <label class="tr-checkitem"><input type="checkbox">Clean and dry</label>
-          <label class="tr-checkitem"><input type="checkbox">Cleaning required</label>
-          <label class="tr-checkitem"><input type="checkbox">Minor</label>
-          <label class="tr-checkitem"><input type="checkbox">Moderate</label>
-          <label class="tr-checkitem"><input type="checkbox">Severe</label>
-          <label class="tr-checkitem"><input type="checkbox">Missing parts</label>
-        </div>
-      </div>
     </div>
   </form>
 
@@ -16598,7 +16580,14 @@ body.theme-night .page .tag{
           <div class="form-row"><div class="fg"><label for="tpJamaican">Are you a Jamaican national?</label><select id="tpJamaican"><option value="">Select one</option><option>Yes</option><option>No</option></select></div><div class="fg"><label for="tpGroupJamaican">Is anyone in your group a Jamaican national?</label><select id="tpGroupJamaican"><option value="">Select one</option><option>Yes</option><option>No</option><option>N/A</option></select></div></div>
           <div class="form-row"><div class="fg"><label for="tpTransport">Do you require transportation?</label><select id="tpTransport"><option value="">Select one</option><option>Yes</option><option>No</option><option>Maybe</option></select></div><div class="fg"><label for="tpPickup">Desired pickup location</label><input type="text" id="tpPickup"></div></div>
           <div class="fg"><label for="tpExcursions">What excursions do you have in mind?</label><textarea id="tpExcursions"></textarea></div>
-          <div class="fg"><label for="tpCall">Availability for a discovery call</label><input type="text" id="tpCall" placeholder="Days and times that suit you"></div>
+          <div class="fg tp-call"><label for="tpCallDate">Availability for a discovery call</label>
+            <div class="form-row">
+              <div class="fg"><label for="tpCallDate" class="tp-call-sub">Choose a date</label><input type="date" id="tpCallDate"></div>
+              <div class="fg"><label for="tpCallTime" class="tp-call-sub">Time of day</label><select id="tpCallTime"><option value="">Any time of day</option><option>Morning (8am to 12pm)</option><option>Afternoon (12pm to 5pm)</option><option>Evening (5pm to 8pm)</option></select></div>
+            </div>
+            <input type="hidden" id="tpCall">
+            <small class="tp-call-note" id="tpCallNote">We will confirm the exact time with you by email. Times are in your own time zone.</small>
+          </div>
           <input type="hidden" id="tpEmail"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhone"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
         </div>
         
@@ -25710,39 +25699,6 @@ const DEFAULT_STAY_PAGE_SETTINGS={
   countryLeadTemplate:'Browse {{country}} {{type}} listings on this dedicated country page.',
   countryDescriptions:''
 };
-function escapeTextareaValue(value=''){ return String(value==null?'':value); }
-function staysToTextarea(data){
-  return (data||[]).map(item=>[
-    item.country||'',
-    item.type||'',
-    item.title||'',
-    item.price||'',
-    item.img||'',
-    item.copy||'',
-    (item.highlights||[]).join(', ')
-  ].join(' | ')).join('\n');
-}
-function parseStayListingsTextarea(value=''){
-  const lines=String(value).split(/\n+/).map(line=>line.trim()).filter(Boolean);
-  const parsed=lines.map((line,idx)=>{
-    const parts=line.split('|').map(p=>p.trim());
-    if(parts.length<6) return null;
-    const type=(parts[1]||'all').toLowerCase()==='villa'?'villa':'airbnb';
-    const highlights=(parts[6]||'').split(',').map(v=>v.trim()).filter(Boolean).slice(0,4);
-    return {
-      id:idx+1,
-      country:parts[0]||'Jamaica',
-      type,
-      tag:type==='villa'?'Villa':'Vacation Rentals',
-      title:parts[2]||'Listing',
-      price:parts[3]||'Rate on request',
-      img:parts[4]||'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=85&auto=format&fit=crop',
-      copy:parts[5]||'',
-      highlights:highlights.length?highlights:['Curated stay','Inquiry support','Island planning']
-    };
-  }).filter(Boolean);
-  return parsed.length?parsed:STAYS.map(item=>({...item,highlights:[...(item.highlights||[])]}));
-}
 function parseStayCountryDescriptions(value=''){
   return String(value).split(/\n+/).map(line=>line.trim()).filter(Boolean).reduce((acc,line)=>{
     const parts=line.split('|');
@@ -25752,33 +25708,21 @@ function parseStayCountryDescriptions(value=''){
     return acc;
   },{});
 }
-function stayCountryDescriptionsToTextarea(map={}){
-  return Object.entries(map||{}).map(([country,desc])=>`${country} | ${desc}`).join('\n');
-}
 function loadStayPageSettings(){
   try{
     const parsed=JSON.parse(localStorage.getItem(STAY_ADMIN_STORAGE_KEY)||'{}');
-    return {
-      ...DEFAULT_STAY_PAGE_SETTINGS,
-      ...parsed,
-      listings:Array.isArray(parsed.listings)&&parsed.listings.length?parsed.listings.map((item,idx)=>({
-        id:idx+1,
-        title:item.title||'Listing',
-        country:item.country||'Jamaica',
-        type:item.type==='villa'?'villa':'airbnb',
-        tag:item.type==='villa'?'Villa':'Vacation Rentals',
-        price:item.price||'Rate on request',
-        img:item.img||'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=85&auto=format&fit=crop',
-        copy:item.copy||'',
-        highlights:Array.isArray(item.highlights)&&item.highlights.length?item.highlights:['Curated stay','Inquiry support','Island planning']
-      })):STAYS.map(item=>({...item,highlights:[...(item.highlights||[])]}))
-    };
+    const out={...DEFAULT_STAY_PAGE_SETTINGS,...parsed};
+    /* the listings come from the list below (and the owner's changes to it), never from an old saved copy */
+    delete out.listings;
+    /* the country page title has to name the country it is showing; an old saved title that does not is not used */
+    if(!/{{\s*country\s*}}/i.test(String(out.countryHeroTitle||''))) out.countryHeroTitle=DEFAULT_STAY_PAGE_SETTINGS.countryHeroTitle;
+    return out;
   }catch(e){
-    return {...DEFAULT_STAY_PAGE_SETTINGS,listings:STAYS.map(item=>({...item,highlights:[...(item.highlights||[])]}))};
+    return {...DEFAULT_STAY_PAGE_SETTINGS};
   }
 }
 let stayPageSettings=loadStayPageSettings();
-function getStayListings(){ return Array.isArray(stayPageSettings.listings)&&stayPageSettings.listings.length?stayPageSettings.listings:STAYS; }
+function getStayListings(){ return STAYS; }
 function getStayCountries(){
   const dynamic=[...new Set(getStayListings().map(item=>item.country).filter(Boolean))];
   return dynamic.length?dynamic:STAY_COUNTRIES;
@@ -27516,7 +27460,7 @@ function renderDestinationPackageCard(destination,pkg,index){
 function renderDestinationPackages(destination){
   const track=document.getElementById('destPackagesTrack');
   if(!track) return 0;
-  const list=getDestinationPackages(destination).slice(0,4);
+  const list=getDestinationPackages(destination);
   const title=document.getElementById('destPackagesTitle');
   const sub=document.getElementById('destPackagesSub');
   const eyebrow=document.getElementById('destPackagesEyebrow');
@@ -28829,7 +28773,7 @@ function copyTripPlannerSummary(){
   else{toast('Copy not available in this browser.');}
 }
 function clearTripPlannerFields(){
-  ['tpEmail','tpFullName','tpPhone','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
+  ['tpEmail','tpFullName','tpPhone','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall','tpCallDate','tpCallTime'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
   refreshTripPlannerSummary();
 }
 function ssPlanningDepositPay(source,el){
@@ -37621,11 +37565,9 @@ body.theme-night .page .tag{
 <script id="destination-package-admin-script">
 (function(){
   const PACKAGE_DETAIL_PAGE_ID='p-package-detail';
-  const defaultPackageData=JSON.parse(JSON.stringify(window.DESTINATION_PACKAGE_DATA||{}));
-  const defaultPackageCopy=JSON.parse(JSON.stringify(window.DESTINATION_PACKAGE_COPY||{}));
-
-  function loadPackageData(){
-    return JSON.parse(JSON.stringify(defaultPackageData));
+  /* the packages the site shows right now (the list in the site's code with the owner's changes laid over it) */
+  function livePackages(){
+    try{ return DESTINATION_PACKAGE_DATA||{}; }catch(e){ return {}; }
   }
   function ensurePackagePage(){
     if(document.getElementById(PACKAGE_DETAIL_PAGE_ID)) return;
@@ -37655,37 +37597,31 @@ body.theme-night .page .tag{
     else document.body.appendChild(page);
   }
 
+  /* only what is written for the package is shown: nothing is made up for a field that is empty */
   function normalizePackage(pkg={}, destination=''){
+    const list=v=>Array.isArray(v)?v.filter(Boolean):String(v||'').split('|').map(x=>x.trim()).filter(Boolean);
     return {
-      title: pkg.title || 'New Package',
-      tag: pkg.tag || 'Curated Package',
-      type: pkg.type || 'Curated Package',
-      duration: pkg.duration || '3 days / 2 nights',
-      price: pkg.price || 'from $500',
+      title: pkg.title || '',
+      tag: pkg.tag || '',
+      type: pkg.type || '',
+      duration: pkg.duration || '',
+      price: pkg.price || '',
       img: pkg.img || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85&auto=format&fit=crop',
-      blurb: pkg.blurb || ('A polished ' + destination + ' package built for guests who want a smooth, premium island experience.'),
-      highlights: Array.isArray(pkg.highlights) ? pkg.highlights : String(pkg.highlights||'').split('|').map(s=>s.trim()).filter(Boolean),
-      inclusions: Array.isArray(pkg.inclusions) ? pkg.inclusions : String(pkg.inclusions||'Luxury stay|Curated itinerary support|Premium island pacing').split('|').map(s=>s.trim()).filter(Boolean),
-      idealFor: pkg.idealFor || 'Couples, groups, leisure travelers and premium getaway clients.',
+      blurb: pkg.blurb || '',
+      highlights: list(pkg.highlights),
+      inclusions: list(pkg.inclusions),
+      idealFor: pkg.idealFor || '',
       note: pkg.note || 'This package can be tailored with villas, excursions, transport, social add-ons and concierge support.',
       tourId: pkg.tourId || null
     };
   }
 
   function getPackageData(){
-    const loaded=loadPackageData()||{};
-    const merged={};
-    Object.keys(defaultPackageData).forEach(dest=>{
-      merged[dest]=(loaded[dest]||defaultPackageData[dest]||[]).map(pkg=>normalizePackage(pkg,dest));
-    });
-    Object.keys(loaded).forEach(dest=>{
-      if(!merged[dest]) merged[dest]=(loaded[dest]||[]).map(pkg=>normalizePackage(pkg,dest));
+    const src=livePackages(), merged={};
+    Object.keys(src).forEach(dest=>{
+      merged[dest]=(src[dest]||[]).map(pkg=>normalizePackage(pkg,dest));
     });
     return merged;
-  }
-
-  function setLivePackageData(data){
-    window.DESTINATION_PACKAGE_DATA = data;
   }
 
   function escapeAttr(value){
@@ -37716,26 +37652,23 @@ body.theme-night .page .tag{
             <span class="package-detail-kicker">${escapeHtml(destination)} package</span>
             <h2 class="package-detail-title">${escapeHtml(pkg.title)}</h2>
             <div class="package-detail-topline">
-              <span class="package-detail-meta-pill">${escapeHtml(pkg.tag)}</span>
-              <span class="package-detail-meta-pill">${escapeHtml(pkg.type)}</span>
-              <span class="package-detail-meta-pill">${escapeHtml(pkg.duration)}</span>
-              <span class="package-detail-meta-pill">${escapeHtml(pkg.price)}</span>
+              ${[pkg.tag,pkg.type,pkg.duration,pkg.price].filter(Boolean).map(v=>`<span class="package-detail-meta-pill">${escapeHtml(v)}</span>`).join('')}
             </div>
-            <p class="package-detail-copy">${escapeHtml(pkg.blurb)}</p>
+            ${pkg.blurb?`<p class="package-detail-copy">${escapeHtml(pkg.blurb)}</p>`:''}
             <div class="package-detail-grid">
-              <div class="package-detail-box">
+              ${pkg.idealFor?`<div class="package-detail-box">
                 <h4>Ideal For</h4>
                 <p>${escapeHtml(pkg.idealFor)}</p>
-              </div>
+              </div>`:''}
               <div class="package-detail-box">
                 <h4>Planning Note</h4>
                 <p>${escapeHtml(pkg.note)}</p>
               </div>
             </div>
-            <div class="package-detail-box" style="margin-bottom:18px">
+            ${pkg.inclusions.length?`<div class="package-detail-box" style="margin-bottom:18px">
               <h4>What's Included</h4>
               <p>${pkg.inclusions.map(item=>'• '+escapeHtml(item)).join('<br>')}</p>
-            </div>
+            </div>`:''}
             <div class="package-detail-highlights">
               ${pkg.highlights.map(item=>`<span>${escapeHtml(item)}</span>`).join('')}
             </div>
@@ -37777,8 +37710,6 @@ body.theme-night .page .tag{
 
   function initPatch(){
     ensurePackagePage();
-    const data=getPackageData();
-    setLivePackageData(data);
     if(typeof renderDests==='function') renderDests();
   }
 
@@ -44835,7 +44766,6 @@ html body #p-tours #tpSubnav{font-size:10.5px}
   #p-tent-rental .tr-fact,
   #p-tent-rental .tr-in,
   #p-tent-rental .tr-note,
-  #p-tent-rental .tr-office,
   #p-tent-rental .tr-sigwrap,
   #p-tent-rental .tr-table,
   #p-tours #exBuilder .gb,
@@ -49600,39 +49530,105 @@ body.theme-night .ix-st-dot[aria-current="step"]{color:#fff}
   if(typeof on0==='function'&&!on0.__ixWrapped){window.nav=function(){var r=on0.apply(this,arguments);setTimeout(boot,140);return r;};window.nav.__ixWrapped=true;}
 })();
 </script>
-<script id="ss-catalog-script">
-/* Experiences the owner edited, hid or added in the admin: laid over the list written in the site's code (CURATED_TOURS), in place,
-   so everything that reads that list (the All Experiences page, the explorer, the group trip builder) shows the same thing. */
+<style id="ss-discovery-call-style">
+#p-booking .tp-call-sub{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5c6f82;margin-bottom:6px}
+#p-booking .tp-call input[type=date]{min-height:46px}
+#p-booking .tp-call-note{display:block;margin-top:6px;font-size:13px;line-height:1.5;color:#5c6f82}
+</style>
+<script id="ss-discovery-call-script">
+/* The discovery call date and time are chosen with a calendar. They are written, in plain words, into the one field the rest of the form already reads. */
 (function(){
-  var BASE=null, LIVE=null;
-  function empty(d){ return !d||(!Object.keys(d.edits||{}).length&&!Object.keys(d.hidden||{}).length&&!(d.added||[]).length); }
-  function again(){
-    ['__exRender','__bxRefresh','gbRender'].forEach(function(f){ try{ if(typeof window[f]==='function') window[f](); }catch(e){} });
-    try{ document.dispatchEvent(new CustomEvent('ss-catalog-applied')); }catch(e){}
+  var d=document.getElementById('tpCallDate'),t=document.getElementById('tpCallTime'),h=document.getElementById('tpCall');
+  if(!d||!t||!h) return;
+  function pad(n){return (n<10?'0':'')+n;}
+  var tm=new Date(Date.now()+86400000);
+  d.min=tm.getFullYear()+'-'+pad(tm.getMonth()+1)+'-'+pad(tm.getDate());
+  function zone(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(e){return '';}}
+  function put(){
+    var parts=[];
+    if(d.value){
+      var dt=new Date(d.value+'T12:00:00');
+      if(!isNaN(dt)) parts.push(dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}));
+    }
+    if(parts.length&&t.value) parts.push(t.value);
+    else if(!parts.length&&t.value) parts.push(t.value);
+    var z=zone();
+    h.value=parts.length?parts.join(', ')+(z?' (time zone: '+z+')':''):'';
   }
-  function apply(doc){
-    var arr=window.CURATED_TOURS, C=window.SSCatalog;
-    if(!arr||!C) return false;
-    if(!BASE){ if(empty(doc)) return false; BASE=JSON.parse(JSON.stringify(arr)); }
-    var eff=C.effective('experiences',BASE,doc);
-    Array.prototype.splice.apply(arr,[0,arr.length].concat(eff));
-    again();
+  d.addEventListener('input',put);d.addEventListener('change',put);t.addEventListener('change',put);
+})();
+</script>
+<script id="ss-catalog-script">
+/* What the owner edited, hid or added in the admin, laid over the lists written in the site's code, in place, so everything that reads a list
+   (the All Experiences page, the explorer, the group trip builder, the destination packages, the stays pages) shows the same thing.
+   Three lists: "experiences" (CURATED_TOURS), "packages" (DESTINATION_PACKAGE_DATA, kept as a list per island) and "stays" (STAYS). */
+(function(){
+  var BASE={}, LIVE={}, LISTS=['experiences','packages','stays'];
+  function copy(x){ return JSON.parse(JSON.stringify(x)); }
+  function empty(d){ return !d||(!Object.keys(d.edits||{}).length&&!Object.keys(d.hidden||{}).length&&!(d.added||[]).length); }
+  function flat(data){
+    var out=[];
+    Object.keys(data||{}).forEach(function(d){ (data[d]||[]).forEach(function(p){ var o=copy(p); o.destination=d; out.push(o); }); });
+    return out;
+  }
+  /* the list as it is written in the code, before any edit: the admin compares against it */
+  function base(list){
+    if(BASE[list]) return BASE[list];
+    var src=null;
+    try{
+      if(list==='experiences') src=window.CURATED_TOURS;
+      else if(list==='stays') src=STAYS;
+      else if(list==='packages') src=flat(DESTINATION_PACKAGE_DATA);
+    }catch(e){}
+    if(!src) return [];
+    BASE[list]=copy(src);
+    return BASE[list];
+  }
+  function again(list){
+    var fns={ experiences:['__exRender','__bxRefresh','gbRender'], packages:['renderDests'], stays:['renderStays','renderStayCountryPage'] }[list]||[];
+    fns.forEach(function(f){ try{ if(typeof window[f]==='function') window[f](); }catch(e){} });
+    try{ document.dispatchEvent(new CustomEvent('ss-catalog-applied',{detail:{list:list}})); }catch(e){}
+  }
+  function put(list,eff){
+    if(list==='experiences'){ var arr=window.CURATED_TOURS; Array.prototype.splice.apply(arr,[0,arr.length].concat(eff)); }
+    else if(list==='stays'){ Array.prototype.splice.apply(STAYS,[0,STAYS.length].concat(eff)); }
+    else if(list==='packages'){
+      var by={}, order=[];
+      base('packages').forEach(function(p){ if(order.indexOf(p.destination)<0) order.push(p.destination); });
+      eff.forEach(function(p){ if(order.indexOf(p.destination)<0) order.push(p.destination); (by[p.destination]=by[p.destination]||[]).push(p); });
+      Object.keys(DESTINATION_PACKAGE_DATA).forEach(function(k){ delete DESTINATION_PACKAGE_DATA[k]; });
+      order.forEach(function(k){ DESTINATION_PACKAGE_DATA[k]=by[k]||[]; });
+    }
+  }
+  function apply(list,doc){
+    var C=window.SSCatalog; if(!C) return false;
+    if(!BASE[list]&&empty(doc)) return false;
+    var b=base(list); if(!b.length) return false;
+    put(list,C.effective(list,b,doc));
+    again(list);
     return true;
   }
-  window.ssCatalogApply=function(doc){ LIVE=doc||null; return apply(LIVE); };
-  window.ssCatalogDoc=function(){ return LIVE; };
-  /* the list as it is written in the code, before any edit: the admin compares against it */
-  window.ssCatalogBase=function(){ if(!BASE&&window.CURATED_TOURS) BASE=JSON.parse(JSON.stringify(window.CURATED_TOURS)); return BASE||[]; };
-  /* a preview link, or the admin showing a change before visitors see it: one more state laid over what is live */
+  window.ssCatalogApplyList=function(list,doc){ LIVE[list]=doc||null; return apply(list,LIVE[list]); };
+  window.ssCatalogBaseList=function(list){ return base(list); };
+  window.ssCatalogDocOf=function(list){ return LIVE[list]||null; };
+  /* the experiences, as before */
+  window.ssCatalogApply=function(doc){ return window.ssCatalogApplyList('experiences',doc); };
+  window.ssCatalogDoc=function(){ return LIVE.experiences||null; };
+  window.ssCatalogBase=function(){ return base('experiences'); };
+  /* a preview link, or the admin showing a change before visitors see it: more states laid over what is live */
   window.ssCatalogPreview=function(changes){
     var C=window.SSCatalog; if(!C) return;
-    var doc=JSON.parse(JSON.stringify(C.docOf(LIVE)));
-    (changes||[]).forEach(function(c){ if(c&&c.list==='experiences'&&c.key){ var r=C.putState(doc,c.key,c.after||{}); if(r.doc) doc=r.doc; } });
-    apply(doc);
+    var docs={};
+    (changes||[]).forEach(function(c){
+      if(!c||!c.key||LISTS.indexOf(c.list)<0) return;
+      var doc=docs[c.list]||copy(C.docOf(LIVE[c.list]));
+      var r=C.putState(doc,c.key,c.after||{},c.list); if(r.doc) docs[c.list]=r.doc;
+    });
+    Object.keys(docs).forEach(function(l){ apply(l,docs[l]); });
   };
   function start(){
     var p=(window.__ssSettings?window.__ssSettings():fetch('/api/settings').then(function(r){ return r.json(); }));
-    p.then(function(d){ var c=d&&d.ss_catalog_v1; if(c&&c.experiences) window.ssCatalogApply(c.experiences); }).catch(function(){});
+    p.then(function(d){ var c=d&&d.ss_catalog_v1; if(c) LISTS.forEach(function(l){ if(c[l]) window.ssCatalogApplyList(l,c[l]); }); }).catch(function(){});
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
@@ -49902,6 +49898,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'pages',t:'Pages and sections',show:function(){return can('pages');},bd:'pages'},
       {id:'photos',t:'Photo library',show:function(){return can('pages','catalog');}},
       {id:'catalog',t:'Tours and experiences',show:function(){return can('catalog');}},
+      {id:'packages',t:'Destination packages',show:function(){return can('catalog');}},
+      {id:'stays',t:'Villas and stays',show:function(){return can('catalog');}},
       {id:'blog',t:'Blog',show:function(){return can('blog');}}]},
     {h:'People and trips',items:[
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
@@ -49910,7 +49908,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -49939,6 +49937,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var quick='';
     if(can('pages'))quick+='<button class="mg-btn" data-go="pages">Edit a page</button> ';
     if(can('catalog'))quick+='<button class="mg-btn" data-go="catalog">Tours and experiences</button> ';
+    if(can('catalog'))quick+='<button class="mg-btn" data-go="packages">Destination packages</button> <button class="mg-btn" data-go="stays">Villas and stays</button> ';
     if(can('blog'))quick+='<button class="mg-btn" data-go="blog">Blog</button> ';
     if(can('pages','catalog'))quick+='<button class="mg-btn" data-go="photos">Change a photo</button> ';
     return '<h1>'+greet+', '+esc(first)+'</h1><p class="mg-sub">Here is what needs you today.</p><div class="mg-grid g3">'+cards+'</div>'+(MG.homeExtra?MG.homeExtra():'')+(quick?'<h2>Do something</h2><div style="display:flex;gap:12px;flex-wrap:wrap">'+quick+'</div>':'');
@@ -50027,7 +50026,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
   /* ---------- sign out after a while of doing nothing ---------- */
   var IDLE_KEY='ss_mg_idle_min',ACT_KEY='ss_mg_last_active',WARN_MS=60000,idleTimer=0,lastWrite=0;
-  function idleMin(){try{var v=parseInt(localStorage.getItem(IDLE_KEY),10);return v>=0?v:30;}catch(e){return 30;}}
+  function idleMin(){try{var v=parseInt(localStorage.getItem(IDLE_KEY),10);return v>=0?v:10;}catch(e){return 10;}}
   function lastAct(){var s=S.lastAct||0,v=0;try{v=parseInt(localStorage.getItem(ACT_KEY),10)||0;}catch(e){}return Math.max(s,v);}
   function touch(force){
     var n=Date.now();S.lastAct=n;
@@ -50516,8 +50515,26 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 
   /* ---------- waiting for approval ---------- */
   function loadDrafts(){return api('site-edit?view=drafts').then(function(d){PG.drafts=d;if(S.home){S.home.drafts=d.pending.length;S.home.badge&&(S.home.badge.pages=d.pending.length);}return d;});}
+  /* a tour, package or stay change, said in words: "Price: from $120; Label on the card: Guest Favorite" */
+  function catWords(list,st){
+    st=st&&typeof st==='object'?st:{};
+    var F=(window.SSCatalog&&window.SSCatalog.FIELDS&&window.SSCatalog.FIELDS[list])||{},out=[];
+    if(st.added)out.push('New: '+short(st.added.title||'',70));
+    var e=st.edits||{};
+    Object.keys(e).forEach(function(k){
+      var f=F[k]||{label:k,kind:'t'},v=e[k],txt;
+      if(f.kind==='u')txt='a new photo';
+      else if(f.kind==='ul')txt=(v||[]).length+' photo'+((v||[]).length===1?'':'s');
+      else if(f.kind==='l')txt=short((v||[]).join(', '),70)||'none';
+      else if(f.kind==='m'||f.kind==='f')txt=(v||[]).length+' item'+((v||[]).length===1?'':'s');
+      else txt=short(String(v==null?'':v),70)||'empty';
+      out.push(f.label+': '+txt);
+    });
+    if(st.hidden)out.push('Taken off the website');
+    return out.length?out.join(' · '):'The original details';
+  }
   function changeHtml(c){
-    var ba=function(v){if((c.kind==='t'||c.kind==='ti')&&(v===''||v==null))v=String(c.orig||c.before||'').replace(/^img:/,'');return (c.kind==='image'||c.kind==='ti')&&isUrl(v)?'<img class="hs-img" src="'+esc(v)+'" alt="">':c.kind==='sections'?'<span class="hs-t">'+(Array.isArray(v)?v.length:0)+' added section(s)</span>':'<span class="hs-t">'+esc(short(v,220))+'</span>';};
+    var ba=function(v){if(c.kind==='c')return '<span class="hs-t">'+esc(catWords(c.list,v))+'</span>';if((c.kind==='t'||c.kind==='ti')&&(v===''||v==null))v=String(c.orig||c.before||'').replace(/^img:/,'');return (c.kind==='image'||c.kind==='ti')&&isUrl(v)?'<img class="hs-img" src="'+esc(v)+'" alt="">':c.kind==='sections'?'<span class="hs-t">'+(Array.isArray(v)?v.length:0)+' added section(s)</span>':'<span class="hs-t">'+esc(short(v,220))+'</span>';};
     var nm=c.label||c.id;
     return '<li><b>'+esc(nm)+'</b><div class="hs-c"><div><small>Live now</small>'+ba(c.now!==undefined?c.now:c.before)+'</div><div><small>New</small>'+ba(c.after)+'</div></div></li>';
   }
@@ -50548,7 +50565,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     PG.hist.forEach(function(h){if(idx[h.group]==null){idx[h.group]=groups.length;groups.push({id:h.group,at:h.at,by:h.by,via:h.via,note:h.note,approvedBy:h.approvedBy,items:[]});}groups[idx[h.group]].items.push(h);});
     return groups.map(function(g){
       var lines=g.items.filter(function(i){return !/__(focus)$/.test(i.fieldId);}).map(function(i){var fi=fieldById(i.fieldId.replace(/__(alt|focus)$/,''));var nm=i.label||(fi&&fi.f.label)||i.fieldId;
-        var ba=function(v){if((i.kind==='t'||i.kind==='ti')&&(v===''||v==null))v=String(i.orig||'').replace(/^img:/,'');return (i.kind==='image'||i.kind==='ti')&&isUrl(v)?'<img class="hs-img sm" src="'+esc(v)+'" alt="">':i.count?'<span class="hs-t">'+v+' section(s)</span>':'<span class="hs-t">'+esc(short(v,90))+'</span>';};
+        var ba=function(v){if(i.kind==='c')return '<span class="hs-t">'+esc(catWords(i.list,v))+'</span>';if((i.kind==='t'||i.kind==='ti')&&(v===''||v==null))v=String(i.orig||'').replace(/^img:/,'');return (i.kind==='image'||i.kind==='ti')&&isUrl(v)?'<img class="hs-img sm" src="'+esc(v)+'" alt="">':i.count?'<span class="hs-t">'+v+' section(s)</span>':'<span class="hs-t">'+esc(short(v,90))+'</span>';};
         return '<li><b>'+esc(nm)+'</b><div class="hs-c"><div>'+ba(i.before)+'</div><div class="hs-arrow">&rarr;</div><div>'+ba(i.after)+'</div></div></li>';}).join('');
       return '<div class="mg-card pg-draft"><div class="pg-dh"><div><b>'+esc(g.by&&g.by.name||'Someone')+'</b> · '+esc(ago(g.at))+(g.via==='approved'?' · approved by '+esc(g.approvedBy&&g.approvedBy.name||'the owner'):g.via==='restore'?' · put back':'')+'</div><button type="button" class="mg-btn sm ghost" data-hg-restore="'+esc(g.id)+'">Put all of this back</button></div>'+(g.note?'<p class="pg-note">'+esc(g.note)+'</p>':'')+'<ul class="hs-list">'+lines+'</ul></div>';
     }).join('');
@@ -52015,6 +52032,282 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       var id=d.blSave;
       run(b,function(){return api('blog',Object.assign({action:id?'update':'create'},id?{id:id}:{},body));},function(){BL.edit=null;return reload().then(function(){msg(id?'Saved.':'Published. It is on the blog now.','ok');});});
     }
+  });
+})();
+</script>
+<style id="manage-lists-style">
+#p-manage .ls-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:0 0 10px}
+#p-manage .ls-th{border:1px solid var(--line);background:#fff;padding:6px;display:flex;flex-direction:column;gap:6px}
+#p-manage .ls-th img{display:block;width:100%;height:86px;object-fit:cover}
+</style>
+<script id="manage-lists-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api,isOwner=MG.isOwner;
+  var C=function(){return window.SSCatalog;};
+
+  /* ====================== Destination packages and stays: the same list-and-form editor, set up once for each ====================== */
+  function needsApproval(){return !isOwner()&&S.user&&S.user.needsApproval!==false;}
+  function short(v,n){v=String(v==null?'':v);return v.length>n?v.slice(0,n)+'…':v;}
+  function clone(o){return JSON.parse(JSON.stringify(o));}
+  function listOf(v){return String(v||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);}
+  function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+  function islands(){return C().COUNTRIES.map(function(c){return [c,c];});}
+
+  var CFG={
+    packages:{
+      id:'packages',title:'Destination packages',noun:'package',Noun:'Package',folder:'tours',groupField:'destination',groupLabel:'All islands',
+      intro:'The packages shown under each island on the Destinations page. Change the wording, price and photo, add a new package or take one off the website.',
+      page:'/destinations',pageLabel:'See the Destinations page',
+      blank:function(){return {destination:'Jamaica',title:'',tag:'',type:'',duration:'',price:'',img:'',blurb:'',highlights:[],inclusions:[],idealFor:'',note:''};},
+      meta:function(t){return (t.destination||'')+(t.price?' · '+t.price:'');},
+      find:function(t){return [t.title,t.destination,t.tag,t.type].join(' ');},
+      sections:[
+        {h:'The basics',fields:[
+          {n:'destination',k:'select',label:'Island',opts:islands},
+          {n:'title',k:'text',label:'Name',max:120},
+          {n:'tag',k:'text',label:'Label on the card',max:40,ph:'For example: Most Requested',half:1},
+          {n:'type',k:'text',label:'Kind of package',max:40,ph:'For example: Day Tour',half:1},
+          {n:'duration',k:'text',label:'How long',max:60,ph:'For example: Half day',half:1},
+          {n:'price',k:'text',label:'Price',max:40,ph:'For example: from $107',hint:'Write it the way it should appear on the card.',half:1}]},
+        {h:'Photo',fields:[{n:'img',k:'photo',label:'Photo',pick:'Choose a photo for this package'}]},
+        {h:'The words',fields:[
+          {n:'blurb',k:'area',label:'Summary',rows:3,max:400,hint:'Shown on the card and at the top of the package page.'},
+          {n:'highlights',k:'lines',label:'Highlights',rows:4,hint:'One per line, up to 8.'},
+          {n:'inclusions',k:'lines',label:'What is included',rows:4,hint:'One per line. Shown on the package page. Leave empty to show nothing.'},
+          {n:'idealFor',k:'text',label:'Ideal for',max:240,hint:'Leave empty to show nothing.'},
+          {n:'note',k:'area',label:'Planning note',rows:2,max:300,hint:'Leave empty to use the standard note about tailoring a package.'}]}
+      ]
+    },
+    stays:{
+      id:'stays',title:'Villas and stays',noun:'stay',Noun:'Stay',folder:'stays',groupField:'country',groupLabel:'All islands',
+      intro:'The villas and vacation rentals on the Villas and Stays pages. Change the wording, price and photos, add a stay or take one off the website.',
+      page:'/villas-and-stays',pageLabel:'See the Villas and Stays page',
+      blank:function(){return {country:'Jamaica',type:'villa',title:'',price:'',img:'',copy:'',highlights:[],gallery:[]};},
+      meta:function(t){return (t.country||'')+' · '+(t.type==='villa'?'Villa':'Vacation rental')+(t.price?' · '+t.price:'');},
+      find:function(t){return [t.title,t.country,t.price].join(' ');},
+      sections:[
+        {h:'The basics',fields:[
+          {n:'title',k:'text',label:'Name',max:120},
+          {n:'country',k:'select',label:'Island',opts:islands,half:1},
+          {n:'type',k:'select',label:'Kind of stay',opts:function(){return [['villa','Villa'],['airbnb','Vacation rental']];},half:1},
+          {n:'price',k:'text',label:'Price',max:60,ph:'For example: from $245 / night',hint:'Write it the way it should appear on the card.'}]},
+        {h:'Photo',fields:[{n:'img',k:'photo',label:'Main photo',pick:'Choose the main photo for this stay'}]},
+        {h:'The words',fields:[
+          {n:'copy',k:'area',label:'Description',rows:4,max:500},
+          {n:'highlights',k:'lines',label:'Highlights',rows:3,hint:'One per line, up to 4.'}]},
+        {h:'More photos',fields:[{n:'gallery',k:'urls',label:'Photos of the property',pick:'Add a photo of this stay',hint:'Shown as small pictures under the description. If you add none, the website shows a standard set of stock photos instead, so adding the real ones is worth doing.'}]}
+      ]
+    }
+  };
+  var L={};
+  Object.keys(CFG).forEach(function(k){L[k]={doc:null,sel:null,form:null,q:'',group:'all',status:'all',shown:40,err:'',toast:'',dirty:false,busy:false};});
+
+  function docNow(c){return C().docOf(L[c.id].doc);}
+  function baseList(c){return (window.ssCatalogBaseList&&window.ssCatalogBaseList(c.id))||[];}
+  function rows(c){
+    var d=docNow(c),open=Object.assign({},d,{hidden:{}});
+    return C().effective(c.id,baseList(c),open).map(function(t){var k=t.origKey;return {item:t,key:k,hidden:!!d.hidden[k],edited:!!d.edits[k],added:!!t.added};});
+  }
+  function find(c,key){var r=rows(c);for(var i=0;i<r.length;i++)if(r[i].key===key)return r[i];return null;}
+  function baseOf(c,key){var b=baseList(c);for(var i=0;i<b.length;i++)if((b[i].origKey||C().keyOf(c.id,b[i]))===key)return b[i];return null;}
+  function fieldsOf(c){var out=[];c.sections.forEach(function(s){s.fields.forEach(function(f){out.push(f);});});return out;}
+
+  function load(c){
+    return api('settings?fresh=1').then(function(d){var cat=d&&d.ss_catalog_v1;L[c.id].doc=(cat&&cat[c.id])||C().emptyDoc();});
+  }
+
+  /* ---------- the screen ---------- */
+  function screen(c){
+    var st=L[c.id];
+    if(!st.doc)return '<h1>'+esc(c.title)+'</h1><p class="mg-sub">Loading…</p>';
+    var list=rows(c),q=st.q.trim().toLowerCase();
+    var vis=list.filter(function(r){
+      var t=r.item;
+      if(st.group!=='all'&&t[c.groupField]!==st.group)return false;
+      if(st.status==='edited'&&!r.edited)return false;
+      if(st.status==='hidden'&&!r.hidden)return false;
+      if(st.status==='added'&&!r.added)return false;
+      if(q&&c.find(t).toLowerCase().indexOf(q)<0)return false;
+      return true;
+    });
+    var counts={edited:list.filter(function(r){return r.edited;}).length,hidden:list.filter(function(r){return r.hidden;}).length,added:list.filter(function(r){return r.added;}).length};
+    var rowsHtml=vis.slice(0,st.shown).map(function(r){
+      var on=st.sel===r.key;
+      return '<button type="button" class="cx-row'+(on?' on':'')+(r.hidden?' off':'')+'" data-ls-pick="'+esc(r.key)+'"><span class="cx-t">'+esc(r.item.title)+'</span><span class="cx-m">'+esc(c.meta(r.item))+'</span>'
+        +'<span class="cx-chips">'+(r.added?'<i class="g">New</i>':'')+(r.edited?'<i class="o">Edited</i>':'')+(r.hidden?'<i class="r">Hidden</i>':'')+'</span></button>';
+    }).join('')||'<p class="mg-hint" style="padding:12px">Nothing matches.</p>';
+    var more=vis.length>st.shown?'<button type="button" class="mg-btn sm ghost" data-ls-more="1" style="margin:10px 12px">Show '+Math.min(40,vis.length-st.shown)+' more</button>':'';
+    var filt='<div class="cx-filt"><input id="lsQ" type="search" placeholder="Search" value="'+esc(st.q)+'" aria-label="Search">'
+      +'<select id="lsGroup" aria-label="Island"><option value="all">'+esc(c.groupLabel)+'</option>'+C().COUNTRIES.map(function(x){return '<option'+(st.group===x?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'
+      +'<select id="lsStatus" aria-label="Show"><option value="all">Everything ('+list.length+')</option><option value="edited"'+(st.status==='edited'?' selected':'')+'>Edited ('+counts.edited+')</option><option value="hidden"'+(st.status==='hidden'?' selected':'')+'>Hidden ('+counts.hidden+')</option><option value="added"'+(st.status==='added'?' selected':'')+'>Added by you ('+counts.added+')</option></select></div>';
+    return '<h1>'+esc(c.title)+'</h1><p class="mg-sub">'+(needsApproval()?esc(c.intro)+' Your changes go to the owner for approval before they appear on the website.':esc(c.intro)+' Changes go live as soon as you save, and can be put back.')+'</p>'
+      +(st.toast?'<div class="mg-msg on ok" role="status">'+esc(st.toast)+'</div>':'')
+      +'<div class="cx-wrap"><aside class="cx-list"><div class="cx-lh"><b>'+list.length+' '+(list.length===1?c.noun:c.noun+'s')+'</b><button type="button" class="mg-btn sm ok" data-ls-new="1">Add a '+esc(c.noun)+'</button></div>'+filt+'<div class="cx-rows">'+rowsHtml+more+'</div></aside>'
+      +'<section class="cx-edit" id="lsEdit">'+formHtml(c)+'</section></div>';
+  }
+
+  /* ---------- the form ---------- */
+  function startForm(c,key){
+    var st=L[c.id],r=key?find(c,key):null;
+    if(key&&!r)return;
+    st.sel=key||null;st.err='';st.dirty=false;
+    if(!key){st.form={isNew:true,key:'n'+Math.random().toString(36).slice(2,9),f:c.blank(),hidden:false};return;}
+    var f={};
+    fieldsOf(c).forEach(function(fd){var v=r.item[fd.n];f[fd.n]=(fd.k==='lines'||fd.k==='urls')?(Array.isArray(v)?v.slice():[]):(v==null?'':String(v));});
+    st.form={isNew:false,added:r.added,key:r.key,hidden:r.hidden,f:f};
+  }
+  function ctl(fd,f){
+    var id='ls_'+fd.n,v=f[fd.n];
+    if(fd.k==='text')return '<input id="'+id+'" data-ls="'+fd.n+'" value="'+esc(v)+'"'+(fd.ph?' placeholder="'+esc(fd.ph)+'"':'')+(fd.max?' maxlength="'+fd.max+'"':'')+' autocomplete="off">';
+    if(fd.k==='area')return '<textarea id="'+id+'" data-ls="'+fd.n+'" rows="'+(fd.rows||3)+'"'+(fd.max?' maxlength="'+fd.max+'"':'')+'>'+esc(v)+'</textarea>';
+    if(fd.k==='lines')return '<textarea id="'+id+'" data-ls="'+fd.n+'" data-ls-lines="1" rows="'+(fd.rows||4)+'">'+esc((v||[]).join('\n'))+'</textarea>';
+    if(fd.k==='select')return '<select id="'+id+'" data-ls="'+fd.n+'">'+fd.opts().map(function(o){return '<option value="'+esc(o[0])+'"'+(String(v)===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>';}).join('')+'</select>';
+    if(fd.k==='photo')return '<div class="cx-photo">'+(v?'<img src="'+esc(v)+'" alt="">':'<div class="cx-noimg">No photo yet</div>')+'<div><button type="button" class="mg-btn sm" data-ls-photo="'+fd.n+'">'+(v?'Change photo':'Choose a photo')+'</button></div></div>';
+    if(fd.k==='urls')return '<div class="ls-thumbs">'+(v||[]).map(function(u,i){return '<div class="ls-th"><img src="'+esc(u)+'" alt=""><button type="button" class="mg-btn sm ghost" data-ls-urldel="'+fd.n+':'+i+'" aria-label="Remove this photo">Remove</button></div>';}).join('')+'</div>'
+      +((v||[]).length<8?'<button type="button" class="mg-btn sm" data-ls-urladd="'+fd.n+'">Add a photo</button>':'<p class="mg-hint">That is the most photos one stay can have.</p>');
+    return '';
+  }
+  function fldHtml(fd,f){
+    return '<div class="mg-fld"><label for="ls_'+fd.n+'">'+esc(fd.label)+'</label>'+ctl(fd,f)+(fd.hint?'<div class="mg-hint">'+esc(fd.hint)+'</div>':'')+'</div>';
+  }
+  function formHtml(c){
+    var st=L[c.id],F=st.form;
+    if(!F)return '<div class="cx-empty"><h3>Choose a '+esc(c.noun)+'</h3><p>Pick one from the list to change it, or add a new '+esc(c.noun)+'.</p></div>';
+    var f=F.f,r=F.isNew?null:find(c,F.key);
+    var h='<div class="cx-head"><div><h2>'+(F.isNew?'New '+esc(c.noun):esc(f.title||c.Noun))+'</h2>'+(F.isNew?'':'<p class="mg-hint" style="margin:2px 0 0">'+(F.added?'Added by you':'Comes with the website')+(F.hidden?' · <b>Hidden from the website</b>':'')+'</p>')+'</div>'
+      +'<a class="mg-btn sm ghost" href="'+esc(c.page)+'" target="_blank" rel="noopener">'+esc(c.pageLabel)+'</a></div>';
+    c.sections.forEach(function(sec){
+      var inner='',pend=[];
+      function flush(){if(pend.length){inner+='<div class="cx-two">'+pend.join('')+'</div>';pend=[];}}
+      sec.fields.forEach(function(fd){if(fd.half){pend.push(fldHtml(fd,f));if(pend.length===2)flush();}else{flush();inner+=fldHtml(fd,f);}});
+      flush();
+      h+='<div class="cx-sec"><h3>'+esc(sec.h)+'</h3>'+inner+'</div>';
+    });
+    h+='<div class="mg-msg'+(st.err?' on err':'')+'" id="lsMsg" role="alert">'+esc(st.err)+'</div>'
+      +'<div class="cx-bar"><button type="button" class="mg-btn ok" data-ls-save="1">'+(needsApproval()?'Send for approval':(F.isNew?'Add and publish':'Save and publish'))+'</button>'
+      +'<button type="button" class="mg-btn ghost" data-ls-cancel="1">Cancel</button>'
+      +(F.isNew?'':'<button type="button" class="mg-btn ghost" data-ls-hide="1">'+(F.hidden?'Show on the website':'Take off the website')+'</button>')
+      +(!F.isNew&&!F.added&&r&&r.edited?'<button type="button" class="mg-btn ghost" data-ls-orig="1">Put back all the original details</button>':'')
+      +(F.added?'<button type="button" class="mg-btn ghost danger" data-ls-del="1">Delete</button>':'')+'</div>';
+    return h;
+  }
+
+  /* ---------- from the form to a state ---------- */
+  function valuesFromForm(c){
+    var f=L[c.id].form.f,v={};
+    fieldsOf(c).forEach(function(fd){
+      if(fd.k==='lines'||fd.k==='urls')v[fd.n]=(f[fd.n]||[]).slice();
+      else v[fd.n]=String(f[fd.n]==null?'':f[fd.n]).trim();
+    });
+    return v;
+  }
+  function stateFromForm(c){
+    var F=L[c.id].form,vals=valuesFromForm(c);
+    if(F.isNew||F.added){return {added:vals,hidden:F.hidden||undefined};}
+    var base=baseOf(c,F.key)||{},edits={};
+    Object.keys(vals).forEach(function(k){
+      var b=base[k],v=vals[k];
+      if(Array.isArray(v)){if(!same(v,b||[]))edits[k]=v;return;}
+      if(String(v)!==String(b==null?'':b))edits[k]=v;
+    });
+    var st={};
+    if(Object.keys(edits).length)st.edits=edits;
+    if(F.hidden)st.hidden=true;
+    return st;
+  }
+
+  /* ---------- saving ---------- */
+  function paint(c){var p=document.getElementById('mgPage');if(p&&S.screen===c.id){var y=window.scrollY;p.innerHTML=screen(c);window.scrollTo(0,y);}}
+  function fail(c,m){L[c.id].err=m;var e=document.getElementById('lsMsg');if(e){e.textContent=m;e.className='mg-msg on err';e.scrollIntoView({block:'nearest'});}}
+  function send(c,key,state,label,okText){
+    var st=L[c.id];
+    var b=R.querySelector('[data-ls-save]');if(b)b.disabled=true;
+    st.busy=true;
+    api('site-edit',{action:'save',changes:[{id:'@c',list:c.id,key:key,value:state,label:label,before:C().stateOf(st.doc,key)}]}).then(function(d){
+      st.busy=false;
+      if(d.unchanged){st.toast='Nothing was different, so nothing changed.';}
+      else if(d.live){
+        var cs=C().cleanState(c.id,key,state),put=C().putState(st.doc,key,cs.value||state,c.id);if(put.doc)st.doc=put.doc;
+        try{window.ssCatalogApplyList(c.id,st.doc);}catch(e){}
+        st.toast=okText||'Published. It is live on the website now.';
+      }else{st.toast='Sent to the owner for approval. You will get an email when it is decided.';if(MG.PG)MG.PG.drafts=null;}
+      st.form=null;st.sel=null;st.err='';st.dirty=false;MG.loadHome&&MG.loadHome();
+      paint(c);window.scrollTo(0,0);
+      setTimeout(function(){st.toast='';var p2=document.getElementById('mgPage');var m=p2&&p2.querySelector('.mg-msg.on.ok');if(m&&S.screen===c.id)m.remove();},9000);
+    }).catch(function(e){st.busy=false;fail(c,e.message);if(b)b.disabled=false;});
+  }
+  function save(c){
+    var st=L[c.id],F=st.form;if(!F)return;
+    var f=F.f;
+    if(!String(f.title||'').trim())return fail(c,'Give it a name.');
+    if(F.isNew||F.added){
+      var need=C().REQUIRED[c.id]||[];
+      for(var i=0;i<need.length;i++){var v=f[need[i][0]];if(v==null||String(v).trim()==='')return fail(c,need[i][1]);}
+    }
+    send(c,F.key,stateFromForm(c),c.Noun+': '+short(f.title,70));
+  }
+
+  /* ---------- wiring ---------- */
+  Object.keys(CFG).forEach(function(k){
+    var c=CFG[k];
+    MG.screens[k]=function(){return screen(c);};
+    MG.after[k]=function(){
+      if(!C()||!window.ssCatalogBaseList)return;
+      load(c).then(function(){paint(c);}).catch(function(e){var p=document.getElementById('mgPage');if(p)p.insertAdjacentHTML('beforeend','<div class="mg-msg on err">'+esc(e.message)+'</div>');});
+    };
+  });
+  MG.leave=(function(prev){return function(from){var st=L[from];if(st&&st.form&&st.dirty)return confirm('You have changes that are not saved yet. Leave without saving them?');return prev?prev(from):true;};})(MG.leave);
+
+  function open(c,key){startForm(c,key);paint(c);var ed=document.getElementById('lsEdit');if(ed&&window.innerWidth<1000)ed.scrollIntoView({behavior:'smooth',block:'start'});}
+  function refreshForm(c){var e=document.getElementById('lsEdit');if(e)e.innerHTML=formHtml(c);}
+  R.addEventListener('click',function(e){
+    var c=CFG[S.screen];if(!c)return;
+    var t=e.target.closest('button,a');if(!t)return;
+    var ds=t.dataset,st=L[c.id],F=st.form;
+    if(ds.lsPick){open(c,ds.lsPick);return;}
+    if(ds.lsNew){open(c,null);return;}
+    if(ds.lsMore){st.shown+=40;paint(c);return;}
+    if(ds.lsCancel){st.form=null;st.sel=null;st.dirty=false;st.err='';paint(c);return;}
+    if(ds.lsSave)return save(c);
+    if(ds.lsPhoto){
+      var fd=fieldsOf(c).filter(function(x){return x.n===ds.lsPhoto;})[0];
+      MG.changer({title:fd.pick||'Choose a photo',current:F.f[ds.lsPhoto],simple:true,folder:c.folder,onUse:function(r){F.f[ds.lsPhoto]=r.url;st.dirty=true;refreshForm(c);}});return;
+    }
+    if(ds.lsUrladd){
+      var fa=fieldsOf(c).filter(function(x){return x.n===ds.lsUrladd;})[0];
+      MG.changer({title:fa.pick||'Add a photo',current:'',simple:true,folder:c.folder,onUse:function(r){F.f[ds.lsUrladd]=(F.f[ds.lsUrladd]||[]).concat([r.url]).slice(0,8);st.dirty=true;refreshForm(c);}});return;
+    }
+    if(ds.lsUrldel){var p=ds.lsUrldel.split(':');F.f[p[0]].splice(+p[1],1);st.dirty=true;refreshForm(c);return;}
+    if(ds.lsHide){
+      F.hidden=!F.hidden;
+      if(!confirm(F.hidden?'Take this '+c.noun+' off the website? Visitors will no longer see it. You can show it again at any time.':'Show this '+c.noun+' on the website again?')){F.hidden=!F.hidden;return;}
+      send(c,F.key,stateFromForm(c),(F.hidden?'Hide: ':'Show: ')+short(F.f.title,70),F.hidden?'Taken off the website.':'Back on the website.');return;
+    }
+    if(ds.lsOrig){
+      if(!confirm('Put back every original detail of this '+c.noun+' (wording, price, photos)?'))return;
+      send(c,F.key,F.hidden?{hidden:true}:{},'Put back original: '+short(F.f.title,60),'Put back. The original details are live again.');return;
+    }
+    if(ds.lsDel){
+      if(!confirm('Delete this '+c.noun+' you added? This takes it off the website for good.'))return;
+      send(c,F.key,{},'Delete: '+short(F.f.title,70),'Deleted.');return;
+    }
+  });
+  R.addEventListener('input',function(e){
+    var c=CFG[S.screen];if(!c)return;
+    var t=e.target,st=L[c.id];
+    if(t.id==='lsQ'){st.q=t.value;st.shown=40;var pos=t.selectionStart;paint(c);var q=document.getElementById('lsQ');if(q){q.focus();q.setSelectionRange(pos,pos);}return;}
+    if(!st.form||!t.dataset||!t.dataset.ls)return;
+    st.form.f[t.dataset.ls]=t.dataset.lsLines?listOf(t.value):t.value;
+    st.dirty=true;
+  });
+  R.addEventListener('change',function(e){
+    var c=CFG[S.screen];if(!c)return;
+    var t=e.target,st=L[c.id];
+    if(t.id==='lsGroup'){st.group=t.value;st.shown=40;paint(c);return;}
+    if(t.id==='lsStatus'){st.status=t.value;st.shown=40;paint(c);return;}
+    if(st.form&&t.dataset&&t.dataset.ls&&t.tagName==='SELECT'){st.form.f[t.dataset.ls]=t.value;st.dirty=true;}
   });
 })();
 </script>

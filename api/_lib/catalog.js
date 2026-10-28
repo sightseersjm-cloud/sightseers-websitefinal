@@ -1,13 +1,14 @@
-/* The experience catalog as the owner edits it: changes laid over the list that is written in the site's code.
+/* The catalogs as the owner edits them: changes laid over the lists that are written in the site's code (experiences, destination packages, stays).
    One file, used in three places: the admin saves and checks changes with it, the experience pages and the trip builder's
    prices are worked out with it on the server, and the browser applies it to the list the site shows.
    (build.js copies this file to public/ss-catalog.js for the browser.)
 
-   What is stored, per list ("experiences"):
-     edits:  { <the original title>: { field: value, ... } }   changes to an experience that comes with the site
-     hidden: { <the original title>: true }                     experiences taken off the website
-     added:  [ { id, title, country, ... } ]                    experiences the owner added
-   A "state" is everything stored for one experience: { edits, hidden, added }. Saving a state replaces what was stored. */
+   What is stored, per list ("experiences", "packages", "stays"):
+     edits:  { <the original key>: { field: value, ... } }   changes to an item that comes with the site
+     hidden: { <the original key>: true }                     items taken off the website
+     added:  [ { id, title, ... } ]                           items the owner added
+   The original key is the title for an experience, "Island|title" for a package and the id for a stay.
+   A "state" is everything stored for one item: { edits, hidden, added }. Saving a state replaces what was stored. */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.SSCatalog = factory();
@@ -15,10 +16,16 @@
   'use strict';
 
   var COUNTRIES = ['Jamaica', 'Barbados', 'Saint Lucia', 'The Bahamas', 'Belize', 'Curacao', 'Dominican Republic'];
+  /* what each list is called, which page of the site it lives on, and how many added items it can hold */
+  var LISTS = {
+    experiences: { noun: 'experience', page: 'tours', max: 120 },
+    packages: { noun: 'package', page: 'destinations', max: 60 },
+    stays: { noun: 'stay', page: 'stays', max: 80 }
+  };
   var MAX_ADDED = 120;
   var CONTROL = /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g;
 
-  /* what may be changed, and how long each may be. kind: t text, n number, u photo address, s choice, l list of lines, m extra sections, f fact rows */
+  /* what may be changed, and how long each may be. kind: t text, n number, u photo address, s choice, l list of lines, ul list of photo addresses, m extra sections, f fact rows */
   var FIELDS = {
     experiences: {
       title: { kind: 't', max: 120, label: 'Name' },
@@ -41,7 +48,37 @@
       routeNote: { kind: 't', max: 400, label: 'Note under the route' },
       more: { kind: 'm', max: 8, label: 'More sections' },
       facts: { kind: 'f', max: 8, label: 'Extra facts' }
+    },
+    packages: {
+      destination: { kind: 's', of: COUNTRIES, label: 'Island' },
+      title: { kind: 't', max: 120, label: 'Name' },
+      tag: { kind: 't', max: 40, label: 'Label on the card' },
+      type: { kind: 't', max: 40, label: 'Kind of package' },
+      duration: { kind: 't', max: 60, label: 'How long' },
+      price: { kind: 't', max: 40, label: 'Price' },
+      img: { kind: 'u', label: 'Photo' },
+      blurb: { kind: 't', max: 400, label: 'Summary' },
+      highlights: { kind: 'l', max: 8, each: 80, label: 'Highlights' },
+      inclusions: { kind: 'l', max: 10, each: 140, label: 'What is included' },
+      idealFor: { kind: 't', max: 240, label: 'Ideal for' },
+      note: { kind: 't', max: 300, label: 'Planning note' }
+    },
+    stays: {
+      country: { kind: 's', of: COUNTRIES, label: 'Island' },
+      type: { kind: 's', of: ['villa', 'airbnb'], label: 'Kind of stay' },
+      title: { kind: 't', max: 120, label: 'Name' },
+      price: { kind: 't', max: 60, label: 'Price' },
+      img: { kind: 'u', label: 'Photo' },
+      copy: { kind: 't', max: 500, label: 'Description' },
+      highlights: { kind: 'l', max: 4, each: 60, label: 'Highlights' },
+      gallery: { kind: 'ul', max: 8, label: 'More photos' }
     }
+  };
+  /* what an added item must have, in the order the person is told about it */
+  var REQUIRED = {
+    experiences: [['title', 'Give it a name.'], ['country', 'Choose the island.'], ['image', 'Choose a photo.'], ['desc', 'Write a short description.']],
+    packages: [['title', 'Give it a name.'], ['destination', 'Choose the island.'], ['img', 'Choose a photo.'], ['blurb', 'Write a short summary.']],
+    stays: [['title', 'Give it a name.'], ['country', 'Choose the island.'], ['type', 'Choose villa or vacation rental.'], ['img', 'Choose a photo.'], ['copy', 'Write a short description.']]
   };
   /* only for experiences the owner adds */
   var ADDED_ONLY = { experiences: { country: { kind: 's', of: COUNTRIES, label: 'Island' }, type: { kind: 's', of: ['water', 'land'], label: 'On water or on land' } } };
@@ -81,6 +118,16 @@
       } else if (f.kind === 'l') {
         if (!Array.isArray(v)) return { error: f.label + ' must be a list.' };
         out[k] = v.map(function (x) { return text(x, f.each); }).filter(Boolean).slice(0, f.max);
+      } else if (f.kind === 'ul') {
+        if (!Array.isArray(v)) return { error: f.label + ' must be a list.' };
+        var urls = [];
+        for (var ui = 0; ui < v.length && urls.length < f.max; ui++) {
+          var u = String(v[ui] == null ? '' : v[ui]).trim();
+          if (!u) continue;
+          if (!okUrl(u)) return { error: 'Each photo in ' + f.label + ' must be a web address starting with https:// or a path on this site.' };
+          urls.push(u);
+        }
+        out[k] = urls;
       } else if (f.kind === 'm') {
         if (!Array.isArray(v)) return { error: f.label + ' must be a list.' };
         out[k] = v.map(function (x) { return x && typeof x === 'object' ? { h: text(x.h, 80), p: text(x.p, 900) } : null; }).filter(function (x) { return x && x.h && x.p; }).slice(0, f.max);
@@ -104,11 +151,9 @@
       var a = state.added;
       var r = cleanFields(list, a, true);
       if (r.error) return r;
-      if (!r.value.title) return { error: 'Give it a name.' };
-      if (!r.value.country) return { error: 'Choose the island.' };
-      if (!r.value.type) r.value.type = 'land';
-      if (!r.value.image) return { error: 'Choose a photo.' };
-      if (!r.value.desc) return { error: 'Write a short description.' };
+      var need = REQUIRED[list] || [];
+      for (var ri = 0; ri < need.length; ri++) if (!r.value[need[ri][0]]) return { error: need[ri][1] };
+      if (list === 'experiences' && !r.value.type) r.value.type = 'land';
       out.added = Object.assign({ id: key }, r.value);
       if (state.hidden === true) out.hidden = true;
       return { value: out };
@@ -140,14 +185,15 @@
   }
 
   /* replace what is stored for one key. Gives back the new doc; the counts are checked here. */
-  function putState(doc, key, state) {
+  function putState(doc, key, state, list) {
     var d = docOf(clone(docOf(doc)));
     delete d.edits[key]; delete d.hidden[key];
     d.added = d.added.filter(function (x) { return x && x.id !== key; });
     if (state && state.added) d.added.push(state.added);
     else if (state && state.edits && Object.keys(state.edits).length) d.edits[key] = state.edits;
     if (state && state.hidden) d.hidden[key] = true;
-    if (d.added.length > MAX_ADDED) return { error: 'That is more added experiences than the site can hold (' + MAX_ADDED + ').' };
+    var spec = LISTS[list || 'experiences'] || LISTS.experiences;
+    if (d.added.length > spec.max) return { error: 'That is more added ' + spec.noun + 's than the site can hold (' + spec.max + ').' };
     return { doc: d };
   }
 
@@ -164,6 +210,7 @@
   /* what the site shows: the list from the code with the edits laid over it, hidden ones left out and added ones at the end.
      `base` is never changed; a new list of new objects comes back. Each item remembers its original title in `origKey`. */
   function effective(list, base, rawDoc) {
+    if (list !== 'experiences') return effectiveSimple(list, base, rawDoc);
     var doc = docOf(rawDoc), out = [];
     (base || []).forEach(function (b) {
       var key = b.origKey || b.title;
@@ -193,6 +240,38 @@
     return out;
   }
 
+  /* the same for packages and stays: edits laid over the item, hidden ones left out, added ones at the end */
+  function keyOf(list, b) { return list === 'packages' ? String(b.destination || '') + '|' + String(b.title || '') : String(b.id != null ? b.id : b.title); }
+  var DEFAULTS = {
+    packages: { tag: 'Curated Package', type: 'Curated Package', duration: '', price: 'Price on request', blurb: '', highlights: [] },
+    stays: { price: 'Rate on request', copy: '', highlights: [] }
+  };
+  function finish(list, item) {
+    if (list === 'stays') { item.tag = item.type === 'villa' ? 'Villa' : 'Vacation Rentals'; if (item.id == null) item.id = item.origKey; }
+  }
+  function effectiveSimple(list, base, rawDoc) {
+    var doc = docOf(rawDoc), out = [];
+    (base || []).forEach(function (b) {
+      var key = b.origKey || keyOf(list, b);
+      if (doc.hidden[key]) return;
+      var item = clone(b);
+      item.origKey = key;
+      var e = doc.edits[key];
+      if (e) { var c = cleanFields(list, e, false).value; for (var k in c) item[k] = c[k]; }
+      finish(list, item);
+      out.push(item);
+    });
+    doc.added.forEach(function (a) {
+      if (!a || !a.id || doc.hidden[a.id]) return;
+      var c = cleanFields(list, a, true).value;
+      var item = Object.assign(clone(DEFAULTS[list] || {}), c);
+      item.origKey = a.id; item.added = true;
+      finish(list, item);
+      out.push(item);
+    });
+    return out;
+  }
+
   /* prices for the trip builder: the code's list with the edits laid over it, in the shape the builder reads */
   function builderItems(baseItems, base, rawDoc) {
     var items = {};
@@ -209,5 +288,5 @@
     return items;
   }
 
-  return { COUNTRIES: COUNTRIES, FIELDS: FIELDS, ADDED_ONLY: ADDED_ONLY, MAX_ADDED: MAX_ADDED, cleanFields: cleanFields, cleanState: cleanState, docOf: docOf, emptyDoc: emptyDoc, stateOf: stateOf, putState: putState, effective: effective, builderItems: builderItems, priceLabel: priceLabel, slugOf: slugOf, okUrl: okUrl };
+  return { COUNTRIES: COUNTRIES, LISTS: LISTS, REQUIRED: REQUIRED, keyOf: keyOf, FIELDS: FIELDS, ADDED_ONLY: ADDED_ONLY, MAX_ADDED: MAX_ADDED, cleanFields: cleanFields, cleanState: cleanState, docOf: docOf, emptyDoc: emptyDoc, stateOf: stateOf, putState: putState, effective: effective, builderItems: builderItems, priceLabel: priceLabel, slugOf: slugOf, okUrl: okUrl };
 });

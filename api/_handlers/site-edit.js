@@ -2,6 +2,7 @@ const db = require('../_lib/db');
 const { getUser, requirePerm, requireOwner, canPublishNow, signPreview, verifyPreview, escapeHtml, can } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 const edit = require('../_lib/siteEdit');
+const catalog = require('../_lib/catalog');
 const { readSettings } = require('../_lib/siteStore');
 
 const MAX_CHANGES = 60;
@@ -19,6 +20,18 @@ async function prepare(list) {
     if (c.id === edit.TEXT_ID && c.value !== '' && now === '') {
       const live = await readSettings();
       if (edit.countTextEdits(live[edit.TEXT]) + clean.filter(x => x.id === edit.TEXT_ID && x.value !== '').length > edit.MAX_TEXT_EDITS) return { error: 'The site already holds as many in-page changes as it can (' + edit.MAX_TEXT_EDITS + '). Put some back to the original first.' };
+    }
+  }
+  /* an added experience, package or stay must fit in what the site can hold */
+  const cats = clean.filter(x => x.id === edit.CAT_ID);
+  if (cats.length) {
+    const live = await readSettings();
+    const stored = live[edit.CAT] && typeof live[edit.CAT] === 'object' && !Array.isArray(live[edit.CAT]) ? live[edit.CAT] : {};
+    const docs = {};
+    for (const c of cats) {
+      const put = catalog.putState(docs[c.list] || stored[c.list], c.key, c.value, c.list);
+      if (put.error) return { error: put.error };
+      docs[c.list] = put.doc;
     }
   }
   return { changes: clean };
@@ -146,7 +159,7 @@ module.exports = async function handler(req, res) {
     const list = [];
     for (const h of entries) {
       if (h.count) continue;
-      if (h.kind === 'c') { list.push({ id: edit.CAT_ID, kind: 'c', list: h.list, key: h.key, value: h.before && typeof h.before === 'object' ? h.before : {}, label: 'Put back: ' + (h.label || 'experience'), page: 'tours', before: h.after, keepEmpty: true }); continue; }
+      if (h.kind === 'c') { list.push({ id: edit.CAT_ID, kind: 'c', list: h.list, key: h.key, value: h.before && typeof h.before === 'object' ? h.before : {}, label: 'Put back: ' + (h.label || 'item'), page: (catalog.LISTS[h.list] || {}).page || 'tours', before: h.after, keepEmpty: true }); continue; }
       if (h.kind === 't' || h.kind === 'ti') { list.push({ id: edit.TEXT_ID, kind: h.kind, scope: h.scope, orig: h.kind === 'ti' ? String(h.orig || '').replace(/^img:/, '') : h.orig, value: typeof h.before === 'string' ? h.before : '', label: 'Put back: ' + (h.label || 'wording'), page: h.page, before: typeof h.after === 'string' ? h.after : '', keepEmpty: true }); continue; }
       list.push({ id: h.fieldId, kind: h.kind === 'sections' ? 'sections' : (h.kind === 'image' ? 'image' : 'text'), value: h.before, label: 'Put back: ' + (h.label || h.fieldId), page: h.page, before: typeof h.after === 'string' ? h.after : '' });
     }

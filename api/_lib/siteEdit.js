@@ -83,7 +83,8 @@ function cleanChange(c) {
     const list = String(c.list || '');
     const r = catalog.cleanState(list, c.key, c.value);
     if (r.error) return r;
-    return { id: CAT_ID, kind: 'c', list, key: String(c.key), value: r.value, label: label || 'Experience', page: 'tours', before: c.before && typeof c.before === 'object' ? c.before : {} };
+    const spec = catalog.LISTS[list];
+    return { id: CAT_ID, kind: 'c', list, key: String(c.key), value: r.value, label: label || spec.noun.charAt(0).toUpperCase() + spec.noun.slice(1), page: spec.page, before: c.before && typeof c.before === 'object' ? c.before : {} };
   }
   if (c.id === TEXT_ID) {
     const scope = c.scope === '*' ? '*' : String(c.scope || '').replace(/[^a-z0-9-]/gi, '').slice(0, 40);
@@ -139,9 +140,10 @@ async function publish(changes, user, meta) {
       store = CAT;
       const doc = settings[CAT] && typeof settings[CAT] === 'object' && !Array.isArray(settings[CAT]) ? settings[CAT] : {};
       was = catalog.stateOf(doc[c.list], c.key);
-      const put = catalog.putState(doc[c.list], c.key, c.value);
+      const put = catalog.putState(doc[c.list], c.key, c.value, c.list);
+      if (put.error) throw new Error(put.error);
       doc[c.list] = put.doc; settings[CAT] = doc; now = c.value;
-      made.push({ id: uid(), group, at, by: who(user), fieldId: catFieldId(c.list, c.key), store, kind: 'c', label: c.label, page: 'tours', list: c.list, key: c.key, before: was, after: now,
+      made.push({ id: uid(), group, at, by: who(user), fieldId: catFieldId(c.list, c.key), store, kind: 'c', label: c.label, page: (catalog.LISTS[c.list] || {}).page || 'tours', list: c.list, key: c.key, before: was, after: now,
         via: meta.via || 'direct', note: meta.note || '', approvedBy: meta.approvedBy || null, restoredFrom: meta.restoredFrom || null });
       continue;
     }
