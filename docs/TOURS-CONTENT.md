@@ -53,3 +53,15 @@ publishing; that confirmation is the owner's.
   itinerary's own "from $718"-style total.
 - Three Destinations-page packages that mirror a tour follow its new price: 3 Islands Pigs, Snorkel & Turtles ($165.10), Private Beach Club & Snorkel
   Day ($180.70) and Catamaran Snorkel Cruise with Lunch ($149.50). The other 25 Destinations packages are their own products and keep their prices.
+
+## Destinations page wording (28 October 2026)
+
+The 28 Destinations packages and the seven island introductions carried internal wording ("inspired by strong marketplace demand", "easy premium
+upsell potential", "to match what travelers browse most", "overbuilding the day" and similar), and some highlights that are only a mood ("Beach club
+feel", "Airport fast-track feel"). Descriptions, highlights and introductions were rewritten in plain Caribbean English using only what a package's
+title, type and duration state, and, where a package mirrors a tour, what the revised tours file says about that tour. Where a package's inclusions
+are not known (stays and weekends) the text says they are confirmed in the quote. Titles, tags, prices and photos are unchanged. One phrase on the
+Greek Life page ("conversion-focused") was also removed.
+
+Not changed, but worth a decision: the card tags ("Best Seller", "Top Rated", "Most Requested", "Island Favorite") are popularity claims nothing in
+the code can back up, and the booking page has urgency messages ("High demand this week", "Weekend slots are filling quickly").
