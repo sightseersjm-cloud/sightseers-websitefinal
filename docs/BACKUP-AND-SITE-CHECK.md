@@ -48,3 +48,9 @@ photos in the lists, the home and About photos, photos changed with Edit on the 
 description. It changes nothing.
 
 Tests: `npm run test:backup`.
+
+## Where uploaded photos live
+The Blob store is private, so uploaded photos (gallery, tours, stays, blog, logos, section photos) are saved privately and
+shown through the site's own address, `/api/images?file=<folder>/<name>` (`api/_lib/siteImages.js`). The file name is random and
+never changes, so the address is cached for a year. "Make the site lighter" moves photos out of the settings the same way.
+`npm run test:images` checks this against a store that refuses public access, as the live one does.

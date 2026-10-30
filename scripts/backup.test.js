@@ -100,9 +100,9 @@ const PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAM
   await wait(3);
   r = await post({ action: 'lighten' }, owner);
   const lit = await live();
-  ok('the photo stored inside the settings moves to a file of its own', r.code === 200 && r.body.moved === 1 && /^https:\/\/blob\.test\/site-images\/.+\.png$/.test(lit.ss_site_settings.heroImg2) && lit.ss_site_settings.aboutImage === '/assets/about.jpg' && lit.ss_site_settings.brandName === 'Sight Seers');
-  const moved = store.get(lit.ss_site_settings.heroImg2.replace(URLBASE, ''));
-  ok('the file is the same picture and is public', !!moved && moved.body.toString('base64') === PNG && moved.access === 'public');
+  ok('the photo stored inside the settings moves to a file of its own', r.code === 200 && r.body.moved === 1 && /^\/api\/images\?file=site-images\/[0-9a-f-]{36}\.png$/.test(lit.ss_site_settings.heroImg2) && lit.ss_site_settings.aboutImage === '/assets/about.jpg' && lit.ss_site_settings.brandName === 'Sight Seers');
+  const moved = store.get(lit.ss_site_settings.heroImg2.split('file=')[1]);
+  ok('the file is the same picture, kept privately and shown through the site address', !!moved && moved.body.toString('base64') === PNG && moved.access === 'private');
   ok('a backup was kept first, and the check finds nothing left to move', r.body.safety.kind === 'before-lighten' && (await get({ action: 'check' }, owner)).body.inlinePhotos.length === 0);
   r = await post({ action: 'lighten' }, owner);
   ok('doing it again changes nothing', r.code === 200 && r.body.moved === 0);

@@ -1,5 +1,5 @@
-const { put } = require('@vercel/blob');
 const db = require('../_lib/db');
+const siteImages = require('../_lib/siteImages');
 const { getUser, uid, can } = require('../_lib/auth');
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
@@ -21,7 +21,10 @@ function sanitizeFolder(folder) {
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  if (req.method === 'HEAD' && req.query && req.query.file) return siteImages.serve(req.query.file, res);
   if (req.method === 'GET') {
+    /* /api/images?file=<folder>/<name> shows one photo (stored privately, see _lib/siteImages.js) */
+    if (req.query && req.query.file) return siteImages.serve(req.query.file, res);
     try {
       /* ?folder=all lists every photo folder for the new photo library; the old call (no folder) is unchanged */
       const want = String((req.query && req.query.folder) || '');
@@ -32,13 +35,14 @@ module.exports = async function handler(req, res) {
         meta.forEach(m => { byPath[m.pathname] = m; });
         const lists = await Promise.all(folders.map(f => db.listImages(f + '/')));
         const images = [].concat(...lists.map((l, i) => l.map(x => Object.assign({ folder: folders[i] }, x, {
+          url: siteImages.NAME_RE.test(x.pathname) ? siteImages.urlFor(x.pathname) : x.url,
           name: (byPath[x.pathname] && byPath[x.pathname].originalName) || '',
           uploadedBy: (byPath[x.pathname] && byPath[x.pathname].uploadedBy) || ''
         }))));
         images.sort((a, b) => String(b.uploadedAt || '').localeCompare(String(a.uploadedAt || '')));
         return res.status(200).json({ ok: true, images });
       }
-      const images = await db.listImages('site-images/');
+      const images = (await db.listImages('site-images/')).map(x => Object.assign({}, x, { url: siteImages.NAME_RE.test(x.pathname) ? siteImages.urlFor(x.pathname) : x.url }));
       return res.status(200).json({ ok: true, images });
     } catch (e) {
       return res.status(200).json({ ok: true, images: [] });
@@ -59,7 +63,7 @@ module.exports = async function handler(req, res) {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: 'Image URL required' });
     try {
-      const removed = await db.deleteBlob(url);
+      const removed = await siteImages.remove(url) || await db.deleteBlob(url);
       return res.status(200).json({ ok: true, deleted: removed });
     } catch (e) {
       return res.status(502).json({ error: 'Could not delete image from storage.' });
@@ -109,16 +113,9 @@ module.exports = async function handler(req, res) {
 
   const safeFolder = sanitizeFolder(folder);
   const contentType = type || EXT_FOR_TYPE[ext] && ('image/' + (ext === 'jpg' ? 'jpeg' : ext)) || 'image/jpeg';
-  const path = safeFolder + '/' + uid() + '.' + ext;
-
   let blob;
   try {
-    blob = await put(path, buffer, {
-      access: 'public',
-      contentType,
-      addRandomSuffix: false,
-      allowOverwrite: true
-    });
+    blob = await siteImages.save(safeFolder, ext, buffer, contentType);
   } catch (err) {
     // Blob rejected a request we already know carries a token, so the token
     // itself is usually the problem (stale, rotated, or pointing at a store
@@ -132,7 +129,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const imgUrl = blob.url || blob.downloadUrl;
+  const imgUrl = blob.url;
 
   // Record metadata (best-effort — never fail the upload over this).
   try {

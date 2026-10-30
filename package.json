@@ -14,7 +14,8 @@
     "test:cards": "node scripts/cards.test.js",
     "test:backup": "node scripts/backup.test.js",
     "test:passport": "node scripts/passport.test.js",
-    "test:routes": "node scripts/routes.test.js"
+    "test:routes": "node scripts/routes.test.js",
+    "test:images": "node scripts/images.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

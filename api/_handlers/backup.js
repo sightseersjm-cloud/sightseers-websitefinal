@@ -13,6 +13,7 @@ const { readSettings, writeSettings } = require('../_lib/siteStore');
 const inbox = require('../_lib/inbox');
 const catalog = require('../_lib/catalog');
 const edit = require('../_lib/siteEdit');
+const siteImages = require('../_lib/siteImages');
 
 const PREFIX = 'ss-admin/backups/';
 const KEEP = 12;
@@ -257,8 +258,8 @@ module.exports = async function handler(req, res) {
       const ext = m && EXT[m[1].toLowerCase()];
       const buf = m && ext ? Buffer.from(m[2].replace(/\s+/g, ''), 'base64') : null;
       if (!buf || !buf.length || buf.length > MAX_PHOTO) { skipped.push(nameOfPath(p.path)); continue; }
-      const blob = await put('site-images/' + uid() + '.' + ext, buf, { access: 'public', contentType: m[1].toLowerCase(), addRandomSuffix: false, allowOverwrite: true });
-      const url = blob.url || blob.downloadUrl;
+      const blob = await siteImages.save('site-images', ext, buf, m[1].toLowerCase());
+      const url = blob.url;
       if (!url) { skipped.push(nameOfPath(p.path)); continue; }
       saved += p.bytes - url.length; moved++;
       p.parent[p.key] = url;
