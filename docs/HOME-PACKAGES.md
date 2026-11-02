@@ -4,8 +4,8 @@ Source of truth: `api/_data/packages.json` (embedded in `Design_Reference.html` 
 
 ## How a package price is made
 - **Excursions per person** (`acts`): the sum of the "from" prices of the excursions listed in the days. They are the tour prices in the Tours catalog (already +30%).
-- **Airport pickup & drop-off** (`addons.xfer`, `included: true`): the only transport in the package. Round trip, researched, then +30%.
-  - Jamaica: the owner's rate, $55 per person for groups of 5 or more, +30% = $71.50 per guest.
+- **Airport pickup & drop-off** (`addons.xfer`, `included: true`): the only transport in the package. Round trip. Researched then +30% for every island except Jamaica.
+  - Jamaica: the owner's own final rate, $55 per person for groups of 5 or more (no markup added).
   - Other islands: a researched round-trip rate for a vehicle of up to 6 guests, +30%.
 - **"From" price per person** (`frm`) = excursions + the airport share (per guest, or per vehicle ÷ 6), rounded to the dollar.
 - **Total for a group** = excursions × guests + airport (per guest × guests, or per vehicle × vehicles of 6).
