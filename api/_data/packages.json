@@ -3,7 +3,7 @@
     "label": "Jamaica",
     "chip": "sea",
     "title": "Jamaica 5-Day Signature",
-    "frm": 1061,
+    "frm": 1041,
     "base": "Montego Bay Villa → Ocho Rios / Drax Hall",
     "days": [
       {
@@ -18,7 +18,7 @@
           "when": "Afternoon",
           "title": "Rose Hall Great House tour",
           "place": "Montego Bay",
-          "meta": "from $60"
+          "meta": "from $40"
         },
         "food": "Pork Pit jerk, Montego Bay"
       },
@@ -102,7 +102,7 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 989.5
+    "acts": 969.5
   },
   "Barbados": {
     "label": "Barbados",
