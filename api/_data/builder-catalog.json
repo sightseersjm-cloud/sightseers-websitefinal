@@ -963,31 +963,31 @@
   },
   "transfers": {
     "Jamaica": {
-      "price": 499,
-      "per": "per group (up to 6)"
+      "price": 71.5,
+      "per": "per guest (groups of 5 or more)"
     },
     "Barbados": {
-      "price": 219,
+      "price": 208,
       "per": "per group (up to 6)"
     },
     "Saint Lucia": {
-      "price": 479,
+      "price": 468,
       "per": "per group (up to 6)"
     },
     "Curacao": {
-      "price": 229,
+      "price": 104,
       "per": "per group (up to 6)"
     },
     "The Bahamas": {
-      "price": 169,
+      "price": 195,
       "per": "per group (up to 6)"
     },
     "Belize": {
-      "price": 209,
-      "per": "per guest (ferry-based)"
+      "price": 163,
+      "per": "per group (up to 6)"
     },
     "Dominican Republic": {
-      "price": 129,
+      "price": 195,
       "per": "per group (up to 6)"
     }
   }

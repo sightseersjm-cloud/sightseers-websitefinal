@@ -141,7 +141,7 @@ function findPackage(itemsStr) {
   return null;
 }
 
-// Pull any purchased add-ons (transfers / driver days) out of the metadata
+// Pull the airport pickup & drop-off and any purchased driver days out of the metadata
 // items string, excluding the package line itself.
 function extractAddons(itemsStr, pkg) {
   if (!itemsStr) return [];
@@ -149,14 +149,14 @@ function extractAddons(itemsStr, pkg) {
     const m = tok.match(/^(.*?)\s*x(\d+)$/);
     return { name: m ? m[1].trim() : tok, qty: m ? parseInt(m[2], 10) : 1 };
   }).filter(it => (!pkg || it.name !== pkg.title) &&
-                  /Private Transfers|Private Driver Day/.test(it.name));
+                  /Airport Pickup|Private Driver Day/.test(it.name));
 }
 function addonLabel(name) { return name.replace(/^.*?:\s*/, '').replace(/^.*? - /, ''); }
 
 // Branded, GetYourGuide-style confirmation email for a package booking.
 function packageConfirmationHtml(pkg, amount, ref, addons) {
   const addonRows = (addons && addons.length)
-    ? `<h3 style="color:#063a63;margin:4px 0 6px;font-size:16px">Added services</h3>
+    ? `<h3 style="color:#063a63;margin:4px 0 6px;font-size:16px">Transport and added services</h3>
        <table style="border-collapse:collapse;width:100%;margin:0 0 16px">` +
       addons.map((a, i) => `<tr${i % 2 ? ' style="background:#f6faf7"' : ''}><td style="padding:8px 9px;color:#333">${addonLabel(a.name)}${a.qty > 1 ? ' <span style="color:#8a97a2">× ' + a.qty + '</span>' : ''}</td></tr>`).join('') +
       `</table>` : '';
@@ -181,7 +181,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
       ${addonRows}
       <h3 style="color:#063a63;margin:0 0 6px;font-size:16px">Your 5-day itinerary</h3>
       <table style="border-collapse:collapse;width:100%">${days}</table>
-      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Pickups from your stay and local food stops are included where noted, and any private transfers or driver days you added are included in the amount above. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
+      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Airport pickup and drop-off is the only transport included, and any private driver days you added are in the amount above. Other transport, meals and entry fees are not included unless an excursion says so. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
@@ -242,7 +242,7 @@ async function buildItineraryPdf(pkg, session, amountStr, addons) {
   }
   if (y < 120) { page = doc.addPage([W,H]); y = H-60; }
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
-  page.drawText('Pickups, food stops and any transfers/driver days you added are included. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
+  page.drawText('Airport pickup and drop-off is the only transport included, plus any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
   page.drawText('guides; final tailoring (dates, group size and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
   page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();

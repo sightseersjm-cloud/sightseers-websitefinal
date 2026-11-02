@@ -71,7 +71,7 @@ function quote(input, itemsOverride) {
     const perGuest = /guest/i.test(tr.per || '');
     const qty = perGuest ? guests : Math.ceil(guests / VAN_CAPACITY);
     const amount = round2(tr.price * qty);
-    transfers = { name: 'Private airport & inter-base transfers', unit: perGuest ? 'guest' : 'vehicle', price: tr.price, qty, amount };
+    transfers = { name: 'Private airport pickup & drop-off', unit: perGuest ? 'guest' : 'vehicle', price: tr.price, qty, amount };
     subtotal += amount;
   }
   subtotal = round2(subtotal);

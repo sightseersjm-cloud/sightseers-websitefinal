@@ -3,7 +3,7 @@
     "label": "Jamaica",
     "chip": "sea",
     "title": "Jamaica 5-Day Signature",
-    "frm": 718,
+    "frm": 1061,
     "base": "Montego Bay Villa → Ocho Rios / Drax Hall",
     "days": [
       {
@@ -28,15 +28,13 @@
           "when": "Morning",
           "title": "Montego Bay ATV Ride Experience",
           "place": "Montpelier, St James",
-          "meta": "Morning · from $193.70",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $193.70"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Jet Car & Jet Ski Beach Combo",
           "place": "Montego Bay waterfront",
-          "meta": "from $247",
-          "pickup": "Pickup from your stay"
+          "meta": "from $247"
         },
         "food": "Pelican Grill · Father Bull & KFC, Montego Bay"
       },
@@ -46,15 +44,13 @@
           "when": "Morning",
           "title": "Bamboo Rafting with Limestone Massage",
           "place": "Martha Brae River, Trelawny",
-          "meta": "Morning · from $104",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $104"
         },
         "pm": {
           "when": "Evening",
           "title": "Luminous Lagoon Night Experience",
           "place": "Glistening Waters, Falmouth",
-          "meta": "from $91",
-          "pickup": "Pickup from your stay"
+          "meta": "from $91"
         },
         "food": "Juici Patties & Scotchies, Falmouth"
       },
@@ -62,10 +58,9 @@
         "n": 4,
         "am": {
           "when": "Full day",
-          "title": "Transfer to Ocho Rios + ATV, River & Blue Hole Combo",
+          "title": "ATV, River Rafting & Blue Hole Combo",
           "place": "Blue Hole, Ocho Rios",
-          "meta": "Full day · from $229",
-          "pickup": "Transfer MoBay → Ocho Rios (luggage)"
+          "meta": "Full day · from $293.80"
         },
         "pm": {
           "when": "Evening",
@@ -94,10 +89,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Jamaica 5-Day Signature: Private Transfers",
-        "price": 499,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Jamaica 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 71.5,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per guest (groups of 5 or more)",
+        "included": true
       },
       "driver": {
         "name": "Jamaica 5-Day Signature: Private Driver Day",
@@ -105,13 +101,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 989.5
   },
   "Barbados": {
     "label": "Barbados",
     "chip": "mix",
     "title": "Barbados 5-Day Signature",
-    "frm": 475,
+    "frm": 711,
     "base": "West Coast Beach Vacation Rentals",
     "days": [
       {
@@ -120,8 +117,7 @@
           "when": "Morning",
           "title": "Catamaran Snorkel Cruise with Lunch",
           "place": "Carlisle Bay, Bridgetown",
-          "meta": "Morning · from $149.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $149.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -137,8 +133,7 @@
           "when": "Morning",
           "title": "Harrison’s Cave & Hunte’s Gardens Escape",
           "place": "Allen View, St Thomas",
-          "meta": "Morning · from $201.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $201.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -154,8 +149,7 @@
           "when": "Morning",
           "title": "Island Safari Jeep & Scenic Coast Tour",
           "place": "Scotland District & East Coast",
-          "meta": "Morning · from $123.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $123.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -171,8 +165,7 @@
           "when": "Morning",
           "title": "Mount Gay Rum Distillery Experience",
           "place": "Spring Garden, St Michael",
-          "meta": "Morning · from $136.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $136.50"
         },
         "pm": {
           "when": "Evening",
@@ -188,8 +181,7 @@
           "when": "Morning",
           "title": "Beach Day & Turtle Swim Experience",
           "place": "Payne’s Bay, West Coast",
-          "meta": "Morning · from $65",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $65"
         },
         "pm": {
           "when": "Afternoon",
@@ -202,10 +194,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Barbados 5-Day Signature: Private Transfers",
-        "price": 219,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Barbados 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 208,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Barbados 5-Day Signature: Private Driver Day",
@@ -213,13 +206,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 676.0
   },
   "Saint Lucia": {
     "label": "St Lucia",
     "chip": "land",
     "title": "Saint Lucia 5-Day Signature",
-    "frm": 390,
+    "frm": 584,
     "base": "Soufrière Piton-View Villa → Rodney Bay Residence",
     "days": [
       {
@@ -228,8 +222,7 @@
           "when": "Full day",
           "title": "Pitons Catamaran Cruise, Snorkel & Lunch",
           "place": "Soufrière & the Pitons",
-          "meta": "Full day · from $188.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Full day · from $188.50"
         },
         "pm": {
           "when": "Evening",
@@ -245,8 +238,7 @@
           "when": "Morning",
           "title": "Sulphur Springs Mud Bath & Waterfall",
           "place": "Soufrière Volcano",
-          "meta": "Morning · from $130",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $130"
         },
         "pm": {
           "when": "Afternoon",
@@ -262,8 +254,7 @@
           "when": "Morning",
           "title": "Volcanic Wellness, Pitons & Waterfalls",
           "place": "Soufrière",
-          "meta": "Morning · from $187.20",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $187.20"
         },
         "pm": {
           "when": "Afternoon",
@@ -308,10 +299,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Saint Lucia 5-Day Signature: Private Transfers",
-        "price": 479,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Saint Lucia 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 468,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Saint Lucia 5-Day Signature: Private Driver Day",
@@ -319,13 +311,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 505.7
   },
   "Curacao": {
     "label": "Curacao",
     "chip": "sea",
     "title": "Curacao 5-Day Signature",
-    "frm": 399,
+    "frm": 500,
     "base": "Jan Thiel Coastal Villa",
     "days": [
       {
@@ -334,8 +327,7 @@
           "when": "Morning",
           "title": "Turtle Bay Snorkel & Blue Room Style Escape",
           "place": "Caracasbaai & Blue Room Cave",
-          "meta": "Morning · from $99",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $99"
         },
         "pm": {
           "when": "Afternoon",
@@ -367,8 +359,7 @@
           "when": "Morning",
           "title": "Off-Road Buggy Tour North Coast Adventure",
           "place": "Shete Boka & North Coast",
-          "meta": "Morning · from $188.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $188.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -384,8 +375,7 @@
           "when": "Full day",
           "title": "Klein Curacao Full-Day Boat Trip",
           "place": "Departs Willemstad",
-          "meta": "Full day · from $195",
-          "pickup": "Pickup / port transfer"
+          "meta": "Full day · from $195"
         },
         "pm": {
           "when": "Evening",
@@ -414,10 +404,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Curacao 5-Day Signature: Private Transfers",
-        "price": 229,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Curacao 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 104,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Curacao 5-Day Signature: Private Driver Day",
@@ -425,13 +416,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 482.5
   },
   "The Bahamas": {
     "label": "Bahamas",
     "chip": "mix",
     "title": "Bahamas 5-Day Signature",
-    "frm": 594,
+    "frm": 892,
     "base": "Paradise Island Modern Suite",
     "days": [
       {
@@ -440,8 +432,7 @@
           "when": "Morning",
           "title": "Bahamas Culture Tour with Electric Trolley",
           "place": "Downtown Nassau",
-          "meta": "Morning · from $71.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $71.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -457,8 +448,7 @@
           "when": "Morning",
           "title": "Historic City Tour with Drink & Food Tasting",
           "place": "Nassau & Paradise Island",
-          "meta": "Morning · from $150",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $195"
         },
         "pm": {
           "when": "Afternoon",
@@ -474,8 +464,7 @@
           "when": "Morning",
           "title": "Nassau ATV Island Half-Day City Tour",
           "place": "New Providence",
-          "meta": "Morning · from $260",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $260"
         },
         "pm": {
           "when": "Afternoon",
@@ -491,8 +480,7 @@
           "when": "Full day",
           "title": "3 Islands Tour, Snorkel, Pig Beach, Turtles & Lunch",
           "place": "Rose Island & nearby cays",
-          "meta": "Full day · from $165.10",
-          "pickup": "Pickup from your stay"
+          "meta": "Full day · from $165.10"
         },
         "pm": {
           "when": "Evening",
@@ -508,8 +496,7 @@
           "when": "Morning",
           "title": "Reef Snorkeling, Turtles, Lunch & Beach Club",
           "place": "Nassau reefs",
-          "meta": "Morning · from $167.70",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $167.70"
         },
         "pm": {
           "when": "Afternoon",
@@ -522,10 +509,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Bahamas 5-Day Signature: Private Transfers",
-        "price": 169,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Bahamas 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 195,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Bahamas 5-Day Signature: Private Driver Day",
@@ -533,13 +521,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 859.3
   },
   "Belize": {
     "label": "Belize",
     "chip": "land",
     "title": "Belize 5-Day Signature",
-    "frm": 614,
+    "frm": 825,
     "base": "Ambergris Caye Stay → San Ignacio Jungle Villa",
     "days": [
       {
@@ -548,8 +537,7 @@
           "when": "Morning",
           "title": "Hol Chan Marine Reserve Small-Group Tour",
           "place": "Hol Chan & Shark Ray Alley, San Pedro",
-          "meta": "Morning · from $167.70",
-          "pickup": "Dock pickup"
+          "meta": "Morning · from $167.70"
         },
         "pm": {
           "when": "Afternoon",
@@ -565,8 +553,7 @@
           "when": "Full day",
           "title": "Caye Caulker 7-Stop Snorkeling Reef Experience",
           "place": "Belize Barrier Reef, Caye Caulker",
-          "meta": "Full day · from $143",
-          "pickup": "Dock pickup"
+          "meta": "Full day · from $143"
         },
         "pm": {
           "when": "Evening",
@@ -580,10 +567,9 @@
         "n": 3,
         "am": {
           "when": "Full day",
-          "title": "Transfer to Cayo + ATM Cave Full-Day Adventure",
+          "title": "ATM Cave Full-Day Adventure",
           "place": "Actun Tunichil Muknal, Cayo",
-          "meta": "Full day · from $140",
-          "pickup": "Pickup from your stay"
+          "meta": "Full day · from $182"
         },
         "pm": {
           "when": "Evening",
@@ -599,8 +585,7 @@
           "when": "Morning",
           "title": "Cave Tubing with Optional Zipline",
           "place": "Nohoch Che’en, Cayo",
-          "meta": "Morning · from $123.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $123.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -616,8 +601,7 @@
           "when": "Morning",
           "title": "ATV Expedition to El Pilar Maya Ruins",
           "place": "El Pilar, San Ignacio",
-          "meta": "Morning · from $182",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $182"
         },
         "pm": {
           "when": "Afternoon",
@@ -630,10 +614,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Belize 5-Day Signature: Private Transfers",
-        "price": 209,
-        "label": "Private airport & inter-base transfers",
-        "per": "per guest (ferry-based)"
+        "name": "Belize 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 163,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Belize 5-Day Signature: Private Driver Day",
@@ -641,13 +626,14 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 798.2
   },
   "Dominican Republic": {
     "label": "Dom. Rep.",
     "chip": "sea",
     "title": "Dominican Republic 5-Day Signature",
-    "frm": 251,
+    "frm": 332,
     "base": "Cap Cana Luxury Villa",
     "days": [
       {
@@ -656,8 +642,7 @@
           "when": "Morning",
           "title": "Punta Cana Buggy, Cave Swim & Macao Beach",
           "place": "Macao Beach & cenote, Punta Cana",
-          "meta": "Morning · from $45.50",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $45.50"
         },
         "pm": {
           "when": "Afternoon",
@@ -689,8 +674,7 @@
           "when": "Full day",
           "title": "Saona Island Cruise with Lunch & Open Bar",
           "place": "Saona Island, from Bayahibe",
-          "meta": "Full day · from $91",
-          "pickup": "Pickup from your stay"
+          "meta": "Full day · from $91"
         },
         "pm": {
           "when": "Evening",
@@ -706,8 +690,7 @@
           "when": "Morning",
           "title": "Bayahibe ATV Buggy Jungle & Caves",
           "place": "Bayahibe",
-          "meta": "Morning · from $74.10",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $74.10"
         },
         "pm": {
           "when": "Afternoon",
@@ -723,8 +706,7 @@
           "when": "Full day",
           "title": "Bávaro Catamaran Sail, Snorkel & Natural Pool",
           "place": "Bávaro / Cortecito",
-          "meta": "Morning · from $89",
-          "pickup": "Pickup from your stay"
+          "meta": "Morning · from $89"
         },
         "pm": {
           "when": "Afternoon",
@@ -737,10 +719,11 @@
     ],
     "addons": {
       "xfer": {
-        "name": "Dominican Republic 5-Day Signature: Private Transfers",
-        "price": 129,
-        "label": "Private airport & inter-base transfers",
-        "per": "per group (up to 6)"
+        "name": "Dominican Republic 5-Day Signature: Airport Pickup & Drop-off",
+        "price": 195,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per group (up to 6)",
+        "included": true
       },
       "driver": {
         "name": "Dominican Republic 5-Day Signature: Private Driver Day",
@@ -748,6 +731,7 @@
         "label": "Private driver day (8 to 10h)",
         "per": "per day (up to 6)"
       }
-    }
+    },
+    "acts": 299.6
   }
 }
