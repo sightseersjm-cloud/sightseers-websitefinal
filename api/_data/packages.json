@@ -3,8 +3,8 @@
     "label": "Jamaica",
     "chip": "sea",
     "title": "Jamaica 5-Day Signature",
-    "frm": 1291,
-    "base": "Montego Bay Villa → Ocho Rios / Drax Hall",
+    "frm": 997,
+    "base": "Montego Bay Villa",
     "days": [
       {
         "n": 1,
@@ -58,33 +58,31 @@
         "n": 4,
         "am": {
           "when": "Full day",
-          "title": "ATV, River Rafting & Blue Hole Combo",
-          "place": "Blue Hole, Ocho Rios",
-          "meta": "Full day · from $293.80"
+          "title": "Jamaica Adventure Day",
+          "place": "ATV, zipline, catamaran party, horseback riding, truck safari & rum tasting · transport from Montego Bay",
+          "meta": "Full day · from $250"
         },
         "pm": {
           "when": "Evening",
-          "title": "Ocho Rios dinner & craft stroll",
-          "place": "Ocho Rios",
+          "title": "Evening at leisure",
+          "place": "Montego Bay",
           "meta": "At leisure"
-        },
-        "food": "Scotchies, Ocho Rios"
+        }
       },
       {
         "n": 5,
         "am": {
-          "when": "Full day",
-          "title": "Jamaica Adventure Day",
-          "place": "ATV, zipline, catamaran party, horseback riding, truck safari & rum tasting · transport from Montego Bay",
-          "meta": "Full day · from $250"
+          "when": "Morning",
+          "title": "Morning at leisure",
+          "place": "Montego Bay",
+          "meta": "At leisure"
         },
         "pm": {
           "when": "Afternoon",
           "title": "Airport drop-off, Montego Bay",
           "place": "Montego Bay → MBJ",
           "meta": "Included"
-        },
-        "food": "Miss T’s Kitchen, Ocho Rios"
+        }
       }
     ],
     "addons": {
@@ -102,7 +100,7 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 1219.5,
+    "acts": 925.7,
     "note": "Airport pickup and drop-off is round trip in Montego Bay. For other pickup locations, enquire with us for a rate."
   },
   "Barbados": {
