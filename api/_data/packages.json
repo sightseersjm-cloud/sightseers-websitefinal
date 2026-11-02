@@ -102,13 +102,14 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 969.5
+    "acts": 969.5,
+    "note": "Airport pickup and drop-off is round trip in Montego Bay. For other pickup locations, enquire with us for a rate."
   },
   "Barbados": {
     "label": "Barbados",
     "chip": "mix",
     "title": "Barbados 5-Day Signature",
-    "frm": 711,
+    "frm": 676,
     "base": "West Coast Beach Vacation Rentals",
     "days": [
       {
@@ -195,10 +196,10 @@
     "addons": {
       "xfer": {
         "name": "Barbados 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 208,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Barbados 5-Day Signature: Private Driver Day",
@@ -213,7 +214,7 @@
     "label": "St Lucia",
     "chip": "land",
     "title": "Saint Lucia 5-Day Signature",
-    "frm": 584,
+    "frm": 506,
     "base": "Soufrière Piton-View Villa → Rodney Bay Residence",
     "days": [
       {
@@ -300,10 +301,10 @@
     "addons": {
       "xfer": {
         "name": "Saint Lucia 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 468,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Saint Lucia 5-Day Signature: Private Driver Day",
@@ -318,7 +319,7 @@
     "label": "Curacao",
     "chip": "sea",
     "title": "Curacao 5-Day Signature",
-    "frm": 500,
+    "frm": 483,
     "base": "Jan Thiel Coastal Villa",
     "days": [
       {
@@ -405,10 +406,10 @@
     "addons": {
       "xfer": {
         "name": "Curacao 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 104,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Curacao 5-Day Signature: Private Driver Day",
@@ -423,7 +424,7 @@
     "label": "Bahamas",
     "chip": "mix",
     "title": "Bahamas 5-Day Signature",
-    "frm": 892,
+    "frm": 859,
     "base": "Paradise Island Modern Suite",
     "days": [
       {
@@ -510,10 +511,10 @@
     "addons": {
       "xfer": {
         "name": "Bahamas 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 195,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Bahamas 5-Day Signature: Private Driver Day",
@@ -528,7 +529,7 @@
     "label": "Belize",
     "chip": "land",
     "title": "Belize 5-Day Signature",
-    "frm": 850,
+    "frm": 798,
     "base": "Ambergris Caye Stay → San Ignacio Jungle Villa",
     "days": [
       {
@@ -615,10 +616,10 @@
     "addons": {
       "xfer": {
         "name": "Belize 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 312,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Belize 5-Day Signature: Private Driver Day",
@@ -627,14 +628,13 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 798.2,
-    "note": "The water taxi from the airport to San Pedro is not included."
+    "acts": 798.2
   },
   "Dominican Republic": {
     "label": "Dom. Rep.",
     "chip": "sea",
     "title": "Dominican Republic 5-Day Signature",
-    "frm": 332,
+    "frm": 300,
     "base": "Cap Cana Luxury Villa",
     "days": [
       {
@@ -721,10 +721,10 @@
     "addons": {
       "xfer": {
         "name": "Dominican Republic 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 195,
-        "label": "Airport pickup & drop-off (round trip)",
-        "per": "per group (up to 6)",
-        "included": true
+        "price": null,
+        "label": "Airport pickup & drop-off",
+        "per": "enquire",
+        "included": false
       },
       "driver": {
         "name": "Dominican Republic 5-Day Signature: Private Driver Day",

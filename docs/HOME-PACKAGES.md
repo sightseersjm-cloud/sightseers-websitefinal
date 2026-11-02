@@ -4,15 +4,14 @@ Source of truth: `api/_data/packages.json` (embedded in `Design_Reference.html` 
 
 ## How a package price is made
 - **Excursions per person** (`acts`): the sum of the "from" prices of the excursions listed in the days. They are the tour prices in the Tours catalog (already +30%).
-- **Airport pickup & drop-off** (`addons.xfer`, `included: true`): the only transport in the package. Round trip, then +30%.
-  - Jamaica: the owner's own cost, $55 per person round trip for groups of 5 or more, +30% = $71.50 per guest.
-  - Other islands: a researched round-trip rate for a vehicle of up to 6 guests, +30%.
-- **"From" price per person** (`frm`) = excursions + the airport share (per guest, or per vehicle ÷ 6), rounded to the dollar.
-- **Total for a group** = excursions × guests + airport (per guest × guests, or per vehicle × vehicles of 6).
+- **Airport pickup & drop-off** (`addons.xfer`): included on the Jamaica package only, round trip in Montego Bay. The owner's cost is $55 per person for groups of 5 or more, +30% = $71.50 per guest.
+  - Every other island: not included (`included: false`, `price: null`, `per: "enquire"`). The page says "enquire with us for a rate"; there is no airport price in the server list or the group builder.
+- **"From" price per person** (`frm`) = excursions per person, plus $71.50 on Jamaica, rounded to the dollar.
+- **Total for a group** = excursions x guests, plus the Jamaica airport line (per guest x guests).
 - **Private driver day** (`addons.driver`) is optional and was not changed.
 - The server charges the excursion price per person and the airport line from `api/_data/vtours-products.json`.
 
-## Researched airport rates (October 2026, USD, before +30%)
+## Researched airport rates (reference only, not used in any package price)
 One-way private transfers from the airport to the base, per vehicle. Sources are operator and guide pages, not quotes: confirm with suppliers.
 
 | Island | Round trip, group of 6 | Basis |

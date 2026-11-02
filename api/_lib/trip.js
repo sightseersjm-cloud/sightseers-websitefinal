@@ -66,7 +66,7 @@ function quote(input, itemsOverride) {
   }
 
   let transfers = null;
-  if (input.transfers === true || input.transfers === 'true') {
+  if ((input.transfers === true || input.transfers === 'true') && typeof (CATALOG.transfers[country] || {}).price === 'number') {
     const tr = CATALOG.transfers[country];
     const perGuest = /guest/i.test(tr.per || '');
     const qty = perGuest ? guests : Math.ceil(guests / VAN_CAPACITY);

@@ -123,7 +123,7 @@ function writeBuilderCatalog(source) {
   const transfers = {};
   for (const k of Object.keys(pk)) {
     const a = pk[k] && pk[k].addons && pk[k].addons.xfer;
-    if (a) transfers[k] = { price: a.price, per: a.per };
+    if (a) transfers[k] = { price: (typeof a.price === 'number' ? a.price : null), per: a.per };
   }
   const dir = path.join(__dirname, 'api', '_data');
   fs.writeFileSync(path.join(dir, 'builder-catalog.json'), JSON.stringify({ items, transfers }, null, 2) + '\n', 'utf8');

@@ -967,28 +967,28 @@
       "per": "per guest (groups of 5 or more)"
     },
     "Barbados": {
-      "price": 208,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     },
     "Saint Lucia": {
-      "price": 468,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     },
     "Curacao": {
-      "price": 104,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     },
     "The Bahamas": {
-      "price": 195,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     },
     "Belize": {
-      "price": 312,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     },
     "Dominican Republic": {
-      "price": 195,
-      "per": "per group (up to 6)"
+      "price": null,
+      "per": "enquire"
     }
   }
 }
