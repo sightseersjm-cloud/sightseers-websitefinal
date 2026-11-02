@@ -963,7 +963,7 @@
   },
   "transfers": {
     "Jamaica": {
-      "price": 55,
+      "price": 71.5,
       "per": "per guest (groups of 5 or more)"
     },
     "Barbados": {
@@ -983,7 +983,7 @@
       "per": "per group (up to 6)"
     },
     "Belize": {
-      "price": 163,
+      "price": 312,
       "per": "per group (up to 6)"
     },
     "Dominican Republic": {

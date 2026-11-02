@@ -3,7 +3,7 @@
     "label": "Jamaica",
     "chip": "sea",
     "title": "Jamaica 5-Day Signature",
-    "frm": 1045,
+    "frm": 1061,
     "base": "Montego Bay Villa → Ocho Rios / Drax Hall",
     "days": [
       {
@@ -90,7 +90,7 @@
     "addons": {
       "xfer": {
         "name": "Jamaica 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 55,
+        "price": 71.5,
         "label": "Airport pickup & drop-off (round trip)",
         "per": "per guest (groups of 5 or more)",
         "included": true
@@ -528,7 +528,7 @@
     "label": "Belize",
     "chip": "land",
     "title": "Belize 5-Day Signature",
-    "frm": 825,
+    "frm": 850,
     "base": "Ambergris Caye Stay → San Ignacio Jungle Villa",
     "days": [
       {
@@ -615,7 +615,7 @@
     "addons": {
       "xfer": {
         "name": "Belize 5-Day Signature: Airport Pickup & Drop-off",
-        "price": 163,
+        "price": 312,
         "label": "Airport pickup & drop-off (round trip)",
         "per": "per group (up to 6)",
         "included": true
@@ -627,7 +627,8 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 798.2
+    "acts": 798.2,
+    "note": "The water taxi from the airport to San Pedro is not included."
   },
   "Dominican Republic": {
     "label": "Dom. Rep.",
