@@ -24980,6 +24980,7 @@ vtSessionAction=function(el,type){
   <div class="ss-bot-messages" id="ssBotMessages"></div>
   <div class="ss-bot-quick">
     <button type="button" onclick="quickAskSightSeers('Find my best tour')">Find My Tour</button>
+    <button type="button" onclick="quickAskSightSeers('Flagship programs')">Programs</button>
     <button type="button" onclick="quickAskSightSeers('Help me renew my Jamaican passport')">Passport</button>
     <button type="button" onclick="quickAskSightSeers('Book Club Mobay or Club Kingston')">VIP Arrivals</button>
     <button type="button" onclick="quickAskSightSeers('Help me plan a group trip')">Group Trip</button>
@@ -28473,7 +28474,7 @@ var SS_META = {
   'passport':['Passport & Travel Document Requirements, Caribbean','Entry requirements, passport validity and travel documents for Caribbean destinations. Check before you book.'],
   'booking':['Plan Your Caribbean Group Trip | Sight Seers Caribbean','Tell us about your group, dates and budget and a planner replies within one business day. Groups of 5 to 60. Office hours daily, 10:00 AM to 6:00 PM.'],
   'contact':['Contact Sight Seers Caribbean | Group Travel Planning','Call or WhatsApp +1 (876) 465-0630 or +1 (347) 291-6868, or email info@sightseerscaribbean.com. Open daily 10:00 AM to 6:00 PM Jamaica time.'],
-  'account':['Your Account | Sight Seers Caribbean','Sign in to track bookings and saved experiences.'],
+  'account':['Your Account | Sight Seers Caribbean','Sign in to track your bookings, trips and Travel Points.'],
   'privacy-policy':['Privacy Policy | Sight Seers Caribbean','How Sight Seers Caribbean collects, uses and safeguards your information.'],
   'terms-of-service':['Terms of Service | Sight Seers Caribbean','The terms that govern bookings and use of the Sight Seers Caribbean website.'],
   'refund-policy':['Refund & Cancellation Policy | Sight Seers Caribbean','Our cancellation windows, deposit terms and refund process.']
@@ -29377,6 +29378,43 @@ function describeTourForBot(tour, opener='Open tour'){
   actions.push({label:'Request Experience',type:'nav',target:'booking'});
   return actions;
 }
+/* The assistant finds a page by the words a guest types: "flagship", "leaders in jamaica", "travel club", "shore leave" and so on.
+   Specific pages come before general ones, and a page with no wording of its own uses its search description (SS_META). */
+const BOT_PAGES=[
+  {id:'leaders-jamaica',name:'Leaders in Jamaica',re:/leaders? in jamaica|leaders? jamaica|leadership institute|student government|student leaders?|\bsga\b|delegates?/,text:'<strong>Leaders in Jamaica</strong> is a five-day leadership institute in Jamaica for student governments, alongside a Jamaican university’s student government. It is by application. The dates, the price per delegate and how to apply are on the page.'},
+  {id:'seven-shores-society',name:'Seven Shores Society',re:/seven shores society|shores society|founders? residency|entrepreneurs?|residency|alignment call|membership/},
+  {id:'shore-leave',name:'Shore Leave',re:/shore leave|undergrad|spring break|college trip|college students?/},
+  {id:'seven-shores-offsite',name:'Seven Shores Offsite',re:/off-?site|company retreat|corporate (trip|retreat)|team building|team-building/},
+  {id:'mba-voyages',name:'Seven Shores MBA Voyages',re:/mba|voyages?|alumni|executive retreat/},
+  {id:'greek-life',name:'Greek Life Travel',re:/greek|fraternity|sorority|divine nine|probate|chapter trip/},
+  {id:'school-tours',name:'School Tours',re:/school (trip|tour)s?|university group|educational (trip|tour)|class trip|field trip|chaperone/},
+  {id:'travel-club',name:'Travel Club',re:/travel club|lead a trip|join a trip|group leader|trip leader|departures?|apply to lead|tell me first|be first to hear|new trips?/,text:'The <strong>Travel Club</strong> lets you join a trip led by someone from our community, or lead your own trip with your group. You will see the approved departures with prices and places left, and you can ask to be told the moment a new one opens.'},
+  {id:'passport',name:'Passport Renewal',re:/passport|renewal|biography page|\bia no\b|birth certificate/,text:'The <strong>Passport Renewal</strong> page takes your renewal request: your details and home address, whether the passport is shipped to that address or another one, the biography page, the birth certificate number (IA No.), a 35 × 45 mm passport photo that is size-checked, and two emergency contacts. Nothing is charged to send it.'},
+  {id:'destinations',name:'Destinations',re:/destinations?|which islands?|countries|5[- ]day (signature )?packages?|signature packages?|packages? by (island|country)/},
+  {id:'discoverjamaica',name:'Discover Jamaica',re:/discover jamaica|jamaica guide|local guide/},
+  {id:'landmark',name:'Landmark Experiences',re:/landmark/},
+  {id:'transfers',name:'Airport Transfers',re:/transfers?|sprinter|coach|escalade|mercedes|airport pick-?up|airport drop/},
+  {id:'yacht-charters',name:'Yacht Charters',re:/yachts?|charters?/},
+  {id:'stays',name:'Villas & Stays',re:/villas?|stays?\b|accommodation|where to stay|vacation rentals?|hotels?/},
+  {id:'tent-rental',name:'Tent Rental',re:/\btents?\b|camping/},
+  {id:'gallery',name:'Gallery',re:/gallery|photos?|pictures?/},
+  {id:'about',name:'About Sight Seers',re:/about (you|us|sight)|who are you|your story|our story|team\b/},
+  {id:'partners',name:'Partners',re:/partners?/},
+  {id:'blog',name:'Blog',re:/\bblog\b|travel guides?|packing/},
+  {id:'refund-policy',name:'Refund Policy',re:/refund|cancel|cancellation|deposit terms/},
+  {id:'flagship-programs',name:'Flagship Programs',re:/flag\s?ship|signature programs?|our programs?|programmes?\b|programs?\b/,text:'Our <strong>Flagship Programs</strong> are Seven Shores MBA Voyages, Leaders in Jamaica, Seven Shores Society, Shore Leave and the Seven Shores Offsite. Open one to see the details, or open the Flagship Programs page to compare them.',kids:['mba-voyages','leaders-jamaica','seven-shores-society','shore-leave','seven-shores-offsite']}
+];
+function botPageFinder(q){
+  const hits=BOT_PAGES.filter(pg=>pg.re.test(q));
+  if(!hits.length) return null;
+  const pg=hits[0];
+  const meta=(typeof SS_META!=='undefined'&&SS_META[pg.id])?SS_META[pg.id][1]:'';
+  const text=pg.text||('<strong>'+pg.name+'</strong>: '+meta);
+  const actions=[{label:'Open '+pg.name,type:'nav',target:pg.id}];
+  (pg.kids||[]).forEach(id=>{const k=BOT_PAGES.find(x=>x.id===id);if(k)actions.push({label:k.name,type:'nav',target:k.id});});
+  hits.slice(1,3).forEach(h=>{if(h.id!==pg.id&&!(pg.kids||[]).includes(h.id))actions.push({label:h.name,type:'nav',target:h.id});});
+  return {text,actions};
+}
 function getBotReply(message){
   const q=String(message||'').toLowerCase().trim();
   const atv=TOURS.find(t=>t.id===2);
@@ -29387,9 +29425,11 @@ function getBotReply(message){
   const school=TOURS.find(t=>t.id===8);
   const mba=TOURS.find(t=>t.id===5);
   if(!q){
-    return {text:'Ask me about tours, pricing, passport renewal, VIP lounges, guest accounts, transport or the virtual Caribbean tour with LAM.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'}]};
+    return {text:'Ask me about tours, flagship programs, the Travel Club, passport renewal, VIP lounges, guest accounts, transport or the virtual Caribbean tour with LAM.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'}]};
   }
-  if(/hello|hi|hey|good morning|good afternoon|good evening/.test(q)){
+  const pageHit=botPageFinder(q);
+  if(pageHit) return pageHit;
+  if(/\b(hello|hi|hey)\b|good morning|good afternoon|good evening/.test(q)){
     return {text:'Welcome to Sight Seers Caribbean Adventures. Tell me the kind of vibe you want and I will point you to the right experience, adrenaline, scenic, romantic, group, premium or quick gift options.',actions:[{label:'Find My Tour',type:'nav',target:'tours'},{label:'Open Virtual Tour',type:'rhythm',target:'home'}]};
   }
   if(/atv|mud|jungle|adrenaline|quad/.test(q)){
@@ -29440,7 +29480,7 @@ function getBotReply(message){
   if(/partner/.test(q)){
     return {text:'Partners now live on their own dedicated page so guests can browse them cleanly without clutter in the main navigation dropdown.',actions:[{label:'Open Partners Page',type:'nav',target:'partners'}]};
   }
-  return {text:'I can help with tours, passport renewal, group packages, VIP airport lounges, transport support, booking flow and the LAM virtual Caribbean tour. Tell me the experience you want and I will take you there.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'},{label:'VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'}]};
+  return {text:'I can help with tours, flagship programs, the Travel Club, passport renewal, group packages, VIP airport lounges, transport support, booking flow and the LAM virtual Caribbean tour. Type a page name, such as flagship programs, leaders in jamaica or travel club, and I will take you there.',actions:[{label:'Explore Tours',type:'nav',target:'tours'},{label:'Passport Renewal',type:'nav',target:'passport'},{label:'VIP Lounge',type:'external',target:'https://booking.vipattractions.com/affiliate/2749'}]};
 }
 function submitSightSeersBot(){
   const input=document.getElementById('ssBotInput'); if(!input) return;
