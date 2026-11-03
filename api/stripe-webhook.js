@@ -181,7 +181,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
       ${addonRows}
       <h3 style="color:#063a63;margin:0 0 6px;font-size:16px">Your 5-day itinerary</h3>
       <table style="border-collapse:collapse;width:100%">${days}</table>
-      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Transport is not included, except the round-trip airport pickup and drop-off in Montego Bay on the Jamaica package and any private driver days you added, which are in the amount above. For other airport transfers, ask us for a rate. Meals and entry fees are not included unless an excursion says so. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
+      <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Transport is not included, except the round-trip airport pickup and drop-off on the Jamaica (Montego Bay) and Saint Lucia packages and any private driver days you added, which are in the amount above. For other airport transfers, ask us for a rate. Meals and entry fees are not included unless an excursion says so. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
@@ -242,7 +242,7 @@ async function buildItineraryPdf(pkg, session, amountStr, addons) {
   }
   if (y < 120) { page = doc.addPage([W,H]); y = H-60; }
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
-  page.drawText('Transport is not included, except the Jamaica package's Montego Bay airport pickup and drop-off and any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
+  page.drawText('Transport is not included, except the Jamaica (Montego Bay) and Saint Lucia packages' airport pickup and drop-off and any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
   page.drawText('guides; final tailoring (dates, group size and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
   page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();

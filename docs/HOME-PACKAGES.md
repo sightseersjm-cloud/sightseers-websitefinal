@@ -5,8 +5,9 @@ Source of truth: `api/_data/packages.json` (embedded in `Design_Reference.html` 
 ## How a package price is made
 - **Excursions per person** (`acts`): the sum of the "from" prices of the excursions listed in the days. They are the tour prices in the Tours catalog (already +30%).
 - **Airport pickup & drop-off** (`addons.xfer`): included on the Jamaica package only, round trip in Montego Bay. The owner's cost is $55 per person for groups of 5 or more, +30% = $71.50 per guest.
+  - Saint Lucia: included, round trip between Hewanorra Airport (UVF) and the stay, $60 per guest with no markup (owner's decision, from a local operator's listed private transfer rate).
   - Every other island: not included (`included: false`, `price: null`, `per: "enquire"`). The page says "enquire with us for a rate"; there is no airport price in the server list or the group builder.
-- **"From" price per person** (`frm`) = excursions per person, plus $71.50 on Jamaica, rounded to the dollar.
+- **"From" price per person** (`frm`) = excursions per person, plus the airport rate on Jamaica ($71.50) and Saint Lucia ($60), rounded to the dollar.
 - **Total for a group** = excursions x guests, plus the Jamaica airport line (per guest x guests).
 - **Private driver day** (`addons.driver`) is optional and was not changed.
 - The server charges the excursion price per person and the airport line from `api/_data/vtours-products.json`.

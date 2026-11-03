@@ -91,7 +91,8 @@
         "price": 71.5,
         "label": "Airport pickup & drop-off (round trip)",
         "per": "per guest (groups of 5 or more)",
-        "included": true
+        "included": true,
+        "where": "Montego Bay"
       },
       "driver": {
         "name": "Jamaica 5-Day Signature: Private Driver Day",
@@ -212,7 +213,7 @@
     "label": "St Lucia",
     "chip": "land",
     "title": "Saint Lucia 5-Day Signature",
-    "frm": 506,
+    "frm": 566,
     "base": "Soufrière Piton-View Villa → Rodney Bay Residence",
     "days": [
       {
@@ -299,10 +300,11 @@
     "addons": {
       "xfer": {
         "name": "Saint Lucia 5-Day Signature: Airport Pickup & Drop-off",
-        "price": null,
-        "label": "Airport pickup & drop-off",
-        "per": "enquire",
-        "included": false
+        "price": 60,
+        "label": "Airport pickup & drop-off (round trip)",
+        "per": "per guest",
+        "included": true,
+        "where": "Hewanorra Airport to your stay"
       },
       "driver": {
         "name": "Saint Lucia 5-Day Signature: Private Driver Day",
@@ -311,7 +313,8 @@
         "per": "per day (up to 6)"
       }
     },
-    "acts": 505.7
+    "acts": 505.7,
+    "note": "Airport pickup and drop-off is round trip between Hewanorra Airport (UVF) and your accommodation anywhere in Saint Lucia."
   },
   "Curacao": {
     "label": "Curacao",
