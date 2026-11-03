@@ -15,7 +15,7 @@ let failTo = null;
 global.fetch = async (u, o) => { const b = JSON.parse(o.body); calls.push(b); const bad = failTo && b.to && b.to.includes(failTo); return bad ? { ok: false, status: 422, json: async () => ({ message: 'rejected' }) } : { ok: true, status: 200, json: async () => ({ id: 'e' + calls.length }) }; };
 const handler = require(path.join(root, 'api/_handlers/waiver'));
 const db = require(path.join(root, 'api/_lib/db'));
-const WAIVER = require(path.join(root, 'api/_data/waiver.json'));
+const { WAIVER, packageEventId } = require(path.join(root, 'api/_lib/waiver'));
 let fails = 0;
 const ok = (name, cond, extra) => { console.log((cond ? 'PASS ' : 'FAIL ') + name + (extra ? '  ' + extra : '')); if (!cond) fails++; };
 const PDF = 'JVBERi0xLjMK' + 'A'.repeat(3000);
@@ -50,8 +50,19 @@ const send = (body, method) => new Promise(r => { const res = { status(c) { this
   failTo = null;
 
   const all = await db.getCollection('signed-waivers');
-  ok('three waivers were kept (spam and refused ones were not)', all.filter(w => /Ann Brown|Bob Green|Carl Dee/.test(w.name)).length === 3);
+  ok('the waivers sent so far were kept (spam and refused ones were not)', all.filter(w => /Ann Brown|Bob Green|Carl Dee/.test(w.name)).length === 3);
   const get = await send({}, 'GET'); ok('listing waivers needs the Inbox permission', get.code === 401 || get.code === 403, String(get.code));
+
+  // every package has its own waiver, built from the package's real activities
+  const PK = require(path.join(root, 'api/_data/packages.json'));
+  Object.keys(PK).forEach(k => {
+    const e = WAIVER.events.find(x => x.id === packageEventId(k));
+    const titles = []; PK[k].days.forEach(d => ['am', 'pm'].forEach(sl => { const it = d[sl]; if (it && it.meta && !/at leisure|included/i.test(it.meta)) titles.push(it.title); }));
+    ok(k + ': has its own waiver naming the package and its activities', !!e && e.activities.includes(PK[k].title) && titles.every(t => e.activities.includes(t)));
+  });
+  calls.length = 0; r = await send({ name: 'Dee Lee', email: 'dee@example.com', event: packageEventId('Jamaica'), ref: 'ss-j-1' });
+  ok('a package waiver is accepted and filed under that package', r.code === 201 && (await db.getCollection('signed-waivers')).some(w => w.name === 'Dee Lee' && w.event === 'pkg-jamaica') && calls.some(c => /Jamaica 5-Day Signature package/.test(c.html || '')));
+  ok('the booking confirmation email links each traveller to their package waiver', /\/waiver\?event=/.test(fs.readFileSync(path.join(root, 'api/stripe-webhook.js'), 'utf8')) && /Sign your waiver/.test(fs.readFileSync(path.join(root, 'api/stripe-webhook.js'), 'utf8')));
 
   // the page, the wording file and the build agree
   const html = fs.readFileSync(path.join(root, 'Design_Reference.html'), 'utf8');

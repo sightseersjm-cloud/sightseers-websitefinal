@@ -5,7 +5,7 @@
 const db = require('../_lib/db');
 const { uid, escapeHtml, requirePerm } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
-const WAIVER = require('../_data/waiver.json');
+const { WAIVER } = require('../_lib/waiver');
 
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]+/g, ' ').trim().slice(0, n);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

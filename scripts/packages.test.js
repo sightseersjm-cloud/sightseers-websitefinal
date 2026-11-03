@@ -40,5 +40,11 @@ for (const [c, v] of Object.entries(pk)) {
 ok('the home page says Jamaica includes Montego Bay airport transport and others enquire', /Jamaica \(Montego Bay\) and Saint Lucia packages include round-trip airport pickup and drop-off\. For other locations, enquire with us for a rate\./.test(html));
 ok('the dialog says what is and is not included', /round-trip airport pickup & drop-off \("\+\(_x\.where\|\|""\)\+"\) included\. No other transport is included\./.test(html) && /airport pickup & drop-off is not included: enquire with us for a rate\./.test(html));
 ok('the destinations description matches the lowest package', html.includes('5-day packages from US$' + Math.min(...Object.values(pk).map(v => v.frm))));
+// every server file must at least parse (a stray quote once broke the Stripe webhook without any test noticing)
+const { spawnSync } = require('child_process');
+const apiFiles = [path.join(root, 'api/stripe-webhook.js'), path.join(root, 'api/[...route].js')]
+  .concat(['_handlers', '_lib'].flatMap(d => fs.readdirSync(path.join(root, 'api', d)).filter(f => f.endsWith('.js')).map(f => path.join(root, 'api', d, f))));
+const broken = apiFiles.filter(f => spawnSync(process.execPath, ['--check', f]).status !== 0);
+ok('every server file parses (' + apiFiles.length + ' checked)', broken.length === 0, broken.join(', '));
 console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
 process.exit(fails ? 1 : 0);

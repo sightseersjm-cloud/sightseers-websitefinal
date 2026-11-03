@@ -153,6 +153,14 @@ function extractAddons(itemsStr, pkg) {
 }
 function addonLabel(name) { return name.replace(/^.*?:\s*/, '').replace(/^.*? - /, ''); }
 
+// The page where each traveller signs the participant waiver for this package; the booking reference ties their waivers together.
+function waiverLink(pkg, ref) {
+  const { packageEventId } = require('./_lib/waiver');
+  const key = Object.keys(PACKAGES).find(k => PACKAGES[k] === pkg);
+  const site = (process.env.SITE_URL || 'https://www.sightseerscaribbean.com').replace(/\/+$/, '');
+  return site + '/waiver?event=' + encodeURIComponent(key ? packageEventId(key) : 'general') + (ref ? '&ref=' + encodeURIComponent(ref) : '');
+}
+
 // Branded, GetYourGuide-style confirmation email for a package booking.
 function packageConfirmationHtml(pkg, amount, ref, addons) {
   const addonRows = (addons && addons.length)
@@ -182,6 +190,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
       <h3 style="color:#063a63;margin:0 0 6px;font-size:16px">Your 5-day itinerary</h3>
       <table style="border-collapse:collapse;width:100%">${days}</table>
       <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Transport is not included, except the round-trip airport pickup and drop-off on the Jamaica (Montego Bay) and Saint Lucia packages and any private driver days you added, which are in the amount above. For other airport transfers, ask us for a rate. Meals and entry fees are not included unless an excursion says so. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
+      <div style="margin-top:18px;padding:14px 16px;background:#fff7ec;border:1px solid #f3d3a6;border-radius:12px;color:#17323f;font-size:13px;line-height:1.6"><b>Every traveller signs a waiver before the trip.</b> Each person in your group opens this link, completes their details and medical form, and signs on screen. A signed copy is emailed to them and to us.<br><a href="${waiverLink(pkg, ref)}" style="display:inline-block;margin-top:8px;background:#ef8731;color:#fff;font-weight:bold;text-decoration:none;padding:9px 18px;border-radius:99px">Sign your waiver</a></div>
       <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
@@ -242,7 +251,7 @@ async function buildItineraryPdf(pkg, session, amountStr, addons) {
   }
   if (y < 120) { page = doc.addPage([W,H]); y = H-60; }
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
-  page.drawText('Transport is not included, except the Jamaica (Montego Bay) and Saint Lucia packages' airport pickup and drop-off and any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
+  page.drawText('Transport is not included, except the Jamaica (Montego Bay) and Saint Lucia packages\' airport pickup and drop-off and any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
   page.drawText('guides; final tailoring (dates, group size and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
   page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();
