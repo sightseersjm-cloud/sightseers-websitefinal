@@ -1,0 +1,28 @@
+{
+  "title": "Shirts",
+  "intro": "Sight Seers team shirts. Pick one off the rack, choose your size and send a request. We confirm the details with you.",
+  "marquee": "SIGHT SEERS CARIBBEAN · TEAM SHIRTS · SHORE TO SUMMIT · JAMAICA · BARBADOS",
+  "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+  "items": [
+    {
+      "id": "team-green",
+      "name": "Team Green shirt",
+      "colour": "#4fae3f",
+      "ink": "#ffffff",
+      "tag": "Green",
+      "blurb": "The Team Green shirt, worn on The Summit Challenge and team events.",
+      "front": "",
+      "back": ""
+    },
+    {
+      "id": "team-orange",
+      "name": "Team Orange shirt",
+      "colour": "#ef8731",
+      "ink": "#ffffff",
+      "tag": "Orange",
+      "blurb": "The Team Orange shirt, worn on The Summit Challenge and team events.",
+      "front": "",
+      "back": ""
+    }
+  ]
+}

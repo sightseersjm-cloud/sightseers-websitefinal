@@ -9075,6 +9075,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           </div>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
           <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
+          <a href="#" onclick="goShirts();return false;">Shirts</a>
           <a href="#" onclick="nav('waiver');return false;">Sign a Waiver</a>
         </div>
       </li>
@@ -9123,6 +9124,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
+    <a href="#" onclick="closeMob();goShirts();return false;">Shirts</a>
     <a href="#" onclick="nav('waiver');closeMob();return false;">Sign a Waiver</a>
   </div>
 
@@ -10364,6 +10366,183 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
       </div>
     </div>
   </div>
+
+<hr class="sec-shimmer">
+<!-- ════════════════════════════════════
+     SHIRTS SHOP (page): a clothing rail
+════════════════════════════════════ -->
+<section class="sh-section" id="p-shop" aria-label="Shirts">
+<style>
+  #p-shop{--sh-ink:#14202b;--sh-mut:#5b6b76;--sh-green:#4fae3f;--sh-orange:#ef8731;color:var(--sh-ink)}
+  #p-shop [hidden]{display:none!important}
+  #p-shop .sh-stage{position:relative;height:clamp(620px,88vh,780px);overflow:hidden;background:radial-gradient(70% 55% at 50% 38%,#fbfbf9 0,#eeeeea 70%,#e6e6e1 100%)}
+  #p-shop .sh-head{position:relative;z-index:3;text-align:center;padding:30px 20px 0;transition:opacity .5s}
+  #p-shop .sh-stage.focus .sh-head{opacity:0;pointer-events:none}
+  #p-shop .sh-kicker{font-size:11px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--sh-mut)}
+  #p-shop .sh-h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4.2vw,44px);margin:8px 0 6px;color:#063a63}
+  #p-shop .sh-intro{max-width:52ch;margin:0 auto;color:var(--sh-mut);font-size:14.5px;line-height:1.6}
+  #p-shop .sh-rail{position:absolute;left:6%;right:6%;top:clamp(190px,27vh,250px);height:5px;border-radius:5px;background:linear-gradient(180deg,#dfe3e6,#a9b1b8 55%,#cfd5da);box-shadow:0 6px 10px rgba(0,0,0,.1);z-index:1;transition:opacity .5s}
+  #p-shop .sh-rack{position:absolute;left:0;right:0;top:clamp(190px,27vh,250px);display:flex;justify-content:center;align-items:flex-start;gap:clamp(18px,5vw,70px);padding:0 6%;z-index:2}
+  #p-shop .sh-item{position:relative;width:clamp(120px,17vw,200px);cursor:pointer;transform-origin:50% 0;transition:transform .8s cubic-bezier(.22,.8,.3,1),opacity .55s,filter .55s;animation:shSway 6s ease-in-out infinite;background:none;border:0;padding:0;font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+  #p-shop .sh-item:nth-child(2){animation-delay:-2.4s}#p-shop .sh-item:nth-child(3){animation-delay:-4.1s}#p-shop .sh-item:nth-child(4){animation-delay:-1.2s}
+  #p-shop .sh-item:hover{animation-duration:2.4s}
+  #p-shop .sh-item:focus-visible{outline:2px solid var(--sh-orange);outline-offset:6px;border-radius:12px}
+  @keyframes shSway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+  #p-shop .sh-hanger{display:block;width:46%;margin:-2px auto -6px;position:relative;z-index:2}
+  #p-shop .sh-shirt{display:block;width:100%;filter:drop-shadow(0 16px 12px rgba(0,0,0,.16))}
+  #p-shop .sh-shirt-img{width:100%;display:block;filter:drop-shadow(0 16px 12px rgba(0,0,0,.16))}
+  #p-shop .sh-tagc{position:absolute;right:-17%;top:24%;display:flex;flex-direction:column;align-items:center;transition:opacity .4s}
+  #p-shop .sh-tagc i{display:block;width:1px;height:26px;background:#8a949c}
+  #p-shop .sh-tagc span{display:block;min-width:34px;padding:7px 8px 6px;border-radius:3px;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,.18)}
+  #p-shop .sh-cap{display:block;text-align:center;margin-top:14px;font-size:11.5px;letter-spacing:.06em;color:var(--sh-mut);transition:opacity .4s}
+  /* focus: one shirt comes forward, the rest fall away */
+  #p-shop .sh-stage.focus .sh-rail{opacity:0}
+  #p-shop .sh-stage.focus .sh-item{opacity:0;filter:blur(7px);pointer-events:none;animation:none}
+  #p-shop .sh-stage.focus .sh-item.on{opacity:1;filter:none;pointer-events:auto;animation:none;transform:translate(var(--dx,0),var(--dy,0)) scale(var(--sc,1.9));z-index:5;cursor:default}
+  #p-shop .sh-stage.focus .sh-item.on .sh-cap,#p-shop .sh-stage.focus .sh-item.on .sh-tagc{opacity:0}
+  #p-shop .sh-info{position:absolute;left:0;right:0;bottom:78px;z-index:6;text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .5s .25s,transform .5s .25s}
+  #p-shop .sh-stage.focus .sh-info{opacity:1;transform:none;pointer-events:auto}
+  #p-shop .sh-name{font-weight:900;letter-spacing:.04em;text-transform:uppercase;font-size:clamp(14px,2vw,18px)}
+  #p-shop .sh-blurb{max-width:46ch;margin:6px auto 0;color:var(--sh-mut);font-size:13.5px;line-height:1.55}
+  #p-shop .sh-toggle{display:inline-flex;margin:12px 0 10px;border:1px solid #c5ccd2;border-radius:99px;overflow:hidden;background:#fff}
+  #p-shop .sh-toggle button{border:0;background:none;padding:7px 18px;font:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--sh-ink)}
+  #p-shop .sh-toggle button.on{background:#0b1620;color:#fff}
+  #p-shop .sh-req{display:inline-block;border:0;background:var(--sh-orange);color:#fff;border-radius:99px;padding:12px 26px;font:inherit;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+  #p-shop .sh-arrow,#p-shop .sh-close{position:absolute;z-index:7;border:1px solid #c5ccd2;background:#fff;color:var(--sh-ink);border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:16px;opacity:0;pointer-events:none;transition:opacity .4s .3s}
+  #p-shop .sh-stage.focus .sh-arrow,#p-shop .sh-stage.focus .sh-close{opacity:1;pointer-events:auto}
+  #p-shop .sh-prev{left:clamp(12px,6vw,90px);top:44%}#p-shop .sh-next{right:clamp(12px,6vw,90px);top:44%}
+  #p-shop .sh-close{right:18px;top:18px;width:auto;border-radius:99px;padding:0 16px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+  #p-shop .sh-marq{position:absolute;left:0;right:0;bottom:0;height:42px;overflow:hidden;background:#52e040;color:#0b1620;display:flex;align-items:center;z-index:8;transform:rotate(-1.2deg) scale(1.04);transform-origin:left bottom}
+  #p-shop .sh-marq div{display:flex;gap:0;white-space:nowrap;animation:shMarq 28s linear infinite;font-size:11.5px;font-weight:900;letter-spacing:.16em}
+  #p-shop .sh-marq span{padding:0 26px}
+  @keyframes shMarq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  #p-shop .sh-hint{position:absolute;left:0;right:0;top:calc(clamp(190px,27vh,250px) + clamp(210px,28vw,330px));text-align:center;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#7b8892;z-index:2;transition:opacity .4s}
+  #p-shop .sh-stage.focus .sh-hint{opacity:0}
+  /* request form */
+  #p-shop .sh-modal{position:fixed;inset:0;z-index:100000;background:rgba(8,18,28,.55);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(4px)}
+  #p-shop .sh-box{width:min(480px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:24px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+  #p-shop .sh-box h3{margin:0 0 4px;font-family:'Playfair Display',serif;color:#063a63;font-size:22px}
+  #p-shop .sh-box p.sub{margin:0 0 14px;color:var(--sh-mut);font-size:13.5px}
+  #p-shop .sh-f{margin:0 0 10px}#p-shop .sh-f label{display:block;font-size:12px;font-weight:700;color:var(--sh-mut);margin:0 0 4px}
+  #p-shop .sh-in{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #cfdbe5;border-radius:11px;font:inherit;font-size:15px}
+  #p-shop .sh-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  #p-shop .sh-msg{margin-top:8px;font-size:13.5px}#p-shop .sh-msg.err{color:#b3261e}
+  #p-shop .sh-box .go{width:100%;margin-top:6px;border:0;background:var(--sh-orange);color:#fff;border-radius:99px;padding:13px;font:inherit;font-weight:800;cursor:pointer}
+  #p-shop .sh-box .x{float:right;border:0;background:#eef3f7;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px}
+  @media(max-width:640px){#p-shop .sh-item{width:clamp(96px,27vw,140px)}#p-shop .sh-rack{gap:12px}#p-shop .sh-info{bottom:66px}#p-shop .sh-prev{left:8px}#p-shop .sh-next{right:8px}#p-shop .sh-row{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){#p-shop .sh-item,#p-shop .sh-marq div{animation:none!important}#p-shop .sh-item,#p-shop .sh-info{transition-duration:.01s}}
+</style>
+  <div class="sh-stage" id="shStage">
+    <div class="sh-head"><div class="sh-kicker">Sight Seers</div><h1 class="sh-h1" id="shTitle">Shirts</h1><p class="sh-intro" id="shIntro"></p></div>
+    <div class="sh-rail"></div>
+    <div class="sh-rack" id="shRack"></div>
+    <div class="sh-hint">Tap a shirt</div>
+    <button type="button" class="sh-arrow sh-prev" id="shPrev" aria-label="Previous shirt">&larr;</button>
+    <button type="button" class="sh-arrow sh-next" id="shNext" aria-label="Next shirt">&rarr;</button>
+    <button type="button" class="sh-close" id="shClose">Close &times;</button>
+    <div class="sh-info" id="shInfo">
+      <div class="sh-name" id="shName"></div><p class="sh-blurb" id="shBlurb"></p>
+      <div class="sh-toggle" id="shToggle"><button type="button" class="on" data-v="front">Front</button><button type="button" data-v="back">Back</button></div><br>
+      <button type="button" class="sh-req" id="shReq">Request this shirt &rarr;</button>
+    </div>
+    <div class="sh-marq" aria-hidden="true"><div id="shMarq"></div></div>
+  </div>
+  <div class="sh-modal" id="shModal" hidden role="dialog" aria-modal="true" aria-labelledby="shMTitle">
+    <div class="sh-box">
+      <button type="button" class="x" id="shMClose" aria-label="Close">&times;</button>
+      <h3 id="shMTitle">Request a shirt</h3><p class="sub" id="shMSub"></p>
+      <form id="shForm" novalidate>
+        <div class="sh-row"><div class="sh-f"><label for="shSize">Size *</label><select class="sh-in" id="shSize"></select></div><div class="sh-f"><label for="shQty">Quantity *</label><input class="sh-in" id="shQty" type="number" min="1" max="200" value="1"></div></div>
+        <div class="sh-f"><label for="shNm">Your name *</label><input class="sh-in" id="shNm" autocomplete="name"></div>
+        <div class="sh-row"><div class="sh-f"><label for="shEm">Email *</label><input class="sh-in" id="shEm" type="email" autocomplete="email"></div><div class="sh-f"><label for="shPh">Phone or WhatsApp</label><input class="sh-in" id="shPh" type="tel" autocomplete="tel"></div></div>
+        <div class="sh-f"><label for="shNote">Anything we should know (event, date, names)</label><textarea class="sh-in" id="shNote" style="min-height:64px"></textarea></div>
+        <div style="position:absolute;left:-9999px"><input id="shWeb" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="go" id="shGo">Send request</button>
+        <div class="sh-msg" id="shMsg" role="alert"></div>
+      </form>
+      <div id="shOk" hidden><h3>Thank you.</h3><p class="sub">We have your request and will email you to confirm the details. No payment is taken on this page.</p></div>
+    </div>
+  </div>
+</section>
+<script>
+window.SHIRTS={"title": "Shirts", "intro": "Sight Seers team shirts. Pick one off the rack, choose your size and send a request. We confirm the details with you.", "marquee": "SIGHT SEERS CARIBBEAN · TEAM SHIRTS · SHORE TO SUMMIT · JAMAICA · BARBADOS", "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL"], "items": [{"id": "team-green", "name": "Team Green shirt", "colour": "#4fae3f", "ink": "#ffffff", "tag": "Green", "blurb": "The Team Green shirt, worn on The Summit Challenge and team events.", "front": "", "back": ""}, {"id": "team-orange", "name": "Team Orange shirt", "colour": "#ef8731", "ink": "#ffffff", "tag": "Orange", "blurb": "The Team Orange shirt, worn on The Summit Challenge and team events.", "front": "", "back": ""}]};
+/* ===== Shirts shop: a clothing rail. Data is window.SHIRTS (api/_data/shirts.json). ===== */
+(function(){
+  var S=window.SHIRTS, cur=-1, view='front', built=false, items=[];
+  function $(i){return document.getElementById(i);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+  var HANGER='<svg class="sh-hanger" viewBox="0 0 60 40" aria-hidden="true"><path d="M30 4c4.6 0 5.6 4.6 3 6.6-1.6 1.2-3 2-3 4.4V16L6 31c-3 2.2-1.6 3.6 1.6 3.6h44.8c3.2 0 4.6-1.4 1.6-3.6L30 16" fill="none" stroke="#5d676f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  /* stand-in artwork until real product photos are added: a plain tee in the shirt's colour */
+  function tee(it,v){
+    var c=it.colour||'#4fae3f',ink=it.ink||'#fff';
+    var body='<path d="M62 18 86 10q14 18 28 0l24 8 52 36-20 42-24-14v133H54V82L30 96 10 54Z" fill="'+esc(c)+'"/><path d="M62 18 86 10q14 18 28 0l24 8" fill="none" stroke="rgba(0,0,0,.14)" stroke-width="2"/>';
+    var shade='<path d="M54 82v133h92V82" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="3"/>';
+    var neck=v==='front'?'<path d="M86 10q14 24 28 0" fill="'+esc(c)+'" stroke="rgba(0,0,0,.22)" stroke-width="2.5"/>':'<path d="M86 10q14 8 28 0" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="2.5"/>';
+    var art=v==='front'
+      ?'<text x="100" y="104" text-anchor="middle" font-family="Poppins,Arial,sans-serif" font-weight="800" font-size="15" letter-spacing="1" fill="'+esc(ink)+'">SIGHT SEERS</text><text x="100" y="118" text-anchor="middle" font-family="Poppins,Arial,sans-serif" font-weight="700" font-size="6.5" letter-spacing="2.4" fill="'+esc(ink)+'" opacity=".9">CARIBBEAN ADVENTURES</text>'
+      :'<text x="100" y="52" text-anchor="middle" font-family="Poppins,Arial,sans-serif" font-weight="800" font-size="8" letter-spacing="1.6" fill="'+esc(ink)+'" opacity=".92">SIGHT SEERS</text>';
+    return '<svg class="sh-shirt" viewBox="0 0 200 218" role="img" aria-label="'+esc(it.name)+', '+v+'">'+body+shade+neck+art+'</svg>';
+  }
+  function art(it,v){var src=v==='back'?it.back:it.front;return src?'<img class="sh-shirt-img" src="'+esc(src)+'" alt="'+esc(it.name)+', '+v+'">':tee(it,v);}
+  function build(){
+    if(built||!S||!$('shRack'))return; built=true;
+    $('shTitle').textContent=S.title||'Shirts';$('shIntro').textContent=S.intro||'';
+    var rack=$('shRack');
+    rack.innerHTML=S.items.map(function(it,i){return '<button type="button" class="sh-item" data-i="'+i+'" aria-label="'+esc(it.name)+'">'+HANGER+'<span class="sh-art" data-i="'+i+'">'+art(it,'front')+'</span><span class="sh-tagc" aria-hidden="true"><i></i><span style="background:'+esc(it.colour)+'">'+esc(it.tag||'')+'</span></span><span class="sh-cap">'+esc(it.name)+'</span></button>';}).join('');
+    items=[].slice.call(rack.querySelectorAll('.sh-item'));
+    items.forEach(function(b){b.addEventListener('click',function(){open(+b.getAttribute('data-i'));});});
+    var m=(S.marquee||'')+'  ·  ';var one='';for(var k=0;k<6;k++)one+='<span>'+esc(m)+'</span>';$('shMarq').innerHTML=one+one;
+    $('shClose').onclick=close;$('shPrev').onclick=function(){step(-1);};$('shNext').onclick=function(){step(1);};
+    $('shToggle').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;setView(b.getAttribute('data-v'));});
+    $('shReq').onclick=openForm;$('shMClose').onclick=closeForm;$('shModal').addEventListener('click',function(e){if(e.target===this)closeForm();});
+    $('shForm').addEventListener('submit',send);
+    document.addEventListener('keydown',function(e){var pg=$('p-shop');if(!pg||pg.offsetParent===null)return;if(!$('shModal').hidden){if(e.key==='Escape')closeForm();return;}if(cur<0)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);});
+    window.addEventListener('resize',function(){if(cur>=0)place(cur);});
+    $('shSize').innerHTML=S.sizes.map(function(z){return '<option>'+esc(z)+'</option>';}).join('');
+  }
+  function place(i){
+    var st=$('shStage'),it=items[i];if(!it)return;
+    it.style.setProperty('--dx','0px');it.style.setProperty('--dy','0px');it.style.setProperty('--sc','1');
+    var sr=st.getBoundingClientRect(),r=it.getBoundingClientRect();
+    var sc=Math.max(1.25,Math.min(2.3,(sr.height*0.44)/r.height));
+    var dx=(sr.left+sr.width/2)-(r.left+r.width/2);
+    var dy=(sr.height*0.1)-(r.top-sr.top);
+    it.style.setProperty('--sc',sc.toFixed(3));it.style.setProperty('--dx',Math.round(dx)+'px');it.style.setProperty('--dy',Math.round(dy)+'px');
+  }
+  function open(i){
+    build();cur=i;view='front';
+    items.forEach(function(b,k){b.classList.toggle('on',k===i);});
+    $('shStage').classList.add('focus');try{$('shStage').scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
+    var it=S.items[i];$('shName').textContent=it.name;$('shBlurb').textContent=it.blurb||'';
+    [].forEach.call($('shToggle').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')==='front');});
+    var holder=items[i].querySelector('.sh-art');holder.innerHTML=art(it,'front');
+    place(i);requestAnimationFrame(function(){place(i);});
+    $('shStage').setAttribute('data-n',String(S.items.length));$('shPrev').hidden=$('shNext').hidden=S.items.length<2;
+  }
+  function close(){cur=-1;$('shStage').classList.remove('focus');items.forEach(function(b){b.classList.remove('on');b.style.removeProperty('--dx');b.style.removeProperty('--dy');b.style.removeProperty('--sc');});}
+  function step(d){if(cur<0)return;var n=S.items.length;var nxt=(cur+d+n)%n;items[cur].classList.remove('on');open(nxt);}
+  function setView(v){view=v;[].forEach.call($('shToggle').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===v);});var it=S.items[cur];items[cur].querySelector('.sh-art').innerHTML=art(it,v);}
+  function openForm(){var it=S.items[cur];if(!it)return;$('shMSub').textContent=it.name+'. Tell us your size and how to reach you. We will confirm the details by email.';$('shForm').hidden=false;$('shOk').hidden=true;$('shMsg').textContent='';$('shGo').disabled=false;$('shGo').textContent='Send request';$('shModal').hidden=false;try{$('shNm').focus();}catch(e){}}
+  function closeForm(){$('shModal').hidden=true;}
+  function send(e){
+    e.preventDefault();var it=S.items[cur],msg=$('shMsg');msg.className='sh-msg';msg.textContent='';
+    var nm=$('shNm').value.trim(),em=$('shEm').value.trim(),ph=$('shPh').value.trim(),qty=parseInt($('shQty').value,10);
+    if(!nm)return fail('Please enter your name.');if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))return fail('Please enter a valid email so we can reply.');
+    if(!(qty>=1&&qty<=200))return fail('Please enter a quantity from 1 to 200.');
+    if($('shWeb').value){$('shForm').hidden=true;$('shOk').hidden=false;return;}
+    var size=$('shSize').value,note=$('shNote').value.trim(),go=$('shGo');go.disabled=true;go.textContent='Sending…';
+    var body={action:'send',name:nm,email:em,phone:ph,subject:'Shirt request: '+it.name+' ('+size+' x '+qty+')',message:'Shirt request from the Shirts page.\nShirt: '+it.name+'\nSize: '+size+'\nQuantity: '+qty+'\nName: '+nm+'\nEmail: '+em+'\nPhone: '+(ph||'Not provided')+'\nNotes: '+(note||'None')};
+    fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(function(r){return r.json().catch(function(){return{};}).then(function(j){return{ok:r.ok,j:j};});})
+      .then(function(res){if(!res.ok)throw new Error((res.j&&res.j.error)||'Could not send');$('shForm').hidden=true;$('shOk').hidden=false;try{if(window.ssConfetti)window.ssConfetti();}catch(x){}})
+      .catch(function(err){go.disabled=false;go.textContent='Send request';fail(err.message+'. Please try again, or email info@sightseerscaribbean.com.');});
+  }
+  function fail(m){var el=$('shMsg');el.className='sh-msg err';el.textContent=m;return false;}
+  window.initShop=function(){build();if(cur>=0)close();};
+  window.goShirts=function(){try{if(typeof nav==='function')nav('home');}catch(e){}setTimeout(function(){var s=$('shStage');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});},450);};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
+})();
+</script>
 
 <!-- FEATURED BLOG -->
 <hr class="sec-shimmer">
@@ -25081,6 +25260,7 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('privacy-policy');return false;"><i class="fas fa-chevron-right"></i>Privacy Policy</a></li>
         <li><a href="#" onclick="nav('terms-of-service');return false;"><i class="fas fa-chevron-right"></i>Terms of Service</a></li>
         <li><a href="#" onclick="nav('waiver');return false;"><i class="fas fa-chevron-right"></i>Sign a Waiver</a></li>
+        <li><a href="#" onclick="goShirts();return false;"><i class="fas fa-chevron-right"></i>Shirts</a></li>
         <li><a href="#" onclick="nav('contact');return false;"><i class="fas fa-chevron-right"></i>Contact Support</a></li>
       </ul>
       <div class="support-note">
