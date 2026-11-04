@@ -14118,26 +14118,6 @@ body.theme-night #p-flagship-programs{
   #p-waiver .wv-ok{text-align:center;padding:34px 22px}
   #p-waiver .wv-ok h2{font-family:'Playfair Display',serif;color:var(--wv-navy);margin:0 0 8px}
   #p-waiver [hidden]{display:none!important}
-  #p-waiver .wv-prog{z-index:20;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--wv-hair);border-radius:16px;padding:12px 16px 10px;margin:0 0 18px;box-shadow:0 8px 22px -14px rgba(6,58,99,.35)}
-  #p-waiver .wv-prog.fixed{position:fixed;top:10px;margin:0;box-sizing:border-box}
-  #p-waiver .wv-prog-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:var(--wv-mut)}
-  #p-waiver .wv-prog-top b{color:var(--wv-navy)}
-  #p-waiver .wv-prog-track{height:6px;border-radius:99px;background:#e6edf3;overflow:hidden}
-  #p-waiver .wv-prog-track i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--wv-green),var(--wv-orange));transition:width .6s cubic-bezier(.22,.8,.3,1)}
-  #p-waiver .wv-prog-steps{list-style:none;margin:10px 0 0;padding:0;display:flex;justify-content:space-between;gap:4px;font-size:11.5px;font-weight:700;color:#8a99a6}
-  #p-waiver .wv-prog-steps li{display:flex;align-items:center;gap:6px;transition:color .3s}
-  #p-waiver .wv-prog-steps em{font-style:normal;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e6edf3;color:#6a7b89;font-size:11px;transition:background .3s,color .3s,transform .3s}
-  #p-waiver .wv-prog-steps li.cur{color:var(--wv-navy)}
-  #p-waiver .wv-prog-steps li.cur em{background:var(--wv-navy);color:#fff}
-  #p-waiver .wv-prog-steps li.done{color:var(--wv-green)}
-  #p-waiver .wv-prog-steps li.done em{background:var(--wv-green);color:#fff;font-size:0}
-  #p-waiver .wv-prog-steps li.done em::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-  #p-waiver .wv-prog-steps li.pop em{animation:wvPop .5s cubic-bezier(.3,1.6,.5,1)}
-  @keyframes wvPop{0%{transform:scale(.4)}100%{transform:scale(1)}}
-  #p-waiver .wv-btn.ready{animation:wvReady 1.8s ease-in-out infinite}
-  @keyframes wvReady{0%,100%{box-shadow:0 0 0 0 rgba(239,135,49,.45)}50%{box-shadow:0 0 0 10px rgba(239,135,49,0)}}
-  @media(max-width:560px){#p-waiver .wv-prog-steps li{font-size:0;gap:0}#p-waiver .wv-prog-steps li em{font-size:11px}#p-waiver .wv-prog-steps li.done em{font-size:0}}
-  @media(prefers-reduced-motion:reduce){#p-waiver .wv-prog-track i,#p-waiver .wv-prog-steps li,#p-waiver .wv-prog-steps em{transition:none}#p-waiver .wv-prog-steps li.pop em,#p-waiver .wv-btn.ready{animation:none}}
   #p-waiver .wv-hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
   @media(max-width:640px){#p-waiver .wv-grid{grid-template-columns:1fr}#p-waiver .wv-card{padding:18px}}
 </style>
@@ -14148,11 +14128,6 @@ body.theme-night #p-flagship-programs{
   </div>
   <div class="wv-wrap">
    <form id="wvForm" onsubmit="return wvSubmit(event)" novalidate>
-    <div class="wv-prog" id="wvProg" role="status" aria-live="polite">
-      <div class="wv-prog-top"><b id="wvProgText">Step 1 of 5</b><span id="wvProgPct">0% done</span></div>
-      <div class="wv-prog-track"><i id="wvProgFill"></i></div>
-      <ol class="wv-prog-steps"><li data-s="1"><em>1</em>Activity</li><li data-s="2"><em>2</em>About you</li><li data-s="3"><em>3</em>Medical</li><li data-s="4"><em>4</em>Waiver</li><li data-s="5"><em>5</em>Sign</li></ol>
-    </div>
     <div class="wv-draft" id="wvDraft" hidden><b>Wording under legal review.</b> This waiver is being reviewed. We will tell you if the final wording changes before your event.</div>
     <div class="wv-card">
       <div class="wv-eyebrow">Step 1</div><h2 class="wv-h2">Your activity</h2>
@@ -43418,10 +43393,9 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     return true;
   }
   function pt(e){ var r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
-  function down(e){ if(!ready()) return; drawing=true; last=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(last.x+0.1,last.y+0.1); ctx.stroke(); hasSig=true; try{canvas.setPointerCapture(e.pointerId);}catch(_){} try{ $('wvForm').dispatchEvent(new Event('input',{bubbles:true})); }catch(_){} e.preventDefault(); }
+  function down(e){ if(!ready()) return; drawing=true; last=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(last.x+0.1,last.y+0.1); ctx.stroke(); hasSig=true; try{canvas.setPointerCapture(e.pointerId);}catch(_){} e.preventDefault(); }
   function mv(e){ if(!drawing||!ctx) return; var p=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
-  window.wvClearSig=function(){ if(ready()){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; try{ $('wvForm').dispatchEvent(new Event('input',{bubbles:true})); }catch(_){} } };
-  window.__wvSig=function(){ return hasSig; };
+  window.wvClearSig=function(){ if(ready()){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; } };
 
   /* a small copy of the logo keeps the signed PDF light enough to email quickly */
   (function(){ try{ var im=new Image(); im.onload=function(){ try{ var sc=Math.min(1,260/im.naturalWidth), cw=Math.round(im.naturalWidth*sc), ch=Math.round(im.naturalHeight*sc), c=document.createElement('canvas'); c.width=cw; c.height=ch; c.getContext('2d').drawImage(im,0,0,cw,ch); window._wvLogo=c.toDataURL('image/png'); window._wvLogoAR=im.naturalWidth/im.naturalHeight; }catch(e){} }; im.src='/assets/inline/1ba92aa926.png'; }catch(e){} })();
@@ -53163,85 +53137,4 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 .cpkg-total b.cpkg-bump{display:inline-block;animation:cpkgBump .5s ease-out}
 @keyframes cpkgBump{0%{transform:scale(1)}35%{transform:scale(1.08)}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){#cpkgDays.cpkg-draw .cpkg-day:not(:last-child)::after,#cpkgDays.cpkg-draw .cpkg-dnum,#cpkgDays.cpkg-draw .cpkg-day>div:last-child,.cpkg-total b.cpkg-bump{animation:none!important}}
-/* a small progress bar for long forms */
-.ss-prog{margin:0 0 18px;padding:12px 16px;border:1px solid #dfe6ec;border-radius:14px;background:#fff}
-.ss-prog-top{display:flex;justify-content:space-between;font-size:13px;color:#5b6b76;margin-bottom:8px}
-.ss-prog-top b{color:#063a63}
-.ss-prog-track{height:6px;border-radius:99px;background:#e6edf3;overflow:hidden}
-.ss-prog-track i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#4fae3f,#ef8731);transition:width .6s cubic-bezier(.22,.8,.3,1)}
-.ss-prog.full .ss-prog-top b::before{content:"\2713\00a0";color:#4fae3f;display:inline-block;animation:wvPop .5s cubic-bezier(.3,1.6,.5,1)}
-@media(prefers-reduced-motion:reduce){.ss-prog-track i{transition:none}.ss-prog.full .ss-prog-top b::before{animation:none}}
 </style>
-<script id="ss-motion-script">
-(function(){
-  function $(i){return document.getElementById(i);}
-  function val(i){var e=$(i);return e?String(e.value||'').trim():'';}
-
-  /* ---------- waiver: five steps that tick off as each part is complete ---------- */
-  function wvSetup(){
-    var form=$('wvForm'),prog=$('wvProg');if(!form||!prog||form.__wvProg)return;form.__wvProg=true;
-    var steps=[].slice.call(prog.querySelectorAll('li')),fill=$('wvProgFill'),txt=$('wvProgText'),pct=$('wvProgPct'),btn=$('wvSend'),read=false,last=[];
-    function checked(id){var e=$(id);return !!(e&&e.checked);}
-    function compute(){
-      var med=true,n=0;while($('wvmd'+n)||document.querySelector('input[name="wvm'+n+'"]')){
-        var c=document.querySelector('input[name="wvm'+n+'"]:checked');
-        if(!c){med=false;}else if(c.value==='Yes'&&!val('wvmd'+n)){med=false;}
-        n++;if(n>30)break;}
-      var em=val('wvEmail').toLowerCase(),em2=val('wvEmail2').toLowerCase();
-      var s2=!!(val('wvName')&&val('wvDob')&&val('wvPhone')&&/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)&&em===em2&&val('wvEcName')&&val('wvEcPhone'));
-      var s5=!!(checked('wvOver18')&&checked('wvAgree')&&val('wvPrinted')&&val('wvPrinted').toLowerCase().replace(/\s+/g,' ')===val('wvName').toLowerCase().replace(/\s+/g,' ')&&window.__wvSig&&window.__wvSig());
-      return [!!val('wvEvent')||!!($('wvEvent')&&$('wvEvent').value),s2,med&&checked('wvMedTrue'),read,s5];
-    }
-    function paint(){
-      var d=compute(),done=d.filter(Boolean).length,cur=d.indexOf(false);
-      steps.forEach(function(li,i){var was=last[i];li.classList.toggle('done',d[i]);li.classList.toggle('cur',i===cur);
-        if(d[i]&&was===false){li.classList.remove('pop');void li.offsetWidth;li.classList.add('pop');}});
-      last=d;fill.style.width=(done/5*100)+'%';
-      txt.textContent=done===5?'All done. Ready to sign and send.':('Step '+(cur+1)+' of 5: '+steps[cur].textContent.replace(/^\d/,''));
-      pct.textContent=Math.round(done/5*100)+'% done';
-      if(btn)btn.classList.toggle('ready',done===5);
-    }
-    ['input','change'].forEach(function(ev){form.addEventListener(ev,paint);});
-    var end=$('wvBringBox')||$('wvClauses');
-    function checkRead(){var el=$('wvClauses');if(!el)return;var r=el.getBoundingClientRect();if(!read&&r.bottom<innerHeight*0.9&&r.height>0){read=true;paint();}}
-    window.addEventListener('scroll',checkRead,{passive:true});
-    var obs=new MutationObserver(function(){paint();});try{obs.observe($('wvMedical'),{childList:true});}catch(e){}
-    paint();setTimeout(paint,600);
-    /* keep the bar in view while the form scrolls (the page scrolls inside the body, so we pin it ourselves) */
-    var holder=document.createElement('div');holder.style.height='0';prog.parentNode.insertBefore(holder,prog);
-    function place(){
-      var fr=form.getBoundingClientRect(),natural=holder.getBoundingClientRect();
-      var pinned=prog.classList.contains('fixed'),h=prog.offsetHeight;
-      var shouldPin=(pinned?natural.top:prog.getBoundingClientRect().top)<10&&fr.bottom>h+120&&fr.height>0&&$('p-waiver')&&$('p-waiver').offsetParent!==null;
-      if(shouldPin&&!pinned){var w=prog.getBoundingClientRect();holder.style.height=(h+18)+'px';prog.style.width=w.width+'px';prog.style.left=w.left+'px';prog.classList.add('fixed');}
-      else if(!shouldPin&&pinned){prog.classList.remove('fixed');prog.style.width='';prog.style.left='';holder.style.height='0';}
-      else if(pinned){var nw=holder.getBoundingClientRect();prog.style.left=nw.left+'px';prog.style.width=nw.width+'px';}
-    }
-    place();window.addEventListener('scroll',place,{passive:true});window.addEventListener('resize',place);
-  }
-
-  /* ---------- passport renewal: how many of the required items are done ---------- */
-  function ppSetup(){
-    var card=document.querySelector('#p-passport .passport-card');if(!card||card.__ppProg)return;card.__ppProg=true;
-    var bar=document.createElement('div');bar.className='ss-prog';bar.setAttribute('role','status');bar.setAttribute('aria-live','polite');
-    bar.innerHTML='<div class="ss-prog-top"><b id="ppProgText"></b><span id="ppProgPct"></span></div><div class="ss-prog-track"><i id="ppProgFill"></i></div>';
-    var first=card.querySelector('.form-success');(first&&first.parentNode?first.parentNode:card).insertBefore(bar,first?first.nextSibling:card.firstChild);
-    var ids=['passName','passEmail','passPhone','passAddress','passIaNo','passEc1Name','passEc1Rel','passEc1Phone','passEc1Email','passEc1Addr','passEc2Name','passEc2Rel','passEc2Phone','passEc2Email','passEc2Addr'];
-    function paint(){
-      var total=ids.length+2,done=0;
-      ids.forEach(function(i){if(val(i))done++;});
-      ['passBioUpload','passPhotoUpload'].forEach(function(i){var e=$(i);if(e&&e.files&&e.files.length)done++;});
-      var other=$('passShipOther');if(other&&other.checked){total++;if(val('passShipAddress').length>=8)done++;}
-      var f=$('ppProgFill');f.style.width=(done/total*100)+'%';
-      $('ppProgText').textContent=done===total?'All set. Ready to submit.':(done+' of '+total+' items done');
-      $('ppProgPct').textContent=Math.round(done/total*100)+'%';bar.classList.toggle('full',done===total);
-    }
-    ['input','change'].forEach(function(ev){card.addEventListener(ev,paint);});paint();
-  }
-
-  function boot(){wvSetup();ppSetup();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
-  setTimeout(boot,1500);
-  var _nav=window.nav;if(typeof _nav==='function'&&!_nav.__ssMotion){var w=function(){var r=_nav.apply(this,arguments);try{setTimeout(boot,300);}catch(e){}return r;};w.__ssMotion=true;window.nav=w;}
-})();
-</script>

@@ -71,7 +71,7 @@ const send = (body, method) => new Promise(r => { const res = { status(c) { this
   ok('no lawyer placeholders appear in the wording guests read', !/\[[^\]]*(lawyer|confirm)[^\]]*\]/i.test(JSON.stringify(WAIVER.clauses)));
   ok('the page is a route and is linked from the menu and the footer', /'waiver':'\/waiver'/.test(html) && (html.match(/nav\('waiver'\)/g) || []).length >= 3);
   ok('each medical question has its own details box that opens on Yes', html.includes('wvmdBox') && html.includes('wvMedToggle') && !html.includes('wvMedDetails'));
-  ok('the waiver form has its five-step progress bar', ['wvProg', 'wvProgFill', 'wvProgText'].every(i => html.includes('id="' + i + '"')) && html.includes('ss-motion-script'));
+  ok('the waiver has no progress bar', !html.includes('wvProg') && !html.includes('ss-prog'));
   ok('the package route line and animated total respect reduced motion', html.includes('cpkg-draw') && html.includes('prefers-reduced-motion') && html.includes('__cpkgPrev'));
   ok('the waiver page sits with the other pages, before the footer (otherwise it opens below the footer)', html.indexOf('id="p-waiver"') > 0 && html.indexOf('id="p-waiver"') < html.indexOf('<footer class="footer">'));
   ok('the built page exists at /waiver', fs.existsSync(path.join(root, 'public/waiver/index.html')));
