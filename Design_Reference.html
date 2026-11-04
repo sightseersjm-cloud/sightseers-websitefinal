@@ -43391,6 +43391,8 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   function mv(e){ if(!drawing||!ctx) return; var p=pt(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
   window.wvClearSig=function(){ if(ready()){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; } };
 
+  /* a small copy of the logo keeps the signed PDF light enough to email quickly */
+  (function(){ try{ var im=new Image(); im.onload=function(){ try{ var sc=Math.min(1,260/im.naturalWidth), cw=Math.round(im.naturalWidth*sc), ch=Math.round(im.naturalHeight*sc), c=document.createElement('canvas'); c.width=cw; c.height=ch; c.getContext('2d').drawImage(im,0,0,cw,ch); window._wvLogo=c.toDataURL('image/png'); window._wvLogoAR=im.naturalWidth/im.naturalHeight; }catch(e){} }; im.src='/assets/inline/1ba92aa926.png'; }catch(e){} })();
   function renderBody(){
     var e=ev(); var h='';
     for(var i=0;i<W.clauses.length;i++){ h+='<p class="wv-clause"><b>'+(i+1)+'. '+esc(W.clauses[i].h)+'.</b> '+esc(clauseText(W.clauses[i]))+'</p>'; }
@@ -43427,10 +43429,10 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   }
   function build(d){
     var J=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF; if(!J) return null;
-    var doc=new J({unit:'pt',format:'letter'}); var M=48,Wd=612,PH=792,y=0,FOOTH=30;
+    var doc=new J({unit:'pt',format:'letter',compress:true}); var M=48,Wd=612,PH=792,y=0,FOOTH=30;
     var navy=[6,58,99],green2=[112,194,87],orange=[239,135,49],ink=[23,42,52],mut=[91,107,118],hair=[224,231,227],soft=[244,249,246];
     function band(){ doc.setFillColor(soft[0],soft[1],soft[2]); doc.rect(0,0,Wd,104,'F');
-      if(window._trLogo){ try{ var ar=window._trLogoAR||(2048/1170); doc.addImage(window._trLogo,'PNG',M,22,140,140/ar); }catch(e){} }
+      var lg=window._wvLogo||window._trLogo; if(lg){ try{ var ar=window._wvLogoAR||window._trLogoAR||(2048/1170); doc.addImage(lg,'PNG',M,22,140,140/ar); }catch(e){} }
       doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(orange[0],orange[1],orange[2]); doc.text('PARTICIPANT WAIVER',Wd-M,44,{align:'right'});
       doc.setFontSize(13); doc.setTextColor(navy[0],navy[1],navy[2]); doc.text(d.event.label,Wd-M,66,{align:'right'});
       doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(mut[0],mut[1],mut[2]); doc.text('Sight Seers Caribbean Adventures · Waiver version '+W.version,Wd-M,88,{align:'right'});
