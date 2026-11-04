@@ -14154,7 +14154,6 @@ body.theme-night #p-flagship-programs{
       <div class="wv-eyebrow">Step 3</div><h2 class="wv-h2">Medical information</h2>
       <p style="margin:0 0 6px;font-size:14px;color:var(--wv-mut)">Please answer honestly. It helps the Sight Seers Team Lead keep you safe. Your answers are in your signed PDF only.</p>
       <div id="wvMedical"></div>
-      <div class="wv-f" style="margin-top:8px"><label for="wvMedDetails">Details for any "Yes" answer</label><textarea class="wv-in" id="wvMedDetails"></textarea></div>
       <label class="wv-check"><input type="checkbox" id="wvMedTrue"><span>I confirm my answers are true and complete. I will tell the Team Lead straight away if my health changes before or during the day.</span></label>
     </div>
     <div class="wv-card">
@@ -43401,12 +43400,13 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     var bb=$('wvBringBox'); if(e.bring&&e.bring.length){ $('wvBring').innerHTML=e.bring.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join(''); bb.hidden=false; } else { bb.hidden=true; }
   }
   window.wvEventChanged=renderBody;
+  window.wvMedToggle=function(i){ var y=document.querySelector('input[name="wvm'+i+'"]:checked'); var b=$('wvmdBox'+i); if(b) b.hidden=!(y&&y.value==='Yes'); };
   window.initWaiver=function(){
     if(!W||!$('wvForm')) return;
     var sel=$('wvEvent');
     if(!sel.options.length){
       sel.innerHTML=W.events.map(function(e){ return '<option value="'+esc(e.id)+'">'+esc(e.label)+'</option>'; }).join('');
-      $('wvMedical').innerHTML=W.medical.map(function(q,i){ return '<div class="wv-q"><p>'+(i+1)+'. '+esc(q)+' *</p><div class="wv-yn"><label><input type="radio" name="wvm'+i+'" value="No"> No</label><label><input type="radio" name="wvm'+i+'" value="Yes"> Yes</label></div></div>'; }).join('');
+      $('wvMedical').innerHTML=W.medical.map(function(q,i){ return '<div class="wv-q"><p>'+(i+1)+'. '+esc(q)+' *</p><div class="wv-yn"><label><input type="radio" name="wvm'+i+'" value="No" onchange="wvMedToggle('+i+')"> No</label><label><input type="radio" name="wvm'+i+'" value="Yes" onchange="wvMedToggle('+i+')"> Yes</label></div><div class="wv-f wv-medd" id="wvmdBox'+i+'" hidden><label for="wvmd'+i+'">Please give details *</label><textarea class="wv-in" id="wvmd'+i+'" placeholder="Tell us what we should know, for example the condition, any medication, and what helps."></textarea></div></div>'; }).join('');
       $('wvPhotoText').textContent=W.photoClause;
       $('wvDraft').hidden=!W.showNotice;
     }
@@ -43423,8 +43423,8 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   function data(){
     var d={event:ev(),ref:$('wvRef').value.trim().toUpperCase(),company:$('wvCompany').value.trim(),name:$('wvName').value.trim(),dob:$('wvDob').value,phone:$('wvPhone').value.trim(),
       email:$('wvEmail').value.trim(),team:$('wvTeam').value,size:$('wvSize').value,ec:{name:$('wvEcName').value.trim(),rel:$('wvEcRel').value.trim(),phone:$('wvEcPhone').value.trim()},
-      med:[],medDetails:$('wvMedDetails').value.trim(),photoNo:$('wvPhoto').checked,printed:$('wvPrinted').value.trim()};
-    for(var i=0;i<W.medical.length;i++){ var c=document.querySelector('input[name="wvm'+i+'"]:checked'); d.med.push(c?c.value:''); }
+      med:[],medDetails:[],photoNo:$('wvPhoto').checked,printed:$('wvPrinted').value.trim()};
+    for(var i=0;i<W.medical.length;i++){ var c=document.querySelector('input[name="wvm'+i+'"]:checked'); d.med.push(c?c.value:''); d.medDetails.push(c&&c.value==='Yes'?($('wvmd'+i).value||'').trim():''); }
     return d;
   }
   function build(d){
@@ -43449,8 +43449,7 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     if(d.event.apparel){ kv('Team',d.team); kv('Shirt size',d.size); }
     kv('Emergency contact',(d.ec.name+(d.ec.rel?' ('+d.ec.rel+')':'')+(d.ec.phone?' · '+d.ec.phone:'')).trim());
     h2('Medical information'); k=0;
-    for(var i=0;i<W.medical.length;i++){ para((i+1)+'. '+W.medical[i]); y-=2; para('Answer: '+d.med[i],true); }
-    para('Details: '+(d.medDetails||'None given'));
+    for(var i=0;i<W.medical.length;i++){ para((i+1)+'. '+W.medical[i]); y-=2; para('Answer: '+d.med[i],true); if(d.med[i]==='Yes'){ y-=2; para('Details: '+d.medDetails[i]); } }
     para('The participant confirmed their medical answers are true and complete.');
     h2('Waiver and release of liability');
     for(var c=0;c<W.clauses.length;c++){ para((c+1)+'. '+W.clauses[c].h+'. '+clauseText(W.clauses[c])); }
@@ -43481,7 +43480,7 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     if($('wvEmail2').value.trim().toLowerCase()!==d.email.toLowerCase()) return fail('The two email addresses do not match. Your signed copy is sent there, so please check it.');
     if(!d.ec.name||!d.ec.phone) return fail('Please give an emergency contact name and phone number.');
     if(d.med.indexOf('')>=0) return fail('Please answer every medical question (Yes or No).');
-    if(d.med.indexOf('Yes')>=0&&!d.medDetails) return fail('Please give details for your "Yes" answers.');
+    for(var q=0;q<d.med.length;q++){ if(d.med[q]==='Yes'&&!d.medDetails[q]){ var bx=$('wvmd'+q); try{ bx.scrollIntoView({behavior:'smooth',block:'center'}); bx.focus(); }catch(e){} return fail('Please give details for question '+(q+1)+', where you answered Yes.'); } }
     if(!$('wvMedTrue').checked) return fail('Please confirm your medical answers are true and complete.');
     if(!$('wvOver18').checked) return fail('You must be 18 or older to sign. Please ask us how a parent or guardian can sign.');
     if(!$('wvAgree').checked) return fail('Please tick the box to say you have read and agree to the waiver.');

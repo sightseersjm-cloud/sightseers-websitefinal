@@ -70,6 +70,7 @@ const send = (body, method) => new Promise(r => { const res = { status(c) { this
   ok('the wording on the page is the wording in api/_data/waiver.json', JSON.stringify(JSON.parse(html.slice(i + 'window.WAIVER='.length, j))) === JSON.stringify(WAIVER));
   ok('no lawyer placeholders appear in the wording guests read', !/\[[^\]]*(lawyer|confirm)[^\]]*\]/i.test(JSON.stringify(WAIVER.clauses)));
   ok('the page is a route and is linked from the menu and the footer', /'waiver':'\/waiver'/.test(html) && (html.match(/nav\('waiver'\)/g) || []).length >= 3);
+  ok('each medical question has its own details box that opens on Yes', html.includes('wvmdBox') && html.includes('wvMedToggle') && !html.includes('wvMedDetails'));
   ok('the waiver page sits with the other pages, before the footer (otherwise it opens below the footer)', html.indexOf('id="p-waiver"') > 0 && html.indexOf('id="p-waiver"') < html.indexOf('<footer class="footer">'));
   ok('the built page exists at /waiver', fs.existsSync(path.join(root, 'public/waiver/index.html')));
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
