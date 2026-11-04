@@ -1,28 +1,27 @@
 {
   "title": "Shirts",
-  "intro": "Sight Seers team shirts. Pick one off the rack, choose your size and send a request. We confirm the details with you.",
-  "marquee": "SIGHT SEERS CARIBBEAN · TEAM SHIRTS · SHORE TO SUMMIT · JAMAICA · BARBADOS",
-  "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+  "intro": "Sight Seers Travel Club shirts. Tap a shirt to take a closer look, choose your size and send a request. We confirm the details with you.",
+  "marquee": "SIGHT SEERS TRAVEL CLUB · TRAVEL MORE · SEE MORE · LIVE MORE",
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL",
+    "3XL"
+  ],
   "items": [
     {
-      "id": "team-green",
-      "name": "Team Green shirt",
-      "colour": "#4fae3f",
-      "ink": "#ffffff",
-      "tag": "Green",
-      "blurb": "The Team Green shirt, worn on The Summit Challenge and team events.",
+      "id": "travel-more",
+      "name": "Travel More tee",
+      "colour": "#ffffff",
+      "ink": "#063a63",
+      "tag": "White",
+      "tagColour": "#063a63",
+      "blurb": "The Sight Seers Travel Club tee. Travel more. See more, live more.",
       "front": "",
-      "back": ""
-    },
-    {
-      "id": "team-orange",
-      "name": "Team Orange shirt",
-      "colour": "#ef8731",
-      "ink": "#ffffff",
-      "tag": "Orange",
-      "blurb": "The Team Orange shirt, worn on The Summit Challenge and team events.",
-      "front": "",
-      "back": ""
+      "back": "/assets/shirts/travel-more-back.webp"
     }
   ]
 }
