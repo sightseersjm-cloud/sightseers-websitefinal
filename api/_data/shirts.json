@@ -1,6 +1,6 @@
 {
   "title": "Shirts",
-  "intro": "Sight Seers Travel Club shirts. Tap a shirt to take a closer look, choose your size and send a request. We confirm the details with you.",
+  "intro": "Sight Seers Travel Club shirts. Hover a shirt to turn it, tap it for the details and price.",
   "marquee": "SIGHT SEERS TRAVEL CLUB · TRAVEL MORE · SEE MORE · LIVE MORE",
   "sizes": [
     "XS",
@@ -21,7 +21,9 @@
       "tagColour": "#063a63",
       "blurb": "The Sight Seers Travel Club tee. Travel more. See more, live more.",
       "front": "",
-      "back": "/assets/shirts/travel-more-back.webp"
+      "back": "/assets/shirts/travel-more-back.webp",
+      "price": null
     }
-  ]
+  ],
+  "currency": "US$"
 }

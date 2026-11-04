@@ -12,7 +12,7 @@ ok('there is at least one shirt', data.items.length >= 1);
 data.items.forEach(it => ok(it.name + ': has an id, a name, a colour and a short description', !!(it.id && it.name && /^#[0-9a-f]{6}$/i.test(it.colour) && it.blurb)));
 ok('shirt ids are unique', new Set(data.items.map(x => x.id)).size === data.items.length);
 ok('sizes are listed', Array.isArray(data.sizes) && data.sizes.length >= 3);
-ok('no prices are shown (none have been set yet)', !/price/i.test(JSON.stringify(data)));
+ok('a shirt without a price says Price on request', data.items.every(x => x.price === null || typeof x.price === 'number') && html.includes('Price on request'));
 ok('the rack section is on the home page, before the featured blog', html.indexOf('id="p-shop"') > 0 && html.indexOf('id="p-shop"') < html.indexOf('<!-- FEATURED BLOG -->'));
 ok('the section is linked from the menu, the mobile menu and the footer', (html.match(/goShirts\(\)/g) || []).length >= 3);
 ok('the request goes to the inbox (no online payment)', html.includes("subject:'Shirt request: '") && !/stripe/i.test(html.slice(html.indexOf('id="p-shop"'), html.indexOf('<!-- FEATURED BLOG -->'))));
