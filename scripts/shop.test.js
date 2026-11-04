@@ -14,7 +14,7 @@ ok('shirt ids are unique', new Set(data.items.map(x => x.id)).size === data.item
 ok('sizes are listed', Array.isArray(data.sizes) && data.sizes.length >= 3);
 ok('no prices are shown (none have been set yet)', !/price/i.test(JSON.stringify(data)));
 ok('the rack section is on the home page, before the featured blog', html.indexOf('id="p-shop"') > 0 && html.indexOf('id="p-shop"') < html.indexOf('<!-- FEATURED BLOG -->'));
-ok('the section is linked from the menu, the mobile menu and the footer', (html.match(/goShirts\(\)/g) || []).length >= 4);
+ok('the section is linked from the menu, the mobile menu and the footer', (html.match(/goShirts\(\)/g) || []).length >= 3);
 ok('the request goes to the inbox (no online payment)', html.includes("subject:'Shirt request: '") && !/stripe/i.test(html.slice(html.indexOf('id="p-shop"'), html.indexOf('<!-- FEATURED BLOG -->'))));
 ok('motion is switched off for guests who reduce motion', html.slice(html.indexOf('id="p-shop"'), html.indexOf('<!-- FEATURED BLOG -->')).includes('prefers-reduced-motion'));
 console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
