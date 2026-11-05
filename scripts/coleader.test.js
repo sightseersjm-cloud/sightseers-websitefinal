@@ -107,6 +107,24 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   r = await post({ action: 'co-review', id, approve: false, reply: 'We need to speak with you first.' }, owner);
   ok('the owner can decline a co-leader, who then has no access', r.code === 200 && r.body.coLeader.status === 'rejected' && (await post({ action: 'trip-info-save', id, summary: 'Cole after decline.' }, co)).code === 404);
 
+  // sponsors: a list on the trip, added like days
+  const base = { action: 'trip-save', id, title: 'Negril Weekend', slug: 'negril-weekend', status: 'open', summary: 'A long weekend in Negril, planned together.', dateText: '1 to 3 May 2027', organizerName: 'Ann Main', organizerEmail: 'ann@example.com', showOrganizer: true };
+  r = await post(Object.assign({}, base, { sponsors: [{ name: 'Legend Lager', url: 'http://not-secure.example' }] }), owner);
+  ok('a sponsor link must be https', r.code === 400);
+  r = await post(Object.assign({}, base, { sponsors: [{ url: 'https://wisynco.com/' }] }), owner);
+  ok('a sponsor needs a name', r.code === 400);
+  r = await post(Object.assign({}, base, { sponsors: [{ name: 'Legend Lager (Wisynco Group)', url: 'https://wisynco.com/', logo: '/logos/legend.png', note: 'Drinks on the yacht day' }, { name: '', url: '', logo: '', note: '' }, { name: 'Second Sponsor', url: 'https://example.com/' }] }), owner);
+  ok('the owner adds two sponsors (an empty row is ignored)', r.code === 200 && r.body.trip.sponsors.length === 2, r.body.error);
+  r = await call('trips', 'GET', '/api/trips?slug=negril-weekend');
+  ok('the public trip shows both sponsors with logo, link and line', r.body.trip.sponsors.length === 2 && r.body.trip.sponsors[0].logo === '/logos/legend.png' && r.body.trip.sponsors[0].note === 'Drinks on the yacht day');
+  r = await call('trips', 'GET', '/api/trips?mine=1', null, main);
+  ok('the leader sees the sponsors on their dashboard', r.body.trips.find(t => t.id === id).sponsors.length === 2);
+  r = await post(Object.assign({}, base), owner);
+  r = await call('trips', 'GET', '/api/trips?slug=negril-weekend');
+  ok('saving the trip without the sponsor list keeps the sponsors', r.body.trip.sponsors.length === 2);
+  r = await post(Object.assign({}, base, { sponsors: Array.from({ length: 9 }, (x, i) => ({ name: 'S' + i })) }), owner);
+  ok('at most six sponsors are kept', r.code === 200 && r.body.trip.sponsors.length === 6);
+
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })();

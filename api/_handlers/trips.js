@@ -113,6 +113,28 @@ function lines(v, maxItems, maxLen) {
 function paragraphs(v) {
   return String(v == null ? '' : v).split(/\r?\n\s*\r?\n/).map(x => x.trim()).filter(Boolean).slice(0, 12).map(x => x.slice(0, 1400));
 }
+/* a sponsor's logo: one of our own files, or a full https link */
+function logoUrl(v) {
+  const u = str(v, 500);
+  if (!u) return '';
+  if (/^\/(logos|assets)\/[\w\-./]+$/.test(u)) return u;
+  if (/^https:\/\/[^\s"'<>]+$/.test(u)) return u;
+  return '';
+}
+function cleanSponsors(list) {
+  const out = [];
+  const rows = Array.isArray(list) ? list.slice(0, 6) : [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i] || {};
+    const name = str(r.name, 80), logo = logoUrl(r.logo), url = str(r.url, 400), note = str(r.note, 160);
+    if (!name && !r.logo && !url && !note) continue;          /* an empty row is ignored */
+    if (!name) return { error: 'Sponsor ' + (i + 1) + ' needs a name, or remove that row.' };
+    if (r.logo && !logo) return { error: name + ': the logo must be one of our logo files (starting with /logos/) or a full https:// link.' };
+    if (url && !/^https:\/\/[^\s"'<>]+$/.test(url)) return { error: name + ': the link must start with https://' };
+    out.push({ name, logo, url, note });
+  }
+  return { value: out };
+}
 function safeUrl(v) {
   const u = str(v, 500);
   if (!u) return '';
@@ -217,6 +239,7 @@ function publicTrip(t, interests, leader, coUser) {
     status: t.status,
     seats: total ? { total, left: Math.max(0, total - taken) } : null,
     led: !!(t.organizerName || t.organizerEmail),
+    sponsors: t.sponsors || [],
     organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName + (coName ? ' & ' + coName : ''), mainName: t.organizerName, coName: coName, coPhoto: (coUser && coUser.avatarUrl) || '', community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
   };
 }
@@ -255,8 +278,14 @@ function cleanTrip(b, existing, all) {
     reward: str(b.reward, 600),
     rewardStatus: oneOf(b.rewardStatus, REWARD_STATUS, 'not_set'),
     internalNote: str(b.internalNote, 1000),
-    groupLink: groupLinkOf(b.groupLink)
+    groupLink: groupLinkOf(b.groupLink),
   };
+  /* brands that back this trip (optional, up to six): shown on the trip page, the departures list and the leader's dashboard */
+  if (b.sponsors !== undefined) {
+    const sp = cleanSponsors(b.sponsors);
+    if (sp.error) return { error: sp.error };
+    out.sponsors = sp.value;
+  } else out.sponsors = (existing && existing.sponsors) || [];
   if (b.groupLink && !out.groupLink) return { error: 'The group link must start with https://, for example your WhatsApp invite link.' };
   if (out.organizerEmail && !isEmail(out.organizerEmail)) return { error: 'The organizer email is not a valid address.' };
   if (status === 'open' || status === 'full') {
@@ -504,6 +533,7 @@ module.exports = async function handler(req, res) {
           const main = isMainLeader(t, user);
           return {
             role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
+            sponsors: t.sponsors || [],
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
