@@ -13715,13 +13715,11 @@ body.theme-night #p-flagship-programs{
 ════════════════════════════════════ -->
 
 <style id="tp-sponsor-css">
-#p-trip .tp-sponsor{margin:20px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px}
-#p-trip .tp-splab{font-size:10.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.85)}
-#p-trip .tp-sprow{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
-#p-trip .tp-sp{display:inline-flex;flex-direction:column;align-items:center;gap:6px;padding:14px 24px 12px;background:rgba(255,255,255,.97);border-radius:18px;box-shadow:0 14px 34px -18px rgba(0,0,0,.45);text-decoration:none;color:#063a63}
-#p-trip .tp-splogo img{display:block;height:clamp(56px,7vw,84px);width:auto;max-width:min(320px,70vw);object-fit:contain}
-#p-trip .tp-spname{font-size:20px;color:#063a63}
-#p-trip .tp-sp small{max-width:34ch;text-align:center;font-size:12.5px;color:#5b6b76;line-height:1.5}
+#p-trip .tp-splist{list-style:none;margin:0;padding:0}
+#p-trip .tp-splist li{padding:6px 0;font-size:15px;line-height:1.6}
+#p-trip .tp-splist a,#p-trip .tp-splist b{font-weight:800;color:#063a63}
+#p-trip .tp-splist a{text-decoration:underline;text-underline-offset:3px}
+#p-trip .tp-splist span{color:#5b6b76}
 .tcd-spons{background:rgba(112,194,87,.24)!important;color:#dff7d3!important;text-transform:none!important;letter-spacing:.02em!important}
 #p-manage .cl-spons{grid-column:1/-1}
 #p-manage .cl-sprow{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;align-items:end;padding:12px 0;border-top:1px solid rgba(0,0,0,.07)}
@@ -13737,7 +13735,6 @@ body.theme-night #p-flagship-programs{
     <h1 class="tc-h1" id="tpTitle">Loading the trip</h1>
     <p class="tc-lede" id="tpLede"></p>
     <ul class="tc-bfacts" id="tpFacts"></ul>
-    <div class="tp-sponsor" id="tpSponsor" hidden></div>
   </div></div>
   <div class="tc-wrap">
     <div class="tp-state" id="tpState" role="status" aria-live="polite">One moment while we load this trip.</div>
@@ -13748,6 +13745,7 @@ body.theme-night #p-flagship-programs{
         <div class="tc-card tp-block" id="tpDaysWrap" hidden><h2>Day by day</h2><ol class="tp-days" id="tpDays"></ol></div>
         <div class="tc-card tp-block tp-soon" id="tpSoon" hidden></div>
         <div class="tc-card tp-block" id="tpInclWrap" hidden><div class="tp-incl"><div id="tpIncCol"><h2>What is included</h2><ul class="tc-ticks" id="tpIncluded"></ul></div><div id="tpNotCol"><h2>Not included</h2><ul class="tp-notinc" id="tpNotIncluded"></ul></div></div></div>
+        <div class="tc-card tp-block tp-sponsor" id="tpSponsor" hidden></div>
         <div class="tc-card tp-block tp-org" id="tpOrg" hidden></div>
         <div class="tc-air" id="tpDisclose" hidden></div>
       </div>
@@ -48580,9 +48578,9 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpFacts').innerHTML=facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join('');
     var sp=$('tpSponsor'),sps=t.sponsors||[];
     if(sps.length){
-      sp.innerHTML='<span class="tp-splab">Sponsored by</span><span class="tp-sprow">'+sps.map(function(so){var lg=/^(\/(logos|assets)\/|https:\/\/)/.test(so.logo||'')?'<img src="'+esc(so.logo)+'" alt="'+esc(so.name)+'" onerror="this.outerHTML=\'<b class=tp-spname>'+esc(so.name).replace(/'/g,'')+'</b>\'">':'<b class="tp-spname">'+esc(so.name)+'</b>';
-        var inner='<span class="tp-splogo">'+lg+'</span>'+(so.note?'<small>'+esc(so.note)+'</small>':'');
-        return so.url?'<a class="tp-sp" href="'+esc(so.url)+'" target="_blank" rel="noopener sponsored" title="'+esc(so.name)+'">'+inner+'</a>':'<span class="tp-sp">'+inner+'</span>';}).join('')+'</span>';
+      sp.innerHTML='<h2>Sponsored by</h2><ul class="tp-splist">'+sps.map(function(so){
+        var nm=so.url?'<a href="'+esc(so.url)+'" target="_blank" rel="noopener sponsored">'+esc(so.name)+'</a>':'<b>'+esc(so.name)+'</b>';
+        return '<li>'+nm+(so.note?'<span> &middot; '+esc(so.note)+'</span>':'')+'</li>';}).join('')+'</ul>';
       sp.hidden=false;}
     else{sp.innerHTML='';sp.hidden=true;}
     var img=$('tpImg');if(t.image){img.innerHTML='<img src="'+esc(t.image)+'" alt="'+esc(t.imageAlt||t.title)+'">';img.hidden=false;}else{img.innerHTML='';img.hidden=true;}
@@ -52216,7 +52214,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       +fld('Organizer name',id('organizerName'),t.organizerName)+fld('Organizer community',id('organizerCommunity'),t.organizerCommunity)+fld('Organizer email (their account email)',id('organizerEmail'),t.organizerEmail,{type:'email',help:'They see this trip in their account when they sign in with that email.'})
       +fld('Show the organizer on the trip page',id('showOrganizer'),t.showOrganizer,{type:'check'})+fld('Organizer bio (public)',id('organizerBio'),t.organizerBio,{type:'textarea'})
       +fld('Agreed reward (private: only you and the organizer see it)',id('reward'),t.reward,{type:'textarea',help:'Whatever you agreed in writing. Nothing is invented or shown publicly.'})+fld('Reward status',id('rewardStatus'),t.rewardStatus,{type:'select',options:st.reward})
-      +'<div class="cl-full cl-spons"><h3 style="margin:14px 0 4px">Sponsors (optional)</h3><p class="mg-hint" style="margin:0 0 8px">Brands that back this trip. They show as "Sponsored by" with their logos on the trip page, a Sponsored tag on the departures list, and on the leader\'s dashboard. Add as many as you have (up to six), or none.</p><div data-sp-list="'+esc(k)+'">'+(t.sponsors||[]).map(function(sp){return spRow(sp);}).join('')+'</div><div class="cl-acts"><button type="button" class="mg-btn ghost" data-cl-spadd="'+esc(k)+'">+ Add sponsor</button><button type="button" class="mg-btn ghost" data-cl-legend="'+esc(k)+'">+ Add Legend Lager (Wisynco Group)</button></div></div>'
+      +'<div class="cl-full cl-spons"><h3 style="margin:14px 0 4px">Sponsors (optional)</h3><p class="mg-hint" style="margin:0 0 8px">Brands that back this trip. They show by name under "Sponsored by" in the trip information, a Sponsored tag on the departures list, and on the leader\'s dashboard. Add as many as you have (up to six), or none.</p><div data-sp-list="'+esc(k)+'">'+(t.sponsors||[]).map(function(sp){return spRow(sp);}).join('')+'</div><div class="cl-acts"><button type="button" class="mg-btn ghost" data-cl-spadd="'+esc(k)+'">+ Add sponsor</button><button type="button" class="mg-btn ghost" data-cl-legend="'+esc(k)+'">+ Add Legend Lager (Wisynco Group)</button></div></div>'
       +fld('WhatsApp group or channel link (the leader can also add this)',id('groupLink'),t.groupLink||'',{full:true,type:'url',ph:'https://chat.whatsapp.com/...',help:'Shown to everyone who joined. Changing it here does not send emails; the leader adding it from their dashboard does.'})+fld('Internal note (private)',id('internalNote'),t.internalNote,{type:'textarea'})
       +'</div>'+(t.id?announceLine(t):'')
       +'<div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-trip="'+k+'">Save trip</button>'+(t.id?'<a class="mg-btn" href="/trip/'+esc(t.slug)+'" target="_blank" rel="noopener">Open page</a><button type="button" class="mg-btn" data-cl-copy="'+esc(location.origin+'/trip/'+t.slug)+'">Copy link</button><button type="button" class="mg-btn ghost" data-cl-deltrip="'+t.id+'">Delete</button>':'')+'</div>';
@@ -52238,7 +52236,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
   /* one sponsor row in the trip editor */
   function spRow(sp){sp=sp||{};
-    return '<div class="cl-sprow"><label>Name<input type="text" maxlength="80" data-sp="name" value="'+esc(sp.name||'')+'" placeholder="e.g. Legend Lager (Wisynco Group)"></label><label>Link<input type="url" maxlength="400" data-sp="url" value="'+esc(sp.url||'')+'" placeholder="https://..."></label><label>Logo<input type="text" maxlength="500" data-sp="logo" value="'+esc(sp.logo||'')+'" placeholder="/logos/legend.png or https://..."></label><label>Line (optional, public)<input type="text" maxlength="160" data-sp="note" value="'+esc(sp.note||'')+'" placeholder="e.g. Drinks on the yacht day"></label><button type="button" class="mg-btn ghost cl-spdel" data-cl-spdel="1" aria-label="Remove this sponsor">Remove</button></div>';}
+    return '<div class="cl-sprow"><label>Name<input type="text" maxlength="80" data-sp="name" value="'+esc(sp.name||'')+'" placeholder="e.g. Legend Lager (Wisynco Group)"></label><label>Link<input type="url" maxlength="400" data-sp="url" value="'+esc(sp.url||'')+'" placeholder="https://..."></label><input type="hidden" data-sp="logo" value="'+esc(sp.logo||'')+'"><label>Line (optional, public)<input type="text" maxlength="160" data-sp="note" value="'+esc(sp.note||'')+'" placeholder="e.g. Drinks on the yacht day"></label><button type="button" class="mg-btn ghost cl-spdel" data-cl-spdel="1" aria-label="Remove this sponsor">Remove</button></div>';}
   function readSponsors(k){var box=document.querySelector('[data-sp-list="'+k+'"]');if(!box)return undefined;return [].map.call(box.querySelectorAll('.cl-sprow'),function(r){var o={};[].forEach.call(r.querySelectorAll('[data-sp]'),function(i){o[i.getAttribute('data-sp')]=i.value.trim();});return o;});}
   function readTrip(k){
     var g=function(n){return val('clT_'+n+'_'+k);};
