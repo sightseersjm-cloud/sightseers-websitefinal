@@ -47733,6 +47733,22 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-infoform label span{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none}
 #p-account .ac-infoform input[type=text],#p-account .ac-infoform textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;font:500 14px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
 #p-account .ac-infonote{margin:0;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-cobox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-o)}
+#p-account .ac-cobox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-cobox>summary::-webkit-details-marker{display:none}
+#p-account .ac-cobox>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-cobox>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-cobox[open]>summary::after{content:'\2212'}
+#p-account .ac-cobody{padding:2px 16px 16px}
+#p-account .ac-cobody small{display:block;margin-top:8px;font-size:12px;color:var(--ac-mut)}
+#p-account .ac-coform{display:flex;flex-wrap:wrap;gap:8px}
+#p-account .ac-coform input{flex:1 1 180px;min-width:0;padding:10px 12px;font:500 14px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0}
+#p-account .ac-cosplit{color:var(--ac-mut);font-size:12.5px}
+#p-account .ac-corole{display:inline-block;vertical-align:middle;margin-left:6px;padding:3px 8px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--ac-o);border-radius:99px}
+#p-account .ac-coinv{margin:0 0 16px;padding:16px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
+#p-account .ac-coinv b{display:block;font-size:15px;color:var(--ac-head)}
+#p-account .ac-coinv small{display:block;margin-top:2px;font-size:12.5px;color:var(--ac-mut)}
+#p-account .ac-coinv p{margin:10px 0 12px;font-size:13.5px;line-height:1.6;color:var(--ac-ink)}
 #p-account .ac-infoform .ac-infolab{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ac-mut)}
 #p-account .ac-infoform .ac-infolab>span{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none}
 #p-account .ac-infoform .tc-day-f input[type=text],#p-account .ac-infoform .tc-day-f textarea{margin-top:0;background:#fff}
@@ -48549,7 +48565,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(t.organizer){var oph=/^(https:\/\/|\/api\/auth\/avatar\/)/.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
       org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
     var dis=$('tpDisclose');
-    if(t.led){dis.innerHTML='<b>Organizer reward.</b> '+(t.organizer?esc(t.organizer.name):'The organizer of this trip')+' receives a reward from Sight Seers for travelers who book this trip. Sight Seers approved the trip, manages the bookings and runs the delivery.';dis.hidden=false;}else{dis.hidden=true;}
+    if(t.led){dis.innerHTML='<b>Organizer reward.</b> '+(t.organizer?esc(t.organizer.mainName||t.organizer.name):'The organizer of this trip')+' receives a reward from Sight Seers for travelers who book this trip'+(t.organizer&&t.organizer.coName?', and shares it with '+esc(t.organizer.coName):'')+'. Sight Seers approved the trip, manages the bookings and runs the delivery.';dis.hidden=false;}else{dis.hidden=true;}
     $('tpFormTitle').textContent=full?'Join the waitlist':'Ask to join this trip';
     $('tpFormSub').textContent=full?'This trip is full right now. Tell us who would like a place and our team will be in touch if one opens.':'Tell us who is travelling. We reply by email to confirm availability and payment terms.';
     $('tpBtn').textContent=full?'Join the waitlist':'Ask to join';$('tpBtn').disabled=false;
@@ -48927,17 +48943,38 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<span class="ac-invmsg" role="status" data-kit-note></span></div>'+
       '<div class="ac-kitqr"><span class="ac-qrbox"><canvas data-kit-qr width="210" height="210" role="img" aria-label="QR code that opens your trip page"></canvas></span><button type="button" class="ac-sbtn ac-sbtn--line" data-kit-qrdl>Download QR code</button><small>Scan to open your trip page</small></div></div></details>';
   }
+  /* co-leader: the main leader invites one person; they accept; Sight Seers approves them */
+  function coBox(t){
+    if(t.role==='co'||t.status==='closed')return '';
+    var c=t.coLeader,who=c?esc(c.name||c.email):'',body='';
+    var rm=function(label){return '<button type="button" class="ac-sbtn ac-sbtn--line" data-co-remove="'+esc(t.id)+'" data-co-label="'+esc(label)+'">'+esc(label)+'</button>';};
+    var form='<div class="ac-coform"><input type="text" maxlength="80" placeholder="Their name" aria-label="Co-leader name" data-co-name><input type="email" maxlength="120" placeholder="Their email" aria-label="Co-leader email" data-co-email><button type="button" class="ac-sbtn" data-co-send="'+esc(t.id)+'">Invite co-leader</button></div><small>They need a Sight Seers account with this email. Once they accept, Sight Seers approves them before they can help run the trip.</small>';
+    if(!c||c.status==='declined'||c.status==='rejected'){
+      body=(c&&c.status==='declined'?'<p class="ac-onote">'+who+' declined your invitation. You can invite someone else.</p>':'')+(c&&c.status==='rejected'?'<p class="ac-onote">Sight Seers did not approve '+who+'. You can invite someone else.</p>':'')+form;
+    }else if(c.status==='invited'){
+      body='<p class="ac-onote">Invitation sent to <b>'+who+'</b>'+(c.name?' ('+esc(c.email)+')':'')+'. Waiting for them to accept.</p><div class="ac-kitbtns">'+rm('Cancel invitation')+'</div>';
+    }else if(c.status==='accepted'){
+      body='<p class="ac-onote"><b>'+who+'</b> accepted. Waiting for Sight Seers to approve them.</p><div class="ac-kitbtns">'+rm('Remove')+'</div>';
+    }else{
+      body='<p class="ac-onote"><b>'+who+'</b> co-leads this trip. They can edit the trip details, post updates and add the group link, and they get the trip emails. Only you can delete the trip or change the co-leader.</p><div class="ac-kitbtns">'+rm('Remove co-leader')+'</div>';
+    }
+    return '<details class="ac-cobox" data-co-box'+(c&&c.status!=='declined'&&c.status!=='rejected'?' open':'')+'><summary><span>Co-leader<small>'+(c&&c.status==='approved'?esc(c.name||c.email):c&&c.status==='invited'?'invitation sent':c&&c.status==='accepted'?'waiting for approval':'lead this trip with someone')+'</small></span></summary><div class="ac-cobody">'+body+'<p class="ac-onote ac-cosplit">Rewards are paid to you as the main leader. You share them with your co-leader as you agree.</p><span class="ac-invmsg" role="status"></span></div></details>';
+  }
+  function coInvites(list){
+    if(!list||!list.length)return '';
+    return list.map(function(v){return '<div class="ac-coinv"><b>'+esc(v.mainLeaderName||'A Travel Club leader')+' invited you to co-lead '+esc(v.title)+'</b><small>'+esc([v.dateText,v.destination].filter(Boolean).join(' · '))+'</small><p>As co-leader you can edit the trip details, post updates and add the group link, and you get the trip emails. Sight Seers approves co-leaders before they start. Rewards are paid to the main leader, who shares them with you.</p><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-co-accept="'+esc(v.tripId)+'">Accept</button><button type="button" class="ac-sbtn ac-sbtn--line" data-co-decline="'+esc(v.tripId)+'">Decline</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('');
+  }
   function orgTrip(t,idx){
     var link=SITE+t.url,c=t.counts||{},tr=t.travelers||[];
     return '<div class="ac-otrip" data-otrip="'+idx+'" data-base="'+esc(link)+'" data-ttl="'+esc(t.title)+'" data-dates="'+esc(t.dateText||'')+'" data-dest="'+esc(t.destination||'')+'">'+
-      '<div class="ac-ohead"><div><h5>'+esc(t.title)+'</h5><small>'+esc([t.dateText,t.destination].filter(Boolean).join(' · ')||'Dates to be added')+'</small></div>'+chip(TRIPST,t.status)+'</div>'+
+      '<div class="ac-ohead"><div><h5>'+esc(t.title)+(t.role==='co'?' <span class="ac-corole">Co-leader</span>':'')+'</h5><small>'+esc([t.dateText,t.destination].filter(Boolean).join(' · ')||'Dates to be added')+(t.role==='co'&&t.mainLeaderName?' · with '+esc(t.mainLeaderName):'')+'</small></div>'+chip(TRIPST,t.status)+'</div>'+
       (t.status==='open'||t.status==='full'?
         '<div class="ac-oshare"><input type="text" readonly value="'+esc(link)+'" aria-label="Your trip link"><button type="button" class="ac-sbtn" data-ocopy>Copy link</button><a class="ac-sbtn" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'" style="text-decoration:none">Open page</a></div>'+
         '<div class="ac-otag"><label for="acTag'+idx+'">Track where sign-ups come from:</label><input id="acTag'+idx+'" type="text" maxlength="30" placeholder="e.g. instagram" data-otag><span>Adds a tag to your link.</span></div>'+'<p class="ac-onote ac-oone">Each person joins for themselves through your link, so every traveler appears on your roster with their own name.</p>'+inviteKit(idx)
         :'<p class="ac-onote"><b>Your trip page is not live yet.</b> Sight Seers will open it once the package, the dates and your reward are agreed.</p>')+
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
-      groupForm(t)+infoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+
+      groupForm(t)+infoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
@@ -48946,8 +48983,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
         return '<li>'+(/^(https:\/\/|\/api\/auth\/avatar\/)/.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
-      '<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+'</p>'+payList(t.payouts)+
-      '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>'+
+      (t.role==='co'
+        ?'<p class="ac-oreward"><b>Rewards:</b> paid to '+esc(t.mainLeaderName||'the main leader')+', who shares them with you as you agree.</p>'
+        :'<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+(t.coLeader&&t.coLeader.status==='approved'?' <span class="ac-cosplit">You share it with your co-leader as you agree.</span>':'')+'</p>'+payList(t.payouts)+
+      '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>')+
     '</div>';
   }
   var PTAG={insurance:'Protection',esim:'Connectivity'};
@@ -48991,10 +49030,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     '</div>';
   }
   function orgHtml(d){
-    var apps=(d.applications||[]).slice().sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));}),a=apps[0],trips=d.trips||[],out='';
+    var apps=(d.applications||[]).slice().sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));}),a=apps[0],trips=d.trips||[],out=coInvites(d.coInvites),invited=!!out;
     if(a)out+=appCard(a,trips);
     if(trips.length)out+=(a?'<h4 class="ac-osub">Your trips</h4>':'')+trips.map(orgTrip).join('');
-    if(!a&&!trips.length)out='<div class="ac-empty"><strong>Lead a trip with your community</strong><p>Apply with a few details about your group. We review every application, and agree the package, the dates and your reward in writing before anything is promoted.</p><button type="button" class="ac-cta" onclick="ssClubApply()">Apply to lead a trip</button></div>';
+    if(!a&&!trips.length&&!invited)out='<div class="ac-empty"><strong>Lead a trip with your community</strong><p>Apply with a few details about your group. We review every application, and agree the package, the dates and your reward in writing before anything is promoted.</p><button type="button" class="ac-cta" onclick="ssClubApply()">Apply to lead a trip</button></div>';
     else if(!trips.length&&a&&a.status==='declined')out+='<button type="button" class="ac-cta" style="margin-top:14px" onclick="ssClubApply()">Apply again</button>';
     return out;
   }
@@ -49225,6 +49264,30 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         if(!confirm('Delete your application "'+(adH?adH.textContent:'')+'"?'+(adTrips?'\n\nThe trip made from it is deleted too, and anyone who asked to join is emailed that it is no longer going ahead.':'')+'\n\nYour account is kept and you can apply again any time. This cannot be undone.'))return;
         ad.disabled=true;adMsg.className='ac-invmsg';adMsg.textContent='Deleting...';
         api('trips','POST',{action:'application-delete-mine',ref:ad.getAttribute('data-app-del')}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){ad.disabled=false;adMsg.className='ac-invmsg err';adMsg.textContent=err.message||'We could not delete it. Please try again.';});
+        return;
+      }
+      var coS=e.target.closest('[data-co-send]');
+      if(coS){
+        var coBx=coS.closest('.ac-cobody'),coM=coBx.querySelector('.ac-invmsg'),coE=coBx.querySelector('[data-co-email]').value.trim(),coN=coBx.querySelector('[data-co-name]').value.trim();
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(coE)){coM.className='ac-invmsg err';coM.textContent='Enter their email address.';return;}
+        coS.disabled=true;coM.className='ac-invmsg';coM.textContent='Sending the invitation...';
+        api('trips','POST',{action:'co-invite',id:coS.getAttribute('data-co-send'),email:coE,name:coN}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){coS.disabled=false;coM.className='ac-invmsg err';coM.textContent=err.message||'We could not send that. Please try again.';});
+        return;
+      }
+      var coR=e.target.closest('[data-co-remove]');
+      if(coR){
+        var coRM=coR.closest('.ac-cobody').querySelector('.ac-invmsg');
+        if(!confirm(coR.getAttribute('data-co-label')+'?'))return;
+        coR.disabled=true;coRM.className='ac-invmsg';coRM.textContent='Saving...';
+        api('trips','POST',{action:'co-remove',id:coR.getAttribute('data-co-remove')}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){coR.disabled=false;coRM.className='ac-invmsg err';coRM.textContent=err.message||'We could not do that. Please try again.';});
+        return;
+      }
+      var coA=e.target.closest('[data-co-accept],[data-co-decline]');
+      if(coA){
+        var acc=coA.hasAttribute('data-co-accept'),coAM=coA.parentNode.querySelector('.ac-invmsg');
+        if(!acc&&!confirm('Decline this invitation?'))return;
+        coA.disabled=true;coAM.className='ac-invmsg';coAM.textContent=acc?'Accepting...':'Declining...';
+        api('trips','POST',{action:'co-respond',id:coA.getAttribute(acc?'data-co-accept':'data-co-decline'),accept:acc}).then(function(){coAM.className='ac-invmsg ok';coAM.textContent=acc?'Accepted. Sight Seers will approve you shortly and email you.':'Declined.';setTimeout(function(){grp.at=0;fillGroups(true);},1600);}).catch(function(err){coA.disabled=false;coAM.className='ac-invmsg err';coAM.textContent=err.message||'We could not do that. Please try again.';});
         return;
       }
       var td=e.target.closest('[data-trip-del]');
@@ -52040,7 +52103,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return api('trips?admin=1').then(function(d){CL.data=d;CL.at=Date.now();CL.loading=false;CL.err='';badge();}).catch(function(e){CL.loading=false;CL.err=e.message;});
   }
   function reload(msg,type){CL.data=null;return load(true).then(function(){if(S.screen==='trips'){repaint();if(msg)say(msg,type||'ok');}});}
-  function badge(){var h=S.home;if(h&&CL.data){var n=CL.data.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length;h.apps=n;(h.badge=h.badge||{}).trips=n;}}
+  function badge(){var h=S.home;if(h&&CL.data){var n=CL.data.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length+(CL.data.trips||[]).filter(function(t){return t.coLeader&&t.coLeader.status==='accepted';}).length;h.apps=n;(h.badge=h.badge||{}).trips=n;}}
   function snapOpen(){CL.open={};[].forEach.call(R.querySelectorAll('details[open][data-k]'),function(d){CL.open[d.dataset.k]=1;});}
   function repaint(){var pg=document.getElementById('mgPage');if(!pg||S.screen!=='trips')return;snapOpen();var y=window.scrollY;pg.innerHTML=screen();window.scrollTo(0,y);}
   function det(key,summary,body){return '<details class="cl-row" data-k="'+esc(key)+'"'+(CL.open[key]?' open':'')+'><summary>'+summary+'</summary><div class="cl-body">'+body+'</div></details>';}
@@ -52051,6 +52114,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(CL.err&&!CL.data)return '<h1>Trips and Travel Club</h1><div class="mg-msg on err">'+esc(CL.err)+'</div>';
     if(!CL.data)return '<h1>Trips and Travel Club</h1><p class="mg-sub">Loading…</p>';
     var d=CL.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}).length,fresh=d.interests.filter(function(i){return i.status==='new'||i.status==='waitlist';}).length;
+    pend+=coWaiting().length;
     var tabs=visibleTabs().map(function(t){var n=t[0]==='apps'?pend:t[0]==='reqs'?fresh:0;return '<button type="button" role="tab" data-cl-tab="'+t[0]+'" class="'+(CL.tab===t[0]?'on':'')+'" aria-selected="'+(CL.tab===t[0])+'">'+t[1]+(n?'<span class="bd">'+n+'</span>':'')+'</button>';}).join('');
     var body={overview:overview,apps:apps,trips:trips,reqs:reqs,accounts:accountsTab,updates:updatesTab,rewards:rewardsTab,dest:destTab,auto:autoTab,news:newsTab,links:links}[CL.tab]||overview;
     return '<h1>Trips and Travel Club</h1><p class="mg-sub">Approve group leaders, run the trips, and follow every traveler.</p><div id="clMsg" class="mg-msg" role="status"></div><div class="pg-tabs cl-tabs" role="tablist">'+tabs+'</div><div id="clPane">'+body()+'</div>';
@@ -52060,7 +52124,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function overview(){
     var d=CL.data,pend=d.applications.filter(function(a){return a.status==='pending'||a.status==='needs_info';}),fresh=d.interests.filter(function(i){return i.status==='new';}),wait=d.interests.filter(function(i){return i.status==='waitlist';}),drafts=d.trips.filter(function(t){return t.status==='draft';}),leaders=d.applications.filter(function(a){return a.status==='approved';});
     function todo(n,label,tab,tone){return '<button type="button" class="mg-card cl-todo'+(n?' has '+(tone||''):'')+'" data-cl-tab="'+tab+'"><b>'+n+'</b><span>'+esc(label)+'</span></button>';}
-    var out='<div class="cl-todos">'+todo(pend.length,'Applications to review','apps','o')+todo(fresh.length,'New traveler requests','reqs','o')+todo(drafts.length,'Draft trips to finish','trips','')+todo(wait.length,'On a waitlist','reqs','')+'</div>';
+    var out='<div class="cl-todos">'+todo(pend.length,'Applications to review','apps','o')+(coWaiting().length?todo(coWaiting().length,'Co-leaders to approve','apps','o'):'')+todo(fresh.length,'New traveler requests','reqs','o')+todo(drafts.length,'Draft trips to finish','trips','')+todo(wait.length,'On a waitlist','reqs','')+'</div>';
     out+='<h2>Group leaders ('+leaders.length+')</h2>';
     if(!leaders.length)out+='<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No approved leaders yet. Approve an application and it shows here with its trip, its joiners and its group chat.</p></div>';
     else out+='<div class="mg-card mg-tw"><table><tr><th>Leader</th><th>Trip</th><th>Joined</th><th>Group chat</th></tr>'+leaders.map(function(a){
@@ -52073,7 +52137,19 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
 
   /* ---------- applications ---------- */
-  function apps(){
+  /* co-leaders who accepted a leader's invitation and wait for the owner's approval */
+  function coWaiting(){return (CL.data.trips||[]).filter(function(t){return t.coLeader&&t.coLeader.status==='accepted';});}
+  function coSection(){
+    var w=coWaiting();if(!w.length)return '';
+    return '<h2>Co-leaders to approve ('+w.length+')</h2>'+w.map(function(t){var c=t.coLeader;
+      return '<div class="mg-card cl-coapp"><p style="margin:0 0 6px"><b>'+esc(c.name||c.email)+'</b> &lt;<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>&gt; wants to co-lead <b>'+esc(t.title)+'</b>'+(t.organizerName?' with '+esc(t.organizerName):'')+'.</p>'
+        +'<p class="mg-hint" style="margin:0 0 10px">Invited '+esc(dOnlyCo(c.invitedAt))+', accepted '+esc(dOnlyCo(c.acceptedAt))+'. Once approved they can edit the trip details, post updates and add the group link, and they get the trip emails. They cannot delete the trip. Rewards stay with the main leader, who shares them.</p>'
+        +fld('Message if you decline (optional, emailed to both leaders)','clCoRep_'+t.id,'',{type:'textarea'})
+        +'<div class="cl-acts"><button type="button" class="mg-btn" data-cl-co="'+esc(t.id)+'" data-ok="1">Approve co-leader</button><button type="button" class="mg-btn ghost" data-cl-co="'+esc(t.id)+'" data-ok="0">Decline</button></div></div>';}).join('');
+  }
+  function dOnlyCo(v){return v?String(v).slice(0,10):'';}
+  function apps(){return coSection()+appsList();}
+  function appsList(){
     var list=CL.data.applications.slice().sort(function(a,b){var pa=(a.status==='pending'||a.status==='needs_info')?0:1,pb=(b.status==='pending'||b.status==='needs_info')?0:1;return pa-pb||String(b.createdAt).localeCompare(String(a.createdAt));});
     if(!list.length)return '<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No leader applications yet. They appear here when someone applies on the Travel Club page.</p></div>';
     return list.map(function(a){
@@ -52121,7 +52197,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return det('newtrip','<span class="s"><b>+ New trip</b><small>Add an approved departure</small></span>',tripForm(BLANK))
       +'<div style="margin-top:12px">'+(list.length?list.map(function(t){
         var n=d.interests.filter(function(i){return i.tripId===t.id;}).length;
-        return det('trip'+t.id,'<span class="s"><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+(t.organizerName?' · led by '+esc(t.organizerName):'')+(t.infoUpdatedBy==='leader'?' · details edited by the leader '+esc(dt(t.infoUpdatedAt)):'')+'</small></span>'+chip(TRIPCHIP,t.status)+(t.status==='draft'?'<button type="button" class="mg-btn sm ok" data-cl-publish="'+t.id+'">Publish to departure board</button>':''),tripForm(t));
+        return det('trip'+t.id,'<span class="s"><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+(t.organizerName?' · led by '+esc(t.organizerName)+(t.coLeader&&t.coLeader.status==='approved'?' &amp; '+esc(t.coLeader.name||t.coLeader.email):''):'')+(t.infoUpdatedBy==='leader'?' · details edited by the leader '+esc(dt(t.infoUpdatedAt)):'')+'</small></span>'+chip(TRIPCHIP,t.status)+(t.status==='draft'?'<button type="button" class="mg-btn sm ok" data-cl-publish="'+t.id+'">Publish to departure board</button>':''),tripForm(t));
       }).join(''):'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No trips yet. Add one above, or approve an application and draft a trip from it.</p></div>')+'</div>';
   }
   function readTrip(k){
@@ -52299,6 +52375,11 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(ds.clCopy){try{navigator.clipboard.writeText(ds.clCopy);}catch(x){}var o=t.textContent;t.textContent='Copied';setTimeout(function(){t.textContent=o;},1400);return;}
     if(ds.clAnnounce){var n=D.alertList||0;if(!confirm('Email the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list about this trip?\n\nEach person gets their own email with a button to see the trip. It goes out once.'))return;busy(t,'Sending…');
       call('trip-announce',{id:ds.clAnnounce}).then(function(res){var r=res.result||{};return reload('Sent to '+(r.sent||0)+' of '+(r.count||0)+' people on the list.'+(r.failed?' '+r.failed+' could not be sent; check the email settings.':''),r.failed?'err':'ok');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clCo){
+      var coId=ds.clCo,coOk=ds.ok==='1';
+      if(!coOk&&!confirm('Decline this co-leader? Both leaders are emailed.'))return;
+      busy(t,coOk?'Approving…':'Saving…');
+      call('co-review',{id:coId,approve:coOk,reply:val('clCoRep_'+coId)}).then(function(){return reload(coOk?'Approved. The co-leader can now help run the trip, and both leaders have been emailed.':'Declined. Both leaders have been emailed.');}).catch(function(err){fail(t,err);});return;}
     if(ds.clReview){
       var id=ds.clReview,st=ds.st,dr=$('clDraft_'+id),nt=$('clNotify_'+id),pb=$('clPub_'+id);busy(t);
       call('application-review',{id:id,status:st,reply:val('clRep_'+id),note:val('clNote_'+id),createTrip:st==='approved'&&dr&&dr.checked&&!dr.disabled,publish:st==='approved'&&!!pb&&pb.checked&&!pb.disabled,notify:nt?nt.checked:true}).then(function(res){

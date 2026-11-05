@@ -33,6 +33,14 @@
  *   POST { action:'trip-announce' }    admin: email the 'Be first to hear about new trips' list about an open trip (once per trip)
  *   GET  ?unsub=<id>&k=<signature>     the one-click link in that email: takes the address off the list
  *   POST { action:'automation-run' }   admin: preview what would send today ({dryRun:true}), or run the daily job now
+ *   POST { action:'co-invite' }        signed in (the trip's main leader): invite one co-leader by email
+ *   POST { action:'co-respond' }       signed in (the invited person): accept or decline; an accepted co-leader waits for the owner's approval
+ *   POST { action:'co-remove' }        signed in (the main leader, or the owner): cancel the invitation or remove the co-leader
+ *   POST { action:'co-review' }        admin: approve or decline a co-leader who accepted
+ *
+ * Co-leaders: a trip has one main leader and at most one co-leader. Once the owner approves them, a co-leader can edit the trip
+ * details, post updates and add the group link, gets the same trip emails, and is shown on the trip page. Only the main leader
+ * can delete the trip or change the co-leader. Rewards are paid to the main leader, who shares them with the co-leader.
  *
  * Nothing here invents a price, a seat count, a reward or a departure: a trip only exists when an admin enters it,
  * seats are only shown when an admin sets them, and an organizer's reward is private text an admin writes per trip.
@@ -177,7 +185,14 @@ function leaderOf(t, users) {
   if (!users || !users.length) return null;
   return users.find(u => t.organizerUserId && u.id === t.organizerUserId) || users.find(u => t.organizerEmail && lower(u.email, 120) === t.organizerEmail) || null;
 }
-function publicTrip(t, interests, leader) {
+function coLeaderOf(t, users) {
+  const c = t && t.coLeader;
+  if (!c || c.status !== 'approved' || !users || !users.length) return null;
+  return users.find(u => c.userId && u.id === c.userId) || users.find(u => c.email && lower(u.email, 120) === c.email) || null;
+}
+function publicTrip(t, interests, leader, coUser) {
+  const co = t.coLeader && t.coLeader.status === 'approved' ? t.coLeader : null;
+  const coName = co ? (co.name || (coUser && coUser.name) || '') : '';
   const total = t.seatsTotal || 0;
   const taken = total ? travelersCounted(interests, t.id) : 0;
   return {
@@ -202,7 +217,7 @@ function publicTrip(t, interests, leader) {
     status: t.status,
     seats: total ? { total, left: Math.max(0, total - taken) } : null,
     led: !!(t.organizerName || t.organizerEmail),
-    organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName, community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
+    organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName + (coName ? ' & ' + coName : ''), mainName: t.organizerName, coName: coName, coPhoto: (coUser && coUser.avatarUrl) || '', community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
   };
 }
 
@@ -257,11 +272,32 @@ function statusCounts(list) {
   return c;
 }
 
-function ownsTrip(t, user) {
+/* the main leader: the account the trip was made for */
+function isMainLeader(t, user) {
   if (!user) return false;
   const mail_ = lower(user.email, 120);
   return (t.organizerUserId && t.organizerUserId === user.id) || (!!t.organizerEmail && !!mail_ && t.organizerEmail === mail_);
 }
+/* an approved co-leader (an invitation, or one waiting for the owner, gives no access) */
+function isCoLeader(t, user) {
+  const c = t && t.coLeader;
+  if (!user || !c || c.status !== 'approved') return false;
+  const mail_ = lower(user.email, 120);
+  return (c.userId && c.userId === user.id) || (!!c.email && !!mail_ && c.email === mail_);
+}
+/* who may run the trip day to day: its main leader or its approved co-leader */
+function ownsTrip(t, user) { return isMainLeader(t, user) || isCoLeader(t, user); }
+/* everyone who leads the trip, for the trip emails */
+function leaderEmails(t) {
+  const out = [];
+  if (t && t.organizerEmail) out.push(t.organizerEmail);
+  const c = t && t.coLeader;
+  if (c && c.status === 'approved' && c.email && out.indexOf(c.email) < 0) out.push(c.email);
+  return out;
+}
+const CO_STATUS = ['invited', 'accepted', 'approved', 'declined', 'rejected'];
+function coActive(c) { return !!(c && (c.status === 'invited' || c.status === 'accepted' || c.status === 'approved')); }
+function publicCo(c) { return c ? { name: c.name || '', email: c.email || '', status: CO_STATUS.indexOf(c.status) > -1 ? c.status : 'invited', invitedAt: c.invitedAt || '', approvedAt: c.approvedAt || '' } : null; }
 
 /* ---------- emails ---------- */
 function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || 'there'; }
@@ -284,17 +320,17 @@ function interestMails(rec, t, extra) {
     safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
     ...(guestOnly ? [] : [safe('interest admin', adminMail('[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), 'New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, rec.email))])
   ];
-  if (!guestOnly && t && t.organizerEmail && t.organizerEmail !== rec.email) {
-    jobs.push(safe('interest leader', mail(t.organizerEmail, 'New traveler on ' + t.title, 'Someone joined your trip',
+  if (!guestOnly && t) leaderEmails(t).filter(e => e !== rec.email).forEach(leaderEmail => {
+    jobs.push(safe('interest leader', mail(leaderEmail, 'New traveler on ' + t.title, 'Someone joined your trip',
       `<p>${trip.esc(firstName(rec.name))} ${rec.status === 'waitlist' ? 'joined the waitlist for' : 'joined'} <b>${trip.esc(t.title)}</b>${rec.source ? ' (from your link tagged <b>' + trip.esc(rec.source) + '</b>)' : ''}.</p>${trip.detailTable(rosterLine(rec).concat(extra.goalLine ? [['Your goal', extra.goalLine]] : []))}${rec.shareContact ? '' : '<p style="color:#555">This traveler chose not to share contact details. Add your group chat link in your dashboard so they can join it.</p>'}${button(SITE + '/account', 'Open my dashboard')}`)));
-  }
+  });
   return Promise.all(jobs);
 }
 
 function goalMails(t, goal, asked) {
   const body = `<p>Your group has reached its goal: <b>${asked}</b> of <b>${goal}</b> people have joined <b>${trip.esc(t.title)}</b>.</p>${button(SITE + '/account', 'Open my dashboard')}`;
   const jobs = [safe('goal admin', adminMail('Goal reached: ' + t.title, 'Invite goal reached', `<p><b>${trip.esc(t.organizerName || 'A leader')}</b> reached their invite goal on <b>${trip.esc(t.title)}</b> (${asked} of ${goal}).</p>`))];
-  if (t.organizerEmail) jobs.push(safe('goal leader', mail(t.organizerEmail, 'Your group reached its goal', 'Goal reached', body)));
+  leaderEmails(t).forEach(e => jobs.push(safe('goal leader', mail(e, 'Your group reached its goal', 'Goal reached', body))));
   return Promise.all(jobs);
 }
 
@@ -325,9 +361,9 @@ function interestStatusMails(i, t) {
   const c = INTEREST_COPY[i.status];
   if (!c) return Promise.resolve();
   const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${c[1]}</p>${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
-  if (i.status === 'booked' && t && t.organizerEmail && t.organizerEmail !== i.email) {
-    jobs.push(safe('booked leader', mail(t.organizerEmail, 'A traveler booked: ' + t.title, 'A traveler booked', `<p>${trip.esc(firstName(i.name))} is now booked on <b>${trip.esc(t.title)}</b>.</p>${trip.detailTable([['Travelers', String(i.partySize)]])}`)));
-  }
+  if (i.status === 'booked' && t) leaderEmails(t).filter(e => e !== i.email).forEach(leaderEmail => {
+    jobs.push(safe('booked leader', mail(leaderEmail, 'A traveler booked: ' + t.title, 'A traveler booked', `<p>${trip.esc(firstName(i.name))} is now booked on <b>${trip.esc(t.title)}</b>.</p>${trip.detailTable([['Travelers', String(i.partySize)]])}`)));
+  });
   return Promise.all(jobs);
 }
 
@@ -462,19 +498,23 @@ module.exports = async function handler(req, res) {
         const updatesOf = id => allUpdates.filter(u => u.tripId === id).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 20).map(updates.publicUpdate);
         const myTrips = trips.filter(t => ownsTrip(t, user)).map(t => {
           const list = interests.filter(i => i.tripId === t.id);
+          const main = isMainLeader(t, user);
           return {
+            role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
-            reward: { status: t.rewardStatus || 'not_set', text: t.reward || '' },
+            reward: main ? { status: t.rewardStatus || 'not_set', text: t.reward || '' } : null,
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
             summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [], itinerary: t.itinerary || [], theme: t.theme || '', themes: THEMES,
-            payouts: allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout),
+            payouts: main ? allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout) : [],
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });
+        const coInvites = trips.filter(t => t.coLeader && t.coLeader.status === 'invited' && t.coLeader.email === mailAddr && !isMainLeader(t, user))
+          .map(t => ({ tripId: t.id, title: t.title, dateText: t.dateText || '', destination: t.destination || '', mainLeaderName: t.organizerName || '' }));
         const me = (await db.getCollection('users')).find(u => u.id === user.id) || {};
         const dests = await entryLib.all();
         const myInterests = interests.filter(i => i.email === mailAddr || (i.userId && i.userId === user.id))
@@ -512,7 +552,7 @@ module.exports = async function handler(req, res) {
           if (t && t.groupLink) notices.push({ key: 'join:' + i.ref, kind: 'group', title: t.title, groupLink: t.groupLink, leaderName: t.organizerName || '' });
         });
         notices.sort((x, y) => (y.kind === 'adminapps' ? 1 : 0) - (x.kind === 'adminapps' ? 1 : 0));   /* the owner's applications come first */
-        return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: myApps, trips: myTrips, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
+        return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: myApps, trips: myTrips, coInvites, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
       const [trips, interests, usersAll] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS), db.getCollection('users')]);
@@ -521,11 +561,11 @@ module.exports = async function handler(req, res) {
         const t = trips.find(x => x.slug === String(slug));
         if (!t || (t.status !== 'open' && t.status !== 'full')) return res.status(404).json({ error: 'That trip is not open right now.' });
         edge();
-        return res.status(200).json({ ok: true, trip: publicTrip(t, interests, leaderOf(t, usersAll)) });
+        return res.status(200).json({ ok: true, trip: publicTrip(t, interests, leaderOf(t, usersAll), coLeaderOf(t, usersAll)) });
       }
       const open = trips.filter(t => t.status === 'open' || t.status === 'full')
         .sort((a, b) => String(a.startDate || '9999').localeCompare(String(b.startDate || '9999')))
-        .map(t => publicTrip(t, interests, leaderOf(t, usersAll)));
+        .map(t => publicTrip(t, interests, leaderOf(t, usersAll), coLeaderOf(t, usersAll)));
       edge();
       return res.status(200).json({ ok: true, trips: open });
     }
@@ -690,7 +730,7 @@ module.exports = async function handler(req, res) {
         if (!app) return res.status(404).json({ error: 'We could not find that application.' });
         led = tripsAll.filter(t => t.applicationId === app.id || t.id === app.tripId);
       } else {
-        const t = tripsAll.find(x => x.id === str(body.id, 80) && ownsTrip(x, user));
+        const t = tripsAll.find(x => x.id === str(body.id, 80) && isMainLeader(x, user));
         if (!t) return res.status(404).json({ error: 'We could not find that trip.' });
         led = [t];
         app = apps.find(a => (a.id === t.applicationId || a.tripId === t.id) && isMine(a)) || null;
@@ -790,6 +830,61 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, groupLink: saved.groupLink || '' });
     }
 
+    /* ===== co-leaders: the main leader invites one, the invitee accepts, the owner approves ===== */
+    if (action === 'co-invite' || action === 'co-respond' || action === 'co-remove') {
+      const user = getUser(req);
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const isOwner = user.role === 'admin';
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      const now = new Date().toISOString();
+      if (action === 'co-invite') {
+        if (!t || (!isMainLeader(t, user) && !isOwner)) return res.status(404).json({ error: 'We could not find that trip.' });
+        if (!allow('coinvite:' + user.id, 10, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of invitations in an hour. Please wait a little.' });
+        if (t.status === 'closed') return res.status(400).json({ error: 'This trip is closed.' });
+        if (coActive(t.coLeader)) return res.status(409).json({ error: 'This trip already has a co-leader. Remove them first to invite someone else.' });
+        const email = lower(body.email, 120), name = str(body.name, 80);
+        if (!isEmail(email)) return res.status(400).json({ error: 'Enter your co-leader\'s email address.' });
+        if (email === t.organizerEmail || (email === lower(user.email, 120) && !isOwner)) return res.status(400).json({ error: 'You are already the main leader. Invite someone else.' });
+        const coLeader = { email, name, status: 'invited', invitedAt: now, invitedBy: user.id };
+        await db.updateInCollection(TRIPS, t.id, { coLeader });
+        await log('co-invite', (t.organizerName || 'A leader') + ' invited ' + (name || email) + ' to co-lead ' + t.title, t.id);
+        await safe('co invite', mail(email, 'You are invited to co-lead ' + t.title, 'Co-lead a Travel Club trip',
+          `<p>Hi ${trip.esc(firstName(name))},</p><p><b>${trip.esc(t.organizerName || 'A Travel Club leader')}</b> has invited you to co-lead <b>${trip.esc(t.title)}</b>${t.dateText ? ' (' + trip.esc(t.dateText) + ')' : ''} with Sight Seers Caribbean.</p><p>Sign in, or create your account with this email address, and accept the invitation on your dashboard under Group trips. Sight Seers then approves you before you can manage the trip.</p>${button(SITE + '/account', 'Open my dashboard')}`));
+        return res.status(200).json({ ok: true, coLeader: publicCo(coLeader) });
+      }
+      if (action === 'co-respond') {
+        const mailAddr = lower(user.email, 120);
+        if (!t || !t.coLeader || t.coLeader.status !== 'invited' || t.coLeader.email !== mailAddr) return res.status(404).json({ error: 'We could not find that invitation.' });
+        const accept = body.accept === true;
+        const coLeader = Object.assign({}, t.coLeader, accept
+          ? { status: 'accepted', userId: user.id, name: t.coLeader.name || str(user.name, 80), acceptedAt: now }
+          : { status: 'declined', declinedAt: now });
+        await db.updateInCollection(TRIPS, t.id, { coLeader });
+        const who = coLeader.name || coLeader.email;
+        await log(accept ? 'co-accepted' : 'co-declined', who + (accept ? ' accepted' : ' declined') + ' the invitation to co-lead ' + t.title, t.id);
+        if (accept) {
+          await safe('co accepted admin', adminMail('Co-leader to approve: ' + t.title, 'A co-leader is waiting for approval',
+            `<p><b>${trip.esc(who)}</b> (${trip.esc(coLeader.email)}) accepted ${trip.esc(t.organizerName || 'the leader')}'s invitation to co-lead <b>${trip.esc(t.title)}</b>.</p><p>Approve or decline them in the admin portal under Trips and Travel Club, Leader applications.</p>`));
+          if (t.organizerEmail) await safe('co accepted leader', mail(t.organizerEmail, who + ' accepted your invitation', 'Your co-leader accepted',
+            `<p><b>${trip.esc(who)}</b> accepted your invitation to co-lead <b>${trip.esc(t.title)}</b>. Sight Seers will approve them shortly, and you will be emailed when they can help run the trip.</p>`));
+        } else if (t.organizerEmail) {
+          await safe('co declined leader', mail(t.organizerEmail, who + ' declined your invitation', 'Co-leader invitation declined',
+            `<p><b>${trip.esc(who)}</b> declined the invitation to co-lead <b>${trip.esc(t.title)}</b>. You can invite someone else from your dashboard.</p>`));
+        }
+        return res.status(200).json({ ok: true, status: coLeader.status });
+      }
+      /* co-remove */
+      if (!t || !t.coLeader || (!isMainLeader(t, user) && !isOwner)) return res.status(404).json({ error: 'We could not find that co-leader.' });
+      const old = t.coLeader;
+      await db.updateInCollection(TRIPS, t.id, { coLeader: null });
+      await log('co-removed', (old.name || old.email) + ' is no longer co-leading ' + t.title, t.id);
+      if (old.email && (old.status === 'accepted' || old.status === 'approved' || old.status === 'invited')) {
+        await safe('co removed', mail(old.email, 'Update on ' + t.title, 'Co-leader update',
+          `<p>Hi ${trip.esc(firstName(old.name))},</p><p>${old.status === 'invited' ? 'The invitation to co-lead' : 'You are no longer a co-leader on'} <b>${trip.esc(t.title)}</b>${old.status === 'invited' ? ' was cancelled' : ''}. If this is a surprise, reply to this email.</p>`));
+      }
+      return res.status(200).json({ ok: true });
+    }
+
     /* ===== signed in: mark a dashboard popup as seen ===== */
     if (action === 'notice-seen') {
       const user = getUser(req);
@@ -860,6 +955,27 @@ module.exports = async function handler(req, res) {
       await log('account-reset', 'Travel Club data cleared for ' + (u.name || u.email) + ': ' + theirApps.length + ' application(s), ' + led.length + ' trip(s), ' + reqIds.size + ' request(s)', u.id);
       return res.status(200).json({ ok: true, applications: theirApps.length, trips: led.length, requests: reqIds.size, keptBooked });
     }
+    if (action === 'co-review') {
+      const admin = await requirePerm(req, res, 'trips');
+      if (!admin) return;
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      if (!t || !t.coLeader || t.coLeader.status !== 'accepted') return res.status(404).json({ error: 'There is no co-leader waiting for approval on that trip.' });
+      const approve = body.approve === true, now = new Date().toISOString();
+      const coLeader = Object.assign({}, t.coLeader, approve ? { status: 'approved', approvedAt: now, approvedBy: admin.id } : { status: 'rejected', rejectedAt: now });
+      await db.updateInCollection(TRIPS, t.id, { coLeader });
+      const who = coLeader.name || coLeader.email;
+      await log(approve ? 'co-approved' : 'co-rejected', who + (approve ? ' approved as co-leader of ' : ' was not approved as co-leader of ') + t.title, t.id);
+      const reason = str(body.reply, 600);
+      await safe('co review', mail(coLeader.email, approve ? 'You are now co-leading ' + t.title : 'About co-leading ' + t.title, approve ? 'You are approved as co-leader' : 'Co-leader request',
+        approve
+          ? `<p>Hi ${trip.esc(firstName(coLeader.name))},</p><p>Sight Seers approved you as co-leader of <b>${trip.esc(t.title)}</b>. The trip is now on your dashboard: you can edit the trip details, post updates for the group and add the group chat link, and you get the trip emails too. Rewards are paid to ${trip.esc(t.organizerName || 'the main leader')}, who shares them with you.</p>${button(SITE + '/account', 'Open my dashboard')}`
+          : `<p>Hi ${trip.esc(firstName(coLeader.name))},</p><p>We have not approved the request for you to co-lead <b>${trip.esc(t.title)}</b> for now.${reason ? ' ' + trip.esc(reason) : ''} If you have questions, reply to this email.</p>`));
+      if (t.organizerEmail) await safe('co review leader', mail(t.organizerEmail, approve ? who + ' is now your co-leader' : 'About your co-leader', approve ? 'Your co-leader is approved' : 'Co-leader not approved',
+        approve ? `<p><b>${trip.esc(who)}</b> is approved as co-leader of <b>${trip.esc(t.title)}</b>. They can now help run the trip from their dashboard. Only you can delete the trip or change the co-leader, and rewards are paid to you to share as you agree.</p>`
+          : `<p>Sight Seers has not approved <b>${trip.esc(who)}</b> as co-leader of <b>${trip.esc(t.title)}</b>.${reason ? ' ' + trip.esc(reason) : ''} You can invite someone else from your dashboard.</p>`));
+      return res.status(200).json({ ok: true, coLeader: publicCo(coLeader) });
+    }
+
     if (action === 'trip-save' || action === 'trip-status' || action === 'trip-announce' || action === 'trip-delete' || action === 'application-delete' || action === 'interest-delete' || action === 'activity-delete' || action === 'application-review' || action === 'interest-update' || action === 'partners-save' || action === 'automation-save' || action === 'automation-run' || action === 'advisory-post' || action === 'destination-save' || action === 'destination-reset' || action === 'payout-add' || action === 'payout-delete') {
       const admin = await requirePerm(req, res, 'trips');
       if (!admin) return;

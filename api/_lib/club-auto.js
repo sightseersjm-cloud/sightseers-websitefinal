@@ -200,6 +200,9 @@ async function runDaily(opts) {
       await db.updateInCollection(TRIPS, t.id, { digestWeek: week });
       await safe('digest', mail(t.organizerEmail, 'Your week on ' + t.title, 'Your week on ' + t.title,
         `<p>Hi ${trip.esc(first(t.organizerName))},</p><p>Here is how <b>${trip.esc(t.title)}</b> is doing.</p>${trip.detailTable(d.rows)}${d.nudge}${button(SITE + '/account', 'Open my dashboard')}<p style="color:#7a8895;font-size:12px">You get this every Monday while your trip is open. Reply to this email if you would rather not.</p>`));
+      const co = t.coLeader && t.coLeader.status === 'approved' && t.coLeader.email && t.coLeader.email !== t.organizerEmail ? t.coLeader : null;
+      if (co) await safe('digest co', mail(co.email, 'Your week on ' + t.title, 'Your week on ' + t.title,
+        `<p>Hi ${trip.esc(first(co.name))},</p><p>Here is how <b>${trip.esc(t.title)}</b> is doing.</p>${trip.detailTable(d.rows)}${d.nudge}${button(SITE + '/account', 'Open my dashboard')}`));
     }
   }
 

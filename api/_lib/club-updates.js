@@ -75,6 +75,8 @@ async function advisoryTargets(country, now) {
   hit.forEach(t => {
     joinersOf(interests, t.id).forEach(i => { (byEmail[i.email] = byEmail[i.email] || { name: i.name, email: i.email, trips: [] }).trips.push(t.title); });
     if (t.organizerEmail) (byEmail[t.organizerEmail] = byEmail[t.organizerEmail] || { name: t.organizerName, email: t.organizerEmail, trips: [], leader: true }).trips.push(t.title);
+    const co = t.coLeader && t.coLeader.status === 'approved' && t.coLeader.email ? t.coLeader : null;
+    if (co) (byEmail[co.email] = byEmail[co.email] || { name: co.name, email: co.email, trips: [], leader: true }).trips.push(t.title);
   });
   return { trips: hit, people: Object.keys(byEmail).map(k => { const p = byEmail[k]; p.trips = p.trips.filter((x, n, a) => a.indexOf(x) === n); return p; }), joiners: hit.reduce((n, t) => n + joinersOf(interests, t.id).length, 0) };
 }
