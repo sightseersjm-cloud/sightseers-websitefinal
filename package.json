@@ -18,9 +18,7 @@
     "test:images": "node scripts/images.test.js",
     "test:packages": "node scripts/packages.test.js",
     "test:waiver": "node scripts/waiver.test.js",
-    "sync:waiver": "node scripts/sync-waiver.js",
-    "sync:shirts": "node scripts/sync-shirts.js",
-    "test:shop": "node scripts/shop.test.js"
+    "sync:waiver": "node scripts/sync-waiver.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

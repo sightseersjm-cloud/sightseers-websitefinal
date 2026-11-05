@@ -9075,7 +9075,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
           </div>
           <a href="#" onclick="nav('leaders-jamaica');return false;">Leaders in Jamaica</a>
           <a href="#" onclick="nav('tent-rental');return false;">Tent Rental</a>
-          <a href="#" onclick="nav('shirts');return false;">Shirts</a>
           <a href="#" onclick="nav('waiver');return false;">Sign a Waiver</a>
         </div>
       </li>
@@ -9124,7 +9123,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
-    <a href="#" onclick="nav('shirts');closeMob();return false;">Shirts</a>
     <a href="#" onclick="nav('waiver');closeMob();return false;">Sign a Waiver</a>
   </div>
 
@@ -14074,238 +14072,6 @@ body.theme-night #p-flagship-programs{
     </div>
   </div>
 </div>
-
-<!-- ════════════════════════════════════
-     SHIRTS STORE: shirts hang side-on from a black rail, turn to face you on hover, details and price on click
-════════════════════════════════════ -->
-<div class="page" id="p-shirts" aria-label="Shirts">
-<style>
-  #p-shirts{--sh-ink:#14202b;--sh-mut:#5b6b76;--sh-orange:#ef8731;--sh-w:clamp(190px,23vw,290px);--sh-slot:clamp(46px,5.4vw,74px);--sh-railY:clamp(200px,28vh,250px);color:var(--sh-ink)}
-  #p-shirts [hidden]{display:none!important}
-  #p-shirts .sh-stage{position:relative;height:clamp(640px,90vh,800px);overflow:hidden;background:radial-gradient(60% 55% at 50% 42%,#fbfbf8 0,#efefea 62%,#e2e2dc 100%);perspective:1300px;perspective-origin:50% 32%}
-  #p-shirts .sh-floor{position:absolute;left:0;right:0;bottom:0;height:23%;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,0) 30%),linear-gradient(180deg,#e4e3dd,#d9d8d1);transform-origin:top;z-index:0}
-  #p-shirts .sh-head{position:relative;z-index:3;text-align:center;padding:28px 20px 0;transition:opacity .5s}
-  #p-shirts .sh-stage.focus .sh-head{opacity:0;pointer-events:none}
-  #p-shirts .sh-kicker{font-size:11px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--sh-mut)}
-  #p-shirts .sh-h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4.2vw,44px);margin:8px 0 6px;color:#063a63}
-  #p-shirts .sh-intro{max-width:52ch;margin:0 auto;color:var(--sh-mut);font-size:14.5px;line-height:1.6}
-  /* the black rail: a lit metal tube with end brackets */
-  #p-shirts .sh-rail{position:absolute;left:7%;right:7%;top:var(--sh-railY);height:9px;border-radius:9px;z-index:3;background:linear-gradient(180deg,#5d5d5d 0,#1c1c1c 35%,#050505 70%,#2a2a2a 100%);box-shadow:0 10px 14px -6px rgba(0,0,0,.45);transition:opacity .5s}
-  #p-shirts .sh-rail::before,#p-shirts .sh-rail::after{content:"";position:absolute;top:-80px;width:8px;height:88px;border-radius:4px;background:linear-gradient(90deg,#3a3a3a,#0a0a0a 60%,#2b2b2b)}
-  #p-shirts .sh-rail::before{left:-2px}#p-shirts .sh-rail::after{right:-2px}
-  #p-shirts .sh-stage.focus .sh-rail{opacity:.15}
-  #p-shirts .sh-rack{position:absolute;left:0;right:0;top:calc(var(--sh-railY) - 6px);display:flex;justify-content:center;align-items:flex-start;gap:4px;padding:0 9%;z-index:4;transform-style:preserve-3d}
-  /* each shirt: a narrow slot on the rail; the shirt itself is wider and turns inside it */
-  #p-shirts .sh-item{position:relative;width:var(--sh-slot);height:calc(var(--sh-w)*1.02 + 46px);flex:none;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.22,.8,.3,1),opacity .55s,filter .55s;-webkit-tap-highlight-color:transparent;z-index:1}
-  #p-shirts .sh-item:hover,#p-shirts .sh-item:focus-visible{z-index:6}
-  #p-shirts .sh-item:focus-visible{outline:none}
-  #p-shirts .sh-turn{position:absolute;left:50%;top:0;width:var(--sh-w);margin-left:calc(var(--sh-w)/-2);transform-style:preserve-3d;transform:rotateY(78deg);transition:transform .9s cubic-bezier(.2,.9,.25,1.12)}
-  #p-shirts .sh-item:nth-child(even) .sh-turn{transform:rotateY(-78deg)}
-  /* a short rack shows its shirts at a gentler angle so they read as shirts at a glance */
-  #p-shirts .sh-rack.few .sh-turn{transform:rotateY(46deg)}
-  #p-shirts .sh-rack.few .sh-item:nth-child(even) .sh-turn{transform:rotateY(-46deg)}
-  #p-shirts .sh-rack.few{gap:clamp(60px,9vw,130px)}
-  #p-shirts .sh-rack.few .sh-edge{display:none}
-  /* the site's phone styles cap widths at the parent; the shirt is meant to be wider than its slot on the rail */
-  #p-shirts .sh-turn,#p-shirts .sh-body,#p-shirts .sh-face,#p-shirts .sh-face img,#p-shirts .sh-shadow{max-width:none!important}
-  /* on arrival each shirt turns to face you once, then settles back */
-  #p-shirts .sh-item.peek .sh-turn{transform:rotateY(0deg)!important}
-  #p-shirts .sh-item:hover .sh-turn,#p-shirts .sh-item:focus-visible .sh-turn{transform:rotateY(0deg)}
-  #p-shirts .sh-hanger{display:block;width:30%;margin:0 auto -8px;position:relative;z-index:2;transform:translateZ(1px)}
-  #p-shirts .sh-body{position:relative;transform-style:preserve-3d}
-  #p-shirts .sh-face{display:block;width:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:filter .9s}
-  #p-shirts .sh-face.front{position:relative;transform:translateZ(7px)}
-  #p-shirts .sh-face.back{position:absolute;left:0;top:0;transform:rotateY(180deg) translateZ(7px);filter:brightness(.82)}
-  #p-shirts .sh-item:not(:hover):not(:focus-visible) .sh-face.front{filter:brightness(.86)}
-  #p-shirts .sh-stage.focus .sh-item.on .sh-face.front{filter:none}
-  /* the shirt's thickness: a soft fabric edge seen when it hangs side-on */
-  #p-shirts .sh-edge{position:absolute;top:6%;bottom:2%;width:14px;left:50%;margin-left:-7px;border-radius:7px;transform:rotateY(90deg);background:linear-gradient(90deg,var(--edge,#e9e9e6),#fff 50%,var(--edge,#e9e9e6));box-shadow:inset 0 0 6px rgba(0,0,0,.12)}
-  #p-shirts .sh-edge{transition:opacity .5s}
-  #p-shirts .sh-item:hover .sh-edge,#p-shirts .sh-item:focus-visible .sh-edge,#p-shirts .sh-stage.focus .sh-item.on .sh-edge{opacity:0}
-  #p-shirts .sh-edge.l{transform:rotateY(90deg) translateZ(calc(var(--sh-w)*-.24))}
-  #p-shirts .sh-edge.r{transform:rotateY(90deg) translateZ(calc(var(--sh-w)*.24))}
-  #p-shirts .sh-edge.c{transform:rotateY(90deg)}
-  /* its shadow on the wall, wider when the shirt faces you */
-  #p-shirts .sh-shadow{position:absolute;left:50%;top:18%;width:var(--sh-w);height:calc(var(--sh-w)*.85);margin-left:calc(var(--sh-w)/-2);border-radius:40%;background:radial-gradient(closest-side,rgba(0,0,0,.2),rgba(0,0,0,0));transform:translateZ(-60px) scaleX(.22);transition:transform .9s cubic-bezier(.2,.9,.25,1.12);pointer-events:none}
-  #p-shirts .sh-item:hover .sh-shadow,#p-shirts .sh-item:focus-visible .sh-shadow{transform:translateZ(-60px) translate(14px,10px) scaleX(1)}
-  #p-shirts .sh-cap{position:absolute;left:50%;top:calc(var(--sh-w)*1.02 + 54px);transform:translateX(-50%);white-space:nowrap;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--sh-ink);opacity:0;transition:opacity .35s .1s;pointer-events:none}
-  #p-shirts .sh-item:hover .sh-cap,#p-shirts .sh-item:focus-visible .sh-cap{opacity:1}
-  /* click: the shirt comes forward and faces you, details and price appear */
-  #p-shirts .sh-stage.focus .sh-item{opacity:0;filter:blur(6px);pointer-events:none}
-  #p-shirts .sh-stage.focus .sh-item.on{opacity:1;filter:none;pointer-events:auto;cursor:default;z-index:8;transform:translate3d(var(--dx,0),var(--dy,0),0) scale(var(--sc,1.4))}
-  #p-shirts .sh-stage.focus .sh-item.on .sh-turn{transform:rotateY(0deg)}
-  #p-shirts .sh-stage.focus .sh-item.on .sh-shadow{transform:translateZ(-60px) translate(14px,10px) scaleX(1)}
-  #p-shirts .sh-stage.focus .sh-item.on .sh-cap{opacity:0}
-  #p-shirts .sh-stage.focus .sh-item.on.spin .sh-turn{transform:rotateY(180deg)}
-  #p-shirts .sh-info{position:absolute;right:clamp(16px,7vw,110px);top:50%;width:min(340px,40vw);z-index:9;opacity:0;transform:translate(16px,-50%);pointer-events:none;transition:opacity .5s .3s,transform .5s .3s;background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(20,32,43,.08);border-radius:18px;padding:22px;box-shadow:0 24px 50px -24px rgba(0,0,0,.35)}
-  #p-shirts .sh-stage.focus .sh-info{opacity:1;transform:translate(0,-50%);pointer-events:auto}
-  #p-shirts .sh-name{font-weight:900;letter-spacing:.03em;text-transform:uppercase;font-size:clamp(16px,1.8vw,20px);margin:0}
-  #p-shirts .sh-price{font-size:22px;font-weight:800;color:#063a63;margin:6px 0 2px}
-  #p-shirts .sh-price.ask{font-size:15px;color:var(--sh-mut);font-weight:700}
-  #p-shirts .sh-blurb{margin:8px 0 0;color:var(--sh-mut);font-size:14px;line-height:1.6}
-  #p-shirts .sh-sizes{margin:12px 0 0;font-size:12.5px;color:var(--sh-mut)}
-  #p-shirts .sh-sizes b{color:var(--sh-ink)}
-  #p-shirts .sh-toggle{display:inline-flex;margin:14px 0 0;border:1px solid #c5ccd2;border-radius:99px;overflow:hidden;background:#fff}
-  #p-shirts .sh-toggle button{border:0;background:none;padding:7px 16px;font:inherit;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--sh-ink)}
-  #p-shirts .sh-toggle button.on{background:#0b0b0b;color:#fff}
-  #p-shirts .sh-req{display:block;width:100%;margin-top:16px;border:0;background:var(--sh-orange);color:#fff;border-radius:99px;padding:13px 20px;font:inherit;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
-  #p-shirts .sh-arrow,#p-shirts .sh-close{position:absolute;z-index:10;border:1px solid #c5ccd2;background:#fff;color:var(--sh-ink);border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:16px;opacity:0;pointer-events:none;transition:opacity .4s .3s}
-  #p-shirts .sh-stage.focus .sh-arrow,#p-shirts .sh-stage.focus .sh-close{opacity:1;pointer-events:auto}
-  #p-shirts .sh-prev{left:clamp(10px,4vw,60px);top:48%}#p-shirts .sh-next{right:calc(clamp(16px,7vw,110px) + min(340px,40vw) + 18px);top:48%}
-  #p-shirts .sh-close{right:18px;top:18px;width:auto;border-radius:99px;padding:0 16px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
-  #p-shirts .sh-marq{position:absolute;left:0;right:0;bottom:0;height:42px;overflow:hidden;background:#52e040;color:#0b1620;display:flex;align-items:center;z-index:11;transform:rotate(-1.2deg) scale(1.04);transform-origin:left bottom}
-  #p-shirts .sh-marq div{display:flex;white-space:nowrap;animation:shMarq 28s linear infinite;font-size:11.5px;font-weight:900;letter-spacing:.16em}
-  #p-shirts .sh-marq span{padding:0 26px}
-  @keyframes shMarq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  /* request form */
-  #p-shirts .sh-modal{position:fixed;inset:0;z-index:100000;background:rgba(8,18,28,.55);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(4px)}
-  #p-shirts .sh-box{width:min(480px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:24px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
-  #p-shirts .sh-box h3{margin:0 0 4px;font-family:'Playfair Display',serif;color:#063a63;font-size:22px}
-  #p-shirts .sh-box p.sub{margin:0 0 14px;color:var(--sh-mut);font-size:13.5px}
-  #p-shirts .sh-f{margin:0 0 10px}#p-shirts .sh-f label{display:block;font-size:12px;font-weight:700;color:var(--sh-mut);margin:0 0 4px}
-  #p-shirts .sh-in{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #cfdbe5;border-radius:11px;font:inherit;font-size:15px}
-  #p-shirts .sh-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  #p-shirts .sh-msg{margin-top:8px;font-size:13.5px}#p-shirts .sh-msg.err{color:#b3261e}
-  #p-shirts .sh-box .go{width:100%;margin-top:6px;border:0;background:var(--sh-orange);color:#fff;border-radius:99px;padding:13px;font:inherit;font-weight:800;cursor:pointer}
-  #p-shirts .sh-box .x{float:right;border:0;background:#eef3f7;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px}
-  @media(max-width:760px){
-    #p-shirts{--sh-w:clamp(170px,50vw,240px);--sh-slot:clamp(44px,12vw,64px);--sh-railY:clamp(220px,30vh,260px)}
-    #p-shirts .sh-info{left:14px;right:14px;top:auto;bottom:56px;width:auto;transform:translateY(16px);padding:16px}
-    #p-shirts .sh-stage.focus .sh-info{transform:none}
-    #p-shirts .sh-prev{left:8px;top:36%}#p-shirts .sh-next{left:auto;right:8px;top:36%}
-    #p-shirts .sh-row{grid-template-columns:1fr}
-  }
-  @media(prefers-reduced-motion:reduce){#p-shirts .sh-turn,#p-shirts .sh-shadow,#p-shirts .sh-item,#p-shirts .sh-info{transition-duration:.01s!important}#p-shirts .sh-marq div{animation:none}}
-</style>
-  <div class="sh-stage" id="shStage">
-    <div class="sh-floor"></div>
-    <div class="sh-head"><div class="sh-kicker">Sight Seers</div><h1 class="sh-h1" id="shTitle">Shirts</h1><p class="sh-intro" id="shIntro"></p></div>
-    <div class="sh-rail"></div>
-    <div class="sh-rack" id="shRack"></div>
-    <button type="button" class="sh-arrow sh-prev" id="shPrev" aria-label="Previous shirt">&larr;</button>
-    <button type="button" class="sh-arrow sh-next" id="shNext" aria-label="Next shirt">&rarr;</button>
-    <button type="button" class="sh-close" id="shClose">Close &times;</button>
-    <div class="sh-info" id="shInfo" aria-live="polite">
-      <p class="sh-name" id="shName"></p>
-      <div class="sh-price" id="shPrice"></div>
-      <p class="sh-blurb" id="shBlurb"></p>
-      <p class="sh-sizes" id="shSizes"></p>
-      <div class="sh-toggle" id="shToggle"><button type="button" class="on" data-v="front">Front</button><button type="button" data-v="back">Back</button></div>
-      <button type="button" class="sh-req" id="shReq">Request this shirt &rarr;</button>
-    </div>
-    <div class="sh-marq" aria-hidden="true"><div id="shMarq"></div></div>
-  </div>
-  <div class="sh-modal" id="shModal" hidden role="dialog" aria-modal="true" aria-labelledby="shMTitle">
-    <div class="sh-box">
-      <button type="button" class="x" id="shMClose" aria-label="Close">&times;</button>
-      <h3 id="shMTitle">Request a shirt</h3><p class="sub" id="shMSub"></p>
-      <form id="shForm" novalidate>
-        <div class="sh-row"><div class="sh-f"><label for="shSize">Size *</label><select class="sh-in" id="shSize"></select></div><div class="sh-f"><label for="shQty">Quantity *</label><input class="sh-in" id="shQty" type="number" min="1" max="200" value="1"></div></div>
-        <div class="sh-f"><label for="shNm">Your name *</label><input class="sh-in" id="shNm" autocomplete="name"></div>
-        <div class="sh-row"><div class="sh-f"><label for="shEm">Email *</label><input class="sh-in" id="shEm" type="email" autocomplete="email"></div><div class="sh-f"><label for="shPh">Phone or WhatsApp</label><input class="sh-in" id="shPh" type="tel" autocomplete="tel"></div></div>
-        <div class="sh-f"><label for="shNote">Anything we should know (event, date, names)</label><textarea class="sh-in" id="shNote" style="min-height:64px"></textarea></div>
-        <div style="position:absolute;left:-9999px"><input id="shWeb" tabindex="-1" autocomplete="off"></div>
-        <button type="submit" class="go" id="shGo">Send request</button>
-        <div class="sh-msg" id="shMsg" role="alert"></div>
-      </form>
-      <div id="shOk" hidden><h3>Thank you.</h3><p class="sub">We have your request and will email you to confirm the details. No payment is taken on this page.</p></div>
-    </div>
-  </div>
-</div>
-<script>
-window.SHIRTS={"title": "Shirts", "intro": "Sight Seers Travel Club shirts. Hover a shirt to turn it, tap it for the details and price.", "marquee": "SIGHT SEERS TRAVEL CLUB · TRAVEL MORE · SEE MORE · LIVE MORE", "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL"], "items": [{"id": "travel-more", "name": "Travel More tee", "colour": "#ffffff", "ink": "#063a63", "tag": "White", "tagColour": "#063a63", "blurb": "The Sight Seers Travel Club tee. Travel more. See more, live more.", "front": "", "back": "/assets/shirts/travel-more-back.webp", "price": null}], "currency": "US$"};
-/* ===== Shirts store: 3D rack. Data is window.SHIRTS (api/_data/shirts.json). ===== */
-(function(){
-  var S=window.SHIRTS, cur=-1, built=false, items=[];
-  function $(i){return document.getElementById(i);}
-  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
-  var HANGER='<svg class="sh-hanger" viewBox="0 0 60 40" aria-hidden="true"><path d="M30 4c4.6 0 5.6 4.6 3 6.6-1.6 1.2-3 2-3 4.4V16L6 31c-3 2.2-1.6 3.6 1.6 3.6h44.8c3.2 0 4.6-1.4 1.6-3.6L30 16" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  /* a plain tee in the shirt's colour, used only until a photo is added */
-  function tee(it,v){
-    var c=it.colour||'#4fae3f',ink=it.ink||'#fff';
-    return '<svg viewBox="0 0 200 218" style="display:block;width:100%" role="img" aria-label="'+esc(it.name)+'"><path d="M62 18 86 10q14 18 28 0l24 8 52 36-20 42-24-14v133H54V82L30 96 10 54Z" fill="'+esc(c)+'"/><path d="M86 10q14 '+(v==='front'?24:8)+' 28 0" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="2.5"/>'+(v==='front'?'<text x="100" y="104" text-anchor="middle" font-family="Poppins,Arial,sans-serif" font-weight="800" font-size="15" fill="'+esc(ink)+'">SIGHT SEERS</text>':'')+'</svg>';
-  }
-  function has(it,v){return (it.front||it.back)?!!(v==='back'?it.back:it.front):true;}
-  function first(it){return it.front?'front':(it.back?'back':'front');}
-  function other(v){return v==='front'?'back':'front';}
-  function img(it,v,cls){var src=v==='back'?it.back:it.front;return '<div class="sh-face '+cls+'">'+(src?'<img src="'+esc(src)+'" alt="'+esc(it.name)+', '+v+'" style="display:block;width:100%" draggable="false">':tee(it,v))+'</div>';}
-  /* the face you see first is the side we have a photo of; the reverse shows the other side, or the same photo darkened */
-  function faces(it){var a=first(it),b=has(it,other(a))?other(a):a;return img(it,a,'front')+img(it,b,'back');}
-  function price(it){return (typeof it.price==='number')?(S.currency||'US$')+(it.price%1?it.price.toFixed(2):it.price):'';}
-  function build(){
-    if(built||!S||!$('shRack'))return; built=true;
-    $('shTitle').textContent=S.title||'Shirts';$('shIntro').textContent=S.intro||'';
-    var rack=$('shRack');
-    rack.innerHTML=S.items.map(function(it,i){
-      var edge=it.edge||'#e9e9e6';
-      return '<button type="button" class="sh-item" data-i="'+i+'" aria-label="'+esc(it.name)+(price(it)?', '+price(it):'')+'"><span class="sh-shadow"></span><span class="sh-turn" style="--edge:'+esc(edge)+'">'+HANGER+'<span class="sh-body">'+faces(it)+'<i class="sh-edge l"></i><i class="sh-edge c"></i><i class="sh-edge r"></i></span></span><span class="sh-cap">'+esc(it.name)+'</span></button>';
-    }).join('');
-    items=[].slice.call(rack.querySelectorAll('.sh-item'));
-    rack.classList.toggle('few',S.items.length<=3);
-    items.forEach(function(b){b.addEventListener('click',function(){if(cur!==+b.getAttribute('data-i'))open(+b.getAttribute('data-i'));});});
-    var m=(S.marquee||'')+'  ·  ',one='';for(var k=0;k<6;k++)one+='<span>'+esc(m)+'</span>';$('shMarq').innerHTML=one+one;
-    $('shClose').onclick=close;$('shPrev').onclick=function(){step(-1);};$('shNext').onclick=function(){step(1);};
-    $('shToggle').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setView(b.getAttribute('data-v'));});
-    $('shReq').onclick=openForm;$('shMClose').onclick=closeForm;$('shModal').addEventListener('click',function(e){if(e.target===this)closeForm();});
-    $('shForm').addEventListener('submit',send);
-    document.addEventListener('keydown',function(e){var pg=$('p-shirts');if(!pg||pg.offsetParent===null)return;if(!$('shModal').hidden){if(e.key==='Escape')closeForm();return;}if(cur<0)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);});
-    window.addEventListener('resize',function(){if(cur>=0)place(cur);});
-    $('shSize').innerHTML=S.sizes.map(function(z){return '<option>'+esc(z)+'</option>';}).join('');
-  }
-  /* bring the chosen shirt to the left of centre (the details card sits on the right); on phones, centre it above the card */
-  function place(i){
-    var st=$('shStage'),it=items[i];if(!it)return;
-    it.style.setProperty('--dx','0px');it.style.setProperty('--dy','0px');it.style.setProperty('--sc','1');
-    var sr=st.getBoundingClientRect(),r=it.getBoundingClientRect(),narrow=sr.width<=760;
-    var h=it.offsetHeight,sc=Math.max(1,Math.min(1.9,(sr.height*(narrow?.42:.62))/h));
-    var targetX=narrow?sr.width/2:sr.width*0.36;
-    var dx=(sr.left+targetX)-(r.left+r.width/2),dy=(sr.height*(narrow?.12:.1))-(r.top-sr.top);
-    it.style.setProperty('--sc',sc.toFixed(3));it.style.setProperty('--dx',Math.round(dx)+'px');it.style.setProperty('--dy',Math.round(dy)+'px');
-  }
-  function open(i){
-    build();cur=i;var it=S.items[i];
-    items.forEach(function(b,k){b.classList.toggle('on',k===i);b.classList.remove('spin');});
-    $('shStage').classList.add('focus');
-    $('shName').textContent=it.name;
-    var p=price(it),pe=$('shPrice');pe.textContent=p||'Price on request';pe.classList.toggle('ask',!p);
-    $('shBlurb').textContent=it.blurb||'';
-    $('shSizes').innerHTML='Sizes: <b>'+esc((it.sizes||S.sizes).join(' · '))+'</b>';
-    var both=has(it,'front')&&has(it,'back'),fv=first(it);
-    $('shToggle').hidden=!both;[].forEach.call($('shToggle').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===fv);});
-    $('shPrev').hidden=$('shNext').hidden=S.items.length<2;
-    place(i);requestAnimationFrame(function(){place(i);});
-    
-  }
-  function close(){cur=-1;$('shStage').classList.remove('focus');items.forEach(function(b){b.classList.remove('on','spin');b.style.removeProperty('--dx');b.style.removeProperty('--dy');b.style.removeProperty('--sc');});}
-  function step(d){if(cur<0)return;var n=S.items.length;open((cur+d+n)%n);}
-  /* Front/Back spins the shirt on its hanger */
-  function setView(v){var it=S.items[cur];if(!it)return;[].forEach.call($('shToggle').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===v);});items[cur].classList.toggle('spin',v!==first(it));}
-  function openForm(){var it=S.items[cur];if(!it)return;$('shMSub').textContent=it.name+(price(it)?' ('+price(it)+')':'')+'. Tell us your size and how to reach you. We will confirm the details by email.';$('shForm').hidden=false;$('shOk').hidden=true;$('shMsg').textContent='';$('shGo').disabled=false;$('shGo').textContent='Send request';$('shModal').hidden=false;try{$('shNm').focus();}catch(e){}}
-  function closeForm(){$('shModal').hidden=true;}
-  function send(e){
-    e.preventDefault();var it=S.items[cur];
-    var nm=$('shNm').value.trim(),em=$('shEm').value.trim(),ph=$('shPh').value.trim(),qty=parseInt($('shQty').value,10);
-    if(!nm)return fail('Please enter your name.');if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))return fail('Please enter a valid email so we can reply.');
-    if(!(qty>=1&&qty<=200))return fail('Please enter a quantity from 1 to 200.');
-    if($('shWeb').value){$('shForm').hidden=true;$('shOk').hidden=false;return;}
-    var size=$('shSize').value,note=$('shNote').value.trim(),go=$('shGo');go.disabled=true;go.textContent='Sending…';$('shMsg').textContent='';
-    var body={action:'send',name:nm,email:em,phone:ph,subject:'Shirt request: '+it.name+' ('+size+' x '+qty+')',message:'Shirt request from the Shirts rack.\nShirt: '+it.name+'\nPrice shown: '+(price(it)||'Price on request')+'\nSize: '+size+'\nQuantity: '+qty+'\nName: '+nm+'\nEmail: '+em+'\nPhone: '+(ph||'Not provided')+'\nNotes: '+(note||'None')};
-    fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-      .then(function(r){return r.json().catch(function(){return{};}).then(function(j){return{ok:r.ok,j:j};});})
-      .then(function(res){if(!res.ok)throw new Error((res.j&&res.j.error)||'Could not send');$('shForm').hidden=true;$('shOk').hidden=false;})
-      .catch(function(err){go.disabled=false;go.textContent='Send request';fail(err.message+'. Please try again, or email info@sightseerscaribbean.com.');});
-  }
-  function fail(m){var el=$('shMsg');el.className='sh-msg err';el.textContent=m;return false;}
-  function peek(){
-    try{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){}
-    items.forEach(function(b,k){setTimeout(function(){b.classList.add('peek');setTimeout(function(){b.classList.remove('peek');},1300);},500+k*220);});
-  }
-  window.initShop=function(){build();if(cur>=0)close();peek();};
-  window.goShirts=function(){try{if(typeof nav==='function')nav('shirts');}catch(e){}};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
-})();
-</script>
-
 
 <!-- ════════════════════════════════════
      PARTICIPANT WAIVER (page)
@@ -25315,7 +25081,6 @@ vtSessionAction=function(el,type){
         <li><a href="#" onclick="nav('privacy-policy');return false;"><i class="fas fa-chevron-right"></i>Privacy Policy</a></li>
         <li><a href="#" onclick="nav('terms-of-service');return false;"><i class="fas fa-chevron-right"></i>Terms of Service</a></li>
         <li><a href="#" onclick="nav('waiver');return false;"><i class="fas fa-chevron-right"></i>Sign a Waiver</a></li>
-        <li><a href="#" onclick="nav('shirts');return false;"><i class="fas fa-chevron-right"></i>Shirts</a></li>
         <li><a href="#" onclick="nav('contact');return false;"><i class="fas fa-chevron-right"></i>Contact Support</a></li>
       </ul>
       <div class="support-note">
@@ -28803,7 +28568,6 @@ var SS_ROUTES = {
   'manage':'/manage',
   'tent-rental':'/tent-rental',
   'waiver':'/waiver',
-  'shirts':'/shirts',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
   'landmark':'/landmark-experiences',
@@ -28844,7 +28608,6 @@ var SS_META = {
   'shore-leave':['Shore Leave: Jamaica for Undergraduates | Sight Seers','Adventure, culture and fun in Jamaica for undergraduates from the US, Canada and abroad. Waterfalls, catamaran sails, music and food, planned for your group.'],
   'mba-voyages':['MBA Class Trips & Alumni Voyages, Caribbean | Seven Shores','MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores: yacht days, villa dinners and curated networking for 12 to 60.'],
   'tent-rental':['Tent Rental Agreement | Sight Seers Caribbean','Rent a two-person camping tent from Sight Seers Caribbean Adventures. Complete and sign the rental agreement online.'],
-  'shirts':['Shirts | Sight Seers Caribbean','Sight Seers Travel Club shirts. Hover a shirt to turn it on its hanger, tap it for the price and details, and send a request.'],
   'waiver':['Participant Waiver | Sight Seers Caribbean','Sign your Sight Seers participant waiver and medical form online. A signed copy is emailed to you and to our team.'],
   'destinations':['Caribbean Group Travel Destinations | Sight Seers Caribbean','Plan a group trip to Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao or the Dominican Republic with 5-day packages from US$300 per person.'],
   'discoverjamaica':['Discover Jamaica, Travel Guide & Experiences','A local guide to Jamaica: where to go, what to do, and how to plan a trip that goes beyond the resort strip.'],
@@ -28992,9 +28755,6 @@ function nav(id,opts={}){
   }
   if(id==='waiver'){
     try{ initWaiver(); }catch(e){}
-  }
-  if(id==='shirts'){
-    try{ initShop(); }catch(e){}
   }
   if(id==='stays'){
     renderStays();
@@ -29787,7 +29547,6 @@ const BOT_PAGES=[
   {id:'yacht-charters',name:'Yacht Charters',re:/yachts?|charters?/},
   {id:'stays',name:'Villas & Stays',re:/villas?|stays?\b|accommodation|where to stay|vacation rentals?|hotels?/},
   {id:'tent-rental',name:'Tent Rental',re:/\btents?\b|camping/},
-  {id:'shirts',name:'Shirts',re:/shirts?|t-?shirts?|tees?\b|merch|shop|store|apparel/},
   {id:'waiver',name:'Sign a Waiver',re:/waivers?|release form|medical form|sign (a|the|my) form/},
   {id:'gallery',name:'Gallery',re:/gallery|photos?|pictures?/},
   {id:'about',name:'About Sight Seers',re:/about (you|us|sight)|who are you|your story|our story|team\b/},
@@ -51445,7 +51204,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   'use strict';
   var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
   var S=MG.S,esc=MG.esc,api=MG.api,isOwner=MG.isOwner;
-  var LABELS={home:'Home',tours:'Tours',destinations:'Destinations',stays:'Villas and stays',staycountry:'Stays by country','yacht-charters':'Yacht charters',transfers:'Airport transfers','school-tours':'School and university tours','greek-life':'Greek life travel','leaders-jamaica':'Leaders in Jamaica','mba-voyages':'MBA voyages','flagship-programs':'Flagship programs','seven-shores-society':'Seven Shores Society','shore-leave':'Shore Leave','seven-shores-offsite':'Seven Shores offsite','travel-club':'Travel Club','tent-rental':'Tent rental',waiver:'Sign a waiver',shirts:'Shirts',discoverjamaica:'Discover Jamaica',landmark:'Landmark experiences',gallery:'Gallery',about:'About',partners:'Partners',blog:'Blog',passport:'Passport and travel documents',booking:'Booking and contact',contact:'Contact','privacy-policy':'Privacy policy','terms-of-service':'Terms of service','refund-policy':'Refund policy'};
+  var LABELS={home:'Home',tours:'Tours',destinations:'Destinations',stays:'Villas and stays',staycountry:'Stays by country','yacht-charters':'Yacht charters',transfers:'Airport transfers','school-tours':'School and university tours','greek-life':'Greek life travel','leaders-jamaica':'Leaders in Jamaica','mba-voyages':'MBA voyages','flagship-programs':'Flagship programs','seven-shores-society':'Seven Shores Society','shore-leave':'Shore Leave','seven-shores-offsite':'Seven Shores offsite','travel-club':'Travel Club','tent-rental':'Tent rental',waiver:'Sign a waiver',discoverjamaica:'Discover Jamaica',landmark:'Landmark experiences',gallery:'Gallery',about:'About',partners:'Partners',blog:'Blog',passport:'Passport and travel documents',booking:'Booking and contact',contact:'Contact','privacy-policy':'Privacy policy','terms-of-service':'Terms of service','refund-policy':'Refund policy'};
   var HIDE={'club-admin':1,admin:1,manage:1,account:1,vtours:1,contact:1};
   var ED=MG.ED={page:'home',view:'desktop',sel:null,done:0,note:'',frameKey:0,hi:null,selBox:null};
 
