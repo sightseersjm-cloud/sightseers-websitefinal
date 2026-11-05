@@ -1,6 +1,6 @@
 # Shirts rack (home page)
 
-A 3D clothing store on the home page (section `#p-shop`, "Shirts" in the menu and footer). Shirts hang side-on from a black rail and turn on their hangers to face you on hover. A click brings the shirt forward with its description, price and sizes; Front/Back spins it on the hanger when both photos exist. Guests then send a request. The request arrives in the admin Inbox as "Shirt request: <shirt> (<size> x <qty>)". No payment is taken; card checkout stays off until Stripe is authorized and refund terms are on the site.
+A 3D clothing store on its own page, `/shirts` (page `#p-shirts`, "Shirts" in the menu and footer). The older "Coming Soon" shop page (`#p-shop`) is separate and unchanged. Shirts hang side-on from a black rail and turn on their hangers to face you on hover. A click brings the shirt forward with its description, price and sizes; Front/Back spins it on the hanger when both photos exist. Guests then send a request. The request arrives in the admin Inbox as "Shirt request: <shirt> (<size> x <qty>)". No payment is taken; card checkout stays off until Stripe is authorized and refund terms are on the site.
 
 ## Adding or changing a shirt
 Edit `api/_data/shirts.json`, then run `npm run sync:shirts` and `npm run build`.
