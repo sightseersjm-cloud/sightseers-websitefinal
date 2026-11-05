@@ -48580,7 +48580,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(sps.length){
       sp.innerHTML='<h2>Sponsored by</h2><ul class="tp-splist">'+sps.map(function(so){
         var nm=so.url?'<a href="'+esc(so.url)+'" target="_blank" rel="noopener sponsored">'+esc(so.name)+'</a>':'<b>'+esc(so.name)+'</b>';
-        return '<li>'+nm+(so.note?'<span> &middot; '+esc(so.note)+'</span>':'')+'</li>';}).join('')+'</ul>';
+        return '<li>'+nm+'</li>';}).join('')+'</ul>';
       sp.hidden=false;}
     else{sp.innerHTML='';sp.hidden=true;}
     var img=$('tpImg');if(t.image){img.innerHTML='<img src="'+esc(t.image)+'" alt="'+esc(t.imageAlt||t.title)+'">';img.hidden=false;}else{img.innerHTML='';img.hidden=true;}
@@ -49006,7 +49006,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         :'<p class="ac-onote"><b>Your trip page is not live yet.</b> Sight Seers will open it once the package, the dates and your reward are agreed.</p>')+
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
-      (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> '+esc(t.sponsors.filter(function(x){return x.note;}).map(function(x){return x.note;}).join(' '))+' Mention them to your group.</p>':'')+
+      (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> Mention them to your group.</p>':'')+
       groupForm(t)+infoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
@@ -52236,7 +52236,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
   /* one sponsor row in the trip editor */
   function spRow(sp){sp=sp||{};
-    return '<div class="cl-sprow"><label>Name<input type="text" maxlength="80" data-sp="name" value="'+esc(sp.name||'')+'" placeholder="e.g. Legend Lager (Wisynco Group)"></label><label>Link<input type="url" maxlength="400" data-sp="url" value="'+esc(sp.url||'')+'" placeholder="https://..."></label><input type="hidden" data-sp="logo" value="'+esc(sp.logo||'')+'"><label>Line (optional, public)<input type="text" maxlength="160" data-sp="note" value="'+esc(sp.note||'')+'" placeholder="e.g. Drinks on the yacht day"></label><button type="button" class="mg-btn ghost cl-spdel" data-cl-spdel="1" aria-label="Remove this sponsor">Remove</button></div>';}
+    return '<div class="cl-sprow"><label>Name<input type="text" maxlength="80" data-sp="name" value="'+esc(sp.name||'')+'" placeholder="e.g. Legend Lager (Wisynco Group)"></label><label>Link<input type="url" maxlength="400" data-sp="url" value="'+esc(sp.url||'')+'" placeholder="https://..."></label><input type="hidden" data-sp="logo" value="'+esc(sp.logo||'')+'"><input type="hidden" data-sp="note" value=""><button type="button" class="mg-btn ghost cl-spdel" data-cl-spdel="1" aria-label="Remove this sponsor">Remove</button></div>';}
   function readSponsors(k){var box=document.querySelector('[data-sp-list="'+k+'"]');if(!box)return undefined;return [].map.call(box.querySelectorAll('.cl-sprow'),function(r){var o={};[].forEach.call(r.querySelectorAll('[data-sp]'),function(i){o[i.getAttribute('data-sp')]=i.value.trim();});return o;});}
   function readTrip(k){
     var g=function(n){return val('clT_'+n+'_'+k);};
