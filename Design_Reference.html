@@ -17168,6 +17168,14 @@ body.theme-night .page .tag{
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
 
+        <a class="partner-item" href="https://mayamobile.pxf.io/m4KkQ7" target="_blank" rel="noopener sponsored" title="Maya Mobile eSIM">
+          <img class="partner-logo" src="/logos/maya-mobile.png" alt="Maya Mobile" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="partner-placeholder" style="display:none">Maya Mobile</div>
+          <div class="partner-name">Maya Mobile</div>
+          <div class="partner-note">Our other eSIM partner. Travel data plans so guests can land connected, without swapping a SIM card or paying roaming fees.</div>
+          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
+        </a>
+
         <a class="partner-item" href="#" onclick="return false" title="Travwell Society">
           <img class="partner-logo" src="/logos/travwell-society.png" alt="Travwell Society" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="partner-placeholder" style="display:none">Travwell Society</div>
@@ -48867,13 +48875,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     else if(i.passport===cc)entryBody='<p>This trip is in your passport\'s own country, so there are no visitor entry rules to prepare. Carry your valid passport or ID.</p>';
     else entryBody='<p>We have not prepared entry details for '+esc(i.passport)+' passports going to '+esc(cc)+' yet. Check your government\'s travel advice for '+esc(cc)+' before you book flights, or ask us.</p>';
     var good=g?'<dl class="ac-ckdl">'+[['Currency',g.currency],['Language',g.language],['Plugs',g.plug],['Voltage',g.voltage],['Driving',g.driving]].filter(function(r){return r[1];}).map(function(r){return '<dt>'+r[0]+'</dt><dd>'+esc(r[1])+'</dd>';}).join('')+'</dl>':'';
-    var ins=pt&&pt.insurance,es=pt&&pt.esim;
+    var ins=pt&&pt.insurance,es=pt&&pt.esim,es2=pt&&pt.esim2;
     function pbody(p,label){return p?'<p>'+esc(p.note)+'</p>'+(p.url?'<p><a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored">'+esc(p.cta||label)+'</a></p>':'<small>Link coming soon.</small>'):'';}
     var items=[
       ckItem(i,'passport','Check your passport',pc.html+renew),
       ckItem(i,'entry','Read the entry rules'+(cc?' for '+cc:''),entryBody+(good?'<p style="margin-top:8px"><b>Good to know in '+esc(cc)+'</b></p>'+good:'')),
       ckItem(i,'insurance','Get travel insurance',pbody(ins,'Get a quote')),
-      ckItem(i,'esim','Sort your phone data',pbody(es,'Get an eSIM')),
+      ckItem(i,'esim','Sort your phone data',es&&es2&&es2.url?'<p>'+esc(es.note)+'</p><p>'+[es,es2].filter(function(p){return p.url;}).map(function(p){return '<a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored">'+esc(p.title)+'</a>';}).join(' &middot; ')+'</p>':pbody(es,'Get an eSIM')),
       ckItem(i,'chat','Join the group chat',i.groupLink?'<p><a href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Open the group chat</a></p>':'<p>'+esc(i.leaderName||'Your leader')+' will share the group chat link here.</p>')
     ];
     var done=['passport','entry','insurance','esim','chat'].filter(function(k){return i.checklist&&i.checklist[k];}).length;
@@ -48989,15 +48997,15 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>')+
     '</div>';
   }
-  var PTAG={insurance:'Protection',esim:'Connectivity'};
+  var PTAG={insurance:'Protection',esim:'Connectivity',esim2:'Connectivity'};
   function partnerCard(k,p){
-    var logo=p.logo?'<img class="ac-reflogo" src="'+esc(p.logo)+'" alt="'+esc(p.title)+'" loading="lazy">':'';
+    var logo=p.logo?'<img class="ac-reflogo" src="'+esc(p.logo)+'" alt="'+esc(p.title)+'" loading="lazy" onerror="this.remove()">':'';
     var inner='<span class="ac-refhead"><span class="ac-reftag">'+PTAG[k]+'</span>'+logo+'</span><h5>'+esc(p.title)+'</h5><p>'+esc(p.note)+'</p>'+(p.url?'<span class="ac-refgo">'+esc(p.cta)+'</span>':'<span class="ac-refsoon">Link coming soon</span>');
     return p.url?'<a class="ac-ref" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored" data-partner="'+k+'">'+inner+'</a>':'<div class="ac-ref is-soon" data-partner="'+k+'">'+inner+'</div>';
   }
   function partnersHtml(pt){
     if(!pt)return '';
-    return '<div class="ac-refgrid">'+partnerCard('insurance',pt.insurance)+partnerCard('esim',pt.esim)+'</div><p class="ac-refnote">'+esc(pt.disclosure||'')+'</p>';
+    return '<div class="ac-refgrid">'+partnerCard('insurance',pt.insurance)+partnerCard('esim',pt.esim)+(pt.esim2?partnerCard('esim2',pt.esim2):'')+'</div><p class="ac-refnote">'+esc(pt.disclosure||'')+'</p>';
   }
   var TRK=['Received','In review','Decision','Trip page live'];
   function appTrack(a,trips){
@@ -52342,10 +52350,11 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   /* ---------- partner links ---------- */
   function links(){
     var raw=CL.data.partnersRaw||{},ins=raw.insurance||{},es=raw.esim||{};
-    return '<p class="mg-hint" style="font-size:14px">These two cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'
+    return '<p class="mg-hint" style="font-size:14px">These cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'
       +'<div class="mg-card cl-box"><div class="cl-grid">'
       +fld('Travel insurance: your referral link','clL_ins_url',ins.url||'',{full:true,type:'url',ph:'https://...',help:'Must start with https://. Leave empty to show Link coming soon.'})+fld('Travel insurance: title (optional)','clL_ins_title',ins.title||'',{ph:'Travel insurance'})+fld('Travel insurance: short note (optional)','clL_ins_note',ins.note||'',{ph:'Cover for cancellations, delays and medical care while you travel.'})
       +fld('eSIM: your referral link','clL_esim_url',es.url||'',{full:true,type:'url',ph:'https://go.saily.site/aff_c?offer_id=101&aff_id=14170',help:'Must start with https://. Leave empty to use your Saily referral link.'})+fld('eSIM: title (optional)','clL_esim_title',es.title||'',{ph:'Saily eSIM'})+fld('eSIM: short note (optional)','clL_esim_note',es.note||'',{ph:'Land connected, without swapping your SIM or paying roaming.'})
+      +fld('Second eSIM (Maya Mobile): your referral link','clL_esim2_url',(raw.esim2||{}).url||'',{full:true,type:'url',ph:'https://mayamobile.pxf.io/m4KkQ7',help:'Must start with https://. Leave empty to use your Maya Mobile referral link.'})+fld('Second eSIM: title (optional)','clL_esim2_title',(raw.esim2||{}).title||'',{ph:'Maya Mobile eSIM'})+fld('Second eSIM: short note (optional)','clL_esim2_note',(raw.esim2||{}).note||'',{ph:'Travel data plans so you land connected, without swapping your SIM or paying roaming.'})
       +fld('Disclosure shown under the cards (optional)','clL_disc',raw.disclosure||'',{type:'textarea',ph:'These are referral links. Sight Seers may receive a reward if you sign up through them.',help:'Leave empty to use the standard sentence shown above. Check it matches your agreement with each partner.'})
       +'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-links>Save partner links</button></div></div>';
   }
@@ -52428,7 +52437,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(ds.clAutoprev!==undefined){busy(t,'Checking…');call('automation-run',{dryRun:true}).then(function(res){CL.autoPreview=res.summary;D.automation=res.automation;repaint();say('Preview ready. Nothing was sent.','ok');}).catch(function(err){fail(t,err);});return;}
     if(ds.clAutorun!==undefined){if(!confirm('Run the daily emails now?\n\nThis sends today\'s real emails for the switches that are on, exactly as the daily job would. Use Preview first to see who gets what.'))return;busy(t,'Sending…');
       call('automation-run',{dryRun:false}).then(function(res){CL.autoPreview=null;D.automation=res.automation;repaint();var c=res.summary.counts||{};say('Done: '+(c.waitlist||0)+' waitlist, '+(c.reminders||0)+' reminders, '+(c.digests||0)+' digests sent.','ok');}).catch(function(err){fail(t,err);});return;}
-    if(ds.clLinks!==undefined){busy(t,'Saving…');call('partners-save',{insurance:{url:val('clL_ins_url'),title:val('clL_ins_title'),note:val('clL_ins_note')},esim:{url:val('clL_esim_url'),title:val('clL_esim_title'),note:val('clL_esim_note')},disclosure:val('clL_disc')}).then(function(){return reload('Partner links saved. Members see them on their Group trips tab.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clLinks!==undefined){busy(t,'Saving…');call('partners-save',{insurance:{url:val('clL_ins_url'),title:val('clL_ins_title'),note:val('clL_ins_note')},esim:{url:val('clL_esim_url'),title:val('clL_esim_title'),note:val('clL_esim_note')},esim2:{url:val('clL_esim2_url'),title:val('clL_esim2_title'),note:val('clL_esim2_note')},disclosure:val('clL_disc')}).then(function(){return reload('Partner links saved. Members see them on their Group trips tab.');}).catch(function(err){fail(t,err);});return;}
   });
   R.addEventListener('input',function(e){var t=e.target;if(S.screen!=='trips')return;if(t.id==='clQ'){CL.q=t.value;var pos=t.selectionStart;repaint();var q=$('clQ');if(q){q.focus();try{q.setSelectionRange(pos,pos);}catch(x){}}}});
   R.addEventListener('change',function(e){var t=e.target;if(S.screen!=='trips')return;if(t.id==='clFilter'){CL.filter=t.value;repaint();}if(t.id==='clCC'){CL.cc=t.value;repaint();}});

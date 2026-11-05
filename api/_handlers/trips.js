@@ -412,8 +412,11 @@ function decisionMail(app) {
 /* ---------- referral links (travel insurance, eSIM): written by an admin, never invented ---------- */
 const PARTNER_DEFAULTS = {
   insurance: { title: 'Travel insurance', note: 'Cover for cancellations, delays and medical care while you travel.', cta: 'Get a quote', url: '', logo: '' },
-  esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://go.saily.site/aff_c?offer_id=101&aff_id=14170', logo: '/logos/saily.png' }
+  esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://go.saily.site/aff_c?offer_id=101&aff_id=14170', logo: '/logos/saily.png' },
+  esim2: { title: 'Maya Mobile eSIM', note: 'Travel data plans so you land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://mayamobile.pxf.io/m4KkQ7', logo: '/logos/maya-mobile.png' }
 };
+const PARTNER_KEYS = ['insurance', 'esim', 'esim2'];
+const PARTNER_LABEL = { insurance: 'Travel insurance', esim: 'eSIM (Saily)', esim2: 'eSIM (Maya Mobile)' };
 const DEFAULT_DISCLOSURE = 'These are referral links. Sight Seers may receive a reward if you sign up through them.';
 function cleanPartner(src) {
   src = src && typeof src === 'object' ? src : {};
@@ -428,7 +431,7 @@ function cleanPartner(src) {
 function publicPartners(doc) {
   doc = doc || {};
   const out = {};
-  ['insurance', 'esim'].forEach(k => {
+  PARTNER_KEYS.forEach(k => {
     const d = doc[k] || {}, f = PARTNER_DEFAULTS[k];
     out[k] = { url: d.url || f.url, title: d.title || f.title, note: d.note || f.note, cta: f.cta, logo: f.logo };
   });
@@ -1094,9 +1097,9 @@ module.exports = async function handler(req, res) {
 
       if (action === 'partners-save') {
         const doc = { id: 'partners' };
-        for (const k of ['insurance', 'esim']) {
+        for (const k of PARTNER_KEYS) {
           const c = cleanPartner(body[k]);
-          if (c.error) return res.status(400).json({ error: (k === 'esim' ? 'eSIM' : 'Travel insurance') + ': ' + c.error + '.' });
+          if (c.error) return res.status(400).json({ error: PARTNER_LABEL[k] + ': ' + c.error + '.' });
           doc[k] = c.value;
         }
         doc.disclosure = str(body.disclosure, 300);
