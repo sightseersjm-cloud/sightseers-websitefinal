@@ -48648,10 +48648,20 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpTitle').textContent='Loading the trip';$('tpLede').textContent='';$('tpFacts').innerHTML='';$('tpKicker').textContent='Travel Club trip';
     if(!slug){tpState('<strong>That trip link is not complete</strong>See every approved departure on the Travel Club page.<br><a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>');return;}
     tpState('One moment while we load this trip.');
-    api('trips?slug='+encodeURIComponent(slug)).then(function(res){cur=res.trip;fillTrip(cur);}).catch(function(err){
-      cur=null;$('tpTitle').textContent='This trip is not open';
-      var gone=err&&err.status===404;
-      tpState('<strong>'+(gone?'This trip is not open right now':'We could not load this trip')+'</strong>'+(gone?'It may be full, finished or not yet announced. See the departures that are open.':'Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.')+'<br><a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>'+
+    /* never sit on "One moment" forever: give each try 12 seconds and retry once before showing the error */
+    var tries=0,want=slug;
+    function load(){
+      tries++;
+      return new Promise(function(ok,no){
+        var done=false,tm=setTimeout(function(){if(!done){done=true;no(Object.assign(new Error('timeout'),{status:0}));}},12000);
+        api('trips?slug='+encodeURIComponent(want)).then(function(r){if(!done){done=true;clearTimeout(tm);ok(r);}},function(e){if(!done){done=true;clearTimeout(tm);no(e);}});
+      }).catch(function(e){if(tries<2&&!(e&&e.status===404)){tpState('Still loading this trip, one more moment.');return load();}throw e;});
+    }
+    load().then(function(res){if(slugNow()!==want)return;cur=res.trip;fillTrip(cur);}).catch(function(err){
+      if(slugNow()!==want)return;
+      cur=null;var gone=err&&err.status===404;
+      $('tpTitle').textContent=gone?'This trip is not open':'We could not load this trip';
+      tpState('<strong>'+(gone?'This trip is not open right now':'We could not load this trip')+'</strong>'+(gone?'It may be full, finished or not yet announced. See the departures that are open.':'Please try again in a moment, or call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.')+'<br>'+(gone?'':'<a class="tc-fbtn" href="'+location.pathname+'" onclick="location.reload();return false;">Try again</a> ')+'<a class="tc-fbtn" href="/travel-club#departures" data-tc-go="departures">See departures</a>'+
         (gone?listBox('trip-closed',(function(){var u=who();return u&&u.email&&u.role!=='admin'?{name:u.name,email:u.email}:null;})()):''));
       setMeta('Trip not open | Sight Seers Travel Club','This Travel Club trip is not open right now.',location.pathname);
     });
