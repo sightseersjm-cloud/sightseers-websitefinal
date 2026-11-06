@@ -123,6 +123,7 @@ PAY_NOTES = [
     'Each delegate and the advisor is responsible for their own application fee, deposit and balance',
     'The balance may be settled in a single payment or in instalments, provided it is paid in full 14 days before the programme begins',
     'Places not paid in full by that date are released, and the deposit is forfeited',
+    'The application fee is waived for scholarship applicants and for individuals who request a fee waiver or enter a fee waiver code when applying',
 ]
 FUNDING = [
     ('Self-funded', 'settle your own place directly'),
@@ -168,6 +169,7 @@ FAQ = [
     ('Is airfare included?', 'No. Airfare varies by departure city. Group air quotations and bookings are available on request.'),
     ('What is included?', 'The Shore Briefing, the full programme, villa accommodation, all meals, transfers and ground transportation, the campus exchange, the Career Development Day, the Negril experience and Pitch Night.'),
     ('Can our student government fund our places?', 'Yes. Places may be funded by the university, a department, the student government or an external sponsor.'),
+    ('Can the application fee be waived?', 'Yes. The application fee is waived for scholarship applicants and for individuals who request a fee waiver or enter a fee waiver code when applying.'),
     ('When is full payment due?', 'All fees must be paid in full no later than 14 days before the programme begins.'),
     ('How is safety managed?', 'We work only with licensed and insured operators, a dedicated host remains with the group throughout, and a 24-hour incident line is in place.'),
     ('Does the Jamaican delegation stay at the villa?', 'No. The Jamaican delegates and their advisor join each day\'s programme from their own base.'),
@@ -279,7 +281,7 @@ def build_page():
     <div class="lj-price-card lj-paycard">
       <div class="lj-eyebrow">Application fee</div>
       <h3>Pay online, securely</h3>
-      <p class="lj-sub" style="margin:0 0 18px">Card payments are processed securely by Stripe. The US$35 application fee is paid by each applicant.</p>
+      <p class="lj-sub" style="margin:0 0 18px">Card payments are processed securely by Stripe. The US$35 application fee is paid by each applicant, unless a waiver applies. Scholarship applicants and anyone who requests a fee waiver when applying do not pay it.</p>
       <a href="%s" target="_blank" rel="noopener" class="lj-btn primary">Pay the US$35 application fee</a>
     </div>
   </div></section>

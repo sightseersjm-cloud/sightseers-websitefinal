@@ -31,7 +31,7 @@ ok(!/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day \d/.test(text), 'no weekday-with
  'Professional code of conduct', 'Safety and accountability', 'Frequently asked questions',
  'Programme overview for student governments', 'Download as Word (.docx)', 'Download as PDF', 'Copy letter text', 'Read the full letter'
 ].forEach(w => ok(text.indexOf(w) !== -1, 'page must contain "' + w + '"'));
-ok((text.match(/<details/g) || []).length === 0 && (block.match(/<details class="lj-faq"/g) || []).length === 12, '12 FAQ items');
+ok((text.match(/<details/g) || []).length === 0 && (block.match(/<details class="lj-faq"/g) || []).length === 13, "13 FAQ items");
 ok((block.match(/class="lj-card lj-day"/g) || []).length === 6, 'six day cards');
 ok((block.match(/class="lj-card lj-mod"/g) || []).length === 8, 'eight module cards');
 ok((block.match(/class="lj-stat[ "]/g) || []).length === 7, 'seven stat tiles');
