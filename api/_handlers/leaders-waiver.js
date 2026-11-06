@@ -11,6 +11,7 @@
  *   GET                                          -> { ok:true, codes:[...], applications:[...] }
  *   POST { action:'generate', name, email, note }-> { ok:true, code:{...} }
  *   POST { action:'revoke', id }                 -> { ok:true }                      unused codes only
+ *   POST { action:'app-edit', id | ids[], university?, cohort? }   set the school or the cohort (for example 2027) of one or more applications
  *   POST { action:'app-delete'|'code-delete', id }          permanently deletes an application, or a code (a used one too)
  *   POST { action:'app-sendpay', id, part:'deposit'|'second'|'third' }   emails the applicant a secure payment link for that part
  *   POST { action:'app-waive'|'app-decline'|'app-paylink'|'app-paid', id, part? }   decide an application's fee and email the applicant
@@ -88,7 +89,7 @@ async function tooMany(req, prefix, limit) {
 function shapeApp(a) {
   return { id: a.id, name: a.name, email: a.email, phone: a.phone || '', university: a.university || '', studentGov: a.studentGov || '', applyingAs: a.applyingAs || '', position: a.position || '',
     funding: a.funding || '', goal: a.goal || '', fee: a.fee, waiverReason: a.waiverReason || '', code: a.code || '', createdAt: a.createdAt, decidedAt: a.decidedAt || '', decidedBy: a.decidedBy || '',
-    payments: a.payments || {}, payLinks: a.payLinks || {} };
+    payments: a.payments || {}, payLinks: a.payLinks || {}, cohort: a.cohort || '' };
 }
 
 async function safe(p) { try { await p; } catch (e) { console.error('leaders email', e && e.message); } }
@@ -154,6 +155,21 @@ module.exports = async function handler(req, res) {
 
     const body = req.body || {};
     const action = body.action || 'check';
+
+    if (action === 'app-edit') {
+      /* the school (fix a spelling so applicants group together) and the cohort (for example the year) an application belongs to */
+      const admin = await requirePerm(req, res, 'inbox');
+      if (!admin) return;
+      const ids = Array.isArray(body.ids) ? body.ids.map(String).slice(0, 200) : [String(body.id || '')];
+      const patch = {};
+      if (body.university !== undefined) patch.university = text(body.university, 160);
+      if (body.cohort !== undefined) patch.cohort = text(body.cohort, 40);
+      if (!Object.keys(patch).length) return res.status(400).json({ error: 'Nothing to change.' });
+      let n = 0;
+      for (const id of ids) { if (await db.updateInCollection(APPS, id, patch)) n++; }
+      if (!n) return res.status(404).json({ error: 'That application was not found.' });
+      return res.status(200).json({ ok: true, changed: n });
+    }
 
     if (action === 'app-delete' || action === 'code-delete') {
       const admin = await requirePerm(req, res, 'inbox');

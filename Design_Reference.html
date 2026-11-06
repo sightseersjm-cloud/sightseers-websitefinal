@@ -52935,6 +52935,17 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-manage .wc-prog{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
 #p-manage .wc-pr{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 #p-manage .wc-pr:last-child{border-bottom:0}
+#p-manage .wc-coh{margin:0 0 26px}
+#p-manage .wc-cohh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;background:#063a63;color:#fff}
+#p-manage .wc-cohh h3{margin:0;color:#fff;font-size:18px}
+#p-manage .wc-cohh .mg-hint{color:rgba(255,255,255,.75)}
+#p-manage .wc-sch{border:1px solid var(--line);border-top:0;padding:0 14px 6px;background:#fbfdfc}
+#p-manage .wc-schh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+#p-manage .wc-edit{margin-top:10px;font-size:13px}
+#p-manage .wc-edit summary{cursor:pointer;color:var(--navy);font-weight:700}
+#p-manage .wc-editrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:8px}
+#p-manage .wc-editrow label{display:flex;flex-direction:column;gap:3px;font-weight:700;color:var(--mut);font-size:12px}
+#p-manage .wc-editrow input{min-width:180px;padding:8px 10px;border:1px solid var(--line);font:inherit}
 #p-manage .wc-del{color:#a63a2d;border-color:#e4b9b3}
 #p-manage .wc-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 @media(max-width:640px){#p-manage .wc-row2{grid-template-columns:1fr}}
@@ -52946,7 +52957,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   var S=MG.S,esc=MG.esc,api=MG.api;
 
   /* ====================== Leaders in Jamaica: the applications, and the single-use fee waiver codes ====================== */
-  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'all',cfilter:'unused',made:null,busy:false,open:{}};
+  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'all',view:'cohort',cfilter:'unused',made:null,busy:false,open:{}};
   var FEE={'fee-due':['Fee due','due'],'waiver-requested':['Waiver requested','ask'],'waived-code':['Waived with a code',''],'waived':['Waived',''],'pay-link-sent':['Payment link sent','ask'],'paid':['Fee paid','']};
   function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
   function load(){
@@ -52960,6 +52971,81 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function note(c){
     return 'Hello '+c.name+',\n\nYour Leaders in Jamaica application fee waiver code is '+c.code+'.\n\nWhen you apply at sightseerscaribbean.com/leaders-in-jamaica, use this email address: '+c.email+'. Enter the code on step 3 of the application. The code works one time and only with that email address.';
   }
+  /* ---------- cohorts, schools and the arrival register ---------- */
+  var FEE_TOTAL=35,PROG_TOTAL=1895;
+  function schoolKey(a){return String(a.university||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()||'unknown';}
+  function cohortOf(a){return a.cohort||'Not assigned yet';}
+  function paidSum(a){var p=a.payments||{},t=0;Object.keys(p).forEach(function(k){t+=Number(p[k].amount)||0;});return t;}
+  function feeWord(a){var p=a.payments||{};if(p.fee||a.fee==='paid')return 'Paid';if(a.fee==='waived'||a.fee==='waived-code')return 'Waived';if(a.fee==='waiver-requested')return 'Waiver requested';return 'Due';}
+  function partWord(a,k){return (a.payments||{})[k]?'Paid':'-';}
+  function feeDue(a){return (a.fee==='waived'||a.fee==='waived-code')?0:FEE_TOTAL;}
+  function outstanding(a){return Math.max(0,feeDue(a)+PROG_TOTAL-paidSum(a));}
+  function money(n){return 'US$'+(Math.round(n*100)/100).toFixed(2).replace(/\.00$/,'');}
+  function groupApps(rows){
+    var cs={};
+    rows.forEach(function(a){var c=cohortOf(a),k=schoolKey(a);cs[c]=cs[c]||{name:c,schools:{}};var s=cs[c].schools[k]=cs[c].schools[k]||{key:k,name:a.university||'No school given',apps:[]};s.apps.push(a);});
+    var list=Object.keys(cs).map(function(k){var c=cs[k];c.list=Object.keys(c.schools).map(function(x){return c.schools[x];}).sort(function(a,b){return a.name.localeCompare(b.name);});return c;});
+    list.sort(function(a,b){var ua=a.name==='Not assigned yet',ub=b.name==='Not assigned yet';if(ua!==ub)return ua?1:-1;return String(b.name).localeCompare(String(a.name));});
+    return list;
+  }
+  function sortedApps(c){var out=[];c.list.forEach(function(s){s.apps.slice().sort(function(a,b){return (a.applyingAs===b.applyingAs?0:(a.applyingAs==='Advisor'?1:-1))||a.name.localeCompare(b.name);}).forEach(function(a){out.push(a);});});return out;}
+  function counts(apps){var d=0,v=0;apps.forEach(function(a){if(a.applyingAs==='Advisor')v++;else d++;});return d+' of 5 delegates, '+v+' of 1 advisor';}
+  function slug(t){return String(t||'register').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'register';}
+  function saveBlob(blob,name){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},500);}
+  function regRows(apps){return apps.map(function(a,i){return [i+1,a.cohort||'',a.university,a.studentGov,a.name,a.applyingAs,a.position,a.email,a.phone,a.funding,feeWord(a),partWord(a,'deposit'),partWord(a,'second'),partWord(a,'third'),money(paidSum(a)),money(outstanding(a)),'','',''];});}
+  var REG_HEAD=['No.','Cohort','University','Student government','Name','Applying as','Position or job title','Email','Phone','Funding route','Application fee','Deposit','Second payment','Third payment','Paid so far','Still to pay','Arrived','Signature','Notes'];
+  function downloadCsv(apps,title){
+    function q(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+    var nm={};groupApps(apps).forEach(function(c){c.list.forEach(function(x){nm[x.key]=x.name;});});
+    var rows=regRows(apps);rows.forEach(function(r,i){r[2]=nm[schoolKey(apps[i])]||r[2];});
+    var lines=[REG_HEAD].concat(rows).map(function(r){return r.map(q).join(',');});
+    saveBlob(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),'Leaders-in-Jamaica-register-'+slug(title)+'.csv');
+  }
+  function loadLogo(){return new Promise(function(ok){try{var im=new Image();im.onload=function(){try{var w=440,h=Math.round(im.naturalHeight*w/im.naturalWidth),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);ok({d:c.toDataURL('image/png'),ar:im.naturalWidth/im.naturalHeight});}catch(e){ok(null);}};im.onerror=function(){ok(null);};im.src='/assets/inline/1ba92aa926.png';}catch(e){ok(null);}});}
+  function downloadPdf(c,only){
+    var J=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;if(!J){msg('The PDF tool is still loading. Try again in a moment.','err');return;}
+    loadLogo().then(function(logo){
+      var doc=new J({unit:'pt',format:'letter',orientation:'landscape'}),W=792,PH=612,M=30;
+      var navy=[6,58,99],green=[112,194,87],orange=[239,135,49],ink=[23,42,52],mut=[91,107,118],soft=[244,249,246],hair=[210,220,215];
+      var cols=[['No.',20],['Name',104],['Role',44],['Position or job title',76],['Phone',70],['Email',118],['Fee',34],['Dep.',30],['2nd',30],['3rd',30],['Arrived',38],['Signature',98]];
+      var title=only?(c.name+', '+only.name):c.name;
+      function band(first){
+        if(first){
+          doc.setFillColor(soft[0],soft[1],soft[2]);doc.rect(0,0,W,84,'F');
+          if(logo){try{var lw=110,lh=lw/logo.ar;doc.addImage(logo.d,'PNG',M,16,lw,lh);}catch(e){}}
+          doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(orange[0],orange[1],orange[2]);doc.text('ARRIVAL REGISTER',W-M,32,{align:'right'});
+          doc.setFontSize(15);doc.setTextColor(navy[0],navy[1],navy[2]);doc.text('Leaders in Jamaica',W-M,50,{align:'right'});
+          doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(mut[0],mut[1],mut[2]);doc.text(title+'   |   Printed '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),W-M,66,{align:'right'});
+          doc.setFillColor(green[0],green[1],green[2]);doc.rect(0,80,W*0.62,4,'F');doc.setFillColor(orange[0],orange[1],orange[2]);doc.rect(W*0.62,80,W*0.38,4,'F');
+        }else{doc.setFillColor(green[0],green[1],green[2]);doc.rect(0,0,W*0.62,4,'F');doc.setFillColor(orange[0],orange[1],orange[2]);doc.rect(W*0.62,0,W*0.38,4,'F');}
+      }
+      function head(y){var x=M;doc.setFillColor(navy[0],navy[1],navy[2]);doc.rect(M,y,W-2*M,17,'F');doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(255,255,255);cols.forEach(function(k){doc.text(k[0],x+3,y+11.5);x+=k[1];});return y+17;}
+      band(true);var y=head(100),n=0;
+      var groups=only?[only]:c.list;
+      groups.forEach(function(s){
+        if(y>PH-70){doc.addPage();band(false);y=head(24);}
+        doc.setFillColor(238,244,240);doc.rect(M,y,W-2*M,15,'F');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(navy[0],navy[1],navy[2]);doc.text(s.name+'   ('+counts(s.apps)+')',M+4,y+10.5);y+=15;
+        s.apps.slice().sort(function(a,b){return (a.applyingAs===b.applyingAs?0:(a.applyingAs==='Advisor'?1:-1))||a.name.localeCompare(b.name);}).forEach(function(a){
+          if(y>PH-46){doc.addPage();band(false);y=head(24);}
+          n++;var x=M,rh=24;
+          doc.setDrawColor(hair[0],hair[1],hair[2]);doc.setLineWidth(0.5);doc.line(M,y+rh,W-M,y+rh);
+          doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(ink[0],ink[1],ink[2]);
+          var cells=[String(n),a.name,a.applyingAs,a.position||'',a.phone||'',a.email||'',feeWord(a)==='Waiver requested'?'Req.':feeWord(a),partWord(a,'deposit'),partWord(a,'second'),partWord(a,'third'),'',''];
+          cells.forEach(function(t,i){
+            if(i<10){var w=cols[i][1]-5,lines=doc.splitTextToSize(String(t),w);doc.text(lines.slice(0,2),x+3,y+10);}
+            else if(i===10){doc.setDrawColor(mut[0],mut[1],mut[2]);doc.rect(x+10,y+6,12,12);}
+            else{doc.setDrawColor(hair[0],hair[1],hair[2]);doc.line(x+3,y+18,x+cols[i][1]-4,y+18);}
+            x+=cols[i][1];
+          });
+          y+=rh;
+        });
+      });
+      var pages=doc.internal.getNumberOfPages();
+      for(var p=1;p<=pages;p++){doc.setPage(p);doc.setFillColor(navy[0],navy[1],navy[2]);doc.rect(0,PH-22,W,22,'F');doc.setFillColor(green[0],green[1],green[2]);doc.rect(0,PH-22,W*0.62,2,'F');doc.setFillColor(orange[0],orange[1],orange[2]);doc.rect(W*0.62,PH-22,W*0.38,2,'F');doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(255,255,255);doc.text('Sight Seers Caribbean Adventures   |   +1 (876) 465-0630   |   info@sightseerscaribbean.com   |   Fee: application fee. Dep., 2nd, 3rd: programme payments (Paid or -)',M,PH-9);doc.text('Page '+p+' of '+pages,W-M,PH-9,{align:'right'});}
+      doc.save('Leaders-in-Jamaica-arrival-register-'+slug(title)+'.pdf');
+    });
+  }
+
   function appCard(a){
     var f=FEE[a.fee]||[a.fee,''],long=a.goal.length>220,open=WC.open[a.id];
     var acts=[];
@@ -52981,6 +53067,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       +(a.code?'<div class="wc-meta">Code used: <b>'+esc(a.code)+'</b></div>':'')
       +(a.goal?'<div class="wc-goal">'+esc(open||!long?a.goal:a.goal.slice(0,220)+'…')+'</div>'+(long?'<button type="button" class="bl-more" data-wc-more="'+esc(a.id)+'">'+(open?'Show less':'Read all')+'</button>':''):'')
       +(a.decidedAt&&(a.fee==='waived'||a.fee==='pay-link-sent'||a.fee==='paid')?'<div class="wc-meta">'+esc(a.fee==='waived'?'Waiver approved':a.fee==='paid'?'Marked paid':'Payment link sent')+' '+esc(dt(a.decidedAt))+(a.decidedBy?' by '+esc(a.decidedBy):'')+'</div>':'')
+      +'<details class="wc-edit"><summary>Edit school or cohort</summary><div class="wc-editrow"><label>School<input class="wc-in-school" maxlength="160" value="'+esc(a.university||'')+'"></label><label>Cohort<input class="wc-in-cohort" maxlength="40" placeholder="e.g. 2027" value="'+esc(a.cohort||'')+'"></label><button type="button" class="mg-btn sm" data-wc-saveedit="'+esc(a.id)+'">Save</button></div></details>'
       +(acts.length?'<div class="wc-act" style="margin-top:12px">'+acts.join(' ')+'</div>':'')
       +(showProg?'<div class="wc-prog"><div class="wc-meta" style="margin:12px 0 4px"><b>Programme fee, US$1,895 in three parts</b> (the US$35 application fee is separate)</div>'+prog+'</div>':'')+'</div>';
   }
@@ -52990,12 +53077,23 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       +'<div class="wc-meta"><b>'+esc(c.name)+'</b> &middot; '+esc(c.email)+(c.note?' &middot; '+esc(c.note):'')+' &middot; made '+esc(dt(c.createdAt))+(c.createdBy?' by '+esc(c.createdBy):'')+'</div></div>'
       +'<div class="wc-act">'+(used?'<button type="button" class="mg-btn sm ghost wc-del" data-wc-delcode="'+esc(c.id)+'">Delete</button>':'<button type="button" class="mg-btn sm" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
   }
+  function groupsHtml(rows){
+    return groupApps(rows).map(function(c){
+      var all=c.list.reduce(function(n,x){return n+x.apps.length;},0),un=c.name==='Not assigned yet';
+      return '<div class="wc-coh"><div class="wc-cohh"><div><h3>'+(un?'Cohort not assigned yet':'Cohort '+esc(c.name))+'</h3><span class="mg-hint">'+all+' application'+(all===1?'':'s')+' shown, '+c.list.length+' school'+(c.list.length===1?'':'s')+'</span></div>'
+        +'<div class="wc-act"><button type="button" class="mg-btn sm" data-wc-regcsv="1" data-coh="'+esc(c.name)+'">Download register (Excel)</button> <button type="button" class="mg-btn sm" data-wc-regpdf="1" data-coh="'+esc(c.name)+'">Print register (PDF)</button></div></div>'
+        +c.list.map(function(sc){return '<div class="wc-sch"><div class="wc-schh"><div><b>'+esc(sc.name)+'</b> <span class="mg-hint">'+esc(counts(sc.apps))+'</span></div>'
+          +'<div class="wc-act"><button type="button" class="mg-btn sm ghost" data-wc-setcoh="1" data-coh="'+esc(c.name)+'" data-sch="'+esc(sc.key)+'">Set cohort</button> <button type="button" class="mg-btn sm ghost" data-wc-regcsv="1" data-coh="'+esc(c.name)+'" data-sch="'+esc(sc.key)+'">Excel</button> <button type="button" class="mg-btn sm ghost" data-wc-regpdf="1" data-coh="'+esc(c.name)+'" data-sch="'+esc(sc.key)+'">PDF</button></div></div>'
+          +sortedApps({list:[sc]}).map(appCard).join('')+'</div>';}).join('')+'</div>';
+    }).join('');
+  }
   function appsTab(){
     var chips=[['all','Everything'],['ask','Waiver requested'],['due','Fee due'],['done','Waived or paid']].map(function(f){return '<button type="button" data-wc-f="'+f[0]+'" class="'+(WC.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+acount(f[0])+'</b></button>';}).join('');
     var rows=WC.apps.filter(function(a){return amatch(a,WC.filter);});
     return '<p class="mg-hint" style="margin:0 0 12px">Every Leaders in Jamaica application is kept here. Applicants who ask for a waiver are not asked to pay until you decide. Approving emails them to say the fee is waived. Declining emails them a short message saying we are unable to waive it, with the US$35 payment link.</p>'
-      +'<div class="ib-chips" style="margin:0 0 14px">'+chips+' <button type="button" data-wc-refresh="1">Refresh</button></div><div class="mg-msg" id="wcMsg" role="alert"></div>'
-      +(rows.length?rows.map(appCard).join(''):'<div class="mg-card mg-soon"><h3>Nothing here</h3><p class="mg-hint" style="font-size:14px;margin:0">'+(WC.apps.length?'Try another filter.':'Applications will be listed here as they arrive.')+'</p></div>');
+      +'<div class="ib-chips" style="margin:0 0 10px">'+chips+' <button type="button" data-wc-refresh="1">Refresh</button></div>'
+      +'<div class="ib-chips" style="margin:0 0 14px"><button type="button" data-wc-view="cohort" class="'+(WC.view==='cohort'?'on':'')+'">By cohort and school</button><button type="button" data-wc-view="list" class="'+(WC.view==='list'?'on':'')+'">One list</button></div><div class="mg-msg" id="wcMsg" role="alert"></div>'
+      +(rows.length&&WC.view==='cohort'?groupsHtml(rows):rows.length?rows.map(appCard).join(''):'<div class="mg-card mg-soon"><h3>Nothing here</h3><p class="mg-hint" style="font-size:14px;margin:0">'+(WC.apps.length?'Try another filter.':'Applications will be listed here as they arrive.')+'</p></div>');
   }
   function codesTab(){
     var made=WC.made?'<div class="mg-card wc-made"><b>Code made for '+esc(WC.made.name)+'</b><span class="wc-code">'+esc(WC.made.code)+'</span><p class="mg-hint" style="margin:0 0 12px">Works once, with <b>'+esc(WC.made.email)+'</b> only.</p><p style="margin:0"><button type="button" class="mg-btn pri sm" data-wc-copy="'+esc(WC.made.id)+'">Copy code</button> <button type="button" class="mg-btn sm" data-wc-note="'+esc(WC.made.id)+'">Copy a message to send them</button></p></div>':'';
@@ -53037,6 +53135,28 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var b=e.target.closest('button');if(!b||S.screen!=='codes')return;var d=b.dataset;
     if(d.wcTab){WC.tab=d.wcTab;rerender();return;}
     if(d.wcF){WC.filter=d.wcF;rerender();return;}
+    if(d.wcView){WC.view=d.wcView;rerender();return;}
+    if(b.hasAttribute('data-wc-regcsv')||b.hasAttribute('data-wc-regpdf')||b.hasAttribute('data-wc-setcoh')){
+      var cg=groupApps(WC.apps||[]).filter(function(x){return x.name===d.coh;})[0];if(!cg){msg('Nothing to use yet.','err');return;}
+      var sg=d.sch?cg.list.filter(function(x){return x.key===d.sch;})[0]:null;
+      if(b.hasAttribute('data-wc-setcoh')){
+        var v=window.prompt('Cohort for '+(sg?sg.name:'this group')+' (for example 2027). Leave blank to clear it.',d.coh==='Not assigned yet'?'':d.coh);
+        if(v===null)return;
+        var ids=(sg?sg.apps:[]).map(function(a){return a.id;});
+        if(WC.busy)return;WC.busy=true;
+        api('leaders-waiver',{action:'app-edit',ids:ids,cohort:v.trim()}).then(function(){WC.busy=false;return load().then(function(){rerender();msg('Cohort saved for '+ids.length+' application'+(ids.length===1?'':'s')+'.','ok');});}).catch(function(er){WC.busy=false;msg(er.message||'That did not work. Try again.','err');});
+        return;
+      }
+      var apps=sg?sortedApps({list:[sg]}):sortedApps(cg),label=(cg.name==='Not assigned yet'?'no-cohort':cg.name)+(sg?' '+sg.name:'');
+      if(b.hasAttribute('data-wc-regcsv'))downloadCsv(apps,label);else downloadPdf(cg,sg);
+      return;
+    }
+    if(d.wcSaveedit){
+      var box=b.closest('.wc-edit');var sc=box.querySelector('.wc-in-school').value,co=box.querySelector('.wc-in-cohort').value;
+      if(WC.busy)return;WC.busy=true;b.disabled=true;
+      api('leaders-waiver',{action:'app-edit',id:d.wcSaveedit,university:sc,cohort:co}).then(function(){WC.busy=false;return load().then(function(){rerender();msg('Saved.','ok');});}).catch(function(er){WC.busy=false;b.disabled=false;msg(er.message||'That did not work. Try again.','err');});
+      return;
+    }
     if(b.hasAttribute('data-wc-refresh')){b.disabled=true;load().then(function(){rerender();msg('Refreshed.','ok');});return;}
     if(d.wcCf){WC.cfilter=d.wcCf;rerender();return;}
     if(d.wcMore){WC.open[d.wcMore]=!WC.open[d.wcMore];rerender();return;}
