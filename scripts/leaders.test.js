@@ -59,11 +59,12 @@ ok(form.indexOf('US$35') !== -1 && form.indexOf('buy.stripe.com') !== -1, 'US$35
 ok(!/2027|February|15 October|founding/i.test(form), 'form has no dates or founding wording');
 
 // fee waiver codes: one per applicant, used once, tied to the applicant's email, managed in the admin
-ok(src.indexOf('id="manage-codes-script"') !== -1 && src.indexOf("id:'codes',t:'Fee waiver codes'") !== -1, 'admin has the Fee waiver codes screen');
+ok(src.indexOf('id="manage-codes-script"') !== -1 && src.indexOf("id:'codes',t:'Leaders applications'") !== -1, 'admin has the Leaders applications screen');
 const wh = fs.readFileSync(path.join(root, 'api', '_handlers', 'leaders-waiver.js'), 'utf8');
 ok(/requirePerm\(req, res, 'inbox'\)/.test(wh) && wh.indexOf("action === 'generate'") !== -1 && wh.indexOf('usedAt') !== -1 && wh.indexOf('mail(c.email) !== mail(email)') !== -1, 'waiver handler: admin only to generate, single use, email bound');
 ok(fs.readFileSync(path.join(root, 'api', '[...route].js'), 'utf8').indexOf("'leaders-waiver'") !== -1, 'waiver handler is routed');
-ok(src.indexOf("action: 'redeem'") !== -1, 'application burns the code when it is sent');
+ok(src.indexOf("action: 'apply'") !== -1 && wh.indexOf("action === 'apply'") !== -1, 'application is stored for the admin and burns its code when sent');
+ok(wh.indexOf('Unfortunately, we are not able to waive') !== -1 && wh.indexOf("'app-decline'") !== -1, 'declined waiver gets a regret email with the payment link');
 
 // SEO
 ok(src.indexOf("'leaders-jamaica':['Leaders in Jamaica | Student Government Leadership Institute | Sight Seers Caribbean','An annual six-day leadership institute in Montego Bay pairing a US student government with a Jamaican counterpart. Eight applied modules, five deliverables, a campus exchange, a Career Development Day and Pitch Night.']") !== -1, 'SEO title and description');
