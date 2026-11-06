@@ -13715,6 +13715,11 @@ body.theme-night #p-flagship-programs{
 ════════════════════════════════════ -->
 
 <style id="tp-sponsor-css">
+/* departures list: on hover the row stays put (sliding it clipped the places-left box and the View trip arrow) and the dot stays square */
+.tcd-row:hover{transform:none!important;translate:none!important}
+.tcd-row:hover .tcd-dot{transform:none!important}
+.tcd-spons{display:inline-block!important;width:auto!important;max-width:100%;padding:2px 8px;border-radius:4px}
+
 #p-trip .tp-splist{list-style:none;margin:0;padding:0}
 #p-trip .tp-splist li{padding:6px 0;font-size:15px;line-height:1.6}
 #p-trip .tp-splist a,#p-trip .tp-splist b{font-weight:800;color:#063a63}
