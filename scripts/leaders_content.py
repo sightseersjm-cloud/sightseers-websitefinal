@@ -104,8 +104,7 @@ ADVISORS = [
     'Advisors enrol on the same terms as delegates: a US$35 application fee, a 30% deposit on selection and the balance in full 14 days before the programme. The place may be funded by the advisor or their university',
 ]
 INVEST_ROWS = [
-    ('Early commitment (deposit received at least 90 days before the programme)', 'US$1,795', True),
-    ('Standard', 'US$1,895', False),
+    ('Programme fee', 'US$1,895', True),
 ]
 INVEST_NOTES = [
     'Each of the five delegates and the advisor holds an individual place',
@@ -115,9 +114,9 @@ INVEST_NOTES = [
     'Jamaican delegation: places are arranged directly with the Jamaican host university',
 ]
 PAY_ROWS = [
-    ('1. Application fee', 'On application', 'US$35', 'US$35'),
-    ('2. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$538.50', 'US$568.50'),
-    ('3. Balance (70%)', 'In full, no later than 14 days before the programme', 'US$1,256.50', 'US$1,326.50'),
+    ('1. Application fee', 'On application', 'US$35'),
+    ('2. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$568.50'),
+    ('3. Balance (70%)', 'In full, no later than 14 days before the programme', 'US$1,326.50'),
 ]
 PAY_NOTES = [
     'Each delegate and the advisor is responsible for their own application fee, deposit and balance',
@@ -162,7 +161,7 @@ DOWNLOAD_LABEL = 'Programme overview for student governments'
 FAQ = [
     ('Who is eligible?', 'Student government executives at a registered university. Each annual cohort pairs one US university with one Jamaican university.'),
     ('How many people can attend from one university?', 'Each university sends five executives and one advisor.'),
-    ('What is the investment?', 'US$1,795 per person at the early commitment rate, or US$1,895 standard, plus a US$35 application fee. Airfare is not included.'),
+    ('What is the investment?', 'US$1,895 per person, plus a US$35 application fee. Airfare is not included.'),
     ('Does each participant pay individually?', 'Yes. Each delegate and the advisor is responsible for their own application fee, deposit and balance, whether funded personally, by a sponsor or by their university.'),
     ('Is there any preparation before travel?', 'Yes. The Shore Briefing is a live online orientation held about two weeks before the programme, with a full programme walk-through, a safety briefing and breakout rooms to meet the other delegation.'),
     ('What happens on the Career Development Day?', 'Delegates spend the day at a high school in western Jamaica, leading a pathways panel, sector-based career circles, a professional skills workshop, a university insight session and a student council masterclass.'),
@@ -273,9 +272,9 @@ def build_page():
     p.append(sec('Investment (per person, US delegation)',
         '    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Rate</th><th>Per person</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(INVEST_NOTES))))
     # payment schedule
-    rows = ''.join('<tr><td data-label="Step">%s</td><td data-label="Timing">%s</td><td data-label="Early commitment" class="price">%s</td><td data-label="Standard" class="price">%s</td></tr>' % tuple(e(x) for x in r) for r in PAY_ROWS)
+    rows = ''.join('<tr><td data-label="Step">%s</td><td data-label="Timing">%s</td><td data-label="Amount" class="price">%s</td></tr>' % tuple(e(x) for x in r) for r in PAY_ROWS)
     p.append(sec('Payment schedule (per person)',
-        '    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Early commitment</th><th>Standard</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(PAY_NOTES))))
+        '    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Amount</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(PAY_NOTES))))
     # Stripe: the existing US$35 payment link stays on the page, beside the payment schedule
     p.append('''  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
     <div class="lj-price-card lj-paycard">

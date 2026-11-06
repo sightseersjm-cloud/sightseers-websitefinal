@@ -12,7 +12,7 @@ const block = src.slice(a, b);
 const text = block.replace(/<style>[\s\S]*?<\/style>/g, '').replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&');
 
 // things that must not appear
-['—', '–', 'February', 'Feb ', '2026', '2027', '1,270', '1,195', '1,220', '1,145', '1,170', '1,095', 'oundin', 'Partner with us',
+['early commitment', 'Early commitment', '1,795', '538.50', '1,256.50', '—', '–', 'February', 'Feb ', '2026', '2027', '1,270', '1,195', '1,220', '1,145', '1,170', '1,095', 'oundin', 'Partner with us',
  'rum tasting', '12 to 15', '16 to 25', 'place deposit', 'hildren', 'illa fee', 'illa quotation', 'three class days', 'Wednesday to Sunday', 'program '
 ].forEach(w => ok(text.indexOf(w) === -1, 'page must not contain "' + w + '"'));
 ok(!/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day \d/.test(text), 'no weekday-with-date strings');
@@ -26,7 +26,7 @@ ok(!/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day \d/.test(text), 'no weekday-with
  'Approximately 90 minutes by video conference. Access details are issued with confirmation of full payment',
  'Day 3, Thursday', 'The Negril experience', 'The eight modules', 'What every delegate takes home',
  'The Career Development Day', 'Safeguarding', 'Pitch Night and the Leaders Fund', 'Who can apply', 'For advisors',
- 'Investment (per person, US delegation)', 'US$1,795', 'US$1,895', 'US$538.50', 'US$568.50', 'US$1,256.50', 'US$1,326.50',
+ 'Investment (per person, US delegation)', 'US$1,895', 'US$568.50', 'US$1,326.50',
  'Payment schedule (per person)', 'Funding your place', 'Secure a sponsor', 'Cancellations and changes', 'Travel requirements',
  'Professional code of conduct', 'Safety and accountability', 'Frequently asked questions',
  'Programme overview for student governments', 'Download as Word (.docx)', 'Download as PDF', 'Copy letter text', 'Read the full letter'
