@@ -339,7 +339,7 @@ CSS_ADD = r'''
   #p-leaders-jamaica .lj-hero .lj-lede{margin-top:14px}
   #p-leaders-jamaica .lj-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px;text-align:center}
   #p-leaders-jamaica .lj-stats .lj-stat{flex:0 1 calc(25% - 11px);min-width:0}
-  #p-leaders-jamaica .lj-stat{background:#fff;border:1px solid var(--lj-line);border-radius:18px;padding:22px 16px;box-shadow:var(--lj-shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+  #p-leaders-jamaica .lj-stat{background:#fff;border:1px solid var(--lj-line);border-radius:0;padding:22px 16px;box-shadow:var(--lj-shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
   #p-leaders-jamaica .lj-stat b{font-family:'Playfair Display',serif;font-size:36px;line-height:1;color:var(--lj-navy)}
   #p-leaders-jamaica .lj-stat span{font-size:13.5px;line-height:1.45;color:var(--lj-mut);font-weight:600}
   #p-leaders-jamaica .lj-stat-text span{font-family:'Playfair Display',serif;font-size:17px;line-height:1.35;color:var(--lj-navy);font-weight:700}
@@ -387,12 +387,12 @@ CSS_ADD = r'''
   #p-leaders-jamaica .lj-btn.ghost-dark.is-done{background:var(--lj-green);border-color:var(--lj-green);color:#fff}
 
   /* FAQ accordion */
-  #p-leaders-jamaica .lj-faq-card{background:#fff;border:1px solid var(--lj-line);border-radius:24px;padding:6px 30px;box-shadow:var(--lj-shadow)}
+  #p-leaders-jamaica .lj-faq-card{background:#fff;border:1px solid var(--lj-line);border-radius:0;padding:6px 30px;box-shadow:var(--lj-shadow)}
   #p-leaders-jamaica .lj-faq{border-bottom:1px solid var(--lj-line)}
   #p-leaders-jamaica .lj-faq:last-child{border-bottom:0}
   #p-leaders-jamaica .lj-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:19px 0;font-weight:800;color:var(--lj-navy);font-size:15.5px}
   #p-leaders-jamaica .lj-faq summary::-webkit-details-marker{display:none}
-  #p-leaders-jamaica .lj-faq summary::after{content:'+';flex:none;width:28px;height:28px;border-radius:50%;background:rgba(112,194,87,.16);color:#3f8c2f;font-size:20px;line-height:26px;text-align:center;transition:transform .3s ease}
+  #p-leaders-jamaica .lj-faq summary::after{content:'+';flex:none;width:28px;height:28px;border-radius:0;background:rgba(112,194,87,.16);color:#3f8c2f;font-size:20px;line-height:26px;text-align:center;transition:transform .3s ease}
   #p-leaders-jamaica .lj-faq[open] summary::after{transform:rotate(45deg)}
   #p-leaders-jamaica .lj-faq-a{padding:0 0 20px;color:var(--lj-mut);font-size:15px;line-height:1.7;max-width:75ch}
   #p-leaders-jamaica .lj-faq summary:focus-visible{outline:2px solid var(--lj-orange);outline-offset:2px;border-radius:6px}
