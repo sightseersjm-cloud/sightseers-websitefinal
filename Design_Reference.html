@@ -48541,7 +48541,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var href='/trip/'+encodeURIComponent(t.slug);
     var isFull=t.status==='full'||(t.seats&&t.seats.left===0);
     return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'" data-dest="'+esc(t.country||t.destination||'')+'" data-full="'+(isFull?'1':'0')+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
-      '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+(t.sponsors&&t.sponsors.length?'<em class="tcd-theme tcd-spons">Sponsored by '+esc(t.sponsors[0].name)+(t.sponsors.length>1?' +'+(t.sponsors.length-1):'')+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
+      '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
   }
   function depStats(list){
     var places=0,dests={};
