@@ -310,6 +310,13 @@ module.exports = async function handler(req, res) {
       await db.addToCollection('viewer-tokens', record);
     }
 
+    // Leaders in Jamaica payments (application fee, deposit, second and third payments): mark the application paid.
+    const isLeaders = !!(session.metadata && session.metadata.kind === 'leaders');
+    if (isLeaders) {
+      try { await require('./_handlers/leaders-waiver').markPaid(session); }
+      catch (e) { console.error('leaders webhook error:', e && e.message); }
+    }
+
     // Group trip deposits get their own confirmation (itemised selections, balance, next steps).
     const isGroupTrip = !!(session.metadata && session.metadata.kind === 'group-trip');
     if (isGroupTrip) {
@@ -325,7 +332,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Branded confirmation email for any V-Tours / tour purchase.
-    if (!isGroupTrip && !isPlanning) try {
+    if (!isGroupTrip && !isPlanning && !isLeaders) try {
       const kind = (session.metadata && session.metadata.kind) || '';
       const items = (session.metadata && (session.metadata.items || session.metadata.tours)) || '';
       const title = (session.metadata && session.metadata.title) || items || 'Sight Seers Virtual Tour';

@@ -55,7 +55,7 @@ const form = src.slice(m0, m1);
 ['fullName', 'email', 'phone', 'university', 'studentGov', 'applyingAs', 'position', 'funding', 'goal'].forEach(n => ok(form.indexOf('name="' + n + '"') !== -1, 'form field ' + n));
 ['cohort', 'delegates', 'earlyRate', 'orgType', 'orgName'].forEach(n => ok(form.indexOf('name="' + n + '"') === -1, 'legacy form field removed: ' + n));
 ok(form.indexOf('Thank you for your application. The programme director reviews every submission personally and typically responds within two working days.') !== -1, 'confirmation message');
-ok(form.indexOf('US$35') !== -1 && form.indexOf('buy.stripe.com') !== -1, 'US$35 application fee step with the payment link');
+ok(form.indexOf('US$35') !== -1 && form.indexOf('id="ljaPay"') !== -1, 'US$35 application fee step with a pay button');
 ok(!/2027|February|15 October|founding/i.test(form), 'form has no dates or founding wording');
 
 // fee waiver codes: one per applicant, used once, tied to the applicant's email, managed in the admin

@@ -115,13 +115,14 @@ INVEST_NOTES = [
 ]
 PAY_ROWS = [
     ('1. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$568.50'),
-    ('2. Second payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
+    ('2. Second payment (35%)', 'No later than 60 days before the programme', 'US$663.25'),
     ('3. Third payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
 ]
 APPFEE_NOTE = 'The US$35 application fee is paid on application. It is separate from, and in addition to, the US$1,895 programme fee, which is paid in the three parts below.'
 PAY_NOTES = [
     'Each delegate and the advisor is responsible for their own application fee and programme payments',
-    'The programme fee may be paid in three parts, and must be paid in full no later than 14 days before the programme begins',
+    'The programme fee is paid in three parts, and must be paid in full no later than 14 days before the programme begins',
+    'A secure payment link for each part is emailed to you once your place is confirmed. Payments are made online by card',
     'Places not paid in full by that date are released, and the deposit is forfeited',
     'A fee waiver can be requested when applying and is confirmed by email. Applicants who do not request one pay the application fee',
 ]
@@ -281,11 +282,11 @@ def build_page():
     <div class="lj-price-card lj-paycard">
       <div class="lj-eyebrow">Application fee</div>
       <h3>Pay online, securely</h3>
-      <p class="lj-sub lj-paysub">Card payments are processed securely by Stripe. The US$35 application fee is paid by each applicant who does not request a fee waiver.</p>
-      <a href="%s" target="_blank" rel="noopener" class="lj-btn primary">Pay the US$35 application fee</a>
+      <p class="lj-sub lj-paysub">Card payments are processed securely by Stripe. Each applicant pays the US$35 application fee when they apply, or applies for a fee waiver instead.</p>
+      <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply now</a>
     </div>
   </div></section>
-''' % STRIPE_FEE)
+''')
     # funding
     fc = ''.join('<div class="lj-card"><h4>%s</h4><p class="lj-cap">%s</p></div>' % (e(t), e(x)) for t, x in FUNDING)
     p.append(sec('Funding your place', '    <div class="lj-grid4">%s</div>' % fc))
@@ -421,6 +422,13 @@ CSS_ADD = r'''
 '''
 
 SCRIPT = r'''
+  <script>
+  (function(){
+    var q=location.search||'';var host=document.getElementById('p-leaders-jamaica');if(!host||!/[?&](paid|pay)=/.test(q))return;
+    var m=/[?&]paid=/.test(q)?'Thank you. Your payment was received, and a receipt is on its way to your email.':/pay=done/.test(q)?'That payment has already been made. Thank you.':'We could not open that payment link just now. Please try again in a moment, or email info@sightseerscaribbean.com.';
+    var d=document.createElement('div');d.setAttribute('role','status');d.style.cssText='background:#063a63;color:#fff;text-align:center;padding:14px 20px;font-weight:700;font-size:15px';d.textContent=m;host.insertBefore(d,host.firstChild);
+  })();
+  </script>
   <script>
   (function(){
     var card=document.getElementById('ljLetter');if(!card)return;
