@@ -14472,6 +14472,7 @@ body.theme-night #p-flagship-programs{
 #ljApplyModal .lja-coderow{display:flex;gap:10px;align-items:stretch}
 #ljApplyModal .lja-coderow .lja-input{flex:1;text-transform:uppercase;letter-spacing:.06em}
 #ljApplyModal .lja-coderow .lja-btn{padding:0 18px;white-space:nowrap}
+#ljApplyModal .lja-codehint{display:block;margin-top:6px;font-size:12px;color:var(--lja-mut)}
 #ljApplyModal .lja-codemsg{display:block;min-height:18px;margin-top:6px;font-size:12.5px;font-weight:700}
 #ljApplyModal .lja-codemsg.ok{color:#3f8c2f}
 #ljApplyModal .lja-codemsg.no{color:#b3261e}
@@ -14610,6 +14611,7 @@ body.theme-night #p-flagship-programs{
             <input class="lja-input" type="text" name="feeCode" id="ljaCode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="Enter your code">
             <button type="button" class="lja-btn ghost" id="ljaCodeBtn">Apply code</button>
           </div>
+          <span class="lja-codehint">The code is made for the email address on your application and works one time.</span>
           <span class="lja-codemsg" id="ljaCodeMsg" role="status" aria-live="polite"></span>
         </div>
         <label class="lja-check" id="ljaConsentWrap">
@@ -14653,7 +14655,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '';
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', redeemedCode = '';
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -14663,17 +14665,21 @@ body.theme-night #p-flagship-programs{
 
   function checkCode(){
     var inp = el('ljaCode'), msg = el('ljaCodeMsg'), btn = el('ljaCodeBtn');
-    var v = (inp.value || '').trim();
+    var v = (inp.value || '').trim(), em = (form().querySelector('[name="email"]').value || '').trim();
     codeOk = '';
     msg.className = 'lja-codemsg';
     if (!v){ msg.textContent = ''; return; }
     btn.disabled = true; msg.textContent = 'Checking...';
-    fetch('/api/leaders-waiver', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: v }) })
+    fetch('/api/leaders-waiver', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', code: v, email: em }) })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, j: j }; }); })
       .then(function(x){
         btn.disabled = false;
         if (x.ok && x.j.valid){ codeOk = v.toUpperCase(); msg.className = 'lja-codemsg ok'; msg.textContent = 'Code accepted. Your application fee is waived.'; }
-        else { msg.className = 'lja-codemsg no'; msg.textContent = x.j.error || 'That code is not valid. Check it and try again, or tick the fee waiver request instead.'; }
+        else {
+          msg.className = 'lja-codemsg no';
+          var why = x.j && x.j.reason;
+          msg.textContent = x.j.error || (why === 'used' ? 'That code has already been used.' : why === 'email' ? 'That code was made for a different email address. Use the email you gave us, or tick the fee waiver request instead.' : 'That code is not valid. Check it and try again, or tick the fee waiver request instead.');
+        }
       })['catch'](function(){ btn.disabled = false; msg.className = 'lja-codemsg no'; msg.textContent = 'We could not check that code just now. Please try again.'; });
   }
 
@@ -14826,8 +14832,11 @@ body.theme-night #p-flagship-programs{
     var body = summary(d);
     alertBox('');
     busyState(true);
-
-    fetch('/api/contact', {
+    var redeem = (feeWaived() === 'code' && redeemedCode !== codeOk)
+      ? fetch('/api/leaders-waiver', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'redeem', code: codeOk, email: d.email, name: d.fullName }) })
+          .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) { var er = new Error(j.error || 'That code could not be used.'); er.code = true; throw er; } redeemedCode = codeOk; }); })
+      : Promise.resolve();
+    redeem.then(function(){ return fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -14838,7 +14847,7 @@ body.theme-night #p-flagship-programs{
         subject: 'Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')',
         message: body
       })
-    }).then(function(r){
+    }); }).then(function(r){
       if (!r.ok) throw new Error('status ' + r.status);
       return r.json().catch(function(){ return {}; });
     }).then(function(){
@@ -14848,8 +14857,16 @@ body.theme-night #p-flagship-programs{
       done.setAttribute('aria-hidden', 'false');
       var btn = done.querySelector('.lja-btn');
       if (btn) btn.focus();
-    })['catch'](function(){
+    })['catch'](function(err){
       busyState(false);
+      if (err && err.code){
+        codeOk = '';
+        el('ljaCodeMsg').className = 'lja-codemsg no';
+        el('ljaCodeMsg').textContent = err.message;
+        paintFee();
+        alertBox(err.message + ' Your application fee is now due, or you can tick the fee waiver request on the previous step.');
+        return;
+      }
       var href = 'mailto:' + APPLY_EMAIL
         + '?subject=' + encodeURIComponent('Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')')
         + '&body=' + encodeURIComponent(body);
@@ -50682,13 +50699,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'blog',t:'Blog',show:function(){return can('blog');}}]},
     {h:'People and trips',items:[
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
-      {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'}]},
+      {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'},
+      {id:'codes',t:'Fee waiver codes',show:function(){return can('inbox');}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Fee waiver codes',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -52845,6 +52863,90 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       var body={title:v('blT'),category:v('blC')||'Guest Journal',author:v('blA'),coverImage:v('blI'),excerpt:v('blE'),content:document.getElementById('blX').value};
       var id=d.blSave;
       run(b,function(){return api('blog',Object.assign({action:id?'update':'create'},id?{id:id}:{},body));},function(){BL.edit=null;return reload().then(function(){msg(id?'Saved.':'Published. It is on the blog now.','ok');});});
+    }
+  });
+})();
+</script>
+<style id="manage-codes-style">
+#p-manage .wc-new{padding:20px 22px;max-width:760px;margin:0 0 18px}
+#p-manage .wc-new h3{margin:0 0 4px;color:var(--navy)}
+#p-manage .wc-row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+#p-manage .wc-made{padding:20px 22px;max-width:760px;margin:0 0 18px;border:2px solid #70c257;background:#f3faf0}
+#p-manage .wc-code{display:block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:28px;font-weight:800;letter-spacing:.08em;color:var(--navy);margin:6px 0 10px;word-break:break-all}
+#p-manage .wc-c{padding:14px 18px;margin:0 0 10px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#p-manage .wc-c .wc-main{flex:1 1 260px;min-width:0}
+#p-manage .wc-c code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;font-weight:800;letter-spacing:.06em;color:var(--navy)}
+#p-manage .wc-c .wc-meta{font-size:13px;color:var(--mut);margin-top:4px;overflow-wrap:anywhere}
+#p-manage .wc-b{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 9px;border-radius:0;white-space:nowrap;background:#e4f3e8;color:#23703a}
+#p-manage .wc-b.used{background:#eef0f3;color:#5c6b7a}
+#p-manage .wc-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+@media(max-width:640px){#p-manage .wc-row2{grid-template-columns:1fr}}
+</style>
+<script id="manage-codes-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+
+  /* ====================== Fee waiver codes: one code for each Leaders in Jamaica applicant, used once ====================== */
+  var WC={list:null,err:'',loading:false,filter:'unused',made:null,busy:false};
+  function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
+  function load(){
+    WC.loading=true;WC.err='';
+    return api('leaders-waiver').then(function(d){WC.list=d.codes||[];}).catch(function(e){WC.list=[];WC.err=e.message||'Could not load the codes.';}).then(function(){WC.loading=false;});
+  }
+  function count(k){return (WC.list||[]).filter(function(c){return k==='all'||c.status===k;}).length;}
+  function msg(t,type){var e=document.getElementById('wcMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function note(c){
+    return 'Hello '+c.name+',\n\nYour Leaders in Jamaica application fee waiver code is '+c.code+'.\n\nWhen you apply at sightseerscaribbean.com/leaders-in-jamaica, use this email address: '+c.email+'. Enter the code on step 3 of the application. The code works one time and only with that email address.';
+  }
+  function row(c){
+    var used=c.status==='used';
+    return '<div class="mg-card wc-c"><div class="wc-main"><code>'+esc(c.code)+'</code> <span class="wc-b '+(used?'used':'')+'">'+(used?'Used '+esc(dt(c.usedAt)):'Not used')+'</span>'
+      +'<div class="wc-meta"><b>'+esc(c.name)+'</b> &middot; '+esc(c.email)+(c.note?' &middot; '+esc(c.note):'')+' &middot; made '+esc(dt(c.createdAt))+(c.createdBy?' by '+esc(c.createdBy):'')+'</div></div>'
+      +'<div class="wc-act">'+(used?'':'<button type="button" class="mg-btn sm" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
+  }
+  function screen(){
+    var head='<h1>Fee waiver codes</h1><p class="mg-sub">Make one code for each applicant who should not pay the US$35 application fee. Each code works one time, and only with the email address you enter, so it cannot be shared.</p>';
+    if(WC.list===null)return head+'<p class="mg-sub">'+(WC.err?esc(WC.err):'Loading…')+'</p>';
+    var made=WC.made?'<div class="mg-card wc-made"><b>Code made for '+esc(WC.made.name)+'</b><span class="wc-code">'+esc(WC.made.code)+'</span><p class="mg-hint" style="margin:0 0 12px">Works once, with <b>'+esc(WC.made.email)+'</b> only.</p><p style="margin:0"><button type="button" class="mg-btn pri sm" data-wc-copy="'+esc(WC.made.id)+'">Copy code</button> <button type="button" class="mg-btn sm" data-wc-note="'+esc(WC.made.id)+'">Copy a message to send them</button></p></div>':'';
+    var form='<div class="mg-card wc-new"><h3>Make a code</h3><p class="mg-hint" style="margin:0 0 12px">Use the email address the applicant will type on the application. The code will not work with any other address.</p>'
+      +'<div class="wc-row2"><div class="mg-fld"><label for="wcN">Applicant name</label><input id="wcN" maxlength="120" autocomplete="off"></div><div class="mg-fld"><label for="wcE">Applicant email</label><input id="wcE" type="email" maxlength="160" autocomplete="off"></div></div>'
+      +'<div class="mg-fld"><label for="wcO">Note <span class="mg-hint">(optional, only you see it)</span></label><input id="wcO" maxlength="200" placeholder="e.g. Scholarship, approved by phone"></div>'
+      +'<div class="mg-msg" id="wcMsg" role="alert"></div><p style="margin:0"><button type="button" class="mg-btn pri" data-wc-make="1">Make the code</button></p></div>';
+    var chips=[['unused','Not used'],['used','Used'],['all','Everything']].map(function(f){return '<button type="button" data-wc-f="'+f[0]+'" class="'+(WC.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+count(f[0])+'</b></button>';}).join('');
+    var rows=WC.list.filter(function(c){return WC.filter==='all'||c.status===WC.filter;});
+    return head+(WC.err?'<div class="mg-msg on err">'+esc(WC.err)+'</div>':'')+made+form
+      +'<div class="ib-chips" style="margin:0 0 14px">'+chips+'</div>'
+      +(rows.length?rows.map(row).join(''):'<div class="mg-card mg-soon"><h3>Nothing here</h3><p class="mg-hint" style="font-size:14px;margin:0">'+(WC.list.length?'Try another filter.':'Codes you make will be listed here.')+'</p></div>');
+  }
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='codes'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  MG.screens.codes=screen;
+  MG.after.codes=function(){if(!WC.loading)load().then(function(){if(S.screen==='codes')rerender();});};
+
+  function copy(txt,btn,done){
+    function ok(){if(btn){var o=btn.getAttribute('data-l')||btn.textContent;btn.setAttribute('data-l',o);btn.textContent=done||'Copied';setTimeout(function(){btn.textContent=o;},2000);}}
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.select();var g=false;try{g=document.execCommand('copy');}catch(x){}document.body.removeChild(ta);if(g)ok();}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
+  }
+  function find(id){return (WC.list||[]).filter(function(c){return c.id===id;})[0]||(WC.made&&WC.made.id===id?WC.made:null);}
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='codes')return;var d=b.dataset;
+    if(d.wcF){WC.filter=d.wcF;rerender();return;}
+    if(d.wcCopy){var c=find(d.wcCopy);if(c)copy(c.code,b);return;}
+    if(d.wcNote){var n=find(d.wcNote);if(n)copy(note(n),b);return;}
+    if(d.wcRevoke){
+      var c2=find(d.wcRevoke);if(!c2||!window.confirm('Cancel the code '+c2.code+' for '+c2.name+'? It will stop working.'))return;
+      if(WC.busy)return;WC.busy=true;b.disabled=true;
+      api('leaders-waiver',{action:'revoke',id:d.wcRevoke}).then(function(){WC.busy=false;if(WC.made&&WC.made.id===d.wcRevoke)WC.made=null;return load().then(function(){rerender();msg('Cancelled.','ok');});}).catch(function(er){WC.busy=false;b.disabled=false;msg(er.message||'That did not work. Try again.','err');});
+      return;
+    }
+    if(b.hasAttribute('data-wc-make')){
+      var v=function(id){var el=document.getElementById(id);return el?String(el.value||'').trim():'';};
+      if(!v('wcN')){msg('Add the applicant\'s name.','err');return;}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('wcE'))){msg('Add the email address the applicant will use on the application.','err');return;}
+      if(WC.busy)return;WC.busy=true;b.disabled=true;
+      api('leaders-waiver',{action:'generate',name:v('wcN'),email:v('wcE'),note:v('wcO')}).then(function(r){WC.busy=false;WC.made=r.code;WC.filter='unused';return load().then(rerender);}).catch(function(er){WC.busy=false;b.disabled=false;msg(er.message||'That did not work. Try again.','err');});
     }
   });
 })();
