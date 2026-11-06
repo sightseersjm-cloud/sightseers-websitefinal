@@ -64,7 +64,7 @@ function shapeApp(a) {
 }
 
 function payButton() {
-  return '<p style="margin:18px 0"><a href="' + FEE_LINK + '" style="display:inline-block;background:#063a63;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px">Pay the US$35 application fee</a></p>';
+  return '<p style="margin:18px 0"><a href="' + FEE_LINK + '" style="display:inline-block;background:#063a63;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:0">Pay the US$35 application fee</a></p>';
 }
 
 function status(c) { return c.usedAt ? 'used' : 'unused'; }
