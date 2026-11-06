@@ -11,6 +11,7 @@
  *   GET                                          -> { ok:true, codes:[...], applications:[...] }
  *   POST { action:'generate', name, email, note }-> { ok:true, code:{...} }
  *   POST { action:'revoke', id }                 -> { ok:true }                      unused codes only
+ *   POST { action:'app-delete'|'code-delete', id }          permanently deletes an application, or a code (a used one too)
  *   POST { action:'app-sendpay', id, part:'deposit'|'second'|'third' }   emails the applicant a secure payment link for that part
  *   POST { action:'app-waive'|'app-decline'|'app-paylink'|'app-paid', id, part? }   decide an application's fee and email the applicant
  *
@@ -153,6 +154,15 @@ module.exports = async function handler(req, res) {
 
     const body = req.body || {};
     const action = body.action || 'check';
+
+    if (action === 'app-delete' || action === 'code-delete') {
+      const admin = await requirePerm(req, res, 'inbox');
+      if (!admin) return;
+      const coll = action === 'app-delete' ? APPS : COLLECTION;
+      const gone = await db.removeFromCollection(coll, body.id);
+      if (!gone) return res.status(404).json({ error: 'That was not found. It may already be deleted.' });
+      return res.status(200).json({ ok: true });
+    }
 
     if (action === 'app-sendpay') {
       const admin = await requirePerm(req, res, 'inbox');

@@ -52935,6 +52935,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-manage .wc-prog{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
 #p-manage .wc-pr{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 #p-manage .wc-pr:last-child{border-bottom:0}
+#p-manage .wc-del{color:#a63a2d;border-color:#e4b9b3}
 #p-manage .wc-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 @media(max-width:640px){#p-manage .wc-row2{grid-template-columns:1fr}}
 </style>
@@ -52945,14 +52946,15 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   var S=MG.S,esc=MG.esc,api=MG.api;
 
   /* ====================== Leaders in Jamaica: the applications, and the single-use fee waiver codes ====================== */
-  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'ask',cfilter:'unused',made:null,busy:false,open:{}};
+  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'all',cfilter:'unused',made:null,busy:false,open:{}};
   var FEE={'fee-due':['Fee due','due'],'waiver-requested':['Waiver requested','ask'],'waived-code':['Waived with a code',''],'waived':['Waived',''],'pay-link-sent':['Payment link sent','ask'],'paid':['Fee paid','']};
   function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
   function load(){
     WC.loading=true;WC.err='';
     return api('leaders-waiver').then(function(d){WC.list=d.codes||[];WC.apps=d.applications||[];}).catch(function(e){WC.list=WC.list||[];WC.apps=WC.apps||[];WC.err=e.message||'Could not load.';}).then(function(){WC.loading=false;});
   }
-  function acount(k){return (WC.apps||[]).filter(function(a){return k==='all'||(k==='ask'?a.fee==='waiver-requested':k==='due'?(a.fee==='fee-due'||a.fee==='pay-link-sent'):a.fee===k);}).length;}
+  function amatch(a,k){return k==='all'||(k==='ask'?a.fee==='waiver-requested':k==='due'?(a.fee==='fee-due'||a.fee==='pay-link-sent'):(a.fee==='waived'||a.fee==='waived-code'||a.fee==='paid'));}
+  function acount(k){return (WC.apps||[]).filter(function(a){return amatch(a,k);}).length;}
   function ccount(k){return (WC.list||[]).filter(function(c){return k==='all'||c.status===k;}).length;}
   function msg(t,type){var e=document.getElementById('wcMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
   function note(c){
@@ -52970,6 +52972,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var prog=[['deposit','Deposit (30%)','US$568.50'],['second','Second payment (35%)','US$663.25'],['third','Third payment (35%)','US$663.25']].map(function(r){
       return '<div class="wc-pr"><span><b>'+r[1]+'</b> '+r[2]+'</span><span class="wc-b '+(pays[r[0]]?'':(links[r[0]]?'ask':'used'))+'">'+pst(r[0])+'</span>'
         +(pays[r[0]]?'':'<span class="wc-act"><button type="button" class="mg-btn sm" data-wc-sendpay="'+esc(a.id)+'" data-part="'+r[0]+'">'+(links[r[0]]?'Send the link again':'Send payment link')+'</button> <button type="button" class="mg-btn sm ghost" data-wc-paidpart="'+esc(a.id)+'" data-part="'+r[0]+'">Mark paid</button></span>')+'</div>';}).join('');
+    acts.push('<button type="button" class="mg-btn sm ghost wc-del" data-wc-delapp="'+esc(a.id)+'">Delete application</button>');
     var showProg=(a.fee!=='waiver-requested');
     return '<div class="mg-card wc-a"><div class="wc-top"><b>'+esc(a.name)+' <span class="mg-hint" style="font-weight:600">'+esc(a.applyingAs)+'</span></b><span class="wc-b '+f[1]+'">'+esc(f[0])+'</span></div>'
       +'<div class="wc-meta"><a href="mailto:'+esc(a.email)+'">'+esc(a.email)+'</a>'+(a.phone?' &middot; '+esc(a.phone):'')+' &middot; sent '+esc(dt(a.createdAt))+'</div>'
@@ -52985,13 +52988,13 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var used=c.status==='used';
     return '<div class="mg-card wc-c"><div class="wc-main"><code>'+esc(c.code)+'</code> <span class="wc-b '+(used?'used':'')+'">'+(used?'Used '+esc(dt(c.usedAt)):'Not used')+'</span>'
       +'<div class="wc-meta"><b>'+esc(c.name)+'</b> &middot; '+esc(c.email)+(c.note?' &middot; '+esc(c.note):'')+' &middot; made '+esc(dt(c.createdAt))+(c.createdBy?' by '+esc(c.createdBy):'')+'</div></div>'
-      +'<div class="wc-act">'+(used?'':'<button type="button" class="mg-btn sm" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
+      +'<div class="wc-act">'+(used?'<button type="button" class="mg-btn sm ghost wc-del" data-wc-delcode="'+esc(c.id)+'">Delete</button>':'<button type="button" class="mg-btn sm" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
   }
   function appsTab(){
-    var chips=[['ask','Waiver requested'],['due','Fee due'],['all','Everything']].map(function(f){return '<button type="button" data-wc-f="'+f[0]+'" class="'+(WC.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+acount(f[0])+'</b></button>';}).join('');
-    var rows=WC.apps.filter(function(a){return WC.filter==='all'||(WC.filter==='ask'?a.fee==='waiver-requested':(a.fee==='fee-due'||a.fee==='pay-link-sent'));});
+    var chips=[['all','Everything'],['ask','Waiver requested'],['due','Fee due'],['done','Waived or paid']].map(function(f){return '<button type="button" data-wc-f="'+f[0]+'" class="'+(WC.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+acount(f[0])+'</b></button>';}).join('');
+    var rows=WC.apps.filter(function(a){return amatch(a,WC.filter);});
     return '<p class="mg-hint" style="margin:0 0 12px">Every Leaders in Jamaica application is kept here. Applicants who ask for a waiver are not asked to pay until you decide. Approving emails them to say the fee is waived. Declining emails them a short message saying we are unable to waive it, with the US$35 payment link.</p>'
-      +'<div class="ib-chips" style="margin:0 0 14px">'+chips+'</div><div class="mg-msg" id="wcMsg" role="alert"></div>'
+      +'<div class="ib-chips" style="margin:0 0 14px">'+chips+' <button type="button" data-wc-refresh="1">Refresh</button></div><div class="mg-msg" id="wcMsg" role="alert"></div>'
       +(rows.length?rows.map(appCard).join(''):'<div class="mg-card mg-soon"><h3>Nothing here</h3><p class="mg-hint" style="font-size:14px;margin:0">'+(WC.apps.length?'Try another filter.':'Applications will be listed here as they arrive.')+'</p></div>');
   }
   function codesTab(){
@@ -53034,10 +53037,13 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var b=e.target.closest('button');if(!b||S.screen!=='codes')return;var d=b.dataset;
     if(d.wcTab){WC.tab=d.wcTab;rerender();return;}
     if(d.wcF){WC.filter=d.wcF;rerender();return;}
+    if(b.hasAttribute('data-wc-refresh')){b.disabled=true;load().then(function(){rerender();msg('Refreshed.','ok');});return;}
     if(d.wcCf){WC.cfilter=d.wcCf;rerender();return;}
     if(d.wcMore){WC.open[d.wcMore]=!WC.open[d.wcMore];rerender();return;}
     if(d.wcWaive){var a1=findA(d.wcWaive);if(a1&&window.confirm('Approve the fee waiver for '+a1.name+'? This emails '+a1.email+' to say the US$35 application fee is waived.'))decide(b,d.wcWaive,'app-waive','Waiver approved. '+a1.name+' has been emailed.');return;}
     if(d.wcDecline){var a4=findA(d.wcDecline);if(a4&&window.confirm('Decline the waiver for '+a4.name+'? This emails '+a4.email+' a short, kind message saying we are unable to waive the fee, with the US$35 payment link.'))decide(b,d.wcDecline,'app-decline','Declined. '+a4.name+' has been emailed the payment link.');return;}
+    if(d.wcDelapp){var a7=findA(d.wcDelapp);if(a7&&window.confirm('Permanently delete the application from '+a7.name+' ('+a7.email+')? This cannot be undone. No email is sent to them.'))decide(b,d.wcDelapp,'app-delete','Application deleted.');return;}
+    if(d.wcDelcode){var c8=findC(d.wcDelcode);if(c8&&window.confirm('Delete the used code '+c8.code+' for '+c8.name+'? This cannot be undone.'))decide(b,d.wcDelcode,'code-delete','Code deleted.');return;}
     if(d.wcSendpay){var a5=findA(d.wcSendpay),lab={deposit:'deposit',second:'second payment',third:'third payment'}[d.part];if(a5&&window.confirm('Email '+a5.name+' ('+a5.email+') the secure payment link for the '+lab+'?'))decidePart(b,d.wcSendpay,'app-sendpay',d.part,'Payment link sent to '+a5.name+'.');return;}
     if(d.wcPaidpart){var a6=findA(d.wcPaidpart);if(a6&&window.confirm('Mark the '+({deposit:'deposit',second:'second payment',third:'third payment'}[d.part])+' as paid for '+a6.name+'? No email is sent.'))decidePart(b,d.wcPaidpart,'app-paid',d.part,'Marked as paid.');return;}
     if(d.wcPay){var a2=findA(d.wcPay);if(a2&&window.confirm('Email '+a2.name+' ('+a2.email+') the US$35 payment link?'))decide(b,d.wcPay,'app-paylink','Payment link sent to '+a2.name+'.');return;}

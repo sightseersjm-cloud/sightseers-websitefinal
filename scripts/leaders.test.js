@@ -63,6 +63,7 @@ ok(src.indexOf('id="manage-codes-script"') !== -1 && src.indexOf("id:'codes',t:'
 const wh = fs.readFileSync(path.join(root, 'api', '_handlers', 'leaders-waiver.js'), 'utf8');
 ok(/requirePerm\(req, res, 'inbox'\)/.test(wh) && wh.indexOf("action === 'generate'") !== -1 && wh.indexOf('usedAt') !== -1 && wh.indexOf('mail(c.email) !== mail(email)') !== -1, 'waiver handler: admin only to generate, single use, email bound');
 ok(fs.readFileSync(path.join(root, 'api', '[...route].js'), 'utf8').indexOf("'leaders-waiver'") !== -1, 'waiver handler is routed');
+ok(wh.indexOf("action === 'app-delete'") !== -1 && src.indexOf('data-wc-delapp') !== -1, 'admin can delete an application');
 ok(src.indexOf("action: 'apply'") !== -1 && wh.indexOf("action === 'apply'") !== -1 && wh.indexOf("action === 'fee-choice'") !== -1, 'application is stored and emailed first, the fee choice comes after');
 ok(src.indexOf("action: 'fee-choice'") !== -1 && src.indexOf('Your application has been received') !== -1, 'fee screen comes after the application is sent');
 ok(wh.indexOf('Unfortunately, we are not able to waive') !== -1 && wh.indexOf("'app-decline'") !== -1, 'declined waiver gets a regret email with the payment link');
