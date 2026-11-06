@@ -13715,6 +13715,53 @@ body.theme-night #p-flagship-programs{
 ════════════════════════════════════ -->
 
 <style id="tp-sponsor-css">
+/* trip page: banner photo, places and countdown, highlights, a bolder day-by-day */
+#p-trip .tc-band--trip.tp-hasimg{background-image:linear-gradient(180deg,rgba(4,22,38,.55) 0%,rgba(4,22,38,.72) 60%,rgba(4,22,38,.9) 100%),var(--tp-hero)!important;background-size:cover!important;background-position:center!important}
+#p-trip .tc-band--trip.tp-hasimg .tc-band-in{padding-top:clamp(70px,9vw,120px);padding-bottom:clamp(60px,8vw,110px)}
+#p-trip .tp-pulse{display:grid;grid-template-columns:1fr auto;gap:12px;margin:0 0 18px}
+#p-trip .tp-pcard{background:#fff;border:1px solid var(--tc-line,#dfe6ec);padding:16px 18px;box-shadow:0 10px 26px -20px rgba(6,58,99,.4)}
+#p-trip .tp-ptop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+#p-trip .tp-ptop b{font:800 16px 'Raleway',sans-serif;color:#063a63}
+#p-trip .tp-ptop span{font-size:13px;color:#5b6b76}
+#p-trip .tp-pbar{height:8px;border-radius:99px;background:#e8eef3;overflow:hidden}
+#p-trip .tp-pbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#70c257,#ef8731)}
+#p-trip .tp-pdays{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:120px;background:linear-gradient(135deg,#063a63,#0d5b6e);color:#fff;border:0}
+#p-trip .tp-pdays b{font:700 32px/1 'Playfair Display',serif;color:#fff}
+#p-trip .tp-pdays span{margin-top:4px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+#p-trip .tp-morebtn{list-style:none;padding-left:0!important}
+#p-trip .tp-morebtn::before{display:none!important}
+#p-trip .tp-morebtn button{margin-top:6px;border:1px solid #cfdbe5;background:#fff;color:#063a63;font:800 12.5px 'Raleway',sans-serif;padding:9px 16px;border-radius:99px;cursor:pointer}
+#p-trip .tp-days::before{left:19px;width:3px;background:linear-gradient(180deg,#ef8731,#70c257)}
+#p-trip .tp-days li{grid-template-columns:40px minmax(0,1fr);gap:16px;padding-bottom:22px}
+#p-trip .tp-days i{width:40px;height:40px;border-radius:50%;font-size:14px;box-shadow:0 0 0 5px #fff,0 6px 14px rgba(239,135,49,.35)}
+#p-trip .tp-days li>div{background:#f6f9fb;border:1px solid #e3eaf0;padding:12px 16px}
+#p-trip .tp-days strong{font-size:19px}
+@media(max-width:640px){#p-trip .tp-pulse{grid-template-columns:1fr}}
+
+/* trip photo section */
+#p-trip .tp-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#p-trip .tp-gal[data-n="1"]{grid-template-columns:1fr}
+#p-trip .tp-gal[data-n="2"]{grid-template-columns:1fr 1fr}
+#p-trip .tp-gal[data-n="4"]{grid-template-columns:1fr 1fr}
+#p-trip .tp-galitem{position:relative;display:block;padding:0;border:0;background:#e9eef2;border-radius:12px;overflow:hidden;aspect-ratio:4/3;cursor:zoom-in}
+#p-trip .tp-gal[data-n="1"] .tp-galitem{aspect-ratio:16/9}
+@media(min-width:641px){#p-trip .tp-gl-d2{grid-column:span 2}#p-trip .tp-gl-d3{grid-column:span 3}}
+@media(max-width:640px){#p-trip .tp-gl-m2{grid-column:span 2}}
+#p-trip .tp-galitem img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+#p-trip .tp-galitem:hover img{transform:scale(1.05)}
+#p-trip .tp-gal:not([data-n="1"]):not([data-n="2"]):not([data-n="4"]) .tp-galitem:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+@media(max-width:640px){#p-trip .tp-gal{grid-template-columns:1fr 1fr}#p-trip .tp-gal .tp-galitem:first-child{grid-column:span 2!important;grid-row:auto!important;aspect-ratio:16/10!important}}
+.tp-lb[hidden]{display:none!important}
+.tp-lb{position:fixed;inset:0;z-index:100000;background:rgba(5,12,20,.92);display:flex;align-items:center;justify-content:center;padding:20px}
+.tp-lb img{max-width:min(1100px,92vw);max-height:82vh;border-radius:10px;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.tp-lb figcaption{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#e6edf3;font-size:14px}
+.tp-lb button{position:absolute;border:0;background:rgba(255,255,255,.14);color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer}
+.tp-lb .x{top:18px;right:18px}.tp-lb .pv{left:18px;top:50%}.tp-lb .nx{right:18px;top:50%}
+#p-manage .cl-galrow{display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid rgba(0,0,0,.07)}
+#p-manage .cl-galrow .pg-thumb{display:block;width:96px;height:64px;border-radius:8px;background-size:cover;background-position:center;background-color:#eef3f7}
+#p-manage .cl-galrow label{display:block;font-size:12px;font-weight:700;color:#5b6b76}
+#p-manage .cl-galrow input[type=text]{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:8px 10px;border:1px solid #cfdbe5;border-radius:8px;font:inherit;font-size:13.5px}
+
 /* departures list: on hover the row stays put (sliding it clipped the places-left box and the View trip arrow) and the dot stays square */
 .tcd-row:hover{transform:none!important;translate:none!important}
 .tcd-row:hover .tcd-dot{transform:none!important}
@@ -13733,6 +13780,21 @@ body.theme-night #p-flagship-programs{
 #p-manage .cl-sprow input{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:8px 10px;border:1px solid #cfdbe5;border-radius:8px;font:inherit;font-size:13.5px}
 @media(max-width:760px){#p-manage .cl-sprow{grid-template-columns:1fr}}
 </style>
+
+<script id="tp-gallery-js">
+(function(){
+  var cur=0,box=null;
+  function show(i){var g=window.__tpGal||[];if(!g.length)return;cur=(i+g.length)%g.length;var it=g[cur];
+    if(!box){box=document.createElement('div');box.className='tp-lb';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.innerHTML='<figure style="margin:0"><img alt=""><figcaption></figcaption></figure><button type="button" class="x" aria-label="Close">&times;</button><button type="button" class="pv" aria-label="Previous photo">&larr;</button><button type="button" class="nx" aria-label="Next photo">&rarr;</button>';
+      box.addEventListener('click',function(e){if(e.target.closest('.x')||e.target===box)close();else if(e.target.closest('.pv'))show(cur-1);else if(e.target.closest('.nx'))show(cur+1);});document.body.appendChild(box);}
+    box.querySelector('img').src=it.url;box.querySelector('img').alt=it.alt||'';box.querySelector('figcaption').textContent=it.alt||'';
+    var many=g.length>1;box.querySelector('.pv').hidden=box.querySelector('.nx').hidden=!many;box.hidden=false;box.querySelector('.x').focus();}
+  function close(){if(box)box.hidden=true;}
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-gal-i]');if(b&&b.closest('#p-trip')){show(parseInt(b.getAttribute('data-gal-i'),10)||0);}});
+  document.addEventListener('click',function(e){var m=e.target.closest&&e.target.closest('[data-tp-more]');if(!m)return;var ul=m.closest('ul');[].forEach.call(ul.querySelectorAll('.tp-more'),function(li){li.hidden=false;});m.parentNode.remove();});
+  document.addEventListener('keydown',function(e){if(!box||box.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(cur-1);else if(e.key==='ArrowRight')show(cur+1);});
+})();
+</script>
 <div class="page" id="p-trip">
 <div class="tc">
   <div class="tc-band tc-band--trip"><div class="tc-band-in">
@@ -13746,6 +13808,8 @@ body.theme-night #p-flagship-programs{
     <div class="tp-layout" id="tpLayout" hidden>
       <div class="tp-main">
         <div class="tp-img" id="tpImg" hidden></div>
+        <div class="tp-pulse" id="tpPulse" hidden></div>
+        <div class="tc-card tp-block tp-gallery" id="tpGallery" hidden><h2>Photos</h2><div class="tp-gal" id="tpGal"></div></div>
         <div class="tc-card tp-block tp-about" id="tpDescWrap" hidden><h2>About this trip</h2><div class="tp-desc" id="tpDesc"></div><small class="tp-by" id="tpBy"></small></div>
         <div class="tc-card tp-block" id="tpDaysWrap" hidden><h2>Day by day</h2><ol class="tp-days" id="tpDays"></ol></div>
         <div class="tc-card tp-block tp-soon" id="tpSoon" hidden></div>
@@ -48579,8 +48643,23 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpState').hidden=true;$('tpLayout').hidden=false;
     $('tpKicker').textContent=full?'Travel Club trip · Waitlist':'Travel Club trip';
     $('tpTitle').textContent=t.title;$('tpLede').textContent=t.summary||'';
-    var facts=[t.theme,t.dateText,[t.destination,t.country].filter(Boolean).join(', '),t.priceText,t.seats&&!full?seatsText(t):''].filter(Boolean);
+    /* days and nights from the trip's own dates */
+    var dn='',sd=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.startDate||''),ed=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.endDate||'');
+    if(sd&&ed){var nn=Math.round((Date.UTC(+ed[1],+ed[2]-1,+ed[3])-Date.UTC(+sd[1],+sd[2]-1,+sd[3]))/86400000);if(nn>=1&&nn<60)dn=(nn+1)+' days · '+nn+(nn===1?' night':' nights');}
+    var facts=[t.theme,t.dateText,dn,[t.destination,t.country].filter(function(x,i,a){return x&&a.indexOf(x)===i;}).join(', '),t.priceText].filter(Boolean);
     $('tpFacts').innerHTML=facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join('');
+    /* the trip photo becomes the banner */
+    var band=document.querySelector('#p-trip .tc-band--trip');
+    if(band){if(t.image){band.style.setProperty('--tp-hero','url("'+String(t.image).replace(/["\\]/g,'')+'")');band.classList.add('tp-hasimg');}else{band.style.removeProperty('--tp-hero');band.classList.remove('tp-hasimg');}}
+    /* places left and the countdown, from the trip's own seats and start date */
+    var pu=$('tpPulse'),ph='';
+    if(t.seats&&t.seats.total){var taken=t.seats.total-t.seats.left,pct=Math.round(taken/t.seats.total*100);
+      ph+='<div class="tp-pcard"><div class="tp-ptop"><b>'+(full?'Full':t.seats.left+' of '+t.seats.total+' places left')+'</b>'+(taken?'<span>'+taken+' taken</span>':'<span>Be one of the first</span>')+'</div><div class="tp-pbar"><i style="width:'+Math.max(full?100:3,pct)+'%"></i></div></div>';}
+    if(sd){var days=Math.ceil((Date.UTC(+sd[1],+sd[2]-1,+sd[3])-Date.now())/86400000);if(days>0)ph+='<div class="tp-pcard tp-pdays"><b>'+days+'</b><span>'+(days===1?'day':'days')+' to go</span></div>';}
+    pu.innerHTML=ph;pu.hidden=!ph;
+    var gw=$('tpGallery'),gl=(t.gallery||[]).filter(function(g){return /^(\/assets\/|\/api\/images\?file=|https:\/\/)/.test(g.url||'');});
+    if(gl.length){$('tpGal').innerHTML=gl.map(function(g,gi){return '<button type="button" class="tp-galitem" data-gal-i="'+gi+'" aria-label="'+esc(g.alt||('Photo '+(gi+1)))+'"><img src="'+esc(g.url)+'" alt="'+esc(g.alt||'')+'" loading="lazy"></button>';}).join('');$('tpGal').setAttribute('data-n',gl.length);(function(){var n=gl.length,rem=(n+3)%3,last=$('tpGal').lastElementChild;if(!last)return;if(n>4&&rem)last.classList.add(rem===2?'tp-gl-d2':'tp-gl-d3');if(n>2&&(n-1)%2===1)last.classList.add('tp-gl-m2');})();window.__tpGal=gl;gw.hidden=false;}
+    else{$('tpGal').innerHTML='';gw.hidden=true;window.__tpGal=[];}
     var sp=$('tpSponsor'),sps=t.sponsors||[];
     if(sps.length){
       sp.innerHTML='<h2>Sponsored by</h2><ul class="tp-splist">'+sps.map(function(so){
@@ -48588,14 +48667,16 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         return '<li>'+nm+'</li>';}).join('')+'</ul>';
       sp.hidden=false;}
     else{sp.innerHTML='';sp.hidden=true;}
-    var img=$('tpImg');if(t.image){img.innerHTML='<img src="'+esc(t.image)+'" alt="'+esc(t.imageAlt||t.title)+'">';img.hidden=false;}else{img.innerHTML='';img.hidden=true;}
+    var img=$('tpImg');img.innerHTML='';img.hidden=true;   /* the trip photo is the banner now */
     var hasDesc=!!(t.description&&t.description.length),hasInc=!!(t.included&&t.included.length),hasNot=!!(t.notIncluded&&t.notIncluded.length),hasDays=!!(t.itinerary&&t.itinerary.length);
     $('tpDays').innerHTML=(t.itinerary||[]).map(function(d,i){var dt=dayDate(t,i);return '<li><i>'+(i+1)+'</i><div><b>Day '+(i+1)+(dt?' · '+esc(dt):'')+'</b>'+(d.title?'<strong>'+esc(d.title)+'</strong>':'')+(d.text?'<span>'+esc(d.text)+'</span>':'')+'</div></li>';}).join('');$('tpDaysWrap').hidden=!hasDays;
     $('tpDesc').innerHTML=(t.description||[]).map(function(p){return '<p>'+esc(p)+'</p>';}).join('');$('tpDescWrap').hidden=!hasDesc;
     $('tpBy').textContent=hasDesc&&t.organizer?'Written by '+t.organizer.name:'';
     var soon=$('tpSoon');soon.hidden=hasDesc||hasInc||hasNot||hasDays;
     soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
-    var inc=$('tpIncluded');inc.innerHTML=(t.included||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpIncCol').hidden=!hasInc;
+    var inc=$('tpIncluded'),il=t.included||[],FOLD=6;
+    inc.innerHTML=il.map(function(x,xi){return '<li'+(xi>=FOLD?' class="tp-more" hidden':'')+'>'+esc(x)+'</li>';}).join('')+(il.length>FOLD?'<li class="tp-morebtn"><button type="button" data-tp-more>Show all '+il.length+'</button></li>':'');
+    $('tpIncCol').hidden=!hasInc;
     $('tpNotIncluded').innerHTML=(t.notIncluded||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpNotCol').hidden=!hasNot;
     $('tpInclWrap').hidden=!(hasInc||hasNot);$('tpInclWrap').classList.toggle('tp-incl--two',hasInc&&hasNot);
     var org=$('tpOrg');
@@ -52215,6 +52296,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       +'<div class="mg-fld full"><label>Day by day</label><div id="'+id('days')+'" class="cl-days">'+window.ssDays.html(t.itinerary)+'</div><div class="mg-hint">A title and a line or two for each day. The dates are added from the start date.</div></div>'
       +'<div class="mg-fld"><label for="'+id('theme')+'">Theme</label>'+window.ssDays.themeSelect(t.theme||'','id="'+id('theme')+'"')+'</div>'
       +'<div class="mg-fld full"><label for="'+id('image')+'">Photo</label><div class="cl-photo"><div class="pg-thumb" id="'+id('thumb')+'" style="background-image:'+(t.image?cssUrl(t.image):'none')+'"></div><input id="'+id('image')+'" value="'+esc(t.image||'')+'" placeholder="/assets/... or https://..."><button type="button" class="mg-btn sm" data-cl-photo="'+k+'">Choose photo</button></div><div class="mg-hint">Pick from the library, upload one, or type a site photo such as /assets/flagship/shore-leave-beach-group.jpg.</div></div>'
+      +'<div class="mg-fld full cl-gal"><label>More photos for the trip page <span style="font-weight:500">(optional, up to twelve)</span></label><div class="mg-hint" style="margin:0 0 8px">They show as a photo section on the trip page. Guests can tap one to see it large. Add a short description for each so people using screen readers know what is in it.</div><div data-gal-list="'+esc(k)+'">'+(t.gallery||[]).map(function(g){return galRow(g);}).join('')+'</div><div class="cl-acts"><button type="button" class="mg-btn ghost" data-cl-galadd="'+esc(k)+'">+ Add photo</button></div></div>'
       +fld('Photo description',id('imageAlt'),t.imageAlt)+fld('Seats in total',id('seatsTotal'),t.seatsTotal||0,{type:'number',min:0,help:'0 shows no seat count. Confirmed and booked travelers come off it automatically.'})+fld('Payment note',id('paymentNote'),t.paymentNote,{full:true,help:'Leave empty for the standard note: we confirm availability and payment terms before anything is charged.'})
       +fld('Organizer name',id('organizerName'),t.organizerName)+fld('Organizer community',id('organizerCommunity'),t.organizerCommunity)+fld('Organizer email (their account email)',id('organizerEmail'),t.organizerEmail,{type:'email',help:'They see this trip in their account when they sign in with that email.'})
       +fld('Show the organizer on the trip page',id('showOrganizer'),t.showOrganizer,{type:'check'})+fld('Organizer bio (public)',id('organizerBio'),t.organizerBio,{type:'textarea'})
@@ -52239,13 +52321,17 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         return det('trip'+t.id,'<span class="s"><b>'+esc(t.title)+'</b><small>'+esc(t.dateText||'no dates')+' · '+n+' request'+(n===1?'':'s')+(t.organizerName?' · led by '+esc(t.organizerName)+(t.coLeader&&t.coLeader.status==='approved'?' &amp; '+esc(t.coLeader.name||t.coLeader.email):''):'')+(t.infoUpdatedBy==='leader'?' · details edited by the leader '+esc(dt(t.infoUpdatedAt)):'')+'</small></span>'+chip(TRIPCHIP,t.status)+(t.status==='draft'?'<button type="button" class="mg-btn sm ok" data-cl-publish="'+t.id+'">Publish to departure board</button>':''),tripForm(t));
       }).join(''):'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No trips yet. Add one above, or approve an application and draft a trip from it.</p></div>')+'</div>';
   }
+  /* one photo row in the trip editor */
+  function galRow(g){g=g||{};
+    return '<div class="cl-galrow"><span class="pg-thumb" style="background-image:'+(g.url?cssUrl(g.url):'none')+'"></span><input type="hidden" data-gal="url" value="'+esc(g.url||'')+'"><label>Description<input type="text" maxlength="140" data-gal="alt" value="'+esc(g.alt||'')+'" placeholder="e.g. Pool party at the villa"></label><button type="button" class="mg-btn ghost" data-cl-galdel="1">Remove</button></div>';}
+  function readGallery(k){var box=document.querySelector('[data-gal-list="'+k+'"]');if(!box)return undefined;return [].map.call(box.querySelectorAll('.cl-galrow'),function(r){return {url:r.querySelector('[data-gal="url"]').value,alt:r.querySelector('[data-gal="alt"]').value.trim()};});}
   /* one sponsor row in the trip editor */
   function spRow(sp){sp=sp||{};
     return '<div class="cl-sprow"><label>Name<input type="text" maxlength="80" data-sp="name" value="'+esc(sp.name||'')+'" placeholder="e.g. Legend Lager (Wisynco Group)"></label><label>Link<input type="url" maxlength="400" data-sp="url" value="'+esc(sp.url||'')+'" placeholder="https://..."></label><input type="hidden" data-sp="logo" value="'+esc(sp.logo||'')+'"><input type="hidden" data-sp="note" value=""><button type="button" class="mg-btn ghost cl-spdel" data-cl-spdel="1" aria-label="Remove this sponsor">Remove</button></div>';}
   function readSponsors(k){var box=document.querySelector('[data-sp-list="'+k+'"]');if(!box)return undefined;return [].map.call(box.querySelectorAll('.cl-sprow'),function(r){var o={};[].forEach.call(r.querySelectorAll('[data-sp]'),function(i){o[i.getAttribute('data-sp')]=i.value.trim();});return o;});}
   function readTrip(k){
     var g=function(n){return val('clT_'+n+'_'+k);};
-    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink'),sponsors:readSponsors(k)};
+    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink'),sponsors:readSponsors(k),gallery:readGallery(k)};
   }
 
   /* ---------- traveler requests ---------- */
@@ -52420,6 +52506,9 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(ds.clAnnounce){var n=D.alertList||0;if(!confirm('Email the '+n+' '+(n===1?'person':'people')+' on the "Be first to hear about new trips" list about this trip?\n\nEach person gets their own email with a button to see the trip. It goes out once.'))return;busy(t,'Sending…');
       call('trip-announce',{id:ds.clAnnounce}).then(function(res){var r=res.result||{};return reload('Sent to '+(r.sent||0)+' of '+(r.count||0)+' people on the list.'+(r.failed?' '+r.failed+' could not be sent; check the email settings.':''),r.failed?'err':'ok');}).catch(function(err){fail(t,err);});return;}
     if(ds.clSpadd!==undefined||ds.clLegend!==undefined){var sk=ds.clSpadd!==undefined?ds.clSpadd:ds.clLegend,bx=document.querySelector('[data-sp-list="'+sk+'"]');if(!bx)return;if(bx.querySelectorAll('.cl-sprow').length>=6){say('Up to six sponsors per trip.','err');return;}bx.insertAdjacentHTML('beforeend',spRow(ds.clLegend!==undefined?{name:'Legend Lager (Wisynco Group)',url:'https://wisynco.com/',logo:'/logos/legend.png',note:''}:null));if(ds.clLegend!==undefined)say('Legend Lager added. Save the trip to publish it.','ok');else{var ins=bx.querySelectorAll('.cl-sprow');ins[ins.length-1].querySelector('input').focus();}return;}
+    if(ds.clGaladd!==undefined){var gk=ds.clGaladd,gb=document.querySelector('[data-gal-list="'+gk+'"]');if(!gb||!MG.changer)return;if(gb.querySelectorAll('.cl-galrow').length>=12){say('Up to twelve photos per trip.','err');return;}
+      MG.changer({title:'Add a photo to the trip page',simple:true,current:'',folder:'tours',onUse:function(r){gb.insertAdjacentHTML('beforeend',galRow({url:r.url,alt:''}));var rs=gb.querySelectorAll('.cl-galrow');rs[rs.length-1].querySelector('[data-gal="alt"]').focus();say('Photo added. Save the trip to publish it.','ok');}});return;}
+    if(ds.clGaldel){var gr=t.closest('.cl-galrow');if(gr)gr.remove();return;}
     if(ds.clSpdel){var rw=t.closest('.cl-sprow');if(rw)rw.remove();return;}
     if(ds.clCo){
       var coId=ds.clCo,coOk=ds.ok==='1';

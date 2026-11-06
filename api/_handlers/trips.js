@@ -139,6 +139,8 @@ function safeUrl(v) {
   const u = str(v, 500);
   if (!u) return '';
   if (/^\/assets\/[\w\-./]+$/.test(u)) return u;
+  /* a photo uploaded through the admin image changer is served from the site's private store */
+  if (/^\/api\/images\?file=[a-z-]+\/[0-9a-f-]{36}\.(jpg|png|webp|gif)$/.test(u)) return u;
   if (/^https:\/\/[^\s"'<>]+$/.test(u)) return u;
   return '';
 }
@@ -240,6 +242,7 @@ function publicTrip(t, interests, leader, coUser) {
     seats: total ? { total, left: Math.max(0, total - taken) } : null,
     led: !!(t.organizerName || t.organizerEmail),
     sponsors: t.sponsors || [],
+    gallery: t.gallery || [],
     organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName + (coName ? ' & ' + coName : ''), mainName: t.organizerName, coName: coName, coPhoto: (coUser && coUser.avatarUrl) || '', community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
   };
 }
@@ -280,6 +283,19 @@ function cleanTrip(b, existing, all) {
     internalNote: str(b.internalNote, 1000),
     groupLink: groupLinkOf(b.groupLink),
   };
+  /* extra photos for the trip page (optional, up to twelve) */
+  if (b.gallery !== undefined) {
+    const g = [];
+    const rows = Array.isArray(b.gallery) ? b.gallery.slice(0, 12) : [];
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i] || {};
+      if (!str(r.url, 500)) continue;
+      const url = safeUrl(r.url);
+      if (!url) return { error: 'Photo ' + (i + 1) + ' is not a photo from the site library or a full https:// link.' };
+      g.push({ url, alt: str(r.alt, 140) });
+    }
+    out.gallery = g;
+  } else out.gallery = (existing && existing.gallery) || [];
   /* brands that back this trip (optional, up to six): shown on the trip page, the departures list and the leader's dashboard */
   if (b.sponsors !== undefined) {
     const sp = cleanSponsors(b.sponsors);
@@ -534,6 +550,7 @@ module.exports = async function handler(req, res) {
           return {
             role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
             sponsors: t.sponsors || [],
+    gallery: t.gallery || [],
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),

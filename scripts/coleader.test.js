@@ -125,6 +125,19 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   r = await post(Object.assign({}, base, { sponsors: Array.from({ length: 9 }, (x, i) => ({ name: 'S' + i })) }), owner);
   ok('at most six sponsors are kept', r.code === 200 && r.body.trip.sponsors.length === 6);
 
+  // photos: an uploaded photo (served from the private store) is kept, and a trip can hold a photo section
+  const up = '/api/images?file=tours/0f8d5c2a-1b2c-4d3e-8f9a-0123456789ab.jpg';
+  r = await post(Object.assign({}, base, { image: up }), owner);
+  ok('a trip photo uploaded through the admin portal is kept when the trip is saved', r.code === 200 && r.body.trip.image === up, r.body.trip && r.body.trip.image);
+  r = await post(Object.assign({}, base, { gallery: [{ url: up, alt: 'Pool party' }, { url: '', alt: '' }, { url: '/assets/tours/dunns-river-falls-and-blue-hole-tour.jpg', alt: 'Falls' }] }), owner);
+  ok('the owner adds photos to the trip page (an empty row is ignored)', r.code === 200 && r.body.trip.gallery.length === 2, r.body.error);
+  r = await post(Object.assign({}, base, { gallery: [{ url: 'javascript:alert(1)' }] }), owner);
+  ok('a photo that is not from the library or an https link is refused', r.code === 400);
+  r = await call('trips', 'GET', '/api/trips?slug=negril-weekend');
+  ok('the public trip shows the photos with their descriptions', r.body.trip.gallery.length === 2 && r.body.trip.gallery[0].alt === 'Pool party');
+  r = await post(Object.assign({}, base, { gallery: Array.from({ length: 15 }, () => ({ url: up })) }), owner);
+  ok('at most twelve photos are kept', r.code === 200 && r.body.trip.gallery.length === 12);
+
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })();
