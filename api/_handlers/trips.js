@@ -33,6 +33,8 @@
  *   POST { action:'trip-announce' }    admin: email the 'Be first to hear about new trips' list about an open trip (once per trip)
  *   GET  ?unsub=<id>&k=<signature>     the one-click link in that email: takes the address off the list
  *   POST { action:'automation-run' }   admin: preview what would send today ({dryRun:true}), or run the daily job now
+ *   POST { action:'trip-photo-upload' } signed in (the trip's leader or co-leader): upload one photo (JPG, PNG or WebP, resized in the browser)
+ *   POST { action:'trip-photos-save' }  signed in (the trip's leader or co-leader, or the owner): set the banner photo and the photo section
  *   POST { action:'co-invite' }        signed in (the trip's main leader): invite one co-leader by email
  *   POST { action:'co-respond' }       signed in (the invited person): accept or decline; an accepted co-leader waits for the owner's approval
  *   POST { action:'co-remove' }        signed in (the main leader, or the owner): cancel the invitation or remove the co-leader
@@ -550,7 +552,7 @@ module.exports = async function handler(req, res) {
           return {
             role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
             sponsors: t.sponsors || [],
-    gallery: t.gallery || [],
+            gallery: t.gallery || [], image: t.image || '',
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
@@ -878,6 +880,50 @@ module.exports = async function handler(req, res) {
         await groupLinkMails(saved, joiners);
       }
       return res.status(200).json({ ok: true, groupLink: saved.groupLink || '' });
+    }
+
+    /* ===== trip photos: a leader uploads photos and sets the banner and the photo section ===== */
+    if (action === 'trip-photo-upload' || action === 'trip-photos-save') {
+      const user = getUser(req);
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const isOwner = user.role === 'admin';
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
+      if (action === 'trip-photo-upload') {
+        if (!allow('photo:' + user.id, 40, 60 * 60 * 1000)) return res.status(429).json({ error: 'That is a lot of photos in an hour. Please wait a little and try again.' });
+        const m = /^data:(image\/(jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''));
+        if (!m) return res.status(400).json({ error: 'Please choose a JPG, PNG or WebP photo.' });
+        const buf = Buffer.from(m[3], 'base64');
+        if (!buf.length) return res.status(400).json({ error: 'That photo was empty.' });
+        if (buf.length > 3 * 1024 * 1024) return res.status(413).json({ error: 'That photo is too large. Please use one under 3MB.' });
+        /* the bytes must really be the image type they claim */
+        const jpg = buf[0] === 0xff && buf[1] === 0xd8, png = buf.slice(0, 4).toString('hex') === '89504e47', webp = buf.slice(0, 4).toString() === 'RIFF' && buf.slice(8, 12).toString() === 'WEBP';
+        const ext = jpg ? 'jpg' : png ? 'png' : webp ? 'webp' : '';
+        if (!ext) return res.status(400).json({ error: 'That file is not a photo we can use. Please choose a JPG, PNG or WebP.' });
+        const saved = await require('../_lib/siteImages').save('tours', ext, buf, ext === 'jpg' ? 'image/jpeg' : 'image/' + ext);
+        return res.status(200).json({ ok: true, url: saved.url });
+      }
+      /* trip-photos-save */
+      const image = body.image === undefined ? (t.image || '') : safeUrl(body.image);
+      if (body.image && !image) return res.status(400).json({ error: 'The banner photo must be an uploaded photo or a full https:// link.' });
+      const rows = Array.isArray(body.gallery) ? body.gallery.slice(0, 12) : (t.gallery || []);
+      const gallery = [];
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i] || {};
+        if (!str(r.url, 500)) continue;
+        const url = safeUrl(r.url);
+        if (!url) return res.status(400).json({ error: 'Photo ' + (i + 1) + ' is not an uploaded photo or a full https:// link.' });
+        gallery.push({ url, alt: str(r.alt, 140) });
+      }
+      const now = new Date().toISOString();
+      const patch = { image, gallery, photosUpdatedAt: now, photosUpdatedBy: isOwner ? 'owner' : 'leader' };
+      /* the owner hears about leader photo changes, at most once an hour per trip */
+      const notifyOwner = !isOwner && (!t.photosMailedAt || Date.now() - new Date(t.photosMailedAt).getTime() > 3600000);
+      if (notifyOwner) patch.photosMailedAt = now;
+      await db.updateInCollection(TRIPS, t.id, patch);
+      await log('trip-photos', (isOwner ? 'Sight Seers' : (user.name || t.organizerName || 'A leader')) + ' updated the photos for ' + t.title, t.id);
+      if (notifyOwner) await safe('trip photos', adminMail('Leader updated trip photos: ' + t.title, 'A leader updated their trip photos', `<p><b>${trip.esc(user.name || t.organizerName || 'A leader')}</b> changed the photos on <b>${trip.esc(t.title)}</b>: ${image ? 'a banner photo and ' : 'no banner photo and '}${gallery.length} photo${gallery.length === 1 ? '' : 's'} in the photo section.</p>${button(SITE + '/trip/' + t.slug, 'View the trip page')}<p style="color:#5b6b76;font-size:13px">You can change or remove any photo in the admin portal under Trips and Travel Club.</p>`));
+      return res.status(200).json({ ok: true, image, gallery });
     }
 
     /* ===== co-leaders: the main leader invites one, the invitee accepts, the owner approves ===== */

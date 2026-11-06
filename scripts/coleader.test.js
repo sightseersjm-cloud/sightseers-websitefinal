@@ -138,6 +138,26 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   r = await post(Object.assign({}, base, { gallery: Array.from({ length: 15 }, () => ({ url: up })) }), owner);
   ok('at most twelve photos are kept', r.code === 200 && r.body.trip.gallery.length === 12);
 
+  // leaders upload and change trip photos themselves
+  const jpeg = 'data:image/jpeg;base64,' + Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(200, 1)]).toString('base64');
+  r = await post({ action: 'trip-photo-upload', id, data: jpeg }, other);
+  ok('someone who does not lead the trip cannot upload photos to it', r.code === 404);
+  r = await post({ action: 'trip-photo-upload', id, data: 'data:image/jpeg;base64,' + Buffer.from('<script>not a photo</script>').toString('base64') }, main);
+  ok('a file that is not really a photo is refused', r.code === 400);
+  r = await post({ action: 'trip-photo-upload', id, data: 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=' }, main);
+  ok('only JPG, PNG and WebP are accepted', r.code === 400);
+  r = await post({ action: 'trip-photo-upload', id, data: jpeg }, main);
+  ok('the leader uploads a photo', r.code === 200 && /^\/api\/images\?file=tours\//.test(r.body.url), JSON.stringify(r.body));
+  const mine = r.body.url;
+  sent.length = 0;
+  r = await post({ action: 'trip-photos-save', id, image: mine, gallery: [{ url: mine, alt: 'Our villa' }] }, main);
+  ok('the leader sets the banner photo and the photo section', r.code === 200 && r.body.image === mine && r.body.gallery.length === 1);
+  ok('the owner is told the leader changed the photos', sent.some(m => /updated trip photos/.test(m.subject)));
+  r = await call('trips', 'GET', '/api/trips?slug=negril-weekend');
+  ok('the trip page shows the leader\'s photos at once', r.body.trip.image === mine && r.body.trip.gallery[0].alt === 'Our villa');
+  r = await post({ action: 'trip-photos-save', id, image: '', gallery: [] }, other);
+  ok('someone who does not lead the trip cannot change its photos', r.code === 404);
+
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })();

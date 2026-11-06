@@ -13718,6 +13718,7 @@ body.theme-night #p-flagship-programs{
 /* trip page: banner photo, places and countdown, highlights, a bolder day-by-day */
 #p-trip .tc-band--trip.tp-hasimg{background-image:linear-gradient(180deg,rgba(4,22,38,.55) 0%,rgba(4,22,38,.72) 60%,rgba(4,22,38,.9) 100%),var(--tp-hero)!important;background-size:cover!important;background-position:center!important}
 #p-trip .tc-band--trip.tp-hasimg .tc-band-in{padding-top:clamp(70px,9vw,120px);padding-bottom:clamp(60px,8vw,110px)}
+@media(max-width:640px){#p-trip .tc-band--trip.tp-hasimg .tc-band-in{padding-top:34px;padding-bottom:30px}#p-trip .tc-band--trip .tc-h1{font-size:30px}}
 #p-trip .tp-pulse{display:grid;grid-template-columns:1fr auto;gap:12px;margin:0 0 18px}
 #p-trip .tp-pcard{background:#fff;border:1px solid var(--tc-line,#dfe6ec);padding:16px 18px;box-shadow:0 10px 26px -20px rgba(6,58,99,.4)}
 #p-trip .tp-ptop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
@@ -13736,7 +13737,7 @@ body.theme-night #p-flagship-programs{
 #p-trip .tp-days i{width:40px;height:40px;border-radius:50%;font-size:14px;box-shadow:0 0 0 5px #fff,0 6px 14px rgba(239,135,49,.35)}
 #p-trip .tp-days li>div{background:#f6f9fb;border:1px solid #e3eaf0;padding:12px 16px}
 #p-trip .tp-days strong{font-size:19px}
-@media(max-width:640px){#p-trip .tp-pulse{grid-template-columns:1fr}}
+@media(max-width:640px){#p-trip .tp-pulse{grid-template-columns:1fr auto;gap:8px}#p-trip .tp-pdays{min-width:84px;padding:10px 8px}#p-trip .tp-pdays b{font-size:24px}#p-trip .tp-pdays span{font-size:9.5px;letter-spacing:.1em}#p-trip .tp-pcard{padding:12px 14px}#p-trip .tp-ptop{flex-direction:column;gap:2px}}
 
 /* trip photo section */
 #p-trip .tp-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -47827,6 +47828,23 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-infoform input[type=text],#p-account .ac-infoform textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;font:500 14px/1.6 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
 #p-account .ac-infonote{margin:0;font-size:12.5px;color:var(--ac-mut)}
 #p-account .ac-spons{border-left:4px solid var(--ac-g);padding-left:10px}
+#p-account .ac-photobox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-g)}
+#p-account .ac-photobox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
+#p-account .ac-photobox>summary::-webkit-details-marker{display:none}
+#p-account .ac-photobox>summary small{margin-left:8px;font-size:12px;font-weight:500;color:var(--ac-mut)}
+#p-account .ac-photobox>summary::after{content:'+';font-size:22px;line-height:1;font-weight:500;color:var(--ac-o)}
+#p-account .ac-photobox[open]>summary::after{content:'\2212'}
+#p-account .ac-phbody{padding:2px 16px 16px}
+#p-account .ac-phban{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+#p-account .ac-phban b,#p-account .ac-phlab{display:block;font-size:13.5px;color:var(--ac-head)}
+#p-account .ac-phban small,#p-account .ac-phsub{display:block;font-size:12px;color:var(--ac-mut);margin-bottom:6px}
+#p-account .ac-phthumb{display:block;flex:none;width:72px;height:54px;background:var(--ac-soft) center/cover no-repeat;border:1px solid var(--ac-line)}
+#p-account .ac-phthumb--ban{width:150px;height:84px}
+#p-account .ac-phrow{display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--ac-line)}
+#p-account .ac-phrow input{min-width:0;padding:9px 11px;font:500 14px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0}
+#p-account .ac-phbody label.ac-sbtn{cursor:pointer}
+#p-account .ac-phsave{margin-top:12px}
+@media(max-width:560px){#p-account .ac-phban{flex-direction:column;align-items:flex-start}#p-account .ac-phrow{grid-template-columns:56px 1fr}#p-account .ac-phrow button{grid-column:1/-1;justify-self:start}}
 #p-account .ac-cobox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-o)}
 #p-account .ac-cobox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
 #p-account .ac-cobox>summary::-webkit-details-marker{display:none}
@@ -49078,6 +49096,42 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
     return '<details class="ac-cobox" data-co-box'+(c&&c.status!=='declined'&&c.status!=='rejected'?' open':'')+'><summary><span>Co-leader<small>'+(c&&c.status==='approved'?esc(c.name||c.email):c&&c.status==='invited'?'invitation sent':c&&c.status==='accepted'?'waiting for approval':'lead this trip with someone')+'</small></span></summary><div class="ac-cobody">'+body+'<p class="ac-onote ac-cosplit">Rewards are paid to you as the main leader. You share them with your co-leader as you agree.</p><span class="ac-invmsg" role="status"></span></div></details>';
   }
+  /* trip photos: the leader (or co-leader) sets the banner photo and the photo section */
+  function phThumb(u){return u?'background-image:url(&quot;'+esc(String(u).replace(/["\\()]/g,''))+'&quot;)':'';}
+  function phRow(g){return '<div class="ac-phrow" data-ph-url="'+esc(g.url)+'"><span class="ac-phthumb" style="'+phThumb(g.url)+'"></span><input type="text" maxlength="140" placeholder="What is in this photo? (optional)" aria-label="Photo description" value="'+esc(g.alt||'')+'" data-ph-alt><button type="button" class="ac-sbtn ac-sbtn--line" data-ph-del>Remove</button></div>';}
+  function photoBox(t){
+    if(t.status==='closed')return '';
+    var n=(t.gallery||[]).length;
+    return '<details class="ac-photobox" data-photo-box data-photo-id="'+esc(t.id)+'" data-ph-banner-url="'+esc(t.image||'')+'"><summary><span>Trip photos<small>'+(t.image||n?(t.image?'banner photo':'no banner photo')+' &middot; '+n+' photo'+(n===1?'':'s'):'add photos to your trip page')+'</small></span></summary><div class="ac-phbody">'+
+      '<div class="ac-phban"><span class="ac-phthumb ac-phthumb--ban" data-ph-banthumb style="'+phThumb(t.image)+'"></span><div><b>Banner photo</b><small>Shown across the top of your trip page.</small><div class="ac-kitbtns"><label class="ac-sbtn">'+(t.image?'Change photo':'Choose photo')+'<input type="file" accept="image/jpeg,image/png,image/webp" data-ph-banner hidden></label><button type="button" class="ac-sbtn ac-sbtn--line" data-ph-banclear'+(t.image?'':' hidden')+'>Remove</button></div></div></div>'+
+      '<b class="ac-phlab">Photo section</b><small class="ac-phsub">Up to twelve. Guests can tap a photo to see it large.</small><div class="ac-phlist" data-ph-list>'+(t.gallery||[]).map(phRow).join('')+'</div>'+
+      '<div class="ac-kitbtns"><label class="ac-sbtn ac-sbtn--line">+ Add photos<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-ph-add hidden></label></div>'+
+      '<div class="ac-kitbtns ac-phsave"><button type="button" class="ac-sbtn" data-ph-save>Save photos</button><span class="ac-invmsg" role="status"></span></div>'+
+      '<p class="ac-onote">Photos show on your trip page as soon as you save. Use photos you took or have permission to use. Sight Seers is told about changes and may remove a photo.</p></div></details>';
+  }
+  /* shrink a photo in the browser before it is uploaded (long side 1600px, JPEG) */
+  function phShrink(file){return new Promise(function(ok,no){
+    if(!/^image\/(jpeg|png|webp)$/.test(file.type)){no(new Error('Please choose a JPG, PNG or WebP photo.'));return;}
+    var rd=new FileReader();rd.onerror=function(){no(new Error('That photo could not be read.'));};
+    rd.onload=function(){var im=new Image();im.onerror=function(){no(new Error('That photo could not be opened.'));};im.onload=function(){
+      var max=1600,w=im.naturalWidth,h=im.naturalHeight,sc=Math.min(1,max/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*sc);c.height=Math.round(h*sc);
+      var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',0.85));};im.src=rd.result;};
+    rd.readAsDataURL(file);});}
+  function phUpload(id,file){return phShrink(file).then(function(data){return api('trips','POST',{action:'trip-photo-upload',id:id,data:data});}).then(function(r){return r.url;});}
+  document.addEventListener('change',function(e){
+    var inp=e.target;if(!inp||!inp.matches||!inp.matches('[data-ph-banner],[data-ph-add]'))return;
+    var box=inp.closest('[data-photo-box]'),id=box.getAttribute('data-photo-id'),msg=box.querySelector('.ac-phsave .ac-invmsg'),files=[].slice.call(inp.files||[]);if(!files.length)return;
+    var list=box.querySelector('[data-ph-list]');
+    if(inp.hasAttribute('data-ph-add')){var room=12-list.querySelectorAll('.ac-phrow').length;if(room<=0){msg.className='ac-invmsg err';msg.textContent='Up to twelve photos.';inp.value='';return;}files=files.slice(0,room);}
+    msg.className='ac-invmsg';msg.textContent='Uploading '+files.length+' photo'+(files.length===1?'':'s')+'...';
+    var chain=Promise.resolve(),done=0;
+    files.forEach(function(f){chain=chain.then(function(){return phUpload(id,f).then(function(url){done++;
+      if(inp.hasAttribute('data-ph-banner')){box.setAttribute('data-ph-banner-url',url);box.querySelector('[data-ph-banthumb]').style.backgroundImage='url("'+String(url).replace(/["\\()]/g,'')+'")';box.querySelector('[data-ph-banclear]').hidden=false;}
+      else list.insertAdjacentHTML('beforeend',phRow({url:url,alt:''}));});});});
+    chain.then(function(){msg.className='ac-invmsg ok';msg.textContent=done+' uploaded. Press Save photos to put '+(done===1?'it':'them')+' on your trip page.';})
+      .catch(function(err){msg.className='ac-invmsg err';msg.textContent=(done?done+' uploaded, then: ':'')+(err.message||'That photo could not be uploaded.');})
+      .then(function(){inp.value='';});
+  });
   function coInvites(list){
     if(!list||!list.length)return '';
     return list.map(function(v){return '<div class="ac-coinv"><b>'+esc(v.mainLeaderName||'A Travel Club leader')+' invited you to co-lead '+esc(v.title)+'</b><small>'+esc([v.dateText,v.destination].filter(Boolean).join(' · '))+'</small><p>As co-leader you can edit the trip details, post updates and add the group link, and you get the trip emails. Sight Seers approves co-leaders before they start. Rewards are paid to the main leader, who shares them with you.</p><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-co-accept="'+esc(v.tripId)+'">Accept</button><button type="button" class="ac-sbtn ac-sbtn--line" data-co-decline="'+esc(v.tripId)+'">Decline</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('');
@@ -49093,7 +49147,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
       (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> Mention them to your group.</p>':'')+
-      groupForm(t)+infoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
+      groupForm(t)+infoBox(t)+photoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
@@ -49385,6 +49439,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         api('trips','POST',{action:'application-delete-mine',ref:ad.getAttribute('data-app-del')}).then(function(){grp.at=0;fillGroups(true);}).catch(function(err){ad.disabled=false;adMsg.className='ac-invmsg err';adMsg.textContent=err.message||'We could not delete it. Please try again.';});
         return;
       }
+      var phD=e.target.closest('[data-ph-del]');if(phD){phD.closest('.ac-phrow').remove();return;}
+      var phC=e.target.closest('[data-ph-banclear]');if(phC){var pb=phC.closest('[data-photo-box]');pb.setAttribute('data-ph-banner-url','');pb.querySelector('[data-ph-banthumb]').style.backgroundImage='';phC.hidden=true;return;}
+      var phS=e.target.closest('[data-ph-save]');
+      if(phS){var sb=phS.closest('[data-photo-box]'),sm=sb.querySelector('.ac-phsave .ac-invmsg');
+        var gal=[].map.call(sb.querySelectorAll('.ac-phrow'),function(r){return {url:r.getAttribute('data-ph-url'),alt:r.querySelector('[data-ph-alt]').value.trim()};});
+        phS.disabled=true;sm.className='ac-invmsg';sm.textContent='Saving...';
+        api('trips','POST',{action:'trip-photos-save',id:sb.getAttribute('data-photo-id'),image:sb.getAttribute('data-ph-banner-url')||'',gallery:gal}).then(function(){phS.disabled=false;sm.className='ac-invmsg ok';sm.textContent='Saved. Your trip page shows the new photos.';}).catch(function(err){phS.disabled=false;sm.className='ac-invmsg err';sm.textContent=err.message||'We could not save the photos. Please try again.';});
+        return;}
       var coS=e.target.closest('[data-co-send]');
       if(coS){
         var coBx=coS.closest('.ac-cobody'),coM=coBx.querySelector('.ac-invmsg'),coE=coBx.querySelector('[data-co-email]').value.trim(),coN=coBx.querySelector('[data-co-name]').value.trim();
