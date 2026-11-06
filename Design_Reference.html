@@ -14608,7 +14608,8 @@ body.theme-night #p-flagship-programs{
       </section>
 
       <section class="lja-step" data-step="4">
-        <p class="lja-legend">Application fee</p>
+        <p class="lja-legend">Your application has been received</p>
+        <p class="lja-fund-note" style="font-size:13.5px;line-height:1.6;color:#5b6b80;margin:0 0 14px">One last step: the application fee. Pay it now, or apply for a fee waiver.</p>
         <div class="lja-fee" id="ljaFeeDue">
           <b>US$35</b>
           <span>Application fee, paid by each applicant. The US$35 application fee is non-refundable.</span>
@@ -14666,7 +14667,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', feeChosen = false;
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', feeChosen = false, appId = '', appEmail = '';
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -14708,6 +14709,12 @@ body.theme-night #p-flagship-programs{
     el('ljaPayBlock').hidden = (w !== '');
     el('ljaWaiverBlock').hidden = (w !== 'request');
     el('ljaFeeWaived').hidden = (w !== 'code');
+    if (step === STEPS && !busy) el('ljaNextTxt').textContent = nextLabel();
+  }
+
+  function nextLabel(){
+    if (step === STEPS){ var w = feeWaived(); return w === 'request' ? 'Send waiver request' : 'Finish'; }
+    return step === STEPS - 1 ? 'Submit application' : 'Continue';
   }
 
   function paint(){
@@ -14724,8 +14731,8 @@ body.theme-night #p-flagship-programs{
       if (sch && sch.value === 'Scholarship' && !feeChosen){ form().querySelector('[name="feeChoice"][value="waiver"]').checked = true; }
       paintFee();
     }
-    el('ljaBack').hidden = (step === 1);
-    el('ljaNextTxt').textContent = (step === STEPS) ? 'Submit application' : 'Continue';
+    el('ljaBack').hidden = (step === 1 || step === STEPS);
+    el('ljaNextTxt').textContent = nextLabel();
     el('ljaFootNote').textContent = 'Step ' + step + ' of ' + STEPS;
     form().scrollTop = 0;
   }
@@ -14811,7 +14818,7 @@ body.theme-night #p-flagship-programs{
       '',
       'FUNDING',
       'Funding route: ' + d.funding,
-      'Application fee: ' + (feeWaived() === 'code' ? 'Waived (fee waiver code accepted: ' + codeOk + ')' : feeWaived() === 'request' ? 'FEE WAIVER REQUESTED. Decide it in the admin under Leaders applications.' + (d.waiverReason ? ' Note: ' + d.waiverReason : '') : 'US$35, payment link opened: ' + (feeOpened ? 'Yes' : 'No')),
+      'Application fee: to be chosen after submitting',
       '',
       'THE SINGLE MOST IMPORTANT THING THEY INTEND TO FIX OR BUILD IN THEIR STUDENT GOVERNMENT',
       d.goal,
@@ -14824,7 +14831,7 @@ body.theme-night #p-flagship-programs{
   function busyState(on){
     busy = on;
     el('ljaNext').classList.toggle('is-busy', on);
-    el('ljaNextTxt').textContent = on ? 'Sending…' : (step === STEPS ? 'Submit application' : 'Continue');
+    el('ljaNextTxt').textContent = on ? 'Sending…' : nextLabel();
   }
 
   function alertBox(html){
@@ -14834,64 +14841,79 @@ body.theme-night #p-flagship-programs{
     if (html) form().scrollTop = 0;
   }
 
+  function post(body){
+    return fetch('/api/leaders-waiver', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); });
+  }
+
+  /* step 3 button: the application is sent and kept straight away, whatever the applicant does about the fee next */
   function submit(){
     if (busy) return;
-    if (!validate(STEPS)) return;
+    if (!validate(STEPS - 1)) return;
     var d = values();
-    var body = summary(d);
     alertBox('');
     busyState(true);
-    var applying = fetch('/api/leaders-waiver', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-        action: 'apply', fullName: d.fullName, email: d.email, phone: d.phone, university: d.university, studentGov: d.studentGov, applyingAs: d.applyingAs,
-        position: d.position, funding: d.funding, goal: d.goal, waiverRequested: feeWaived() === 'request', waiverReason: d.waiverReason || '',
-        code: feeWaived() === 'code' ? codeOk : '' }) })
-      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){
-        if (r.ok) return;
-        if (r.status === 409){ var er = new Error(j.error || 'That code could not be used.'); er.code = true; throw er; }
-        if (feeWaived() === 'code'){ throw new Error('apply failed'); } /* a code is never used without a record */
-      }); }, function(){ if (feeWaived() === 'code') throw new Error('apply failed'); });
-    applying.then(function(){ return fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'send',
-        name: d.fullName,
-        email: d.email,
-        phone: d.phone,
-        subject: 'Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')',
-        message: body
-      })
-    }); }).then(function(r){
-      if (!r.ok) throw new Error('status ' + r.status);
-      return r.json().catch(function(){ return {}; });
-    }).then(function(){
-      busyState(false);
-      var done = el('ljaDone');
-      done.classList.add('is-on');
-      done.setAttribute('aria-hidden', 'false');
-      var btn = done.querySelector('.lja-btn');
-      if (btn) btn.focus();
-    })['catch'](function(err){
-      busyState(false);
-      if (err && err.code){
-        codeOk = '';
-        el('ljaCodeMsg').className = 'lja-codemsg no';
-        el('ljaCodeMsg').textContent = err.message;
-        paintFee();
-        alertBox(err.message + ' Your application fee is now due, or you can tick the fee waiver request on the previous step.');
-        return;
-      }
-      var href = 'mailto:' + APPLY_EMAIL
-        + '?subject=' + encodeURIComponent('Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')')
-        + '&body=' + encodeURIComponent(body);
-      alertBox('We could not send the application just now. <a href="' + href + '">Send it by email instead</a> and everything you typed will be carried across, or message the director on WhatsApp.');
-    });
+    post({ action: 'apply', fullName: d.fullName, email: d.email, phone: d.phone, university: d.university, studentGov: d.studentGov,
+           applyingAs: d.applyingAs, position: d.position, funding: d.funding, goal: d.goal })
+      .then(function(x){
+        if (!x.ok || !x.j.id) throw new Error('status ' + x.status);
+        appId = x.j.id; appEmail = d.email;
+        busyState(false);
+        step = STEPS;
+        var sch = form().querySelector('[name="funding"]:checked');
+        if (sch && sch.value === 'Scholarship' && !feeChosen){ form().querySelector('[name="feeChoice"][value="waiver"]').checked = true; }
+        paint();
+      })['catch'](function(){
+        busyState(false);
+        var body = summary(d);
+        var href = 'mailto:' + APPLY_EMAIL
+          + '?subject=' + encodeURIComponent('Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')')
+          + '&body=' + encodeURIComponent(body);
+        alertBox('We could not send the application just now. <a href="' + href + '">Send it by email instead</a> and everything you typed will be carried across, or message the director on WhatsApp.');
+      });
+  }
+
+  /* step 4 button: the applicant's choice about the fee, then the confirmation */
+  function showDone(extra){
+    busyState(false);
+    el('ljaDoneMsg').textContent = 'Thank you for your application. The programme director reviews every submission personally and typically responds within two working days.' + (extra ? ' ' + extra : '');
+    var done = el('ljaDone');
+    done.classList.add('is-on');
+    done.setAttribute('aria-hidden', 'false');
+    var btn = done.querySelector('.lja-btn');
+    if (btn) btn.focus();
+  }
+  function finishFee(){
+    if (busy) return;
+    var w = feeWaived();
+    if (w === ''){ showDone(''); return; }               /* paying: the payment link opened in its own tab */
+    alertBox('');
+    busyState(true);
+    var why = (el('ljaWhy').value || '').trim();
+    post(w === 'code'
+      ? { action: 'fee-choice', id: appId, email: appEmail, choice: 'code', code: codeOk }
+      : { action: 'fee-choice', id: appId, email: appEmail, choice: 'waiver', reason: why })
+      .then(function(x){
+        if (x.ok){ showDone(w === 'code' ? 'Your fee waiver code was accepted.' : 'Your fee waiver request has been sent with it.'); return; }
+        busyState(false);
+        if (x.status === 409){
+          codeOk = ''; el('ljaCodeMsg').className = 'lja-codemsg no'; el('ljaCodeMsg').textContent = x.j.error || 'That code could not be used.';
+          paintFee();
+          alertBox((x.j.error || 'That code could not be used.') + ' Your application has been received. You can pay the fee, or apply for a fee waiver instead.');
+          return;
+        }
+        alertBox('We could not send that just now, but your application has been received. Please try again, or email us at <a href="mailto:' + APPLY_EMAIL + '">' + APPLY_EMAIL + '</a>.');
+      })['catch'](function(){
+        busyState(false);
+        alertBox('We could not send that just now, but your application has been received. Please try again, or email us at <a href="mailto:' + APPLY_EMAIL + '">' + APPLY_EMAIL + '</a>.');
+      });
   }
 
   window.openLeadersApply = function(){
     var m = modal();
     if (!m) return;
     lastFocus = document.activeElement;
+    if (appId){ form().reset(); appId = ''; appEmail = ''; codeOk = ''; feeChosen = false; el('ljaCodeMsg').textContent = ''; el('ljaCodeMsg').className = 'lja-codemsg'; el('ljaCount').textContent = '0 / 700'; }
     step = 1;
     alertBox('');
     var done = el('ljaDone');
@@ -14925,8 +14947,9 @@ body.theme-night #p-flagship-programs{
 
     el('ljaNext').addEventListener('click', function(){
       if (busy) return;
-      if (!validate(step)) return;
-      if (step === STEPS){ submit(); return; }
+      if (step < STEPS && !validate(step)) return;
+      if (step === STEPS){ finishFee(); return; }
+      if (step === STEPS - 1){ submit(); return; }
       step++;
       paint();
     });

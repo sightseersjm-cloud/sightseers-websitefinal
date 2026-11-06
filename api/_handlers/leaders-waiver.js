@@ -4,8 +4,9 @@
  * Applicants (no sign-in):
  *   POST { action:'check',  code, email }        -> { ok:true, valid:true|false }   does not use the code up
  *   POST { action:'redeem', code, email, name }  -> { ok:true }                      uses it up, once, as the application is sent
- *   POST { action:'apply', ...application, code?, waiverRequested?, waiverReason? }
- *                                                -> { ok:true, id, fee }             stores the application for the admin; uses the code up
+ *   POST { action:'apply', ...application }      -> { ok:true, id }                  keeps the application for the admin and emails the team, whatever happens next
+ *   POST { action:'fee-choice', id, email, choice:'pay'|'waiver'|'code', reason?, code? }
+ *                                                -> { ok:true, fee }                 the applicant's choice about the US$35 fee, once the application is in
  * Admin (needs the "inbox" permission):
  *   GET                                          -> { ok:true, codes:[...], applications:[...] }
  *   POST { action:'generate', name, email, note }-> { ok:true, code:{...} }
@@ -62,6 +63,8 @@ function shapeApp(a) {
   return { id: a.id, name: a.name, email: a.email, phone: a.phone || '', university: a.university || '', studentGov: a.studentGov || '', applyingAs: a.applyingAs || '', position: a.position || '',
     funding: a.funding || '', goal: a.goal || '', fee: a.fee, waiverReason: a.waiverReason || '', code: a.code || '', createdAt: a.createdAt, decidedAt: a.decidedAt || '', decidedBy: a.decidedBy || '' };
 }
+
+async function safe(p) { try { await p; } catch (e) { console.error('leaders email', e && e.message); } }
 
 function payButton() {
   return '<p style="margin:18px 0"><a href="' + FEE_LINK + '" style="display:inline-block;background:#063a63;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:0">Pay the US$35 application fee</a></p>';
@@ -134,22 +137,49 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'apply') {
+      /* the application is kept and sent to the team first, whatever the applicant does about the fee afterwards */
       if (await tooMany(req, 'apply-', 20)) return res.status(429).json({ error: 'Too many tries. Please wait an hour or contact us.' });
       const name = text(body.fullName, 120), email = mail(body.email);
       if (!name || !EMAIL.test(email)) return res.status(400).json({ error: 'Please check your name and email address.' });
-      const code = text(body.code, 40);
-      let fee, used = null;
-      if (code) {
-        const r = await find(code, email);
-        if (!r.c) return res.status(409).json({ error: r.why === 'used' ? 'That code has already been used.' : 'That code could not be used with this email address.' });
-        used = r.c; fee = 'waived-code';
-      } else if (body.waiverRequested === true) fee = 'waiver-requested';
-      else fee = 'fee-due';
       const item = { id: uid(), name, email, phone: text(body.phone, 60), university: text(body.university, 160), studentGov: text(body.studentGov, 160), applyingAs: text(body.applyingAs, 20),
-        position: text(body.position, 120), funding: text(body.funding, 80), goal: text(body.goal, 700), fee, waiverReason: text(body.waiverReason, 400), code: used ? used.code : '', createdAt: new Date().toISOString() };
+        position: text(body.position, 120), funding: text(body.funding, 80), goal: text(body.goal, 700), fee: 'fee-due', waiverReason: '', code: '', createdAt: new Date().toISOString() };
       await db.addToCollection(APPS, item);
-      if (used) await db.updateInCollection(COLLECTION, used.id, { usedAt: item.createdAt, usedByName: name, applicationId: item.id });
-      return res.status(200).json({ ok: true, id: item.id, fee });
+      const rows = [['Name', item.name], ['Email', item.email], ['Phone', item.phone], ['University and country', item.university], ['Student government', item.studentGov],
+        ['Applying as', item.applyingAs], [item.applyingAs === 'Advisor' ? 'Job title' : 'Executive position held', item.position], ['Funding route', item.funding],
+        ['Application fee', 'Pending. The applicant is choosing to pay the US$35 or to apply for a fee waiver. You will get a second email if they request a waiver or use a code.'],
+        ['The single most important thing they intend to fix or build', item.goal]];
+      await safe(sendEmail({ replyTo: item.email, subject: 'New Leaders in Jamaica application: ' + item.name + ', ' + item.university + ' (' + item.applyingAs + ')',
+        html: '<h2 style="color:#0d5371">New Leaders in Jamaica application</h2>' + trip.detailTable(rows.map(r => [r[0], r[1] || "Not given"])) }));
+      return res.status(200).json({ ok: true, id: item.id });
+    }
+
+    if (action === 'fee-choice') {
+      if (await tooMany(req, 'apply-', 20)) return res.status(429).json({ error: 'Too many tries. Please wait an hour or contact us.' });
+      const email = mail(body.email);
+      const a = (await db.getCollection(APPS)).find(x => x.id === body.id);
+      if (!a || mail(a.email) !== email) return res.status(404).json({ error: 'We could not find that application.' });
+      const choice = String(body.choice || '');
+      if (a.fee !== 'fee-due') return res.status(200).json({ ok: true, fee: a.fee }); // already decided, nothing to change
+      if (choice === 'pay') return res.status(200).json({ ok: true, fee: a.fee });
+      if (choice === 'waiver') {
+        const reason = text(body.reason, 400);
+        await db.updateInCollection(APPS, a.id, { fee: 'waiver-requested', waiverReason: reason });
+        await safe(sendEmail({ replyTo: a.email, subject: 'Fee waiver requested: ' + a.name + ' (Leaders in Jamaica)',
+          html: '<h2 style="color:#0d5371">Fee waiver requested</h2><p style="font-family:sans-serif">' + trip.esc(a.name) + ' (' + trip.esc(a.email) + ') applied to Leaders in Jamaica and asked for the US$35 application fee to be waived. They have not been asked to pay.</p>'
+            + (reason ? '<p style="font-family:sans-serif"><b>Their note:</b> ' + trip.esc(reason) + '</p>' : '') + '<p style="font-family:sans-serif">Approve it, or decline it and send the payment link, in the admin under Leaders applications.</p>' }));
+        return res.status(200).json({ ok: true, fee: 'waiver-requested' });
+      }
+      if (choice === 'code') {
+        const r = await find(body.code, email);
+        if (!r.c) return res.status(409).json({ error: r.why === 'used' ? 'That code has already been used.' : r.why === 'email' ? 'That code was made for a different email address.' : 'That code is not valid.' });
+        const now = new Date().toISOString();
+        await db.updateInCollection(COLLECTION, r.c.id, { usedAt: now, usedByName: a.name, applicationId: a.id });
+        await db.updateInCollection(APPS, a.id, { fee: 'waived-code', code: r.c.code });
+        await safe(sendEmail({ replyTo: a.email, subject: 'Fee waived with a code: ' + a.name + ' (Leaders in Jamaica)',
+          html: '<h2 style="color:#0d5371">Fee waived with a code</h2><p style="font-family:sans-serif">' + trip.esc(a.name) + ' (' + trip.esc(a.email) + ') used the fee waiver code ' + trip.esc(r.c.code) + '. Nothing is due.</p>' }));
+        return res.status(200).json({ ok: true, fee: 'waived-code' });
+      }
+      return res.status(400).json({ error: 'Unknown choice' });
     }
 
     if (action === 'generate' || action === 'revoke') {
