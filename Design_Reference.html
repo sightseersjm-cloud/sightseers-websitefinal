@@ -14600,25 +14600,6 @@ body.theme-night #p-flagship-programs{
           <span class="lja-count" id="ljaCount">0 / 700</span>
           <span class="lja-err"></span>
         </label>
-        <label class="lja-check" id="ljaWaiverWrap">
-          <input type="checkbox" name="feeWaiver">
-          <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
-          <span class="txt"><b>Application fee waiver.</b> I am requesting a waiver of the US$35 application fee. You will not be asked to pay now, and we will reply by email.</span>
-        </label>
-        <label class="lja-field" id="ljaWhyWrap" hidden>
-          <span class="lja-label">Anything we should know about your waiver request <i>(optional)</i></span>
-          <input class="lja-input" type="text" name="waiverReason" id="ljaWhy" maxlength="400" placeholder="A short note">
-          <span class="lja-err"></span>
-        </label>
-        <div class="lja-field lja-codefield">
-          <span class="lja-label">Fee waiver code <i>(optional)</i></span>
-          <div class="lja-coderow">
-            <input class="lja-input" type="text" name="feeCode" id="ljaCode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="Enter your code">
-            <button type="button" class="lja-btn ghost" id="ljaCodeBtn">Apply code</button>
-          </div>
-          <span class="lja-codehint">The code is made for the email address on your application and works one time.</span>
-          <span class="lja-codemsg" id="ljaCodeMsg" role="status" aria-live="polite"></span>
-        </div>
         <label class="lja-check" id="ljaConsentWrap">
           <input type="checkbox" name="consent" data-label="Consent">
           <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
@@ -14632,11 +14613,36 @@ body.theme-night #p-flagship-programs{
           <b>US$35</b>
           <span>Application fee, paid by each applicant. The US$35 application fee is non-refundable.</span>
         </div>
+        <div id="ljaFeeChoice">
+          <div class="lja-chips" role="radiogroup" aria-label="Application fee">
+            <label class="lja-chip"><input type="radio" name="feeChoice" value="pay" checked><span>Pay the application fee<small>Pay now, when you finish</small></span></label>
+            <label class="lja-chip"><input type="radio" name="feeChoice" value="waiver"><span>Apply for a fee waiver<small>You are not asked to pay now</small></span></label>
+          </div>
+          <div id="ljaPayBlock">
+            <a class="lja-btn primary lja-pay" id="ljaPay" href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener">Pay the US$35 application fee</a>
+          </div>
+          <div id="ljaWaiverBlock" hidden>
+            <p class="lja-fund-note" style="font-size:13px;line-height:1.6;color:#5b6b80;margin:0 0 10px">Your fee waiver request is sent with your application. You are not asked to pay now, and we will reply by email.</p>
+            <label class="lja-field">
+              <span class="lja-label">Anything we should know about your waiver request <i>(optional)</i></span>
+              <input class="lja-input" type="text" name="waiverReason" id="ljaWhy" maxlength="400" placeholder="A short note">
+              <span class="lja-err"></span>
+            </label>
+          </div>
+        </div>
+        <div class="lja-field lja-codefield">
+          <span class="lja-label">Have a fee waiver code? <i>(optional)</i></span>
+          <div class="lja-coderow">
+            <input class="lja-input" type="text" name="feeCode" id="ljaCode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="Enter your code">
+            <button type="button" class="lja-btn ghost" id="ljaCodeBtn">Apply code</button>
+          </div>
+          <span class="lja-codehint">The code is made for the email address on your application and works one time.</span>
+          <span class="lja-codemsg" id="ljaCodeMsg" role="status" aria-live="polite"></span>
+        </div>
         <div class="lja-fee lja-fee-waived" id="ljaFeeWaived" hidden>
           <b>US$0</b>
-          <span id="ljaFeeWaivedTxt">Your application fee is waived. Nothing is due when you submit.</span>
+          <span id="ljaFeeWaivedTxt">Your fee waiver code was accepted, so your application fee is waived. Nothing is due when you submit.</span>
         </div>
-        <a class="lja-btn primary lja-pay" id="ljaPay" href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener">Pay the US$35 application fee</a>
       </section>
     </form>
 
@@ -14660,7 +14666,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '';
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', feeChosen = false;
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -14679,7 +14685,7 @@ body.theme-night #p-flagship-programs{
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, j: j }; }); })
       .then(function(x){
         btn.disabled = false;
-        if (x.ok && x.j.valid){ codeOk = v.toUpperCase(); msg.className = 'lja-codemsg ok'; msg.textContent = 'Code accepted. Your application fee is waived.'; }
+        if (x.ok && x.j.valid){ codeOk = v.toUpperCase(); msg.className = 'lja-codemsg ok'; msg.textContent = 'Code accepted. Your application fee is waived.'; paintFee(); }
         else {
           msg.className = 'lja-codemsg no';
           var why = x.j && x.j.reason;
@@ -14690,21 +14696,18 @@ body.theme-night #p-flagship-programs{
 
   function feeWaived(){
     var f = form();
-    var sch = f.querySelector('[name="funding"]:checked');
-    var req = f.querySelector('[name="feeWaiver"]');
     var cv = (f.querySelector('[name="feeCode"]').value || '').trim();
     if (codeOk && cv && cv.toUpperCase() === codeOk) return 'code';
-    if ((sch && sch.value === 'Scholarship') || (req && req.checked)) return 'request';
-    return '';
+    var ch = f.querySelector('[name="feeChoice"]:checked');
+    return (ch && ch.value === 'waiver') ? 'request' : '';
   }
   function paintFee(){
     var w = feeWaived();
-    el('ljaFeeDue').hidden = !!w;
-    el('ljaPay').hidden = !!w;
-    el('ljaFeeWaived').hidden = !w;
-    el('ljaFeeWaivedTxt').textContent = w === 'code'
-      ? 'Your fee waiver code was accepted, so your application fee is waived. Nothing is due when you submit.'
-      : 'Your application fee waiver request is included with your application. You are not asked to pay now, and we will reply by email.';
+    el('ljaFeeDue').hidden = (w === 'code');
+    el('ljaFeeChoice').hidden = (w === 'code');
+    el('ljaPayBlock').hidden = (w !== '');
+    el('ljaWaiverBlock').hidden = (w !== 'request');
+    el('ljaFeeWaived').hidden = (w !== 'code');
   }
 
   function paint(){
@@ -14716,7 +14719,11 @@ body.theme-night #p-flagship-programs{
     for (var j = 0; j < list.length; j++){
       list[j].classList.toggle('is-on', Number(list[j].dataset.step) === step);
     }
-    if (step === STEPS) paintFee();
+    if (step === STEPS){
+      var sch = form().querySelector('[name="funding"]:checked');
+      if (sch && sch.value === 'Scholarship' && !feeChosen){ form().querySelector('[name="feeChoice"][value="waiver"]').checked = true; }
+      paintFee();
+    }
     el('ljaBack').hidden = (step === 1);
     el('ljaNextTxt').textContent = (step === STEPS) ? 'Submit application' : 'Continue';
     el('ljaFootNote').textContent = 'Step ' + step + ' of ' + STEPS;
@@ -14932,10 +14939,9 @@ body.theme-night #p-flagship-programs{
 
     form().addEventListener('submit', function(e){ e.preventDefault(); });
     el('ljaPay').addEventListener('click', function(){ feeOpened = true; });
-    function whyShow(){ el('ljaWhyWrap').hidden = feeWaived() !== 'request'; }
-    form().addEventListener('change', function(e){ if (e.target.name === 'feeWaiver' || e.target.name === 'funding') whyShow(); });
+    form().addEventListener('change', function(e){ if (e.target.name === 'feeChoice'){ feeChosen = true; paintFee(); } });
     el('ljaCodeBtn').addEventListener('click', checkCode);
-    el('ljaCode').addEventListener('input', function(){ codeOk = ''; el('ljaCodeMsg').textContent = ''; el('ljaCodeMsg').className = 'lja-codemsg'; });
+    el('ljaCode').addEventListener('input', function(){ codeOk = ''; el('ljaCodeMsg').textContent = ''; el('ljaCodeMsg').className = 'lja-codemsg'; paintFee(); });
     el('ljaCode').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); e.stopPropagation(); checkCode(); } });
 
     form().addEventListener('keydown', function(e){

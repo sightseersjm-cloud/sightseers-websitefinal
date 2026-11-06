@@ -143,7 +143,7 @@ module.exports = async function handler(req, res) {
         const r = await find(code, email);
         if (!r.c) return res.status(409).json({ error: r.why === 'used' ? 'That code has already been used.' : 'That code could not be used with this email address.' });
         used = r.c; fee = 'waived-code';
-      } else if (body.waiverRequested === true || text(body.funding, 80) === 'Scholarship') fee = 'waiver-requested';
+      } else if (body.waiverRequested === true) fee = 'waiver-requested';
       else fee = 'fee-due';
       const item = { id: uid(), name, email, phone: text(body.phone, 60), university: text(body.university, 160), studentGov: text(body.studentGov, 160), applyingAs: text(body.applyingAs, 20),
         position: text(body.position, 120), funding: text(body.funding, 80), goal: text(body.goal, 700), fee, waiverReason: text(body.waiverReason, 400), code: used ? used.code : '', createdAt: new Date().toISOString() };
