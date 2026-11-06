@@ -15,6 +15,7 @@
     "test:backup": "node scripts/backup.test.js",
     "test:passport": "node scripts/passport.test.js",
     "test:routes": "node scripts/routes.test.js",
+    "test:leaders": "node scripts/leaders.test.js",
     "test:images": "node scripts/images.test.js",
     "test:packages": "node scripts/packages.test.js",
     "test:waiver": "node scripts/waiver.test.js",

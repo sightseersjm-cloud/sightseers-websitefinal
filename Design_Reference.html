@@ -11268,7 +11268,7 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
   #p-leaders-jamaica .lj-qa .a{flex:1;color:var(--lj-mut);font-size:15px;line-height:1.65}
 
   /* Days */
-  #p-leaders-jamaica .lj-days{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  #p-leaders-jamaica .lj-days{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   #p-leaders-jamaica .lj-day .d-date{font-size:12px;color:var(--lj-orange);font-weight:700;letter-spacing:.4px;margin-bottom:8px}
   #p-leaders-jamaica .lj-day h4{margin-bottom:10px}
 
@@ -11301,199 +11301,269 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
   #p-leaders-jamaica .lj-band p{color:rgba(255,255,255,.85);max-width:600px;margin:0 auto 30px;font-size:16px;line-height:1.7}
   #p-leaders-jamaica .lj-band .lj-cta{justify-content:center}
 
-  @media(max-width:920px){#p-leaders-jamaica .lj-grid4,#p-leaders-jamaica .lj-days{grid-template-columns:1fr 1fr}#p-leaders-jamaica .lj-grid3{grid-template-columns:1fr}#p-leaders-jamaica .lj-qa{flex-direction:column;gap:6px}#p-leaders-jamaica .lj-qa .q{flex:none}}
-  @media(max-width:560px){#p-leaders-jamaica .lj-grid2,#p-leaders-jamaica .lj-grid4,#p-leaders-jamaica .lj-days{grid-template-columns:1fr}#p-leaders-jamaica .lj-hero{padding:44px 0 52px}}
+  @media(max-width:920px){#p-leaders-jamaica .lj-grid4{grid-template-columns:1fr 1fr}#p-leaders-jamaica .lj-grid3{grid-template-columns:1fr}#p-leaders-jamaica .lj-qa{flex-direction:column;gap:6px}#p-leaders-jamaica .lj-qa .q{flex:none}}
+  @media(max-width:560px){#p-leaders-jamaica .lj-grid2,#p-leaders-jamaica .lj-grid4{grid-template-columns:1fr}#p-leaders-jamaica .lj-hero{padding:44px 0 52px}}
+
+  /* Leaders in Jamaica: 2027 programme redesign additions */
+  #p-leaders-jamaica .lj-value{margin:18px auto 0;max-width:30ch;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(22px,3.2vw,30px);line-height:1.25;color:#fff}
+  #p-leaders-jamaica .lj-hero .lj-lede{margin-top:14px}
+  #p-leaders-jamaica .lj-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px;text-align:center}
+  #p-leaders-jamaica .lj-stats .lj-stat{flex:0 1 calc(25% - 11px);min-width:0}
+  #p-leaders-jamaica .lj-stat{background:#fff;border:1px solid var(--lj-line);border-radius:18px;padding:22px 16px;box-shadow:var(--lj-shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+  #p-leaders-jamaica .lj-stat b{font-family:'Playfair Display',serif;font-size:36px;line-height:1;color:var(--lj-navy)}
+  #p-leaders-jamaica .lj-stat span{font-size:13.5px;line-height:1.45;color:var(--lj-mut);font-weight:600}
+  #p-leaders-jamaica .lj-stat-text span{font-family:'Playfair Display',serif;font-size:17px;line-height:1.35;color:var(--lj-navy);font-weight:700}
+  #p-leaders-jamaica .lj-listcard{padding:10px 26px}
+  #p-leaders-jamaica .lj-listcard h4{margin:14px 0 4px}
+  #p-leaders-jamaica .lj-wide p{font-size:16px;line-height:1.75;color:var(--lj-ink)}
+  #p-leaders-jamaica .lj-days{grid-template-columns:repeat(3,1fr)}
+  #p-leaders-jamaica .lj-mod{display:flex;flex-direction:column;gap:10px}
+  #p-leaders-jamaica .lj-mod h4{margin:0}
+  #p-leaders-jamaica .lj-del{font-size:13.5px;line-height:1.55;color:var(--lj-mut)}
+  #p-leaders-jamaica .lj-del i{display:block;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--lj-green);margin-bottom:3px}
+  #p-leaders-jamaica .lj-cap{display:block}
+  #p-leaders-jamaica .lj-cap::first-letter{text-transform:uppercase}
+  #p-leaders-jamaica .lj-takes{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  #p-leaders-jamaica .lj-take{padding:20px 16px}
+  #p-leaders-jamaica .lj-take p{margin-top:10px;font-weight:700;color:var(--lj-navy);font-size:14px}
+  #p-leaders-jamaica .lj-terms .lj-card{padding-bottom:14px}
+  #p-leaders-jamaica .lj-table .price{white-space:nowrap}
+  #p-leaders-jamaica .lj-price-card + .lj-card{margin-top:22px}
+  #p-leaders-jamaica .lj-paycard{padding:26px 24px;text-align:center}
+  #p-leaders-jamaica .lj-paycard h3{font-family:'Playfair Display',serif;color:var(--lj-navy);font-size:clamp(20px,2.6vw,26px);margin:2px 0 6px}
+  #p-leaders-jamaica .lj-paycard .lj-sub{margin-left:auto;margin-right:auto}
+
+  /* Sponsor letter */
+  #p-leaders-jamaica .lj-letter-wrap{max-width:760px;margin:0 auto;text-align:left}
+  #p-leaders-jamaica .lj-letter{position:relative;background:#fff;border-radius:16px;border-top:3px solid var(--lj-green);box-shadow:0 2px 6px rgba(6,58,99,.06),0 22px 50px rgba(6,58,99,.14);
+    padding:34px 40px 22px;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease;transform-origin:center top;outline:none}
+  #p-leaders-jamaica .lj-letter:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.45),0 22px 50px rgba(6,58,99,.14)}
+  #p-leaders-jamaica .lj-letter.is-open{box-shadow:0 4px 10px rgba(6,58,99,.08),0 38px 80px rgba(6,58,99,.24)}
+  @media(min-width:701px){#p-leaders-jamaica .lj-letter.is-open{transform:scale(1.015)}}
+  #p-leaders-jamaica .lj-letter-body{max-height:300px;overflow:hidden;transition:max-height .3s ease;font-size:14.5px;line-height:1.7;color:var(--lj-ink)}
+  #p-leaders-jamaica .lj-letter-body p{margin:0 0 14px}
+  #p-leaders-jamaica .lj-letter-body ul{margin:0 0 14px;padding-left:22px}
+  #p-leaders-jamaica .lj-letter-body li{margin:0 0 4px}
+  #p-leaders-jamaica .lj-letter-fade{position:absolute;left:0;right:0;bottom:0;height:150px;border-radius:0 0 16px 16px;pointer-events:none;transition:opacity .3s ease;
+    background:linear-gradient(180deg,rgba(255,255,255,0),#fff 78%)}
+  #p-leaders-jamaica .lj-letter.is-open .lj-letter-fade{opacity:0}
+  #p-leaders-jamaica .lj-letter-prompt{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--lj-navy)}
+  #p-leaders-jamaica .lj-letter-prompt .less,#p-leaders-jamaica .lj-letter.is-open .lj-letter-prompt .more{display:none}
+  @media(hover:none){#p-leaders-jamaica .lj-letter.is-open .lj-letter-prompt{position:static;margin-top:6px;display:block}#p-leaders-jamaica .lj-letter.is-open .lj-letter-prompt .less{display:inline}}
+  @media(hover:hover){#p-leaders-jamaica .lj-letter.is-open .lj-letter-prompt{display:none}}
+  #p-leaders-jamaica .lj-letter-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+  #p-leaders-jamaica .lj-btn.ghost-dark{background:#fff;border:2px solid var(--lj-navy);color:var(--lj-navy);padding:13px 28px}
+  #p-leaders-jamaica .lj-btn.ghost-dark:hover{background:var(--lj-navy);color:#fff;transform:translateY(-2px)}
+  #p-leaders-jamaica .lj-btn.ghost-dark.is-done{background:var(--lj-green);border-color:var(--lj-green);color:#fff}
+
+  /* FAQ accordion */
+  #p-leaders-jamaica .lj-faq-card{background:#fff;border:1px solid var(--lj-line);border-radius:24px;padding:6px 30px;box-shadow:var(--lj-shadow)}
+  #p-leaders-jamaica .lj-faq{border-bottom:1px solid var(--lj-line)}
+  #p-leaders-jamaica .lj-faq:last-child{border-bottom:0}
+  #p-leaders-jamaica .lj-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:19px 0;font-weight:800;color:var(--lj-navy);font-size:15.5px}
+  #p-leaders-jamaica .lj-faq summary::-webkit-details-marker{display:none}
+  #p-leaders-jamaica .lj-faq summary::after{content:'+';flex:none;width:28px;height:28px;border-radius:50%;background:rgba(112,194,87,.16);color:#3f8c2f;font-size:20px;line-height:26px;text-align:center;transition:transform .3s ease}
+  #p-leaders-jamaica .lj-faq[open] summary::after{transform:rotate(45deg)}
+  #p-leaders-jamaica .lj-faq-a{padding:0 0 20px;color:var(--lj-mut);font-size:15px;line-height:1.7;max-width:75ch}
+  #p-leaders-jamaica .lj-faq summary:focus-visible{outline:2px solid var(--lj-orange);outline-offset:2px;border-radius:6px}
+
+  @media(max-width:920px){
+    #p-leaders-jamaica .lj-stats .lj-stat{flex-basis:calc(50% - 7px)}
+    #p-leaders-jamaica .lj-days{grid-template-columns:1fr 1fr}
+    #p-leaders-jamaica .lj-takes{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:700px){
+    #p-leaders-jamaica .lj-letter{padding:26px 22px 18px}
+    #p-leaders-jamaica .lj-faq-card{padding:4px 20px}
+    #p-leaders-jamaica .lj-listcard{padding:8px 20px}
+    #p-leaders-jamaica .lj-stack thead{display:none}
+    #p-leaders-jamaica .lj-stack,#p-leaders-jamaica .lj-stack tbody,#p-leaders-jamaica .lj-stack tr,#p-leaders-jamaica .lj-stack td{display:block;width:100%}
+    #p-leaders-jamaica .lj-stack tr{padding:12px 6px;border-bottom:1px solid var(--lj-line)}
+    #p-leaders-jamaica .lj-stack tr:last-child{border-bottom:0}
+    #p-leaders-jamaica .lj-stack td{border:0;padding:5px 12px;display:flex;justify-content:space-between;gap:16px;text-align:right}
+    #p-leaders-jamaica .lj-stack td::before{content:attr(data-label);flex:none;text-align:left;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--lj-mut);padding-top:3px}
+  }
+  @media(max-width:560px){
+    #p-leaders-jamaica .lj-days,#p-leaders-jamaica .lj-takes{grid-template-columns:1fr}
+    #p-leaders-jamaica .lj-stats .lj-stat{flex-basis:100%}
+    #p-leaders-jamaica .lj-stat b{font-size:30px}
+  }
   </style>
 
   <section class="lj-hero">
     <div class="lj-hero-in">
       <span class="lj-kicker">A Sight Seers Flagship Programme</span>
-      <h1 class="lj-h1">Leaders in Jamaica<span class="sub">Leadership Institute</span></h1>
-      <p class="lj-lede">Five days of policy, systems, and process, built as a genuine partnership of peers: two student organisations, one from a Jamaican university and one from the United States, coming together to learn from each other. Open by application and funded by the delegate. This is where the programme begins, and it is built to last.</p>
-      <div class="lj-facts">
-        <span class="lj-fact"><b>5</b><span>Days, 4 nights</span></span>
-        <span class="lj-fact"><b>Feb 17 to 21</b><span>2027</span></span>
-        <span class="lj-fact"><b>$1,195</b><span>Per delegate</span></span>
-        <span class="lj-fact"><b>12 to 15</b><span>Founding cohort</span></span>
-      </div>
+      <h1 class="lj-h1">Leaders in Jamaica<span class="sub">The Student Government Leadership Institute</span></h1>
+      <p class="lj-value">Six days. Two student governments. One standard of leadership.</p>
+      <p class="lj-lede">An annual, cross-border leadership institute that pairs a US student government with its Jamaican counterpart to strengthen governance, sharpen execution and build leaders who deliver measurable results.</p>
       <div class="lj-cta">
-        <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply / Enquire</a>
+        <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply now</a>
         <a href="https://wa.me/18764650630" target="_blank" rel="noopener" class="lj-btn ghost">Talk to the Director</a>
       </div>
-      <p style="margin:22px 0 0;font-size:14px"><a href="#" onclick="nav('flagship-programs');return false;" style="color:#fff;font-weight:700;text-decoration:underline">All flagship programs</a></p>
     </div>
   </section>
-
   <section class="lj-sec"><div class="lj-wrap lj-center">
-    <div class="lj-eyebrow">A founding cohort, built to last</div>
-    <h2 class="lj-h2" style="font-size:clamp(20px,2.7vw,31px)">A leadership institute set in a working student government</h2>
-    <p class="lj-sub">The centre of the programme is not a workshop room. Days 2 and 3 sit alongside the student government of a partner Jamaican university, comparing constitutions, committees, funding, records, and reporting. The two bodies work in different contexts, often described in broad geopolitical terms as the Global North and the Global South. Those are not reliable labels for any single institution's resources, which vary widely within either context, so each side brings expertise the other needs and each leaves having learned from the other.</p>
-    <p class="lj-sub">This is a partnership of peers, not a service delivered to hosted guests, and the work starts long before the five days. The two student organisations, one Jamaican and one American, get acquainted, share what each wants from the week, and set the agenda together. Each side names its own goals; neither are assumed for them. That is what makes the exchange real, and it is why both sides leave with something they could not have built alone.</p>
-    <div class="lj-grid3" style="text-align:left">
-      <div class="lj-card"><h4>Open by application</h4><p>Any student holding a leadership position in a registered organisation may apply. SGA holds a reserved block but does not hold the programme.</p></div>
-      <div class="lj-card"><h4>No student fee money</h4><p>The individual delegate pays, or a sponsor they secure. There is no appropriation and no student fee money at any stage.</p></div>
-      <div class="lj-card"><h4>Documents, not memories</h4><p>Every delegate leaves with eight working documents: a drafted policy, mapped processes, a KPI framework, a pitched idea, and a handover pack.</p></div>
+    <h2 class="lj-h2">Overview</h2>
+    <p class="lj-sub">Leaders in Jamaica is the flagship leadership institute of Sight Seers Caribbean Adventures. Each year, a delegation of five student government executives and one advisor from a US university is paired with a counterpart delegation from a Jamaican university. Over six immersive days, the two delegations operate as peers, benchmarking governance practice, codifying policy and process, and building the systems that allow a student government to perform beyond a single term. Every delegate leaves with five ready-to-implement deliverables. The experience is anchored by a campus exchange, a Career Development Day at a Jamaican high school and a Pitch Night where community initiatives compete for funding. Before departure, both delegations convene for the Shore Briefing, a live online orientation. Programme dates will be announced once the pilot year is confirmed.</p>
+    <div class="lj-stats"><div class="lj-stat"><b>6</b><span>days, Tuesday to Sunday</span></div><div class="lj-stat"><b>8</b><span>applied modules</span></div><div class="lj-stat"><b>5</b><span>deliverables per delegate</span></div><div class="lj-stat"><b>2</b><span>delegations: 5 executives and 1 advisor from each university</span></div><div class="lj-stat lj-stat-text"><span>Private villa base in Montego Bay</span></div><div class="lj-stat lj-stat-text"><span>Live online Shore Briefing before departure</span></div><div class="lj-stat lj-stat-text"><span>One cohort per year</span></div></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Before you travel: The Shore Briefing</h2>
+    <p class="lj-sub">A live, facilitated online orientation for every delegate and advisor, held approximately two weeks before the programme once all places are confirmed. It sits outside the six days and ensures every participant arrives aligned, prepared and ready to contribute from the first session.</p>
+    <div class="lj-card lj-listcard"><ul class="lj-list"><li>Programme orientation: a structured walk-through of the six days, the eight modules and the five deliverables</li><li>Operational briefing: travel logistics, arrival procedures, dress code, packing guidance and the code of conduct</li><li>Safety and safeguarding briefing, including the Career Development Day protocols</li><li>Delegation breakout rooms: US and Jamaican delegates meet their role counterparts in advance, for example treasurer with treasurer, to build rapport before arrival</li><li>Pre-work: each student government submits its constitution and one priority challenge to be addressed during the week</li><li>Open Q&amp;A for delegates and advisors</li><li>Approximately 90 minutes by video conference. Access details are issued with confirmation of full payment</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">The six days</h2>
+    <div class="lj-days"><div class="lj-card lj-day"><div class="lj-badge">1</div><div class="d-date">Day 1, Tuesday</div><h4>Arrival and onboarding</h4><p>Airport meet and greet, transfer to the villa, opening circle and a welcome dinner with the Jamaican delegation.</p></div><div class="lj-card lj-day"><div class="lj-badge">2</div><div class="d-date">Day 2, Wednesday</div><h4>The leadership intensive</h4><p>A full day of applied work on governance, policy, process, systems, KPIs and cross-functional collaboration.</p></div><div class="lj-card lj-day"><div class="lj-badge">3</div><div class="d-date">Day 3, Thursday</div><h4>The campus exchange</h4><p>A structured benchmarking session with the Jamaican student government covering constitutions, committees, funding, records and reporting, together with a dedicated session on budgeting and treasury controls.</p></div><div class="lj-card lj-day"><div class="lj-badge">4</div><div class="d-date">Day 4, Friday</div><h4>The Career Development Day</h4><p>Delegates lead career and leadership sessions for upper-school students at a high school in western Jamaica.</p></div><div class="lj-card lj-day"><div class="lj-badge">5</div><div class="d-date">Day 5, Saturday</div><h4>The Negril experience</h4><p>A curated adventure day on the Negril coast, followed by the Leaders Fund Pitch Night at the villa.</p></div><div class="lj-card lj-day"><div class="lj-badge">6</div><div class="d-date">Day 6, Sunday</div><h4>Synthesis and departure</h4><p>A closing debrief, completion of handover packs and airport transfers.</p></div></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">The eight modules</h2>
+    <div class="lj-grid4"><div class="lj-card lj-mod"><h4>Governance framework</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a governance map with budget and treasury controls</span></div></div><div class="lj-card lj-mod"><h4>Policy development</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a drafted, adoption-ready policy</span></div></div><div class="lj-card lj-mod"><h4>Process design</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">documented process maps</span></div></div><div class="lj-card lj-mod"><h4>Systems and infrastructure</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a structured records system</span></div></div><div class="lj-card lj-mod"><h4>KPI training</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a performance measurement framework</span></div></div><div class="lj-card lj-mod"><h4>Cross-functional collaboration</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a stakeholder collaboration plan</span></div></div><div class="lj-card lj-mod"><h4>Game-changing ideas</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a pitch-ready community initiative</span></div></div><div class="lj-card lj-mod"><h4>Handover and continuity</h4><div class="lj-del"><i>Deliverable</i><span class="lj-cap">a succession and handover pack</span></div></div></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">What every delegate takes home</h2>
+    <p class="lj-sub">Five practical deliverables, built during the week and ready to implement on return:</p>
+    <div class="lj-takes"><div class="lj-card lj-take"><div class="lj-badge">1</div><p>An adoption-ready policy</p></div><div class="lj-card lj-take"><div class="lj-badge">2</div><p>Documented process maps</p></div><div class="lj-card lj-take"><div class="lj-badge">3</div><p>A performance measurement framework</p></div><div class="lj-card lj-take"><div class="lj-badge">4</div><p>A pitch-ready community initiative</p></div><div class="lj-card lj-take"><div class="lj-badge">5</div><p>A succession and handover pack</p></div></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">The Career Development Day</h2>
+    <p class="lj-sub">A full day at a high school in western Jamaica, where US and Jamaican student leaders share their experience to help upper-school students chart their next steps.</p>
+    <div class="lj-card lj-listcard"><ul class="lj-list"><li>Pathways panel: delegates share their academic journeys, fields of study and career ambitions</li><li>Career circles: small-group mentoring by sector, including business, law, health, technology and the creative industries</li><li>Professional skills workshop: CV development, interview technique, personal statements and scholarship applications</li><li>University insight session: studying in Jamaica and the United States, admissions and funding</li><li>Student council masterclass: a leadership workshop for the school's prefects and student council</li><li>A contribution of career resources to the school's guidance department</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Safeguarding</h2>
+    <div class="lj-card lj-listcard"><ul class="lj-list"><li>The school principal and the Ministry of Education's regional office approve the programme and the visitor list</li><li>Teachers are present at every session, and there is no one-to-one contact with any student</li><li>No identifiable images of students without the school's consent, and no posting of students on social media</li><li>No exchange of personal phone numbers or social media details with students</li><li>Every visitor completes the safeguarding briefing during the Shore Briefing and signs the code of conduct</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Pitch Night and the Leaders Fund</h2>
+    <div class="lj-card lj-wide"><p>On Saturday evening, mixed Jamaican and US teams present community initiatives to a panel. The strongest proposals receive Leaders Fund grants and are delivered within 90 days, turning ideas into measurable community impact.</p></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Who can apply</h2>
+    <div class="lj-card lj-listcard"><ul class="lj-list"><li>Each annual cohort pairs one US university with one Jamaican university</li><li>Each university sends five student government executives and one advisor, typically the president, vice president, treasurer, secretary and one additional executive</li><li>Delegates must hold an elected or appointed executive position in their student government</li><li>Advisors are staff members who support the student government, such as the student government advisor or a student life officer</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">For advisors</h2>
+    <div class="lj-card lj-listcard"><ul class="lj-list"><li>Each delegation travels with one advisor from its university. The US advisor is accommodated at the villa with the US delegation; the Jamaican advisor joins each day from their own base</li><li>Advisors have full access to every session, including the campus exchange, the Career Development Day and Pitch Night</li><li>Sight Seers manages all logistics end to end, so the advisor's role is oversight and support, not coordination</li><li>Advisors enrol on the same terms as delegates: a US$35 application fee, a 30% deposit on selection and the balance in full 14 days before the programme. The place may be funded by the advisor or their university</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Investment (per person, US delegation)</h2>
+    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Rate</th><th>Per person</th></tr></thead><tbody><tr class="rec"><td data-label="Rate">Early commitment (deposit received at least 90 days before the programme)</td><td data-label="Per person" class="price">US$1,795</td></tr><tr><td data-label="Rate">Standard</td><td data-label="Per person" class="price">US$1,895</td></tr></tbody></table></div></div>
+    <div class="lj-card lj-listcard" style="margin-top:22px"><ul class="lj-list"><li>Each of the five delegates and the advisor holds an individual place</li><li>Each place may be funded personally, by a sponsor, or by the university or student government</li><li>Inclusions: the Shore Briefing, the full six-day programme, all eight modules and materials, shared accommodation at a private villa in Montego Bay, all meals, airport transfers and ground transportation, the campus exchange, the Career Development Day, the Negril experience, Pitch Night, a dedicated Sight Seers host and a 24-hour incident line</li><li>Exclusions: airfare to Montego Bay (Sangster International Airport, MBJ), which varies by departure city. Group air quotations and bookings are available on request</li><li>Jamaican delegation: places are arranged directly with the Jamaican host university</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <h2 class="lj-h2">Payment schedule (per person)</h2>
+    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Early commitment</th><th>Standard</th></tr></thead><tbody><tr><td data-label="Step">1. Application fee</td><td data-label="Timing">On application</td><td data-label="Early commitment" class="price">US$35</td><td data-label="Standard" class="price">US$35</td></tr><tr><td data-label="Step">2. Deposit (30%, non-refundable)</td><td data-label="Timing">On selection, to secure the place</td><td data-label="Early commitment" class="price">US$538.50</td><td data-label="Standard" class="price">US$568.50</td></tr><tr><td data-label="Step">3. Balance (70%)</td><td data-label="Timing">In full, no later than 14 days before the programme</td><td data-label="Early commitment" class="price">US$1,256.50</td><td data-label="Standard" class="price">US$1,326.50</td></tr></tbody></table></div></div>
+    <div class="lj-card lj-listcard" style="margin-top:22px"><ul class="lj-list"><li>Each delegate and the advisor is responsible for their own application fee, deposit and balance</li><li>The balance may be settled in a single payment or in instalments, provided it is paid in full 14 days before the programme begins</li><li>Places not paid in full by that date are released, and the deposit is forfeited</li></ul></div>
+  </div></section>
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
+    <div class="lj-price-card lj-paycard">
+      <div class="lj-eyebrow">Application fee</div>
+      <h3>Pay online, securely</h3>
+      <p class="lj-sub" style="margin:0 0 18px">Card payments are processed securely by Stripe. The US$35 application fee is paid by each applicant.</p>
+      <a href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener" class="lj-btn primary">Pay the US$35 application fee</a>
     </div>
   </div></section>
-
   <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">The Model</div>
-    <h2 class="lj-h2">How the Institute is structured</h2>
-    <p class="lj-sub">Every structural choice answers a question a senator, an advisor, or a student reporter would reasonably ask, on page one rather than in a hearing.</p>
-    <div class="lj-qa-card">
-      <div class="lj-qa"><div class="q">Who benefits?</div><div class="a">Any student leader in a registered organisation may apply. SGA holds a reserved block but does not own the programme.</div></div>
-      <div class="lj-qa"><div class="q">Who pays?</div><div class="a">The individual delegate, or a sponsor the delegate secures. No student fee money is required at any stage.</div></div>
-      <div class="lj-qa"><div class="q">What is SGA's role?</div><div class="a">Endorsement, promotion, and a seat on the selection panel. SGA may sponsor a delegate on the same terms as any other sponsor.</div></div>
-      <div class="lj-qa"><div class="q">Is it a holiday?</div><div class="a">Five days: two full working days with a Jamaican student government, one adventure day, an arrival day, and a departure morning. Every day is published and every delegate produces documents.</div></div>
-      <div class="lj-qa"><div class="q">What comes back?</div><div class="a">A drafted policy, documented processes, a KPI framework, and a pitched idea per delegate, plus a cohort report SGA can publish to the student body.</div></div>
-      <div class="lj-qa"><div class="q">Who is accountable?</div><div class="a">Licensed and insured operators, signed waivers, certificates on file, and a 24 hour incident line for the duration.</div></div>
-    </div>
+    <h2 class="lj-h2">Funding your place</h2>
+    <div class="lj-grid4"><div class="lj-card"><h4>Self-funded</h4><p class="lj-cap">settle your own place directly</p></div><div class="lj-card"><h4>Corporate or community sponsor</h4><p class="lj-cap">an employer, family business, church or local business funds your place. A professionally written sponsor letter is provided below</p></div><div class="lj-card"><h4>Institutional funding</h4><p class="lj-cap">your university, a department or your student government funds your place from its own budget</p></div><div class="lj-card"><h4>Scholarships</h4><p class="lj-cap">a limited number of scholarships are available for Jamaican student leaders</p></div></div>
   </div></section>
-
-  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">The Five Days</div>
-    <h2 class="lj-h2">Wednesday to Sunday, three class days rather than a week</h2>
-    <p class="lj-sub">Both working days land midweek when the host university is fully operational, the adventure day falls on Saturday, and the cohort is based in a private Montego Bay villa for all four nights.</p>
-    <div class="lj-days">
-      <div class="lj-card lj-day"><div class="lj-badge">1</div><div class="d-date">Wed 17 Feb</div><h4>Arrival and orientation</h4><p>Airport meet and greet at Montego Bay, transfer to the villa, opening circle and welcome dinner.</p></div>
-      <div class="lj-card lj-day"><div class="lj-badge">2</div><div class="d-date">Thu 18 Feb</div><h4>Leadership intensive</h4><p>Full day intensive at the villa with the partner Jamaican student government, closing with the pitch session.</p></div>
-      <div class="lj-card lj-day"><div class="lj-badge">3</div><div class="d-date">Fri 19 Feb</div><h4>Campus exchange</h4><p>A day on the host campus: comparative briefing on their constitution, committees, funding and records.</p></div>
-      <div class="lj-card lj-day"><div class="lj-badge">4</div><div class="d-date">Sat 20 Feb</div><h4>Adventure day, Negril</h4><p>ATV, catamaran, horseback, ocean zipline, snorkelling and bamboo rafting, in rotating groups.</p></div>
-      <div class="lj-card lj-day"><div class="lj-badge">5</div><div class="d-date">Sun 21 Feb</div><h4>Outputs and departure</h4><p>Closing debrief breakfast with each delegate's documents captured, then transfer to the airport.</p></div>
-    </div>
-    <p class="lj-note">Every delegate receives arrival and departure transfers, all ground transport across four programme days, a dedicated Sight Seers host, and a delegate kit. The Day 4 rum tasting is 18 and over under Jamaican law and optional within the day.</p>
-  </div></section>
-
-  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">Days 2 and 3</div>
-    <h2 class="lj-h2">The campus exchange, the part that cannot be replicated in Miami</h2>
-    <p class="lj-sub">Two full days with the student government of a Jamaican university, working through how each body actually runs. Not a courtesy visit and not a panel: a working exchange between peers, on an agenda both sides shape and goals each side sets. What each learns from the other is the point, and it runs in both directions.</p>
-    <div class="lj-grid2">
-      <div class="lj-card">
-        <ul class="lj-list">
-          <li><b>Constitutions and mandate.</b> Different founding documents, powers, and relationships to administration.</li>
-          <li><b>Funding and allocation.</b> How a body with different resources decides what to fund.</li>
-          <li><b>Committee architecture.</b> How work is divided, where it stalls, what survives turnover.</li>
-          <li><b>Records and continuity.</b> What each body writes down, loses every June, and how handover really happens.</li>
-          <li><b>Reaching students.</b> Commuter populations, multiple campuses, and low turnout.</li>
-          <li><b>Reporting and measurement.</b> What each body counts, publishes, and is held to.</li>
-        </ul>
+  <section class="lj-sec" style="padding-top:0" id="ljSponsor"><div class="lj-wrap lj-center">
+    <h2 class="lj-h2">Secure a sponsor</h2>
+    <p class="lj-sub">Many delegates fund their place through an employer, family business, church or local business. This letter presents your participation as a clear, professional business case. Complete the details in [brackets] and send it to your prospective sponsor.</p>
+    <div class="lj-letter-wrap">
+      <div class="lj-letter" id="ljLetter" tabindex="0" role="button" aria-expanded="false" aria-controls="ljLetterBody" aria-label="Sponsor letter preview. Read the full letter">
+        <div class="lj-letter-body" id="ljLetterBody"><p>[Your full name]<br>[Your address]<br>[Your email] | [Your phone]<br>[Date]</p><p>[Sponsor's full name]<br>[Title]<br>[Organisation]<br>[Address]</p><p>Dear [Sponsor's name],</p><p>Re: Sponsorship of my participation in Leaders in Jamaica</p><p>I am writing to request your organisation's sponsorship of my place at Leaders in Jamaica, an annual leadership institute delivered by Sight Seers Caribbean Adventures in Montego Bay, Jamaica.</p><p>As [your role] of the [student government name] at [university name], I am accountable for decisions that affect [number] students and a budget of [amount, if applicable]. Leaders in Jamaica pairs our student government with that of a Jamaican university for six days of applied work on governance, policy, process design and performance measurement. The programme also includes a Career Development Day, on which we mentor students at a Jamaican high school, and a Pitch Night at which community initiatives compete for funding.</p><p>The return on this investment is concrete. I will return with five deliverables ready for implementation: an adoption-ready policy, documented process maps, a performance measurement framework, a community initiative and a succession plan for the next administration. I intend to apply these directly to [one sentence on the priority you will address in your student government].</p><p>The cost of my place is US$1,795, which covers tuition, accommodation, meals, ground transportation and all programme activities. I am respectfully requesting sponsorship of [the full amount / US$ amount]. Payment would be made directly to Sight Seers Caribbean Adventures against an invoice issued in your organisation's name.</p><p>In recognition of your support, I would be pleased to:</p><ul><li>Acknowledge [Organisation] as my sponsor in my student government's communications and on social media</li><li>Provide a concise post-programme report with photographs, outlining outcomes and next steps</li><li>Deliver a short briefing to your team or members on the insights gained</li></ul><p>A deposit is due once my place is confirmed, and the balance is due 14 days before the programme begins. Full programme details are available at sightseerscaribbean.com/leaders-in-jamaica.</p><p>Thank you for considering this request. I would welcome the opportunity to discuss it with you at your convenience.</p><p>Yours sincerely,</p><p>[Your full name]<br>[Your role], [Student government name]<br>[University name]</p></div>
+        <div class="lj-letter-fade" aria-hidden="true"></div>
+        <span class="lj-letter-prompt" aria-hidden="true"><span class="more">Read the full letter</span><span class="less">Collapse the letter</span></span>
       </div>
-      <div style="display:flex;flex-direction:column;gap:20px">
-        <div class="lj-card"><h4>The host student government</h4><p>The Jamaican side is the student government of a partner university with an active, accessible student leadership structure. We are finalising the host now and will name it once the partnership is confirmed in writing, before applications open.</p></div>
-        <div class="lj-card"><h4>Why a working guild</h4><p>Pairing with a real, functioning student government is the point: two bodies compare how they actually run, side by side, rather than sitting through a briefing. The host is chosen for the strength of that exchange.</p></div>
+      <div class="lj-letter-actions">
+        <a class="lj-btn primary" href="/downloads/Leaders-in-Jamaica-Sponsor-Letter.docx" download="Leaders-in-Jamaica-Sponsor-Letter.docx">Download as Word (.docx)</a>
+        <a class="lj-btn primary" href="/downloads/Leaders-in-Jamaica-Sponsor-Letter.pdf" download="Leaders-in-Jamaica-Sponsor-Letter.pdf">Download as PDF</a>
+        <button type="button" class="lj-btn ghost-dark" id="ljCopyLetter">Copy letter text</button>
       </div>
+      <script type="text/plain" id="ljLetterPlain">[Your full name]
+[Your address]
+[Your email] | [Your phone]
+[Date]
+
+[Sponsor's full name]
+[Title]
+[Organisation]
+[Address]
+
+Dear [Sponsor's name],
+
+Re: Sponsorship of my participation in Leaders in Jamaica
+
+I am writing to request your organisation's sponsorship of my place at Leaders in Jamaica, an annual leadership institute delivered by Sight Seers Caribbean Adventures in Montego Bay, Jamaica.
+
+As [your role] of the [student government name] at [university name], I am accountable for decisions that affect [number] students and a budget of [amount, if applicable]. Leaders in Jamaica pairs our student government with that of a Jamaican university for six days of applied work on governance, policy, process design and performance measurement. The programme also includes a Career Development Day, on which we mentor students at a Jamaican high school, and a Pitch Night at which community initiatives compete for funding.
+
+The return on this investment is concrete. I will return with five deliverables ready for implementation: an adoption-ready policy, documented process maps, a performance measurement framework, a community initiative and a succession plan for the next administration. I intend to apply these directly to [one sentence on the priority you will address in your student government].
+
+The cost of my place is US$1,795, which covers tuition, accommodation, meals, ground transportation and all programme activities. I am respectfully requesting sponsorship of [the full amount / US$ amount]. Payment would be made directly to Sight Seers Caribbean Adventures against an invoice issued in your organisation's name.
+
+In recognition of your support, I would be pleased to:
+• Acknowledge [Organisation] as my sponsor in my student government's communications and on social media
+• Provide a concise post-programme report with photographs, outlining outcomes and next steps
+• Deliver a short briefing to your team or members on the insights gained
+
+A deposit is due once my place is confirmed, and the balance is due 14 days before the programme begins. Full programme details are available at sightseerscaribbean.com/leaders-in-jamaica.
+
+Thank you for considering this request. I would welcome the opportunity to discuss it with you at your convenience.
+
+Yours sincerely,
+
+[Your full name]
+[Your role], [Student government name]
+[University name]</script>
     </div>
   </div></section>
-
   <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">The Programming</div>
-    <h2 class="lj-h2">Systems, not speeches. Eight modules, eight documents</h2>
-    <p class="lj-sub">Each module runs on Day 2 alongside the host university's student leaders and closes with a document rather than a discussion.</p>
-    <div class="lj-grid4">
-      <div class="lj-card"><h4>Governance framework</h4><span class="out">A governance map</span></div>
-      <div class="lj-card"><h4>Process design</h4><span class="out">Two mapped processes</span></div>
-      <div class="lj-card"><h4>Policy development</h4><span class="out">A drafted policy</span></div>
-      <div class="lj-card"><h4>Systems and infrastructure</h4><span class="out">A systems audit</span></div>
-      <div class="lj-card"><h4>KPI training</h4><span class="out">A KPI framework</span></div>
-      <div class="lj-card"><h4>Cross functional collaboration</h4><span class="out">A joint initiative plan</span></div>
-      <div class="lj-card"><h4>Game changing ideas</h4><span class="out">A pitched idea and feedback</span></div>
-      <div class="lj-card"><h4>Handover and continuity</h4><span class="out">A handover pack</span></div>
-    </div>
+    <h2 class="lj-h2">Terms and requirements</h2>
+    <div class="lj-grid2 lj-terms"><div class="lj-card lj-listcard"><h4>Cancellations and changes</h4><ul class="lj-list"><li>The US$35 application fee is non-refundable</li><li>The 30% deposit is non-refundable once a place is secured</li><li>If a confirmed delegate is unable to travel, the place may be transferred to another executive of the same student government at no charge, up to 14 days before the programme</li><li>Should Sight Seers cancel the programme for any reason, all fees paid, including the application fee, are refunded in full</li><li>The programme is confirmed once the full delegation has paid its deposits</li></ul></div><div class="lj-card lj-listcard"><h4>Travel requirements</h4><ul class="lj-list"><li>A passport valid for at least six months beyond the travel dates</li><li>US citizens do not require a visa for short stays in Jamaica; other nationals should verify entry requirements</li><li>Comprehensive travel insurance covering medical care and trip cancellation is strongly recommended</li><li>Each delegate and advisor completes a medical, dietary and emergency contact form before departure</li></ul></div><div class="lj-card lj-listcard"><h4>Professional code of conduct</h4><ul class="lj-list"><li>Delegates represent their university and student government at all times</li><li>Business attire is expected for the campus exchange, the Career Development Day and Pitch Night</li><li>No alcohol at any programme activity</li><li>Delegates follow the host's direction on safety, curfew and off-site movement</li><li>Serious breaches may result in removal from the programme without refund</li></ul></div><div class="lj-card lj-listcard"><h4>Safety and accountability</h4><ul class="lj-list"><li>Licensed and insured operators only, with certificates on file</li><li>Signed waivers for all activities</li><li>A dedicated Sight Seers host and a 24-hour incident line throughout the programme</li></ul></div></div>
   </div></section>
-
+  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap lj-center">
+    <h2 class="lj-h2">Downloads</h2>
+    <div class="lj-cta"><a class="lj-btn primary" href="/downloads/Leaders-in-Jamaica-Programme-Overview.pdf" download="Leaders-in-Jamaica-Programme-Overview.pdf">Programme overview for student governments (PDF)</a></div>
+  </div></section>
   <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">Pricing</div>
-    <h2 class="lj-h2">Rates by cohort size</h2>
-    <p class="lj-sub">All rates are per delegate and cover all five days and every transfer. Villa accommodation and airfare sit outside this figure.</p>
-    <div class="lj-price-card"><div class="lj-table-wrap">
-      <table class="lj-table">
-        <thead><tr><th>Cohort size</th><th>Standard</th><th>Early commitment</th><th></th></tr></thead>
-        <tbody>
-          <tr class="rec"><td>12 to 15 delegates</td><td>US$1,270</td><td class="price">US$1,195</td><td><span class="lj-chip">Recommended</span></td></tr>
-          <tr><td>16 to 25 delegates</td><td>US$1,220</td><td class="price">US$1,145</td><td>Second cohort onward</td></tr>
-          <tr><td>26 to 40 delegates</td><td>US$1,170</td><td class="price">US$1,095</td><td>Best unit cost</td></tr>
-        </tbody>
-      </table>
-    </div></div>
-    <div class="lj-grid2" style="margin-top:22px">
-      <div class="lj-card"><h4>Early commitment</h4><p>Confirm the partnership in principle by 15 October 2026 and every delegate saves US$75 on the founding cohort. A US$35 place deposit opens a seat.</p></div>
-      <div class="lj-card"><h4>The payment plan</h4><p>A US$35 place deposit opens your seat. A delegate who is not selected pays nothing. Once selected, a 30% non-refundable deposit confirms your place, and your US$35 place deposit is credited toward it. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>.</p></div>
-    </div>
-
-    <div class="lj-price-card" style="margin-top:22px;padding:26px 24px">
-      <div class="lj-eyebrow">Secure your place</div>
-      <h3 style="font-family:'Playfair Display',serif;color:var(--lj-navy);font-size:clamp(20px,2.6vw,26px);margin:2px 0 6px">Pay online, securely</h3>
-      <p class="lj-sub" style="margin:0 0 18px">Card payments are processed securely by Stripe. Choose the option that matches where you are in the process. Every payment is credited toward your programme balance.</p>
-      <div class="lj-grid3">
-        <div class="lj-card" style="text-align:center">
-          <h4 style="margin-bottom:4px">Place Deposit</h4>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--lj-navy);line-height:1">US$35</div>
-          <p style="font-size:13px;color:var(--lj-mut);margin:8px 0 14px">Opens your seat. Credited toward your 30% deposit.</p>
-          <a href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener" class="lj-btn primary" style="display:block;text-align:center">Pay Deposit</a>
-        </div>
-        <div class="lj-card" style="text-align:center">
-          <h4 style="margin-bottom:4px">Monthly Instalment</h4>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--lj-navy);line-height:1">US$290</div>
-          <p style="font-size:13px;color:var(--lj-mut);margin:8px 0 14px">A payment toward your balance. The full balance is due 14 days before the programme starts.</p>
-          <a href="https://buy.stripe.com/4gM6oIe5I3034KKfHu5kk08" target="_blank" rel="noopener" class="lj-btn primary" style="display:block;text-align:center">Pay Instalment</a>
-        </div>
-        <div class="lj-card" style="text-align:center">
-          <h4 style="margin-bottom:4px">Pay in Full</h4>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--lj-navy);line-height:1">US$1,195</div>
-          <p style="font-size:13px;color:var(--lj-mut);margin:8px 0 14px">Founding-cohort early rate, all-in programme fee.</p>
-          <a href="https://buy.stripe.com/6oU7sM9Ps8kn5OOcvi5kk07" target="_blank" rel="noopener" class="lj-btn primary" style="display:block;text-align:center">Pay in Full</a>
-        </div>
-      </div>
-      <p class="lj-note" style="margin-top:14px">Applying first? Use <b>Apply / Enquire</b> above. A delegate who is not selected pays nothing. Once selected, a 30% non-refundable deposit confirms your place, and your US$35 place deposit is credited toward it. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>. Programme fee covers the five days and transfers; airfare and villa accommodation are separate.</p>
-    </div>
-
-    <p class="lj-note">Airfare from Miami to Montego Bay is booked by the delegate and typically runs US$280 to US$380 return. Villa accommodation is quoted once cohort size and dates are confirmed.</p>
+    <h2 class="lj-h2">Frequently asked questions</h2>
+    <div class="lj-faq-card"><details class="lj-faq"><summary>Who is eligible?</summary><div class="lj-faq-a">Student government executives at a registered university. Each annual cohort pairs one US university with one Jamaican university.</div></details><details class="lj-faq"><summary>How many people can attend from one university?</summary><div class="lj-faq-a">Each university sends five executives and one advisor.</div></details><details class="lj-faq"><summary>What is the investment?</summary><div class="lj-faq-a">US$1,795 per person at the early commitment rate, or US$1,895 standard, plus a US$35 application fee. Airfare is not included.</div></details><details class="lj-faq"><summary>Does each participant pay individually?</summary><div class="lj-faq-a">Yes. Each delegate and the advisor is responsible for their own application fee, deposit and balance, whether funded personally, by a sponsor or by their university.</div></details><details class="lj-faq"><summary>Is there any preparation before travel?</summary><div class="lj-faq-a">Yes. The Shore Briefing is a live online orientation held about two weeks before the programme, with a full programme walk-through, a safety briefing and breakout rooms to meet the other delegation.</div></details><details class="lj-faq"><summary>What happens on the Career Development Day?</summary><div class="lj-faq-a">Delegates spend the day at a high school in western Jamaica, leading a pathways panel, sector-based career circles, a professional skills workshop, a university insight session and a student council masterclass.</div></details><details class="lj-faq"><summary>Is airfare included?</summary><div class="lj-faq-a">No. Airfare varies by departure city. Group air quotations and bookings are available on request.</div></details><details class="lj-faq"><summary>What is included?</summary><div class="lj-faq-a">The Shore Briefing, the full programme, villa accommodation, all meals, transfers and ground transportation, the campus exchange, the Career Development Day, the Negril experience and Pitch Night.</div></details><details class="lj-faq"><summary>Can our student government fund our places?</summary><div class="lj-faq-a">Yes. Places may be funded by the university, a department, the student government or an external sponsor.</div></details><details class="lj-faq"><summary>When is full payment due?</summary><div class="lj-faq-a">All fees must be paid in full no later than 14 days before the programme begins.</div></details><details class="lj-faq"><summary>How is safety managed?</summary><div class="lj-faq-a">We work only with licensed and insured operators, a dedicated host remains with the group throughout, and a 24-hour incident line is in place.</div></details><details class="lj-faq"><summary>Does the Jamaican delegation stay at the villa?</summary><div class="lj-faq-a">No. The Jamaican delegates and their advisor join each day's programme from their own base.</div></details></div>
   </div></section>
-
-  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">Funding</div>
-    <h2 class="lj-h2">How a delegate pays for it</h2>
-    <p class="lj-sub">Two routes, and most delegates use a combination. Sight Seers invoices whoever is paying and issues a receipt in that name, with no cash and no intermediary.</p>
-    <div class="lj-grid4">
-      <div class="lj-card"><h4>Self funded</h4><p>A US$35 place deposit opens your seat. Once selected, a 30% non-refundable deposit confirms your place and the balance is due 14 days before the programme starts.</p></div>
-      <div class="lj-card"><h4>Sponsored</h4><p>An employer, family business, church or local business funds the seat in whole or part. A template letter is provided.</p></div>
-      <div class="lj-card"><h4>Organisation funded</h4><p>A registered student organisation sends its own leader from dues, fundraising, or its operating account.</p></div>
-      <div class="lj-card"><h4>SGA sponsored seat</h4><p>SGA may sponsor a delegate on exactly the same terms as any other sponsor. Not required and not assumed.</p></div>
-    </div>
-  </div></section>
-
-  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
-    <div class="lj-eyebrow">Where the cohort stays</div>
-    <h2 class="lj-h2">A private Montego Bay villa</h2>
-    <p class="lj-sub">The cohort is based in one exclusive use villa for all four nights, a programme decision rather than a cost saving. The Day 2 intensive runs in the villa, and the conversation that makes a cohort a cohort happens on its terrace rather than across a resort.</p>
-    <div class="lj-grid2">
-      <div class="lj-card"><ul class="lj-list">
-        <li>Day 2 intensive runs on site, with no room hire.</li>
-        <li>Shared spaces double as breakout rooms.</li>
-        <li>Private terrace and pool for working dinners.</li>
-        <li>The host university delegation can be received properly.</li>
-      </ul></div>
-      <div class="lj-card"><ul class="lj-list">
-        <li>Exclusive use, shared room occupancy.</li>
-        <li>Private staff and on site catering.</li>
-        <li>Sized to the confirmed cohort.</li>
-        <li>Partnerships across 43 plus large group estates.</li>
-      </ul></div>
-    </div>
-    <p class="lj-note">Villa rates move with date, season, cohort size, and availability, so we issue a firm written quotation once the window and cohort size are confirmed, before any delegate is asked for a deposit.</p>
-  </div></section>
-
   <div class="lj-wrap">
     <div class="lj-band"><div class="lj-band-in">
-      <h2>Hold the founding cohort</h2>
-      <p>A founding cohort of 12 to 15 delegates, Wednesday 17 to Sunday 21 February 2027. Delegates arrive with real problems and return with roughly ten weeks of term left to act on them, at a cost of three class days.</p>
+      <h2>Six days. Two student governments. One standard of leadership.</h2>
       <div class="lj-cta">
-        <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply / Enquire</a>
-        <a href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener" class="lj-btn ghost">Pay $35 Place Deposit</a>
+        <a href="#" class="lj-btn primary" onclick="openLeadersApply();return false;">Apply now</a>
       </div>
     </div></div>
   </div>
+
+  <script>
+  (function(){
+    var card=document.getElementById('ljLetter');if(!card)return;
+    var body=document.getElementById('ljLetterBody'),COLLAPSED=300;
+    var canHover=window.matchMedia&&window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    function set(open){
+      card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',open?'true':'false');
+      body.style.maxHeight=open?body.scrollHeight+'px':COLLAPSED+'px';
+    }
+    set(false);
+    if(canHover){card.addEventListener('mouseenter',function(){set(true);});card.addEventListener('mouseleave',function(){set(false);});}
+    else card.addEventListener('click',function(){set(!card.classList.contains('is-open'));});
+    card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!card.classList.contains('is-open'));}});
+    window.addEventListener('resize',function(){if(card.classList.contains('is-open'))body.style.maxHeight=body.scrollHeight+'px';});
+    var btn=document.getElementById('ljCopyLetter'),plain=document.getElementById('ljLetterPlain'),t=null;
+    function done(){var old=btn.getAttribute('data-label')||btn.textContent;btn.setAttribute('data-label',old);btn.textContent='Copied';btn.classList.add('is-done');clearTimeout(t);t=setTimeout(function(){btn.textContent=old;btn.classList.remove('is-done');},2000);}
+    function fallback(txt){var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(x){}document.body.removeChild(ta);if(ok)done();}
+    btn.addEventListener('click',function(){
+      var txt=plain.textContent.trim();
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,function(){fallback(txt);});else fallback(txt);
+    });
+  })();
+  </script>
 </div>
 
 <!-- ════════════════════════════════════
@@ -14328,6 +14398,10 @@ body.theme-night #p-flagship-programs{
 #ljApplyModal .lja-step{display:none}
 #ljApplyModal .lja-step.is-on{display:block;animation:ljaStepIn .42s var(--lja-spring) both}
 @keyframes ljaStepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#ljApplyModal .lja-fee{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:15px;background:#fff;border:1.5px solid rgba(6,58,99,.14)}
+#ljApplyModal .lja-fee b{font-family:'Playfair Display',serif;font-size:32px;line-height:1;color:var(--lja-navy)}
+#ljApplyModal .lja-fee span{font-size:13.5px;line-height:1.55;color:var(--lja-mut)}
+#ljApplyModal .lja-pay{display:block;text-align:center;margin-top:16px;text-decoration:none}
 #ljApplyModal .lja-legend{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--lja-navy2);
   margin:0 0 16px;opacity:.75}
 #ljApplyModal .lja-legend+.lja-legend,#ljApplyModal .lja-field+.lja-legend,#ljApplyModal .lja-row+.lja-legend,
@@ -14449,10 +14523,10 @@ body.theme-night #p-flagship-programs{
     </button>
 
     <header class="lja-head">
-      <span class="lja-kicker">Leaders in Jamaica &middot; Leadership Institute</span>
-      <h2 class="lja-title" id="ljaTitle">Apply for the founding cohort</h2>
-      <p class="lja-sub">Wednesday 17 to Sunday 21 February 2027. Applications are reviewed as they arrive, and a place is only held once a delegate is accepted. Nothing is charged here.</p>
-      <div class="lja-steps" aria-hidden="true"><span class="now"></span><span></span><span></span></div>
+      <span class="lja-kicker">Leaders in Jamaica &middot; Student Government Leadership Institute</span>
+      <h2 class="lja-title" id="ljaTitle">Apply to Leaders in Jamaica</h2>
+      <p class="lja-sub">Each university sends five student government executives and one advisor. Applications are reviewed as they arrive.</p>
+      <div class="lja-steps" aria-hidden="true"><span class="now"></span><span></span><span></span><span></span></div>
     </header>
 
     <form class="lja-body" id="ljApplyForm" novalidate autocomplete="on">
@@ -14460,134 +14534,85 @@ body.theme-night #p-flagship-programs{
 
       <section class="lja-step is-on" data-step="1">
         <p class="lja-legend">About you</p>
+        <label class="lja-field">
+          <span class="lja-label">Full name</span>
+          <input class="lja-input" type="text" name="fullName" data-label="Full name" data-req autocomplete="name" placeholder="First and last name">
+          <span class="lja-err"></span>
+        </label>
         <div class="lja-row">
-          <label class="lja-field">
-            <span class="lja-label">Full name</span>
-            <input class="lja-input" type="text" name="fullName" data-label="Full name" data-req autocomplete="name" placeholder="First and last name">
-            <span class="lja-err"></span>
-          </label>
           <label class="lja-field">
             <span class="lja-label">Email</span>
             <input class="lja-input" type="email" name="email" data-label="Email" data-req data-email autocomplete="email" placeholder="you@example.com">
             <span class="lja-err"></span>
           </label>
-        </div>
-        <div class="lja-row">
           <label class="lja-field">
-            <span class="lja-label">Phone or WhatsApp <i>(optional)</i></span>
-            <input class="lja-input" type="tel" name="phone" data-label="Phone" autocomplete="tel" placeholder="+1 305 000 0000">
-            <span class="lja-err"></span>
-          </label>
-          <label class="lja-field">
-            <span class="lja-label">City and country</span>
-            <input class="lja-input" type="text" name="location" data-label="City and country" data-req placeholder="Miami, United States">
+            <span class="lja-label">Phone</span>
+            <input class="lja-input" type="tel" name="phone" data-label="Phone" data-req autocomplete="tel" placeholder="+1 305 000 0000">
             <span class="lja-err"></span>
           </label>
         </div>
       </section>
 
       <section class="lja-step" data-step="2">
-        <p class="lja-legend">Your organisation</p>
+        <p class="lja-legend">Your university</p>
         <label class="lja-field">
-          <span class="lja-label">Organisation name</span>
-          <input class="lja-input" type="text" name="orgName" data-label="Organisation name" data-req placeholder="e.g. your Student Government Association">
+          <span class="lja-label">University name and country</span>
+          <input class="lja-input" type="text" name="university" data-label="University name and country" data-req placeholder="e.g. Florida International University, United States">
           <span class="lja-err"></span>
         </label>
-        <div class="lja-row">
-          <label class="lja-field">
-            <span class="lja-label">Type of organisation</span>
-            <select class="lja-select" name="orgType" data-label="Type of organisation" data-req>
-              <option value="">Select one</option>
-              <option>Student government or guild</option>
-              <option>Registered student organisation</option>
-              <option>Fraternity or sorority</option>
-              <option>University department or office</option>
-              <option>Non-profit or community group</option>
-              <option>Employer or company</option>
-              <option>Other</option>
-            </select>
-            <span class="lja-err"></span>
-          </label>
-          <label class="lja-field">
-            <span class="lja-label">University or institution</span>
-            <input class="lja-input" type="text" name="institution" data-label="University or institution" data-req placeholder="Florida International University">
-            <span class="lja-err"></span>
-          </label>
+        <label class="lja-field">
+          <span class="lja-label">Student government name</span>
+          <input class="lja-input" type="text" name="studentGov" data-label="Student government name" data-req placeholder="e.g. Student Government Association">
+          <span class="lja-err"></span>
+        </label>
+        <p class="lja-legend">Applying as</p>
+        <div class="lja-chips" role="radiogroup" aria-label="Applying as">
+          <label class="lja-chip"><input type="radio" name="applyingAs" value="Delegate" checked><span>Delegate<small>Student government executive</small></span></label>
+          <label class="lja-chip"><input type="radio" name="applyingAs" value="Advisor"><span>Advisor<small>Staff member</small></span></label>
         </div>
-        <div class="lja-row">
-          <label class="lja-field">
-            <span class="lja-label">Your leadership position</span>
-            <input class="lja-input" type="text" name="position" data-label="Leadership position" data-req placeholder="e.g. Senate President, Chair of Finance">
-            <span class="lja-err"></span>
-          </label>
-          <label class="lja-field">
-            <span class="lja-label">Website or social <i>(optional)</i></span>
-            <input class="lja-input" type="text" name="orgLink" data-label="Website or social" placeholder="e.g. sga.youruniversity.edu">
-            <span class="lja-err"></span>
-          </label>
-        </div>
+        <label class="lja-field">
+          <span class="lja-label" id="ljaPosLabel">Executive position held</span>
+          <input class="lja-input" type="text" name="position" id="ljaPosition" data-label="Position or job title" data-req placeholder="e.g. Treasurer">
+          <span class="lja-err"></span>
+        </label>
       </section>
 
       <section class="lja-step" data-step="3">
-        <p class="lja-legend">Which cohort</p>
-        <div class="lja-chips" role="radiogroup" aria-label="Which cohort">
-          <label class="lja-chip"><input type="radio" name="cohort" value="Founding cohort, 17 to 21 February 2027" checked><span>Founding cohort<small>17 to 21 Feb 2027</small></span></label>
-          <label class="lja-chip"><input type="radio" name="cohort" value="A later cohort"><span>A later cohort<small>Keep me on the list</small></span></label>
+        <p class="lja-legend">Funding route</p>
+        <div class="lja-chips" role="radiogroup" aria-label="Funding route">
+          <label class="lja-chip"><input type="radio" name="funding" value="Self-funded" checked><span>Self-funded<small>You settle your own place</small></span></label>
+          <label class="lja-chip"><input type="radio" name="funding" value="Corporate or community sponsor"><span>Corporate or community sponsor<small>Employer, business or church</small></span></label>
+          <label class="lja-chip"><input type="radio" name="funding" value="Institutional funding"><span>Institutional funding<small>University, department or student government</small></span></label>
+          <label class="lja-chip"><input type="radio" name="funding" value="Scholarship"><span>Scholarship<small>Jamaican applicants only</small></span></label>
         </div>
-
-        <p class="lja-legend">How many delegates</p>
-        <label class="lja-field">
-          <span class="lja-label">Delegates you expect to send</span>
-          <select class="lja-select" name="delegates" data-label="Delegates" data-req>
-            <option value="">Select one</option>
-            <option>Just me (1 delegate)</option>
-            <option>2 to 5 delegates</option>
-            <option>6 to 11 delegates</option>
-            <option>12 to 15 (founding cohort size)</option>
-            <option>16 to 25 delegates</option>
-            <option>26 to 40 delegates</option>
-            <option>Not decided yet</option>
-          </select>
-          <span class="lja-err"></span>
-        </label>
-
-        <p class="lja-legend">How the seat is funded</p>
-        <div class="lja-chips" role="radiogroup" aria-label="How the seat is funded">
-          <label class="lja-chip"><input type="radio" name="funding" value="Self funded" checked><span>Self funded<small>$35 place deposit</small></span></label>
-          <label class="lja-chip"><input type="radio" name="funding" value="Sponsored"><span>Sponsored<small>Employer, business or church</small></span></label>
-          <label class="lja-chip"><input type="radio" name="funding" value="Organisation funded"><span>Organisation funded<small>Dues or operating account</small></span></label>
-          <label class="lja-chip"><input type="radio" name="funding" value="SGA sponsored seat"><span>SGA sponsored seat<small>Same terms as any sponsor</small></span></label>
-        </div>
-        <p class="lja-fund-note" style="font-size:12.5px;line-height:1.65;color:#5b6b80;margin:12px 0 0">A delegate who is not selected pays nothing. Once selected, a 30% non-refundable deposit confirms your place, and your US$35 place deposit is credited toward it. The balance is due 14 days before the programme starts. Cancellations and changes follow our <a href="#" onclick="nav('refund-policy');return false;" style="color:inherit;font-weight:700;text-decoration:underline">Group Bookings policy</a>.</p>
-        <label class="lja-check">
-          <input type="checkbox" name="earlyRate">
-          <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
-          <span class="txt"><b>Early commitment rate.</b> Confirm in principle by 15 October 2026 and save US$75 per delegate.</span>
-        </label>
 
         <p class="lja-legend">In your own words</p>
         <label class="lja-field">
-          <span class="lja-label">What do you want to fix or build in your organisation?</span>
-          <textarea class="lja-area" name="goal" data-label="What you want to fix or build" data-req maxlength="700" placeholder="The problem you would bring to the institute, and what you would want to carry back with roughly ten weeks of term left."></textarea>
+          <span class="lja-label">What is the single most important thing you intend to fix or build in your student government?</span>
+          <textarea class="lja-area" name="goal" data-label="Your answer" data-req maxlength="700" placeholder="Your answer"></textarea>
           <span class="lja-count" id="ljaCount">0 / 700</span>
-          <span class="lja-err"></span>
-        </label>
-        <label class="lja-field">
-          <span class="lja-label">Anything else we should know <i>(optional)</i></span>
-          <input class="lja-input" type="text" name="notes" data-label="Anything else" placeholder="Questions, dietary needs, accessibility, travel documents">
           <span class="lja-err"></span>
         </label>
         <label class="lja-check" id="ljaConsentWrap">
           <input type="checkbox" name="consent" data-label="Consent">
           <span class="box"><svg viewBox="0 0 12 12"><path d="M1.5 6.4l3 3L10.5 3"/></svg></span>
-          <span class="txt">I agree that Sight Seers Caribbean may contact me about this application and the Leaders in Jamaica Leadership Institute.</span>
+          <span class="txt">I agree that Sight Seers Caribbean may contact me about this application and the Leaders in Jamaica Student Government Leadership Institute.</span>
         </label>
+      </section>
+
+      <section class="lja-step" data-step="4">
+        <p class="lja-legend">Application fee</p>
+        <div class="lja-fee">
+          <b>US$35</b>
+          <span>Application fee, paid by each applicant. The US$35 application fee is non-refundable.</span>
+        </div>
+        <a class="lja-btn primary lja-pay" id="ljaPay" href="https://buy.stripe.com/14A8wQf9M6cf910cvi5kk01" target="_blank" rel="noopener">Pay the US$35 application fee</a>
       </section>
     </form>
 
     <footer class="lja-foot">
       <button type="button" class="lja-btn ghost" id="ljaBack" hidden>Back</button>
-      <span class="lja-foot-note" id="ljaFootNote">Step 1 of 3</span>
+      <span class="lja-foot-note" id="ljaFootNote">Step 1 of 4</span>
       <button type="button" class="lja-btn primary" id="ljaNext"><span class="spin"></span><span id="ljaNextTxt">Continue</span></button>
     </footer>
 
@@ -14597,7 +14622,7 @@ body.theme-night #p-flagship-programs{
         <path d="M25 41.5l10.5 10.5L56 29"/>
       </svg>
       <h3>Application received</h3>
-      <p id="ljaDoneMsg">Thank you. The programme director reviews every application personally and will reply to you by email, usually within two working days.</p>
+      <p id="ljaDoneMsg">Thank you for your application. The programme director reviews every submission personally and typically responds within two working days.</p>
       <button type="button" class="lja-btn primary" onclick="closeLeadersApply()">Done</button>
     </div>
   </div>
@@ -14605,7 +14630,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 3, step = 1, busy = false, lastFocus = null, prevOverflow = '';
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false;
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -14694,32 +14719,25 @@ body.theme-night #p-flagship-programs{
 
   function summary(d){
     return [
-      'LEADERS IN JAMAICA: LEADERSHIP INSTITUTE APPLICATION',
+      'LEADERS IN JAMAICA: STUDENT GOVERNMENT LEADERSHIP INSTITUTE APPLICATION',
       '',
-      'DELEGATE',
+      'APPLICANT',
       'Name: ' + d.fullName,
       'Email: ' + d.email,
-      'Phone / WhatsApp: ' + (d.phone || 'Not given'),
-      'City and country: ' + d.location,
+      'Phone: ' + d.phone,
       '',
-      'ORGANISATION',
-      'Organisation: ' + d.orgName,
-      'Type: ' + d.orgType,
-      'University or institution: ' + d.institution,
-      'Leadership position: ' + d.position,
-      'Website or social: ' + (d.orgLink || 'Not given'),
+      'UNIVERSITY',
+      'University and country: ' + d.university,
+      'Student government: ' + d.studentGov,
+      'Applying as: ' + d.applyingAs,
+      (d.applyingAs === 'Advisor' ? 'Job title: ' : 'Executive position held: ') + d.position,
       '',
-      'PROGRAMME',
-      'Cohort: ' + d.cohort,
-      'Delegates expected: ' + d.delegates,
+      'FUNDING',
       'Funding route: ' + d.funding,
-      'Early commitment rate: ' + (d.earlyRate ? 'Yes, wants the 15 October 2026 rate' : 'No'),
+      'US$35 application fee payment link opened: ' + (feeOpened ? 'Yes' : 'No'),
       '',
-      'WHAT THEY WANT TO FIX OR BUILD',
+      'THE SINGLE MOST IMPORTANT THING THEY INTEND TO FIX OR BUILD IN THEIR STUDENT GOVERNMENT',
       d.goal,
-      '',
-      'ANYTHING ELSE',
-      (d.notes || 'Nothing added'),
       '',
       'Consent to be contacted: ' + (d.consent ? 'Yes' : 'No'),
       'Submitted from: ' + (location.origin + '/leaders-in-jamaica')
@@ -14755,7 +14773,7 @@ body.theme-night #p-flagship-programs{
         name: d.fullName,
         email: d.email,
         phone: d.phone,
-        subject: 'Leaders in Jamaica application: ' + d.orgName,
+        subject: 'Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')',
         message: body
       })
     }).then(function(r){
@@ -14771,7 +14789,7 @@ body.theme-night #p-flagship-programs{
     })['catch'](function(){
       busyState(false);
       var href = 'mailto:' + APPLY_EMAIL
-        + '?subject=' + encodeURIComponent('Leaders in Jamaica application: ' + d.orgName)
+        + '?subject=' + encodeURIComponent('Leaders in Jamaica application: ' + d.university + ' (' + d.applyingAs + ')')
         + '&body=' + encodeURIComponent(body);
       alertBox('We could not send the application just now. <a href="' + href + '">Send it by email instead</a> and everything you typed will be carried across, or message the director on WhatsApp.');
     });
@@ -14827,6 +14845,7 @@ body.theme-night #p-flagship-programs{
     });
 
     form().addEventListener('submit', function(e){ e.preventDefault(); });
+    el('ljaPay').addEventListener('click', function(){ feeOpened = true; });
 
     form().addEventListener('keydown', function(e){
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA'){
@@ -14842,6 +14861,11 @@ body.theme-night #p-flagship-programs{
     });
 
     form().addEventListener('change', function(e){
+      if (e.target.name === 'applyingAs'){
+        var adv = e.target.value === 'Advisor';
+        el('ljaPosLabel').textContent = adv ? 'Job title' : 'Executive position held';
+        el('ljaPosition').placeholder = adv ? 'e.g. Student Government Advisor' : 'e.g. Treasurer';
+      }
       if (e.target.name === 'consent' && e.target.checked){
         e.target.closest('.lja-check').classList.remove('has-err');
       }
@@ -15707,6 +15731,7 @@ body.theme-night #p-flagship-programs{
       paint();
     });
     form().addEventListener('submit', function(e){ e.preventDefault(); });
+    el('ljaPay').addEventListener('click', function(){ feeOpened = true; });
     form().addEventListener('keydown', function(e){
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA'){
         e.preventDefault();
@@ -28693,7 +28718,7 @@ var SS_META = {
   'stays':['Caribbean Villas & Group Vacation Rentals | Sight Seers','Villas and vacation rentals with room for the whole group in Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao and the Dominican Republic.'],
   'staycountry':['Caribbean Stays by Country | Sight Seers Caribbean','Browse villas, hotels and resorts by destination across Jamaica, Barbados, Belize, The Bahamas, Saint Lucia, Curacao and the Dominican Republic.'],
   'greek-life':['Greek Life Trips: Fraternity & Sorority Travel, Caribbean','Spring break, founders, probate and chapter trips to Jamaica and the Caribbean. Villas, transfers, yacht days and nightlife, planned for your whole crew.'],
-  'leaders-jamaica':['Leaders in Jamaica, Leadership Institute | Sight Seers Caribbean','A five-day leadership institute in Jamaica for student governments and organisations, working alongside a Jamaican university\'s student government. Feb 2027, open by application.'],
+  'leaders-jamaica':['Leaders in Jamaica | Student Government Leadership Institute | Sight Seers Caribbean','An annual six-day leadership institute in Montego Bay pairing a US student government with a Jamaican counterpart. Eight applied modules, five deliverables, a campus exchange, a Career Development Day and Pitch Night.'],
   'travel-club':['Travel Club: Lead a Caribbean Group Trip | Sight Seers','Apply to lead a Caribbean group trip with your own community. We manage the bookings and run the delivery.'],
   'trip':['Travel Club trip | Sight Seers Caribbean','An approved Sight Seers Travel Club trip. Ask to join and we confirm availability and payment terms before anything is charged.'],
   'flagship-programs':['Flagship Programs | Sight Seers Caribbean','Flagship programs: Seven Shores MBA Voyages, Leaders in Jamaica, Seven Shores Society, Shore Leave and Seven Shores Offsite. Open one to see how it works.'],
