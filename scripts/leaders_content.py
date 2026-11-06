@@ -114,13 +114,14 @@ INVEST_NOTES = [
     'Jamaican delegation: places are arranged directly with the Jamaican host university',
 ]
 PAY_ROWS = [
-    ('1. Application fee', 'On application', 'US$35'),
-    ('2. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$568.50'),
-    ('3. Balance (70%)', 'In full, no later than 14 days before the programme', 'US$1,326.50'),
+    ('1. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$568.50'),
+    ('2. Second payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
+    ('3. Third payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
 ]
+APPFEE_NOTE = 'The US$35 application fee is paid on application. It is separate from, and in addition to, the US$1,895 programme fee, which is paid in the three parts below.'
 PAY_NOTES = [
-    'Each delegate and the advisor is responsible for their own application fee, deposit and balance',
-    'The balance may be settled in a single payment or in instalments, provided it is paid in full 14 days before the programme begins',
+    'Each delegate and the advisor is responsible for their own application fee and programme payments',
+    'The programme fee may be paid in three parts, and must be paid in full no later than 14 days before the programme begins',
     'Places not paid in full by that date are released, and the deposit is forfeited',
     'A fee waiver can be requested when applying and is confirmed by email. Applicants who do not request one pay the application fee',
 ]
@@ -162,7 +163,7 @@ FAQ = [
     ('Who is eligible?', 'Student government executives at a registered university. Each annual cohort pairs one US university with one Jamaican university.'),
     ('How many people can attend from one university?', 'Each university sends five executives and one advisor.'),
     ('What is the investment?', 'US$1,895 per person, plus a US$35 application fee. Airfare is not included.'),
-    ('Does each participant pay individually?', 'Yes. Each delegate and the advisor is responsible for their own application fee, deposit and balance, whether funded personally, by a sponsor or by their university.'),
+    ('Does each participant pay individually?', 'Yes. Each delegate and the advisor is responsible for their own application fee and programme payments, whether funded personally, by a sponsor or by their university.'),
     ('Is there any preparation before travel?', 'Yes. The Shore Briefing is a live online orientation held about two weeks before the programme, with a full programme walk-through, a safety briefing and breakout rooms to meet the other delegation.'),
     ('What happens on the Career Development Day?', 'Delegates spend the day at a high school in western Jamaica, leading a pathways panel, sector-based career circles, a professional skills workshop, a university insight session and a student council masterclass.'),
     ('Is airfare included?', 'No. Airfare varies by departure city. Group air quotations and bookings are available on request.'),
@@ -274,7 +275,7 @@ def build_page():
     # payment schedule
     rows = ''.join('<tr><td data-label="Step">%s</td><td data-label="Timing">%s</td><td data-label="Amount" class="price">%s</td></tr>' % tuple(e(x) for x in r) for r in PAY_ROWS)
     p.append(sec('Payment schedule (per person)',
-        '    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Amount</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(PAY_NOTES))))
+        '    <p class="lj-sub" style="margin-bottom:20px">' + e(APPFEE_NOTE) + '</p>\n    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Amount</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(PAY_NOTES))))
     # Stripe: the existing US$35 payment link stays on the page, beside the payment schedule
     p.append('''  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
     <div class="lj-price-card lj-paycard">

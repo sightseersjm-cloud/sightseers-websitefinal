@@ -201,7 +201,7 @@ def _overview_pdf(c):
     f.append(h2('For advisors')); f += bullets(c.ADVISORS)
     f.append(KeepTogether([h2('Investment (per person, US delegation)'), rows([(a, x) for a, x, _ in c.INVEST_ROWS], [CW - 110, 110], ['Rate', 'Per person'], price_cols=(1,)), Spacer(1, 6)] ))
     f += bullets(c.INVEST_NOTES)
-    f.append(KeepTogether([h2('Payment schedule (per person)'), rows(c.PAY_ROWS, [170, CW - 290, 120], ['Step', 'Timing', 'Amount'], price_cols=(2,)), Spacer(1, 6)]))
+    f.append(KeepTogether([h2('Payment schedule (per person)'), para(c.APPFEE_NOTE), rows(c.PAY_ROWS, [170, CW - 290, 120], ['Step', 'Timing', 'Amount'], price_cols=(2,)), Spacer(1, 6)]))
     f += bullets(c.PAY_NOTES)
     f.append(h2('Funding your place')); f += bullets(['%s: %s' % (t, x) for t, x in c.FUNDING])
     f.append(h2('Cancellations and changes')); f += bullets(c.CANCEL)
