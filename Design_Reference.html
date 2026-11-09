@@ -48027,6 +48027,15 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-phbody label.ac-sbtn{cursor:pointer}
 #p-account .ac-phsave{margin-top:12px}
 @media(max-width:560px){#p-account .ac-phban{flex-direction:column;align-items:flex-start}#p-account .ac-phrow{grid-template-columns:56px 1fr}#p-account .ac-phrow button{grid-column:1/-1;justify-self:start}}
+@font-face{font-family:'SSAnton';src:url('/assets/fonts/anton-latin-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+#p-account .ac-lcbody{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:18px;align-items:start;padding:2px 16px 16px}
+#p-account .ac-lccv{display:block;width:100%;height:auto;aspect-ratio:1/1;background:var(--ac-soft);border:1px solid var(--ac-line);touch-action:none;cursor:grab}
+#p-account .ac-lcctl label.ac-lclab{display:block;font-size:12.5px;font-weight:800;color:var(--ac-head);margin:0 0 4px}
+#p-account .ac-lcctl input[type=text]{width:100%;max-width:300px;padding:10px 12px;font:700 15px 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;text-transform:uppercase}
+#p-account .ac-lcctl input[type=range]{width:100%;max-width:300px}
+#p-account .ac-lcctl .ac-lcrow{margin:0 0 14px}
+#p-account .ac-lcctl small{display:block;font-size:12px;color:var(--ac-mut);margin-top:3px}
+@media(max-width:640px){#p-account .ac-lcbody{grid-template-columns:1fr}#p-account .ac-lccv{max-width:340px}}
 #p-account .ac-cobox{margin-top:14px;background:var(--ac-card);border:1px solid var(--ac-line);border-left:4px solid var(--ac-o)}
 #p-account .ac-cobox>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;list-style:none;font-size:13.5px;font-weight:800;color:var(--ac-head)}
 #p-account .ac-cobox>summary::-webkit-details-marker{display:none}
@@ -49324,6 +49333,76 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       .catch(function(err){msg.className='ac-invmsg err';msg.textContent=(done?done+' uploaded, then: ':'')+(err.message||'That photo could not be uploaded.');})
       .then(function(){inp.value='';});
   });
+  /* ---------- the Team Leader card: a picture and name the leader can change, downloaded as an image for their WhatsApp group ---------- */
+  var LC={base:null,store:{}};
+  function lcUser(){try{return JSON.parse(localStorage.getItem('ss_current_user')||'{}')||{};}catch(e){return {};}}
+  function lcKey(id){return 'ss_lcard_'+id;}
+  function lcSaved(id){try{return JSON.parse(localStorage.getItem(lcKey(id))||'null');}catch(e){return null;}}
+  function lcSave(id,st){try{localStorage.setItem(lcKey(id),JSON.stringify({name:st.name,zoom:st.zoom,ox:st.ox,oy:st.oy,photo:st.photoData||''}));}catch(e){}}
+  function lcBox(t){
+    if(t.status==='closed')return '';
+    var u=lcUser(),first=String(u.name||'').trim().split(/\s+/)[0]||'';
+    return '<details class="ac-photobox" data-lc-box data-lc-id="'+esc(t.id)+'" data-lc-first="'+esc(first)+'" data-lc-avatar="'+esc(u.avatarUrl||'')+'"><summary><span>WhatsApp group picture<small>your Team Leader card</small></span></summary>'+
+      '<div class="ac-lcbody"><canvas class="ac-lccv" width="2000" height="2000" data-lc-cv aria-label="Team Leader card preview"></canvas><div class="ac-lcctl">'+
+      '<div class="ac-lcrow"><label class="ac-lclab" for="lcName'+esc(t.id)+'">Name on the card</label><input id="lcName'+esc(t.id)+'" type="text" maxlength="16" data-lc-name placeholder="Your name"></div>'+
+      '<div class="ac-lcrow"><label class="ac-lclab">Your picture</label><div class="ac-kitbtns"><label class="ac-sbtn ac-sbtn--line">Choose a photo<input type="file" accept="image/jpeg,image/png,image/webp" data-lc-file hidden></label></div><small>Drag the picture to move it. Use the slider to zoom.</small></div>'+
+      '<div class="ac-lcrow"><label class="ac-lclab" for="lcZoom'+esc(t.id)+'">Zoom</label><input id="lcZoom'+esc(t.id)+'" type="range" min="1" max="3" step="0.01" value="1" data-lc-zoom></div>'+
+      '<div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-lc-download>Download image</button></div>'+
+      '<span class="ac-invmsg" role="status" data-lc-msg></span><p class="ac-onote">Save it, then set it as the picture of your WhatsApp group. It is your own card, only you see it here.</p></div></div></details>';
+  }
+  function lcLoadBase(){return new Promise(function(ok){if(LC.base)return ok();var im=new Image();im.onload=function(){LC.base=im;ok();};im.onerror=function(){ok();};im.src='/assets/travel-club/leader-card-base.webp';});}
+  function lcFont(){try{return document.fonts&&document.fonts.load?document.fonts.load('400 100px "SSAnton"'):Promise.resolve();}catch(e){return Promise.resolve();}}
+  /* draw the card: the template, the picture in the circle (never over the label), and the name in place of the old one */
+  function lcDraw(cv,st){
+    if(!LC.base)return;var W=2000,x=cv.getContext('2d');
+    x.clearRect(0,0,W,W);x.drawImage(LC.base,0,0,W,W);
+    var CX=1020.5,CY=944.5,R=546,yl=function(px){return 1459-0.0525*(px-1000)-2;};
+    if(st.photo){
+      x.save();x.beginPath();x.arc(CX,CY,R,0,Math.PI*2);x.clip();
+      x.beginPath();x.moveTo(0,0);x.lineTo(W,0);x.lineTo(W,yl(W));x.lineTo(0,yl(0));x.closePath();x.clip();
+      var im=st.photo,iw=im.naturalWidth||im.width,ih=im.naturalHeight||im.height,cover=Math.max(2*R/iw,2*R/ih),sc=cover*st.zoom,dw=iw*sc,dh=ih*sc;
+      var mx=Math.max(0,(dw-2*R)/2),my=Math.max(0,(dh-2*R)/2);
+      var dx=CX-dw/2+Math.max(-1,Math.min(1,st.ox))*mx,dy=CY-dh/2+Math.max(-1,Math.min(1,st.oy))*my;
+      x.fillStyle='#fff';x.fillRect(CX-R,CY-R,2*R,2*R);x.drawImage(im,dx,dy,dw,dh);x.restore();
+    }
+    var name=String(st.name||'').trim().toUpperCase().slice(0,16);if(!name)return;
+    x.save();x.textBaseline='alphabetic';x.textAlign='left';
+    var probe=100;x.font='400 '+probe+'px SSAnton, Impact, sans-serif';
+    var capR=(x.measureText('H').actualBoundingBoxAscent||probe*0.73)/probe;
+    var size=322/capR,SK=0.2;x.font='400 '+size+'px SSAnton, Impact, sans-serif';
+    var SX=1.2,w=x.measureText(name).width*SX;if(w>1130){size=size*1130/w;x.font='400 '+size+'px SSAnton, Impact, sans-serif';w=x.measureText(name).width*SX;}
+    var cap=capR*size,base=1953;  /* the bottom of the letters stays where the old name's was */
+    x.translate(1024-w/2,base);x.transform(SX,0,-SK,1,0,0);
+    x.shadowColor='rgba(0,0,0,.22)';x.shadowBlur=14;x.shadowOffsetX=6;x.shadowOffsetY=9;
+    x.fillStyle='#f87c14';x.fillText(name,0,0);x.restore();
+  }
+  function lcInit(box){
+    if(box._lcDone)return;box._lcDone=true;var id=box.getAttribute('data-lc-id'),cv=box.querySelector('[data-lc-cv]'),msg=box.querySelector('[data-lc-msg]');
+    var sv=lcSaved(id)||{},st=LC.store[id]={name:sv.name!=null?sv.name:box.getAttribute('data-lc-first'),zoom:sv.zoom||1,ox:sv.ox||0,oy:sv.oy||0,photo:null,photoData:sv.photo||''};
+    box.querySelector('[data-lc-name]').value=st.name;box.querySelector('[data-lc-zoom]').value=st.zoom;
+    var redraw=function(){lcDraw(cv,st);};
+    var setPhoto=function(src,keep){var im=new Image();im.onload=function(){st.photo=im;redraw();};im.onerror=function(){redraw();};im.src=src;};
+    Promise.all([lcLoadBase(),lcFont()]).then(function(){redraw();
+      var src=st.photoData||box.getAttribute('data-lc-avatar');if(src)setPhoto(src);
+    });
+    box.querySelector('[data-lc-name]').addEventListener('input',function(e){st.name=e.target.value;lcSave(id,st);redraw();});
+    box.querySelector('[data-lc-zoom]').addEventListener('input',function(e){st.zoom=Number(e.target.value)||1;lcSave(id,st);redraw();});
+    box.querySelector('[data-lc-file]').addEventListener('change',function(e){
+      var f=(e.target.files||[])[0];if(!f)return;msg.className='ac-invmsg';msg.textContent='';
+      phShrink(f).then(function(d){st.photoData=d;st.ox=0;st.oy=0;st.zoom=1;box.querySelector('[data-lc-zoom]').value=1;lcSave(id,st);setPhoto(d);}).catch(function(err){msg.className='ac-invmsg err';msg.textContent=err.message||'That photo could not be opened.';}).then(function(){e.target.value='';});
+    });
+    var drag=null;
+    cv.addEventListener('pointerdown',function(e){if(!st.photo)return;var r=cv.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,ox:st.ox,oy:st.oy,k:2000/r.width};try{cv.setPointerCapture(e.pointerId);}catch(x){}cv.style.cursor='grabbing';});
+    cv.addEventListener('pointermove',function(e){if(!drag)return;
+      var im=st.photo,iw=im.naturalWidth,ih=im.naturalHeight,cover=Math.max(1092/iw,1092/ih),dw=iw*cover*st.zoom,dh=ih*cover*st.zoom,mx=Math.max(1,(dw-1092)/2),my=Math.max(1,(dh-1092)/2);
+      st.ox=Math.max(-1,Math.min(1,drag.ox-(e.clientX-drag.x)*drag.k/mx));st.oy=Math.max(-1,Math.min(1,drag.oy-(e.clientY-drag.y)*drag.k/my));redraw();});
+    var end=function(){if(drag){drag=null;cv.style.cursor='';lcSave(id,st);}};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+    box.querySelector('[data-lc-download]').addEventListener('click',function(){
+      lcDraw(cv,st);cv.toBlob(function(b){if(!b){msg.className='ac-invmsg err';msg.textContent='Could not make the image. Please try again.';return;}
+        var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='Team-Leader-'+(String(st.name||'card').trim().replace(/[^A-Za-z0-9]+/g,'-')||'card')+'.jpg';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
+        msg.className='ac-invmsg ok';msg.textContent='Downloaded. Set it as your WhatsApp group picture.';},'image/jpeg',0.93);});
+  }
+  document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.matches&&d.matches('[data-lc-box]')&&d.open)lcInit(d);},true);
   function coInvites(list){
     if(!list||!list.length)return '';
     return list.map(function(v){return '<div class="ac-coinv"><b>'+esc(v.mainLeaderName||'A Travel Club leader')+' invited you to co-lead '+esc(v.title)+'</b><small>'+esc([v.dateText,v.destination].filter(Boolean).join(' · '))+'</small><p>As co-leader you can edit the trip details, post updates and add the group link, and you get the trip emails. Sight Seers approves co-leaders before they start. Rewards are paid to the main leader, who shares them with you.</p><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-co-accept="'+esc(v.tripId)+'">Accept</button><button type="button" class="ac-sbtn ac-sbtn--line" data-co-decline="'+esc(v.tripId)+'">Decline</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('');
@@ -49339,7 +49418,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
       (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> Mention them to your group.</p>':'')+
-      groupForm(t)+infoBox(t)+photoBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
+      groupForm(t)+infoBox(t)+photoBox(t)+lcBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
