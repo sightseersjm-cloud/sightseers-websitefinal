@@ -52935,6 +52935,9 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-manage .wc-prog{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
 #p-manage .wc-pr{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 #p-manage .wc-pr:last-child{border-bottom:0}
+#p-manage .wc-sel{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 14px}
+#p-manage .wc-sel label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:12px;color:var(--mut);min-width:240px;flex:1 1 240px;max-width:380px}
+#p-manage .wc-sel select{padding:10px 12px;border:1px solid var(--line);background:#fff;font:inherit;font-size:15px;color:var(--navy)}
 #p-manage .wc-coh{margin:0 0 26px}
 #p-manage .wc-cohh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;background:#063a63;color:#fff}
 #p-manage .wc-cohh h3{margin:0;color:#fff;font-size:18px}
@@ -52957,7 +52960,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   var S=MG.S,esc=MG.esc,api=MG.api;
 
   /* ====================== Leaders in Jamaica: the applications, and the single-use fee waiver codes ====================== */
-  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'all',view:'cohort',cfilter:'unused',made:null,busy:false,open:{}};
+  var WC={tab:'apps',list:null,apps:null,err:'',loading:false,filter:'all',view:'cohort',fCoh:'all',fSch:'all',cfilter:'unused',made:null,busy:false,open:{}};
   var FEE={'fee-due':['Fee due','due'],'waiver-requested':['Waiver requested','ask'],'waived-code':['Waived with a code',''],'waived':['Waived',''],'pay-link-sent':['Payment link sent','ask'],'paid':['Fee paid','']};
   function dt(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
   function load(){
@@ -53075,7 +53078,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var used=c.status==='used';
     return '<div class="mg-card wc-c"><div class="wc-main"><code>'+esc(c.code)+'</code> <span class="wc-b '+(used?'used':'')+'">'+(used?'Used '+esc(dt(c.usedAt)):'Not used')+'</span>'
       +'<div class="wc-meta"><b>'+esc(c.name)+'</b> &middot; '+esc(c.email)+(c.note?' &middot; '+esc(c.note):'')+' &middot; made '+esc(dt(c.createdAt))+(c.createdBy?' by '+esc(c.createdBy):'')+'</div></div>'
-      +'<div class="wc-act">'+(used?'<button type="button" class="mg-btn sm ghost wc-del" data-wc-delcode="'+esc(c.id)+'">Delete</button>':'<button type="button" class="mg-btn sm" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
+      +'<div class="wc-act">'+(used?'<button type="button" class="mg-btn sm ghost wc-del" data-wc-delcode="'+esc(c.id)+'">Delete</button>':'<button type="button" class="mg-btn sm" data-wc-emailcode="'+esc(c.id)+'">'+(c.emailedAt?'Email it again':'Email the code')+'</button> <button type="button" class="mg-btn sm ghost" data-wc-copy="'+esc(c.id)+'">Copy code</button> <button type="button" class="mg-btn sm ghost" data-wc-revoke="'+esc(c.id)+'">Cancel this code</button>')+'</div></div>';
   }
   function groupsHtml(rows){
     return groupApps(rows).map(function(c){
@@ -53089,14 +53092,20 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
   function appsTab(){
     var chips=[['all','Everything'],['ask','Waiver requested'],['due','Fee due'],['done','Waived or paid']].map(function(f){return '<button type="button" data-wc-f="'+f[0]+'" class="'+(WC.filter===f[0]?'on':'')+'">'+f[1]+' <b>'+acount(f[0])+'</b></button>';}).join('');
-    var rows=WC.apps.filter(function(a){return amatch(a,WC.filter);});
+    var rows=WC.apps.filter(function(a){return amatch(a,WC.filter)&&(WC.fCoh==='all'||cohortOf(a)===WC.fCoh)&&(WC.fSch==='all'||schoolKey(a)===WC.fSch);});
+    var cohs={},schs={};(WC.apps||[]).forEach(function(a){cohs[cohortOf(a)]=1;if(WC.fCoh==='all'||cohortOf(a)===WC.fCoh)schs[schoolKey(a)]=schs[schoolKey(a)]||a.university||'No school given';});
+    var cohList=Object.keys(cohs).sort(function(x,y){var ux=x==='Not assigned yet',uy=y==='Not assigned yet';if(ux!==uy)return ux?1:-1;return String(y).localeCompare(String(x));});
+    var schList=Object.keys(schs).sort(function(x,y){return schs[x].localeCompare(schs[y]);});
+    if(WC.fSch!=='all'&&!schs[WC.fSch])WC.fSch='all';
+    var sel='<div class="wc-sel"><label>Cohort<select data-wc-sel="coh"><option value="all">All cohorts</option>'+cohList.map(function(k){return '<option value="'+esc(k)+'"'+(WC.fCoh===k?' selected':'')+'>'+(k==='Not assigned yet'?'Not assigned yet':'Cohort '+esc(k))+'</option>';}).join('')+'</select></label>'
+      +'<label>University<select data-wc-sel="sch"><option value="all">All universities</option>'+schList.map(function(k){return '<option value="'+esc(k)+'"'+(WC.fSch===k?' selected':'')+'>'+esc(schs[k])+'</option>';}).join('')+'</select></label></div>';
     return '<p class="mg-hint" style="margin:0 0 12px">Every Leaders in Jamaica application is kept here. Applicants who ask for a waiver are not asked to pay until you decide. Approving emails them to say the fee is waived. Declining emails them a short message saying we are unable to waive it, with the US$35 payment link.</p>'
-      +'<div class="ib-chips" style="margin:0 0 10px">'+chips+' <button type="button" data-wc-refresh="1">Refresh</button></div>'
+      +sel+'<div class="ib-chips" style="margin:0 0 10px">'+chips+' <button type="button" data-wc-refresh="1">Refresh</button></div>'
       +'<div class="ib-chips" style="margin:0 0 14px"><button type="button" data-wc-view="cohort" class="'+(WC.view==='cohort'?'on':'')+'">By cohort and school</button><button type="button" data-wc-view="list" class="'+(WC.view==='list'?'on':'')+'">One list</button></div><div class="mg-msg" id="wcMsg" role="alert"></div>'
       +(rows.length&&WC.view==='cohort'?groupsHtml(rows):rows.length?rows.map(appCard).join(''):'<div class="mg-card mg-soon"><h3>Nothing here</h3><p class="mg-hint" style="font-size:14px;margin:0">'+(WC.apps.length?'Try another filter.':'Applications will be listed here as they arrive.')+'</p></div>');
   }
   function codesTab(){
-    var made=WC.made?'<div class="mg-card wc-made"><b>Code made for '+esc(WC.made.name)+'</b><span class="wc-code">'+esc(WC.made.code)+'</span><p class="mg-hint" style="margin:0 0 12px">Works once, with <b>'+esc(WC.made.email)+'</b> only.</p><p style="margin:0"><button type="button" class="mg-btn pri sm" data-wc-copy="'+esc(WC.made.id)+'">Copy code</button> <button type="button" class="mg-btn sm" data-wc-note="'+esc(WC.made.id)+'">Copy a message to send them</button></p></div>':'';
+    var made=WC.made?'<div class="mg-card wc-made"><b>Code made for '+esc(WC.made.name)+'</b><span class="wc-code">'+esc(WC.made.code)+'</span><p class="mg-hint" style="margin:0 0 12px">Works once, with <b>'+esc(WC.made.email)+'</b> only.</p><p style="margin:0"><button type="button" class="mg-btn pri sm" data-wc-copy="'+esc(WC.made.id)+'">Copy code</button> <button type="button" class="mg-btn sm" data-wc-emailcode="'+esc(WC.made.id)+'">Email the code to '+esc(WC.made.name.split(' ')[0])+'</button> <button type="button" class="mg-btn sm ghost" data-wc-note="'+esc(WC.made.id)+'">Copy a message instead</button></p><div class="mg-msg" id="wcMsg2" role="alert"></div></div>':'';
     var form='<div class="mg-card wc-new"><h3>Make a code</h3><p class="mg-hint" style="margin:0 0 12px">For someone you approve before they apply. Use the email address they will type on the application. The code will not work with any other address, and works one time.</p>'
       +'<div class="wc-row2"><div class="mg-fld"><label for="wcN">Applicant name</label><input id="wcN" maxlength="120" autocomplete="off"></div><div class="mg-fld"><label for="wcE">Applicant email</label><input id="wcE" type="email" maxlength="160" autocomplete="off"></div></div>'
       +'<div class="mg-fld"><label for="wcO">Note <span class="mg-hint">(optional, only you see it)</span></label><input id="wcO" maxlength="200" placeholder="e.g. Scholarship, approved by phone"></div>'
@@ -53131,6 +53140,10 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(WC.busy)return;WC.busy=true;b.disabled=true;
     api('leaders-waiver',{action:action,id:id,part:part}).then(function(){WC.busy=false;return load().then(function(){rerender();msg(ok,'ok');});}).catch(function(er){WC.busy=false;b.disabled=false;msg(er.message||'That did not work. Try again.','err');});
   }
+  R.addEventListener('change',function(e){
+    var t=e.target;if(S.screen!=='codes'||!t||!t.hasAttribute||!t.hasAttribute('data-wc-sel'))return;
+    if(t.getAttribute('data-wc-sel')==='coh'){WC.fCoh=t.value;WC.fSch='all';}else WC.fSch=t.value;rerender();
+  });
   R.addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b||S.screen!=='codes')return;var d=b.dataset;
     if(d.wcTab){WC.tab=d.wcTab;rerender();return;}
@@ -53168,6 +53181,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.wcPaidpart){var a6=findA(d.wcPaidpart);if(a6&&window.confirm('Mark the '+({deposit:'deposit',second:'second payment',third:'third payment'}[d.part])+' as paid for '+a6.name+'? No email is sent.'))decidePart(b,d.wcPaidpart,'app-paid',d.part,'Marked as paid.');return;}
     if(d.wcPay){var a2=findA(d.wcPay);if(a2&&window.confirm('Email '+a2.name+' ('+a2.email+') the US$35 payment link?'))decide(b,d.wcPay,'app-paylink','Payment link sent to '+a2.name+'.');return;}
     if(d.wcPaid){var a3=findA(d.wcPaid);if(a3&&window.confirm('Mark the fee as paid for '+a3.name+'? No email is sent.'))decide(b,d.wcPaid,'app-paid','Marked as paid.');return;}
+    if(d.wcEmailcode){var c9=findC(d.wcEmailcode);if(c9&&window.confirm('Email the code '+c9.code+' to '+c9.name+' ('+c9.email+')?'))decide(b,d.wcEmailcode,'code-email','Code emailed to '+c9.name+'.');return;}
     if(d.wcCopy){var c=findC(d.wcCopy);if(c)copy(c.code,b);return;}
     if(d.wcNote){var n=findC(d.wcNote);if(n)copy(note(n),b);return;}
     if(d.wcRevoke){

@@ -105,7 +105,7 @@ function mailTo(a, subject, heading, html) {
 
 function status(c) { return c.usedAt ? 'used' : 'unused'; }
 function shape(c) {
-  return { id: c.id, code: c.code, name: c.name, email: c.email, note: c.note || '', createdAt: c.createdAt, createdBy: c.createdBy || '', status: status(c), usedAt: c.usedAt || '', usedByName: c.usedByName || '' };
+  return { id: c.id, code: c.code, name: c.name, email: c.email, note: c.note || '', emailedAt: c.emailedAt || '', createdAt: c.createdAt, createdBy: c.createdBy || '', status: status(c), usedAt: c.usedAt || '', usedByName: c.usedByName || '' };
 }
 
 /** The unused code for this applicant's email, or why it cannot be used. */
@@ -155,6 +155,24 @@ module.exports = async function handler(req, res) {
 
     const body = req.body || {};
     const action = body.action || 'check';
+
+    if (action === 'code-email') {
+      /* email an unused waiver code to the applicant it was made for */
+      const admin = await requirePerm(req, res, 'inbox');
+      if (!admin) return;
+      const c = (await db.getCollection(COLLECTION)).find(x => x.id === body.id);
+      if (!c) return res.status(404).json({ error: 'That code was not found.' });
+      if (c.usedAt) return res.status(400).json({ error: 'That code has already been used.' });
+      const first = String(c.name || '').trim().split(/\s+/)[0] || 'there';
+      const r = await sendEmail({ to: c.email, replyTo: process.env.BUSINESS_EMAIL || 'sightseersjm@gmail.com', subject: 'Your Leaders in Jamaica application fee waiver code', html: trip.shell('Your fee waiver code',
+        '<p>Hello ' + trip.esc(first) + ',</p><p>Your <b>Leaders in Jamaica</b> application fee waiver code is:</p>'
+        + '<p style="margin:16px 0;font-family:monospace;font-size:26px;font-weight:800;letter-spacing:2px;color:#063a63">' + trip.esc(c.code) + '</p>'
+        + '<p>When you apply at <a href="' + SITE() + '/leaders-in-jamaica">sightseerscaribbean.com/leaders-in-jamaica</a>, use this email address: <b>' + trip.esc(c.email) + '</b>. After you submit your application you will see a box for a fee waiver code. Enter the code there and your US$35 application fee is waived.</p>'
+        + '<p>The code works one time and only with that email address.</p>', ' ') });
+      if (r && r.ok === false) return res.status(502).json({ error: 'The email to ' + c.email + ' did not go through. Try again in a moment.' });
+      await db.updateInCollection(COLLECTION, c.id, { emailedAt: new Date().toISOString() });
+      return res.status(200).json({ ok: true });
+    }
 
     if (action === 'app-edit') {
       /* the school (fix a spelling so applicants group together) and the cohort (for example the year) an application belongs to */
