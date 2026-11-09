@@ -37,6 +37,10 @@ async function prepare(b, { needItems } = {}) {
   if (!trip.AUDIENCES[audience]) return { error: 'Please choose a group type.' };
   const contact = trip.cleanContact(b.contact);
   if (contact.error) return { error: contact.error };
+  if (!Number.isInteger(Number(b.guests))) return { error: 'Please enter the exact number of travellers, a whole number from 5 up.' };
+  const pf = b.prefs || {};
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(pf.month || ''))) return { error: 'Please choose your travel date.' };
+  if (!(Number(pf.budget) > 0)) return { error: 'Please enter your exact total budget in US dollars.' };
   const q = trip.quote({ country: b.country, guests: b.guests, items: b.items, transfers: b.transfers }, await liveItems());
   if (!q.ok) return { error: q.error };
   if (needItems && !q.lines.some(l => l.amount > 0)) return { error: 'Add at least one priced experience before reserving.' };

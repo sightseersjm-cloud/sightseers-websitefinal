@@ -9229,10 +9229,10 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 <div class="searchbar">
   <div class="sb-wrap">
     <div class="sb-field"><div><div class="sb-label">Destination</div><select class="sb-select" id="sbDest"><option value="">All Caribbean</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curacao</option></select></div></div>
-    <div class="sb-field" onclick="document.getElementById('sbDateFrom').showPicker?.()" style="cursor:pointer"><div><div class="sb-label">Travel Dates</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
+    <div class="sb-field" onclick="document.getElementById('sbDateFrom').showPicker?.()" style="cursor:pointer"><div><div class="sb-label">Travel Dates *</div><div class="sb-date-row"><input type="date" class="sb-input sb-date-input" id="sbDateFrom" placeholder="Start date"><span class="sb-date-sep">→</span><input type="date" class="sb-input sb-date-input" id="sbDateTo" placeholder="End date"></div></div></div>
     <div class="sb-field"><div><div class="sb-label">Experience Style</div><select class="sb-select" id="sbStyle"><option value="">All Excursions</option><option>Water Adventures</option><option>Land Excursions</option><option>MBA Experiences</option><option>Custom Packages</option><option>Yacht Charters</option><option>Efoil Surfboarding</option></select></div></div>
-    <div class="sb-field"><div><div class="sb-label">Travel Party</div><select class="sb-select" id="sbParty"><option>5 to 10 Persons</option><option>11 to 20 Persons</option><option>21 to 40 Persons</option><option>41+ Persons</option></select></div></div>
-    <div class="sb-field"><div><div class="sb-label">Trip Budget</div><select class="sb-select" id="sbBudget"><option value="">Select Budget</option><option>Under $500</option><option>$500 to $1,000</option><option>$1,000 to $2,500</option><option>$2,500 to $5,000</option><option>$5,000 to $10,000</option><option>$10,000+</option></select></div></div>
+    <div class="sb-field"><div><div class="sb-label">Travellers (5 or more)</div><input type="number" class="sb-select" id="sbParty" min="5" step="1" value="5" inputmode="numeric" aria-label="Number of travellers, 5 or more"></div></div>
+    <div class="sb-field"><div><div class="sb-label">Trip Budget (US$)</div><input type="number" class="sb-select" id="sbBudget" min="1" step="1" inputmode="numeric" placeholder="Exact total, e.g. 4500" aria-label="Total trip budget in US dollars"></div></div>
     <button class="sb-btn" onclick="submitSearchBar()">Submit</button>
   </div>
 </div>
@@ -10499,10 +10499,10 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
           </div>
           <div class="ex-tabs" id="gbTabs" role="tablist" aria-label="Choose an island"></div>
           <div class="gb-guests" aria-label="Group size">
-            <span>Group size (groups of 5)</span>
-            <button type="button" id="gbMinus" aria-label="5 fewer guests">&minus;</button>
-            <b id="gbGuests">10</b>
-            <button type="button" id="gbPlus" aria-label="5 more guests">+</button>
+            <span>Number of travellers (5 or more)</span>
+            <button type="button" id="gbMinus" aria-label="One fewer traveller">&minus;</button>
+            <input id="gbGuests" type="number" min="5" max="60" step="1" value="5" inputmode="numeric" aria-label="Number of travellers, from 5">
+            <button type="button" id="gbPlus" aria-label="One more traveller">+</button>
           </div>
         </div>
         <p class="gb-blurb" id="gbBlurb"></p>
@@ -16945,8 +16945,8 @@ body.theme-night .page .tag{
         <input type="hidden" id="b_funnelSource" value=""><input type="hidden" id="b_funnelLabel" value=""><div class="form-row"><div class="fg"><label for="b_dest">Destination *</label><select id="b_dest"><option value="">Select Destination</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curacao</option></select></div><div class="fg"><label for="b_type">Experience Type *</label><select id="b_type"><option value="">Select Experience Type</option><option>Water Experience</option><option>Land Experience</option><option>Zip-line / Canopy</option><option>ATV Adventures</option><option>Bamboo Rafting</option><option>Horseback Riding</option><option>Parasailing</option><option>Kayaking</option><option>Snorkeling / Scuba</option><option>Waterfalls Trip</option><option>Beach Trip</option><option>Efoil Surfboarding</option><option>MBA Experience</option><option>Seven Shores Society</option><option>Seven Shores Offsite</option><option>Luxury Getaway Weekend</option><option>Yacht Charters Tour</option><option>Yacht Charter</option><option>Greek Life Travel</option><option>School Tour Package</option><option>Villa &amp; Vacation Rental Booking</option><option>Airport Shuttle (NMIA/MBJ)</option><option>Executive Transfer</option><option>Group Transfer</option><option>Club Kingston / Club Mobay</option><option>Custom Package</option></select></div></div>
         <div class="form-row"><div class="fg" style="grid-column:1/-1"><label for="b_package">Selected Experience</label><input type="text" id="b_package" readonly></div></div>
         
-        <div class="form-row"><div class="fg"><label for="b_dt">Travel Date *</label><input type="date" id="b_dt"></div><div class="fg"><label for="b_gs">Travel Party *</label><select id="b_gs"><option value="">Select</option><option>5 to 10 Persons</option><option>11 to 20 Persons</option><option>21 to 40 Persons</option><option>41+ Persons</option></select></div></div>
-        <div class="form-row"><div class="fg"><label for="b_budget">Trip Budget</label><select id="b_budget"><option value="">Select Budget Range</option><option>Under $500</option><option>$500 to $1,000</option><option>$1,000 to $2,500</option><option>$2,500 to $5,000</option><option>$5,000 to $10,000</option><option>$10,000+</option></select></div></div>
+        <div class="form-row"><div class="fg"><label for="b_dt">Travel Date *</label><input type="date" id="b_dt" required></div><div class="fg"><label for="b_gs">Number of travellers * <span style="font-weight:500;opacity:.7">(5 or more)</span></label><input type="number" id="b_gs" min="5" step="1" value="5" inputmode="numeric" required></div></div>
+        <div class="form-row"><div class="fg"><label for="b_budget">Total trip budget (US$) *</label><input type="number" id="b_budget" min="1" step="1" inputmode="numeric" placeholder="Exact figure, e.g. 4500" required></div></div>
         <div class="fg"><label for="b_notes">Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
         <div class="sp-more">
           <div class="form-row"><div class="fg"><label for="tpJamaican">Are you a Jamaican national?</label><select id="tpJamaican"><option value="">Select one</option><option>Yes</option><option>No</option></select></div><div class="fg"><label for="tpGroupJamaican">Is anyone in your group a Jamaican national?</label><select id="tpGroupJamaican"><option value="">Select one</option><option>Yes</option><option>No</option><option>N/A</option></select></div></div>
@@ -27396,7 +27396,19 @@ function openBookingCustom(destination, packageName, type='Start Planning', note
     });
   },120);
 }
+/* Every inquiry needs a travel date, a traveller count of 5 or more and an exact budget figure. Returns true when they are all there. */
+function ssInquiryOk(ids,from){
+  var el=function(i){return document.getElementById(i)};
+  var bad=function(id,msg){var f=el(id);if(f){f.style.outline='2px solid #e94560';try{f.focus();f.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}setTimeout(function(){f.style.outline=''},3500)}try{toast(msg)}catch(e){}return false;};
+  var dt=el(ids.date)&&el(ids.date).value;
+  if(!dt)return bad(ids.date,'Please choose your travel date.');
+  var n=el(ids.party)?Number(el(ids.party).value):0;
+  if(!(n>=5)||Math.floor(n)!==n)return bad(ids.party,'Please enter how many travellers, a whole number from 5 up.');
+  if(ids.budget){var b=el(ids.budget)?Number(el(ids.budget).value):0;if(!(b>0))return bad(ids.budget,'Please enter your exact total budget in US dollars.');}
+  return true;
+}
 function submitSearchBar(){
+  if(!ssInquiryOk({date:'sbDateFrom',party:'sbParty',budget:'sbBudget'}))return;
   var dest=document.getElementById('sbDest')&&document.getElementById('sbDest').value||'';
   var dateFrom=document.getElementById('sbDateFrom')&&document.getElementById('sbDateFrom').value||'';
   var style=document.getElementById('sbStyle')&&document.getElementById('sbStyle').value||'';
@@ -27764,7 +27776,7 @@ function selectPackage(pkg){
 function setGroupSize(size){
   const notes=document.getElementById('b_notes');
   const gs=document.getElementById('b_gs');
-  const map={small:'5 to 10 Persons',medium:'11 to 20 Persons',large:'21 to 40 Persons'};
+  const map={small:'5',medium:'11',large:'21'};
   const messages={
     small:'Small group looking for a smooth, well-paced experience with easy coordination.',
     medium:'Mid-size group looking for coordination, energy, and a clear booking flow.',
@@ -29189,6 +29201,7 @@ function ssPlanningDepositPay(source,el){
       emailId='tpEmail';name=val('tpFullName');email=val('tpEmail');phone=val('tpPhone');
       summary=getTripPlannerSummary();if(!summary||summary.indexOf('Complete the fields above')===0)summary='';
     }
+    if(isBook&&!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return false;
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
       var ef=document.getElementById(emailId);if(ef){ef.style.border='2px solid #e94560';ef.focus();ef.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){ef.style.border=''},3000)}
       toast('Please add your email so we can send your package.');return false;
@@ -29270,6 +29283,7 @@ function submitStartPlanning(){
   }
 }
 function submitBook(){
+  if(!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return;
   calculateUpsells();
   var upsells=[].slice.call(document.querySelectorAll('.upsell-section input:checked')).map(function(i){return i.value});
   var notesField=document.getElementById('b_notes');
@@ -29290,7 +29304,7 @@ function submitBook(){
   var funnelSource=document.getElementById('b_funnelSource')?document.getElementById('b_funnelSource').value:'';
   var funnelLabel=document.getElementById('b_funnelLabel')?document.getElementById('b_funnelLabel').value:'';
   if(budget && notesField){
-    var budgetLine='Trip Budget: '+budget+'.';
+    var budgetLine='Trip Budget: US$'+Number(budget).toLocaleString('en-US')+'.';
     if(notesField.value.indexOf(budgetLine)===-1) notesField.value=(notesField.value?notesField.value.trim()+' ':'')+budgetLine;
   }
   var notes=notesField?notesField.value.trim():'';
@@ -29310,7 +29324,7 @@ function submitBook(){
     phone:ph||'',
     tourName:(funnelLabel||pkg||type||'General Enquiry')+(dest?', '+dest:''),
     date:dt||'',
-    guests:gs||1,
+    guests:Number(gs)||5,
     notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
     type:'tour'
   };
@@ -29321,7 +29335,7 @@ function submitBook(){
       ssTrack('generate_lead',{form:'booking',method:'api'});
       try{ recordMemberBooking({tour:data.tourName,date:data.date,guests:data.guests,at:new Date().toISOString()}); if(getCurrentUser&&getCurrentUser()){ if(typeof awardPoints==='function')awardPoints(25); if(typeof refreshTravelClub==='function')refreshTravelClub(); } }catch(e){}
       if(btn){btn.innerHTML='Request Submitted!';btn.classList.add('success')}
-      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').selectedIndex=0;if(document.getElementById('b_budget'))document.getElementById('b_budget').selectedIndex=0;if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
+      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').value='5';if(document.getElementById('b_budget'))document.getElementById('b_budget').value='';if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
       setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
     }).catch(function(err){
       toast(err&&err.message?err.message:'Something went wrong. Please try again.');
@@ -44242,6 +44256,12 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
 #p-tours .gb-guests{display:inline-flex;align-items:center;gap:10px;padding:5px 6px 5px 14px;border:1px solid rgba(6,58,99,.08);background:rgba(6,58,99,.05);border-radius:14px;color:#4b6075;font-size:12.5px;font-weight:700}
 #p-tours .gb-guests button{width:32px;height:32px;border-radius:0;border:1px solid rgba(6,58,99,.14);background:#fff;color:#063a63;font-size:17px;line-height:1;cursor:pointer;box-shadow:none}
 #p-tours .gb-guests b{min-width:26px;text-align:center;color:#063a63;font-size:15px}
+#p-tours .gb-guests input{width:64px;text-align:center;border:1px solid rgba(6,58,99,.14);background:#fff;color:#063a63;font-size:15px;font-weight:700;padding:6px 4px;border-radius:0}
+#p-tours .gb-req{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+#p-tours .gb-req label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:#4b6075}
+#p-tours .gb-req input{padding:10px 12px;border:1px solid rgba(6,58,99,.14);font:inherit;font-size:14px;color:#063a63;background:#fff}
+#p-tours .gb-req input.bad{outline:2px solid #e94560}
+@media(max-width:560px){#p-tours .gb-req{grid-template-columns:1fr}}
 #p-tours .gb-blurb{margin:0 0 24px;color:var(--grey);font-size:14px;line-height:1.65;max-width:760px}
 #p-tours .gb-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:24px;align-items:start}
 #p-tours .gb-listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;color:#4b6075;font-size:12.5px;font-weight:700}
@@ -44324,7 +44344,7 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   };
   var INTERESTS=['Beach & water','Adventure','Culture & food','Wellness','Nightlife & parties','Luxury & private','Family-friendly'];
   var KEY='ss-group-trip-v1';
-  var st={aud:'mba',country:'Jamaica',guests:10,sel:{},xfer:false,all:false,prefsOpen:false,open:'',busy:false,msg:null,
+  var st={aud:'mba',country:'Jamaica',guests:5,sel:{},xfer:false,all:false,prefsOpen:false,open:'',busy:false,msg:null,
           contact:{name:'',email:'',phone:''},prefs:{month:'',budget:'',interests:[],notes:''},consult:{channel:'Email',when:'',notes:''}};
   try{var sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv&&typeof sv==='object'){
     ['aud','country','guests','sel','xfer','contact','prefs','consult'].forEach(function(k){if(sv[k]!==undefined)st[k]=sv[k];});}}catch(e){}
@@ -44372,7 +44392,7 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   function renderControls(){
     document.querySelectorAll('#gbAud button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-aud')===st.aud);});
     var tabs=$('gbTabs');if(tabs)tabs.innerHTML=ORDER.map(function(c){var on=c===st.country;return '<button type="button" role="tab" aria-selected="'+on+'" class="'+(on?'on':'')+'" data-country="'+esc(c)+'">'+esc(SHORT[c]||c)+'</button>';}).join('');
-    var g=$('gbGuests');if(g)g.textContent=st.guests;
+    var g=$('gbGuests');if(g&&document.activeElement!==g)g.value=st.guests;
     var bl=$('gbBlurb');if(bl)bl.textContent=AUD[st.aud].blurb;
   }
   function renderList(){
@@ -44408,7 +44428,8 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
       +(c.onReq?'<p class="gb-note">'+c.onReq+' experience'+(c.onReq>1?'s are':' is')+' priced on request and not included above.</p>':'')
       +'<div class="gb-fields"><input id="gbName" type="text" placeholder="Your name" autocomplete="name" value="'+esc(f.name)+'"><input id="gbEmail" type="email" placeholder="Email" autocomplete="email" value="'+esc(f.email)+'"><input id="gbPhone" type="tel" placeholder="WhatsApp or phone (optional)" autocomplete="tel" value="'+esc(f.phone)+'">'
       +'<input class="gb-hp" id="gbWebsite" type="text" tabindex="-1" autocomplete="off" aria-hidden="true"></div>'
-      +'<details class="gb-prefs" id="gbPrefs"'+(st.prefsOpen?' open':'')+'><summary>Trip preferences (optional)</summary><div class="gb-prefs-body"><div class="gb-fields"><input id="gbMonth" type="text" placeholder="When would you like to travel?" value="'+esc(p.month)+'"><input id="gbBudget" type="text" placeholder="Budget per person" value="'+esc(p.budget)+'"></div>'
+      +'<div class="gb-req"><label>Travel date *<input id="gbMonth" type="date" value="'+esc(p.month)+'" required></label><label>Total budget (US$) *<input id="gbBudget" type="number" min="1" step="1" inputmode="numeric" placeholder="Exact figure, e.g. 12000" value="'+esc(p.budget)+'" required></label></div>'
+      +'<details class="gb-prefs" id="gbPrefs"'+(st.prefsOpen?' open':'')+'><summary>Trip preferences (optional)</summary><div class="gb-prefs-body">'
       +'<div class="gb-chips" id="gbChips">'+INTERESTS.map(function(x){return '<button type="button" data-int="'+esc(x)+'" class="'+(p.interests.indexOf(x)>-1?'on':'')+'">'+esc(x)+'</button>';}).join('')+'</div>'
       +'<div class="gb-fields"><textarea id="gbNotes" placeholder="Anything we should know? Pace, dietary needs, accessibility, special occasions">'+esc(p.notes)+'</textarea></div></div></details>'
       +'<button type="button" class="gb-primary" id="gbReserve"'+(c.dep&&c.priced&&!st.busy?'':' disabled')+'>'+(c.dep&&c.priced?'Reserve with a '+money(c.dep.charge)+' deposit':'Choose an experience to reserve')+'</button>'
@@ -44451,6 +44472,8 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
   function send(action,extra){
     readFields();st.msg=null;
     if(!needContact()){renderSummary();return;}
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(st.prefs.month||'')){st.msg={type:'err',text:'Please choose your travel date.'};renderSummary();var dm=$('gbMonth');if(dm){dm.classList.add('bad');try{dm.focus();}catch(e){}}return;}
+    if(!(Number(st.prefs.budget)>0)){st.msg={type:'err',text:'Please enter your exact total budget in US dollars.'};renderSummary();var db=$('gbBudget');if(db){db.classList.add('bad');try{db.focus();}catch(e){}}return;}
     var body=payload(action);if(extra)body.consult=extra;
     st.busy=true;renderSummary();
     fetch('/api/group-trip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
@@ -44471,8 +44494,8 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     var b;
     if((b=t.closest('#gbAud button'))){readFields();st.aud=b.getAttribute('data-aud');st.all=false;save();render();return;}
     if((b=t.closest('#gbTabs button'))){readFields();st.country=b.getAttribute('data-country');st.all=false;st.xfer=false;st.msg=null;save();render();return;}
-    if(t.closest('#gbMinus')){readFields();st.guests=Math.max(MIN,st.guests-5);save();renderControls();renderList();renderSummary();return;}
-    if(t.closest('#gbPlus')){readFields();st.guests=Math.min(MAX,st.guests+5);save();renderControls();renderList();renderSummary();return;}
+    if(t.closest('#gbMinus')){readFields();st.guests=Math.max(MIN,st.guests-1);save();renderControls();renderList();renderSummary();return;}
+    if(t.closest('#gbPlus')){readFields();st.guests=Math.min(MAX,st.guests+1);save();renderControls();renderList();renderSummary();return;}
     if(t.closest('#gbToggleAll')){st.all=!st.all;renderList();return;}
     if((b=t.closest('#gbChips button'))){readFields();var x=b.getAttribute('data-int'),a=st.prefs.interests,i=a.indexOf(x);if(i>-1)a.splice(i,1);else a.push(x);st.prefsOpen=true;save();renderSummary();return;}
     if(t.closest('#gbReserve')){send('checkout');return;}
@@ -44497,8 +44520,16 @@ window.WAIVER={"version":"draft-1","status":"Draft wording written by Claude, no
     if(t.id==='gbXfer'){readFields();st.xfer=t.checked;save();renderSummary();return;}
   });
   document.addEventListener('input',function(e){
-    var t=e.target;if(!t||!t.closest||!t.closest('#gbSum'))return;
+    var t=e.target;if(t&&t.id==='gbGuests'&&t.closest&&t.closest('#gb')){
+      var n=Math.floor(Number(t.value));if(n>=MIN&&n<=MAX&&st.guests!==n){readFields();st.guests=n;save();renderList();renderSummary();}
+      return;
+    }
+    if(!t||!t.closest||!t.closest('#gbSum'))return;
     readFields();
+  });
+  document.addEventListener('change',function(e){
+    var t=e.target;if(!t||t.id!=='gbGuests'||!t.closest||!t.closest('#gb'))return;
+    var n=Math.floor(Number(t.value));if(!(n>=MIN))n=MIN;if(n>MAX)n=MAX;t.value=n;if(st.guests!==n){readFields();st.guests=n;save();renderList();renderSummary();}
   });
 
   function init(){if($('gb'))render();}
