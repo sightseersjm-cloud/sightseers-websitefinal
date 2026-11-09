@@ -49421,7 +49421,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function lcInit(box){
     if(box._lcDone)return;box._lcDone=true;var id=box.getAttribute('data-lc-id'),cv=box.querySelector('[data-lc-cv]'),msg=box.querySelector('[data-lc-msg]');
-    var sv=lcSaved(id)||{},st=LC.store[id]={name:sv.name!=null?sv.name:box.getAttribute('data-lc-first'),zoom:sv.zoom||1,ox:sv.ox||0,oy:sv.oy||0,photo:null,photoData:sv.photo||''};
+    var sv=lcSaved(id)||{},st=LC.store[id]={name:sv.name!=null?sv.name:'Gabby',zoom:sv.zoom||1,ox:sv.ox||0,oy:sv.oy||0,photo:null,photoData:sv.photo||''};
     box.querySelector('[data-lc-name]').value=st.name;box.querySelector('[data-lc-zoom]').value=st.zoom;
     var redraw=function(){lcDraw(cv,st);};
     var setPhoto=function(src,keep){var im=new Image();im.onload=function(){st.photo=im;redraw();};im.onerror=function(){redraw();};im.src=src;};
