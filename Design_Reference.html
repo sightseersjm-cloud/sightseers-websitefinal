@@ -17434,18 +17434,18 @@ body.theme-night .page .tag{
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
 
-        <a class="partner-item" href="https://go.saily.site/aff_c?offer_id=101&amp;aff_id=14170" target="_blank" rel="noopener sponsored" title="Saily eSIM">
-          <img class="partner-logo" src="/logos/saily.png" alt="Saily" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="partner-placeholder" style="display:none">Saily</div>
-          <div class="partner-name">Saily</div>
-          <div class="partner-note">Our eSIM partner. Travel data plans so guests can land connected, without swapping a SIM card or paying roaming fees.</div>
-          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
-        </a>
-
         <a class="partner-item" href="https://mayamobile.pxf.io/m4KkQ7" target="_blank" rel="noopener sponsored" title="Maya Mobile eSIM">
           <img class="partner-logo" src="/logos/maya-mobile.png" alt="Maya Mobile" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="partner-placeholder" style="display:none">Maya Mobile</div>
           <div class="partner-name">Maya Mobile</div>
+          <div class="partner-note">Our eSIM partner. Travel data plans so guests can land connected, without swapping a SIM card or paying roaming fees.</div>
+          <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a class="partner-item" href="https://go.saily.site/aff_c?offer_id=101&amp;aff_id=14170" target="_blank" rel="noopener sponsored" title="Saily eSIM">
+          <img class="partner-logo" src="/logos/saily.png" alt="Saily" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="partner-placeholder" style="display:none">Saily</div>
+          <div class="partner-name">Saily</div>
           <div class="partner-note">Our other eSIM partner. Travel data plans so guests can land connected, without swapping a SIM card or paying roaming fees.</div>
           <span class="partner-cta">Visit Partner <i class="fas fa-arrow-right"></i></span>
         </a>
@@ -49245,7 +49245,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       ckItem(i,'passport','Check your passport',pc.html+renew),
       ckItem(i,'entry','Read the entry rules'+(cc?' for '+cc:''),entryBody+(good?'<p style="margin-top:8px"><b>Good to know in '+esc(cc)+'</b></p>'+good:'')),
       ckItem(i,'insurance','Get travel insurance',pbody(ins,'Get a quote')),
-      ckItem(i,'esim','Sort your phone data',es&&es2&&es2.url?'<p>'+esc(es.note)+'</p><p>'+[es,es2].filter(function(p){return p.url;}).map(function(p){return '<a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored">'+esc(p.title)+'</a>';}).join(' &middot; ')+'</p>':pbody(es,'Get an eSIM')),
+      ckItem(i,'esim','Sort your phone data',es&&es2&&es2.url?'<p>'+esc(es2.note)+'</p><p>'+[es2,es].filter(function(p){return p.url;}).map(function(p){return '<a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer sponsored">'+esc(p.title)+'</a>';}).join(' &middot; ')+'</p>':pbody(es,'Get an eSIM')),
       ckItem(i,'chat','Join the group chat',i.groupLink?'<p><a href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Open the group chat</a></p>':'<p>'+esc(i.leaderName||'Your leader')+' will share the group chat link here.</p>')
     ];
     var done=['passport','entry','insurance','esim','chat'].filter(function(k){return i.checklist&&i.checklist[k];}).length;
@@ -49476,7 +49476,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function partnersHtml(pt){
     if(!pt)return '';
-    return '<div class="ac-refgrid">'+partnerCard('insurance',pt.insurance)+partnerCard('esim',pt.esim)+(pt.esim2?partnerCard('esim2',pt.esim2):'')+'</div><p class="ac-refnote">'+esc(pt.disclosure||'')+'</p>';
+    return '<div class="ac-refgrid">'+partnerCard('insurance',pt.insurance)+(pt.esim2?partnerCard('esim2',pt.esim2):'')+partnerCard('esim',pt.esim)+'</div><p class="ac-refnote">'+esc(pt.disclosure||'')+'</p>';
   }
   var TRK=['Received','In review','Decision','Trip page live'];
   function appTrack(a,trips){
@@ -52843,8 +52843,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return '<p class="mg-hint" style="font-size:14px">These cards appear under <b>Before you go</b> on every member\'s Group trips tab. Paste the referral link your partner gave you. The eSIM card uses <b>Saily</b> (https://saily.com/) until you set your own link. Until an insurance link is set, that card shows <b>Link coming soon</b> with no button.</p>'
       +'<div class="mg-card cl-box"><div class="cl-grid">'
       +fld('Travel insurance: your referral link','clL_ins_url',ins.url||'',{full:true,type:'url',ph:'https://...',help:'Must start with https://. Leave empty to show Link coming soon.'})+fld('Travel insurance: title (optional)','clL_ins_title',ins.title||'',{ph:'Travel insurance'})+fld('Travel insurance: short note (optional)','clL_ins_note',ins.note||'',{ph:'Cover for cancellations, delays and medical care while you travel.'})
-      +fld('eSIM: your referral link','clL_esim_url',es.url||'',{full:true,type:'url',ph:'https://go.saily.site/aff_c?offer_id=101&aff_id=14170',help:'Must start with https://. Leave empty to use your Saily referral link.'})+fld('eSIM: title (optional)','clL_esim_title',es.title||'',{ph:'Saily eSIM'})+fld('eSIM: short note (optional)','clL_esim_note',es.note||'',{ph:'Land connected, without swapping your SIM or paying roaming.'})
-      +fld('Second eSIM (Maya Mobile): your referral link','clL_esim2_url',(raw.esim2||{}).url||'',{full:true,type:'url',ph:'https://mayamobile.pxf.io/m4KkQ7',help:'Must start with https://. Leave empty to use your Maya Mobile referral link.'})+fld('Second eSIM: title (optional)','clL_esim2_title',(raw.esim2||{}).title||'',{ph:'Maya Mobile eSIM'})+fld('Second eSIM: short note (optional)','clL_esim2_note',(raw.esim2||{}).note||'',{ph:'Travel data plans so you land connected, without swapping your SIM or paying roaming.'})
+      +fld('eSIM (Maya Mobile): your referral link','clL_esim2_url',(raw.esim2||{}).url||'',{full:true,type:'url',ph:'https://mayamobile.pxf.io/m4KkQ7',help:'Must start with https://. Leave empty to use your Maya Mobile referral link.'})+fld('Maya Mobile: title (optional)','clL_esim2_title',(raw.esim2||{}).title||'',{ph:'Maya Mobile eSIM'})+fld('Maya Mobile: short note (optional)','clL_esim2_note',(raw.esim2||{}).note||'',{ph:'Travel data plans so you land connected, without swapping your SIM or paying roaming.'})
+      +fld('Second eSIM (Saily): your referral link','clL_esim_url',es.url||'',{full:true,type:'url',ph:'https://go.saily.site/aff_c?offer_id=101&aff_id=14170',help:'Must start with https://. Leave empty to use your Saily referral link.'})+fld('Saily: title (optional)','clL_esim_title',es.title||'',{ph:'Saily eSIM'})+fld('Saily: short note (optional)','clL_esim_note',es.note||'',{ph:'Land connected, without swapping your SIM or paying roaming.'})
       +fld('Disclosure shown under the cards (optional)','clL_disc',raw.disclosure||'',{type:'textarea',ph:'These are referral links. Sight Seers may receive a reward if you sign up through them.',help:'Leave empty to use the standard sentence shown above. Check it matches your agreement with each partner.'})
       +'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-links>Save partner links</button></div></div>';
   }
