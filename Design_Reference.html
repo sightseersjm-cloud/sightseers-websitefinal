@@ -48063,6 +48063,13 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-phsave{margin-top:12px}
 @media(max-width:560px){#p-account .ac-phban{flex-direction:column;align-items:flex-start}#p-account .ac-phrow{grid-template-columns:56px 1fr}#p-account .ac-phrow button{grid-column:1/-1;justify-self:start}}
 @font-face{font-family:'SSAnton';src:url('/assets/fonts/anton-latin-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+#p-account .ac-lkbody{padding:2px 16px 16px}
+#p-account .ac-lksteps{margin:0 0 16px;padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--ac-ink)}
+#p-account .ac-lksteps li{margin:0 0 6px}
+#p-account .ac-lkmsg{padding:12px 0;border-top:1px solid var(--ac-line)}
+#p-account .ac-lkhead b{display:block;font-size:13.5px;color:var(--ac-head)}
+#p-account .ac-lkhead small{display:block;font-size:12px;color:var(--ac-mut);margin:2px 0 8px}
+#p-account .ac-lkmsg textarea{display:block;width:100%;padding:11px 12px;font:500 13.5px/1.55 'Raleway',sans-serif;color:var(--ac-ink);background:var(--ac-soft);border:1px solid var(--ac-line);border-radius:0;resize:vertical}
 #p-account .ac-lcbody{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:18px;align-items:start;padding:2px 16px 16px}
 #p-account .ac-lccv{display:block;width:100%;height:auto;aspect-ratio:1/1;background:var(--ac-soft);border:1px solid var(--ac-line);touch-action:none;cursor:grab}
 #p-account .ac-lcctl label.ac-lclab{display:block;font-size:12.5px;font-weight:800;color:var(--ac-head);margin:0 0 4px}
@@ -49374,6 +49381,47 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function lcKey(id){return 'ss_lcard_'+id;}
   function lcSaved(id){try{return JSON.parse(localStorage.getItem(lcKey(id))||'null');}catch(e){return null;}}
   function lcSave(id,st){try{localStorage.setItem(lcKey(id),JSON.stringify({name:st.name,zoom:st.zoom,ox:st.ox,oy:st.oy,photo:st.photoData||''}));}catch(e){}}
+  /* ---------- the WhatsApp launch kit: the steps and ready-to-send messages for a leader's group, filled in with their trip ---------- */
+  var LK_ADMIN='+1 (876) 465-0630';
+  function lkMsgs(t,link){
+    var ttl=t.title||'our trip',when=t.dateText||'[trip dates]',where=t.destination||'[destination]';
+    return [
+      ['1. Welcome','Send first, with the group set so only admins can send.',
+       'Hey everyone, welcome to the group! 🌴\n\nI am [your name] and I am leading '+ttl+' with Sight Seers Travel Club ('+when+', '+where+').\n\nThis is where you will find all the details and updates for the trip. The Sight Seers team is in this group too, to help with bookings and questions.\n\nWe will keep the chat closed for now and share more very soon. Stay tuned!'],
+      ['2. Why this trip','Post with a short video or voice note of you.',
+       'Here is why I picked this trip and why it means so much to me 👇\n\n[Add 2 or 3 sentences in your own words, or record a short video.]\n\nI cannot wait to share '+where+' with you all!'],
+      ['3. Bookings open','Fill in the day and time before you send.',
+       '🚨 Places on '+ttl+' are limited and are first come, first served.\n\nBookings open: [day and date] at [time, with time zone]\n\nSet your alarm and be ready to grab your place the moment we go live. Everything is booked through the Sight Seers website, never in this chat.'],
+      ['4. Group rules','Send just before you open the chat.',
+       'A few rules to keep this group great:\n\n✅ Be kind and respectful to everyone.\n❌ No offensive messages of any kind.\n❌ No betting, crypto or money offers.\n❌ No promotions, links or outside groups.\n❌ Never send money to anyone in this chat. All bookings and payments are on the Sight Seers website only.\n\nAnyone breaking these will be removed.'],
+      ['5. Introductions','Open the chat for a short time, then post your own answers first.',
+       'Now we would love to meet you all! Tell us:\n\n🌞 Your name and where you are travelling from\n🌞 Your favourite place you have travelled (or if this is your first big trip)\n🌞 A hobby or passion you love\n🌞 What excites you most about this trip\n\n📸 Share a photo of yourself doing something you love if you like, no pressure.\n\nThe chat is open for a limited time, so jump in!'],
+      ['6. Trip details','Send in the days before bookings open.',
+       'Here is what '+ttl+' looks like:\n\n📅 '+when+'\n📍 '+where+'\n\nThe full plan, what is included and the price are on the trip page:\n'+link+'\n\nHave a read and send me any questions.'],
+      ['7. We are live','Send at the moment bookings open.',
+       '🎉 WE ARE LIVE! Bookings for '+ttl+' are now open.\n\nJoin here: '+link+'\n\nEach person joins for themselves with their own name. Places are limited, so do not wait!'],
+      ['8. Places left','Send as places fill. Check the number on your trip page first.',
+       'Quick update: only [number] places left on '+ttl+'!\n\nIf you have been thinking about it, now is the time: '+link]
+    ];
+  }
+  function lkBox(t,link){
+    if(t.status==='closed')return '';
+    return '<details class="ac-photobox" data-lk-box><summary><span>WhatsApp launch kit<small>steps and ready messages for your group</small></span></summary><div class="ac-lkbody">'+
+      '<ol class="ac-lksteps"><li>Create a WhatsApp group for people interested in your trip.</li>'+
+      '<li><b>Add Sight Seers as an admin:</b> add <a href="tel:+18764650630">'+LK_ADMIN+'</a> to the group, then tap the number and choose <b>Make group admin</b>. Sight Seers helps with bookings and keeps the group safe.</li>'+
+      '<li>Set the group so only admins can send messages (Group settings, Send messages, Only admins) until you are ready for introductions.</li>'+
+      '<li>Use your Team Leader card as the group picture, and put the trip dates and your trip link in the group description.</li>'+
+      '<li>Save the group invite link in the box above, then send the messages below in order. Change the words in [brackets] and make them sound like you.</li></ol>'+
+      lkMsgs(t,link).map(function(m,i){return '<div class="ac-lkmsg"><div class="ac-lkhead"><b>'+esc(m[0])+'</b><small>'+esc(m[1])+'</small></div><textarea rows="6" spellcheck="true" aria-label="'+esc(m[0])+' message">'+esc(m[2])+'</textarea><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-lk-copy>Copy message</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('')+
+      '</div></details>';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-lk-copy]');if(!b)return;
+    var box=b.closest('.ac-lkmsg'),ta=box.querySelector('textarea'),msg=box.querySelector('.ac-invmsg'),txt=ta.value;
+    var ok=function(){msg.className='ac-invmsg ok';msg.textContent='Copied. Paste it into your group.';setTimeout(function(){msg.textContent='';},2500);};
+    var fb=function(){ta.select();var g=false;try{g=document.execCommand('copy');}catch(x){}if(g)ok();else{msg.className='ac-invmsg err';msg.textContent='Select the text and copy it.';}};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
+  });
   function lcBox(t){
     if(t.status==='closed')return '';
     var u=lcUser(),first=String(u.name||'').trim().split(/\s+/)[0]||'';
@@ -49462,7 +49510,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       goalBar(t)+
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
       (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> Mention them to your group.</p>':'')+
-      groupForm(t)+infoBox(t)+photoBox(t)+lcBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
+      groupForm(t)+lkBox(t,link)+infoBox(t)+photoBox(t)+lcBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
       (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
