@@ -35,7 +35,7 @@ const PARTS = {
   fee:     { cents: 3500,  label: 'Application fee',            name: 'Leaders in Jamaica: application fee',            due: '' },
   deposit: { cents: 56850, label: 'Deposit (30%)',              name: 'Leaders in Jamaica: deposit (30%)',              due: 'after you apply, to secure your place. It is refundable' },
   full:    { cents: 189500, label: 'Programme fee in full',      name: 'Leaders in Jamaica: programme fee in full',      due: 'in full, no later than 14 days before the programme. It is refundable' },
-  second:  { cents: 66325, label: 'Second payment (35%)',       name: 'Leaders in Jamaica: second payment (35%)',       due: 'no later than 60 days before the programme' },
+  second:  { cents: 66325, label: 'Second payment (35%)',       name: 'Leaders in Jamaica: second payment (35%)',       due: 'no later than 35 days before the programme' },
   third:   { cents: 66325, label: 'Third payment (35%)',        name: 'Leaders in Jamaica: third payment (35%)',        due: 'no later than 14 days before the programme' }
 };
 const usd = cents => 'US$' + (cents / 100).toFixed(2).replace(/\.00$/, '');

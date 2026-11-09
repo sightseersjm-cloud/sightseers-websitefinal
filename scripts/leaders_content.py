@@ -115,7 +115,7 @@ INVEST_NOTES = [
 ]
 PAY_ROWS = [
     ('1. Deposit (30%, refundable)', 'After you apply, to secure the place', 'US$568.50'),
-    ('2. Second payment (35%)', 'No later than 60 days before the programme', 'US$663.25'),
+    ('2. Second payment (35%)', 'No later than 35 days before the programme', 'US$663.25'),
     ('3. Third payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
 ]
 APPFEE_NOTE = 'The US$35 application fee is paid on application. It is separate from, and in addition to, the US$1,895 programme fee, which you can pay in full or in the three parts below.'
