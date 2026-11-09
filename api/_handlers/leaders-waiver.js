@@ -33,7 +33,8 @@ const SITE = () => String(process.env.SITE_URL || 'https://www.sightseerscaribbe
    which is paid in three parts: a 30% deposit, then two payments of 35%. */
 const PARTS = {
   fee:     { cents: 3500,  label: 'Application fee',            name: 'Leaders in Jamaica: application fee',            due: '' },
-  deposit: { cents: 56850, label: 'Deposit (30%)',              name: 'Leaders in Jamaica: deposit (30%)',              due: 'on selection, to secure your place. It is non-refundable' },
+  deposit: { cents: 56850, label: 'Deposit (30%)',              name: 'Leaders in Jamaica: deposit (30%)',              due: 'after you apply, to secure your place. It is refundable' },
+  full:    { cents: 189500, label: 'Programme fee in full',      name: 'Leaders in Jamaica: programme fee in full',      due: 'in full, no later than 14 days before the programme. It is refundable' },
   second:  { cents: 66325, label: 'Second payment (35%)',       name: 'Leaders in Jamaica: second payment (35%)',       due: 'no later than 60 days before the programme' },
   third:   { cents: 66325, label: 'Third payment (35%)',        name: 'Leaders in Jamaica: third payment (35%)',        due: 'no later than 14 days before the programme' }
 };
@@ -131,7 +132,7 @@ module.exports = async function handler(req, res) {
       if (!t) return go(back + '?pay=invalid');
       const a = (await db.getCollection(APPS)).find(x => x.id === t.id);
       if (!a) return go(back + '?pay=invalid');
-      if ((a.payments || {})[t.part] || (t.part === 'fee' && (a.fee === 'paid' || a.fee === 'waived' || a.fee === 'waived-code'))) return go(back + '?pay=done');
+      if ((a.payments || {})[t.part] || ((a.payments || {}).full && t.part !== 'fee') || (t.part === 'fee' && (a.fee === 'paid' || a.fee === 'waived' || a.fee === 'waived-code'))) return go(back + '?pay=done');
       if (!process.env.STRIPE_SECRET_KEY) return go(back + '?pay=unavailable');
       const P = PARTS[t.part];
       const r = await trip.stripeRequest('POST', '/v1/checkout/sessions', {
@@ -202,14 +203,15 @@ module.exports = async function handler(req, res) {
       const admin = await requirePerm(req, res, 'inbox');
       if (!admin) return;
       const part = String(body.part || '');
-      if (!PARTS[part] || part === 'fee') return res.status(400).json({ error: 'Choose the deposit, the second payment or the third payment.' });
+      if (!PARTS[part] || part === 'fee') return res.status(400).json({ error: 'Choose the deposit, the second payment, the third payment or the full payment.' });
       const a = (await db.getCollection(APPS)).find(x => x.id === body.id);
       if (!a) return res.status(404).json({ error: 'That application was not found.' });
       if ((a.payments || {})[part]) return res.status(400).json({ error: 'That payment has already been made.' });
+      if ((a.payments || {}).full && part !== 'full') return res.status(400).json({ error: 'This applicant has already paid the programme fee in full.' });
       const P = PARTS[part];
-      const rest = part === 'deposit' ? '<p>The rest of the programme fee is paid in two further payments of ' + usd(PARTS.second.cents) + ': the second ' + PARTS.second.due + ', and the third ' + PARTS.third.due + '. We will email you a link for each one.</p>' : '';
+      const rest = part === 'full' ? '<p>This covers the whole programme fee, so there are no further payments. The payment is refundable.</p>' : part === 'deposit' ? '<p>The rest of the programme fee is paid in two further payments of ' + usd(PARTS.second.cents) + ': the second ' + PARTS.second.due + ', and the third ' + PARTS.third.due + '. We will email you a link for each one.</p>' : '';
       const r = await mailTo(a, 'Your Leaders in Jamaica ' + P.label.toLowerCase(), P.label,
-        '<p>Hello ' + trip.esc(firstName(a)) + ',</p><p>' + (part === 'deposit' ? 'Your place in <b>Leaders in Jamaica</b> is ready to be secured. ' : 'Your next <b>Leaders in Jamaica</b> payment is ready. ')
+        '<p>Hello ' + trip.esc(firstName(a)) + ',</p><p>' + (part === 'deposit' ? 'Your place in <b>Leaders in Jamaica</b> is ready to be secured. ' : (part === 'full' ? 'You can pay the whole <b>Leaders in Jamaica</b> programme fee in one payment. ' : 'Your next <b>Leaders in Jamaica</b> payment is ready. '))
         + 'The ' + trip.esc(P.label.toLowerCase()) + ' is <b>' + usd(P.cents) + '</b>, due ' + P.due + '. You can pay securely by card here:</p>'
         + payButton(payUrl(a, part), 'Pay ' + usd(P.cents)) + rest);
       if (r && r.ok === false) return res.status(502).json({ error: 'The email to ' + a.email + ' did not go through, so nothing was changed. Try again in a moment.' });
@@ -275,12 +277,14 @@ module.exports = async function handler(req, res) {
         ['The single most important thing they intend to fix or build', item.goal]];
       await safe(sendEmail({ replyTo: item.email, subject: 'New Leaders in Jamaica application: ' + item.name + ', ' + item.university + ' (' + item.applyingAs + ')',
         html: '<h2 style="color:#0d5371">New Leaders in Jamaica application</h2>' + trip.detailTable(rows.map(r => [r[0], r[1] || "Not given"])) }));
-      const fp = payUrl(item, 'fee');
+      const fp = payUrl(item, 'fee'), dp = payUrl(item, 'deposit'), pf = payUrl(item, 'full');
       await safe(mailTo(item, 'We received your Leaders in Jamaica application', 'Application received',
         '<p>Hello ' + trip.esc(firstName(item)) + ',</p><p>Thank you for your application to <b>Leaders in Jamaica</b>. The programme director reviews every submission personally and typically responds within two working days.</p>'
         + '<p><b>Application fee.</b> The US$35 application fee is separate from the programme fee. If you have not paid it or asked for a fee waiver yet, you can pay it here at any time:</p>'
-        + payButton(fp, 'Pay the US$35 application fee') + '<p style="font-size:13px">The application fee is non-refundable. If you asked for a fee waiver, there is nothing to pay now and we will reply by email.</p>'));
-      return res.status(200).json({ ok: true, id: item.id, payUrl: fp });
+        + payButton(fp, 'Pay the US$35 application fee') + '<p style="font-size:13px">The application fee is non-refundable. If you asked for a fee waiver, there is nothing to pay now and we will reply by email.</p>'
+        + '<p><b>Secure your place.</b> The programme fee is US$1,895. You can pay the refundable 30% deposit (US$568.50) now and the rest in two further payments, or pay the full amount in one go:</p>'
+        + payButton(dp, 'Pay the refundable deposit, US$568.50') + payButton(pf, 'Pay the full US$1,895')));
+      return res.status(200).json({ ok: true, id: item.id, payUrl: fp, depositUrl: dp, fullUrl: pf });
     }
 
     if (action === 'fee-choice') {

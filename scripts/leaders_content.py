@@ -114,16 +114,16 @@ INVEST_NOTES = [
     'Jamaican delegation: places are arranged directly with the Jamaican host university',
 ]
 PAY_ROWS = [
-    ('1. Deposit (30%, non-refundable)', 'On selection, to secure the place', 'US$568.50'),
+    ('1. Deposit (30%, refundable)', 'After you apply, to secure the place', 'US$568.50'),
     ('2. Second payment (35%)', 'No later than 60 days before the programme', 'US$663.25'),
     ('3. Third payment (35%)', 'No later than 14 days before the programme', 'US$663.25'),
 ]
-APPFEE_NOTE = 'The US$35 application fee is paid on application. It is separate from, and in addition to, the US$1,895 programme fee, which is paid in the three parts below.'
+APPFEE_NOTE = 'The US$35 application fee is paid on application. It is separate from, and in addition to, the US$1,895 programme fee, which you can pay in full or in the three parts below.'
 PAY_NOTES = [
     'Each delegate and the advisor is responsible for their own application fee and programme payments',
-    'The programme fee is paid in three parts, and must be paid in full no later than 14 days before the programme begins',
-    'A secure payment link for each part is emailed to you once your place is confirmed. Payments are made online by card',
-    'Places not paid in full by that date are released, and the deposit is forfeited',
+    'The programme fee can be paid in full or in three parts, and must be paid in full no later than 14 days before the programme begins',
+    'After you apply you can pay the refundable deposit or the full programme fee online by card. A secure link for each later payment is emailed to you',
+    'Places not paid in full by that date are released, and any programme payments made are refunded',
     'A fee waiver can be requested when applying and is confirmed by email. Applicants who do not request one pay the application fee',
 ]
 FUNDING = [
@@ -136,7 +136,7 @@ SPONSOR_TITLE = 'Secure a sponsor'
 SPONSOR_INTRO = 'Many delegates fund their place through an employer, family business, church or local business. This letter presents your participation as a clear, professional business case. Complete the details in [brackets] and send it to your prospective sponsor.'
 CANCEL = [
     'The US$35 application fee is non-refundable',
-    'The 30% deposit is non-refundable once a place is secured',
+    'The programme fee, including the 30% deposit, is refundable. The application fee is the only payment that is not',
     'If a confirmed delegate is unable to travel, the place may be transferred to another executive of the same student government at no charge, up to 14 days before the programme',
     'Should Sight Seers cancel the programme for any reason, all fees paid, including the application fee, are refunded in full',
     'The programme is confirmed once the full delegation has paid its deposits',
