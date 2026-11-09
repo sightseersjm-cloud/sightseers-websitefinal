@@ -277,6 +277,20 @@ def build_page():
     rows = ''.join('<tr><td data-label="Step">%s</td><td data-label="Timing">%s</td><td data-label="Amount" class="price">%s</td></tr>' % tuple(e(x) for x in r) for r in PAY_ROWS)
     p.append(sec('Payment schedule (per person)',
         '    <p class="lj-sub" style="margin-bottom:20px">' + e(APPFEE_NOTE) + '</p>\n    <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Amount</th></tr></thead><tbody>%s</tbody></table></div></div>\n    <div class="lj-card lj-listcard" style="margin-top:22px">%s</div>' % (rows, ul(PAY_NOTES))))
+    # pay the programme fee: the three parts (or in full) are paid from the page, with links emailed to the applicant
+    p.append('''  <section class="lj-sec" style="padding-top:0" id="pay"><div class="lj-wrap">
+    <div class="lj-price-card lj-paycard">
+      <div class="lj-eyebrow">Already applied?</div>
+      <h3>Pay your programme fee</h3>
+      <p class="lj-sub lj-paysub">Enter the email address you applied with and we will email you secure links to pay the deposit, the second and third payments, or the full US$1,895. Payments are refundable.</p>
+      <form class="lj-payform" id="ljPayForm" novalidate>
+        <input type="email" id="ljPayEmail" placeholder="The email you applied with" autocomplete="email" aria-label="The email address you applied with" required>
+        <button type="submit" class="lj-btn primary" id="ljPayBtn">Email me my payment links</button>
+      </form>
+      <p class="lj-payform-msg" id="ljPayMsg" role="status"></p>
+    </div>
+  </div></section>
+''')
     # Stripe: the existing US$35 payment link stays on the page, beside the payment schedule
     p.append('''  <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
     <div class="lj-price-card lj-paycard">
@@ -361,6 +375,11 @@ CSS_ADD = r'''
   #p-leaders-jamaica .lj-table .price{white-space:nowrap}
   #p-leaders-jamaica .lj-price-card + .lj-card{margin-top:22px}
   #p-leaders-jamaica .lj-paycard{padding:26px 24px;text-align:center}
+  #p-leaders-jamaica .lj-payform{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:560px;margin:0 auto}
+  #p-leaders-jamaica .lj-payform input{flex:1 1 260px;min-width:0;padding:14px 16px;border:1.5px solid rgba(6,58,99,.18);font:inherit;font-size:15px;color:var(--lj-ink);background:#fff;border-radius:0}
+  #p-leaders-jamaica .lj-payform .lj-btn{border:0;cursor:pointer}
+  #p-leaders-jamaica .lj-payform-msg{min-height:20px;margin:12px 0 0;font-size:14px;font-weight:700;color:var(--lj-navy)}
+  #p-leaders-jamaica .lj-payform-msg.err{color:#b3261e}
   #p-leaders-jamaica .lj-paycard h3{font-family:'Playfair Display',serif;color:var(--lj-navy);font-size:clamp(20px,2.6vw,26px);margin:2px 0 6px}
   #p-leaders-jamaica .lj-paycard .lj-paysub{margin:0 auto 18px;text-align:center;max-width:56ch}
 
@@ -422,6 +441,24 @@ CSS_ADD = r'''
 '''
 
 SCRIPT = r'''
+  <script>
+  (function(){
+    var f=document.getElementById('ljPayForm');if(!f)return;
+    var em=document.getElementById('ljPayEmail'),btn=document.getElementById('ljPayBtn'),msg=document.getElementById('ljPayMsg');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();msg.className='lj-payform-msg';
+      var v=(em.value||'').trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){msg.className='lj-payform-msg err';msg.textContent='Please enter the email address you applied with.';em.focus();return;}
+      btn.disabled=true;var old=btn.textContent;btn.textContent='Sending...';
+      fetch('/api/leaders-waiver',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'pay-links',email:v})})
+        .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok,j:j};});})
+        .then(function(x){btn.disabled=false;btn.textContent=old;
+          if(x.ok){msg.textContent='Thank you. If we found your application, your payment links are on their way to '+v+'. Check your spam folder if you do not see them.';}
+          else{msg.className='lj-payform-msg err';msg.textContent=(x.j&&x.j.error)||'We could not send that just now. Please try again.';}})
+        ['catch'](function(){btn.disabled=false;btn.textContent=old;msg.className='lj-payform-msg err';msg.textContent='We could not send that just now. Please try again.';});
+    });
+  })();
+  </script>
   <script>
   (function(){
     var q=location.search||'';var host=document.getElementById('p-leaders-jamaica');if(!host||!/[?&](paid|pay)=/.test(q))return;

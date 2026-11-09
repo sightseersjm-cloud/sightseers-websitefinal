@@ -263,6 +263,31 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, application: shapeApp(up) });
     }
 
+    if (action === 'pay-links') {
+      /* "Already applied? Email me my payment links": the same answer whether or not an application is found */
+      if (await tooMany(req, 'paylinks-', 6)) return res.status(429).json({ error: 'Too many tries. Please wait an hour or contact us.' });
+      const email = mail(body.email);
+      if (!EMAIL.test(email)) return res.status(400).json({ error: 'Please enter the email address you applied with.' });
+      const list = (await db.getCollection(APPS)).filter(x => mail(x.email) === email).sort((x, y) => String(y.createdAt).localeCompare(String(x.createdAt)));
+      const a = list[0];
+      if (a) {
+        const pay = a.payments || {};
+        let body2 = '<p>Hello ' + trip.esc(firstName(a)) + ',</p>';
+        if (pay.full) {
+          body2 += '<p>Your <b>Leaders in Jamaica</b> programme fee has been paid in full. Thank you. There is nothing more to pay.</p>';
+        } else {
+          body2 += '<p>Here are your secure links to pay the <b>Leaders in Jamaica</b> programme fee (US$1,895). You can pay it in full, or in three parts. Payments are refundable.</p>';
+          body2 += '<p><b>Pay in full: US$1,895</b></p>' + payButton(payUrl(a, 'full'), 'Pay in full, US$1,895');
+          body2 += '<p><b>Or pay in three parts</b></p>';
+          [['deposit', 'Pay the deposit (30%), ' + usd(PARTS.deposit.cents)], ['second', 'Pay the second payment (35%), ' + usd(PARTS.second.cents)], ['third', 'Pay the third payment (35%), ' + usd(PARTS.third.cents)]].forEach(function (r) {
+            if (!pay[r[0]]) body2 += payButton(payUrl(a, r[0]), r[1]) + '<p style="margin:-8px 0 14px;font-size:12px">Due ' + trip.esc(PARTS[r[0]].due) + '.</p>';
+          });
+        }
+        await safe(mailTo(a, 'Your Leaders in Jamaica payment links', 'Your payment links', body2));
+      }
+      return res.status(200).json({ ok: true });
+    }
+
     if (action === 'apply') {
       /* the application is kept and sent to the team first, whatever the applicant does about the fee afterwards */
       if (await tooMany(req, 'apply-', 20)) return res.status(429).json({ error: 'Too many tries. Please wait an hour or contact us.' });
@@ -277,14 +302,13 @@ module.exports = async function handler(req, res) {
         ['The single most important thing they intend to fix or build', item.goal]];
       await safe(sendEmail({ replyTo: item.email, subject: 'New Leaders in Jamaica application: ' + item.name + ', ' + item.university + ' (' + item.applyingAs + ')',
         html: '<h2 style="color:#0d5371">New Leaders in Jamaica application</h2>' + trip.detailTable(rows.map(r => [r[0], r[1] || "Not given"])) }));
-      const fp = payUrl(item, 'fee'), dp = payUrl(item, 'deposit'), pf = payUrl(item, 'full');
+      const fp = payUrl(item, 'fee');
       await safe(mailTo(item, 'We received your Leaders in Jamaica application', 'Application received',
         '<p>Hello ' + trip.esc(firstName(item)) + ',</p><p>Thank you for your application to <b>Leaders in Jamaica</b>. The programme director reviews every submission personally and typically responds within two working days.</p>'
         + '<p><b>Application fee.</b> The US$35 application fee is separate from the programme fee. If you have not paid it or asked for a fee waiver yet, you can pay it here at any time:</p>'
         + payButton(fp, 'Pay the US$35 application fee') + '<p style="font-size:13px">The application fee is non-refundable. If you asked for a fee waiver, there is nothing to pay now and we will reply by email.</p>'
-        + '<p><b>Secure your place.</b> The programme fee is US$1,895. You can pay the refundable 30% deposit (US$568.50) now and the rest in two further payments, or pay the full amount in one go:</p>'
-        + payButton(dp, 'Pay the refundable deposit, US$568.50') + payButton(pf, 'Pay the full US$1,895')));
-      return res.status(200).json({ ok: true, id: item.id, payUrl: fp, depositUrl: dp, fullUrl: pf });
+        + '<p style="font-size:13px">When you are ready to pay the programme fee (US$1,895, in full or in three parts), go to <a href="' + SITE() + '/leaders-in-jamaica#pay">sightseerscaribbean.com/leaders-in-jamaica</a> and ask for your payment links.</p>'));
+      return res.status(200).json({ ok: true, id: item.id, payUrl: fp });
     }
 
     if (action === 'fee-choice') {

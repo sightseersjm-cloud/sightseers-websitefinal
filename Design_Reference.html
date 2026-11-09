@@ -11330,6 +11330,11 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
   #p-leaders-jamaica .lj-table .price{white-space:nowrap}
   #p-leaders-jamaica .lj-price-card + .lj-card{margin-top:22px}
   #p-leaders-jamaica .lj-paycard{padding:26px 24px;text-align:center}
+  #p-leaders-jamaica .lj-payform{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:560px;margin:0 auto}
+  #p-leaders-jamaica .lj-payform input{flex:1 1 260px;min-width:0;padding:14px 16px;border:1.5px solid rgba(6,58,99,.18);font:inherit;font-size:15px;color:var(--lj-ink);background:#fff;border-radius:0}
+  #p-leaders-jamaica .lj-payform .lj-btn{border:0;cursor:pointer}
+  #p-leaders-jamaica .lj-payform-msg{min-height:20px;margin:12px 0 0;font-size:14px;font-weight:700;color:var(--lj-navy)}
+  #p-leaders-jamaica .lj-payform-msg.err{color:#b3261e}
   #p-leaders-jamaica .lj-paycard h3{font-family:'Playfair Display',serif;color:var(--lj-navy);font-size:clamp(20px,2.6vw,26px);margin:2px 0 6px}
   #p-leaders-jamaica .lj-paycard .lj-paysub{margin:0 auto 18px;text-align:center;max-width:56ch}
 
@@ -11457,6 +11462,18 @@ fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},
     <div class="lj-price-card"><div class="lj-table-wrap"><table class="lj-table lj-stack"><thead><tr><th>Step</th><th>Timing</th><th>Amount</th></tr></thead><tbody><tr><td data-label="Step">1. Deposit (30%, refundable)</td><td data-label="Timing">After you apply, to secure the place</td><td data-label="Amount" class="price">US$568.50</td></tr><tr><td data-label="Step">2. Second payment (35%)</td><td data-label="Timing">No later than 35 days before the programme</td><td data-label="Amount" class="price">US$663.25</td></tr><tr><td data-label="Step">3. Third payment (35%)</td><td data-label="Timing">No later than 14 days before the programme</td><td data-label="Amount" class="price">US$663.25</td></tr></tbody></table></div></div>
     <div class="lj-card lj-listcard" style="margin-top:22px"><ul class="lj-list"><li>Each delegate and the advisor is responsible for their own application fee and programme payments</li><li>The programme fee can be paid in full or in three parts, and must be paid in full no later than 14 days before the programme begins</li><li>After you apply you can pay the refundable deposit or the full programme fee online by card. A secure link for each later payment is emailed to you</li><li>Places not paid in full by that date are released, and any programme payments made are refunded</li><li>A fee waiver can be requested when applying and is confirmed by email. Applicants who do not request one pay the application fee</li></ul></div>
   </div></section>
+  <section class="lj-sec" style="padding-top:0" id="pay"><div class="lj-wrap">
+    <div class="lj-price-card lj-paycard">
+      <div class="lj-eyebrow">Already applied?</div>
+      <h3>Pay your programme fee</h3>
+      <p class="lj-sub lj-paysub">Enter the email address you applied with and we will email you secure links to pay the deposit, the second and third payments, or the full US$1,895. Payments are refundable.</p>
+      <form class="lj-payform" id="ljPayForm" novalidate>
+        <input type="email" id="ljPayEmail" placeholder="The email you applied with" autocomplete="email" aria-label="The email address you applied with" required>
+        <button type="submit" class="lj-btn primary" id="ljPayBtn">Email me my payment links</button>
+      </form>
+      <p class="lj-payform-msg" id="ljPayMsg" role="status"></p>
+    </div>
+  </div></section>
   <section class="lj-sec" style="padding-top:0"><div class="lj-wrap">
     <div class="lj-price-card lj-paycard">
       <div class="lj-eyebrow">Application fee</div>
@@ -11542,6 +11559,24 @@ Yours sincerely,
     </div></div>
   </div>
 
+  <script>
+  (function(){
+    var f=document.getElementById('ljPayForm');if(!f)return;
+    var em=document.getElementById('ljPayEmail'),btn=document.getElementById('ljPayBtn'),msg=document.getElementById('ljPayMsg');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();msg.className='lj-payform-msg';
+      var v=(em.value||'').trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){msg.className='lj-payform-msg err';msg.textContent='Please enter the email address you applied with.';em.focus();return;}
+      btn.disabled=true;var old=btn.textContent;btn.textContent='Sending...';
+      fetch('/api/leaders-waiver',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'pay-links',email:v})})
+        .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok,j:j};});})
+        .then(function(x){btn.disabled=false;btn.textContent=old;
+          if(x.ok){msg.textContent='Thank you. If we found your application, your payment links are on their way to '+v+'. Check your spam folder if you do not see them.';}
+          else{msg.className='lj-payform-msg err';msg.textContent=(x.j&&x.j.error)||'We could not send that just now. Please try again.';}})
+        ['catch'](function(){btn.disabled=false;btn.textContent=old;msg.className='lj-payform-msg err';msg.textContent='We could not send that just now. Please try again.';});
+    });
+  })();
+  </script>
   <script>
   (function(){
     var q=location.search||'';var host=document.getElementById('p-leaders-jamaica');if(!host||!/[?&](paid|pay)=/.test(q))return;
@@ -14480,12 +14515,6 @@ body.theme-night #p-flagship-programs{
 #ljApplyModal .lja-coderow{display:flex;gap:10px;align-items:stretch}
 #ljApplyModal .lja-coderow .lja-input{flex:1;text-transform:uppercase;letter-spacing:.06em}
 #ljApplyModal .lja-coderow .lja-btn{padding:0 18px;white-space:nowrap}
-#ljApplyModal .lja-donepay{display:flex;flex-direction:column;gap:10px;align-items:stretch;text-align:center;margin:14px auto 16px;max-width:420px;padding:16px;background:#fff;border:1.5px solid rgba(6,58,99,.14)}
-#ljApplyModal .lja-donepay b{font-family:'Playfair Display',serif;font-size:18px;color:var(--lja-navy)}
-#ljApplyModal .lja-donepay span{font-size:13px;line-height:1.55;color:var(--lja-mut)}
-#ljApplyModal .lja-donepay small{font-size:12px;color:var(--lja-mut)}
-#ljApplyModal .lja-donepay a{text-decoration:none;display:block}
-#ljApplyModal .lja-donepay[hidden]{display:none}
 #ljApplyModal .lja-codehint{display:block;margin-top:6px;font-size:12px;color:var(--lja-mut)}
 #ljApplyModal .lja-codemsg{display:block;min-height:18px;margin-top:6px;font-size:12.5px;font-weight:700}
 #ljApplyModal .lja-codemsg.ok{color:#3f8c2f}
@@ -14674,13 +14703,6 @@ body.theme-night #p-flagship-programs{
       </svg>
       <h3>Application received</h3>
       <p id="ljaDoneMsg">Thank you for your application. The programme director reviews every submission personally and typically responds within two working days.</p>
-      <div class="lja-donepay" id="ljaDonePay" hidden>
-        <b>Secure your place</b>
-        <span>The programme fee is US$1,895. Pay the refundable 30% deposit now and the rest in two payments, or pay the full amount.</span>
-        <a class="lja-btn primary" id="ljaPayDeposit" href="#" target="_blank" rel="noopener">Pay the refundable deposit, US$568.50</a>
-        <a class="lja-btn ghost" id="ljaPayFull" href="#" target="_blank" rel="noopener">Pay in full, US$1,895</a>
-        <small>You can also do this later. We email you the links.</small>
-      </div>
       <button type="button" class="lja-btn primary" onclick="closeLeadersApply()">Done</button>
     </div>
   </div>
@@ -14688,7 +14710,7 @@ body.theme-night #p-flagship-programs{
 
 <script>
 (function(){
-  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', feeChosen = false, appId = '', appEmail = '', payLinks = null;
+  var STEPS = 4, step = 1, busy = false, lastFocus = null, prevOverflow = '', feeOpened = false, codeOk = '', feeChosen = false, appId = '', appEmail = '';
   var APPLY_EMAIL = 'info@sightseerscaribbean.com';
 
   function el(id){ return document.getElementById(id); }
@@ -14880,7 +14902,6 @@ body.theme-night #p-flagship-programs{
         if (!x.ok || !x.j.id) throw new Error('status ' + x.status);
         appId = x.j.id; appEmail = d.email;
         if (x.j.payUrl) el('ljaPay').href = x.j.payUrl;
-        payLinks = x.j.depositUrl && x.j.fullUrl ? { deposit: x.j.depositUrl, full: x.j.fullUrl } : null;
         busyState(false);
         step = STEPS;
         var sch = form().querySelector('[name="funding"]:checked');
@@ -14900,8 +14921,6 @@ body.theme-night #p-flagship-programs{
   function showDone(extra){
     busyState(false);
     el('ljaDoneMsg').textContent = 'Thank you for your application. The programme director reviews every submission personally and typically responds within two working days.' + (extra ? ' ' + extra : '');
-    var dp = el('ljaDonePay');
-    if (payLinks){ el('ljaPayDeposit').href = payLinks.deposit; el('ljaPayFull').href = payLinks.full; dp.hidden = false; } else dp.hidden = true;
     var done = el('ljaDone');
     done.classList.add('is-on');
     done.setAttribute('aria-hidden', 'false');
@@ -14938,7 +14957,7 @@ body.theme-night #p-flagship-programs{
     var m = modal();
     if (!m) return;
     lastFocus = document.activeElement;
-    if (appId){ form().reset(); appId = ''; appEmail = ''; payLinks = null; codeOk = ''; feeChosen = false; el('ljaCodeMsg').textContent = ''; el('ljaCodeMsg').className = 'lja-codemsg'; el('ljaCount').textContent = '0 / 700'; }
+    if (appId){ form().reset(); appId = ''; appEmail = ''; codeOk = ''; feeChosen = false; el('ljaCodeMsg').textContent = ''; el('ljaCodeMsg').className = 'lja-codemsg'; el('ljaCount').textContent = '0 / 700'; }
     step = 1;
     alertBox('');
     var done = el('ljaDone');
