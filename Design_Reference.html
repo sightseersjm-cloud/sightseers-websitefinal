@@ -49392,6 +49392,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(!LC.base)return;var W=2000,x=cv.getContext('2d');
     x.clearRect(0,0,W,W);x.drawImage(LC.base,0,0,W,W);
     var CX=1020.5,CY=944.5,R=546,yl=function(px){return 1459-0.0525*(px-1000)-2;};
+    if(!st.photo){
+      /* no picture yet: a plain placeholder, never the sample photo from the template */
+      x.save();x.beginPath();x.arc(CX,CY,R,0,Math.PI*2);x.clip();
+      x.beginPath();x.moveTo(0,0);x.lineTo(W,0);x.lineTo(W,yl(W));x.lineTo(0,yl(0));x.closePath();x.clip();
+      var gr=x.createLinearGradient(0,CY-R,0,CY+R);gr.addColorStop(0,'#e8f4f0');gr.addColorStop(1,'#cfe3dc');x.fillStyle=gr;x.fillRect(CX-R,CY-R,2*R,2*R);
+      x.fillStyle='#9fbfb5';x.beginPath();x.arc(CX,CY-90,150,0,Math.PI*2);x.fill();x.beginPath();x.ellipse(CX,CY+330,300,260,0,0,Math.PI*2);x.fill();
+      x.fillStyle='#5f8a7e';x.font='700 54px Arial, sans-serif';x.textAlign='center';x.fillText('ADD YOUR PHOTO',CX,CY-R+120);x.restore();
+    }
     if(st.photo){
       x.save();x.beginPath();x.arc(CX,CY,R,0,Math.PI*2);x.clip();
       x.beginPath();x.moveTo(0,0);x.lineTo(W,0);x.lineTo(W,yl(W));x.lineTo(0,yl(0));x.closePath();x.clip();
@@ -49433,6 +49441,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       st.ox=Math.max(-1,Math.min(1,drag.ox-(e.clientX-drag.x)*drag.k/mx));st.oy=Math.max(-1,Math.min(1,drag.oy-(e.clientY-drag.y)*drag.k/my));redraw();});
     var end=function(){if(drag){drag=null;cv.style.cursor='';lcSave(id,st);}};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
     box.querySelector('[data-lc-download]').addEventListener('click',function(){
+      if(!st.photo){msg.className='ac-invmsg err';msg.textContent='Choose your photo first, then download.';return;}
       lcDraw(cv,st);cv.toBlob(function(b){if(!b){msg.className='ac-invmsg err';msg.textContent='Could not make the image. Please try again.';return;}
         var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='Team-Leader-'+(String(st.name||'card').trim().replace(/[^A-Za-z0-9]+/g,'-')||'card')+'.jpg';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
         msg.className='ac-invmsg ok';msg.textContent='Downloaded. Set it as your WhatsApp group picture.';},'image/jpeg',0.93);});
