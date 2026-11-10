@@ -25,7 +25,7 @@ ok(inv.invoiceHtml(sample).indexOf('by card') === -1, 'card button is optional (
 ok(page.includes('put the invoice number <b>SS-2026-0001</b> in the note'), 'customer is asked to put the invoice number in the transfer note');
 const pg2 = inv.invoiceHtml(sample);
 ok(inv.BANKS.length === 4 && ['006400205846','006400205915','1002405782','1002407476'].every(n => pg2.includes(n)), 'all four bank accounts are on the invoice');
-ok(pg2.includes('CIBC') && pg2.includes('09746') && pg2.includes('FCIBJMKN') && pg2.includes('JMJAJMKN') && pg2.includes('PNBPUS3NNYC') && pg2.includes('IRVTUS3N') && pg2.includes('026005092') && pg2.includes('021000018') && pg2.includes('890-1338-729'), 'CIBC and JMMB USD SWIFT codes shown');
+ok(pg2.includes('CIBC') && pg2.includes('09746') && pg2.includes('FCIBJMKN') && pg2.includes('CCMKJMKN') && pg2.includes('PNBPUS3NNYC') && pg2.includes('IRVTUS3N') && pg2.includes('026005092') && pg2.includes('021000018') && pg2.includes('890-1338-729'), 'CIBC and JMMB USD SWIFT codes shown');
 ok(!/\[.*to be added\]/.test(pg2), 'no placeholder bank text left');
 const mail = inv.emailParts(sample, { stripeUrl: 'https://checkout.example/c/abc' });
 ok(mail.subject === 'Invoice SS-2026-0001 from Sight Seers Caribbean Adventures', 'email subject');

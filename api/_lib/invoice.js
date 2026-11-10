@@ -21,7 +21,7 @@ const BANKS = [
       ['Account name', 'Sight Seers Caribbean Adventures'],
       ['Account number', '006400205915'],
       ['Account type', 'Chequing'],
-      ['Beneficiary SWIFT', 'JMJAJMKN'],
+      ['Beneficiary SWIFT', 'CCMKJMKN'],
       ['Intermediary bank', 'BNY Mellon, New York'],
       ['Intermediary SWIFT', 'IRVTUS3N'],
       ['ABA / routing', '021000018'],
