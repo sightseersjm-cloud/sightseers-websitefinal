@@ -8,14 +8,15 @@ const trip = require('./trip');
 const LOGO = require('fs').readFileSync(require('path').join(__dirname, 'invoice-logo.txt'), 'utf8').trim();
 const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-0630', email: 'info@sightseerscaribbean.com', site: 'sightseerscaribbean.com' };
 
-/* Bank details are shown on every invoice. Placeholders until the real details are added. */
-function bankDetails() {
-  try {
-    const b = JSON.parse(process.env.INVOICE_BANK || 'null');
-    if (b && typeof b === 'object') return b;
-  } catch (e) { /* fall through to the placeholder */ }
-  return { bank: '[Bank name to be added]', account: '[Account name to be added]', number: '[Account number to be added]', code: '[Routing or SWIFT code to be added]' };
-}
+/* Bank accounts shown on every invoice. All are business accounts. JMMB accounts are in the company's name; FCIB shows the
+   account holder's name on every account, as the bank does for business accounts. */
+const BANKS = [
+  { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
+  { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville' },
+  { currency: 'JMD', bank: 'FCIB', name: 'DAINEROY ALLEN', number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
+  { currency: 'USD', bank: 'FCIB', name: 'DAINEROY ALLEN', number: '1002407476', type: 'Savings', swift: 'FCIBJMKN' }
+];
+function bankDetails() { return BANKS; }
 
 /* SS-2026-0001, counting up for each year with no gaps or reuse */
 function nextNumber(invoices, year) {
@@ -43,7 +44,7 @@ function esc(x) { return trip.esc(x); }
 function invoiceHtml(inv, opts) {
   const o = opts || {};
   const t = totals(inv.items, inv.discount);
-  const bank = bankDetails();
+  const banks = bankDetails();
   const rows = t.lines.map((l, i) => `<tr style="background:${i % 2 ? '#f6faf7' : '#fff'}"><td style="padding:10px 12px;color:#333">${esc(l.description)}</td><td style="padding:10px 12px;text-align:right;color:#333">${l.qty}</td><td style="padding:10px 12px;text-align:right;color:#333">${money(l.unit)}</td><td style="padding:10px 12px;text-align:right;color:#063a63;font-weight:700">${money(l.amount)}</td></tr>`).join('');
   const pay = o.stripeUrl
     ? `<p style="margin:18px 0"><a href="${esc(o.stripeUrl)}" style="display:inline-block;background:#ef8731;color:#fff;text-decoration:none;font-weight:700;padding:13px 24px;letter-spacing:1px;text-transform:uppercase;font-size:13px">Pay ${money(t.total)} by card</a></p>`
@@ -75,9 +76,8 @@ function invoiceHtml(inv, opts) {
     <tr><td style="padding:12px 12px;text-align:right;font-weight:800;color:#063a63;font-size:16px">Total due</td><td style="padding:12px 12px;text-align:right;width:130px;font-family:Georgia,serif;font-size:20px;color:#063a63;font-weight:700">${money(t.total)}</td></tr>
   </table>
   <div style="margin:18px 32px 0;padding:16px 18px;background:#f3faf0;border-left:4px solid #70c257;font-size:13px;line-height:1.7;color:#33424f">
-    <b style="color:#063a63">Pay by bank transfer</b><br>
-    Bank: ${esc(bank.bank)}<br>Account name: ${esc(bank.account)}<br>Account number: ${esc(bank.number)}<br>Routing or SWIFT: ${esc(bank.code)}<br>
-    Reference: <b>${esc(inv.number)}</b>
+    <b style="color:#063a63">Pay by bank transfer</b> &middot; use the reference <b>${esc(inv.number)}</b><br>
+    ${['JMD', 'USD'].map(cur => '<div style="margin-top:8px"><b style="color:#063a63">' + cur + ' accounts</b>' + banks.filter(b => b.currency === cur).map(b => '<div style="margin-top:4px">' + esc(b.bank) + ' &middot; ' + esc(b.name) + '<br>Account ' + esc(b.number) + ' &middot; ' + esc(b.type) + (b.branch ? ' &middot; ' + esc(b.branch) : '') + (b.transit ? ' &middot; Transit ' + esc(b.transit) : '') + (b.swift ? ' &middot; SWIFT ' + esc(b.swift) : '') + '</div>').join('') + '</div>').join('')}
   </div>
   ${pay ? `<div style="margin:0 32px;text-align:center">${pay}</div>` : ''}
   ${inv.terms ? `<p style="margin:18px 32px 0;font-size:12px;line-height:1.6;color:#5b6b7a">${esc(inv.terms)}</p>` : ''}
@@ -126,4 +126,4 @@ function emailParts(inv, opts) {
   return { subject, text, html };
 }
 
-module.exports = { nextNumber, totals, money, invoiceHtml, emailParts, bankDetails, BIZ, LOGO };
+module.exports = { nextNumber, totals, money, invoiceHtml, emailParts, bankDetails, BANKS, BIZ, LOGO };
