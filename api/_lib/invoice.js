@@ -13,8 +13,8 @@ const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-063
 const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
   { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville' },
-  { currency: 'JMD', bank: 'FCIB', name: 'DAINEROY ALLEN', number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
-  { currency: 'USD', bank: 'FCIB', name: 'DAINEROY ALLEN', number: '1002407476', type: 'Savings', swift: 'FCIBJMKN' }
+  { currency: 'JMD', bank: 'FCIB', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
+  { currency: 'USD', bank: 'FCIB', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', swift: 'FCIBJMKN' }
 ];
 function bankDetails() { return BANKS; }
 
@@ -75,9 +75,10 @@ function invoiceHtml(inv, opts) {
     ${t.discount ? `<tr><td style="padding:6px 12px;text-align:right;color:#5b6b7a">Discount</td><td style="padding:6px 12px;text-align:right;width:130px">-${money(t.discount)}</td></tr>` : ''}
     <tr><td style="padding:12px 12px;text-align:right;font-weight:800;color:#063a63;font-size:16px">Total due</td><td style="padding:12px 12px;text-align:right;width:130px;font-family:Georgia,serif;font-size:20px;color:#063a63;font-weight:700">${money(t.total)}</td></tr>
   </table>
-  <div style="margin:18px 32px 0;padding:16px 18px;background:#f3faf0;border-left:4px solid #70c257;font-size:13px;line-height:1.7;color:#33424f">
-    <b style="color:#063a63">Pay by bank transfer</b> &middot; use the reference <b>${esc(inv.number)}</b><br>
-    ${['JMD', 'USD'].map(cur => '<div style="margin-top:8px"><b style="color:#063a63">' + cur + ' accounts</b>' + banks.filter(b => b.currency === cur).map(b => '<div style="margin-top:4px">' + esc(b.bank) + ' &middot; ' + esc(b.name) + '<br>Account ' + esc(b.number) + ' &middot; ' + esc(b.type) + (b.branch ? ' &middot; ' + esc(b.branch) : '') + (b.transit ? ' &middot; Transit ' + esc(b.transit) : '') + (b.swift ? ' &middot; SWIFT ' + esc(b.swift) : '') + '</div>').join('') + '</div>').join('')}
+  <div style="margin:18px 32px 0;padding:16px 18px;background:#f3faf0;border-left:4px solid #70c257;font-size:13px;line-height:1.6;color:#33424f">
+    <b style="color:#063a63">Pay by bank transfer</b><br>
+    Pay in the currency of your invoice, to either bank. Please quote the reference <b>${esc(inv.number)}</b>.
+    ${['JMD', 'USD'].map(cur => '<div style="margin-top:12px"><b style="color:#063a63">' + cur + ' accounts</b><table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;background:#fff"><tr style="background:#063a63;color:#fff"><th style="padding:6px 8px;text-align:left">Bank</th><th style="padding:6px 8px;text-align:left">Account name</th><th style="padding:6px 8px;text-align:left">Account number</th><th style="padding:6px 8px;text-align:left">Details</th></tr>' + banks.filter(b => b.currency === cur).map(b => '<tr><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.bank) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.name) + (b.business ? ' <span style="color:#5b6b7a">(business account)</span>' : '') + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.number) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc([b.type, b.branch, b.transit ? 'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ')) + '</td></tr>').join('') + '</table></div>').join('')}
   </div>
   ${pay ? `<div style="margin:0 32px;text-align:center">${pay}</div>` : ''}
   ${inv.terms ? `<p style="margin:18px 32px 0;font-size:12px;line-height:1.6;color:#5b6b7a">${esc(inv.terms)}</p>` : ''}
