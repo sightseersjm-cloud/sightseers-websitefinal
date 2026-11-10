@@ -12,9 +12,9 @@ const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-063
    account holder's name on every account, as the bank does for business accounts. */
 const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
-  { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', swift: 'JMJAJMKN' },
+  { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', address: '23 Ward Avenue, Mandeville, Manchester, Jamaica', swift: 'JMJAJMKN' },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
-  { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', swift: 'FCIBJMKN' }
+  { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', address: '23-27 Knutsford Boulevard, Kingston 5, Jamaica', swift: 'FCIBJMKN' }
 ];
 function bankDetails() { return BANKS; }
 
@@ -79,7 +79,7 @@ function invoiceHtml(inv, opts) {
     <b style="color:#063a63">Pay by bank transfer</b><br>
     Pay in the currency of your invoice, to either bank.<br>
     <b style="color:#063a63">Payment note:</b> when making your bank transfer, please put the invoice number <b>${esc(inv.number)}</b> in the note (reference) of the transfer.
-    ${['JMD', 'USD'].map(cur => '<div style="margin-top:12px"><b style="color:#063a63">' + cur + ' accounts</b><table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;background:#fff"><tr style="background:#063a63;color:#fff"><th style="padding:6px 8px;text-align:left">Bank</th><th style="padding:6px 8px;text-align:left">Account name</th><th style="padding:6px 8px;text-align:left">Account number</th><th style="padding:6px 8px;text-align:left">Details</th></tr>' + banks.filter(b => b.currency === cur).map(b => '<tr><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.bank) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.name) + (b.business ? ' <span style="color:#5b6b7a">(business account)</span>' : '') + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.number) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc([b.type, b.branch, b.transit ? 'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ')) + '</td></tr>').join('') + '</table></div>').join('')}
+    ${['JMD', 'USD'].map(cur => '<div style="margin-top:12px"><b style="color:#063a63">' + cur + ' accounts</b><table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;background:#fff"><tr style="background:#063a63;color:#fff"><th style="padding:6px 8px;text-align:left">Bank</th><th style="padding:6px 8px;text-align:left">Account name</th><th style="padding:6px 8px;text-align:left">Account number</th><th style="padding:6px 8px;text-align:left">Details</th></tr>' + banks.filter(b => b.currency === cur).map(b => '<tr><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.bank) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.name) + (b.business ? ' <span style="color:#5b6b7a">(business account)</span>' : '') + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.number) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc([b.type, b.branch, b.address, b.transit ?'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ')) + '</td></tr>').join('') + '</table></div>').join('')}
   </div>
   ${pay ? `<div style="margin:0 32px;text-align:center">${pay}</div>` : ''}
   ${inv.terms ? `<p style="margin:18px 32px 0;font-size:12px;line-height:1.6;color:#5b6b7a">${esc(inv.terms)}</p>` : ''}
