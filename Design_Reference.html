@@ -50963,13 +50963,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     {h:'People and trips',items:[
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
       {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'},
-      {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}}]},
+      {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}},
+      {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -53417,6 +53418,121 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       if(WC.busy)return;WC.busy=true;b.disabled=true;
       api('leaders-waiver',{action:'generate',name:v('wcN'),email:v('wcE'),note:v('wcO')}).then(function(r){WC.busy=false;WC.made=r.code;WC.cfilter='unused';return load().then(rerender);}).catch(function(er){WC.busy=false;b.disabled=false;msg(er.message||'That did not work. Try again.','err');});
     }
+  });
+})();
+</script>
+<style id="manage-invoices-style">
+#p-manage .iv-wrap{max-width:980px}
+#p-manage .iv-card{background:#fff;border:1px solid var(--line);padding:18px 20px;margin:0 0 14px}
+#p-manage .iv-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+#p-manage .iv-grid .wide{grid-column:1/-1}
+#p-manage .iv-lines{width:100%;border-collapse:collapse;margin:8px 0}
+#p-manage .iv-lines th{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+#p-manage .iv-lines td{padding:5px 4px;border-bottom:1px solid var(--line)}
+#p-manage .iv-lines input{width:100%;padding:8px 9px;border:1px solid var(--line);font:inherit;font-size:14px;background:#fff}
+#p-manage .iv-lines .num{width:90px;text-align:right}
+#p-manage .iv-tot{text-align:right;font-size:15px;margin-top:8px;color:var(--navy)}
+#p-manage .iv-tot b{font-family:Georgia,serif;font-size:20px}
+#p-manage .iv-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+#p-manage .iv-row b{font-size:16px;color:var(--navy)}
+#p-manage .iv-meta{font-size:13px;color:var(--mut);margin-top:3px}
+#p-manage .iv-st{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 9px;background:#eef0f3;color:#5c6b7a;white-space:nowrap}
+#p-manage .iv-st.sent{background:#fdf1dc;color:#9a6416}
+#p-manage .iv-st.paid{background:#e4f3e8;color:#23703a}
+#p-manage .iv-st.draft{background:#eef0f3;color:#5c6b7a}
+#p-manage .iv-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#p-manage .iv-check{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:6px}
+@media(max-width:640px){#p-manage .iv-grid{grid-template-columns:1fr}}
+</style>
+<script id="manage-invoices-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var IV={list:null,err:'',busy:false,editing:null,bank:[],msg:''};
+  function money(n){return 'US$'+(Math.round((Number(n)||0)*100)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function today(){return new Date().toISOString().slice(0,10);}
+  function blank(){return {customerName:'',customerEmail:'',customerAddress:'',description:'',issuedOn:today(),dueOn:'',discount:0,items:[{description:'',qty:1,unit:0}],terms:'Payment is due by the date shown. Please quote the invoice number when you pay.',cardPayment:false};}
+  function load(){return api('invoices').then(function(d){IV.list=d.invoices||[];IV.bank=d.bank||[];}).catch(function(e){IV.list=IV.list||[];IV.err=e.message||'Could not load invoices.';});}
+  function msg(t,type){var e=document.getElementById('ivMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='invoices'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function formHtml(f,isNew){
+    var lines=f.items.map(function(l,i){return '<tr><td><input data-iv-d="'+i+'" value="'+esc(l.description)+'" placeholder="What the customer is paying for" maxlength="200"></td><td><input class="num" data-iv-q="'+i+'" type="number" min="1" step="1" value="'+esc(l.qty)+'" inputmode="numeric"></td><td><input class="num" data-iv-u="'+i+'" type="number" min="0" step="0.01" value="'+esc(l.unit)+'" inputmode="decimal"></td><td><button type="button" class="mg-btn sm ghost" data-iv-rm="'+i+'">Remove</button></td></tr>';}).join('');
+    var t=0;f.items.forEach(function(l){t+=(Number(l.qty)||0)*(Number(l.unit)||0);});var tot=Math.max(0,t-(Number(f.discount)||0));
+    return '<div class="iv-card"><h3 style="margin:0 0 12px;color:var(--navy)">'+(isNew?'New invoice':'Edit invoice '+esc(f.number||''))+'</h3>'+
+      '<div class="iv-grid">'+
+      '<div class="mg-fld"><label for="ivN">Customer name</label><input id="ivN" maxlength="120" value="'+esc(f.customerName)+'"></div>'+
+      '<div class="mg-fld"><label for="ivE">Customer email</label><input id="ivE" type="email" maxlength="160" value="'+esc(f.customerEmail)+'"></div>'+
+      '<div class="mg-fld wide"><label for="ivA">Customer address (optional)</label><input id="ivA" maxlength="300" value="'+esc(f.customerAddress)+'"></div>'+
+      '<div class="mg-fld wide"><label for="ivD">What this invoice is for</label><input id="ivD" maxlength="400" value="'+esc(f.description)+'" placeholder="e.g. Leaders in Jamaica: deposit (30%)"></div>'+
+      '<div class="mg-fld"><label for="ivI">Issue date</label><input id="ivI" type="date" value="'+esc(f.issuedOn)+'"></div>'+
+      '<div class="mg-fld"><label for="ivDue">Due date</label><input id="ivDue" type="date" value="'+esc(f.dueOn)+'"></div>'+
+      '</div>'+
+      '<table class="iv-lines" style="table-layout:fixed"><colgroup><col><col style="width:90px"><col style="width:130px"><col style="width:100px"></colgroup><thead><tr><th>Description</th><th style="text-align:right">Qty</th><th style="text-align:right">Price (US$)</th><th></th></tr></thead><tbody>'+lines+'</tbody></table>'+
+      '<p><button type="button" class="mg-btn sm" data-iv-add="1">+ Add a line</button></p>'+
+      '<div class="iv-grid"><div class="mg-fld"><label for="ivDisc">Discount (US$, optional)</label><input id="ivDisc" type="number" min="0" step="0.01" value="'+esc(f.discount)+'"></div>'+
+      '<div class="iv-tot">Total due <b id="ivTot">'+money(tot)+'</b></div></div>'+
+      '<div class="mg-fld"><label for="ivT">Terms (shown at the bottom)</label><input id="ivT" maxlength="600" value="'+esc(f.terms)+'"></div>'+
+      '<label class="iv-check"><input type="checkbox" id="ivCard" '+(f.cardPayment?'checked':'')+'> Also offer a card payment button (Stripe)</label>'+
+      '<p class="mg-hint" style="margin:10px 0 0">Bank transfer details are on every invoice. Customers put the invoice number in the transfer note.</p>'+
+      '<div class="iv-acts"><button type="button" class="mg-btn pri" data-iv-save="'+(isNew?'':esc(f.id))+'">'+(isNew?'Save as draft':'Save changes')+'</button><button type="button" class="mg-btn ghost" data-iv-cancel="1">Cancel</button></div>'+
+      '<div class="mg-msg" id="ivMsg" role="alert"></div></div>';
+  }
+  function readForm(){
+    var v=function(id){var e=document.getElementById(id);return e?String(e.value||'').trim():'';};
+    var items=[];var n=document.querySelectorAll('[data-iv-d]').length;
+    for(var i=0;i<n;i++){var d=document.querySelector('[data-iv-d="'+i+'"]');if(!d)continue;items.push({description:d.value,qty:document.querySelector('[data-iv-q="'+i+'"]').value,unit:document.querySelector('[data-iv-u="'+i+'"]').value});}
+    return {customerName:v('ivN'),customerEmail:v('ivE'),customerAddress:v('ivA'),description:v('ivD'),issuedOn:v('ivI'),dueOn:v('ivDue'),discount:v('ivDisc'),terms:v('ivT'),cardPayment:!!(document.getElementById('ivCard')||{}).checked,items:items};
+  }
+  /* the total on the form updates as the figures are typed */
+  function recalc(){
+    var t=0;var n=document.querySelectorAll('[data-iv-q]').length;
+    for(var i=0;i<n;i++){var q=document.querySelector('[data-iv-q="'+i+'"]'),u=document.querySelector('[data-iv-u="'+i+'"]');if(q&&u)t+=(Number(q.value)||0)*(Number(u.value)||0);}
+    var disc=Number((document.getElementById('ivDisc')||{}).value)||0;
+    var tot=document.getElementById('ivTot');if(tot)tot.textContent=money(Math.max(0,t-disc));
+  }
+  R.addEventListener('input',function(e){var t=e.target;if(!t||!t.matches)return;if(t.matches('[data-iv-q],[data-iv-u],#ivDisc'))recalc();});
+  function card(i){
+    var st=i.status==='paid'?'paid':i.status==='sent'?'sent':'draft';
+    var label=i.status==='paid'?'Paid':i.status==='sent'?'Sent':'Draft';
+    var acts='<button type="button" class="mg-btn sm" data-iv-pdf="'+esc(i.id)+'">Download PDF</button>';
+    if(i.status!=='paid')acts+=' <button type="button" class="mg-btn sm" data-iv-send="'+esc(i.id)+'">'+(i.status==='draft'?'Email to customer':'Email again')+'</button>';
+    if(i.status!=='paid')acts+=' <button type="button" class="mg-btn sm ghost" data-iv-paid="'+esc(i.id)+'">Mark paid</button>';
+    if(i.status==='draft')acts+=' <button type="button" class="mg-btn sm ghost" data-iv-edit="'+esc(i.id)+'">Edit</button> <button type="button" class="mg-btn sm ghost" data-iv-del="'+esc(i.id)+'">Delete draft</button>';
+    return '<div class="mg-card iv-card"><div class="iv-row"><div><b>'+esc(i.number)+'</b> <span class="iv-meta">'+esc(i.customerName)+' &middot; '+esc(i.customerEmail)+'</span><div class="iv-meta">'+esc(i.description||'')+' &middot; Due '+esc(i.dueOn||'')+(i.sentAt?' &middot; Sent '+esc(String(i.sentAt).slice(0,10)):'')+(i.paidAt?' &middot; Paid '+esc(String(i.paidAt).slice(0,10))+' by '+esc(i.paidBy||''):'')+'</div></div>'+
+      '<div style="text-align:right"><span class="iv-st '+st+'">'+label+'</span><div style="font-family:Georgia,serif;font-size:18px;color:var(--navy);margin-top:6px">'+money(i.total)+'</div></div></div>'+
+      '<div class="iv-acts">'+acts+'</div></div>';
+  }
+  function screen(){
+    var head='<h1>Invoices</h1><p class="mg-sub">Invoices for customers. Each one is numbered automatically and emailed with a PDF attached. Only admins can see this page.</p>';
+    if(IV.list===null)return head+'<p class="mg-sub">'+(IV.err?esc(IV.err):'Loading…')+'</p>';
+    if(IV.editing)return head+formHtml(IV.editing.f,IV.editing.isNew);
+    var top='<p><button type="button" class="mg-btn pri" data-iv-new="1">+ New invoice</button></p><div class="mg-msg" id="ivMsg" role="alert"></div>';
+    return head+top+(IV.list.length?IV.list.map(card).join(''):'<div class="mg-card mg-soon"><h3>No invoices yet</h3><p class="mg-hint" style="font-size:14px;margin:0">Press New invoice to make the first one.</p></div>');
+  }
+  MG.screens.invoices=function(){return '<div class="iv-wrap">'+screen()+'</div>';};
+  MG.after.invoices=function(){if(!IV.loading&&IV.list===null){IV.loading=true;load().then(function(){IV.loading=false;if(S.screen==='invoices')rerender();});}};
+  function run(b,fn){if(IV.busy)return;IV.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){IV.busy=false;if(b)b.disabled=false;},function(e){IV.busy=false;if(b)b.disabled=false;msg(e.message||'That did not work. Try again.','err');});}
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='invoices')return;var d=b.dataset;
+    if(d.ivNew){IV.editing={f:blank(),isNew:true};rerender();return;}
+    if(d.ivCancel){IV.editing=null;rerender();return;}
+    if(d.ivEdit){var i=IV.list.filter(function(x){return x.id===d.ivEdit;})[0];if(i){IV.editing={f:JSON.parse(JSON.stringify(i)),isNew:false};rerender();}return;}
+    if(d.ivAdd){var f=readForm();f.items.push({description:'',qty:1,unit:0});IV.editing={f:f,isNew:IV.editing.isNew,id:IV.editing.f.id,number:IV.editing.f.number};rerender();return;}
+    if(d.ivRm){var g=readForm();g.items.splice(Number(d.ivRm),1);if(!g.items.length)g.items.push({description:'',qty:1,unit:0});IV.editing={f:g,isNew:IV.editing.isNew,id:IV.editing.f.id,number:IV.editing.f.number};rerender();return;}
+    if(d.ivSave!==undefined&&b.hasAttribute('data-iv-save')){
+      var body=readForm();
+      run(b,function(){
+        var isNew=!d.ivSave;var p=isNew?api('invoices',Object.assign({action:'create'},body)):api('invoices',Object.assign({action:'update',id:d.ivSave},body));
+        return p.then(function(){IV.editing=null;return load().then(rerender);});
+      });
+      return;
+    }
+    if(d.ivSend){var i2=IV.list.filter(function(x){return x.id===d.ivSend;})[0];if(i2&&window.confirm('Email invoice '+i2.number+' to '+i2.customerEmail+' with the PDF attached?'))run(b,function(){return api('invoices',{action:'send',id:d.ivSend}).then(function(){return load().then(function(){rerender();msg('Emailed to '+i2.customerEmail+'.','ok');});});});return;}
+    if(d.ivPaid){var i3=IV.list.filter(function(x){return x.id===d.ivPaid;})[0];var how=window.prompt('How was '+(i3?i3.number:'this invoice')+' paid? Type bank or card.','bank');if(how===null)return;var m=/card/i.test(how)?'card':'bank transfer';run(b,function(){return api('invoices',{action:'mark-paid',id:d.ivPaid,method:m}).then(function(){return load().then(function(){rerender();msg('Marked as paid.','ok');});});});return;}
+    if(d.ivDel){var i4=IV.list.filter(function(x){return x.id===d.ivDel;})[0];if(i4&&window.confirm('Delete the draft '+i4.number+'? This cannot be undone.'))run(b,function(){return api('invoices',{action:'delete',id:d.ivDel}).then(function(){return load().then(rerender);});});return;}
+    if(d.ivPdf){var tok=null;try{tok=localStorage.getItem('ss_auth_token');}catch(x){}
+      fetch('/api/invoices?pdf='+encodeURIComponent(d.ivPdf),{headers:tok?{Authorization:'Bearer '+tok}:{}}).then(function(r){if(!r.ok)throw new Error('Could not make the PDF.');return r.blob();}).then(function(bl){var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='Invoice.pdf';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},500);}).catch(function(err){msg(err.message,'err');});return;}
   });
 })();
 </script>
