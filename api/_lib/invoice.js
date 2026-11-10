@@ -14,7 +14,7 @@ const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
   { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', swift: 'JMJAJMKN' },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
-  { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings' }
+  { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', swift: 'FCIBJMKN' }
 ];
 function bankDetails() { return BANKS; }
 
