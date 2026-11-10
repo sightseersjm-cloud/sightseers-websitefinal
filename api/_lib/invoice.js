@@ -14,7 +14,7 @@ const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
   { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', address: '23 Ward Avenue, Mandeville, Manchester, Jamaica', swift: 'JMJAJMKN', intermediary: 'Intermediary bank: BNY Mellon, 225 Liberty Street, New York, NY, SWIFT IRVTUS3N' },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
-  { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', address: '23-27 Knutsford Boulevard, Kingston 5, Jamaica', swift: 'FCIBJMKN' }
+  { currency: 'USD', bank: 'CIBC Caribbean Bank (Jamaica) Limited', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', address: '23-27 Knutsford Boulevard, Kingston, Jamaica', swift: 'FCIBJMKN', intermediary: 'Intermediary bank: Wells Fargo Bank, New York, SWIFT PNBPUS3NNYC, ABA 026005092' }
 ];
 function bankDetails() { return BANKS; }
 
