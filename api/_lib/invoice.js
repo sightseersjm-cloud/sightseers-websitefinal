@@ -11,7 +11,7 @@ const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-063
 /* Bank accounts shown on every invoice. All are business accounts. JMMB accounts are in the company's name; FCIB shows the
    account holder's name on every account, as the bank does for business accounts. */
 const BANKS = [
-  { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville', swift: 'JMJAJMKN' },
+  { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
   { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', swift: 'JMJAJMKN' },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
   { currency: 'USD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings' }
