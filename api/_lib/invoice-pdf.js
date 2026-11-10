@@ -85,7 +85,7 @@ function build(invoice) {
     ['BANK', 'ACCOUNT NAME', 'ACCOUNT NUMBER', 'DETAILS'].forEach((h, i) => doc.text(h, cx[i] + 4, hdr + 5));
     let ry = hdr + 16;
     banks.filter(b => b.currency === cur).forEach(b => {
-      const details = [b.type, b.branch, b.address, b.transit ?'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ');
+      const details = [b.type, b.branch, b.address, b.intermediary, b.transit ?'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ');
       doc.rect(M + 12, ry, CW - 24, 30).fill('#fff').strokeColor('#e1ebe4').lineWidth(0.5).rect(M + 12, ry, CW - 24, 30).stroke();
       doc.fillColor(INK).font('Helvetica').fontSize(8.5);
       doc.text(b.bank, cx[0] + 4, ry + 8, { width: 84 });
