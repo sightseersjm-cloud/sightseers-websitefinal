@@ -101,7 +101,7 @@ function emailParts(inv, opts) {
     '',
     inv.description ? inv.description : '',
     '',
-    opts && opts.stripeUrl ? 'Pay by card: ' + opts.stripeUrl : 'Pay by bank transfer, using the bank details on the invoice and the reference ' + inv.number + '.',
+    opts && opts.stripeUrl ? 'Pay by card: ' + opts.stripeUrl : 'To pay by bank transfer, use the bank details on the invoice, and put the invoice number ' + inv.number + ' in the note of your transfer.',
     '',
     'Please let us know if you have any questions. We look forward to hosting you.',
     '',
@@ -121,7 +121,7 @@ function emailParts(inv, opts) {
     ${inv.description ? `<p style="margin:0 0 12px">${esc(inv.description)}</p>` : ''}
     ${opts && opts.stripeUrl
       ? `<p style="margin:18px 0"><a href="${esc(opts.stripeUrl)}" style="display:inline-block;background:#ef8731;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;text-transform:uppercase;font-size:13px;letter-spacing:1px">Pay ${money(t.total)} by card</a></p>`
-      : `<p style="margin:0 0 12px">To pay by bank transfer, use the bank details on the invoice and quote the reference <b>${esc(inv.number)}</b>.</p>`}
+      : `<p style="margin:0 0 12px">To pay by bank transfer, use the bank details on the invoice, and put the invoice number <b>${esc(inv.number)}</b> in the note of your transfer.</p>`}
     <p style="margin:0 0 12px">Please reply to this email if you have any questions. We look forward to hosting you.</p>
     <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);font-size:13px;color:#063a63"><b>${esc(BIZ.name)}</b><br>${esc(BIZ.phone)} &middot; ${esc(BIZ.email)}</div>
   </div></div>`;
