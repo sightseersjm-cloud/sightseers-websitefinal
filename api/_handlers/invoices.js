@@ -26,7 +26,6 @@ function clean(body) {
     discount: Math.max(0, Number(body.discount) || 0),
     items,
     terms: text(body.terms, 600),
-    cardPayment: body.cardPayment === true
   };
 }
 

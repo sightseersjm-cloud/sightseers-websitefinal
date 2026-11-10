@@ -53473,7 +53473,6 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       '<div class="iv-grid"><div class="mg-fld"><label for="ivDisc">Discount (US$, optional)</label><input id="ivDisc" type="number" min="0" step="0.01" value="'+esc(f.discount)+'"></div>'+
       '<div class="iv-tot">Total due <b id="ivTot">'+money(tot)+'</b></div></div>'+
       '<div class="mg-fld"><label for="ivT">Terms (shown at the bottom)</label><input id="ivT" maxlength="600" value="'+esc(f.terms)+'"></div>'+
-      '<label class="iv-check"><input type="checkbox" id="ivCard" '+(f.cardPayment?'checked':'')+'> Also offer a card payment button (Stripe)</label>'+
       '<p class="mg-hint" style="margin:10px 0 0">Bank transfer details are on every invoice. Customers put the invoice number in the transfer note.</p>'+
       '<div class="iv-acts"><button type="button" class="mg-btn pri" data-iv-save="'+(isNew?'':esc(f.id))+'">'+(isNew?'Save as draft':'Save changes')+'</button><button type="button" class="mg-btn ghost" data-iv-cancel="1">Cancel</button></div>'+
       '<div class="mg-msg" id="ivMsg" role="alert"></div></div>';
@@ -53482,7 +53481,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var v=function(id){var e=document.getElementById(id);return e?String(e.value||'').trim():'';};
     var items=[];var n=document.querySelectorAll('[data-iv-d]').length;
     for(var i=0;i<n;i++){var d=document.querySelector('[data-iv-d="'+i+'"]');if(!d)continue;items.push({description:d.value,qty:document.querySelector('[data-iv-q="'+i+'"]').value,unit:document.querySelector('[data-iv-u="'+i+'"]').value});}
-    return {customerName:v('ivN'),customerEmail:v('ivE'),customerAddress:v('ivA'),description:v('ivD'),issuedOn:v('ivI'),dueOn:v('ivDue'),discount:v('ivDisc'),terms:v('ivT'),cardPayment:!!(document.getElementById('ivCard')||{}).checked,items:items};
+    return {customerName:v('ivN'),customerEmail:v('ivE'),customerAddress:v('ivA'),description:v('ivD'),issuedOn:v('ivI'),dueOn:v('ivDue'),discount:v('ivDisc'),terms:v('ivT'),items:items};
   }
   /* the total on the form updates as the figures are typed */
   function recalc(){
