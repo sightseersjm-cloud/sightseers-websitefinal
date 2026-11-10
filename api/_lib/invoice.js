@@ -12,7 +12,7 @@ const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-063
    account holder's name on every account, as the bank does for business accounts. */
 const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
-  { currency: 'USD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', address: '23 Ward Avenue, Mandeville, Manchester, Jamaica', swift: 'JMJAJMKN', intermediary: 'Intermediary bank: BNY Mellon, 225 Liberty Street, New York, NY, SWIFT IRVTUS3N' },
+  { currency: 'USD', bank: 'JMMB Bank (Jamaica) Limited', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', address: '23 Ward Avenue, Mandeville, Manchester, Jamaica (Head office: 6 Haughton Terrace, Kingston 10, Jamaica)', swift: 'JMJAJMKN', intermediary: 'Intermediary bank: BNY Mellon (New York), SWIFT IRVTUS3N, ABA 021000018, JMMB account 890-1338-729' },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
   { currency: 'USD', bank: 'CIBC Caribbean Bank (Jamaica) Limited', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', address: '23-27 Knutsford Boulevard, Kingston, Jamaica', swift: 'FCIBJMKN', intermediary: 'Intermediary bank: Wells Fargo Bank, New York, SWIFT PNBPUS3NNYC, ABA 026005092' }
 ];
