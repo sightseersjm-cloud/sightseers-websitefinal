@@ -2,7 +2,7 @@ const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL || 'sightseersjm@gmail.com';
 const FROM = process.env.RESEND_FROM || 'Sight Seers Caribbean <onboarding@resend.dev>';
 const KEY  = process.env.RESEND_API_KEY || '';
 
-async function sendEmail({ to, subject, html, replyTo, attachments }) {
+async function sendEmail({ to, subject, html, text, replyTo, attachments }) {
   if (!KEY) { console.log('EMAIL SKIP: no RESEND_API_KEY'); return; }
   const recipient = to || BUSINESS_EMAIL;
   /* a message to the team always ends with a way into the admin inbox, where the request can be tracked */
@@ -12,6 +12,7 @@ async function sendEmail({ to, subject, html, replyTo, attachments }) {
   }
   try {
     const payload = { from: FROM, to: Array.isArray(recipient) ? recipient : [recipient], subject, html };
+    if (typeof text === 'string' && text) payload.text = text;
     if (replyTo) payload.reply_to = replyTo;
     if (Array.isArray(attachments) && attachments.length) payload.attachments = attachments;
     const resp = await fetch('https://api.resend.com/emails', {

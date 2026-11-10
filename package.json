@@ -16,7 +16,7 @@
     "test:passport": "node scripts/passport.test.js",
     "test:routes": "node scripts/routes.test.js",
     "test:leaders": "node scripts/leaders.test.js",
-    "test:invoice": "node scripts/invoice.test.js",
+    "test:invoice": "node scripts/invoice.test.js && node scripts/invoice-send.test.js",
     "test:images": "node scripts/images.test.js",
     "test:packages": "node scripts/packages.test.js",
     "test:waiver": "node scripts/waiver.test.js",
@@ -26,7 +26,8 @@
   "dependencies": {
     "@vercel/blob": "^2.4.0",
     "html-minifier-terser": "^7.2.0",
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.15.1"
   },
   "engines": {
     "node": "24.x"
