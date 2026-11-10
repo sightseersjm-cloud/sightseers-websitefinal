@@ -552,7 +552,7 @@ module.exports = async function handler(req, res) {
           return {
             role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
             sponsors: t.sponsors || [],
-            gallery: t.gallery || [], image: t.image || '',
+            gallery: t.gallery || [], image: t.image || '', leaderCard: t.leaderCard || null,
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
@@ -883,6 +883,22 @@ module.exports = async function handler(req, res) {
     }
 
     /* ===== trip photos: a leader uploads photos and sets the banner and the photo section ===== */
+    if (action === 'card-save') {
+      /* the Team Leader card: the name, zoom and position are small and saved with the trip; the picture is an uploaded photo */
+      const user = getUser(req);
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const isOwner = user.role === 'admin';
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
+      const name = str(body.name, 16).toUpperCase().replace(/[^A-Z0-9 .'&-]/g, '').trim();
+      const num = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : d; };
+      const photo = /^\/api\/images\?file=[a-z-]+\/[0-9a-f-]{36}\.(jpg|png|webp|gif)$/.test(String(body.photo || '')) ? String(body.photo) : '';
+      if (body.photo && !photo) return res.status(400).json({ error: 'The picture must be a photo uploaded through the site.' });
+      const card = { name, zoom: num(body.zoom, 1, 3, 1), ox: num(body.ox, -1, 1, 0), oy: num(body.oy, -1, 1, 0), photo, savedAt: new Date().toISOString() };
+      await db.updateInCollection(TRIPS, t.id, { leaderCard: card });
+      return res.status(200).json({ ok: true, leaderCard: card });
+    }
+
     if (action === 'trip-photo-upload' || action === 'trip-photos-save') {
       const user = getUser(req);
       if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });

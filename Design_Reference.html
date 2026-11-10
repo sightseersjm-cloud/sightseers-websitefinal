@@ -49425,7 +49425,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function lcBox(t){
     if(t.status==='closed')return '';
     var u=lcUser(),first=String(u.name||'').trim().split(/\s+/)[0]||'';
-    return '<details class="ac-photobox" data-lc-box data-lc-id="'+esc(t.id)+'" data-lc-first="'+esc(first)+'" data-lc-avatar="'+esc(u.avatarUrl||'')+'"><summary><span>WhatsApp group picture<small>your Team Leader card</small></span></summary>'+
+    return '<details class="ac-photobox" data-lc-box data-lc-id="'+esc(t.id)+'" data-lc-first="'+esc(first)+'" data-lc-avatar="'+esc(u.avatarUrl||'')+'" data-lc-saved="'+esc(JSON.stringify(t.leaderCard||null))+'"><summary><span>WhatsApp group picture<small>your Team Leader card</small></span></summary>'+
       '<div class="ac-lcbody"><canvas class="ac-lccv" width="2000" height="2000" data-lc-cv aria-label="Team Leader card preview"></canvas><div class="ac-lcctl">'+
       '<div class="ac-lcrow"><label class="ac-lclab" for="lcName'+esc(t.id)+'">Name on the card</label><input id="lcName'+esc(t.id)+'" type="text" maxlength="16" data-lc-name placeholder="Your name"></div>'+
       '<div class="ac-lcrow"><label class="ac-lclab">Your picture</label><div class="ac-kitbtns"><label class="ac-sbtn ac-sbtn--line">Choose a photo<input type="file" accept="image/jpeg,image/png,image/webp" data-lc-file hidden></label></div><small>Drag the picture to move it. Use the slider to zoom.</small></div>'+
@@ -49469,25 +49469,29 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function lcInit(box){
     if(box._lcDone)return;box._lcDone=true;var id=box.getAttribute('data-lc-id'),cv=box.querySelector('[data-lc-cv]'),msg=box.querySelector('[data-lc-msg]');
-    var sv=lcSaved(id)||{},st=LC.store[id]={name:sv.name!=null?sv.name:'Gabby',zoom:sv.zoom||1,ox:sv.ox||0,oy:sv.oy||0,photo:null,photoData:sv.photo||''};
+    var srv=null;try{srv=JSON.parse(box.getAttribute('data-lc-saved')||'null');}catch(e){}
+    var sv=srv||lcSaved(id)||{},st=LC.store[id]={name:sv.name!=null?sv.name:'Gabby',zoom:sv.zoom||1,ox:sv.ox||0,oy:sv.oy||0,photo:null,photoData:sv.photoData||sv.photo||''};
+    /* the picture from the server is an address; a freshly chosen one is a data address until it is saved */
+    var savedUrl=srv&&srv.photo?srv.photo:'';
+    var pushSave=function(){clearTimeout(st._t);st._t=setTimeout(function(){var msg2=box.querySelector('[data-lc-msg]');api('trips','POST',{action:'card-save',id:id,name:st.name,zoom:st.zoom,ox:st.ox,oy:st.oy,photo:savedUrl}).then(function(r){if(r&&r.leaderCard){savedUrl=r.leaderCard.photo||savedUrl;msg2.className='ac-invmsg ok';msg2.textContent='Saved. Your card will be here next time.';}}).catch(function(err){msg2.className='ac-invmsg err';msg2.textContent=err.message||'Could not save just now.';});},700);};
     box.querySelector('[data-lc-name]').value=st.name;box.querySelector('[data-lc-zoom]').value=st.zoom;
     var redraw=function(){lcDraw(cv,st);};
     var setPhoto=function(src,keep){var im=new Image();im.onload=function(){st.photo=im;redraw();};im.onerror=function(){redraw();};im.src=src;};
     Promise.all([lcLoadBase(),lcFont()]).then(function(){redraw();
       var src=st.photoData||box.getAttribute('data-lc-avatar');if(src)setPhoto(src);
     });
-    box.querySelector('[data-lc-name]').addEventListener('input',function(e){st.name=e.target.value;lcSave(id,st);redraw();});
-    box.querySelector('[data-lc-zoom]').addEventListener('input',function(e){st.zoom=Number(e.target.value)||1;lcSave(id,st);redraw();});
+    box.querySelector('[data-lc-name]').addEventListener('input',function(e){st.name=e.target.value;lcSave(id,st);redraw();pushSave();});
+    box.querySelector('[data-lc-zoom]').addEventListener('input',function(e){st.zoom=Number(e.target.value)||1;lcSave(id,st);redraw();pushSave();});
     box.querySelector('[data-lc-file]').addEventListener('change',function(e){
       var f=(e.target.files||[])[0];if(!f)return;msg.className='ac-invmsg';msg.textContent='';
-      phShrink(f).then(function(d){st.photoData=d;st.ox=0;st.oy=0;st.zoom=1;box.querySelector('[data-lc-zoom]').value=1;lcSave(id,st);setPhoto(d);}).catch(function(err){msg.className='ac-invmsg err';msg.textContent=err.message||'That photo could not be opened.';}).then(function(){e.target.value='';});
+      phShrink(f).then(function(d){st.photoData=d;st.ox=0;st.oy=0;st.zoom=1;box.querySelector('[data-lc-zoom]').value=1;lcSave(id,st);setPhoto(d);return api('trips','POST',{action:'trip-photo-upload',id:id,data:d}).then(function(r){savedUrl=r.url;pushSave();});}).catch(function(err){msg.className='ac-invmsg err';msg.textContent=err.message||'That photo could not be opened.';}).then(function(){e.target.value='';});
     });
     var drag=null;
     cv.addEventListener('pointerdown',function(e){if(!st.photo)return;var r=cv.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,ox:st.ox,oy:st.oy,k:2000/r.width};try{cv.setPointerCapture(e.pointerId);}catch(x){}cv.style.cursor='grabbing';});
     cv.addEventListener('pointermove',function(e){if(!drag)return;
       var im=st.photo,iw=im.naturalWidth,ih=im.naturalHeight,cover=Math.max(1092/iw,1092/ih),dw=iw*cover*st.zoom,dh=ih*cover*st.zoom,mx=Math.max(1,(dw-1092)/2),my=Math.max(1,(dh-1092)/2);
       st.ox=Math.max(-1,Math.min(1,drag.ox-(e.clientX-drag.x)*drag.k/mx));st.oy=Math.max(-1,Math.min(1,drag.oy-(e.clientY-drag.y)*drag.k/my));redraw();});
-    var end=function(){if(drag){drag=null;cv.style.cursor='';lcSave(id,st);}};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+    var end=function(){if(drag){drag=null;cv.style.cursor='';lcSave(id,st);pushSave();}};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
     box.querySelector('[data-lc-download]').addEventListener('click',function(){
       if(!st.photo){msg.className='ac-invmsg err';msg.textContent='Choose your photo first, then download.';return;}
       lcDraw(cv,st);cv.toBlob(function(b){if(!b){msg.className='ac-invmsg err';msg.textContent='Could not make the image. Please try again.';return;}
