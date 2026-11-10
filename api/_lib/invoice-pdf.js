@@ -75,7 +75,7 @@ function build(invoice) {
   doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(11).text('Pay by bank transfer', M + 12, boxTop + 12);
   doc.fillColor(INK).font('Helvetica').fontSize(9).text('Pay in the currency of your invoice, to either bank.', M + 12, doc.y + 4, { width: CW - 24 });
   doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(9).text('Payment note:', M + 12, doc.y + 6, { continued: true }).font('Helvetica').fillColor(INK).text(' when making your bank transfer, please put the invoice number ' + invoice.number + ' in the note (reference) of the transfer.', { width: CW - 24 });
-  ['JMD', 'USD'].forEach(cur => {
+  ['JMD'].forEach(cur => {
     doc.moveDown(0.6);
     doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(9).text(cur + ' accounts', M + 12, doc.y, { width: CW - 24 });
     const hdr = doc.y + 4;
@@ -85,7 +85,7 @@ function build(invoice) {
     ['BANK', 'ACCOUNT NAME', 'ACCOUNT NUMBER', 'DETAILS'].forEach((h, i) => doc.text(h, cx[i] + 4, hdr + 5));
     let ry = hdr + 16;
     banks.filter(b => b.currency === cur).forEach(b => {
-      const details = [b.type, b.branch, b.address, b.intermediary, b.transit ?'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ');
+      const details = [b.type, b.branch, b.transit ? 'Transit ' + b.transit : ''].filter(Boolean).join(' · ');
       doc.rect(M + 12, ry, CW - 24, 30).fill('#fff').strokeColor('#e1ebe4').lineWidth(0.5).rect(M + 12, ry, CW - 24, 30).stroke();
       doc.fillColor(INK).font('Helvetica').fontSize(8.5);
       doc.text(b.bank, cx[0] + 4, ry + 8, { width: 84 });
@@ -96,6 +96,33 @@ function build(invoice) {
     });
     doc.y = ry + 2;
   });
+
+  // USD accounts: one labelled card per account, side by side
+  doc.moveDown(0.6);
+  doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(9).text('USD accounts (international wire)', M + 12, doc.y, { width: CW - 24 });
+  const usd = banks.filter(b => b.currency === 'USD');
+  const gap = 10, colW = (CW - 24 - gap * (usd.length - 1)) / usd.length;
+  const cardTop = doc.y + 6;
+  let cardBottom = cardTop;
+  usd.forEach((b, idx) => {
+    const x = M + 12 + idx * (colW + gap);
+    let cy = cardTop;
+    doc.rect(x, cy, colW, 18).fill(NAVY);
+    doc.fillColor('#fff').font('Helvetica-Bold').fontSize(8).text(b.bank + ' · USD', x + 6, cy + 5, { width: colW - 12 });
+    cy += 18;
+    b.wire.forEach(([k, v]) => {
+      doc.font('Helvetica-Bold').fontSize(8);
+      const vh = doc.heightOfString(v, { width: colW - 12 });
+      const rowH = 9 + vh + 6;
+      doc.fillColor(MUTED).font('Helvetica').fontSize(6.5).text(k.toUpperCase(), x + 6, cy + 4, { width: colW - 12, characterSpacing: 0.6 });
+      doc.fillColor(INK).font('Helvetica-Bold').fontSize(8).text(v, x + 6, cy + 13, { width: colW - 12 });
+      cy += rowH;
+      doc.moveTo(x, cy).lineTo(x + colW, cy).strokeColor('#e1ebe4').lineWidth(0.5).stroke();
+    });
+    doc.rect(x, cardTop, colW, cy - cardTop).strokeColor('#cfe3cf').lineWidth(0.5).stroke();
+    cardBottom = Math.max(cardBottom, cy);
+  });
+  doc.y = cardBottom + 4;
 
   // footer: drawn with the bottom margin cleared so it does not start a new page
   doc.page.margins.bottom = 0;

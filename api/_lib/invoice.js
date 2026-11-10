@@ -8,13 +8,38 @@ const trip = require('./trip');
 const LOGO = require('fs').readFileSync(require('path').join(__dirname, 'invoice-logo.txt'), 'utf8').trim();
 const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-0630', email: 'info@sightseerscaribbean.com', site: 'sightseerscaribbean.com' };
 
-/* Bank accounts shown on every invoice. All are business accounts. JMMB accounts are in the company's name; FCIB shows the
-   account holder's name on every account, as the bank does for business accounts. */
+/* Bank accounts shown on every invoice. All are business accounts. JMMB accounts are in the company's name; CIBC shows the
+   account holder's name on every account, as the bank does for business accounts.
+   USD accounts carry a `wire` list: the labelled rows shown for an international transfer. */
 const BANKS = [
   { currency: 'JMD', bank: 'JMMB Bank', name: 'Sight Seers Caribbean Adventures', number: '006400205846', type: 'Chequing', branch: 'Mandeville' },
-  { currency: 'USD', bank: 'JMMB Bank (Jamaica) Limited', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville', address: '23 Ward Avenue, Mandeville, Manchester, Jamaica (Head office: 6 Haughton Terrace, Kingston 10, Jamaica)', swift: 'JMJAJMKN', intermediary: 'Intermediary bank: BNY Mellon (New York), SWIFT IRVTUS3N, ABA 021000018, JMMB account 890-1338-729' },
+  { currency: 'USD', bank: 'JMMB Bank (Jamaica) Limited', name: 'Sight Seers Caribbean Adventures', number: '006400205915', type: 'Chequing', branch: 'Mandeville',
+    wire: [
+      ['Beneficiary bank', 'JMMB Bank (Jamaica) Limited'],
+      ['Branch address', '23 Ward Avenue, Mandeville, Manchester, Jamaica'],
+      ['Head office', '6 Haughton Terrace, Kingston 10, Jamaica'],
+      ['Account name', 'Sight Seers Caribbean Adventures'],
+      ['Account number', '006400205915'],
+      ['Account type', 'Chequing'],
+      ['Beneficiary SWIFT', 'JMJAJMKN'],
+      ['Intermediary bank', 'BNY Mellon, New York'],
+      ['Intermediary SWIFT', 'IRVTUS3N'],
+      ['ABA / routing', '021000018'],
+      ['JMMB account at BNY Mellon', '890-1338-729']
+    ] },
   { currency: 'JMD', bank: 'CIBC', name: 'DAINEROY ALLEN', business: true, number: '1002405782', type: 'Chequing', branch: 'Mandeville', transit: '09746' },
-  { currency: 'USD', bank: 'CIBC Caribbean Bank (Jamaica) Limited', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings', address: '23-27 Knutsford Boulevard, Kingston, Jamaica', swift: 'FCIBJMKN', intermediary: 'Intermediary bank: Wells Fargo Bank, New York, SWIFT PNBPUS3NNYC, ABA 026005092' }
+  { currency: 'USD', bank: 'CIBC Caribbean Bank (Jamaica) Limited', name: 'DAINEROY ALLEN', business: true, number: '1002407476', type: 'Savings',
+    wire: [
+      ['Beneficiary bank', 'CIBC Caribbean Bank (Jamaica) Limited'],
+      ['Bank address', '23-27 Knutsford Boulevard, Kingston, Jamaica'],
+      ['Account name', 'DAINEROY ALLEN (business account)'],
+      ['Account number', '1002407476'],
+      ['Account type', 'Savings'],
+      ['Beneficiary SWIFT', 'FCIBJMKN'],
+      ['Intermediary bank', 'Wells Fargo Bank, New York'],
+      ['Intermediary SWIFT', 'PNBPUS3NNYC'],
+      ['ABA / routing', '026005092']
+    ] }
 ];
 function bankDetails() { return BANKS; }
 
@@ -40,6 +65,12 @@ function totals(items, discount) {
 
 function esc(x) { return trip.esc(x); }
 
+/* one USD account as a labelled card: each row is a label and its value */
+function wireCardHtml(b) {
+  const rows = (b.wire || []).map(([k, v]) => '<tr><td style="padding:6px 10px;color:#5b6b7a;width:44%;border-top:1px solid #e1ebe4;vertical-align:top">' + esc(k) + '</td><td style="padding:6px 10px;color:#12293d;font-weight:700;border-top:1px solid #e1ebe4;vertical-align:top">' + esc(v) + '</td></tr>').join('');
+  return '<div style="flex:1 1 300px;min-width:0;border:1px solid #cfe3cf;background:#fff"><div style="background:#063a63;color:#fff;padding:8px 10px;font-size:12.5px;font-weight:700">' + esc(b.bank) + ' &middot; USD</div><table style="width:100%;border-collapse:collapse;font-size:12.5px">' + rows + '</table></div>';
+}
+
 /* the invoice as a page: the same look as the tent rental agreement and the booking confirmations */
 function invoiceHtml(inv, opts) {
   const o = opts || {};
@@ -49,6 +80,8 @@ function invoiceHtml(inv, opts) {
   const pay = o.stripeUrl
     ? `<p style="margin:18px 0"><a href="${esc(o.stripeUrl)}" style="display:inline-block;background:#ef8731;color:#fff;text-decoration:none;font-weight:700;padding:13px 24px;letter-spacing:1px;text-transform:uppercase;font-size:13px">Pay ${money(t.total)} by card</a></p>`
     : '';
+  const jmdRows = banks.filter(b => b.currency === 'JMD').map(b => '<tr><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.bank) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.name) + (b.business ? ' <span style="color:#5b6b7a">(business account)</span>' : '') + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.number) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc([b.type, b.branch, b.transit ? 'Transit ' + b.transit : ''].filter(Boolean).join(' · ')) + '</td></tr>').join('');
+  const usdCards = banks.filter(b => b.currency === 'USD').map(wireCardHtml).join('');
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Invoice ${esc(inv.number)}</title></head>
 <body style="margin:0;background:#eef3f7;font-family:Raleway,Arial,sans-serif;color:#12293d">
 <div style="max-width:720px;margin:24px auto;background:#fff;border:1px solid #dfe7ee;border-radius:0;box-shadow:0 18px 48px rgba(6,58,99,.10)">
@@ -79,7 +112,8 @@ function invoiceHtml(inv, opts) {
     <b style="color:#063a63">Pay by bank transfer</b><br>
     Pay in the currency of your invoice, to either bank.<br>
     <b style="color:#063a63">Payment note:</b> when making your bank transfer, please put the invoice number <b>${esc(inv.number)}</b> in the note (reference) of the transfer.
-    ${['JMD', 'USD'].map(cur => '<div style="margin-top:12px"><b style="color:#063a63">' + cur + ' accounts</b><table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;background:#fff"><tr style="background:#063a63;color:#fff"><th style="padding:6px 8px;text-align:left">Bank</th><th style="padding:6px 8px;text-align:left">Account name</th><th style="padding:6px 8px;text-align:left">Account number</th><th style="padding:6px 8px;text-align:left">Details</th></tr>' + banks.filter(b => b.currency === cur).map(b => '<tr><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.bank) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.name) + (b.business ? ' <span style="color:#5b6b7a">(business account)</span>' : '') + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc(b.number) + '</td><td style="padding:6px 8px;border-top:1px solid #e1ebe4">' + esc([b.type, b.branch, b.address, b.intermediary, b.transit ?'Transit ' + b.transit : '', b.swift ? 'SWIFT ' + b.swift : ''].filter(Boolean).join(' · ')) + '</td></tr>').join('') + '</table></div>').join('')}
+    <div style="margin-top:12px"><b style="color:#063a63">JMD accounts (local)</b><table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;background:#fff"><tr style="background:#063a63;color:#fff"><th style="padding:6px 8px;text-align:left">Bank</th><th style="padding:6px 8px;text-align:left">Account name</th><th style="padding:6px 8px;text-align:left">Account number</th><th style="padding:6px 8px;text-align:left">Details</th></tr>${jmdRows}</table></div>
+    <div style="margin-top:14px"><b style="color:#063a63">USD accounts (international wire)</b><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px">${usdCards}</div></div>
   </div>
   ${pay ? `<div style="margin:0 32px;text-align:center">${pay}</div>` : ''}
   ${inv.terms ? `<p style="margin:18px 32px 0;font-size:12px;line-height:1.6;color:#5b6b7a">${esc(inv.terms)}</p>` : ''}
