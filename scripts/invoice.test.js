@@ -22,7 +22,7 @@ ok(page.includes('SS-2026-0001') && page.includes('US$568.50') && page.includes(
 ok(page.includes('data:image/png;base64,') && page.includes('alt="Sight Seers Caribbean Adventures"'), 'invoice page has the embedded Sight Seers logo');
 ok(inv.emailParts(sample).html.includes('https://www.sightseerscaribbean.com/assets/logo-wordmark.png'), 'email uses the logo hosted on the site');
 ok(inv.invoiceHtml(sample).indexOf('by card') === -1, 'card button is optional (off when no link)');
-ok(page.includes('quote the reference <b>SS-2026-0001</b>'), 'bank transfer reference is the invoice number');
+ok(page.includes('Payment note:</b> <b>SS-2026-0001</b>'), 'invoice number is the payment note');
 const pg2 = inv.invoiceHtml(sample);
 ok(inv.BANKS.length === 4 && ['006400205846','006400205915','1002405782','1002407476'].every(n => pg2.includes(n)), 'all four bank accounts are on the invoice');
 ok(pg2.includes('FCIBJMKN') && pg2.includes('09746'), 'SWIFT and transit are shown');
