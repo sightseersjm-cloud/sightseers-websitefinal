@@ -26,7 +26,7 @@ function build(invoice) {
   // accent bar and header
   doc.rect(0, 0, W * 0.62, 5).fill(GREEN);
   doc.rect(W * 0.62, 0, W * 0.38, 5).fill(ORANGE);
-  doc.image(logoBuffer(), M, 28, { width: 150 });
+  doc.image(logoBuffer(), M, 28, { width: 150, height: 150 * 75 / 340 });
   doc.fillColor(ORANGE).font('Helvetica-Bold').fontSize(8).text('INVOICE', M, 30, { width: CW, align: 'right', characterSpacing: 1.5 });
   doc.fillColor(NAVY).font('Times-Bold').fontSize(22).text(invoice.number, M, 42, { width: CW, align: 'right' });
   doc.fillColor(MUTED).font('Helvetica').fontSize(9).text('Issued ' + (invoice.issuedOn || '') + (invoice.dueOn ? '   Due ' + invoice.dueOn : ''), M, 70, { width: CW, align: 'right' });

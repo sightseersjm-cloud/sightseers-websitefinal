@@ -54,7 +54,7 @@ function invoiceHtml(inv, opts) {
 <div style="max-width:720px;margin:24px auto;background:#fff;border:1px solid #dfe7ee;border-radius:0;box-shadow:0 18px 48px rgba(6,58,99,.10)">
   <div style="height:6px;background:linear-gradient(90deg,#70c257 62%,#ef8731 62%)"></div>
   <div style="padding:28px 32px 18px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
-    <img src="${LOGO}" alt="Sight Seers Caribbean Adventures" width="170" style="display:block;width:170px;height:auto;border:0">
+    <img src="${LOGO}" alt="Sight Seers Caribbean Adventures" width="170" height="38" style="display:block;width:170px;height:38px;border:0">
     <div style="text-align:right">
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ef8731;font-weight:800">Invoice</div>
       <div style="font-family:Georgia,serif;font-size:26px;color:#063a63;font-weight:700">${esc(inv.number)}</div>
@@ -112,7 +112,7 @@ function emailParts(inv, opts) {
   const EMAIL_LOGO = 'https://www.sightseerscaribbean.com/assets/logo-wordmark.png';
   const html = `<div style="font-family:Raleway,Arial,sans-serif;max-width:620px;margin:0 auto;color:#12293d">
   <div style="background:linear-gradient(135deg,#063a63,#0a5678);color:#fff;padding:24px;border-radius:0">
-    <img src="${EMAIL_LOGO}" alt="Sight Seers Caribbean Adventures" width="170" style="display:block;width:170px;height:auto;border:0;margin:0 0 14px">
+    <img src="${EMAIL_LOGO}" alt="Sight Seers Caribbean Adventures" width="170" height="38" style="display:block;width:170px;height:38px;border:0;margin:0 0 14px">
     <div style="font-family:Georgia,serif;font-size:22px;margin-top:6px">Invoice ${esc(inv.number)}</div>
   </div>
   <div style="border:1px solid #dfe7ee;border-top:none;padding:24px;font-size:14px;line-height:1.7;color:#33424f">
