@@ -49406,15 +49406,27 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function lkBox(t,link){
     if(t.status==='closed')return '';
-    return '<details class="ac-photobox" data-lk-box><summary><span>WhatsApp launch kit<small>steps and ready messages for your group</small></span></summary><div class="ac-lkbody">'+
+    var sv=t.launchKit&&t.launchKit.messages?t.launchKit.messages:null;
+    return '<details class="ac-photobox" data-lk-box data-lk-id="'+esc(t.id)+'"><summary><span>WhatsApp launch kit<small>steps and ready messages for your group</small></span></summary><div class="ac-lkbody">'+
       '<ol class="ac-lksteps"><li>Create a WhatsApp group for people interested in your trip.</li>'+
       '<li><b>Add Sight Seers as an admin:</b> add <a href="tel:+18764650630">'+LK_ADMIN+'</a> to the group, then tap the number and choose <b>Make group admin</b>. Sight Seers helps with bookings and keeps the group safe.</li>'+
       '<li>Set the group so only admins can send messages (Group settings, Send messages, Only admins) until you are ready for introductions.</li>'+
       '<li>Use your Team Leader card as the group picture, and put the trip dates and your trip link in the group description.</li>'+
       '<li>Save the group invite link in the box above, then send the messages below in order. Change the words in [brackets] and make them sound like you.</li></ol>'+
-      lkMsgs(t,link).map(function(m,i){return '<div class="ac-lkmsg"><div class="ac-lkhead"><b>'+esc(m[0])+'</b><small>'+esc(m[1])+'</small></div><textarea rows="6" spellcheck="true" aria-label="'+esc(m[0])+' message">'+esc(m[2])+'</textarea><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-lk-copy>Copy message</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('')+
+      lkMsgs(t,link).map(function(m,i){var txt=sv&&typeof sv[i]==='string'?sv[i]:m[2];return '<div class="ac-lkmsg"><div class="ac-lkhead"><b>'+esc(m[0])+'</b><small>'+esc(m[1])+'</small></div><textarea rows="6" spellcheck="true" data-lk-idx="'+i+'" aria-label="'+esc(m[0])+' message">'+esc(txt)+'</textarea><div class="ac-kitbtns"><button type="button" class="ac-sbtn" data-lk-copy>Copy message</button><span class="ac-invmsg" role="status"></span></div></div>';}).join('')+
       '</div></details>';
   }
+  /* the leader's edits to the launch-kit messages are saved to the trip, a moment after they stop typing */
+  var lkTimers={};
+  document.addEventListener('input',function(e){
+    var ta=e.target;if(!ta||!ta.matches||!ta.matches('[data-lk-box] textarea'))return;
+    var box=ta.closest('[data-lk-box]'),id=box.getAttribute('data-lk-id');
+    clearTimeout(lkTimers[id]);lkTimers[id]=setTimeout(function(){
+      var msgs=[].map.call(box.querySelectorAll('textarea'),function(x){return x.value;});
+      var note=box.querySelector('.ac-lkmsg .ac-invmsg');
+      api('trips','POST',{action:'kit-save',id:id,messages:msgs}).then(function(){if(note){note.className='ac-invmsg ok';note.textContent='Saved. Your wording will be here next time.';}}).catch(function(err){if(note){note.className='ac-invmsg err';note.textContent=err.message||'Could not save just now.';}});
+    },800);
+  });
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-lk-copy]');if(!b)return;
     var box=b.closest('.ac-lkmsg'),ta=box.querySelector('textarea'),msg=box.querySelector('.ac-invmsg'),txt=ta.value;

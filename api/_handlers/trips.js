@@ -552,7 +552,7 @@ module.exports = async function handler(req, res) {
           return {
             role: main ? 'main' : 'co', mainLeaderName: t.organizerName || '', coLeader: main ? publicCo(t.coLeader) : null,
             sponsors: t.sponsors || [],
-            gallery: t.gallery || [], image: t.image || '', leaderCard: t.leaderCard || null,
+            gallery: t.gallery || [], image: t.image || '', leaderCard: t.leaderCard || null, launchKit: t.launchKit || null,
             id: t.id, slug: t.slug, title: t.title, status: t.status, dateText: t.dateText, destination: t.destination, country: t.country || '', image: t.image || '', startDate: t.startDate || '',
             url: '/trip/' + t.slug, counts: statusCounts(list), seatsTotal: t.seatsTotal || 0,
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
@@ -883,6 +883,21 @@ module.exports = async function handler(req, res) {
     }
 
     /* ===== trip photos: a leader uploads photos and sets the banner and the photo section ===== */
+    if (action === 'kit-save') {
+      /* the WhatsApp launch kit: the leader's own wording for each of the eight messages, saved with the trip */
+      const user = getUser(req);
+      if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
+      const isOwner = user.role === 'admin';
+      const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
+      if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
+      const list = Array.isArray(body.messages) ? body.messages.slice(0, 8) : [];
+      const messages = list.map(m => String(m == null ? '' : m).slice(0, 2000));
+      if (!messages.length) return res.status(400).json({ error: 'Nothing to save.' });
+      const kit = { messages, savedAt: new Date().toISOString() };
+      await db.updateInCollection(TRIPS, t.id, { launchKit: kit });
+      return res.status(200).json({ ok: true, launchKit: kit });
+    }
+
     if (action === 'card-save') {
       /* the Team Leader card: the name, zoom and position are small and saved with the trip; the picture is an uploaded photo */
       const user = getUser(req);
