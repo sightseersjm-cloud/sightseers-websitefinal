@@ -884,13 +884,13 @@ module.exports = async function handler(req, res) {
 
     /* ===== trip photos: a leader uploads photos and sets the banner and the photo section ===== */
     if (action === 'kit-save') {
-      /* the WhatsApp launch kit: the leader's own wording for each of the eight messages, saved with the trip */
+      /* the WhatsApp launch kit: the leader's own wording for each of the ten messages, saved with the trip */
       const user = getUser(req);
       if (!user) return res.status(401).json({ error: 'Sign in with your account to do this.' });
       const isOwner = user.role === 'admin';
       const t = (await db.getCollection(TRIPS)).find(x => x.id === str(body.id, 80));
       if (!t || (!isOwner && !ownsTrip(t, user))) return res.status(404).json({ error: 'We could not find that trip.' });
-      const list = Array.isArray(body.messages) ? body.messages.slice(0, 8) : [];
+      const list = Array.isArray(body.messages) ? body.messages.slice(0, 10) : [];
       const messages = list.map(m => String(m == null ? '' : m).slice(0, 2000));
       if (!messages.length) return res.status(400).json({ error: 'Nothing to save.' });
       const kit = { messages, savedAt: new Date().toISOString() };
