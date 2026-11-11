@@ -39354,6 +39354,13 @@ document.addEventListener('click', function(e){
   const type = decodeURIComponent(btn.getAttribute('data-stay-type') || '');
   const note = decodeURIComponent(btn.getAttribute('data-stay-note') || '');
 
+  /* Inquire and Reserve open a popup on this page, pre-filled with the stay that was clicked */
+  if (typeof window.openStayInquiry === 'function') {
+    var isReserve = (btn.textContent || '').trim().toLowerCase().indexOf('reserve') > -1;
+    window.openStayInquiry({ country: country, title: title, type: type, action: isReserve ? 'Reserve' : 'Inquire', note: note });
+    return;
+  }
+
   if (typeof openBookingCustom === 'function') {
     openBookingCustom(country, title, type, note);
     return;
@@ -39370,6 +39377,149 @@ document.addEventListener('click', function(e){
     }, 160);
   }
 }, true);
+</script>
+
+<!-- ===== STAY INQUIRY / RESERVE POPUP (villas and vacation rentals) =====
+     Opens on the same page with the clicked stay pre-filled. Sends to /api/contact, like the other forms. -->
+<style id="stay-inquiry-modal-style">
+#stayInqModal{position:fixed;inset:0;z-index:150001;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,26,45,.42);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s linear .3s;font-family:'Raleway',-apple-system,'Segoe UI',sans-serif;color:#12293d}
+#stayInqModal.is-open{opacity:1;visibility:visible;transition:opacity .3s ease,visibility 0s}
+#stayInqModal *{box-sizing:border-box}
+#stayInqModal .sim-sheet{position:relative;width:min(620px,100%);max-height:min(90vh,860px);overflow-y:auto;background:#fff;border-radius:26px;box-shadow:0 40px 90px rgba(6,58,99,.32);padding:30px 28px 26px;transform:translateY(16px) scale(.96);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+#stayInqModal.is-open .sim-sheet{transform:none}
+#stayInqModal .sim-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(6,58,99,.08);color:#5c6f82;font-size:20px;cursor:pointer;line-height:1}
+#stayInqModal .sim-kicker{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#ef8731}
+#stayInqModal .sim-title{font-family:'Playfair Display',Georgia,serif;font-size:26px;color:#063a63;margin:6px 0 6px;line-height:1.2;padding-right:30px}
+#stayInqModal .sim-chip{display:inline-block;font-size:12px;color:#063a63;background:rgba(112,194,87,.14);padding:5px 10px;margin:0 0 18px;border-radius:999px}
+#stayInqModal .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#stayInqModal .sim-full{grid-column:1/-1}
+#stayInqModal label{display:block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#5c6f82;margin-bottom:5px}
+#stayInqModal input,#stayInqModal textarea{width:100%;font:inherit;font-size:14px;color:#12293d;padding:11px 12px;border:1px solid rgba(6,58,99,.18);border-radius:10px;background:#fff}
+#stayInqModal input:focus,#stayInqModal textarea:focus{outline:2px solid #70c257;outline-offset:1px;border-color:transparent}
+#stayInqModal textarea{min-height:84px;resize:vertical}
+#stayInqModal .sim-hint{font-size:12px;color:#5c6f82;margin-top:4px}
+#stayInqModal .sim-err{min-height:18px;margin-top:12px;font-size:13px;color:#c0392b}
+#stayInqModal .sim-err a{color:#c0392b;font-weight:700}
+#stayInqModal .sim-go{width:100%;margin-top:8px;padding:14px;border:0;border-radius:999px;background:#ef8731;color:#fff;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;font-size:13px;cursor:pointer}
+#stayInqModal .sim-go:disabled{opacity:.6;cursor:default}
+#stayInqModal .sim-done{text-align:center;padding:18px 0}
+#stayInqModal .sim-done h3{font-family:'Playfair Display',Georgia,serif;font-size:24px;color:#063a63;margin:0 0 10px}
+#stayInqModal .sim-done p{font-size:14px;line-height:1.7;color:#33424f}
+#stayInqModal .sim-hidden{display:none}
+@media(max-width:560px){#stayInqModal .sim-grid{grid-template-columns:1fr}#stayInqModal .sim-sheet{padding:26px 18px 22px}}
+</style>
+<script id="stay-inquiry-modal">
+(function(){
+  var ctx = null, sending = false, subjectNow = '', textNow = '';
+  var BIZ_EMAIL = 'info@sightseerscaribbean.com';
+  function $(id){ return document.getElementById(id); }
+  function build(){
+    if ($('stayInqModal')) return;
+    var m = document.createElement('div');
+    m.id = 'stayInqModal';
+    m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); m.setAttribute('aria-labelledby', 'simTitle');
+    m.innerHTML = '<div class="sim-sheet">'
+      + '<button type="button" class="sim-close" aria-label="Close">&times;</button>'
+      + '<div id="simFormView">'
+        + '<div class="sim-kicker" id="simKicker"></div>'
+        + '<h2 class="sim-title" id="simTitle"></h2>'
+        + '<div class="sim-chip" id="simChip"></div>'
+        + '<form id="simForm" novalidate><div class="sim-grid">'
+          + '<div><label for="simName">Full name *</label><input id="simName" name="name" autocomplete="name"></div>'
+          + '<div><label for="simEmail">Email *</label><input id="simEmail" name="email" type="email" autocomplete="email"></div>'
+          + '<div><label for="simPhone">Phone / WhatsApp</label><input id="simPhone" name="phone" type="tel" autocomplete="tel"></div>'
+          + '<div><label for="simTravellers">Travellers *</label><input id="simTravellers" name="travellers" type="number" min="5" inputmode="numeric"><div class="sim-hint">Groups of 5 or more</div></div>'
+          + '<div><label for="simArrive">Arrival date *</label><input id="simArrive" name="arrive" type="date"></div>'
+          + '<div><label for="simDepart">Departure date</label><input id="simDepart" name="depart" type="date"></div>'
+          + '<div class="sim-full"><label for="simBudget">Budget (US$, total for the group) *</label><input id="simBudget" name="budget" type="number" min="1" step="1" inputmode="numeric"></div>'
+          + '<div class="sim-full"><label for="simMsg">Anything else we should know</label><textarea id="simMsg" name="message" placeholder="Tours, transfers, dietary needs, the occasion"></textarea></div>'
+        + '</div>'
+        + '<div class="sim-err" id="simErr" role="alert"></div>'
+        + '<button type="submit" class="sim-go" id="simGo"></button>'
+        + '</form>'
+      + '</div>'
+      + '<div id="simDoneView" class="sim-done sim-hidden"><h3>Thank you</h3><p id="simDoneMsg"></p></div>'
+      + '</div>';
+    document.body.appendChild(m);
+    m.addEventListener('mousedown', function(e){ if (e.target === m) close(); });
+    m.querySelector('.sim-close').addEventListener('click', close);
+    $('simForm').addEventListener('submit', function(e){ e.preventDefault(); submit(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && m.classList.contains('is-open')) close(); });
+  }
+  function open(c){
+    build();
+    ctx = c;
+    var reserve = c.action === 'Reserve';
+    $('simKicker').textContent = reserve ? 'Reserve this stay' : 'Ask about this stay';
+    $('simTitle').textContent = c.title || 'Stay';
+    $('simChip').textContent = [c.country, c.type].filter(Boolean).join(' · ');
+    $('simGo').textContent = reserve ? 'Request reservation' : 'Send inquiry';
+    $('simErr').textContent = '';
+    $('simFormView').classList.remove('sim-hidden');
+    $('simDoneView').classList.add('sim-hidden');
+    $('simForm').reset();
+    var today = new Date().toISOString().slice(0, 10);
+    $('simArrive').min = today; $('simDepart').min = today;
+    sending = false; $('simGo').disabled = false;
+    $('stayInqModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ $('simName').focus({ preventScroll: true }); }, 60);
+  }
+  function close(){
+    var m = $('stayInqModal'); if (m) m.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  function fail(msg){ $('simErr').textContent = msg; }
+  function submit(){
+    if (sending || !ctx) return;
+    var name = $('simName').value.trim(), email = $('simEmail').value.trim(), phone = $('simPhone').value.trim();
+    var travellers = parseInt($('simTravellers').value, 10), budget = parseFloat($('simBudget').value);
+    var arrive = $('simArrive').value, depart = $('simDepart').value, msg = $('simMsg').value.trim();
+    if (!name) return fail('Please add your name.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Please add a valid email address.');
+    if (!arrive) return fail('Please choose your arrival date.');
+    if (depart && depart < arrive) return fail('Departure must be after arrival.');
+    if (!(travellers >= 5)) return fail('Please enter your number of travellers. We plan for groups of 5 or more.');
+    if (!(budget > 0)) return fail('Please enter your budget in US$.');
+    var reserve = ctx.action === 'Reserve';
+    subjectNow = (reserve ? 'Stay reservation request: ' : 'Stay inquiry: ') + ctx.title;
+    textNow = [
+      (reserve ? 'Reservation request' : 'Inquiry') + ' from the website',
+      'Stay: ' + ctx.title,
+      'Location: ' + ctx.country,
+      'Type: ' + ctx.type,
+      'Arrival: ' + arrive,
+      'Departure: ' + (depart || 'Not given'),
+      'Travellers: ' + travellers,
+      'Budget (US$, total): ' + budget,
+      '',
+      'Name: ' + name,
+      'Email: ' + email,
+      'Phone / WhatsApp: ' + (phone || 'Not given'),
+      '',
+      'Message:',
+      msg || 'None'
+    ].join('\n');
+    sending = true; $('simGo').disabled = true; $('simErr').textContent = '';
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'send', name: name, email: email, phone: phone, subject: subjectNow, message: textNow, requireEmail: true })
+    }).then(function(r){
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json().catch(function(){ return {}; });
+    }).then(function(){
+      sending = false;
+      $('simFormView').classList.add('sim-hidden');
+      $('simDoneView').classList.remove('sim-hidden');
+      $('simDoneMsg').textContent = (reserve ? 'We have your reservation request for ' : 'We have your inquiry about ') + ctx.title + '. We will reply by email.';
+    }).catch(function(){
+      sending = false; $('simGo').disabled = false;
+      $('simErr').innerHTML = 'We could not send this just now. <a href="mailto:' + BIZ_EMAIL + '?subject=' + encodeURIComponent(subjectNow) + '&body=' + encodeURIComponent(textNow) + '">Send it by email instead</a>.';
+    });
+  }
+  window.openStayInquiry = open;
+})();
 </script>
 
 <style id="ss-v5-luxe-blog-and-back-patch">
