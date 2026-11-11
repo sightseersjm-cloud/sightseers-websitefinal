@@ -109,6 +109,15 @@ function manyOf(v, list, max) {
 function slugify(v) {
   return String(v || '').toLowerCase().replace(/[‘’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
 }
+/* arrival and what to bring: three short sections the leader or Sight Seers fills in; blank sections are dropped */
+function arrivalClean(v) {
+  let a = v;
+  if (typeof a === 'string') { try { a = JSON.parse(a); } catch (e) { a = {}; } }
+  if (!a || typeof a !== 'object') return null;
+  const pick = k => String(a[k] == null ? '' : a[k]).replace(/\r\n/g, '\n').trim().slice(0, 1500);
+  const out = { getting: pick('getting'), bring: pick('bring'), before: pick('before') };
+  return (out.getting || out.bring || out.before) ? out : null;
+}
 function lines(v, maxItems, maxLen) {
   return String(v == null ? '' : (Array.isArray(v) ? v.join('\n') : v)).split(/\r?\n/).map(x => x.trim()).filter(Boolean).slice(0, maxItems || 12).map(x => x.slice(0, maxLen || 160));
 }
@@ -558,7 +567,7 @@ module.exports = async function handler(req, res) {
             inviteGoal: (() => { const a = t.applicationId ? applications.find(x => x.id === t.applicationId) : null; return a && a.inviteCount != null ? a.inviteCount : null; })(),
             reward: main ? { status: t.rewardStatus || 'not_set', text: t.reward || '' } : null,
             groupLink: t.groupLink || '', joined: joinedPeople(list), updates: updatesOf(t.id),
-            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [], itinerary: t.itinerary || [], theme: t.theme || '', themes: THEMES,
+            summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [], itinerary: t.itinerary || [], arrival: t.arrival || null, theme: t.theme || '', themes: THEMES,
             payouts: main ? allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout) : [],
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
               .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
@@ -814,9 +823,10 @@ module.exports = async function handler(req, res) {
       const notIncluded = body.notIncluded !== undefined ? lines(body.notIncluded, 10, 140) : (t.notIncluded || []);
       const itinerary = body.itinerary !== undefined ? cleanDays(body.itinerary) : (t.itinerary || []);
       const theme = body.theme !== undefined ? oneOf(body.theme, THEMES, '') : (t.theme || '');
+      const arrival = body.arrival !== undefined ? arrivalClean(body.arrival) : (t.arrival || null);
       if ((t.status === 'open' || t.status === 'full') && summary.length < 10) return res.status(400).json({ error: 'Write a short summary of the trip, at least a sentence, because it shows under the trip title.' });
       const now = new Date().toISOString();
-      const patch = { summary, description, included, notIncluded, itinerary, theme, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
+      const patch = { summary, description, included, notIncluded, itinerary, theme, arrival, infoUpdatedAt: now, infoUpdatedBy: isOwner ? 'owner' : 'leader' };
       /* the owner hears about leader edits, but at most once an hour per trip so a long editing session is one email */
       const notifyOwner = !isOwner && (!t.infoMailedAt || Date.now() - new Date(t.infoMailedAt).getTime() > 3600000);
       if (notifyOwner) patch.infoMailedAt = now;

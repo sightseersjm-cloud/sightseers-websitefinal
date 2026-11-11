@@ -13927,6 +13927,7 @@ body.theme-night #p-flagship-programs{
         <div class="tc-card tp-block tp-about" id="tpDescWrap" hidden><h2>About this trip</h2><div class="tp-desc" id="tpDesc"></div><small class="tp-by" id="tpBy"></small></div>
         <div class="tc-card tp-block" id="tpDaysWrap" hidden><h2>Day by day</h2><ol class="tp-days" id="tpDays"></ol></div>
         <div class="tc-card tp-block tp-soon" id="tpSoon" hidden></div>
+        <div class="tc-card tp-block tp-arr" id="tpArrWrap" hidden><h2>Arrival and what to bring</h2><div id="tpArr"></div></div>
         <div class="tc-card tp-block" id="tpInclWrap" hidden><div class="tp-incl"><div id="tpIncCol"><h2>What is included</h2><ul class="tc-ticks" id="tpIncluded"></ul></div><div id="tpNotCol"><h2>Not included</h2><ul class="tp-notinc" id="tpNotIncluded"></ul></div></div></div>
         <div class="tc-card tp-block tp-sponsor" id="tpSponsor" hidden></div>
         <div class="tc-card tp-block tp-org" id="tpOrg" hidden></div>
@@ -49090,6 +49091,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpIncCol').hidden=!hasInc;
     $('tpNotIncluded').innerHTML=(t.notIncluded||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');$('tpNotCol').hidden=!hasNot;
     $('tpInclWrap').hidden=!(hasInc||hasNot);$('tpInclWrap').classList.toggle('tp-incl--two',hasInc&&hasNot);
+    /* arrival and what to bring: shown only where the leader or Sight Seers has filled something in */
+    var arr=t.arrival||{},arrParts=[['Getting there',arr.getting],['What to bring',arr.bring],['Before you arrive',arr.before]].filter(function(x){return x[1]&&String(x[1]).trim();});
+    $('tpArr').innerHTML=arrParts.map(function(x){var items=String(x[1]).split(/\n+/).filter(Boolean);return '<h3>'+esc(x[0])+'</h3>'+(x[0]==='What to bring'?'<ul class="tc-ticks">'+items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul>':items.map(function(i){return '<p>'+esc(i)+'</p>';}).join(''));}).join('');
+    $('tpArrWrap').hidden=!arrParts.length;
     var org=$('tpOrg');
     if(t.organizer){var oph=/^(https:\/\/|\/api\/auth\/avatar\/)/.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
       org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
@@ -49450,6 +49455,9 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<label>What the trip involves <span>(where you go, what a day looks like, who it is for. Leave a blank line between paragraphs.)</span><textarea rows="8" maxlength="6000" data-info-desc>'+esc(t.descriptionText||'')+'</textarea></label>'+
       '<label>What is included <span>(one per line)</span><textarea rows="4" maxlength="2000" data-info-incl>'+esc((t.included||[]).join('\n'))+'</textarea></label>'+
       '<label>Not included <span>(one per line, for example flights, drinks, travel insurance)</span><textarea rows="3" maxlength="1500" data-info-notincl>'+esc((t.notIncluded||[]).join('\n'))+'</textarea></label>'+
+      '<label>Getting there <span>(optional: airport, pickup and drop-off, transfer details)</span><textarea rows="3" maxlength="1500" data-info-arr-get>'+esc((t.arrival&&t.arrival.getting)||'')+'</textarea></label>'+
+      '<label>What to bring <span>(optional: a short checklist, one item per line)</span><textarea rows="4" maxlength="1500" data-info-arr-bring>'+esc((t.arrival&&t.arrival.bring)||'')+'</textarea></label>'+
+      '<label>Before you arrive <span>(optional: documents, check-in time, who to contact)</span><textarea rows="3" maxlength="1500" data-info-arr-before>'+esc((t.arrival&&t.arrival.before)||'')+'</textarea></label>'+
       '<div class="ac-infodays"><span class="ac-infolab">Day by day <span>(optional: a title and a line or two for each day; the dates are added from the trip dates)</span></span>'+daysHtml(t.itinerary)+'</div>'+
       '<label>Theme <span>(optional, shown as a tag on the departures and your trip page)</span>'+themeSelect(t.theme||'','data-info-theme')+'</label>'+
       '<p class="ac-infonote">'+(live?'Travelers see this on your trip page the moment you save.':'Travelers see this once your trip page is open.')+' Dates, price, places and your reward stay with Sight Seers. Your photo and the intro about you come from your <a href="#" onclick="var t=document.getElementById(\'acTab-profile\');if(t)t.click();return false;">Profile</a>.</p>'+
@@ -50039,7 +50047,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         e.preventDefault();
         var im=inf.querySelector('.ac-invmsg'),ib=inf.querySelector('[type=submit]'),isum=inf.querySelector('[data-info-summary]');
         im.className='ac-invmsg';ib.disabled=true;im.textContent='Saving...';
-        api('trips','POST',{action:'trip-info-save',id:inf.getAttribute('data-info-id'),summary:isum.value,description:inf.querySelector('[data-info-desc]').value,included:inf.querySelector('[data-info-incl]').value,notIncluded:inf.querySelector('[data-info-notincl]').value,itinerary:daysRead(inf.querySelector('[data-days]')),theme:inf.querySelector('[data-info-theme]').value}).then(function(r){
+        api('trips','POST',{action:'trip-info-save',id:inf.getAttribute('data-info-id'),summary:isum.value,description:inf.querySelector('[data-info-desc]').value,included:inf.querySelector('[data-info-incl]').value,notIncluded:inf.querySelector('[data-info-notincl]').value,itinerary:daysRead(inf.querySelector('[data-days]')),theme:inf.querySelector('[data-info-theme]').value,arrival:{getting:inf.querySelector('[data-info-arr-get]').value,bring:inf.querySelector('[data-info-arr-bring]').value,before:inf.querySelector('[data-info-arr-before]').value}}).then(function(r){
           ib.disabled=false;im.className='ac-invmsg ok';im.textContent='Saved. Travelers see it on your trip page.';grp.at=0;
           var s2=inf.closest('.ac-infobox').querySelector('summary small');if(s2)s2.textContent='shown on your trip page';
         }).catch(function(err){ib.disabled=false;im.className='ac-invmsg err';im.textContent=err.message||'We could not save that. Please try again.';});
