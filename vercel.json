@@ -15,6 +15,16 @@
   "installCommand": "npm install",
   "redirects": [
     {
+      "source": "/insurance",
+      "destination": "https://tmetravelinsurance.com/",
+      "permanent": false
+    },
+    {
+      "source": "/esim",
+      "destination": "https://go.saily.site/aff_c?offer_id=101&aff_id=14170",
+      "permanent": false
+    },
+    {
       "source": "/admin",
       "destination": "/manage",
       "permanent": false
