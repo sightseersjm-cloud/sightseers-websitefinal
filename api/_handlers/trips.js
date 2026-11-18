@@ -664,7 +664,24 @@ module.exports = async function handler(req, res) {
         }
         return res.status(200).json({ ok: true, already: true, resent, ref: dupe.ref });
       }
-      const user = getUser(req);
+      let user = getUser(req);
+      /* a guest who is not signed in gets a Sight Seers account for their email (the same as applying), so the request is on their profile */
+      let newAccount = false, session = null;
+      if (!user) {
+        try {
+          const users = await db.getCollection('users');
+          const found = users.find(u => lower(u.email, 120) === contact.email);
+          if (found) user = found;
+          else {
+            const pw = typeof body.password === 'string' ? body.password : '';
+            if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }
+            const acct = { id: uid(), name: contact.name, email: contact.email, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: contact.phone || '', style: 'Adventure', role: 'guest', provider: pw ? 'trip-request' : 'trip-request-link', country: geo(req).country, city: geo(req).city, createdAt: new Date().toISOString() };
+            await db.addToCollection('users', acct);
+            user = acct; newAccount = true;
+            if (pw) { const tokenStr = createToken({ id: acct.id, email: acct.email, name: acct.name, role: acct.role }); if (tokenStr) { const { passwordHash, ...safeUser } = acct; session = { token: tokenStr, user: safeUser }; } }
+          }
+        } catch (e) { console.error('trip request account', e && e.message); }
+      }
       const full = t && (t.status === 'full' || (t.seatsTotal && travelersCounted(interests, t.id) + partySize > t.seatsTotal));
       const rec = {
         id: uid(), ref: trip.ref('TC'), kind: t ? 'trip' : 'alert',
@@ -690,8 +707,14 @@ module.exports = async function handler(req, res) {
       }
       await log('joined', rec.name + ' ' + (rec.status === 'waitlist' ? 'joined the waitlist for ' : 'joined ') + (t ? t.title : 'the departure alert list') + (rec.partySize > 1 ? ' (' + rec.partySize + ' travelers)' : ''), rec.ref);
       await interestMails(rec, t, { goalLine });
+      if (newAccount) {
+        const how = session
+          ? '<p>Your password is the one you chose.</p>'
+          : '<p><b>To sign in, set your password first:</b> open the sign-in page, choose <b>Forgot password</b>, and enter <b>' + trip.esc(rec.email) + '</b>. We will email you a code.</p>';
+        await safe('trip account', mail(rec.email, 'Your Sight Seers account is ready', 'Your account is ready', '<p>Hi ' + trip.esc(firstName(rec.name)) + ',</p><p>We opened a Sight Seers account for you with this email address, so your trip request is on your profile.</p>' + how));
+      }
       if (goalHit) { await log('goal', (t.organizerName || 'A leader') + ' reached the invite goal on ' + t.title, rec.ref); await goalMails(t, goalHit.goal, goalHit.asked); }
-      return res.status(200).json({ ok: true, ref: rec.ref, waitlist: rec.status === 'waitlist' });
+      return res.status(200).json(Object.assign({ ok: true, ref: rec.ref, waitlist: rec.status === 'waitlist', account: newAccount ? 'created' : (user ? 'linked' : 'none') }, session ? { token: session.token, user: session.user } : {}));
     }
 
     /* ===== public: apply to lead a trip ===== */
