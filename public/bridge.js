@@ -293,7 +293,17 @@
   /* ── Bookings ─────────────────────── */
 
   function getBookings() { return api('bookings', 'GET'); }
-  function createBooking(data) { return api('bookings', 'POST', Object.assign({ action: 'create' }, data)); }
+  function createBooking(data) {
+    return api('bookings', 'POST', Object.assign({ action: 'create' }, data)).then(function (res) {
+      /* a new account (or one with the password the guest chose) signs them in on this device */
+      if (res && res.token && res.user) {
+        setToken(res.token);
+        try { localStorage.setItem(USER_KEY, JSON.stringify(res.user)); } catch (e) {}
+        document.dispatchEvent(new CustomEvent('ss-account-updated', { detail: { user: res.user } }));
+      }
+      return res;
+    });
+  }
   function updateBookingStatus(id, status, adminNote) { return api('bookings', 'POST', { action: 'update-status', id: id, status: status, adminNote: adminNote }); }
   function deleteBooking(id) { return api('bookings', 'POST', { action: 'delete', id: id }); }
 

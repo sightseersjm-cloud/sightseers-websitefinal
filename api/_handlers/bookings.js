@@ -1,5 +1,6 @@
 const db = require('../_lib/db');
-const { requireAuth, requireAdmin, getUser, uid, escapeHtml, requirePerm, can } = require('../_lib/auth');
+const crypto = require('crypto');
+const { requireAuth, requireAdmin, getUser, uid, escapeHtml, requirePerm, can, hashPassword, validatePassword, createToken } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
 
 module.exports = async function handler(req, res) {
@@ -21,9 +22,33 @@ module.exports = async function handler(req, res) {
       const { action } = req.body || {};
 
       if (action === 'create' || !action) {
-        const user = getUser(req);
+        let user = getUser(req);
         const { name, email, phone, tourId, tourName, date, guests, notes, type, stayId, stayName, checkIn, checkOut } = req.body || {};
         if (!name || !email) return res.status(400).json({ error: 'Name and email required' });
+
+        /* a guest who is not signed in gets a Sight Seers account for their email (as trip requests do), so the booking is on their profile */
+        const bookingEmail = String(email).trim().toLowerCase();
+        let session = null;
+        if (!user) {
+          try {
+            const users = await db.getCollection('users');
+            const found = users.find(u => String(u.email || '').toLowerCase() === bookingEmail);
+            if (found) user = found;
+            else {
+              const pw = typeof req.body.password === 'string' ? req.body.password : '';
+              if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }
+              const acct = { id: uid(), name: String(name).trim(), email: bookingEmail, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: (phone || '').trim(), style: 'Adventure', role: 'guest', provider: pw ? 'booking' : 'booking-link', createdAt: new Date().toISOString() };
+              await db.addToCollection('users', acct);
+              user = acct;
+              await sendEmail({
+                subject: 'Your Sight Seers account is ready',
+                html: `<p>Hi ${escapeHtml(String(name).trim().split(/\s+/)[0] || 'there')},</p><p>We opened a Sight Seers account for you with this email address, so your booking request is on your profile.</p>` + (pw ? '<p>Your password is the one you chose.</p>' : `<p><b>To sign in, set your password first:</b> open the sign-in page, choose <b>Forgot password</b>, and enter <b>${escapeHtml(bookingEmail)}</b>.</p>`),
+                to: bookingEmail
+              }).catch(() => {});
+              if (pw) { const tokenStr = createToken({ id: acct.id, email: acct.email, name: acct.name, role: acct.role }); if (tokenStr) { const { passwordHash, ...safeUser } = acct; session = { token: tokenStr, user: safeUser }; } }
+            }
+          } catch (e) { console.error('booking account', e && e.message); }
+        }
 
         const booking = {
           id: uid(),
@@ -67,7 +92,7 @@ module.exports = async function handler(req, res) {
             </table>
             <p style="color:#888;font-size:12px;margin-top:20px">This booking was submitted via sightseerscaribbean.com</p>`
         });
-        return res.status(201).json({ ok: true, booking });
+        return res.status(201).json(Object.assign({ ok: true, booking, account: user && booking.userId ? 'linked' : 'none' }, session ? { token: session.token, user: session.user } : {}));
       }
 
       if (action === 'update-status') {

@@ -22,7 +22,8 @@
     "test:waiver": "node scripts/waiver.test.js",
     "sync:waiver": "node scripts/sync-waiver.js",
     "test:coleader": "node scripts/coleader.test.js",
-    "test:trip-account": "node scripts/trip-request-account.test.js"
+    "test:trip-account": "node scripts/trip-request-account.test.js",
+    "test:booking-account": "node scripts/booking-account.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",
