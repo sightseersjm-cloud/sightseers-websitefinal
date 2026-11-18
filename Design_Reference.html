@@ -9106,6 +9106,22 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 </nav>
 
 <!-- Mobile Nav -->
+<style id="mob-nav-redesign">
+#mobNav{background:linear-gradient(180deg,#063a63 0%,#042c4b 100%)!important;padding:26px 22px 30px!important;font-family:'Raleway',-apple-system,'Segoe UI',sans-serif}
+#mobNav::before{content:'Menu';display:block;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:800;color:#70c257;margin:8px 0 22px}
+#mobNav .mob-close{top:18px!important;right:18px!important;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:15px}
+#mobNav > a{display:flex!important;align-items:center;justify-content:space-between;padding:17px 2px!important;font-size:1.05rem!important;font-weight:700!important;color:#fff!important;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.09)!important}
+#mobNav > a:hover{color:#ef8731!important}
+#mobNav > a.mob-feature{margin:4px 0 14px;padding:16px 18px!important;background:rgba(112,194,87,.14);border:1px solid rgba(112,194,87,.4)!important;border-radius:14px;color:#a6e38f!important;text-transform:uppercase;font-size:.8rem!important;letter-spacing:1.8px;font-weight:800!important}
+#mobNav > a.mob-feature::after{content:'\2192';font-size:1.1rem;letter-spacing:0}
+#mobNav > a.mob-group-toggle i{font-size:11px!important;color:#70c257;margin-left:auto!important;transition:transform .3s}
+#mobNav .mob-group{border-left:2px solid rgba(112,194,87,.35);margin:2px 0 10px 4px;padding-left:14px}
+#mobNav .mob-group a{display:block;padding:12px 0 12px 8px!important;font-size:.92rem!important;font-weight:500!important;color:rgba(255,255,255,.7)!important;border-bottom:none!important}
+#mobNav .mob-group a:hover{color:#fff!important}
+#mobNav > a:nth-last-child(2){justify-content:center;margin-top:28px;border:1px solid rgba(255,255,255,.3)!important;border-radius:999px;padding:14px 18px!important;font-size:.92rem!important;letter-spacing:1.2px;text-transform:uppercase;font-weight:700!important}
+#mobNav > a:last-child{justify-content:center;margin-top:12px!important;background:#ef8731;color:#fff!important;border:none!important;border-radius:999px;padding:16px 18px!important;font-size:.95rem!important;letter-spacing:1.2px;text-transform:uppercase;font-weight:800!important}
+#mobNav > a:last-child:hover{background:#d9712a}
+</style>
 <div class="mob-nav" id="mobNav">
   <span class="mob-close" onclick="closeMob()"><i class="fas fa-times"></i></span>
   <a href="#" onclick="nav('home');closeMob()">Home</a>
