@@ -17030,7 +17030,7 @@ body.theme-night .page .tag{
             <input type="hidden" id="tpCall">
             <small class="tp-call-note" id="tpCallNote">Times are in your own time zone.</small>
           </div>
-          <input type="hidden" id="tpEmail"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhone"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
+          <input type="hidden" id="tpEmailP"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhoneP"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
         </div>
         
         <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore. Tell us in the notes above which industries or kinds of companies your group would like to visit, and your planner matches the visits to your interests.</p>
@@ -29013,6 +29013,13 @@ document.addEventListener('DOMContentLoaded', function(){
   try{ if(document.documentElement.hasAttribute('data-ss-blog-hidden') && /^\/blog\/?$/.test(location.pathname)) history.replaceState(null,'','/'+location.search); }catch(e){}  /* Blog is hidden for now: show the home address */
   if(id && id !== 'home'){ nav(id, {fromPop:true, skipScroll:true}); }
   else { ssSetMeta('home'); }
+  /* an address that is not a page on this site: keep search engines from indexing it as a page */
+  if(!id && /^\/[^\/]+\/?$/.test(location.pathname)){
+    var rb=document.querySelector('meta[name="robots"]');
+    if(!rb){ rb=document.createElement('meta'); rb.setAttribute('name','robots'); document.head.appendChild(rb); }
+    rb.setAttribute('content','noindex,follow');
+    document.title='Page not found | Sight Seers Caribbean';
+  }
   if(window.__ssBootDone)window.__ssBootDone();else document.documentElement.classList.remove('ss-pending-route','ss-booting');
   try{ history.replaceState({ssPage: id || 'home', ssDepth: 0}, '', location.pathname + location.search + location.hash); }catch(e){}
   /* The Request button on a /tours/<slug> page links to /booking?experience=<slug>: open the enquiry for that experience. */
@@ -29223,9 +29230,9 @@ function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.c
 function getTripPlannerSummary(){
   const read=id=>{const el=document.getElementById(id);return el?String(el.value||'').trim():'';};
   const lines=[
-    ['Email',read('tpEmail')],
+    ['Email',read('tpEmailP')],
     ['Full name',read('tpFullName')],
-    ['Telephone number',read('tpPhone')],
+    ['Telephone number',read('tpPhoneP')],
     ['Are you a Jamaican national?',read('tpJamaican')],
     ['Is anyone in your group a Jamaican national?',read('tpGroupJamaican')],
     ['Arrival date',read('tpArrival')],
@@ -29253,7 +29260,7 @@ function copyTripPlannerSummary(){
   else{toast('Copy not available in this browser.');}
 }
 function clearTripPlannerFields(){
-  ['tpEmail','tpFullName','tpPhone','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall','tpCallDate','tpCallTime'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
+  ['tpEmailP','tpFullName','tpPhoneP','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall','tpCallDate','tpCallTime'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
   refreshTripPlannerSummary();
 }
 function ssPlanningDepositPay(source,el){
@@ -29268,7 +29275,7 @@ function ssPlanningDepositPay(source,el){
       var upsells=[].slice.call(document.querySelectorAll('#p-booking .upsell-section input:checked')).map(function(i){return i.value});
       summary=[['Destination',val('b_dest')],['Experience type',val('b_type')],['Package',val('b_package')],['Preferred date',val('b_dt')],['Guests',val('b_gs')],['Budget',val('b_budget')],['Add-ons',upsells.join(', ')],['Notes',val('b_notes')]].filter(function(r){return r[1]}).map(function(r){return r[0]+': '+r[1]}).join('\n');
     }else{
-      emailId='tpEmail';name=val('tpFullName');email=val('tpEmail');phone=val('tpPhone');
+      emailId='tpEmailP';name=val('tpFullName');email=val('tpEmailP');phone=val('tpPhoneP');
       summary=getTripPlannerSummary();if(!summary||summary.indexOf('Complete the fields above')===0)summary='';
     }
     if(isBook&&!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return false;
@@ -29304,9 +29311,9 @@ function submitTripPlannerForm(){
 function sendTripPlannerRequest(){
   var summary=getTripPlannerSummary();
   if(!summary || summary.indexOf('Complete the fields above')===0){toast('Please complete a few trip details first.');return;}
-  var visitorEmail=(document.getElementById('tpEmail')&&document.getElementById('tpEmail').value.trim())||'visitor@sightseerscaribbean.com';
+  var visitorEmail=(document.getElementById('tpEmailP')&&document.getElementById('tpEmailP').value.trim())||'visitor@sightseerscaribbean.com';
   var visitorName=(document.getElementById('tpFullName')&&document.getElementById('tpFullName').value.trim())||'Trip Planner Request';
-  var visitorPhone=(document.getElementById('tpPhone')&&document.getElementById('tpPhone').value.trim())||'';
+  var visitorPhone=(document.getElementById('tpPhoneP')&&document.getElementById('tpPhoneP').value.trim())||'';
   // Target the "Send by Email" button specifically (inside gform-wrap), not the first .trip-planner-btn
   var btn=document.querySelector('#tripPlannerSubmitSection .trip-planner-btn')||document.querySelector('.trip-planner-btn');
   var origBtn=btn?btn.innerHTML:'';
@@ -29374,7 +29381,7 @@ function submitStartPlanning(){
   var set=function(id,x){var e=document.getElementById(id);if(e)e.value=x||''};
   var email=v('b_em');
   if(!email){submitBook();return;}   /* submitBook highlights the email field */
-  set('tpEmail',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhone',v('b_ph'));set('tpArrival',v('b_dt'));
+  set('tpEmailP',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhoneP',v('b_ph'));set('tpArrival',v('b_dt'));
   set('tpTravelers',v('b_gs'));set('tpBudget',v('b_budget'));set('tpAdditional',v('b_notes'));
   var extras=['tpJamaican','tpGroupJamaican','tpTransport','tpPickup','tpExcursions','tpCall'].some(function(id){return v(id)});
   var summary=extras?getTripPlannerSummary():'';
@@ -29382,7 +29389,7 @@ function submitStartPlanning(){
   if(extras&&notes&&notes.value.indexOf('Trip details:')===-1)notes.value=(notes.value?notes.value.trim()+'\n\n':'')+'Trip details:\n'+summary;
   submitBook();
   if(extras&&window.SS&&typeof SS.sendContactMessage==='function'){
-    SS.sendContactMessage({name:v('tpFullName')||'Trip Planner Request',email:email,phone:v('tpPhone'),subject:'Travel Form Enquiry',message:summary}).catch(function(){});
+    SS.sendContactMessage({name:v('tpFullName')||'Trip Planner Request',email:email,phone:v('tpPhoneP'),subject:'Travel Form Enquiry',message:summary}).catch(function(){});
   }
 }
 function submitBook(){
