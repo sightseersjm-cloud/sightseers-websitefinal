@@ -29335,6 +29335,39 @@ function sendTripPlannerWhatsapp(){
   window.open('https://wa.me/18764650630?text='+message,'_blank');
 }
 document.addEventListener('input',e=>{if(e.target && e.target.closest('.trip-planner-card')) refreshTripPlannerSummary();});
+/* Account prompt before a request is sent: guests who are not signed in are offered a Travel account. Either choice still
+   sends the request; the password (if chosen) goes with it so the account is created and the request lands on it. */
+function ssSignedIn(){try{var k=localStorage.getItem('ss_auth_token')||'';return !!k&&k.indexOf('guest_')!==0;}catch(e){return false;}}
+function ssAccountPrompt(done){
+  var old=document.getElementById('ssAcctPrompt'); if(old) old.remove();
+  var m=document.createElement('div');
+  m.id='ssAcctPrompt';
+  m.style.cssText='position:fixed;inset:0;z-index:150010;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,26,45,.46);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-family:Raleway,-apple-system,Segoe UI,sans-serif';
+  m.innerHTML='<div style="position:relative;width:min(440px,100%);background:#fff;border-radius:22px;padding:28px 26px 24px;box-shadow:0 30px 70px rgba(6,58,99,.3);color:#12293d">'
+    +'<div style="font-size:10px;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;color:#ef8731;margin-bottom:8px">Your Travel account</div>'
+    +'<h3 style="font-family:Playfair Display,Georgia,serif;font-size:24px;color:#063a63;margin:0 0 10px;line-height:1.2">Keep this request on your profile?</h3>'
+    +'<p style="font-size:14px;line-height:1.6;color:#33424f;margin:0 0 16px">Create a Sight Seers Travel account and this request, your future bookings and your Travel Points stay in one place.</p>'
+    +'<label for="ssAcctPw" style="display:block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#5c6f82;margin-bottom:6px">Choose a password</label>'
+    +'<input id="ssAcctPw" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" style="width:100%;font:inherit;font-size:14px;padding:11px 12px;border:1px solid rgba(6,58,99,.18);border-radius:10px">'
+    +'<div id="ssAcctErr" role="alert" style="min-height:18px;margin-top:8px;font-size:13px;color:#c0392b"></div>'
+    +'<button type="button" id="ssAcctGo" style="width:100%;margin-top:6px;padding:14px;border:0;border-radius:999px;background:#ef8731;color:#fff;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;font-size:13px;cursor:pointer">Create account and send</button>'
+    +'<button type="button" id="ssAcctLater" style="width:100%;margin-top:10px;padding:12px;border:0;background:none;color:#5c6f82;font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline">Not now, just send my request</button>'
+    +'</div>';
+  document.body.appendChild(m);
+  var pw=m.querySelector('#ssAcctPw'), err=m.querySelector('#ssAcctErr');
+  setTimeout(function(){pw.focus();},60);
+  m.querySelector('#ssAcctGo').addEventListener('click',function(){
+    if((pw.value||'').length<8){err.textContent='Please choose a password of at least 8 characters, or send without one.';pw.focus();return;}
+    m.remove(); done(pw.value);
+  });
+  m.querySelector('#ssAcctLater').addEventListener('click',function(){ m.remove(); done(''); });
+}
+/* returns true when the request can go out now; otherwise shows the prompt and sends it once the guest chooses */
+function ssAccountGate(retry){
+  if(ssSignedIn()||window.__ssAcctDone) return true;
+  ssAccountPrompt(function(pw){ window.__ssAcctDone=true; window.__ssAcctPw=pw||''; retry(); });
+  return false;
+}
 function submitStartPlanning(){
   /* Start Planning and the old Travel Form are one form now: the booking request goes out as before, and when the
      extra trip details are filled in, the Travel Form enquiry goes to the team too. */
@@ -29355,6 +29388,7 @@ function submitStartPlanning(){
 }
 function submitBook(){
   if(!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return;
+  if(!ssAccountGate(submitBook)) return;
   calculateUpsells();
   var upsells=[].slice.call(document.querySelectorAll('.upsell-section input:checked')).map(function(i){return i.value});
   var notesField=document.getElementById('b_notes');
@@ -29397,7 +29431,8 @@ function submitBook(){
     date:dt||'',
     guests:Number(gs)||5,
     notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
-    type:'tour'
+    type:'tour',
+    password:window.__ssAcctPw||''
   };
 
   if(window.SS&&typeof SS.createBooking==='function'){
