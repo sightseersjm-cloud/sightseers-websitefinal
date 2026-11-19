@@ -34,7 +34,19 @@ function stamps(now) {
     [383, 'Cave Tubing Adventure', 'Belize', 'booking'],
     [421, 'Blue Hole Escape', 'Jamaica', 'booking'],
     [462, 'Nassau Island Hopping', 'The Bahamas', 'booking'],
-    [507, 'Dunn River Falls', 'Jamaica', 'booking']
+    [507, 'Dunn River Falls', 'Jamaica', 'booking'],
+    [552, 'Rick Cafe Cliff Jump Day', 'Jamaica', 'booking'],
+    [583, 'Rodney Bay Catamaran', 'Saint Lucia', 'booking'],
+    [614, 'Exuma Cays Boat Day', 'The Bahamas', 'booking'],
+    [646, 'Placencia Beach Weekend', 'Belize', 'booking'],
+    [679, 'Carlisle Bay Snorkel', 'Barbados', 'booking'],
+    [711, 'Rose Hall Great House Tour', 'Jamaica', 'booking'],
+    [744, 'Klein Curacao Boat Trip', 'Curacao', 'booking'],
+    [776, 'Altos de Chavon Day Trip', 'Dominican Republic', 'booking'],
+    [809, 'Pigeon Island Hike', 'Saint Lucia', 'booking'],
+    [841, 'YS Falls Adventure', 'Jamaica', 'booking'],
+    [874, 'Reach Falls Day Trip', 'Jamaica', 'booking'],
+    [906, 'Bob Marley Museum Day', 'Jamaica', 'booking']
   ];
   return T.map(t => ({ title: t[1], country: t[2], on: dayStr(now, t[0]), kind: t[3] }));
 }
@@ -46,7 +58,7 @@ function bookings(now) {
   const out = stamps(now).map((st, i) => ({
     id: 'demo-b' + (100 + i), type: i === 0 ? 'stay' : 'tour', tourName: i === 0 ? '' : st.title, stayName: i === 0 ? st.title : '',
     date: st.on, checkIn: i === 0 ? st.on : '', checkOut: i === 0 ? ymd(new Date(st.on + 'T12:00:00Z'), 3) : '',
-    guests: [2, 4, 6, 2, 8, 3, 2, 5, 2, 4, 6, 2, 3, 2, 4, 2][i] || 2, status: 'completed', notes: '', createdAt: new Date(new Date(st.on + 'T12:00:00Z').getTime() - 30 * 86400000).toISOString()
+    guests: [2, 4, 6, 2, 8, 3, 2, 5, 2, 4, 6, 2, 3, 2, 4, 2, 3, 5, 2, 4, 6, 2, 3, 2, 4, 2, 5, 3][i] || 2, status: 'completed', notes: '', createdAt: new Date(new Date(st.on + 'T12:00:00Z').getTime() - 30 * 86400000).toISOString()
   }));
   out.unshift(
     { id: 'demo-b001', type: 'tour', tourName: 'Pitons Boat Day', stayName: '', date: ymd(now, 38), guests: 4, status: 'confirmed', notes: 'Pickup from the hotel confirmed.', createdAt: new Date(now.getTime() - 9 * 86400000).toISOString() },

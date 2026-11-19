@@ -105,9 +105,9 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   /* the showcase account */
   const demo = await signup('Daine Demo', 'daine.allenn@gmail.com');
   let dm = await call('member', 'GET', null, demo.token);
-  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 16 && new Set(dm.body.stamps.map(x => x.country)).size >= 7 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
+  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 28 && new Set(dm.body.stamps.map(x => x.country)).size >= 7 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
   const dme = await call('auth', 'POST', { action: 'me' }, demo.token);
-  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 16);
+  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 28);
   let dr = await call('reviews', 'GET', null, demo.token, { mine: '1' });
   ok('the demo account has sample reviews and one trip to review', dr.body.demo === true && dr.body.mine.length === 2 && dr.body.eligible.length === 1);
   const before = (await db.getCollection('reviews')).length;
@@ -116,7 +116,7 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   const pubAll = await call('reviews', 'GET', null, null, { recent: '1' });
   ok('demo reviews never appear on the public pages', !JSON.stringify(pubAll.body).includes('demo-r'));
   const dbk = await call('bookings', 'GET', null, demo.token);
-  ok('the demo account has a sample trip history: finished, coming up and just sent', dbk.code === 200 && dbk.body.demo === true && dbk.body.bookings.length >= 18 && ['completed', 'confirmed', 'pending'].every(s => dbk.body.bookings.some(b => b.status === s)));
+  ok('the demo account has a sample trip history: finished, coming up and just sent', dbk.code === 200 && dbk.body.demo === true && dbk.body.bookings.length >= 30 && ['completed', 'confirmed', 'pending'].every(s => dbk.body.bookings.some(b => b.status === s)));
   const dgt = await call('trips', 'GET', null, demo.token, { mine: '1' });
   ok('the demo account leads sample trips with travellers who joined', dgt.code === 200 && dgt.body.trips.length === 2 && dgt.body.trips[0].travelers.length >= 5 && dgt.body.applications[0].status === 'approved' && dgt.body.interests.length === 2);
   const zbk = await call('bookings', 'GET', null, zed.token);
