@@ -15,17 +15,28 @@ const isDemo = user => !!(user && user.email && demoEmails().has(lower(user.emai
 
 const dayStr = (now, back) => new Date(now.getTime() - back * 86400000).toISOString().slice(0, 10);
 
-/* sample finished trips, newest first, dated relative to today so they always look recent */
+/* sample finished trips, newest first, dated relative to today so they always look recent: a well-travelled passport across the islands Sight Seers serves */
 function stamps(now) {
   now = now || new Date();
-  return [
-    { title: 'Ocho Rios Villa Weekend', country: 'Jamaica', on: dayStr(now, 21), kind: 'booking' },
-    { title: 'Catamaran Sunset Cruise', country: '', on: dayStr(now, 74), kind: 'booking' },
-    { title: 'Negril Group Week', country: 'Jamaica', on: dayStr(now, 131), kind: 'club' },
-    { title: 'Bamboo Rafting on the Martha Brae', country: '', on: dayStr(now, 190), kind: 'booking' },
-    { title: 'Blue Hole Escape', country: 'Jamaica', on: dayStr(now, 262), kind: 'booking' },
-    { title: 'Dunn River Falls', country: 'Jamaica', on: dayStr(now, 335), kind: 'booking' }
+  const T = [
+    [14, 'Ocho Rios Villa Weekend', 'Jamaica', 'booking'],
+    [41, 'Pitons Boat Day', 'Saint Lucia', 'booking'],
+    [68, 'Catamaran Sunset Cruise', 'Jamaica', 'booking'],
+    [97, 'Swimming Pigs Day Trip', 'The Bahamas', 'booking'],
+    [126, 'Negril Group Week', 'Jamaica', 'club'],
+    [158, 'Great Blue Hole Flyover', 'Belize', 'booking'],
+    [189, 'Harrison Cave Tour', 'Barbados', 'booking'],
+    [221, 'Bamboo Rafting on the Martha Brae', 'Jamaica', 'booking'],
+    [252, 'Saona Island Beach Day', 'Dominican Republic', 'booking'],
+    [284, 'Willemstad City Tour', 'Curacao', 'booking'],
+    [316, 'ATV Mountain Adventure', 'Jamaica', 'booking'],
+    [349, 'Catamaran Snorkel Cruise', 'Barbados', 'booking'],
+    [383, 'Cave Tubing Adventure', 'Belize', 'booking'],
+    [421, 'Blue Hole Escape', 'Jamaica', 'booking'],
+    [462, 'Nassau Island Hopping', 'The Bahamas', 'booking'],
+    [507, 'Dunn River Falls', 'Jamaica', 'booking']
   ];
+  return T.map(t => ({ title: t[1], country: t[2], on: dayStr(now, t[0]), kind: t[3] }));
 }
 const POINTS = 800;                                   /* Pioneer tier */
 const referral = { joined: 3, rewarded: 2 };
@@ -34,8 +45,8 @@ function reviewsFor(now) {
   return {
     eligible: [{ refKey: 'demo:' + s[0].title, title: s[0].title, country: s[0].country, on: s[0].on }],
     mine: [
-      { id: 'demo-r1', name: 'You', title: s[2].title, rating: 5, text: 'An unforgettable week. The group was great and every detail was taken care of.', country: 'Jamaica', on: s[2].on, status: 'approved', verified: true },
-      { id: 'demo-r2', name: 'You', title: s[1].title, rating: 5, text: 'Perfect sunset, friendly crew, and the music was just right.', country: '', on: s[1].on, status: 'approved', verified: true }
+      { id: 'demo-r1', name: 'You', title: s[4].title, rating: 5, text: 'An unforgettable week. The group was great and every detail was taken care of.', country: 'Jamaica', on: s[4].on, status: 'approved', verified: true },
+      { id: 'demo-r2', name: 'You', title: s[2].title, rating: 5, text: 'Perfect sunset, friendly crew, and the music was just right.', country: 'Jamaica', on: s[2].on, status: 'approved', verified: true }
     ]
   };
 }

@@ -105,9 +105,9 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   /* the showcase account */
   const demo = await signup('Daine Demo', 'daine.allenn@gmail.com');
   let dm = await call('member', 'GET', null, demo.token);
-  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 6 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
+  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 16 && new Set(dm.body.stamps.map(x => x.country)).size >= 7 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
   const dme = await call('auth', 'POST', { action: 'me' }, demo.token);
-  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 6);
+  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 16);
   let dr = await call('reviews', 'GET', null, demo.token, { mine: '1' });
   ok('the demo account has sample reviews and one trip to review', dr.body.demo === true && dr.body.mine.length === 2 && dr.body.eligible.length === 1);
   const before = (await db.getCollection('reviews')).length;
