@@ -54662,20 +54662,25 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         })();
         var papers=pages.map(function(){var c=mk(PW,PH),x=c.getContext('2d');paper(x,PW,PH,false);txt(x,'VISAS & STAMPS',PW/2,36*SC,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
           if(logo){x.globalAlpha=.07;x.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;x.drawImage(logo,PW/2-lw/2,PH-110*SC,lw,lw*logo.height/logo.width);x.filter='none';x.globalAlpha=1;}return c;});
-        var backs=mk(PW,PH);paper(backs.getContext('2d'),PW,PH,true);
-        /* sheets: cover, ID, then each stamp page; every sheet's back is a plain left page (the first one has the name) */
-        var sheets=[{front:cover,back:insideL},{front:idp,back:backs}].concat(papers.map(function(p){return {front:p,back:backs,stampPage:true};}));
-        var nStamp=pages.length,slowFrom=Math.max(0,nStamp-2);
+        var blankL=mk(PW,PH);paper(blankL.getContext('2d'),PW,PH,true);var blankR=mk(PW,PH);paper(blankR.getContext('2d'),PW,PH,false);
+        var nP=papers.length;
+        /* every sheet has two sides: sheet 0 is the cover and the welcome note, sheet 1 is the ID page and the first stamp page, and every other side is a stamp page */
+        function frontOf(s){if(s===0)return {t:'cover'};if(s===1)return {t:'id'};var p=2*s-3;return p<nP?{t:'stamp',p:p}:{t:'blank'};}
+        function backOf(s){if(s===0)return {t:'msg'};var p=2*s-2;return p<nP?{t:'stamp',p:p}:{t:'blank'};}
+        var nSheets=2+Math.ceil(Math.max(0,nP-1)/2);
         /* ---- the timeline ---- */
-        var T=[];var t=0;
+        var T=[];var t=0,ANIM={};
         T.push({k:'intro',s:0,e:3.6});t=3.6;
         T.push({k:'flip',sheet:0,s:t,e:t+1.2});t+=1.2;
         T.push({k:'hold',sheet:1,s:t,e:t+2.0});t+=2.0;
-        T.push({k:'flip',sheet:1,s:t,e:t+1.1});t+=1.1;
-        for(var p=0;p<nStamp;p++){
-          var slow=p>=slowFrom,cnt=pages[p].length;
-          if(slow){T.push({k:'stamps',page:p,s:t,e:t+0.5+cnt*0.55+1.0});t+=0.5+cnt*0.55+1.0;}else{T.push({k:'quick',page:p,s:t,e:t+0.35});t+=0.35;}
-          if(p<nStamp-1){var fs=slow?0.9:0.32;T.push({k:'flip',sheet:2+p,s:t,e:t+fs});t+=fs;}
+        var spreads=Math.max(1,Math.ceil(nP/2));
+        for(var j=0;j<spreads;j++){
+          var slow=j===spreads-1,fd=j===0?1.1:(slow?0.9:0.32);
+          T.push({k:'flip',sheet:j+1,s:t,e:t+fd});t+=fd;
+          if(slow){
+            [2*j,2*j+1].forEach(function(pp){if(pp<nP){var cnt=pages[pp].length,dur=.5+cnt*.55+.5;ANIM[pp]={s:t,e:t+dur};T.push({k:'stamps',page:pp,s:t,e:t+dur});t+=dur;}});
+            T.push({k:'quick',s:t,e:t+.6});t+=.6;
+          }else{T.push({k:'quick',s:t,e:t+.3});t+=.3;}
         }
         T.push({k:'outro',s:t,e:t+2.6});var TOTAL=t+2.6;
         /* moments for the camera flash and the sounds */
@@ -54733,15 +54738,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
             c.drawImage(shineTmp,lx,ly);}
           return coverTmp;
         }
-        var animTmp=mk(PW,PH);
-        function finalPage(si){var sh=sheets[si];if(sh.final)return sh.final;var c=mk(PW,PH),x=c.getContext('2d');x.drawImage(sh.front,0,0);x.save();x.scale(SC,SC);stampStatic(x,si-2);x.restore();sh.final=c;return c;}
-        function pageCanvas(si,time,st){/* the right-hand page for this moment; the finished pages are made once and reused */
-          var sh=sheets[si];if(si===0)return coverFrame(time);if(!sh.stampPage)return sh.front;
-          var pi=si-2;
-          if(st.stampPage===pi){var x=animTmp.getContext('2d');x.clearRect(0,0,PW,PH);x.drawImage(sh.front,0,0);x.save();x.scale(SC,SC);stampAnim(x,pi,st.stampT);x.restore();return animTmp;}
-          var sg2=T.filter(function(q){return (q.k==='stamps'||q.k==='quick')&&q.page===pi;})[0];
-          return (sg2&&(time>=sg2.e||sg2.k==='quick'))?finalPage(si):sh.front;
+        var animTmp=mk(PW,PH),finals={};
+        function finalStamp(p){if(finals[p])return finals[p];var c=mk(PW,PH),x=c.getContext('2d');x.drawImage(papers[p],0,0);x.save();x.scale(SC,SC);stampStatic(x,p);x.restore();finals[p]=c;return c;}
+        function stampPageCanvas(p,time){/* blank until its stamps start, stamped one by one, then finished (made once and reused) */
+          var an=ANIM[p];
+          if(an){if(time<an.s)return papers[p];if(time<an.e){var x=animTmp.getContext('2d');x.clearRect(0,0,PW,PH);x.drawImage(papers[p],0,0);x.save();x.scale(SC,SC);stampAnim(x,p,time-an.s);x.restore();return animTmp;}}
+          return finalStamp(p);
         }
+        function faceCanvas(f,time,left){if(f.t==='cover')return coverFrame(time);if(f.t==='msg')return insideL;if(f.t==='id')return idp;if(f.t==='stamp')return stampPageCanvas(f.p,time);return left?blankL:blankR;}
         /* the background and the soft shadow are drawn once */
         var bgC=mk(W,H);(function(){var g=bgC.getContext('2d'),bg=g.createRadialGradient(W*.5,H*.38,40,W*.5,H*.5,H*.75);bg.addColorStop(0,'#134a78');bg.addColorStop(.55,'#0a2a47');bg.addColorStop(1,'#04111e');g.fillStyle=bg;g.fillRect(0,0,W,H);})();
         var shC=mk(400,60);(function(){var g=shC.getContext('2d');g.save();g.translate(200,30);g.scale(1,.16);var r=g.createRadialGradient(0,0,0,0,0,200);r.addColorStop(0,'rgba(0,0,0,.55)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.beginPath();g.arc(0,0,200,0,Math.PI*2);g.fill();g.restore();})();
@@ -54751,24 +54755,23 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           ctx.drawImage(bgC,0,0);
           for(var k=0;k<2;k++){var a=time*.25+k*2.1,gx=W*(.5+.38*Math.sin(a)),gy=H*(.45+.3*Math.cos(a*.8));var gr=ctx.createRadialGradient(gx,gy,0,gx,gy,260);gr.addColorStop(0,'rgba(120,190,255,.12)');gr.addColorStop(1,'rgba(120,190,255,0)');ctx.fillStyle=gr;ctx.fillRect(gx-260,gy-260,520,520);}
           /* the book: glide in, float, pan to the middle of the open spread */
-          var open=ease(clamp((time-T[1].s)/1.2,0,1)),sc=1.7*K,intro=easeOut(time/1.5),floatY=Math.sin(time*1.4)*14*K,tilt=Math.sin(time*.9)*.018;   /* the camera stays on the right-hand page */
-          var spineX=W/2-BW*sc/2;   /* the right-hand page stays centred; turned pages swing off to the left */
-          var by=H*.5-(BH*sc)/2+floatY+(1-intro)*420*K,ox=0;
+          /* the camera: on the right-hand page (cover and ID), then it pulls back to show both pages once the ID page turns */
+          var f1=T.filter(function(q){return q.k==='flip'&&q.sheet===1;})[0],z=ease(clamp((time-f1.s)/(f1.e-f1.s),0,1));
+          var scR=1.7*K,scS=(W*.95)/(2*BW),sc=scR+(scS-scR)*z,intro=easeOut(time/1.5),floatY=Math.sin(time*1.4)*14*K,tilt=Math.sin(time*.9)*.018;
+          var spineX=(W/2-BW*sc/2)*(1-z)+(W/2)*z;
+          var by=H*.5-(BH*sc)/2+floatY+(1-intro)*420*K;
           ctx.save();ctx.translate(spineX,by+BH*sc/2);ctx.rotate(tilt+(1-intro)*-.08);ctx.scale(sc*(.86+.14*intro),sc*(.86+.14*intro));ctx.translate(-0,-BH/2);
           ctx.globalAlpha=Math.min(1,intro*1.6);
-          /* shadow */
           var twoPages=st.flipped>0||st.flipping>=0;ctx.drawImage(shC,twoPages?-BW:0,BH-14,BW*(twoPages?2:1),60);
-          /* left side: flipped sheets (the last flipped one on top) */
-          if(st.flipped>0){var ls=st.flipped-1;ctx.drawImage(sheets[ls].back,-BW,0,BW,BH);}
-          /* right side: the next page(s) */
-          var rs=st.flipped;
-          if(rs<sheets.length){var rp=pageCanvas(rs,time,st);ctx.drawImage(rp,0,0,BW,BH);}
-          else{ctx.drawImage(sheets[sheets.length-1].back,0,0,BW,BH);}
-          /* the turning sheet */
+          /* left-hand page: the back of the last sheet that has turned */
+          if(st.flipped>0)ctx.drawImage(faceCanvas(backOf(st.flipped-1),time,true),-BW,0,BW,BH);
+          /* right-hand page: while a sheet turns, the page underneath it is the next one */
+          var rs=st.flipping>=0?st.flipping+1:st.flipped;
+          ctx.drawImage(faceCanvas(frontOf(rs),time,false),0,0,BW,BH);
+          /* the turning sheet: its front, then its back (a left-hand page) once it has passed the middle */
           if(st.flipping>=0){
-            var ang=ease(st.prog)*Math.PI,si=st.flipping,fr=ang<Math.PI/2;
-            if(fr)drawSlices(ctx,pageCanvas(si,time,st),0,0,ang,false);else drawSlices(ctx,sheets[si].back,0,0,ang,true);
-            if(!fr&&si+1<sheets.length){/* the page underneath keeps showing on the right (already drawn) */}
+            var ang=ease(st.prog)*Math.PI,si=st.flipping;
+            if(ang<Math.PI/2)drawSlices(ctx,faceCanvas(frontOf(si),time,false),0,0,ang,false);else drawSlices(ctx,faceCanvas(backOf(si),time,true),0,0,ang,true);
           }
           ctx.restore();
           /* captions */
