@@ -16,7 +16,7 @@
   "redirects": [
     {
       "source": "/insurance",
-      "destination": "https://tmetravelinsurance.com/",
+      "destination": "https://tmetravelinsurance.com/?referrer=sscaribbean",
       "permanent": false
     },
     {
