@@ -86,7 +86,8 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
 
   /* nothing is paid until the switch is on and the friend has travelled */
   let s = await ops.runDaily({ now: new Date() });
-  ok('no points while the switch is off', !(await db.getCollection('users')).find(u => u.email === 'cara@example.com').bonusPoints);
+  const ledger0 = (await db.getCollection('points-ledger')).filter(x => x.type === 'referral' || x.type === 'referred').length;
+  ok('no referral points while the switch is off', ledger0 === 0);
   await ops.saveSettings({ referrals: true, referralPoints: 120 });
   s = await ops.runDaily({ now: new Date() });
   ok('no points until the friend has finished a trip', s.referrals.length === 0);
@@ -94,20 +95,21 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   sent.length = 0;
   s = await ops.runDaily({ now: new Date() });
   const after = await db.getCollection('users');
-  ok('after the friend travels, both get the points', s.referrals.length === 1 && after.find(u => u.email === 'cara@example.com').bonusPoints === 120 && after.find(u => u.email === 'fay@example.com').bonusPoints === 120);
+  const led1 = await db.getCollection('points-ledger');
+  ok('after the friend travels, both get the points', s.referrals.length === 1 && led1.some(x => x.userId === cara.user.id && x.type === 'referral' && x.points === 120) && led1.some(x => x.userId === friend.user.id && x.type === 'referred' && x.points === 120));
   ok('both get an email about it', sent.filter(m => /earned 120 Travel Points/.test(m.subject || '')).length === 2);
   sent.length = 0;
   await ops.runDaily({ now: new Date() });
-  ok('the reward is paid only once', (await db.getCollection('users')).find(u => u.email === 'cara@example.com').bonusPoints === 120 && sent.length === 0);
+  ok('the reward is paid only once', (await db.getCollection('points-ledger')).filter(x => x.type === 'referral').length === 1 && sent.length === 0);
   const me = await call('auth', 'POST', { action: 'me' }, cara.token);
-  ok('the points show on the account as a bonus', me.body.user.pointsFloor === 120);
+  ok('the points show on the account', me.body.user.points >= 120);
 
   /* the showcase account */
   const demo = await signup('Daine Demo', 'daine.allenn@gmail.com');
   let dm = await call('member', 'GET', null, demo.token);
-  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 28 && new Set(dm.body.stamps.map(x => x.country)).size >= 7 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
+  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 28 && new Set(dm.body.stamps.map(x => x.country)).size >= 7 && dm.body.points.balance >= 800 && dm.body.referral.joined === 3);
   const dme = await call('auth', 'POST', { action: 'me' }, demo.token);
-  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 28);
+  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.points >= 800 && dme.body.user.tripsCompleted === 28);
   let dr = await call('reviews', 'GET', null, demo.token, { mine: '1' });
   ok('the demo account has sample reviews and one trip to review', dr.body.demo === true && dr.body.mine.length === 2 && dr.body.eligible.length === 1);
   const before = (await db.getCollection('reviews')).length;
@@ -122,6 +124,48 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   const zbk = await call('bookings', 'GET', null, zed.token);
   ok('other accounts see only their own bookings', zbk.body.demo === undefined && zbk.body.bookings.length === 1);
   ok('other accounts are not affected', (await call('member', 'GET', null, zed.token)).body.demo === undefined);
+  /* the Travel Points system: kept on the account, paid once, with a history and rules the team can change */
+  const pts = require(root + 'api/_lib/points');
+  const nina = await signup('Nina New', 'nina@example.com');
+  let pm = await call('member', 'GET', null, nina.token);
+  ok('a new account has the welcome bonus and one line of history', pm.code === 200 && pm.body.points.balance === 100 && pm.body.points.history.length === 1 && pm.body.points.history[0].label === 'Welcome bonus');
+  pm = await call('member', 'GET', null, nina.token);
+  ok('opening the page again never pays the welcome bonus twice', pm.body.points.balance === 100 && pm.body.points.history.length === 1);
+  let er = await call('member', 'POST', { action: 'earn', type: 'save', ref: 'tour-12' }, nina.token);
+  ok('saving a tour earns points', er.code === 200 && er.body.awarded === 10 && er.body.balance === 110);
+  er = await call('member', 'POST', { action: 'earn', type: 'save', ref: 'tour-12' }, nina.token);
+  ok('saving the same tour again earns nothing more', er.body.awarded === 0 && er.body.balance === 110);
+  er = await call('member', 'POST', { action: 'earn', type: 'cart', ref: 'tour-12' }, nina.token);
+  ok('adding to the cart earns points once per item', er.body.awarded === 25 && er.body.balance === 135);
+  er = await call('member', 'POST', { action: 'earn', type: 'adjust', ref: 'x' }, nina.token);
+  ok('a member cannot give themselves points', er.code === 400);
+  er = await call('member', 'POST', { action: 'earn', type: 'save', ref: 'tour-9' }, null);
+  ok('earning needs a sign-in', er.code === 401);
+  await db.addToCollection('bookings', { id: 'nb1', userId: nina.user.id, email: 'nina@example.com', tourName: 'Rafting', status: 'pending', date: day(30), createdAt: new Date().toISOString() });
+  pm = await call('member', 'GET', null, nina.token);
+  ok('a booking request earns points from the records', pm.body.points.balance === 160 && pm.body.points.history.some(h => h.label === 'Sent a booking request'));
+  await db.updateInCollection('bookings', 'nb1', { status: 'completed' });
+  pm = await call('member', 'GET', null, nina.token);
+  ok('a finished trip earns points', pm.body.points.balance === 260 && pm.body.points.history.some(h => h.label === 'Finished a trip'));
+  pm = await call('member', 'GET', null, nina.token);
+  ok('and only once', pm.body.points.balance === 260);
+  let ad = await call('member', 'POST', { action: 'adjust', email: 'nina@example.com', points: 40, note: 'Thank you gift' }, nina.token);
+  ok('a member cannot adjust points', ad.code === 401 || ad.code === 403);
+  ad = await call('member', 'POST', { action: 'adjust', email: 'nina@example.com', points: 40, note: 'Thank you gift' }, owner);
+  ok('the team can give points', ad.code === 200 && ad.body.balance === 300);
+  pm = await call('member', 'GET', null, nina.token);
+  ok('the gift shows in her history', pm.body.points.history.some(h => h.label === 'Added by the Sight Seers team' && h.points === 40 && h.note === 'Thank you gift'));
+  ad = await call('member', 'POST', { action: 'adjust', email: 'nina@example.com', points: -50 }, owner);
+  ok('the team can take points back, and a balance never goes below zero', ad.body.balance === 250);
+  ad = await call('member', 'POST', { action: 'adjust', email: 'nobody@example.com', points: 10 }, owner);
+  ok('an unknown email is refused', ad.code === 404);
+  await ops.saveSettings({ pointRules: { save: 15, trip: 150 } });
+  er = await call('member', 'POST', { action: 'earn', type: 'save', ref: 'tour-77' }, nina.token);
+  ok('the team can change what an action is worth', er.body.awarded === 15);
+  const me2 = await call('auth', 'POST', { action: 'me' }, nina.token);
+  ok('the account answer carries the balance', me2.body.user.points === 265);
+  const sg = await call('auth', 'POST', { action: 'signin', email: 'nina@example.com', password: 'Passw0rd!x1' });
+  ok('sign-in carries the balance too', sg.body.user.points === 265);
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

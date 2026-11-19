@@ -84,13 +84,20 @@ async function getSettings() {
   out.templates = (doc.templates && typeof doc.templates === 'object') ? doc.templates : {};
   out.reviewLink = String(doc.reviewLink || '').slice(0, 400);
   out.referralPoints = Math.min(1000, Math.max(10, Math.round(Number(doc.referralPoints)) || 100));
+  out.pointRules = await require('./points').rulesNow();
   return out;
 }
 async function saveSettings(patch) {
   const cur = await getSettings();
   const next = Object.assign({}, cur);
+  next.pointRules = Object.assign({}, ((await db.getDoc(SETTINGS)) || {}).pointRules || {});   /* only what the team has set; the rest stays on the defaults */
   KINDS.forEach(k => { if (patch && patch[k] !== undefined) next[k] = patch[k] === true; });
   if (patch && patch.referralPoints !== undefined) next.referralPoints = Math.min(1000, Math.max(10, Math.round(Number(patch.referralPoints)) || 100));
+  if (patch && patch.pointRules && typeof patch.pointRules === 'object') {
+    const pl = require('./points'), nr = {};
+    Object.keys(pl.RULES).forEach(k => { if (patch.pointRules[k] !== undefined) nr[k] = pl.clampRule(patch.pointRules[k]); });
+    Object.assign(next.pointRules, nr);
+  }
   if (patch && patch.reviewLink !== undefined) {
     const v = String(patch.reviewLink || '').trim();
     next.reviewLink = /^https:\/\/[^\s]+$/i.test(v) ? v.slice(0, 400) : '';
@@ -251,7 +258,7 @@ async function runDaily(opts) {
   /* 6. the morning summary to the team */
   if (on('digest')) summary.digest = await sendDigest({ now, dryRun, bookings, invoices, waivers, aiCalls, signedEmails, summary });
 
-  if (!dryRun) { await trimSent(); try { await db.setDoc(SETTINGS, Object.assign({}, await getSettings(), { lastRun: { at: summary.at, counts: counts(summary) } })); } catch (e) { /* the record of the last run is optional */ } }
+  if (!dryRun) { await trimSent(); try { await db.setDoc(SETTINGS, Object.assign({}, (await db.getDoc(SETTINGS)) || {}, { lastRun: { at: summary.at, counts: counts(summary) } })); } catch (e) { /* the record of the last run is optional */ } }
   summary.counts = counts(summary);
   return summary;
 }
@@ -260,7 +267,7 @@ function counts(s) { return { calendlyBooked: s.calendly.booked.length, followup
 /* ---------- referral rewards ---------- */
 async function rewardReferrals(now, dryRun, settings, blocked) {
   const verifiedLib = require('./verified');
-  const pts = settings.referralPoints || 100, out = [];
+  const pointsLib = require('./points'), pts = (await pointsLib.rulesNow()).referral, out = [];
   const users = await db.getCollection('users');
   for (const u of users) {
     if (!u.referredBy || u.referralRewardedAt) continue;
@@ -270,10 +277,9 @@ async function rewardReferrals(now, dryRun, settings, blocked) {
     out.push({ friend: u.name, referrer: ref.name, points: pts });
     if (dryRun) continue;
     /* marked first, so a retry never pays twice */
-    const fresh = await db.getCollection('users');
-    const f = fresh.find(x => x.id === u.id), r = fresh.find(x => x.id === ref.id);
-    await db.updateInCollection('users', u.id, { referralRewardedAt: now.toISOString(), bonusPoints: (Number(f && f.bonusPoints) || 0) + pts });
-    await db.updateInCollection('users', ref.id, { bonusPoints: (Number(r && r.bonusPoints) || 0) + pts });
+    await db.updateInCollection('users', u.id, { referralRewardedAt: now.toISOString() });
+    await pointsLib.award(u.id, 'referred', 'referred:' + u.id, { points: pts, note: 'Invited by ' + String(ref.name || '').split(' ')[0] });
+    await pointsLib.award(ref.id, 'referral', 'referral:' + u.id, { points: pts, note: String(u.name || '').split(' ')[0] + ' travelled' });
     const first = n => String(n || '').trim().split(/\s+/)[0] || 'there';
     const mail = (to, name, line) => ({ to, replyTo: 'info@sightseerscaribbean.com', subject: 'You earned ' + pts + ' Travel Points',
       html: '<div style="font-family:sans-serif;max-width:560px;color:#17323f;line-height:1.55"><p>Hi ' + escapeHtml(first(name)) + ',</p><p>' + escapeHtml(line) + '</p><p>Your Travel Points show on your Travel Club page.</p><p>Sight Seers Caribbean Adventures</p></div>' });
