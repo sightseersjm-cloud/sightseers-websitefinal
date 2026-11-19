@@ -24,7 +24,8 @@
     "test:coleader": "node scripts/coleader.test.js",
     "test:trip-account": "node scripts/trip-request-account.test.js",
     "test:booking-account": "node scripts/booking-account.test.js",
-    "test:ai-calls": "node scripts/ai-calls.test.js"
+    "test:ai-calls": "node scripts/ai-calls.test.js",
+    "test:ops": "node scripts/ops-auto.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",

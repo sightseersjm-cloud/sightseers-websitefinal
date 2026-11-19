@@ -29,6 +29,7 @@ const handlers = {
   'leaders-waiver':  require('./_handlers/leaders-waiver'),
   'invoices':        require('./_handlers/invoices'),
   'ai-calls':        require('./_handlers/ai-calls'),
+  'ops-auto':        require('./_handlers/ops-auto'),
   'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
   'newsletter':      require('./_handlers/newsletter'),

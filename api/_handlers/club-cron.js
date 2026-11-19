@@ -19,7 +19,10 @@ module.exports = async function handler(req, res) {
   if (!same(given, 'Bearer ' + secret)) return res.status(401).json({ error: 'Not allowed.' });
   try {
     const summary = await auto.runDaily({});
-    return res.status(200).json({ ok: true, at: summary.at, counts: summary.counts });
+    /* the follow-up, reminder and summary emails the owner switched on in Admin, Automations (a failure here never stops the Travel Club job) */
+    let ops = null;
+    try { ops = (await require('../_lib/ops-auto').runDaily({})).counts; } catch (e) { console.error('ops cron', e && e.stack || e); }
+    return res.status(200).json({ ok: true, at: summary.at, counts: summary.counts, ops });
   } catch (e) {
     console.error('club cron', e && e.stack || e);
     return res.status(500).json({ error: 'The daily job failed.' });

@@ -51294,13 +51294,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'},
       {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}},
       {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}},
-      {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}}]},
+      {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}},
+      {id:'ops',t:'Automations',show:function(){return S.user&&S.user.role==='admin';}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -53917,6 +53918,88 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.acSkip){run(b,function(){return api('ai-calls',{action:'skip',id:d.acSkip}).then(load).then(rerender);});return;}
     if(d.acDncAdd){var n=document.getElementById('acDnc').value;run(b,function(){return api('ai-calls',{action:'dnc-add',phone:n}).then(load).then(rerender);});return;}
     if(d.acDncRm){if(window.confirm('Take '+d.acDncRm+' off the do-not-call list? Only do this if the person asked to be called again.'))run(b,function(){return api('ai-calls',{action:'dnc-remove',phone:d.acDncRm}).then(load).then(rerender);});return;}
+  });
+})();
+</script>
+<script id="manage-ops-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var OP={data:null,err:'',busy:false,loading:false,edit:''};
+  var SWITCHES=[
+    ['followups','Follow up with quiet requests','Emails a guest the call-booking link about a day after their request, and once more a few days later, if nobody has spoken to them yet. Stops when they book.'],
+    ['calendly','Notice Calendly bookings','Marks a request as "call booked" when the guest books a time, so the follow-ups stop. Needs CALENDLY_API_TOKEN in Vercel.'],
+    ['payments','Payment reminders','Reminds a customer about a sent invoice 3 days before it is due, on the day, and 3 and 10 days after, with the invoice attached.'],
+    ['waivers','Waiver reminders','For confirmed bookings, reminds travellers who have not signed a waiver 7 days and 2 days before the trip.'],
+    ['arrival','Getting ready email','Three days before a confirmed trip: asks for arrival details and links the waiver.'],
+    ['review','After the trip email','Two days after a confirmed trip ends: a thank-you and a request for a review.'],
+    ['digest','Morning summary to the team','One email each morning with new requests, calls, overdue and upcoming invoices, trips tomorrow and missing waivers. Mondays add last week\'s numbers.']
+  ];
+  var KIND_OF={followup1:'followups',followup2:'followups',payment_soon:'payments',payment_due:'payments',payment_late:'payments',waiver_week:'waivers',waiver_last:'waivers',arrival:'arrival',review:'review'};
+  function load(){return api('ops-auto').then(function(d){OP.data=d;OP.err='';}).catch(function(e){OP.err=e.message||'Could not load Automations.';if(!OP.data)OP.data={settings:{},templates:{},sent:[],optouts:[],replies:[],preview:null};});}
+  function msg(id,t,type){var e=document.getElementById(id);if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='ops'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function when(iso){if(!iso)return '';try{return new Date(iso).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}catch(e){return iso;}}
+  function tpl(k){var d=OP.data,o=(d.settings.templates||{})[k]||{},b=d.templates[k];return {subject:o.subject||b.subject,body:o.body||b.body};}
+  function screen(){
+    var d=OP.data;if(!d)return '<p class="mg-hint">Loading Automations...</p>';
+    var st=d.settings||{},pv=d.preview;
+    var sw=SWITCHES.map(function(s){return '<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)"><input type="checkbox" id="op_'+s[0]+'" style="width:20px;height:20px;flex:none;margin:2px 0 0"'+(st[s[0]]?' checked':'')+'><label for="op_'+s[0]+'" style="flex:1"><b>'+esc(s[1])+'</b><br><small style="color:var(--grey)">'+esc(s[2])+'</small></label></div>';}).join('');
+    var counts=pv&&pv.counts?pv.counts:null;
+    function list(a,f){return a&&a.length?'<ul style="margin:4px 0 10px;padding-left:18px">'+a.map(f).join('')+'</ul>':'';}
+    var prev=!counts?'<p class="mg-hint">The preview is not available right now.</p>':
+      '<p style="margin:0 0 6px">If every switch were on, today\'s run would send: <b>'+counts.followups+'</b> follow-ups, <b>'+counts.payments+'</b> payment reminders, <b>'+counts.waivers+'</b> waiver reminders, <b>'+counts.arrival+'</b> getting-ready emails, <b>'+counts.review+'</b> thank-you emails.</p>'+
+      list(pv.followups,function(x){return '<li>'+esc(x.name)+' <small>('+esc(x.email)+', nudge '+x.stage+')</small></li>';})+
+      list(pv.payments,function(x){return '<li>Invoice '+esc(x.number)+' <small>('+esc(x.email)+')</small></li>';})+
+      list(pv.waivers,function(x){return '<li>Waiver: '+esc(x.name)+' <small>('+esc(x.email)+')</small></li>';})+
+      list(pv.arrival,function(x){return '<li>Getting ready: '+esc(x.name)+'</li>';})+
+      list(pv.review,function(x){return '<li>Thank-you: '+esc(x.name)+'</li>';});
+    var words=Object.keys(d.templates).map(function(k){var t=tpl(k);return '<div class="mg-fld" style="border-top:1px solid var(--line);padding-top:14px"><label><b>'+esc(d.templates[k].label)+'</b></label>'+
+      '<input data-op-sub="'+k+'" value="'+esc(t.subject)+'" maxlength="200" style="margin-bottom:6px">'+
+      '<textarea data-op-body="'+k+'" rows="7" maxlength="4000" style="width:100%">'+esc(t.body)+'</textarea>'+
+      '<p style="margin:6px 0 0"><button type="button" class="mg-btn sm" data-op-sample="'+k+'">Send me a sample</button></p></div>';}).join('');
+    var rep=d.replies.map(function(r){return '<div style="border-top:1px solid var(--line);padding:10px 0"><b>'+esc(r.title)+'</b><div style="white-space:pre-wrap;color:var(--grey);font-size:13px;margin:4px 0 8px">'+esc(r.body)+'</div>'+
+      '<button type="button" class="mg-btn sm pri" data-op-copy="'+esc(r.id)+'">Copy</button> <button type="button" class="mg-btn sm" data-op-redit="'+esc(r.id)+'">Edit</button> <button type="button" class="mg-btn sm" data-op-rdel="'+esc(r.id)+'">Delete</button></div>';}).join('');
+    var cur=d.replies.filter(function(r){return r.id===OP.edit;})[0]||{title:'',body:''};
+    var opt=d.optouts.map(function(o){return '<li>'+esc(o.email)+' <button type="button" class="mg-btn sm" data-op-orm="'+esc(o.email)+'">Remove</button></li>';}).join('');
+    var sent=d.sent.map(function(x){return '<tr><td>'+esc(when(x.at))+'</td><td>'+esc(String(x.kind||'').replace(/_/g,' '))+'</td><td>'+esc(x.to)+'</td></tr>';}).join('');
+    return '<div class="iv-wrap">'+
+      '<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">Automations</h3>'+
+      '<p class="mg-hint" style="margin:0 0 10px">These save you chasing people. Every switch starts <b>off</b>. They run once a day, around 8 am Jamaica time, and the same message is never sent twice to the same person. Guests who reply STOP, or who tell the AI assistant they are not interested, are skipped.</p>'+
+      '<p style="margin:0 0 4px"><b>Daily job:</b> '+(d.cronReady?'connected':'not connected yet. Add CRON_SECRET in Vercel (the Travel Club daily job uses the same one).')+'</p>'+
+      '<p style="margin:0 0 10px"><b>Calendly:</b> '+(d.calendlyReady?'connected':'not connected yet. Add CALENDLY_API_TOKEN in Vercel to let the site see who booked a call.')+'</p>'+sw+
+      '<div class="mg-fld" style="margin-top:12px"><label for="opReview">Review page link (optional)</label><input id="opReview" placeholder="https://..." value="'+esc(st.reviewLink||'')+'"><small class="mg-hint">Shown in the after-the-trip email. Leave empty to ask guests to reply instead.</small></div>'+
+      '<p><button type="button" class="mg-btn pri" data-op-save="1">Save switches</button> <button type="button" class="mg-btn" data-op-run="1">Run today\'s jobs now</button></p><div id="opMsg" class="mg-msg" role="status"></div></div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">What would go out today</h3>'+(OP.err?'<p class="mg-msg on err">'+esc(OP.err)+'</p>':'')+prev+'</div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 6px;color:var(--navy)">The wording</h3><p class="mg-hint" style="margin:0 0 8px">Change anything so it sounds like you. These placeholders fill in automatically: {first} (first name), {trip}, {date}, {number}, {amount}, {due}. A line like {button:Choose a time} becomes a button. Leave a box as it is to keep the standard text.</p>'+words+
+      '<p><button type="button" class="mg-btn pri" data-op-words="1">Save wording</button></p><div id="opMsg2" class="mg-msg" role="status"></div></div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 6px;color:var(--navy)">Saved replies</h3><p class="mg-hint" style="margin:0 0 8px">Answers you send often. Press Copy, paste into an email or WhatsApp, and swap {name} for the guest\'s name.</p>'+rep+
+      '<div class="mg-fld" style="margin-top:12px"><label for="opRt">'+(OP.edit?'Edit reply':'New reply')+' title</label><input id="opRt" maxlength="80" value="'+esc(cur.title)+'"></div><div class="mg-fld"><label for="opRb">Text</label><textarea id="opRb" rows="5" maxlength="3000" style="width:100%">'+esc(cur.body)+'</textarea></div>'+
+      '<p><button type="button" class="mg-btn pri" data-op-rsave="1">Save reply</button>'+(OP.edit?' <button type="button" class="mg-btn" data-op-rnew="1">Cancel</button>':'')+'</p><div id="opMsg3" class="mg-msg" role="status"></div></div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 6px;color:var(--navy)">Do not email list</h3><p class="mg-hint" style="margin:0 0 8px">If a guest replies STOP, add their email here. They get none of the automatic emails above.</p>'+(opt?'<ul style="margin:0 0 10px;padding-left:18px">'+opt+'</ul>':'')+
+      '<div class="iv-grid"><div class="mg-fld"><label for="opOpt">Add an email</label><input id="opOpt" type="email" placeholder="name@example.com"></div><div class="mg-fld"><label>&nbsp;</label><button type="button" class="mg-btn" data-op-oadd="1">Add to list</button></div></div></div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">Recently sent</h3>'+(sent?'<div style="overflow-x:auto"><table class="iv-lines"><thead><tr><th>When</th><th>What</th><th>To</th></tr></thead><tbody>'+sent+'</tbody></table></div>':'<p class="mg-hint">Nothing has been sent yet.</p>')+'</div>'+
+    '</div>';
+  }
+  MG.screens.ops=function(){return screen();};
+  MG.after.ops=function(){if(!OP.loading&&OP.data===null){OP.loading=true;load().then(function(){OP.loading=false;if(S.screen==='ops')rerender();});}};
+  function run(b,id,fn){if(OP.busy)return;OP.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){OP.busy=false;if(b)b.disabled=false;},function(e){OP.busy=false;if(b)b.disabled=false;msg(id,e&&e.message||'Something went wrong.','err');});}
+  function gather(){var o={reviewLink:document.getElementById('opReview').value};SWITCHES.forEach(function(s){o[s[0]]=document.getElementById('op_'+s[0]).checked;});return o;}
+  function words(){var t={};Object.keys(OP.data.templates).forEach(function(k){var a=R.querySelector('[data-op-sub="'+k+'"]'),b=R.querySelector('[data-op-body="'+k+'"]');if(a&&b)t[k]={subject:a.value,body:b.value};});return t;}
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='ops')return;var d=b.dataset;
+    if(d.opSave){run(b,'opMsg',function(){var o=gather();o.action='settings-save';return api('ops-auto',o).then(load).then(function(){rerender();msg('opMsg','Saved.','ok');});});return;}
+    if(d.opRun){if(window.confirm('Run today\'s jobs now? Only the switches that are on will send, and nobody gets the same message twice.'))run(b,'opMsg',function(){return api('ops-auto',{action:'run'}).then(function(r){return load().then(function(){rerender();var c=r.counts||{};msg('opMsg','Done. Sent '+((c.followups||0)+(c.payments||0)+(c.waivers||0)+(c.arrival||0)+(c.review||0))+' guest emails'+(c.digest?' and the morning summary':'')+'.','ok');});});});return;}
+    if(d.opWords){run(b,'opMsg2',function(){return api('ops-auto',{action:'settings-save',templates:words()}).then(load).then(function(){rerender();msg('opMsg2','Wording saved.','ok');});});return;}
+    if(d.opSample){run(b,'opMsg2',function(){return api('ops-auto',{action:'preview',kind:d.opSample,templates:words()}).then(function(r){msg('opMsg2','A sample was sent to '+r.to+'.','ok');});});return;}
+    if(d.opCopy){var r=OP.data.replies.filter(function(x){return x.id===d.opCopy;})[0];if(r&&navigator.clipboard)navigator.clipboard.writeText(r.body).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1500);});return;}
+    if(d.opRedit){OP.edit=d.opRedit;rerender();return;}
+    if(d.opRnew){OP.edit='';rerender();return;}
+    if(d.opRsave){run(b,'opMsg3',function(){return api('ops-auto',{action:'reply-save',id:OP.edit,title:document.getElementById('opRt').value,body:document.getElementById('opRb').value}).then(function(){OP.edit='';return load();}).then(rerender);});return;}
+    if(d.opRdel){if(window.confirm('Delete this saved reply?'))run(b,'opMsg3',function(){return api('ops-auto',{action:'reply-delete',id:d.opRdel}).then(load).then(rerender);});return;}
+    if(d.opOadd){var em=document.getElementById('opOpt').value;run(b,'opMsg3',function(){return api('ops-auto',{action:'optout-add',email:em}).then(load).then(rerender);});return;}
+    if(d.opOrm){run(b,'opMsg3',function(){return api('ops-auto',{action:'optout-remove',email:d.opOrm}).then(load).then(rerender);});return;}
   });
 })();
 </script>
