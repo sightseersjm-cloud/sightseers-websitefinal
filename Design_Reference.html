@@ -53822,7 +53822,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       '<div class="iv-tot">Total due <b id="ivTot">'+money(tot)+'</b></div></div>'+
       '<div class="mg-fld"><label for="ivT">Terms (shown at the bottom)</label><input id="ivT" maxlength="600" value="'+esc(f.terms)+'"></div>'+
       '<p class="mg-hint" style="margin:10px 0 0">Bank transfer details are on every invoice. Customers put the invoice number in the transfer note.</p>'+
-      '<div class="iv-acts"><button type="button" class="mg-btn pri" data-iv-save="'+(isNew?'':esc(f.id))+'">'+(isNew?'Save as draft':'Save changes')+'</button><button type="button" class="mg-btn ghost" data-iv-cancel="1">Cancel</button></div>'+
+      '<div class="iv-acts"><button type="button" class="mg-btn pri" data-iv-save="'+(isNew?'':esc(f.id))+'" data-iv-and-send="1">'+(isNew?'Save and email to customer':'Save and email to customer')+'</button><button type="button" class="mg-btn" data-iv-save="'+(isNew?'':esc(f.id))+'">'+(isNew?'Save as draft':'Save changes')+'</button><button type="button" class="mg-btn ghost" data-iv-cancel="1">Cancel</button></div>'+
       '<div class="mg-msg" id="ivMsg" role="alert"></div></div>';
   }
   function readForm(){
@@ -53868,10 +53868,19 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.ivAdd){var f=readForm();f.items.push({description:'',qty:1,unit:0});IV.editing={f:f,isNew:IV.editing.isNew,id:IV.editing.f.id,number:IV.editing.f.number};rerender();return;}
     if(d.ivRm){var g=readForm();g.items.splice(Number(d.ivRm),1);if(!g.items.length)g.items.push({description:'',qty:1,unit:0});IV.editing={f:g,isNew:IV.editing.isNew,id:IV.editing.f.id,number:IV.editing.f.number};rerender();return;}
     if(d.ivSave!==undefined&&b.hasAttribute('data-iv-save')){
-      var body=readForm();
+      var body=readForm();var andSend=b.hasAttribute('data-iv-and-send');
+      if(andSend){
+        if(!body.customerEmail||body.customerEmail.indexOf('@')<1){msg('Add the customer\'s email address first.','err');return;}
+        if(!window.confirm('Save this invoice and email it now to '+body.customerEmail+' with the PDF attached?'))return;
+        body.send=true;
+      }
       run(b,function(){
         var isNew=!d.ivSave;var p=isNew?api('invoices',Object.assign({action:'create'},body)):api('invoices',Object.assign({action:'update',id:d.ivSave},body));
-        return p.then(function(){IV.editing=null;return load().then(rerender);});
+        return p.then(function(){IV.editing=null;return load().then(function(){rerender();if(andSend)msg('Saved and emailed to '+body.customerEmail+'.','ok');});},function(err){
+          /* the invoice is kept as a draft when only the email failed, so show the list again with the reason */
+          if(err&&err.data&&err.data.saved){IV.editing=null;return load().then(function(){rerender();msg(err.message||'Saved as a draft, but the email did not go through.','err');});}
+          throw err;
+        });
       });
       return;
     }

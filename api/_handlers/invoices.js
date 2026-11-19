@@ -43,6 +43,14 @@ function view(i) {
   return Object.assign({}, i, { total: t.total, subtotal: t.subtotal, discountApplied: t.discount });
 }
 
+/* emails an invoice to its customer (PDF attached) and marks a draft as sent; returns { ok, invoice } or { ok:false, error } */
+async function emailNow(cur) {
+  const r = await sendInvoice(cur, { stripeUrl: '' });
+  if (!r.ok) return { ok: false, error: r.error || 'The invoice email did not go through. Try again.' };
+  const up = await db.updateInCollection(COLL, cur.id, { status: cur.status === 'draft' ? 'sent' : cur.status, sentAt: new Date().toISOString(), sentTo: cur.customerEmail });
+  return { ok: true, invoice: up };
+}
+
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'OPTIONS') return res.status(200).end();
@@ -76,6 +84,12 @@ module.exports = async function handler(req, res) {
       const issued = f.issuedOn || new Date().toISOString().slice(0, 10);
       const i = Object.assign(f, { id: uid(), number: inv.nextNumber(all, Number(issued.slice(0, 4)) || new Date().getFullYear()), issuedOn: issued, status: 'draft', createdAt: new Date().toISOString(), createdBy: text(user.name || user.email, 120) });
       await db.addToCollection(COLL, i);
+      /* "save and email": the invoice is kept either way, so a failed email never loses the work */
+      if (body.send === true) {
+        const sent = await emailNow(i);
+        if (!sent.ok) return res.status(502).json({ error: 'The invoice was saved as a draft, but the email did not go through. Open it and press Email to customer to try again.', saved: true, invoice: view(i) });
+        return res.status(200).json({ ok: true, sent: true, invoice: view(sent.invoice) });
+      }
       return res.status(200).json({ ok: true, invoice: view(i) });
     }
 
@@ -88,15 +102,19 @@ module.exports = async function handler(req, res) {
       const err = check(f);
       if (err) return res.status(400).json({ error: err });
       const up = await db.updateInCollection(COLL, cur.id, f);
+      if (body.send === true) {
+        const sent = await emailNow(up);
+        if (!sent.ok) return res.status(502).json({ error: 'Your changes were saved, but the email did not go through. Press Email to customer to try again.', saved: true, invoice: view(up) });
+        return res.status(200).json({ ok: true, sent: true, invoice: view(sent.invoice) });
+      }
       return res.status(200).json({ ok: true, invoice: view(up) });
     }
 
     if (action === 'send') {
       if (cur.status === 'paid') return res.status(400).json({ error: 'This invoice is already paid.' });
-      const r = await sendInvoice(cur, { stripeUrl: '' });
-      if (!r.ok) return res.status(502).json({ error: r.error || 'The invoice email did not go through. Try again.' });
-      const up = await db.updateInCollection(COLL, cur.id, { status: cur.status === 'draft' ? 'sent' : cur.status, sentAt: new Date().toISOString(), sentTo: cur.customerEmail });
-      return res.status(200).json({ ok: true, invoice: view(up) });
+      const sent = await emailNow(cur);
+      if (!sent.ok) return res.status(502).json({ error: sent.error });
+      return res.status(200).json({ ok: true, invoice: view(sent.invoice) });
     }
 
     if (action === 'mark-paid') {
