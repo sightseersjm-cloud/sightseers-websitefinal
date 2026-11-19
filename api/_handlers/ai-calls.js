@@ -6,6 +6,7 @@
 const db = require('../_lib/db');
 const { requireAdmin, uid, escapeHtml } = require('../_lib/auth');
 const { sendEmail } = require('../_lib/email');
+const BOOKING_LINK = 'https://calendly.com/sightseersjm/30min';
 const ai = require('../_lib/ai-calls');
 
 const CALLS = 'ai-calls';
@@ -65,6 +66,20 @@ async function handleWebhook(req, res) {
           '<p>Outcome: <b>' + escapeHtml(patch.outcome.replace(/_/g, ' ')) + '</b></p><p>' + escapeHtml(patch.summary || 'No summary was sent.') + '</p>'
       });
     } catch (e) { console.error('ai call email', e && e.message); }
+  }
+  // the call tells the guest they will get a link to choose a time: send it (once)
+  if (['interested', 'call_back_later'].indexOf(patch.outcome) > -1 && call.email && !call.linkSentAt) {
+    try {
+      const first = escapeHtml(String(call.name || '').split(' ')[0] || 'there');
+      await sendEmail({
+        to: call.email,
+        subject: 'Pick a time to plan your trip with Sight Seers',
+        html: '<p>Hi ' + first + ',</p><p>Thanks for chatting with our assistant. As promised, here is the link to choose a time that suits you for a quick call with one of our planners (about 30 minutes, on Zoom):</p>' +
+          '<p><a href="' + BOOKING_LINK + '" style="background:#0d5371;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;display:inline-block">Choose a time</a></p>' +
+          '<p>We can\'t wait to help you plan it.<br>The Sight Seers team</p>'
+      });
+      await db.updateInCollection(CALLS, call.id, { linkSentAt: new Date().toISOString() });
+    } catch (e) { console.error('ai call guest email', e && e.message); }
   }
   return res.status(200).json({ ok: true });
 }

@@ -109,6 +109,11 @@ function callH(h, method, url, body, token, headers) {
   st = await list();
   ok('the outcome and summary are saved', st.calls[0].status === 'completed' && st.calls[0].outcome === 'interested' && /July/.test(st.calls[0].summary));
   ok('the team is emailed when someone is interested', sent.some(m => /AI call result/.test(m.subject || '')));
+  const g = sent.find(m => /Pick a time/.test(m.subject || ''));
+  ok('the guest gets the booking link by email', g && JSON.stringify(g.to).includes('cara@example.com') && /calendly\.com\/sightseersjm\/30min/.test(g.html));
+  sent.length = 0;
+  await callH('ai-calls', 'POST', '/api/ai-calls?webhook=1', { callId: cara.id, outcome: 'interested', summary: 'again' }, null, { 'x-webhook-secret': 'hook-secret-123' });
+  ok('the link is not sent twice', !sent.some(m => /Pick a time/.test(m.subject || '')));
 
   /* the daily cap */
   await bk({ name: 'Dan Daily', email: 'dan@example.com', phone: '(876) 333-4444', callConsent: true });
