@@ -23,7 +23,7 @@ module.exports = async function handler(req, res) {
 
       if (action === 'create' || !action) {
         let user = getUser(req);
-        const { name, email, phone, tourId, tourName, date, endDate, guests, notes, type, stayId, stayName, checkIn, checkOut } = req.body || {};
+        const { name, email, phone, tourId, tourName, date, endDate, guests, notes, type, stayId, stayName, checkIn, checkOut, callConsent } = req.body || {};
         if (!name || !email) return res.status(400).json({ error: 'Name and email required' });
 
         /* a guest who is not signed in gets a Sight Seers account for their email (as trip requests do), so the booking is on their profile */
@@ -62,6 +62,9 @@ module.exports = async function handler(req, res) {
           stayName: (stayName || '').trim(),
           date: date || '',
           endDate: endDate || '',
+          /* only an explicit tick counts; the time it was given is kept with the booking */
+          callConsent: callConsent === true,
+          callConsentAt: callConsent === true ? new Date().toISOString() : '',
           checkIn: checkIn || '',
           checkOut: checkOut || '',
           guests: guests || 1,
@@ -72,6 +75,7 @@ module.exports = async function handler(req, res) {
         };
 
         await db.addToCollection('bookings', booking);
+        if (booking.callConsent) { try { await require('./ai-calls').enqueueFromBooking(booking); } catch (e) { console.error('ai call queue', e && e.message); } }
         const isStay = booking.type === 'stay';
         await sendEmail({
           subject: `New ${isStay ? 'Stay' : 'Tour'} Booking: ${escapeHtml(booking.tourName || booking.stayName || 'Sight Seers')}`,

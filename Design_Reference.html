@@ -17108,6 +17108,7 @@ body.theme-night .page .tag{
         <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore. Tell us in the notes above which industries or kinds of companies your group would like to visit, and your planner matches the visits to your interests.</p>
         <p class="mba-upsell-note" id="societyNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Applications for the Seven Shores Society are reviewed by your host, with a short Alignment Call. There is no payment to apply. Dates, venue and price are shared as they are confirmed.</p>
         <p class="mba-upsell-note" id="offsiteNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">Seven Shores Offsites are quoted for your team. Tell us your team size, preferred country and dates, and what you want the offsite to achieve, and your planner replies within one business day.</p>
+        <label style="display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;font-size:13px;line-height:1.5;color:#33424f;cursor:pointer"><input type="checkbox" id="b_callok" style="margin-top:3px;flex:none"><span>Optional: I agree that Sight Seers may call or text me about this request. Calls may come from an AI voice assistant, which will say it is an AI. I can say "stop" at any time and I will not be called again.</span></label>
         <button class="btn-primary" style="width:100%;justify-content:center" onclick="submitStartPlanning()">Start Your Journey</button>
         <p style="font-size:12px;color:var(--grey,#777);text-align:center;margin-top:10px">Once your planner has talked your trip through with you, a US$15 planning fee gets your fully researched custom package started. It is credited toward your booking.</p>
 
@@ -29520,7 +29521,8 @@ function submitBook(){
     guests:Number(gs)||5,
     notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
     type:'tour',
-    password:window.__ssAcctPw||''
+    password:window.__ssAcctPw||'',
+    callConsent:!!(document.getElementById('b_callok')&&document.getElementById('b_callok').checked)
   };
 
   if(window.SS&&typeof SS.createBooking==='function'){
@@ -29529,7 +29531,7 @@ function submitBook(){
       ssTrack('generate_lead',{form:'booking',method:'api'});
       try{ recordMemberBooking({tour:data.tourName,date:data.date,guests:data.guests,at:new Date().toISOString()}); if(getCurrentUser&&getCurrentUser()){ if(typeof awardPoints==='function')awardPoints(25); if(typeof refreshTravelClub==='function')refreshTravelClub(); } }catch(e){}
       if(btn){btn.innerHTML='Request Submitted!';btn.classList.add('success')}
-      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';if(document.getElementById('b_dt_end'))document.getElementById('b_dt_end').value='';document.getElementById('b_gs').value='5';if(document.getElementById('b_budget'))document.getElementById('b_budget').value='';if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
+      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';if(document.getElementById('b_dt_end'))document.getElementById('b_dt_end').value='';if(document.getElementById('b_callok'))document.getElementById('b_callok').checked=false;document.getElementById('b_gs').value='5';if(document.getElementById('b_budget'))document.getElementById('b_budget').value='';if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
       setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
     }).catch(function(err){
       toast(err&&err.message?err.message:'Something went wrong. Please try again.');
@@ -51288,13 +51290,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'trips',t:'Trips and Travel Club',show:function(){return can('trips');},bd:'trips'},
       {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'},
       {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}},
-      {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}}]},
+      {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}},
+      {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -53856,6 +53859,61 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.ivDel){var i4=IV.list.filter(function(x){return x.id===d.ivDel;})[0];if(i4&&window.confirm('Delete the draft '+i4.number+'? This cannot be undone.'))run(b,function(){return api('invoices',{action:'delete',id:d.ivDel}).then(function(){return load().then(rerender);});});return;}
     if(d.ivPdf){var tok=null;try{tok=localStorage.getItem('ss_auth_token');}catch(x){}
       fetch('/api/invoices?pdf='+encodeURIComponent(d.ivPdf),{headers:tok?{Authorization:'Bearer '+tok}:{}}).then(function(r){if(!r.ok)throw new Error('Could not make the PDF.');return r.blob();}).then(function(bl){var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='Invoice.pdf';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},500);}).catch(function(err){msg(err.message,'err');});return;}
+  });
+})();
+</script>
+<script id="manage-aicalls-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var AC={data:null,err:'',busy:false,loading:false};
+  var LABEL={pending:'Waiting',calling:'On a call',completed:'Done',failed:'Failed',skipped:'Skipped'};
+  function load(){return api('ai-calls').then(function(d){AC.data=d;AC.err='';}).catch(function(e){AC.err=e.message||'Could not load AI calls.';if(!AC.data)AC.data={calls:[],dnc:[],settings:{enabled:false,dailyCap:20,maxAttempts:2},providerReady:false,inWindow:false};});}
+  function msg(t,type){var e=document.getElementById('acMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='aicalls'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function when(iso){if(!iso)return '';try{return new Date(iso).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}catch(e){return iso;}}
+  function screen(){
+    var d=AC.data;if(!d)return '<p class="mg-hint">Loading AI calls...</p>';
+    var st=d.settings;
+    var rows=d.calls.map(function(c){
+      var blocked=c.outcome==='do_not_call'||d.dnc.some(function(x){return x.phone===c.phone;});
+      var can=!blocked&&c.status!=='calling'&&c.status!=='skipped'&&(c.attempts||0)<st.maxAttempts;
+      return '<tr><td><b>'+esc(c.name)+'</b><br><small>'+esc(c.email)+'</small></td><td>'+esc(c.phone)+'</td>'+
+        '<td>'+esc(c.trip)+(c.dates?'<br><small>'+esc(c.dates)+'</small>':'')+(c.guests?'<br><small>'+esc(c.guests)+' guests</small>':'')+'</td>'+
+        '<td><small>Agreed '+esc(when(c.consentAt))+'</small></td>'+
+        '<td>'+esc(LABEL[c.status]||c.status)+(c.attempts?'<br><small>'+c.attempts+' of '+st.maxAttempts+' tries</small>':'')+(c.failNote?'<br><small>'+esc(c.failNote)+'</small>':'')+'</td>'+
+        '<td>'+esc((c.outcome||'').replace(/_/g,' '))+(c.summary?'<br><small>'+esc(c.summary)+'</small>':'')+'</td>'+
+        '<td style="white-space:nowrap">'+(can?'<button type="button" class="mg-btn pri sm" data-ac-call="'+esc(c.id)+'">Call now</button> ':'')+(blocked?'<small>Do not call</small>':(c.status!=='skipped'&&c.status!=='calling'?'<button type="button" class="mg-btn sm" data-ac-skip="'+esc(c.id)+'">Skip</button>':''))+'</td></tr>';
+    }).join('');
+    var dnc=d.dnc.map(function(x){return '<li>'+esc(x.phone)+' <small>'+esc(x.reason||'')+'</small> <button type="button" class="mg-btn sm" data-ac-dnc-rm="'+esc(x.phone)+'">Remove</button></li>';}).join('');
+    return '<div class="iv-wrap">'+
+      '<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">AI calls</h3>'+
+      '<p class="mg-hint" style="margin:0 0 10px">Only people who ticked the consent box on a request form appear here. Each call is started by you, and the assistant tells the person it is an AI. Nothing is called while this is switched off.</p>'+
+      '<p style="margin:0 0 4px">'+(d.providerReady?'<b>Voice provider:</b> connected':'<b>Voice provider:</b> not connected yet. Add VAPI_API_KEY, VAPI_ASSISTANT_ID, VAPI_PHONE_NUMBER_ID and AI_CALL_WEBHOOK_SECRET in Vercel.')+'</p>'+
+      '<p style="margin:0 0 12px"><b>Calling hours now:</b> '+(d.inWindow?'open':'closed')+' (Monday to Saturday, 9 am to 6 pm Jamaica time)</p>'+
+      '<div class="iv-grid"><div class="mg-fld"><label style="display:flex;align-items:center;gap:10px;margin-top:22px"><input type="checkbox" id="acOn" style="width:20px;height:20px;flex:none;margin:0"'+(st.enabled?' checked':'')+'> Allow AI calls</label></div>'+
+      '<div class="mg-fld"><label for="acCap">Calls per day (most)</label><input id="acCap" type="number" min="1" max="100" value="'+esc(st.dailyCap)+'"></div>'+
+      '<div class="mg-fld"><label for="acMax">Tries per person (most)</label><input id="acMax" type="number" min="1" max="3" value="'+esc(st.maxAttempts)+'"></div></div>'+
+      '<p><button type="button" class="mg-btn pri" data-ac-save="1">Save settings</button></p><div id="acMsg" class="mg-msg" role="status"></div></div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 10px;color:var(--navy)">Leads who agreed to be called</h3>'+
+      (AC.err?'<p class="mg-msg on err">'+esc(AC.err)+'</p>':'')+
+      (d.calls.length?'<div style="overflow-x:auto"><table class="iv-lines"><thead><tr><th>Person</th><th>Phone</th><th>Trip</th><th>Consent</th><th>Status</th><th>Outcome</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<p class="mg-hint">No one yet. They appear here when someone sends a request and ticks the consent box.</p>')+'</div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 10px;color:var(--navy)">Do not call list</h3>'+
+      '<p class="mg-hint" style="margin:0 0 8px">Numbers here are never called. Anyone who says "stop" on a call is added automatically.</p>'+
+      (dnc?'<ul style="margin:0 0 12px;padding-left:18px">'+dnc+'</ul>':'')+
+      '<div class="iv-grid"><div class="mg-fld"><label for="acDnc">Add a number</label><input id="acDnc" placeholder="(876) 555-0123"></div><div class="mg-fld"><label>&nbsp;</label><button type="button" class="mg-btn" data-ac-dnc-add="1">Add to list</button></div></div></div></div>';
+  }
+  MG.screens.aicalls=function(){return screen();};
+  MG.after.aicalls=function(){if(!AC.loading&&AC.data===null){AC.loading=true;load().then(function(){AC.loading=false;if(S.screen==='aicalls')rerender();});}};
+  function run(b,fn){if(AC.busy)return;AC.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){AC.busy=false;if(b)b.disabled=false;},function(e){AC.busy=false;if(b)b.disabled=false;msg(e&&e.message||'Something went wrong.','err');});}
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='aicalls')return;var d=b.dataset;
+    if(d.acSave){run(b,function(){return api('ai-calls',{action:'settings-save',enabled:document.getElementById('acOn').checked,dailyCap:document.getElementById('acCap').value,maxAttempts:document.getElementById('acMax').value}).then(load).then(function(){rerender();msg('Saved.','ok');});});return;}
+    if(d.acCall){var c=AC.data.calls.filter(function(x){return x.id===d.acCall;})[0];if(c&&window.confirm('Call '+c.name+' on '+c.phone+' now? The assistant will say it is an AI and that the call may be recorded.'))run(b,function(){return api('ai-calls',{action:'start',id:d.acCall}).then(load).then(function(){rerender();msg('The call has started.','ok');});});return;}
+    if(d.acSkip){run(b,function(){return api('ai-calls',{action:'skip',id:d.acSkip}).then(load).then(rerender);});return;}
+    if(d.acDncAdd){var n=document.getElementById('acDnc').value;run(b,function(){return api('ai-calls',{action:'dnc-add',phone:n}).then(load).then(rerender);});return;}
+    if(d.acDncRm){if(window.confirm('Take '+d.acDncRm+' off the do-not-call list? Only do this if the person asked to be called again.'))run(b,function(){return api('ai-calls',{action:'dnc-remove',phone:d.acDncRm}).then(load).then(rerender);});return;}
   });
 })();
 </script>
