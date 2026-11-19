@@ -54126,15 +54126,34 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-c2{font-size:20px;letter-spacing:.28em}
 #p-account #acClubExtras .cx-c3{font:700 28px 'Playfair Display',serif;letter-spacing:.2em}
 #p-account #acClubExtras .cx-c4{font-size:9px;letter-spacing:.32em;margin-top:18px}
+#p-account #acClubExtras .cx-id{display:flex;flex-direction:column;background-image:repeating-radial-gradient(circle at 18% 28%,rgba(60,110,150,.10) 0 1.5px,transparent 1.5px 7px),repeating-radial-gradient(circle at 84% 70%,rgba(190,140,60,.10) 0 1.5px,transparent 1.5px 8px),repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8)}
+#p-account #acClubExtras .cx-idhead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.5px solid #063a63;padding-bottom:8px;margin-bottom:12px}
+#p-account #acClubExtras .cx-idhead small{display:block;font:800 8px 'Raleway',sans-serif;letter-spacing:.28em;color:#8a7a52}
+#p-account #acClubExtras .cx-idhead b{display:block;font:700 26px 'Playfair Display',serif;letter-spacing:.16em;color:#063a63;line-height:1.1}
+#p-account #acClubExtras .cx-idtype{display:flex;gap:12px}
+#p-account #acClubExtras .cx-idtype span{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;text-align:center}
+#p-account #acClubExtras .cx-idtype i{display:block;font:700 15px 'Raleway',sans-serif;letter-spacing:.06em;color:#063a63;font-style:normal;margin-top:2px}
 #p-account #acClubExtras .cx-id .cx-idrow{display:flex;gap:14px;align-items:flex-start}
-#p-account #acClubExtras .cx-idphoto{flex:none;width:31%;aspect-ratio:3/4;background:linear-gradient(135deg,#f5a04b,#ef8731);display:grid;place-items:center;overflow:hidden;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-#p-account #acClubExtras .cx-idphoto img{width:100%;height:100%;object-fit:cover;display:block}
-#p-account #acClubExtras .cx-idphoto span{font:800 40px 'Playfair Display',serif;color:#fff}
-#p-account #acClubExtras .cx-id dl{margin:0;min-width:0}
-#p-account #acClubExtras .cx-id dt{font:800 8.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;margin-top:9px}
+#p-account #acClubExtras .cx-idphoto{flex:none;width:37%;aspect-ratio:3/4;background:linear-gradient(135deg,#f5a04b,#ef8731);display:grid;place-items:center;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px #063a63,0 4px 10px rgba(0,0,0,.25)}
+#p-account #acClubExtras .cx-idphoto img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+#p-account #acClubExtras .cx-idphoto span{font:800 52px 'Playfair Display',serif;color:#fff}
+#p-account #acClubExtras .cx-id dl{margin:0;min-width:0;flex:1}
+#p-account #acClubExtras .cx-id dt{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;margin-top:9px}
 #p-account #acClubExtras .cx-id dt:first-child{margin-top:0}
-#p-account #acClubExtras .cx-id dd{margin:2px 0 0;font:700 15px 'Raleway',sans-serif;color:#063a63;word-break:break-word}
-#p-account #acClubExtras .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(9px,3.1vw,11.5px)/1.5 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
+#p-account #acClubExtras .cx-id dd{margin:2px 0 0;font:700 14px 'Raleway',sans-serif;letter-spacing:.04em;color:#063a63;word-break:break-word}
+#p-account #acClubExtras .cx-idrow2{display:grid;grid-template-columns:1fr 1fr 1fr 52px;gap:10px;align-items:end;margin-top:10px}
+#p-account #acClubExtras .cx-ghost{width:48px;aspect-ratio:3/4;overflow:hidden;opacity:.28;filter:grayscale(1) contrast(1.15);justify-self:end;mix-blend-mode:multiply;border:1px solid rgba(6,58,99,.4)}
+#p-account #acClubExtras .cx-ghost img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+#p-account #acClubExtras .cx-ghost span{display:grid;place-items:center;height:100%;font:800 24px 'Playfair Display',serif;color:#063a63}
+#p-account #acClubExtras .cx-holo{height:20px;margin:12px -16px 0;flex:none;width:calc(100% + 32px);max-width:none;background:linear-gradient(100deg,#ffd0e6 0%,#c9efff 22%,#d8ffc9 44%,#fff0b8 66%,#e0ccff 88%,#ffd0e6 100%);background-size:240% 100%;opacity:.7;animation:cxHolo 6s linear infinite;border-top:1px solid rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.8)}
+@keyframes cxHolo{to{background-position:240% 0}}
+#p-account #acClubExtras .cx-sig{margin-top:10px;border-bottom:1px solid #063a63;padding-bottom:2px;position:relative;min-height:42px}
+#p-account #acClubExtras .cx-sig small{font:800 7px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase}
+#p-account #acClubExtras .cx-sig span{display:block;font:italic 30px/1.1 'Snell Roundhand','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;color:#1b3f8f;transform:rotate(-3deg);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-account #acClubExtras .cx-seal{position:absolute;right:16px;bottom:100px;width:46px;height:46px;border-radius:50%;border:2px solid rgba(29,100,160,.5);display:grid;place-items:center;font-size:22px;color:rgba(29,100,160,.55);transform:rotate(-14deg);box-shadow:inset 0 0 0 4px rgba(29,100,160,.12)}
+#p-account #acClubExtras .cx-note{margin:70px 18px 0;text-align:center;font:italic 14px/1.7 'Playfair Display',serif;color:#6f6240}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-holo{animation:none}}
+#p-account #acClubExtras .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(8px,2.5vw,10.5px)/1.45 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
 #p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
 #p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
 #p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
@@ -54246,7 +54265,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var photo=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',code=(m.referral&&m.referral.code)||'';
     var st=(m.stamps||[]).slice().reverse(),pages=[]; /* oldest first, like a real passport: new stamps land on the latest page */
     pages.push('<div class="cx-cover"><div class="cx-logo" role="img" aria-label="Sight Seers Caribbean Adventures"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-gold cx-c2">TRAVEL CLUB</div><div class="cx-gold cx-c3">PASSPORT</div><div class="cx-c5"><i></i><span>MEMBER EDITION</span><i></i></div></div>');
-    pages.push('<div class="cx-paper cx-id"><div class="cx-ph">TRAVEL CLUB MEMBER</div><div class="cx-idrow"><div class="cx-idphoto">'+(photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>')+'</div><dl><dt>Name</dt><dd>'+esc(name)+(u&&u.verifiedTraveller?mark():'')+'</dd><dt>Tier</dt><dd>'+esc(tier)+'</dd><dt>Member since</dt><dd>'+esc(since)+'</dd><dt>Stamps</dt><dd>'+esc(st.length)+'</dd></dl></div><div class="cx-mrz">'+mrz(name,code,since)+'</div></div>');
+    var parts=String(name||'Traveller').trim().split(/\s+/).filter(Boolean),sur=parts.length>1?parts[parts.length-1]:parts[0]||'',given=parts.length>1?parts.slice(0,-1).join(' '):'';
+    var imgHtml=photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>';
+    pages.push('<div class="cx-paper cx-id"><div class="cx-idhead"><div><small>SIGHT SEERS TRAVEL CLUB</small><b>PASSPORT</b></div><div class="cx-idtype"><span>Type<i>P</i></span><span>Code<i>SSC</i></span></div></div>'+
+      '<div class="cx-idrow"><div class="cx-idphoto">'+imgHtml+'</div><dl><dt>Surname</dt><dd>'+esc(sur.toUpperCase())+'</dd><dt>Given names</dt><dd>'+esc(given.toUpperCase()||'-')+'</dd><dt>Tier</dt><dd>'+esc(String(tier).toUpperCase())+'</dd><dt>Member since</dt><dd>'+esc(since)+'</dd></dl></div>'+
+      '<div class="cx-idrow2"><div><dt>Stamps</dt><dd>'+esc(st.length)+'</dd></div><div><dt>Status</dt><dd>'+(u&&u.verifiedTraveller?'VERIFIED'+mark():'MEMBER')+'</dd></div><div><dt>Member no.</dt><dd>'+esc(String(code||'').toUpperCase())+'</dd></div><div class="cx-ghost">'+(photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>')+'</div></div>'+
+      '<div class="cx-holo" aria-hidden="true"></div>'+
+      '<div class="cx-sig"><small>Holder\'s signature</small><span>'+esc(name)+'</span></div>'+
+      '<div class="cx-seal" aria-hidden="true">★</div><div class="cx-mrz">'+mrz(name,code,since)+'</div></div>');
     var n=Math.max(1,Math.ceil(st.length/PER_PAGE));
     for(var i=0;i<n;i++){
       var chunk=st.slice(i*PER_PAGE,(i+1)*PER_PAGE);
@@ -54257,7 +54283,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function bookHtml(m){
     var pages=bookPages(m),total=pages.length;
     X.pages=total;if(X.page>=total)X.page=total-1;if(X.page==null||X.page<0)X.page=0;
-    var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div></div>';}).join('');
+    var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div><p class="cx-note">The Sight Seers Travel Club invites all whom it may concern to welcome the bearer of this passport, a traveller who loves the Caribbean, and to give every assistance and kindness the bearer may need along the way.</p></div></div>';}).join('');
     return '<div class="cx-bookwrap"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
       '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div>'+
       '<div class="cx-vid"><button type="button" class="cx-btn cx-btn--navy" data-cx-video>Make my passport video</button><p class="cx-vidhint">A short clip for Instagram, TikTok or WhatsApp status.</p><div id="cxVidOut" aria-live="polite"></div></div></div>';
@@ -54518,19 +54544,49 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           txt(cx,'PASSPORT',PW/2,PH*.70,'700 '+(30*SC)+'px "Playfair Display", Georgia, serif',gold,'center',6*SC);
           txt(cx,'MEMBER EDITION',PW/2,PH*.78,'700 '+(9*SC)+'px Raleway, Arial, sans-serif','rgba(246,227,161,.8)','center',4*SC);
         })();
+        function u(v){return v*SC;}
+        function drawCover(c,img,x,y,w,h,fy){var sc2=Math.max(w/img.width,h/img.height),sw=w/sc2,sh=h/sc2,sx=(img.width-sw)/2,sy=(img.height-sh)*(fy==null?.22:fy);c.drawImage(img,sx,sy,sw,sh,x,y,w,h);}
         var insideL=mk(PW,PH),il=insideL.getContext('2d');paper(il,PW,PH,true);
-        (function(){txt(il,'THIS PASSPORT BELONGS TO',PW/2,PH*.42,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
-          var nm=String(d.name||'Traveller'),fs=26*SC;il.font='700 '+fs+'px "Playfair Display", Georgia, serif';while(il.measureText(nm).width>PW-60*SC&&fs>12*SC){fs-=2*SC;il.font='700 '+fs+'px "Playfair Display", Georgia, serif';}
-          txt(il,nm,PW/2,PH*.5,'700 '+fs+'px "Playfair Display", Georgia, serif','#063a63','center',0);
-          if(logo){il.globalAlpha=.1;il.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;il.drawImage(logo,PW/2-lw/2,PH*.62,lw,lw*logo.height/logo.width);il.filter='none';il.globalAlpha=1;}
+        (function(){
+          var lines=['The Sight Seers Travel Club invites all','whom it may concern to welcome the bearer','of this passport, a traveller who loves','the Caribbean, and to give every','assistance and kindness the bearer','may need along the way.'];
+          lines.forEach(function(l,i){txt(il,l,PW/2,PH*.36+i*u(22),'italic '+u(14)+'px "Playfair Display", Georgia, serif','#6f6240','center',0);});
+          if(logo){il.globalAlpha=.12;il.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;il.drawImage(logo,PW/2-lw/2,PH*.66,lw,lw*logo.height/logo.width);il.filter='none';il.globalAlpha=1;}
         })();
         var idp=mk(PW,PH),ic=idp.getContext('2d');paper(ic,PW,PH,false);
-        (function(){txt(ic,'TRAVEL CLUB MEMBER',PW/2,36*SC,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
-          var px=18*SC,py=52*SC,pw=PW*.31,ph=pw*4/3;ic.fillStyle='#fff';ic.fillRect(px-3*SC,py-3*SC,pw+6*SC,ph+6*SC);
-          if(photo){ic.drawImage(photo,0,0,photo.width,photo.height,px,py,pw,ph);}else{var g=ic.createLinearGradient(px,py,px+pw,py+ph);g.addColorStop(0,'#f5a04b');g.addColorStop(1,'#ef8731');ic.fillStyle=g;ic.fillRect(px,py,pw,ph);txt(ic,String(d.name||'T').trim().charAt(0).toUpperCase(),px+pw/2,py+ph*.62,'800 '+(48*SC)+'px "Playfair Display", Georgia, serif','#fff','center',0);}
-          var x0=px+pw+16*SC,y=py+6*SC,lab=function(s,v,extra){txt(ic,s.toUpperCase(),x0,y,'800 '+(8.5*SC)+'px Raleway, Arial, sans-serif','#8a7a52','left',2.6*SC);y+=19*SC;txt(ic,v,x0,y,'700 '+(15*SC)+'px Raleway, Arial, sans-serif','#063a63','left',0);if(extra){ic.font='700 '+(15*SC)+'px Raleway, Arial, sans-serif';checkMark(ic,x0+ic.measureText(v).width+14*SC,y-5*SC,8*SC);}y+=28*SC;};
-          lab('Name',String(d.name||'Traveller'),d.verified);lab('Tier',String(d.tier||'Explorer'));lab('Member since',String(d.since||''));lab('Stamps',String(stamps.length));
-          var m=mrzLines(d.name,d.code,d.since);txt(ic,m[0],14*SC,PH-44*SC,'600 '+(12*SC)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);txt(ic,m[1],14*SC,PH-24*SC,'600 '+(12*SC)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);
+        (function(){
+          /* fine rings, like the printed background of a real passport page */
+          ic.save();ic.lineWidth=1.2;ic.strokeStyle='rgba(60,110,150,.10)';for(var r=u(8);r<PW*1.4;r+=u(7)){ic.beginPath();ic.arc(PW*.18,PH*.28,r,0,Math.PI*2);ic.stroke();}
+          ic.strokeStyle='rgba(190,140,60,.10)';for(var r2=u(8);r2<PW*1.2;r2+=u(8)){ic.beginPath();ic.arc(PW*.84,PH*.7,r2,0,Math.PI*2);ic.stroke();}ic.restore();
+          var nm=String(d.name||'Traveller'),parts=nm.trim().split(/\s+/).filter(Boolean),sur=(parts.length>1?parts[parts.length-1]:parts[0]||'').toUpperCase(),given=(parts.length>1?parts.slice(0,-1).join(' '):'').toUpperCase()||'-';
+          txt(ic,'SIGHT SEERS TRAVEL CLUB',u(16),u(34),'800 '+u(8)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2.2));
+          txt(ic,'PASSPORT',u(16),u(62),'700 '+u(26)+'px "Playfair Display", Georgia, serif','#063a63','left',u(4));
+          txt(ic,'TYPE',PW-u(78),u(38),'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','center',u(1.6));txt(ic,'P',PW-u(78),u(58),'700 '+u(15)+'px Raleway, Arial, sans-serif','#063a63','center',0);
+          txt(ic,'CODE',PW-u(36),u(38),'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','center',u(1.6));txt(ic,'SSC',PW-u(36),u(58),'700 '+u(15)+'px Raleway, Arial, sans-serif','#063a63','center',u(1));
+          ic.fillStyle='#063a63';ic.fillRect(u(16),u(70),PW-u(32),u(1.5));
+          var px=u(16),py=u(88),pw=u(140),ph=pw*4/3;
+          ic.save();ic.shadowColor='rgba(0,0,0,.28)';ic.shadowBlur=u(8);ic.shadowOffsetY=u(3);ic.fillStyle='#fff';ic.fillRect(px-u(3),py-u(3),pw+u(6),ph+u(6));ic.restore();
+          ic.strokeStyle='#063a63';ic.lineWidth=u(1);ic.strokeRect(px-u(3),py-u(3),pw+u(6),ph+u(6));
+          if(photo){drawCover(ic,photo,px,py,pw,ph);}else{var g=ic.createLinearGradient(px,py,px+pw,py+ph);g.addColorStop(0,'#f5a04b');g.addColorStop(1,'#ef8731');ic.fillStyle=g;ic.fillRect(px,py,pw,ph);txt(ic,String(nm).trim().charAt(0).toUpperCase(),px+pw/2,py+ph*.62,'800 '+u(56)+'px "Playfair Display", Georgia, serif','#fff','center',0);}
+          var x0=px+pw+u(16),y=py+u(10);
+          function field(lab,val,big){txt(ic,lab,x0,y,'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2));y+=u(19);txt(ic,val,x0,y,'700 '+u(14.5)+'px Raleway, Arial, sans-serif','#063a63','left',u(.6));y+=u(24);}
+          field('SURNAME',sur);field('GIVEN NAMES',given);field('TIER',String(d.tier||'Explorer').toUpperCase());field('MEMBER SINCE',String(d.since||''));
+          var ry=py+ph+u(40);
+          txt(ic,'STAMPS',u(16),ry,'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2));txt(ic,String(stamps.length),u(16),ry+u(19),'700 '+u(14.5)+'px Raleway, Arial, sans-serif','#063a63','left',u(.6));
+          txt(ic,'STATUS',u(116),ry,'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2));var st1=d.verified?'VERIFIED':'MEMBER';txt(ic,st1,u(116),ry+u(19),'700 '+u(14.5)+'px Raleway, Arial, sans-serif','#063a63','left',u(.6));
+          if(d.verified){ic.font='700 '+u(14.5)+'px Raleway, Arial, sans-serif';checkMark(ic,u(116)+ic.measureText(st1).width+u(14),ry+u(14),u(8));}
+          txt(ic,'MEMBER NO.',u(228),ry,'800 '+u(7.5)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2));txt(ic,String(d.code||'').toUpperCase(),u(228),ry+u(19),'700 '+u(14.5)+'px Raleway, Arial, sans-serif','#063a63','left',u(.6));
+          /* the ghost copy of the photo, as on a real data page */
+          var gw=u(48),gh=gw*4/3,gx=PW-u(16)-gw,gy=ry-u(12);
+          ic.save();ic.globalAlpha=.3;ic.filter='grayscale(1) contrast(1.15)';ic.globalCompositeOperation='multiply';if(photo)drawCover(ic,photo,gx,gy,gw,gh);else{ic.fillStyle='#8a8f98';ic.fillRect(gx,gy,gw,gh);}ic.restore();
+          var hy=ry+u(34),hg=ic.createLinearGradient(0,0,PW,0);['#ffd0e6','#c9efff','#d8ffc9','#fff0b8','#e0ccff','#ffd0e6'].forEach(function(c,i){hg.addColorStop(i/5,c);});
+          ic.save();ic.globalAlpha=.75;ic.fillStyle=hg;ic.fillRect(0,hy,PW,u(20));ic.restore();
+          txt(ic,"HOLDER'S SIGNATURE",u(16),hy+u(40),'800 '+u(7)+'px Raleway, Arial, sans-serif','#8a7a52','left',u(2));
+          var sf=u(30);ic.font='italic '+sf+'px "Snell Roundhand","Segoe Script","Brush Script MT","Lucida Handwriting",cursive';while(ic.measureText(nm).width>PW-u(130)&&sf>u(14)){sf-=u(2);ic.font='italic '+sf+'px "Snell Roundhand","Segoe Script","Brush Script MT","Lucida Handwriting",cursive';}
+          ic.save();ic.translate(u(20),hy+u(82));ic.rotate(-.04);ic.fillStyle='#1b3f8f';ic.textAlign='left';ic.fillText(nm,0,0);ic.restore();
+          ic.fillStyle='#063a63';ic.fillRect(u(16),hy+u(92),PW-u(32),u(1));
+          /* a round seal */
+          ic.save();ic.translate(PW-u(40),hy+u(70));ic.rotate(-.25);ic.strokeStyle='rgba(29,100,160,.55)';ic.lineWidth=u(2);ic.beginPath();ic.arc(0,0,u(23),0,Math.PI*2);ic.stroke();ic.lineWidth=u(1);ic.beginPath();ic.arc(0,0,u(18),0,Math.PI*2);ic.stroke();txt(ic,'★',0,u(7),u(20)+'px Arial, sans-serif','rgba(29,100,160,.6)','center',0);ic.restore();
+          var m=mrzLines(d.name,d.code,d.since);txt(ic,m[0],u(14),PH-u(40),'600 '+u(10.5)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);txt(ic,m[1],u(14),PH-u(22),'600 '+u(10.5)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);
         })();
         var papers=pages.map(function(){var c=mk(PW,PH),x=c.getContext('2d');paper(x,PW,PH,false);txt(x,'VISAS & STAMPS',PW/2,36*SC,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
           if(logo){x.globalAlpha=.07;x.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;x.drawImage(logo,PW/2-lw/2,PH-110*SC,lw,lw*logo.height/logo.width);x.filter='none';x.globalAlpha=1;}return c;});
@@ -54609,8 +54665,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           var bg=ctx.createRadialGradient(W*.5,H*.38,60,W*.5,H*.5,H*.75);bg.addColorStop(0,'#134a78');bg.addColorStop(.55,'#0a2a47');bg.addColorStop(1,'#04111e');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
           for(var k=0;k<5;k++){var a=time*.25+k*1.3,gx=W*(.5+.38*Math.sin(a)),gy=H*(.45+.3*Math.cos(a*.8));var gr=ctx.createRadialGradient(gx,gy,0,gx,gy,380);gr.addColorStop(0,'rgba(120,190,255,.10)');gr.addColorStop(1,'rgba(120,190,255,0)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);}
           /* the book: glide in, float, pan to the middle of the open spread */
-          var open=ease(clamp((time-T[1].s)/1.2,0,1)),sc=1.62-.54*open,intro=easeOut(time/1.5),floatY=Math.sin(time*1.4)*14,tilt=Math.sin(time*.9)*.018;   /* it zooms out as it opens so both pages fit */
-          var spineX=W/2-(BW*sc/2)*(1-open);   /* closed: the cover is centred; open: the two-page spread is centred */
+          var open=ease(clamp((time-T[1].s)/1.2,0,1)),sc=1.7,intro=easeOut(time/1.5),floatY=Math.sin(time*1.4)*14,tilt=Math.sin(time*.9)*.018;   /* the camera stays on the right-hand page */
+          var spineX=W/2-BW*sc/2;   /* the right-hand page stays centred; turned pages swing off to the left */
           var by=H*.5-(BH*sc)/2+floatY+(1-intro)*420,ox=0;
           ctx.save();ctx.translate(spineX,by+BH*sc/2);ctx.rotate(tilt+(1-intro)*-.08);ctx.scale(sc*(.86+.14*intro),sc*(.86+.14*intro));ctx.translate(-0,-BH/2);
           ctx.globalAlpha=Math.min(1,intro*1.6);
