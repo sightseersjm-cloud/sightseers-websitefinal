@@ -10,8 +10,14 @@ const lower = v => String(v || '').trim().toLowerCase();
 function jamaicaDay(d) { return new Date(d.getTime() - 5 * 3600 * 1000).toISOString().slice(0, 10); }   /* Jamaica is UTC-5 all year */
 const ymd = v => { const m = /^(\d{4}-\d{2}-\d{2})/.exec(String(v || '')); return m ? m[1] : ''; };
 
+/* Sight Seers' own accounts (the owner and the business inbox) are Verified and start at the Voyager tier (250 points) */
+const HOUSE_POINTS = 250;
+function houseEmails() {
+  return new Set([process.env.OWNER_EMAIL, process.env.BUSINESS_EMAIL, 'info@sightseerscaribbean.com', 'sightseersjm@gmail.com'].map(lower).filter(Boolean));
+}
+
 async function statusFor(user, now) {
-  const out = { verifiedTraveller: false, tripsCompleted: 0, firstTripOn: '' };
+  const out = { verifiedTraveller: false, tripsCompleted: 0, firstTripOn: '', pointsFloor: 0 };
   if (!user || !user.email) return out;
   const today = jamaicaDay(now || new Date()), email = lower(user.email);
   const dates = [];
@@ -37,7 +43,8 @@ async function statusFor(user, now) {
   out.tripsCompleted = done.length;
   out.verifiedTraveller = done.length > 0;
   out.firstTripOn = done[0] || '';
+  if (houseEmails().has(email)) { out.verifiedTraveller = true; out.pointsFloor = HOUSE_POINTS; }
   return out;
 }
 
-module.exports = { statusFor };
+module.exports = { statusFor, HOUSE_POINTS };

@@ -44,6 +44,9 @@ function call(body, token) {
   ok('a trip that ends today has not finished yet', !(await verified.statusFor(u('u6', 'six@example.com'), NOW)).verifiedTraveller);
   ok('a finished Travel Club trip counts', (await verified.statusFor(u('u7', 'club@example.com'), NOW)).verifiedTraveller);
   ok('an upcoming Travel Club trip and a waitlist spot do not', !(await verified.statusFor(u('u8', 'later@example.com'), NOW)).verifiedTraveller && !(await verified.statusFor(u('u9', 'wait@example.com'), NOW)).verifiedTraveller);
+  const house = await verified.statusFor(u('h1', 'info@sightseerscaribbean.com'), NOW);
+  ok("Sight Seers' own account is verified and starts at 250 points (Voyager)", house.verifiedTraveller && house.pointsFloor === 250);
+  ok('an ordinary account has no points floor', (await verified.statusFor(u('u1', 'one@example.com'), NOW)).pointsFloor === 0);
   ok('no account, no badge', !(await verified.statusFor(null, NOW)).verifiedTraveller);
 
   /* the sign-in and "me" answers carry it */

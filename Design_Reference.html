@@ -28551,7 +28551,7 @@ function ssVerifiedBadge(user){
   fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({action:'me'})}).then(function(r){return r.ok?r.json():null;}).then(function(r){
     if(!r||!r.user)return;
     var u=getCurrentUser();if(!u)return;
-    u.verifiedTraveller=!!r.user.verifiedTraveller;u.tripsCompleted=r.user.tripsCompleted||0;
+    u.verifiedTraveller=!!r.user.verifiedTraveller;u.tripsCompleted=r.user.tripsCompleted||0;u.pointsFloor=r.user.pointsFloor||0;
     setCurrentUser(u);paint(u);
   }).catch(function(){});
 }
@@ -28600,7 +28600,7 @@ function ssUserKey(base){
   if(k!==base){try{if(localStorage.getItem(k)===null&&localStorage.getItem(base)!==null){localStorage.setItem(k,localStorage.getItem(base));localStorage.removeItem(base);}}catch(e){}}
   return k;
 }
-function getTravelPoints(){try{return parseInt(localStorage.getItem(ssUserKey('ss_travel_points'))||'0',10)||0;}catch(e){return 0;}}
+function getTravelPoints(){var n=0;try{n=parseInt(localStorage.getItem(ssUserKey('ss_travel_points'))||'0',10)||0;}catch(e){}var u=getCurrentUser();return Math.max(n,(u&&u.pointsFloor)|0);} /* an account can start above zero (Sight Seers' own accounts start at Voyager) */
 function setTravelPoints(n){try{localStorage.setItem(ssUserKey('ss_travel_points'),String(Math.max(0,n|0)));}catch(e){}}
 function hasTravelPoints(){try{return localStorage.getItem(ssUserKey('ss_travel_points'))!==null;}catch(e){return false;}}
 function awardPoints(n){
