@@ -94,3 +94,7 @@ If they ask about money:
 If they ask to stop:
 
 > **AI:** Of course, and I'm sorry to have bothered you. I'll make sure you're not called again. Take care, Cara.
+
+## Ready-made assistant file
+
+`docs/vapi-assistant.json` holds the first message, prompt, report settings and outcome list already filled in. In Vapi, create the assistant from it (or copy the values across), then replace `PASTE-YOUR-AI_CALL_WEBHOOK_SECRET-HERE` with your secret. The field names were written from memory of Vapi's public format, so if the dashboard rejects one, copy that value in by hand.
