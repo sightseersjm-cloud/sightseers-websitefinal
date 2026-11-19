@@ -467,7 +467,7 @@ function decisionMail(app) {
 
 /* ---------- referral links (travel insurance, eSIM): written by an admin, never invented ---------- */
 const PARTNER_DEFAULTS = {
-  insurance: { title: 'TME Travel Insurance', note: 'Cover for cancellations, delays and medical care while you travel.', cta: 'Get a quote', url: 'https://tmetravelinsurance.com/?referrer=sscaribbean', logo: '/logos/tme-travel-insurance.webp' },
+  insurance: { title: 'TME Travel Insurance', note: 'Cover for cancellations, delays and medical care while you travel. Offered by TME; we are an affiliate partner and do not handle coverage or claims, so please ask TME.', cta: 'Get a quote', url: 'https://tmetravelinsurance.com/?referrer=sscaribbean', logo: '/logos/tme-travel-insurance.webp' },
   esim: { title: 'Saily eSIM', note: 'Land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://go.saily.site/aff_c?offer_id=101&aff_id=14170', logo: '/logos/saily.png' },
   esim2: { title: 'Maya Mobile eSIM', note: 'Travel data plans so you land connected, without swapping your SIM or paying roaming.', cta: 'Get an eSIM', url: 'https://mayamobile.pxf.io/m4KkQ7', logo: '/logos/maya-mobile.png' }
 };
