@@ -550,6 +550,7 @@ module.exports = async function handler(req, res) {
             communityType: a.communityType || '', city: a.city || '', link: a.link || '', audienceSize: a.audienceSize || '', channels: a.channels || [], experience: a.experience || '',
             inviteCount: a.inviteCount != null ? a.inviteCount : null, destination: a.destination || '', styles: a.styles || [], timing: a.timing || '', message: a.message || '', notes: a.notes || ''
           }));
+        let vset = new Set(); try { vset = await require('../_lib/verified').verifiedSet(interests.map(i => i.email)); } catch (e) { /* the badge is optional */ }
         const allPayouts = await db.getCollection(payouts.PAYOUTS);
         const usersForPhotos = await db.getCollection('users');
         const photoOf = i => { const u = usersForPhotos.find(x => (i.userId && x.id === i.userId) || (i.email && lower(x.email, 120) === i.email)); return u && u.avatarUrl ? u.avatarUrl : ''; };
@@ -570,7 +571,7 @@ module.exports = async function handler(req, res) {
             summary: t.summary || '', descriptionText: t.description || '', included: t.included || [], notIncluded: t.notIncluded || [], itinerary: t.itinerary || [], arrival: t.arrival || null, theme: t.theme || '', themes: THEMES,
             payouts: main ? allPayouts.filter(p => p.tripId === t.id).sort((a, b) => String(b.paidOn).localeCompare(String(a.paidOn))).map(payouts.publicPayout) : [],
             travelers: list.filter(i => i.status !== 'cancelled').slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
-              .map(i => Object.assign({ photo: photoOf(i), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
+              .map(i => Object.assign({ photo: photoOf(i), verified: vset.has(lower(i.email, 120)), firstName: i.name.split(' ')[0], partySize: i.partySize, guests: i.guests || [], status: i.status, source: i.source || '', createdAt: i.createdAt, shared: !!i.shareContact },
                 i.shareContact ? { name: i.name, email: i.email, phone: i.phone || '' } : {}))
           };
         });

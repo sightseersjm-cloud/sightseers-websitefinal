@@ -47,4 +47,27 @@ async function statusFor(user, now) {
   return out;
 }
 
-module.exports = { statusFor, HOUSE_POINTS };
+/* the same rule for many people at once (leader and inbox lists): returns the set of verified emails among those given */
+async function verifiedSet(emails, now) {
+  const want = new Set((emails || []).map(lower).filter(Boolean));
+  const out = new Set();
+  if (!want.size) return out;
+  const today = jamaicaDay(now || new Date());
+  houseEmails().forEach(e => { if (want.has(e)) out.add(e); });
+  const [bookings, trips, interests] = await Promise.all([db.getCollection('bookings'), db.getCollection('club-trips'), db.getCollection('club-interests')]);
+  bookings.forEach(b => {
+    const e = lower(b.email); if (!want.has(e) || out.has(e)) return;
+    if (b.status === 'completed') { out.add(e); return; }
+    if (b.status !== 'confirmed') return;
+    const end = ymd(b.endDate || b.checkOut || b.date || b.checkIn);
+    if (end && end < today) out.add(e);
+  });
+  interests.forEach(i => {
+    const e = lower(i.email); if (!want.has(e) || out.has(e) || (i.status !== 'confirmed' && i.status !== 'booked')) return;
+    const t = trips.find(x => x.id === i.tripId); const end = t ? ymd(t.endDate || t.startDate) : '';
+    if (end && end < today) out.add(e);
+  });
+  return out;
+}
+
+module.exports = { statusFor, verifiedSet, HOUSE_POINTS };

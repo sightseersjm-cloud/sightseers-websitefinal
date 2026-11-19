@@ -59,6 +59,15 @@ function call(body, token) {
   ok('an account for that email can be created', !!tok);
   const me = await call({ action: 'me' }, tok);
   ok('the account answer says verified, with a trip count', me.code === 200 && me.body.user.verifiedTraveller === true && me.body.user.tripsCompleted >= 1);
+  /* lists: the batch check agrees with the single check */
+  const vs = await verified.verifiedSet(['one@example.com', 'TWO@example.com', 'five@example.com', 'club@example.com', 'info@sightseerscaribbean.com', 'nobody@example.com'], NOW);
+  ok('the batch check marks the same people verified', vs.has('one@example.com') && vs.has('five@example.com') && vs.has('club@example.com') && vs.has('info@sightseerscaribbean.com') && !vs.has('two@example.com') && !vs.has('nobody@example.com'));
+  const inboxH = require(root + 'api/_handlers/inbox');
+  const ownerTok = (await call({ action: 'signin', email: 'owner@example.com', password: 'OwnerPass123!' })).body.token;
+  const inboxRes = await new Promise(r => { const res = { headers: {}, status(c) { this.code = c; return this; }, json(x) { r({ code: this.code, body: x }); }, end(x) { r({ code: this.code, body: x }); }, setHeader() {} }; inboxH({ method: 'GET', url: '/api/inbox', query: {}, headers: { host: 'x', 'x-forwarded-for': '10.5.0.1', authorization: 'Bearer ' + ownerTok }, body: {} }, res); });
+  const one = (inboxRes.body.items || []).find(i => String(i.email || '').toLowerCase() === 'five@example.com');
+  const two = (inboxRes.body.items || []).find(i => String(i.email || '').toLowerCase() === 'two@example.com');
+  ok('the admin inbox marks a verified guest and not an unverified one', inboxRes.code === 200 && one && one.verified === true && two && !two.verified);
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

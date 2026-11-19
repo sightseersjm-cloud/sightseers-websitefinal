@@ -35,7 +35,12 @@ module.exports = async function handler(req, res) {
       const items = await inbox.collect(db);
       const c = inbox.counts(items);
       if ((req.query && req.query.count) || url.searchParams.get('count')) return res.status(200).json({ ok: true, counts: c });
-      return res.status(200).json({ ok: true, counts: c, items: items.slice(0, 600), statuses: inbox.STATUSES, team: await assignable() });
+      const shown = items.slice(0, 600);
+      try {
+        const vs = await require('../_lib/verified').verifiedSet(shown.map(i => i.email));
+        shown.forEach(i => { if (i.email && vs.has(String(i.email).trim().toLowerCase())) i.verified = true; });
+      } catch (e) { /* the badge is optional */ }
+      return res.status(200).json({ ok: true, counts: c, items: shown, statuses: inbox.STATUSES, team: await assignable() });
     }
 
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });

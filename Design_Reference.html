@@ -28542,8 +28542,11 @@ function logoutGuest(){
 }
 /* the Verified traveller badge: the server works it out (a finished confirmed trip), the page only shows it */
 var ssVerifiedAsked='';
+/* the small blue check used beside a verified traveller's name in lists */
+function ssVMark(){return '<span class="ssv-mark" role="img" aria-label="Verified traveller" title="Verified traveller"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#1d9bf0" d="M12 1.6l2.5 1.8 3.1-.2 1 2.9 2.6 1.8-.9 3 .9 3-2.6 1.8-1 2.9-3.1-.2L12 22.4l-2.5-1.8-3.1.2-1-2.9-2.6-1.8.9-3-.9-3 2.6-1.8 1-2.9 3.1.2z"/><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7.8 12.4l2.9 2.9 5.6-6"/></svg></span>';}
 function ssVerifiedBadge(user){
-  function paint(u){var m=document.getElementById('acVerifiedMark');if(!m)return;var on=!!(u&&u.verifiedTraveller);m.style.display=on?'inline-block':'none';m.title=on&&u.tripsCompleted>1?'Verified traveller, '+u.tripsCompleted+' trips with Sight Seers':'Verified traveller';}
+  function nav(u){var a=document.getElementById('n-account');if(!a)return;var old=a.querySelector('.ssv-nav');var on=!!(u&&u.verifiedTraveller);if(on&&!old){var sp=document.createElement('span');sp.className='ssv-nav';sp.innerHTML=ssVMark().replace(/ class="ssv-mark"/,'').replace(/ role="img"[^>]*?title="Verified traveller"/,' aria-hidden="true"');a.appendChild(sp);}else if(!on&&old)old.remove();}
+  function paint(u){nav(u);var m=document.getElementById('acVerifiedMark');if(!m)return;var on=!!(u&&u.verifiedTraveller);m.style.display=on?'inline-block':'none';m.title=on&&u.tripsCompleted>1?'Verified traveller, '+u.tripsCompleted+' trips with Sight Seers':'Verified traveller';}
   paint(user);
   var tok='';try{tok=localStorage.getItem('ss_auth_token')||'';}catch(e){}
   if(!user||!tok||tok.indexOf('guest_')===0||ssVerifiedAsked===(user.id||user.email))return;
@@ -28582,6 +28585,7 @@ function updateAccountUI(){
     refreshTravelClub();
     if(blogPanel) blogPanel.classList.add('on');
     if(accountIcon) accountIcon.innerHTML='<i class="fas fa-user-check"></i>';
+    ssVerifiedBadge(user); /* the icon was just redrawn, so put the blue check back */
   }else{
     if(accountPage) accountPage.classList.remove('account-signed-in');
     if(guestView) guestView.style.display='block';
@@ -46589,6 +46593,11 @@ body.theme-night #p-account{--ac-ink:#e6eff8;--ac-mut:#b3c5d7;--ac-head:#fff;--a
 #p-account .ac-bchip{display:inline-block;padding:6px 12px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22)}
 #p-account .ac-bchip b{font-weight:800}
 #p-account #acTierChip{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent}
+.ssv-mark{display:inline-block;width:1.05em;height:1.05em;margin-left:.3em;vertical-align:-.17em;flex:none}
+.ssv-mark svg{display:block;width:100%;height:100%}
+#n-account{position:relative}
+#n-account .ssv-nav{position:absolute;right:-5px;top:-5px;width:13px;height:13px;pointer-events:none}
+#n-account .ssv-nav svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 1px #fff)}
 #p-account .ac-h1 .ac-vmark{display:inline-block;width:.62em;height:.62em;margin-left:.22em;vertical-align:-.03em;flex:none}
 #p-account .ac-signout{display:inline-flex;align-items:center;justify-content:center;margin-top:20px;height:42px;padding:0 22px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.08);color:#fff;font-size:12px!important;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .2s}
 #p-account .ac-signout:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
@@ -49879,7 +49888,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
           var digits=String(x.phone||'').replace(/[^0-9]/g,'');
           contact='<div class="ac-ocontact">'+(x.email?'<a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a>':'')+(x.phone?'<a href="tel:'+esc(x.phone.replace(/[^0-9+]/g,''))+'">'+esc(x.phone)+'</a>':'')+(digits.length>=7?'<a href="https://wa.me/'+digits+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>';
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
-        return '<li>'+(/^(https:\/\/|\/api\/auth\/avatar\/)/.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
+        return '<li>'+(/^(https:\/\/|\/api\/auth\/avatar\/)/.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+(x.verified?ssVMark():'')+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
       }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
       (t.role==='co'
         ?'<p class="ac-oreward"><b>Rewards:</b> paid to '+esc(t.mainLeaderName||'the main leader')+', who shares them with you as you agree.</p>'
@@ -52833,7 +52842,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var rows=visible();
     var sel=IB.items.filter(function(i){return i.key===IB.sel;})[0];
     var listHtml=rows.length?rows.slice(0,250).map(function(i){
-      return '<button type="button" class="ib-i'+(i.key===IB.sel?' on':'')+(i.status==='new'?' new':'')+'" data-ib-sel="'+esc(i.key)+'"><span class="ib-av">'+esc(initials(i.name))+'</span><span class="ib-t"><b>'+esc(i.name||'(no name)')+'</b><em>'+esc(i.type)+(i.title&&i.title!==i.type?' · '+esc(i.title):'')+'</em><small>'+esc(i.summary||i.details||'')+'</small></span><span class="ib-m"><small>'+esc(ago(i.createdAt))+'</small><span class="mg-chip '+(i.status==='new'?'o':i.status==='done'?'g':'')+'">'+esc(ST[i.status])+'</span>'+(i.assignee?'<small class="ib-as">'+esc(first(i.assignee.name))+'</small>':'')+'</span></button>';
+      return '<button type="button" class="ib-i'+(i.key===IB.sel?' on':'')+(i.status==='new'?' new':'')+'" data-ib-sel="'+esc(i.key)+'"><span class="ib-av">'+esc(initials(i.name))+'</span><span class="ib-t"><b>'+esc(i.name||'(no name)')+(i.verified?ssVMark():'')+'</b><em>'+esc(i.type)+(i.title&&i.title!==i.type?' · '+esc(i.title):'')+'</em><small>'+esc(i.summary||i.details||'')+'</small></span><span class="ib-m"><small>'+esc(ago(i.createdAt))+'</small><span class="mg-chip '+(i.status==='new'?'o':i.status==='done'?'g':'')+'">'+esc(ST[i.status])+'</span>'+(i.assignee?'<small class="ib-as">'+esc(first(i.assignee.name))+'</small>':'')+'</span></button>';
     }).join(''):'<div class="ib-empty">'+(IB.items.length?'Nothing here. Try another filter.':'No requests yet. Bookings, contact messages, tent rentals, planning requests and passport renewals arrive here, and you also get an email for each.')+'</div>';
     return '<h1>Enquiries and bookings</h1><p class="mg-sub">Everything people send through the website, in one place. Give each request to someone, keep notes, and reply by email.</p>'
       +(IB.err?'<div class="mg-msg on err">'+esc(IB.err)+'</div>':'')
@@ -52856,7 +52865,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       ?'<div class="mg-fld"><label for="ibNote">Private note (only your team sees it)</label><textarea id="ibNote" rows="3" data-ib-key="'+esc(i.key)+'" placeholder="For example: called, left a message">'+esc(dr.note||'')+'</textarea></div><button type="button" class="mg-btn pri" data-ib-send="note">Save note</button>'
       :(i.email?'<div class="mg-fld"><label for="ibSub">Subject</label><input id="ibSub" data-ib-key="'+esc(i.key)+'" value="'+esc(subj)+'" maxlength="160"></div><div class="mg-fld"><label for="ibMsg">Your reply to '+esc(first(i.name))+' ('+esc(i.email)+')</label><textarea id="ibMsg" rows="7" data-ib-key="'+esc(i.key)+'">'+esc(msgv)+'</textarea><div class="mg-hint">Sent from the website by email. Their answer comes to the company inbox. Your name is added at the end.</div></div><button type="button" class="mg-btn pri" data-ib-send="reply">Send reply</button>':'<p class="mg-hint">There is no email address on this request, so a reply cannot be sent from here.</p>');
     return '<div class="mg-card ib-d"><button type="button" class="mg-btn sm ghost ib-back" data-ib-back="1">&larr; All requests</button>'
-      +'<div class="ib-dh"><span class="ib-av big">'+esc(initials(i.name))+'</span><div><h3>'+esc(i.name||'(no name)')+'</h3><small>'+esc(i.type)+(i.ref?' · '+esc(i.ref):'')+' · received '+esc(dt(i.createdAt))+'</small></div></div>'
+      +'<div class="ib-dh"><span class="ib-av big">'+esc(initials(i.name))+'</span><div><h3>'+esc(i.name||'(no name)')+(i.verified?ssVMark():'')+'</h3><small>'+esc(i.type)+(i.ref?' · '+esc(i.ref):'')+' · received '+esc(dt(i.createdAt))+'</small></div></div>'
       +'<div class="ib-act">'+contact+'</div>'
       +(i.title?'<p class="ib-sum"><b>'+esc(i.title)+'</b>'+(i.summary?'<br>'+esc(i.summary):'')+'</p>':'')+(i.details?'<p class="ib-body">'+esc(i.details)+'</p>':'')
       +'<div class="ib-ctl"><div><label>Status</label><div class="ib-seg">'+['new','in_progress','done'].map(function(s){return '<button type="button" data-ib-st="'+s+'" class="'+(i.status===s?'on':'')+'">'+ST[s]+'</button>';}).join('')+'</div></div>'
