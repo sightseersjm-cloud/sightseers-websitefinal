@@ -54067,10 +54067,43 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-btn{padding:11px 18px;border:0;background:#ef8731;color:#fff;font:700 13px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
 #p-account #acClubExtras .cx-btn:disabled{opacity:.6;cursor:default}
 #p-account #acClubExtras .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
-#p-account #acClubExtras .cx-pages{padding:18px;background:#f6efdc;background-image:repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8);border:1px solid #d9ccaa;box-shadow:inset 0 0 40px rgba(120,90,30,.12)}
-#p-account #acClubExtras .cx-stamps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 10px}
+#p-account #acClubExtras .cx-bookwrap{max-width:400px;margin:6px auto 0}
+#p-account #acClubExtras .cx-book{position:relative;width:100%;aspect-ratio:3/4;perspective:1600px;outline:none;transition:transform .6s;transform:translateX(0)}
+#p-account #acClubExtras .cx-book:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.5)}
+#p-account #acClubExtras .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
+#p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper{position:absolute;inset:0}
+#p-account #acClubExtras .cx-sheet.flipped{transform:rotateY(-178deg)}
+#p-account #acClubExtras .cx-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:3px 8px 8px 3px;box-shadow:0 14px 30px -14px rgba(6,40,70,.55)}
+#p-account #acClubExtras .cx-back{transform:rotateY(180deg);border-radius:8px 3px 3px 8px}
+#p-account #acClubExtras .cx-paper{background:#f6efdc;background-image:repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8);box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset 8px 0 14px -8px rgba(80,60,20,.3);padding:18px 16px;position:relative}
+#p-account #acClubExtras .cx-back.cx-paper{box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
+#p-account #acClubExtras .cx-ph{font:800 10px 'Raleway',sans-serif;letter-spacing:.3em;color:#8a7a52;text-align:center;margin:0 0 10px;text-transform:uppercase}
+#p-account #acClubExtras .cx-pn{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:700 11px 'Raleway',sans-serif;color:#8a7a52}
+#p-account #acClubExtras .cx-sgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
 #p-account #acClubExtras .cx-stamp{padding:0;border:0;background:none;mix-blend-mode:multiply}
-#p-account #acClubExtras .cx-stamp svg{display:block;max-width:170px;margin:0 auto}
+#p-account #acClubExtras .cx-stamp svg{display:block;width:100%;max-width:150px;margin:0 auto}
+#p-account #acClubExtras .cx-empty{margin:30px 8px;text-align:center;color:#8a7a52;font-size:14px;line-height:1.6;font-style:italic}
+#p-account #acClubExtras .cx-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;background:radial-gradient(ellipse at 30% 20%,#164a75 0,#0b2f4e 55%,#071d33 100%);border-radius:3px 8px 8px 3px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset 10px 0 18px -8px rgba(0,0,0,.6)}
+#p-account #acClubExtras .cx-cover::after{content:'';position:absolute;inset:0;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1.2px);background-size:5px 5px;border-radius:inherit;pointer-events:none}
+#p-account #acClubExtras .cx-gold{background:linear-gradient(135deg,#f6e3a1,#c9973a 50%,#f1d98a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:'Raleway',sans-serif;font-weight:800;text-shadow:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+#p-account #acClubExtras .cx-c1{font-size:13px;letter-spacing:.42em}
+#p-account #acClubExtras .cx-emb{width:42%;max-width:150px;margin:14px 0;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+#p-account #acClubExtras .cx-c2{font-size:22px;letter-spacing:.28em}
+#p-account #acClubExtras .cx-c3{font:700 30px 'Playfair Display',serif;letter-spacing:.2em}
+#p-account #acClubExtras .cx-c4{font-size:9px;letter-spacing:.32em;margin-top:18px}
+#p-account #acClubExtras .cx-id .cx-idrow{display:flex;gap:14px;align-items:flex-start}
+#p-account #acClubExtras .cx-idphoto{flex:none;width:31%;aspect-ratio:3/4;background:linear-gradient(135deg,#f5a04b,#ef8731);display:grid;place-items:center;overflow:hidden;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+#p-account #acClubExtras .cx-idphoto img{width:100%;height:100%;object-fit:cover;display:block}
+#p-account #acClubExtras .cx-idphoto span{font:800 40px 'Playfair Display',serif;color:#fff}
+#p-account #acClubExtras .cx-id dl{margin:0;min-width:0}
+#p-account #acClubExtras .cx-id dt{font:800 8.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;margin-top:9px}
+#p-account #acClubExtras .cx-id dt:first-child{margin-top:0}
+#p-account #acClubExtras .cx-id dd{margin:2px 0 0;font:700 15px 'Raleway',sans-serif;color:#063a63;word-break:break-word}
+#p-account #acClubExtras .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(9px,3.1vw,11.5px)/1.5 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
+#p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+#p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
+#p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet{transition:none}}
 #p-account #acClubExtras .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
 #p-account #acClubExtras .cx-rev:first-of-type{border-top:0}
 #p-account #acClubExtras .cx-stars{display:inline-flex;gap:2px}
@@ -54144,8 +54177,47 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return '<svg viewBox="0 0 160 160" width="100%" role="img" aria-label="Stamp: '+esc(st.title)+(date?', '+date:'')+'">'+defs+'<g filter="url(#r'+id+')" opacity=".92">'+body+'</g></svg>';
   };
 
+
+  /* ---------- the passport book: a cover, an ID page, then pages of stamps that flip ---------- */
+  var PER_PAGE=4;
+  function mrz(name,code,since){
+    var parts=String(name||'TRAVELLER').toUpperCase().replace(/[^A-Z ]+/g,'').trim().split(/\s+/).filter(Boolean),sur=parts.length>1?parts[parts.length-1]:parts[0]||'TRAVELLER',given=parts.length>1?parts.slice(0,-1).join('<'):'';
+    function pad(t){t=String(t);while(t.length<30)t+='<';return t.slice(0,30);}
+    function safe(t){return t.replace(/</g,'&lt;');}
+    return safe(pad('P<SSC'+sur+'<<'+given))+'<br>'+safe(pad('SSTC'+String(code||'').replace(/[^0-9A-Za-z]/g,'').toUpperCase()+'<<'+String(since||'').slice(-2)+'<<<<<'));
+  }
+  function bookPages(m){
+    var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(e){}
+    var name=(u&&u.name)||'Traveller',tier=(typeof getTravelTier==='function'&&typeof getTravelPoints==='function')?getTravelTier(getTravelPoints()).name:'Explorer',since=u&&u.createdAt?new Date(u.createdAt).getFullYear():'';
+    var photo=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',code=(m.referral&&m.referral.code)||'';
+    var st=(m.stamps||[]).slice().reverse(),pages=[]; /* oldest first, like a real passport: new stamps land on the latest page */
+    pages.push('<div class="cx-cover"><div class="cx-gold cx-c1">SIGHT SEERS</div><svg class="cx-emb" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="url(#cxg)" stroke-width="3"/><circle cx="60" cy="60" r="44" fill="none" stroke="url(#cxg)" stroke-width="1.2"/><path d="M60 14 66 54 106 60 66 66 60 106 54 66 14 60 54 54Z" fill="url(#cxg)"/><circle cx="60" cy="60" r="6" fill="#0b2f4e" stroke="url(#cxg)" stroke-width="2"/><defs><linearGradient id="cxg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e3a1"/><stop offset=".5" stop-color="#c9973a"/><stop offset="1" stop-color="#f1d98a"/></linearGradient></defs></svg><div class="cx-gold cx-c2">TRAVEL CLUB</div><div class="cx-gold cx-c3">PASSPORT</div><div class="cx-gold cx-c4">CARIBBEAN ADVENTURES</div></div>');
+    pages.push('<div class="cx-paper cx-id"><div class="cx-ph">TRAVEL CLUB MEMBER</div><div class="cx-idrow"><div class="cx-idphoto">'+(photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>')+'</div><dl><dt>Name</dt><dd>'+esc(name)+(u&&u.verifiedTraveller?mark():'')+'</dd><dt>Tier</dt><dd>'+esc(tier)+'</dd><dt>Member since</dt><dd>'+esc(since)+'</dd><dt>Stamps</dt><dd>'+esc(st.length)+'</dd></dl></div><div class="cx-mrz">'+mrz(name,code,since)+'</div></div>');
+    var n=Math.max(1,Math.ceil(st.length/PER_PAGE));
+    for(var i=0;i<n;i++){
+      var chunk=st.slice(i*PER_PAGE,(i+1)*PER_PAGE);
+      pages.push('<div class="cx-paper"><div class="cx-ph">VISAS &amp; STAMPS</div>'+(chunk.length?'<div class="cx-sgrid">'+chunk.map(function(x,k){var idx=i*PER_PAGE+k,h=hash(x.title+'|'+x.on);return '<div class="cx-stamp" style="transform:rotate('+(((h%13)-6)*1.2).toFixed(1)+'deg)">'+ssStampSvg(x,idx)+'</div>';}).join('')+'</div>':'<p class="cx-empty">Your first stamp arrives after your first finished trip.</p>')+'<div class="cx-pn">'+(i+3)+'</div></div>');
+    }
+    return pages;
+  }
+  function bookHtml(m){
+    var pages=bookPages(m),total=pages.length;
+    X.pages=total;if(X.page>=total)X.page=total-1;if(X.page==null||X.page<0)X.page=0;
+    var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div></div>';}).join('');
+    return '<div class="cx-bookwrap"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div>'+
+      '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div></div>';
+  }
+  function setBook(n){
+    var b=document.getElementById('cxBook');if(!b)return;
+    var total=b.querySelectorAll('.cx-sheet').length;n=Math.max(0,Math.min(total-1,n));X.page=n;
+    [].forEach.call(b.querySelectorAll('.cx-sheet'),function(sh){var i=Number(sh.getAttribute('data-sheet')),flipped=i<n;sh.classList.toggle('flipped',flipped);sh.style.zIndex=String(flipped?i:total-i);});
+    b.classList.toggle('closed',n===0);
+    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':'Page '+n+' of '+(total-1);
+    [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===total-1);});
+  }
+
   /* ---------- the member's own cards (Travel Club tab of the account page) ---------- */
-  var X={member:null,mine:null,asked:'',busy:false};
+  var X={member:null,mine:null,asked:'',busy:false,page:0,pages:0};
   function memberKey(){try{var u=JSON.parse(localStorage.getItem('ss_current_user')||'null');return u&&(u.id||u.email)||'';}catch(e){return '';}}
   function paint(){
     var box=document.getElementById('acClubExtras');if(!box)return;
@@ -54155,8 +54227,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var inv='<div class="cx-card"><h4>Invite friends</h4><p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
       '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
       '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p></div>';
-    var stamps='<div class="cx-card"><h4>Your stamp book</h4><p class="cx-sub">One stamp for every trip you finish with Sight Seers.</p>'+
-      (st.length?'<div class="cx-pages"><div class="cx-stamps">'+st.map(function(x,i){var h=hash(x.title+'|'+x.on);return '<div class="cx-stamp" style="transform:rotate('+(((h%13)-6)*1.1).toFixed(1)+'deg)">'+ssStampSvg(x,i)+'</div>';}).join('')+'</div></div>':'<p class="cx-sub" style="margin:0">Your first stamp arrives after your first finished trip.</p>')+'</div>';
+    var stamps='<div class="cx-card"><h4>Your Travel Club passport</h4><p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m)+'</div>';
     var rev='<div class="cx-card"><h4>Your reviews</h4>';
     if(mine.eligible.length){
       rev+='<p class="cx-sub">Tell other travellers how it went. Reviews are checked by our team before they appear.</p>'+mine.eligible.map(function(e){
@@ -54167,6 +54238,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(!mine.eligible.length&&!mine.mine.length)rev+='<p class="cx-sub" style="margin:0">After your first finished trip you can leave a review here.</p>';
     rev+='</div>';
     box.innerHTML=inv+stamps+rev;
+    setBook(X.page||0);
   }
   function load(force){
     var key=memberKey(),t=tok();
@@ -54176,8 +54248,16 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     Promise.all([api('member'),api('reviews?mine=1')]).then(function(r){X.member=r[0];X.mine=r[1];paint();}).catch(function(){/* the cards stay hidden */});
   }
   window.ssClubExtras=function(){load(false);};
+  /* swipe and arrow keys turn the pages too */
+  (function(){var sx=null;
+    document.addEventListener('touchstart',function(e){var bk=e.target.closest&&e.target.closest('#cxBook');sx=bk?e.touches[0].clientX:null;},{passive:true});
+    document.addEventListener('touchend',function(e){if(sx==null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40)setBook((X.page||0)+(dx<0?1:-1));},{passive:true});
+    document.addEventListener('keydown',function(e){var bk=document.getElementById('cxBook');if(!bk||(document.activeElement!==bk))return;if(e.key==='ArrowRight'){setBook((X.page||0)+1);e.preventDefault();}else if(e.key==='ArrowLeft'){setBook((X.page||0)-1);e.preventDefault();}});
+    document.addEventListener('click',function(e){var sh=e.target.closest&&e.target.closest('#cxBook .cx-sheet');if(!sh||e.target.closest('button'))return;var i=Number(sh.getAttribute('data-sheet'));if(i===(X.page||0))setBook(i+1);else if(i===(X.page||0)-1)setBook(i);});
+  })();
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('#acClubExtras button');if(!b)return;
+    if(b.hasAttribute('data-cx-book')){setBook((X.page||0)+(b.getAttribute('data-cx-book')==='next'?1:-1));return;}
     if(b.hasAttribute('data-cx-copy')){var inp=document.getElementById('cxRefLink');if(inp){try{navigator.clipboard.writeText(inp.value);}catch(x){inp.select();document.execCommand('copy');}b.textContent='Copied';setTimeout(function(){b.textContent='Copy link';},1600);}return;}
     var card=b.closest('[data-cx-rev]');
     if(b.hasAttribute('data-cx-star')&&card){var n=Number(b.getAttribute('data-cx-star'));card.setAttribute('data-rating',String(n));[].forEach.call(card.querySelectorAll('[data-cx-star]'),function(s){s.classList.toggle('on',Number(s.getAttribute('data-cx-star'))<=n);});return;}
