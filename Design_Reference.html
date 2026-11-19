@@ -13776,6 +13776,10 @@ body.theme-night #p-flagship-programs{
 @media(max-width:900px){
   #p-travel-club .tcd-in{padding-bottom:96px}
   #p-travel-club .tcd-go{display:inline-block;margin-top:2px}
+  /* phones: no endless bobbing or glowing on the steps and stat numbers; the one-time reveal stays */
+  #p-travel-club .tc-steps>li{animation:none!important}
+  #p-travel-club .tc-steps>li.ix-in{animation:ixRise .6s cubic-bezier(.2,.8,.2,1) both!important}
+  #p-travel-club .tc-num,#p-travel-club .tcd-stats dt{animation:none!important}
 }
 @media(prefers-reduced-motion:reduce){
   #p-travel-club .tc-band::before,#p-travel-club .tc-band::after,#p-travel-club .tc-band-in>*{animation:none}
