@@ -17,8 +17,8 @@ const PHONE = '+1 (876) 465-0630';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX_GUEST_EMAILS_PER_RUN = 40;
 
-const KINDS = ['followups', 'calendly', 'payments', 'waivers', 'arrival', 'review', 'digest'];
-const DEFAULTS = { followups: false, calendly: false, payments: false, waivers: false, arrival: false, review: false, digest: false, reviewLink: '', templates: {}, lastRun: null };
+const KINDS = ['followups', 'calendly', 'payments', 'waivers', 'arrival', 'review', 'digest', 'referrals'];
+const DEFAULTS = { followups: false, calendly: false, payments: false, waivers: false, arrival: false, review: false, digest: false, referrals: false, referralPoints: 100, reviewLink: '', templates: {}, lastRun: null };
 
 /* ---------- the wording (an admin can change any of these in the Automations screen) ---------- */
 const DEFAULT_TEMPLATES = {
@@ -39,7 +39,7 @@ const DEFAULT_TEMPLATES = {
   arrival: { label: 'Before you arrive (three days before)', subject: 'Getting ready for {trip} on {date}',
     body: 'Hi {first},\n\nYour trip is almost here. We are looking forward to hosting you.\n\nIf you have not already, please reply with your arrival details (flight or arrival time, and where you are staying) so we can confirm your pickup. Everyone in your group should sign the waiver before the day:\n\n{button:Sign the waiver}\n\nNeed us for anything? Message or call us on WhatsApp at ' + PHONE + '.\n\nSight Seers Caribbean Adventures' },
   review: { label: 'After the trip (two days after)', subject: 'Thank you, {first}. How was {trip}?',
-    body: 'Hi {first},\n\nThank you for travelling with us. We hope {trip} was everything you hoped for.\n\n{reviewLine}\n\nWhen you are ready to plan the next one, just reply to this email or start a new request on our website. We would love to host you again.\n\nSight Seers Caribbean Adventures' }
+    body: 'Hi {first},\n\nThank you for travelling with us. We hope {trip} was everything you hoped for. Your new stamp is waiting in your Travel Club stamp book.\n\n{reviewLine}\n\n{button:Write your review}\n\nWhen you are ready to plan the next one, just reply to this email or start a new request on our website. We would love to host you again.\n\nSight Seers Caribbean Adventures' }
 };
 
 function templateFor(settings, key) {
@@ -83,12 +83,14 @@ async function getSettings() {
   KINDS.forEach(k => { out[k] = doc[k] === true; });
   out.templates = (doc.templates && typeof doc.templates === 'object') ? doc.templates : {};
   out.reviewLink = String(doc.reviewLink || '').slice(0, 400);
+  out.referralPoints = Math.min(1000, Math.max(10, Math.round(Number(doc.referralPoints)) || 100));
   return out;
 }
 async function saveSettings(patch) {
   const cur = await getSettings();
   const next = Object.assign({}, cur);
   KINDS.forEach(k => { if (patch && patch[k] !== undefined) next[k] = patch[k] === true; });
+  if (patch && patch.referralPoints !== undefined) next.referralPoints = Math.min(1000, Math.max(10, Math.round(Number(patch.referralPoints)) || 100));
   if (patch && patch.reviewLink !== undefined) {
     const v = String(patch.reviewLink || '').trim();
     next.reviewLink = /^https:\/\/[^\s]+$/i.test(v) ? v.slice(0, 400) : '';
@@ -163,7 +165,7 @@ async function runDaily(opts) {
   const now = opts.now || new Date(), dryRun = !!opts.dryRun;
   const settings = opts.settings || await getSettings();
   const on = k => (opts.force && dryRun) ? true : settings[k];
-  const summary = { at: now.toISOString(), dryRun, calendly: { configured: !!process.env.CALENDLY_API_TOKEN, booked: [] }, followups: [], payments: [], waivers: [], arrival: [], review: [], digest: false, counts: {} };
+  const summary = { at: now.toISOString(), dryRun, calendly: { configured: !!process.env.CALENDLY_API_TOKEN, booked: [] }, followups: [], payments: [], waivers: [], arrival: [], review: [], referrals: [], digest: false, counts: {} };
 
   const sent = await loadSent();
   const blocked = await blockedEmails();
@@ -238,10 +240,13 @@ async function runDaily(opts) {
     }
     if (on('review') && de === -2) {
       const line = settings.reviewLink ? 'If you have a minute, we would be so grateful for a short review of your trip:\n' + settings.reviewLink : 'If you have a minute, reply and tell us how it went, what you loved and what we could do better.';
-      const mail = await guestMail(settings, 'review', b.email, Object.assign({ reviewLine: line }, vars), settings.reviewLink || SITE, null, isV(b.email));
+      const mail = await guestMail(settings, 'review', b.email, Object.assign({ reviewLine: line }, vars), SITE + '/account', null, isV(b.email));
       if (await send('review:' + b.id, 'review', mail)) summary.review.push({ name: b.name, email: b.email });
     }
   }
+
+  /* 5b. referral rewards: when a friend who was invited has finished a first trip, both of them get the points */
+  if (on('referrals')) { try { summary.referrals = await rewardReferrals(now, dryRun, settings, blocked); } catch (e) { console.error('referral rewards', e && e.message); } }
 
   /* 6. the morning summary to the team */
   if (on('digest')) summary.digest = await sendDigest({ now, dryRun, bookings, invoices, waivers, aiCalls, signedEmails, summary });
@@ -250,7 +255,35 @@ async function runDaily(opts) {
   summary.counts = counts(summary);
   return summary;
 }
-function counts(s) { return { calendlyBooked: s.calendly.booked.length, followups: s.followups.length, payments: s.payments.length, waivers: s.waivers.length, arrival: s.arrival.length, review: s.review.length, digest: s.digest ? 1 : 0 }; }
+function counts(s) { return { calendlyBooked: s.calendly.booked.length, followups: s.followups.length, payments: s.payments.length, waivers: s.waivers.length, arrival: s.arrival.length, review: s.review.length, referrals: s.referrals.length, digest: s.digest ? 1 : 0 }; }
+
+/* ---------- referral rewards ---------- */
+async function rewardReferrals(now, dryRun, settings, blocked) {
+  const verifiedLib = require('./verified');
+  const pts = settings.referralPoints || 100, out = [];
+  const users = await db.getCollection('users');
+  for (const u of users) {
+    if (!u.referredBy || u.referralRewardedAt) continue;
+    const ref = users.find(x => x.id === u.referredBy);
+    if (!ref || ref.id === u.id) continue;
+    if (!(await verifiedLib.finishedFor(u, now)).length) continue;
+    out.push({ friend: u.name, referrer: ref.name, points: pts });
+    if (dryRun) continue;
+    /* marked first, so a retry never pays twice */
+    const fresh = await db.getCollection('users');
+    const f = fresh.find(x => x.id === u.id), r = fresh.find(x => x.id === ref.id);
+    await db.updateInCollection('users', u.id, { referralRewardedAt: now.toISOString(), bonusPoints: (Number(f && f.bonusPoints) || 0) + pts });
+    await db.updateInCollection('users', ref.id, { bonusPoints: (Number(r && r.bonusPoints) || 0) + pts });
+    const first = n => String(n || '').trim().split(/\s+/)[0] || 'there';
+    const mail = (to, name, line) => ({ to, replyTo: 'info@sightseerscaribbean.com', subject: 'You earned ' + pts + ' Travel Points',
+      html: '<div style="font-family:sans-serif;max-width:560px;color:#17323f;line-height:1.55"><p>Hi ' + escapeHtml(first(name)) + ',</p><p>' + escapeHtml(line) + '</p><p>Your Travel Points show on your Travel Club page.</p><p>Sight Seers Caribbean Adventures</p></div>' });
+    for (const m of [mail(ref.email, ref.name, first(u.name) + ' took a first trip with Sight Seers after your invite, so you earned ' + pts + ' Travel Points. Thank you for spreading the word.'),
+                     mail(u.email, u.name, 'Thanks for travelling with us. As you joined through a friend\'s invite, you earned ' + pts + ' Travel Points.')]) {
+      if (m.to && !(blocked && blocked.has(String(m.to).toLowerCase()))) { try { await sendEmail(m); } catch (e) { /* the points are already saved */ } }
+    }
+  }
+  return out;
+}
 
 /* ---------- the morning summary ---------- */
 function digestData(ctx) {
@@ -303,7 +336,7 @@ async function sendDigest(ctx) {
 async function previewMail(key, to, settings) {
   if (!DEFAULT_TEMPLATES[key]) return null;
   const vars = { first: 'Cara', trip: 'the Blue Hole trip', date: 'July 1, 2027', number: 'SS-2027-001', amount: 'US$1,250.00', due: 'June 15, 2027', reviewLine: settings.reviewLink ? 'If you have a minute, we would be so grateful for a short review of your trip:\n' + settings.reviewLink : 'If you have a minute, reply and tell us how it went, what you loved and what we could do better.' };
-  const m = render(templateFor(settings, key), vars, key.indexOf('followup') === 0 ? CALENDLY_LINK : SITE + '/waiver');
+  const m = render(templateFor(settings, key), vars, key.indexOf('followup') === 0 ? CALENDLY_LINK : (key === 'review' ? SITE + '/account' : SITE + '/waiver'));
   m.subject = '[Sample] ' + m.subject;
   return Object.assign({ to }, m);
 }

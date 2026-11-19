@@ -90,6 +90,7 @@ module.exports = async function handler(req, res) {
 
     users.push(user);
     await db.setCollection('users', users);
+    try { await require('../_lib/member').attachReferral(req, user); } catch (e) { /* tying a referral is optional */ }
 
     const token = tokenFor(user);
     const safe = publicUser(user);
@@ -155,6 +156,7 @@ module.exports = async function handler(req, res) {
       user.lastSignInAt = new Date().toISOString();
       try { await db.setCollection('users', users); } catch (e) { /* best effort */ }
     }
+    try { await require('../_lib/member').attachReferral(req, user); } catch (e) { /* optional */ }
     const token = tokenFor(user);
     const safe = publicUser(user);
     try { Object.assign(safe, await require('../_lib/verified').statusFor(user)); } catch (e) { /* the badge is optional */ }

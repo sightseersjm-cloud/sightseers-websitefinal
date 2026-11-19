@@ -30,6 +30,8 @@ const handlers = {
   'invoices':        require('./_handlers/invoices'),
   'ai-calls':        require('./_handlers/ai-calls'),
   'ops-auto':        require('./_handlers/ops-auto'),
+  'member':          require('./_handlers/member'),
+  'reviews':         require('./_handlers/reviews'),
   'live-token':      require('./_handlers/live-token'),
   'mux-stream':      require('./_handlers/mux-stream'),
   'newsletter':      require('./_handlers/newsletter'),

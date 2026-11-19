@@ -13800,6 +13800,10 @@ body.theme-night #p-flagship-programs{
   </div></div>
 
   <div class="tc-wrap">
+    <div class="tc-sec" id="tcReviews" hidden>
+      <h2 style="margin:0 0 14px;font:700 28px 'Playfair Display',serif;color:#063a63">What travellers say</h2>
+      <div class="tc-card" style="padding:22px" id="tcReviewsBody"></div>
+    </div>
     <div class="tc-sec" id="departures">
       <div class="tcd tcd-none" id="tcdPanel">
         <div class="tcd-bg" aria-hidden="true"></div>
@@ -14038,6 +14042,7 @@ body.theme-night #p-flagship-programs{
         <div class="tc-card tp-block" id="tpInclWrap" hidden><div class="tp-incl"><div id="tpIncCol"><h2>What is included</h2><ul class="tc-ticks" id="tpIncluded"></ul></div><div id="tpNotCol"><h2>Not included</h2><ul class="tp-notinc" id="tpNotIncluded"></ul></div></div></div>
         <div class="tc-card tp-block tp-sponsor" id="tpSponsor" hidden></div>
         <div class="tc-card tp-block tp-org" id="tpOrg" hidden></div>
+        <div class="tc-card tp-block" id="tpReviews" hidden></div>
         <div class="tc-air" id="tpDisclose" hidden></div>
       </div>
       <aside class="tp-side">
@@ -24817,6 +24822,7 @@ vtSessionAction=function(el,type){
                   <div class="ac-earn-cta"><button type="button" class="ac-cta" onclick="nav('tours')">Browse tours</button><button type="button" class="ac-cta ac-cta--ghost-dark" onclick="nav('booking')">Start booking</button></div>
                 </div>
               </div>
+              <div id="acClubExtras" hidden></div>
             </div>
 
             <!-- Group trips: trips you asked to join, and the organizer space -->
@@ -28689,6 +28695,7 @@ function renderMemberBookings(){
 }
 function refreshTravelClub(){
   if(!getCurrentUser())return;
+  if(window.ssClubExtras)ssClubExtras();
   var points=getTravelPoints();
   var tier=getTravelTier(points);
   var elPts=document.getElementById('dashPoints');if(elPts)elPts.textContent=points.toLocaleString();
@@ -49292,6 +49299,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var arr=t.arrival||{},arrParts=[['Getting there',arr.getting],['What to bring',arr.bring],['Before you arrive',arr.before]].filter(function(x){return x[1]&&String(x[1]).trim();});
     $('tpArr').innerHTML=arrParts.map(function(x){var items=String(x[1]).split(/\n+/).filter(Boolean);return '<h3>'+esc(x[0])+'</h3>'+(x[0]==='What to bring'?'<ul class="tc-ticks">'+items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul>':items.map(function(i){return '<p>'+esc(i)+'</p>';}).join(''));}).join('');
     $('tpArrWrap').hidden=!arrParts.length;
+    if(window.ssTripReviews)ssTripReviews(t.slug);
     var org=$('tpOrg');
     if(t.organizer){var oph=/^(https:\/\/|\/api\/auth\/avatar\/)/.test(t.organizer.photo||'')?'<img class="tp-ophoto" src="'+esc(t.organizer.photo)+'" alt="'+esc(t.organizer.name)+'">':'<span class="tp-ophoto tp-oinit" aria-hidden="true">'+esc((t.organizer.name||'?').charAt(0))+'</span>';
       org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
@@ -51329,13 +51337,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}},
       {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}},
-      {id:'ops',t:'Automations',show:function(){return S.user&&S.user.role==='admin';}}]},
+      {id:'ops',t:'Automations',show:function(){return S.user&&S.user.role==='admin';}},
+      {id:'reviews',t:'Reviews',show:function(){return S.user&&S.user.role==='admin';}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',reviews:'Reviews',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -53977,6 +53986,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     ['waivers','Waiver reminders','For confirmed bookings, reminds travellers who have not signed a waiver 7 days and 2 days before the trip.'],
     ['arrival','Getting ready email','Three days before a confirmed trip: asks for arrival details and links the waiver.'],
     ['review','After the trip email','Two days after a confirmed trip ends: a thank-you and a request for a review.'],
+    ['referrals','Referral rewards','When a friend a member invited finishes a first trip, both get Travel Points (set the amount below). Switched off, the invite link still works but nobody is paid.'],
     ['digest','Morning summary to the team','One email each morning with new requests, calls, overdue and upcoming invoices, trips tomorrow and missing waivers. Mondays add last week\'s numbers.']
   ];
   var KIND_OF={followup1:'followups',followup2:'followups',payment_soon:'payments',payment_due:'payments',payment_late:'payments',waiver_week:'waivers',waiver_last:'waivers',arrival:'arrival',review:'review'};
@@ -53992,7 +54002,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var counts=pv&&pv.counts?pv.counts:null;
     function list(a,f){return a&&a.length?'<ul style="margin:4px 0 10px;padding-left:18px">'+a.map(f).join('')+'</ul>':'';}
     var prev=!counts?'<p class="mg-hint">The preview is not available right now.</p>':
-      '<p style="margin:0 0 6px">If every switch were on, today\'s run would send: <b>'+counts.followups+'</b> follow-ups, <b>'+counts.payments+'</b> payment reminders, <b>'+counts.waivers+'</b> waiver reminders, <b>'+counts.arrival+'</b> getting-ready emails, <b>'+counts.review+'</b> thank-you emails.</p>'+
+      '<p style="margin:0 0 6px">If every switch were on, today\'s run would send: <b>'+counts.followups+'</b> follow-ups, <b>'+counts.payments+'</b> payment reminders, <b>'+counts.waivers+'</b> waiver reminders, <b>'+counts.arrival+'</b> getting-ready emails, <b>'+counts.review+'</b> thank-you emails, <b>'+(counts.referrals||0)+'</b> referral rewards.</p>'+
       list(pv.followups,function(x){return '<li>'+esc(x.name)+' <small>('+esc(x.email)+', nudge '+x.stage+')</small></li>';})+
       list(pv.payments,function(x){return '<li>Invoice '+esc(x.number)+' <small>('+esc(x.email)+')</small></li>';})+
       list(pv.waivers,function(x){return '<li>Waiver: '+esc(x.name)+' <small>('+esc(x.email)+')</small></li>';})+
@@ -54012,6 +54022,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       '<p class="mg-hint" style="margin:0 0 10px">These save you chasing people. Every switch starts <b>off</b>. They run once a day, around 8 am Jamaica time, and the same message is never sent twice to the same person. Guests who reply STOP, or who tell the AI assistant they are not interested, are skipped.</p>'+
       '<p style="margin:0 0 4px"><b>Daily job:</b> '+(d.cronReady?'connected':'not connected yet. Add CRON_SECRET in Vercel (the Travel Club daily job uses the same one).')+'</p>'+
       '<p style="margin:0 0 10px"><b>Calendly:</b> '+(d.calendlyReady?'connected':'not connected yet. Add CALENDLY_API_TOKEN in Vercel to let the site see who booked a call.')+'</p>'+sw+
+      '<div class="mg-fld" style="margin-top:12px"><label for="opRefPts">Travel Points for a referral (each)</label><input id="opRefPts" type="number" min="10" max="1000" value="'+esc(st.referralPoints||100)+'"><small class="mg-hint">Given to the member who invited and to the friend, after the friend finishes a first trip.</small></div>'+
       '<div class="mg-fld" style="margin-top:12px"><label for="opReview">Review page link (optional)</label><input id="opReview" placeholder="https://..." value="'+esc(st.reviewLink||'')+'"><small class="mg-hint">Shown in the after-the-trip email. Leave empty to ask guests to reply instead.</small></div>'+
       '<p><button type="button" class="mg-btn pri" data-op-save="1">Save switches</button> <button type="button" class="mg-btn" data-op-run="1">Run today\'s jobs now</button></p><div id="opMsg" class="mg-msg" role="status"></div></div>'+
       '<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">What would go out today</h3>'+(OP.err?'<p class="mg-msg on err">'+esc(OP.err)+'</p>':'')+prev+'</div>'+
@@ -54028,7 +54039,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   MG.screens.ops=function(){return screen();};
   MG.after.ops=function(){if(!OP.loading&&OP.data===null){OP.loading=true;load().then(function(){OP.loading=false;if(S.screen==='ops')rerender();});}};
   function run(b,id,fn){if(OP.busy)return;OP.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){OP.busy=false;if(b)b.disabled=false;},function(e){OP.busy=false;if(b)b.disabled=false;msg(id,e&&e.message||'Something went wrong.','err');});}
-  function gather(){var o={reviewLink:document.getElementById('opReview').value};SWITCHES.forEach(function(s){o[s[0]]=document.getElementById('op_'+s[0]).checked;});return o;}
+  function gather(){var o={reviewLink:document.getElementById('opReview').value,referralPoints:document.getElementById('opRefPts').value};SWITCHES.forEach(function(s){o[s[0]]=document.getElementById('op_'+s[0]).checked;});return o;}
   function words(){var t={};Object.keys(OP.data.templates).forEach(function(k){var a=R.querySelector('[data-op-sub="'+k+'"]'),b=R.querySelector('[data-op-body="'+k+'"]');if(a&&b)t[k]={subject:a.value,body:b.value};});return t;}
   R.addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b||S.screen!=='ops')return;var d=b.dataset;
@@ -54043,6 +54054,195 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.opRdel){if(window.confirm('Delete this saved reply?'))run(b,'opMsg3',function(){return api('ops-auto',{action:'reply-delete',id:d.opRdel}).then(load).then(rerender);});return;}
     if(d.opOadd){var em=document.getElementById('opOpt').value;run(b,'opMsg3',function(){return api('ops-auto',{action:'optout-add',email:em}).then(load).then(rerender);});return;}
     if(d.opOrm){run(b,'opMsg3',function(){return api('ops-auto',{action:'optout-remove',email:d.opOrm}).then(load).then(rerender);});return;}
+  });
+})();
+</script>
+<style id="club-extras-style">
+#p-account #acClubExtras{margin-top:22px;display:grid;gap:18px}
+#p-account #acClubExtras .cx-card{background:#fff;border:1px solid #dfe6ec;padding:22px;box-shadow:0 10px 26px -22px rgba(6,58,99,.45)}
+#p-account #acClubExtras .cx-card h4{margin:0 0 6px;font:700 22px 'Playfair Display',serif;color:#063a63}
+#p-account #acClubExtras .cx-sub{margin:0 0 14px;color:#5b6b76;font-size:14px;line-height:1.55}
+#p-account #acClubExtras .cx-link{display:flex;gap:8px;flex-wrap:wrap}
+#p-account #acClubExtras .cx-link input{flex:1 1 240px;min-width:0;padding:11px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;background:#f6f9fb;color:#17323f}
+#p-account #acClubExtras .cx-btn{padding:11px 18px;border:0;background:#ef8731;color:#fff;font:700 13px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+#p-account #acClubExtras .cx-btn:disabled{opacity:.6;cursor:default}
+#p-account #acClubExtras .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
+#p-account #acClubExtras .cx-pages{padding:18px;background:#f6efdc;background-image:repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8);border:1px solid #d9ccaa;box-shadow:inset 0 0 40px rgba(120,90,30,.12)}
+#p-account #acClubExtras .cx-stamps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 10px}
+#p-account #acClubExtras .cx-stamp{padding:0;border:0;background:none;mix-blend-mode:multiply}
+#p-account #acClubExtras .cx-stamp svg{display:block;max-width:170px;margin:0 auto}
+#p-account #acClubExtras .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
+#p-account #acClubExtras .cx-rev:first-of-type{border-top:0}
+#p-account #acClubExtras .cx-stars{display:inline-flex;gap:2px}
+#p-account #acClubExtras .cx-stars button{background:none;border:0;padding:2px;font-size:26px;line-height:1;color:#c9d3da;cursor:pointer}
+#p-account #acClubExtras .cx-stars button.on{color:#ef8731}
+#p-account #acClubExtras textarea{width:100%;margin:8px 0;padding:10px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;resize:vertical}
+#p-account #acClubExtras .cx-chip{display:inline-block;padding:3px 10px;font-size:12px;font-weight:700;background:#fdf1e4;color:#a55a12}
+#p-account #acClubExtras .cx-chip.ok{background:#e6f4ea;color:#1f6b3a}
+#p-account #acClubExtras .cx-msg{min-height:18px;margin:6px 0 0;font-size:13px;color:#a02;}
+#p-account #acClubExtras .cx-msg.ok{color:#1f6b3a}
+.cx-pub{margin:0}
+.cx-pub .cx-avg{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:14px;color:#5b6b76}
+.cx-pub .cx-avg b{font:800 22px 'Raleway',sans-serif;color:#063a63}
+.cx-pub .cx-s{color:#ef8731;letter-spacing:2px}
+.cx-pub .cx-r{border-top:1px solid #e3ebf2;padding:14px 0}
+.cx-pub .cx-r:first-of-type{border-top:0;padding-top:0}
+.cx-pub .cx-r p{margin:6px 0;color:#17323f;line-height:1.6}
+.cx-pub .cx-r small{color:#5b6b76}
+.cx-pub .cx-v{display:inline-block;width:1em;height:1em;vertical-align:-.15em;margin-left:.25em}
+</style>
+<script id="club-extras-script">
+(function(){
+  'use strict';
+  /* a friend's invite link (?ref=CODE) is remembered for 30 days, so the account made later is tied to the friend who invited them */
+  try{var rm=/[?&]ref=([0-9A-Fa-f]{8})(?:&|$)/.exec(location.search);if(rm)document.cookie='ss_ref='+rm[1].toUpperCase()+'; path=/; max-age=2592000; SameSite=Lax';}catch(e){}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function tok(){try{var k=localStorage.getItem('ss_auth_token')||'';return k&&k.indexOf('guest_')!==0?k:'';}catch(e){return '';}}
+  function api(path,body){
+    var h={'Content-Type':'application/json'},t=tok();if(t)h.Authorization='Bearer '+t;
+    var o=body===undefined?{method:'GET',headers:h}:{method:'POST',headers:h,body:JSON.stringify(body)};
+    return fetch('/api/'+path,o).then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok){var e=new Error(d.error||'Something went wrong. Please try again.');e.status=r.status;throw e;}return d;});});
+  }
+  function stars(n){var s='';for(var i=1;i<=5;i++)s+=i<=n?'★':'☆';return s;}
+  function monthYear(iso){try{return new Date(String(iso).slice(0,10)+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',year:'numeric',timeZone:'UTC'});}catch(e){return '';}}
+  function mark(){return typeof ssVMark==='function'?ssVMark().replace('class="ssv-mark"','class="ssv-mark cx-v"'):'';}
+
+
+  /* ---------- passport-style stamps: drawn as inked SVG, a different shape and colour for each trip ---------- */
+  var INKS=['#1f4e9c','#b3262e','#5b2a86','#1f7a4d','#8a4b12','#0f6a7a'];
+  function hash(str){var h=2166136261;str=String(str);for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+  function wrap(t,max){
+    var w=String(t||'').toUpperCase().replace(/[^A-Z0-9&'\- ]+/g,' ').trim().split(/\s+/).filter(Boolean),lines=[''],i;
+    for(i=0;i<w.length;i++){var cur=lines[lines.length-1];if((cur?cur+' ':'').length+w[i].length<=max)lines[lines.length-1]=(cur?cur+' ':'')+w[i];else if(lines.length<2)lines.push(w[i]);else{lines[1]=(lines[1]+' '+w[i]).slice(0,max-1)+'…';break;}}
+    lines=lines.map(function(l){return l.length>max?l.slice(0,max-1)+'…':l;});
+    return lines.filter(Boolean).slice(0,2);
+  }
+  function dmy(iso){try{var d=new Date(String(iso).slice(0,10)+'T12:00:00Z');return d.getUTCDate()+' '+['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getUTCMonth()]+' '+d.getUTCFullYear();}catch(e){return '';}}
+  window.ssStampSvg=function(st,idx){
+    var h=hash(st.title+'|'+st.on),ink=INKS[h%INKS.length],shape=(h>>3)%3,id='st'+idx+'_'+(h%9973),date=dmy(st.on),country=String(st.country||'').toUpperCase().replace(/[^A-Z ]+/g,'').slice(0,18),L=wrap(st.title,shape===1?15:13);
+    var defs='<defs><filter id="r'+id+'" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="'+(h%97)+'" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.7" result="d"/><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="2" seed="'+(h%53)+'" result="m"/><feColorMatrix in="m" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.1 0 0 0 -0.62" result="a"/><feComposite in="d" in2="a" operator="in"/></filter>'+
+      '<path id="t'+id+'" d="M 23 80 A 57 57 0 0 1 137 80"/><path id="b'+id+'" d="M 13 80 A 67 67 0 0 0 147 80"/></defs>';
+    var body='',f='fill="'+ink+'" font-family="Raleway,Arial,sans-serif" font-weight="800"';
+    if(shape===0){
+      body='<circle cx="80" cy="80" r="76" fill="none" stroke="'+ink+'" stroke-width="3.2"/><circle cx="80" cy="80" r="70" fill="none" stroke="'+ink+'" stroke-width="1.1"/><circle cx="80" cy="80" r="50" fill="none" stroke="'+ink+'" stroke-width="1.6"/>'+
+        '<text '+f+' font-size="10.5" letter-spacing="2.4"><textPath href="#t'+id+'" startOffset="50%" text-anchor="middle">SIGHT SEERS CARIBBEAN</textPath></text>'+
+        '<text '+f+' font-size="10" letter-spacing="2.6"><textPath href="#b'+id+'" startOffset="50%" text-anchor="middle">'+(country?'★ '+country+' ★':'★ ARRIVED ★')+'</textPath></text>'+
+        L.map(function(t,i){return '<text x="80" y="'+((L.length===1?76:68)+i*12)+'" text-anchor="middle" '+f+' font-size="10.5">'+t+'</text>';}).join('')+
+        '<line x1="56" y1="'+(L.length===1?84:88)+'" x2="104" y2="'+(L.length===1?84:88)+'" stroke="'+ink+'" stroke-width="1.2"/><text x="80" y="'+(L.length===1?98:101)+'" text-anchor="middle" '+f+' font-size="10" letter-spacing=".4">'+date+'</text>';
+    }else if(shape===1){
+      body='<rect x="8" y="26" width="144" height="108" rx="10" fill="none" stroke="'+ink+'" stroke-width="3.2"/><rect x="15" y="33" width="130" height="94" rx="6" fill="none" stroke="'+ink+'" stroke-width="1.1"/>'+
+        '<rect x="15" y="33" width="130" height="20" rx="6" fill="'+ink+'"/><text x="80" y="47.5" text-anchor="middle" font-family="Raleway,Arial,sans-serif" font-weight="800" font-size="11.5" letter-spacing="3" fill="#fff">ARRIVED</text>'+
+        L.map(function(t,i){return '<text x="80" y="'+((L.length===1?82:76)+i*14)+'" text-anchor="middle" '+f+' font-size="13">'+t+'</text>';}).join('')+
+        '<text x="80" y="'+(L.length===1?103:108)+'" text-anchor="middle" '+f+' font-size="12" letter-spacing=".6">'+date+'</text><text x="80" y="121" text-anchor="middle" '+f+' font-size="8.5" letter-spacing="2.6">'+(country||'SIGHT SEERS')+'</text>';
+    }else{
+      body='<ellipse cx="80" cy="80" rx="76" ry="54" fill="none" stroke="'+ink+'" stroke-width="3.2"/><ellipse cx="80" cy="80" rx="69" ry="47" fill="none" stroke="'+ink+'" stroke-width="1.1"/>'+
+        '<text x="80" y="53" text-anchor="middle" '+f+' font-size="8.5" letter-spacing="3">SIGHT SEERS</text>'+
+        L.map(function(t,i){return '<text x="80" y="'+((L.length===1?78:70)+i*12.5)+'" text-anchor="middle" '+f+' font-size="11">'+t+'</text>';}).join('')+
+        '<rect x="45" y="'+(L.length===1?86:90)+'" width="70" height="16" fill="none" stroke="'+ink+'" stroke-width="1.5"/><text x="80" y="'+(L.length===1?97.5:101.5)+'" text-anchor="middle" '+f+' font-size="10" letter-spacing=".4">'+date+'</text>'+
+        '<text x="80" y="116" text-anchor="middle" '+f+' font-size="7.5" letter-spacing="2.4">'+(country||'WELCOME')+'</text>';
+    }
+    return '<svg viewBox="0 0 160 160" width="100%" role="img" aria-label="Stamp: '+esc(st.title)+(date?', '+date:'')+'">'+defs+'<g filter="url(#r'+id+')" opacity=".92">'+body+'</g></svg>';
+  };
+
+  /* ---------- the member's own cards (Travel Club tab of the account page) ---------- */
+  var X={member:null,mine:null,asked:'',busy:false};
+  function memberKey(){try{var u=JSON.parse(localStorage.getItem('ss_current_user')||'null');return u&&(u.id||u.email)||'';}catch(e){return '';}}
+  function paint(){
+    var box=document.getElementById('acClubExtras');if(!box)return;
+    if(!X.member){box.hidden=true;return;}
+    box.hidden=false;
+    var m=X.member,r=m.referral||{},st=m.stamps||[],mine=X.mine||{eligible:[],mine:[]};
+    var inv='<div class="cx-card"><h4>Invite friends</h4><p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
+      '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
+      '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p></div>';
+    var stamps='<div class="cx-card"><h4>Your stamp book</h4><p class="cx-sub">One stamp for every trip you finish with Sight Seers.</p>'+
+      (st.length?'<div class="cx-pages"><div class="cx-stamps">'+st.map(function(x,i){var h=hash(x.title+'|'+x.on);return '<div class="cx-stamp" style="transform:rotate('+(((h%13)-6)*1.1).toFixed(1)+'deg)">'+ssStampSvg(x,i)+'</div>';}).join('')+'</div></div>':'<p class="cx-sub" style="margin:0">Your first stamp arrives after your first finished trip.</p>')+'</div>';
+    var rev='<div class="cx-card"><h4>Your reviews</h4>';
+    if(mine.eligible.length){
+      rev+='<p class="cx-sub">Tell other travellers how it went. Reviews are checked by our team before they appear.</p>'+mine.eligible.map(function(e){
+        return '<div class="cx-rev" data-cx-rev="'+esc(e.refKey)+'"><b>'+esc(e.title)+'</b> <small>'+esc(monthYear(e.on))+'</small><div><span class="cx-stars" role="group" aria-label="Your rating">'+[1,2,3,4,5].map(function(i){return '<button type="button" data-cx-star="'+i+'" aria-label="'+i+' star'+(i>1?'s':'')+'">★</button>';}).join('')+'</span></div>'+
+          '<textarea rows="3" maxlength="600" placeholder="What was the best part? Who would you tell to go?" data-cx-text></textarea><button type="button" class="cx-btn" data-cx-send>Send review</button><p class="cx-msg" role="status"></p></div>';}).join('');
+    }
+    if(mine.mine.length){rev+=mine.mine.map(function(v){return '<div class="cx-rev"><b>'+esc(v.title)+'</b> <span class="cx-chip'+(v.status==='approved'?' ok':'')+'">'+(v.status==='approved'?'Published':'Waiting for approval')+'</span><div class="cx-s" style="color:#ef8731;letter-spacing:2px">'+stars(v.rating)+'</div><p class="cx-sub" style="margin:4px 0 0">'+esc(v.text)+'</p></div>';}).join('');}
+    if(!mine.eligible.length&&!mine.mine.length)rev+='<p class="cx-sub" style="margin:0">After your first finished trip you can leave a review here.</p>';
+    rev+='</div>';
+    box.innerHTML=inv+stamps+rev;
+  }
+  function load(force){
+    var key=memberKey(),t=tok();
+    if(!t||!key){X.member=null;paint();return;}
+    if(!force&&X.asked===key)return;
+    X.asked=key;
+    Promise.all([api('member'),api('reviews?mine=1')]).then(function(r){X.member=r[0];X.mine=r[1];paint();}).catch(function(){/* the cards stay hidden */});
+  }
+  window.ssClubExtras=function(){load(false);};
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#acClubExtras button');if(!b)return;
+    if(b.hasAttribute('data-cx-copy')){var inp=document.getElementById('cxRefLink');if(inp){try{navigator.clipboard.writeText(inp.value);}catch(x){inp.select();document.execCommand('copy');}b.textContent='Copied';setTimeout(function(){b.textContent='Copy link';},1600);}return;}
+    var card=b.closest('[data-cx-rev]');
+    if(b.hasAttribute('data-cx-star')&&card){var n=Number(b.getAttribute('data-cx-star'));card.setAttribute('data-rating',String(n));[].forEach.call(card.querySelectorAll('[data-cx-star]'),function(s){s.classList.toggle('on',Number(s.getAttribute('data-cx-star'))<=n);});return;}
+    if(b.hasAttribute('data-cx-send')&&card&&!X.busy){
+      var msg=card.querySelector('.cx-msg'),rating=Number(card.getAttribute('data-rating')||0),text=card.querySelector('[data-cx-text]').value;
+      msg.className='cx-msg';
+      if(!rating){msg.textContent='Choose a star rating first.';return;}
+      if(String(text).trim().length<10){msg.textContent='Please write at least a sentence.';return;}
+      X.busy=true;b.disabled=true;
+      api('reviews',{action:'create',refKey:card.getAttribute('data-cx-rev'),rating:rating,text:text}).then(function(){X.busy=false;load(true);},function(err){X.busy=false;b.disabled=false;msg.textContent=err.message;});
+    }
+  });
+
+  /* ---------- reviews shown to everyone ---------- */
+  function pubHtml(d,showTitle){
+    if(!d||!d.reviews||!d.reviews.length)return '';
+    return '<div class="cx-pub"><div class="cx-avg"><b>'+esc(d.average)+'</b><span class="cx-s">'+stars(Math.round(d.average))+'</span><span>'+esc(d.count)+(d.count===1?' review':' reviews')+' from verified travellers</span></div>'+
+      d.reviews.map(function(r){return '<div class="cx-r"><span class="cx-s">'+stars(r.rating)+'</span><p>'+esc(r.text)+'</p><small><b>'+esc(r.name)+'</b>'+mark()+(showTitle&&r.title?' · '+esc(r.title):'')+(r.on?' · '+esc(monthYear(r.on)):'')+'</small></div>';}).join('')+'</div>';
+  }
+  window.ssTripReviews=function(slug){
+    var box=document.getElementById('tpReviews');if(!box)return;
+    box.hidden=true;if(!slug)return;
+    api('reviews?trip='+encodeURIComponent(slug)).then(function(d){var h=pubHtml(d,false);if(!h)return;box.innerHTML='<h2>What travellers say</h2>'+h;box.hidden=false;}).catch(function(){});
+  };
+  function recent(){
+    var box=document.getElementById('tcReviews');if(!box)return;
+    api('reviews?recent=1').then(function(d){var h=pubHtml(d,true);if(!h)return;document.getElementById('tcReviewsBody').innerHTML=h;box.hidden=false;}).catch(function(){});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',recent);else recent();
+})();
+</script>
+<script id="manage-reviews-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var RV={list:null,err:'',busy:false,loading:false,filter:'pending'};
+  function load(){return api('reviews?admin=1').then(function(d){RV.list=d.reviews||[];RV.err='';}).catch(function(e){RV.err=e.message||'Could not load reviews.';if(!RV.list)RV.list=[];});}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='reviews'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function msg(t,type){var e=document.getElementById('rvMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function when(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch(e){return iso;}}
+  var LABEL={pending:'Waiting for approval',approved:'Published',hidden:'Hidden'};
+  function screen(){
+    if(!RV.list)return '<p class="mg-hint">Loading reviews...</p>';
+    var counts={pending:0,approved:0,hidden:0};RV.list.forEach(function(r){counts[r.status]=(counts[r.status]||0)+1;});
+    var tabs=['pending','approved','hidden'].map(function(k){return '<button type="button" class="mg-btn sm'+(RV.filter===k?' pri':'')+'" data-rv-filter="'+k+'">'+LABEL[k]+' ('+(counts[k]||0)+')</button>';}).join(' ');
+    var rows=RV.list.filter(function(r){return r.status===RV.filter;}).map(function(r){
+      return '<div class="iv-card"><div style="display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap"><div><b>'+esc(r.name)+'</b> &middot; '+esc(r.title)+' <small>('+esc(when(r.createdAt))+')</small><div style="color:#ef8731;letter-spacing:2px;margin:4px 0">'+'★★★★★'.slice(0,r.rating)+'<span style="color:#c9d3da">'+'★★★★★'.slice(0,5-r.rating)+'</span></div></div></div>'+
+        '<p style="white-space:pre-wrap;margin:6px 0 12px">'+esc(r.text)+'</p>'+
+        (r.status!=='approved'?'<button type="button" class="mg-btn pri sm" data-rv-ok="'+esc(r.id)+'">Approve and publish</button> ':'')+
+        (r.status!=='hidden'?'<button type="button" class="mg-btn sm" data-rv-hide="'+esc(r.id)+'">Hide</button> ':'')+
+        '<button type="button" class="mg-btn sm ghost" data-rv-del="'+esc(r.id)+'">Delete</button></div>';}).join('');
+    return '<div class="iv-wrap"><div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">Traveller reviews</h3>'+
+      '<p class="mg-hint" style="margin:0 0 10px">Only travellers who finished a trip can write a review, once per trip. Nothing appears on the website until you approve it. It shows the first name and last initial, the stars and the words.</p><p>'+tabs+'</p><div id="rvMsg" class="mg-msg" role="status"></div></div>'+
+      (RV.err?'<p class="mg-msg on err">'+esc(RV.err)+'</p>':'')+(rows||'<div class="iv-card"><p class="mg-hint" style="margin:0">Nothing here.</p></div>')+'</div>';
+  }
+  MG.screens.reviews=function(){return screen();};
+  MG.after.reviews=function(){if(!RV.loading&&RV.list===null){RV.loading=true;load().then(function(){RV.loading=false;if(S.screen==='reviews')rerender();});}};
+  function run(b,fn){if(RV.busy)return;RV.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){RV.busy=false;if(b)b.disabled=false;},function(e){RV.busy=false;if(b)b.disabled=false;msg(e&&e.message||'Something went wrong.','err');});}
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='reviews')return;var d=b.dataset;
+    if(d.rvFilter){RV.filter=d.rvFilter;rerender();return;}
+    if(d.rvOk){run(b,function(){return api('reviews',{action:'moderate',id:d.rvOk,status:'approved'}).then(load).then(rerender);});return;}
+    if(d.rvHide){run(b,function(){return api('reviews',{action:'moderate',id:d.rvHide,status:'hidden'}).then(load).then(rerender);});return;}
+    if(d.rvDel){if(window.confirm('Delete this review for good?'))run(b,function(){return api('reviews',{action:'delete',id:d.rvDel}).then(load).then(rerender);});return;}
   });
 })();
 </script>

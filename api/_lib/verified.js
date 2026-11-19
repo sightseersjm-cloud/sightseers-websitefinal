@@ -16,34 +16,39 @@ function houseEmails() {
   return new Set([process.env.OWNER_EMAIL, process.env.BUSINESS_EMAIL, 'info@sightseerscaribbean.com', 'sightseersjm@gmail.com'].map(lower).filter(Boolean));
 }
 
-async function statusFor(user, now) {
-  const out = { verifiedTraveller: false, tripsCompleted: 0, firstTripOn: '', pointsFloor: 0 };
+/* every finished trip a person has, oldest first: [{ refKey, kind, title, country, end }].
+   A booking finishes after its last day (or when the team marks it completed); a Travel Club trip after its end date. */
+async function finishedFor(user, now) {
+  const out = [];
   if (!user || !user.email) return out;
   const today = jamaicaDay(now || new Date()), email = lower(user.email);
-  const dates = [];
-
   const bookings = await db.getCollection('bookings');
   bookings.forEach(b => {
     if (!(b.userId === user.id || lower(b.email) === email)) return;
-    if (b.status === 'completed') { dates.push(ymd(b.endDate || b.checkOut || b.date || b.checkIn) || ymd(b.createdAt)); return; }
-    if (b.status !== 'confirmed') return;
     const end = ymd(b.endDate || b.checkOut || b.date || b.checkIn);
-    if (end && end < today) dates.push(end);
+    const done = b.status === 'completed' || (b.status === 'confirmed' && end && end < today);
+    if (done) out.push({ refKey: 'booking:' + b.id, kind: 'booking', title: String(b.tourName || b.stayName || 'Your trip'), country: '', end: end || ymd(b.createdAt) });
   });
-
   const [trips, interests] = await Promise.all([db.getCollection('club-trips'), db.getCollection('club-interests')]);
   interests.forEach(i => {
     if (lower(i.email) !== email || (i.status !== 'confirmed' && i.status !== 'booked')) return;
     const t = trips.find(x => x.id === i.tripId);
     const end = t ? ymd(t.endDate || t.startDate) : '';
-    if (end && end < today) dates.push(end);
+    if (t && end && end < today) out.push({ refKey: 'club:' + i.id, kind: 'club', title: String(t.title || i.tripTitle || 'Travel Club trip'), country: String(t.country || ''), slug: String(t.slug || ''), end });
   });
+  return out.sort((x, y) => String(x.end).localeCompare(String(y.end)));
+}
 
-  const done = dates.filter(Boolean).sort();
+async function statusFor(user, now) {
+  const out = { verifiedTraveller: false, tripsCompleted: 0, firstTripOn: '', pointsFloor: 0 };
+  if (!user || !user.email) return out;
+  const done = await finishedFor(user, now);
   out.tripsCompleted = done.length;
   out.verifiedTraveller = done.length > 0;
-  out.firstTripOn = done[0] || '';
-  if (houseEmails().has(email)) { out.verifiedTraveller = true; out.pointsFloor = HOUSE_POINTS; }
+  out.firstTripOn = (done[0] && done[0].end) || '';
+  /* points given to an account (a referral reward, a gift) are kept on the account and added to what the member earns */
+  out.pointsFloor = Math.max(0, Number(user.bonusPoints) || 0);
+  if (houseEmails().has(lower(user.email))) { out.verifiedTraveller = true; out.pointsFloor += HOUSE_POINTS; }
   return out;
 }
 
@@ -70,4 +75,4 @@ async function verifiedSet(emails, now) {
   return out;
 }
 
-module.exports = { statusFor, verifiedSet, HOUSE_POINTS };
+module.exports = { statusFor, finishedFor, verifiedSet, HOUSE_POINTS };

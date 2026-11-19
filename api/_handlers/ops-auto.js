@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
         ok: true, settings, templates: ops.DEFAULT_TEMPLATES,
         sent: sent.slice(-40).reverse(), optouts, replies,
         calendlyReady: !!process.env.CALENDLY_API_TOKEN, cronReady: !!process.env.CRON_SECRET,
-        preview: preview ? { counts: preview.counts, followups: preview.followups, payments: preview.payments, waivers: preview.waivers, arrival: preview.arrival, review: preview.review } : null
+        preview: preview ? { counts: preview.counts, followups: preview.followups, payments: preview.payments, waivers: preview.waivers, arrival: preview.arrival, review: preview.review, referrals: preview.referrals } : null
       });
     }
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
