@@ -12,8 +12,8 @@ function call(h, method, body, token, headers, query) {
 }
 let fails = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FAIL ') + n + (x ? '  ' + x : '')); if (!c) fails++; };
 (async () => {
-  const human = { 'user-agent': 'Mozilla/5.0 (iPhone) Safari', 'x-vercel-ip-country': 'us' };
-  await call('track', 'POST', { events: [{ e: 'site_view', k: 'home' }, { e: 'site_visit' }, { e: 'site_ref', k: 'google.com' }, { e: 'site_dev', k: 'phone' }, { e: 'site_view', k: 'tours' }] }, null, human);
+  const human = { 'user-agent': 'Mozilla/5.0 (iPhone) Safari', 'x-vercel-ip-country': 'us', 'x-vercel-ip-city': 'Kingston' };
+  await call('track', 'POST', { events: [{ e: 'site_view', k: 'home' }, { e: 'site_visit' }, { e: 'site_ref', k: 'google.com' }, { e: 'site_dev', k: 'phone' }, { e: 'site_view', k: 'tours' }, { e: 'site_click', k: 'home - Start Planning' }] }, null, human);
   await call('track', 'POST', { events: [{ e: 'site_view', k: 'home' }] }, null, human);
   await call('track', 'POST', { events: [{ e: 'site_view', k: 'home' }, { e: 'site_visit' }] }, null, { 'user-agent': 'Googlebot/2.1', 'x-vercel-ip-country': 'US' });
   await call('track', 'POST', { events: [{ e: 'site_ctry', k: 'ZZ' }, { e: 'evil', k: 'x' }, { e: 'site_view', k: '<b>x</b>' }] }, null, human);
@@ -24,6 +24,8 @@ let fails = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FAIL ') + n
   ok('where it came from and the device are counted', t['site_ref|google.com'] === 1 && t['site_dev|phone'] === 1);
   ok('the country comes from the network edge', t['site_ctry|US'] === 1);
   ok('robots are not counted', t['site_view|home'] === 2 && t['site_visit'] === 1);
+  ok('clicks are counted by page and button', t['site_click|home - Start Planning'] === 1);
+  ok('the city comes from the network edge, with its country', t['site_city|Kingston, US'] === 1 && !Object.keys(t).some(k => k.startsWith('site_city|') && /[<>]/.test(k)));
   ok('a browser cannot claim a country', !t['site_ctry|ZZ']);
   ok('unknown events are ignored', !Object.keys(t).some(k => k.startsWith('evil')));
   ok('markup in a key is stripped', !Object.keys(t).some(k => /[<>]/.test(k)));

@@ -26,7 +26,7 @@ const ALLOWED = [
   'quote_cta', 'live_join', 'rtc_join', 'invite_click', 'vote_cast',
   'trip_add',
   /* whole-site visitor numbers: a page view, a visit (the first page of a browsing session), where it came from, and the kind of device */
-  'site_view', 'site_visit', 'site_ref', 'site_dev'
+  'site_view', 'site_visit', 'site_ref', 'site_dev', 'site_click'
 ];
 const MAX_KEYS_PER_DAY = 800;      // a day's counters can never grow without limit
 const BOT = /bot|crawl|spider|slurp|headless|lighthouse|preview|monitor|facebookexternalhit|curl|wget|python|node-fetch/i;
@@ -60,6 +60,11 @@ module.exports = async function handler(req, res) {
     if (keys.indexOf('site_visit') > -1) {
       const cc = String((req.headers && req.headers['x-vercel-ip-country']) || '').toUpperCase();
       if (/^[A-Z]{2}$/.test(cc)) keys.push('site_ctry|' + cc);
+      /* the city, again from the network edge: a name only, never an address */
+      let city = '';
+      try { city = decodeURIComponent(String((req.headers && req.headers['x-vercel-ip-city']) || '')); } catch (e) { city = ''; }
+      city = city.replace(/[^\p{L} .'-]/gu, '').trim().slice(0, 36);
+      if (city && /^[A-Z]{2}$/.test(cc)) keys.push('site_city|' + city + ', ' + cc);
     }
     if (keys.length) {
       try {

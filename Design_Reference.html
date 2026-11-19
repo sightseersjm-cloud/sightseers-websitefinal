@@ -20555,6 +20555,25 @@ function ssCountView(id){
   }catch(e){}
 }
 setTimeout(function(){try{var on=document.querySelector('.page.on');if(on&&on.id)ssCountView(on.id.replace(/^p-/,''));}catch(e){}},900);
+/* which buttons and links people press: the page and the words on the button, counted. Nothing typed into a form is ever read. */
+var ssClickLast='',ssClickAt=0;
+document.addEventListener('click',function(e){
+  try{
+    if(e.isTrusted===false)return; /* only real presses, not clicks made by the page's own scripts */
+    var el=e.target&&e.target.closest&&e.target.closest('a,button,[role="button"]');if(!el)return;
+    if(navigator.doNotTrack==='1'||window.doNotTrack==='1')return;
+    var pg=document.querySelector('.page.on'),pid=pg&&pg.id?pg.id.replace(/^p-/,''):'';
+    if(!pid||/^(manage|admin|club-admin)$/.test(pid)||el.closest('#p-manage,#mgRoot'))return;
+    var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(x){}
+    if(u&&(u.role==='admin'||u.role==='staff'||u.role==='editor'))return;
+    var label=String(el.getAttribute('data-track')||el.getAttribute('aria-label')||el.textContent||'').replace(/\s+/g,' ').trim().slice(0,26);
+    if(label.length<2)return;
+    var key=pid.slice(0,14)+' - '+label,now=Date.now();
+    if(key===ssClickLast&&now-ssClickAt<1500)return;
+    ssClickLast=key;ssClickAt=now;
+    vtTrack('site_click',key);
+  }catch(err){}
+},true);
 var vtTrackQ=[];
 function vtTrack(e,k){
   try{
@@ -51339,13 +51358,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'ops',t:'Automations',show:function(){return S.user&&S.user.role==='admin';}},
-      {id:'reviews',t:'Reviews',show:function(){return S.user&&S.user.role==='admin';}}]},
+      {id:'reviews',t:'Reviews',show:function(){return S.user&&S.user.role==='admin';}},
+      {id:'visitors',t:'Visitors',show:function(){return S.user&&S.user.role==='admin';}}]},
     {h:'Settings',items:[
       {id:'backup',t:'Backup and site check',show:function(){return isOwner();}},
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',reviews:'Reviews',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',reviews:'Reviews',visitors:'Visitors',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -54357,6 +54377,54 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.rvHide){run(b,function(){return api('reviews',{action:'moderate',id:d.rvHide,status:'hidden'}).then(load).then(rerender);});return;}
     if(d.rvDel){if(window.confirm('Delete this review for good?'))run(b,function(){return api('reviews',{action:'delete',id:d.rvDel}).then(load).then(rerender);});return;}
   });
+})();
+</script>
+<script id="manage-visitors-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var V={d:null,days:14,err:'',loading:false};
+  var RN=null;try{RN=new Intl.DisplayNames(['en'],{type:'region'});}catch(e){}
+  function country(c){try{return RN?RN.of(c):c;}catch(e){return c;}}
+  function load(){return api('track?days='+V.days).then(function(d){V.d=d;V.err='';}).catch(function(e){V.err=e.message||'Could not load the numbers.';if(!V.d)V.d={totals:{},daily:{},counting:false};});}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='visitors'){var y=window.scrollY;p.innerHTML=screen();window.scrollTo(0,y);}}
+  function dayList(n){var out=[],now=Date.now();for(var i=n-1;i>=0;i--)out.push(new Date(now-i*86400000).toISOString().slice(0,10));return out;}
+  function top(totals,prefix,n){return Object.keys(totals).filter(function(k){return k.indexOf(prefix)===0;}).map(function(k){return [k.slice(prefix.length),totals[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,n);}
+  function sum(totals,prefix){var t=0;Object.keys(totals).forEach(function(k){if(k.indexOf(prefix)===0)t+=totals[k];});return t;}
+  function pretty(id){return String(id||'').replace(/-/g,' ').replace(/^./,function(c){return c.toUpperCase();});}
+  function table(title,rows,fmt,hint){
+    var max=rows.length?rows[0][1]:1;
+    return '<div class="iv-card"><h3 style="margin:0 0 4px;color:var(--navy);font-size:17px">'+esc(title)+'</h3>'+(hint?'<p class="mg-hint" style="margin:0 0 10px">'+esc(hint)+'</p>':'')+
+      (rows.length?rows.map(function(r){var w=Math.max(3,Math.round(r[1]/max*100));return '<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><div style="flex:0 0 46%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(fmt?fmt(r[0]):r[0])+'">'+esc(fmt?fmt(r[0]):r[0])+'</div><div style="flex:1;background:#eef3f7;height:10px"><div style="width:'+w+'%;height:100%;background:#ef8731"></div></div><b style="flex:0 0 40px;text-align:right">'+esc(r[1])+'</b></div>';}).join(''):'<p class="mg-hint" style="margin:0">Nothing yet.</p>')+'</div>';
+  }
+  function tile(label,val){return '<div class="iv-card" style="text-align:center;padding:16px"><div style="font:800 30px Raleway,sans-serif;color:var(--navy)">'+esc(val)+'</div><div class="mg-hint" style="margin:4px 0 0">'+esc(label)+'</div></div>';}
+  function screen(){
+    var d=V.d;if(!d)return '<p class="mg-hint">Loading the numbers...</p>';
+    var t=d.totals||{},days=dayList(V.days),visits=days.map(function(dt){return (d.daily[dt]||{})['site_visit']||0;}),maxv=Math.max.apply(null,visits.concat([1]));
+    var bars='<div style="display:flex;align-items:flex-end;gap:3px;height:90px;margin-top:8px">'+days.map(function(dt,i){var h=Math.max(2,Math.round(visits[i]/maxv*86));return '<div title="'+esc(dt+': '+visits[i]+' visits')+'" style="flex:1;background:#063a63;height:'+h+'px"></div>';}).join('')+'</div>';
+    var devs=top(t,'site_dev|',5),ph=0,tot=0;devs.forEach(function(x){tot+=x[1];if(x[0]==='phone')ph=x[1];});
+    var clicks=top(t,'site_click|',15);
+    var head='<div class="iv-card"><h3 style="margin:0 0 8px;color:var(--navy)">Visitors, clicks and places</h3>'+
+      '<p class="mg-hint" style="margin:0 0 10px">Counts only. There are no cookies, no names and no addresses. The country and city come from the network, and nothing is kept about a person. Visits from you and your team are not counted.</p>'+
+      '<p style="margin:0 0 8px"><b>Counting:</b> '+(d.counting?'on':'<b style="color:#a55a12">off</b>. Add <code>VISIT_COUNTING</code> with the value <code>on</code> in Vercel, then redeploy. It saves one small record a day, so it is light on storage.')+'</p>'+
+      '<p style="margin:0"><span class="mg-hint">Show the last </span> '+[7,14,30].map(function(n){return '<button type="button" class="mg-btn sm'+(V.days===n?' pri':'')+'" data-vs-days="'+n+'">'+n+' days</button>';}).join(' ')+'</p></div>';
+    return '<div class="iv-wrap">'+head+(V.err?'<p class="mg-msg on err">'+esc(V.err)+'</p>':'')+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">'+tile('Visits',t['site_visit']||0)+tile('Page views',sum(t,'site_view|'))+tile('Button and link clicks',sum(t,'site_click|'))+tile('On a phone',tot?Math.round(ph/tot*100)+'%':'-')+'</div>'+
+      '<div class="iv-card"><h3 style="margin:0 0 2px;color:var(--navy);font-size:17px">Visits each day</h3>'+bars+'</div>'+
+      table('Most clicked buttons and links',clicks,function(k){var i=k.indexOf(' - ');return i>0?pretty(k.slice(0,i))+': '+k.slice(i+3):k;},'The page, then what was pressed.')+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px">'+
+        table('Countries',top(t,'site_ctry|',10),country)+
+        table('Cities',top(t,'site_city|',10),function(k){var m=/^(.*), ([A-Z]{2})$/.exec(k);return m?m[1]+', '+country(m[2]):k;},'Where people were when they visited.')+
+        table('Most viewed pages',top(t,'site_view|',10),pretty)+
+        table('Where visitors came from',top(t,'site_ref|',10),function(k){return k==='direct'?'Direct (typed or saved link)':k;})+
+        table('Devices',devs,function(k){return k==='phone'?'Phone':'Computer';})+
+        table('Booking and quote buttons',[['Start booking',t['book_cta|site']||0],['Contact and quote',t['quote_cta|site']||0]].filter(function(r){return r[1];}).sort(function(a,b){return b[1]-a[1];}),null,'Times people opened the booking page or the contact page.')+
+      '</div></div>';
+  }
+  MG.screens.visitors=function(){return screen();};
+  MG.after.visitors=function(){if(!V.loading&&V.d===null){V.loading=true;load().then(function(){V.loading=false;if(S.screen==='visitors')rerender();});}};
+  R.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||S.screen!=='visitors'||!b.dataset.vsDays)return;V.days=Number(b.dataset.vsDays);V.d=null;V.loading=true;rerender();load().then(function(){V.loading=false;rerender();});});
 })();
 </script>
 <style id="manage-lists-style">
