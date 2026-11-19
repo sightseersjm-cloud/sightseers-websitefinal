@@ -49653,6 +49653,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+checklist(i,pt)+'</div>';
     }).join('')+'</div>'+lb;
   }
+  function whoSub(tr){var people=0,booked=0;tr.forEach(function(x){var n=x.partySize||1;people+=n;if(x.status==='booked')booked+=n;});return people+(people===1?' traveler':' travelers')+(booked?' · '+booked+' booked':'');}
   function goalBar(t){
     if(!t.inviteGoal)return '';
     var asked=0,booked=0;(t.travelers||[]).forEach(function(x){var n=x.partySize||1;asked+=n;if(x.status==='booked')booked+=n;});
@@ -49918,14 +49919,14 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       '<div class="ac-ostats"><div class="ac-ostat"><b>'+(t.joined||0)+'</b><span>People joined</span></div><div class="ac-ostat"><b>'+(c.confirmed||0)+'</b><span>Confirmed</span></div><div class="ac-ostat"><b>'+(c.booked||0)+'</b><span>Booked</span></div><div class="ac-ostat"><b>'+(c.waitlist||0)+'</b><span>Waitlist</span></div></div>'+
       (t.sponsors&&t.sponsors.length?'<p class="ac-onote ac-spons"><b>Sponsored by '+esc(t.sponsors.map(function(x){return x.name;}).join(' & '))+'.</b> Mention them to your group.</p>':'')+
       groupForm(t)+lkBox(t,link)+infoBox(t)+photoBox(t)+lcBox(t)+(t.status==='open'||t.status==='full'?updBox(t,idx):'')+coBox(t)+
-      (tr.length?'<h5 class="ac-osub2">Who has joined</h5><ul class="ac-otrav">'+tr.map(function(x){
+      (tr.length?'<details class="ac-infobox ac-whobox" data-who-box><summary><span>Who has joined<small>'+whoSub(tr)+'</small></span></summary><ul class="ac-otrav">'+tr.map(function(x){
         var nm=x.shared?x.name:x.firstName,contact='';
         if(x.shared){
           var digits=String(x.phone||'').replace(/[^0-9]/g,'');
           contact='<div class="ac-ocontact">'+(x.email?'<a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a>':'')+(x.phone?'<a href="tel:'+esc(x.phone.replace(/[^0-9+]/g,''))+'">'+esc(x.phone)+'</a>':'')+(digits.length>=7?'<a href="https://wa.me/'+digits+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>';
         }else contact='<div class="ac-ocontact is-private">Contact details not shared. Send them your group link instead.</div>';
         return '<li>'+(/^(https:\/\/|\/api\/auth\/avatar\/)/.test(x.photo||'')?'<img class="ac-ophoto" src="'+esc(x.photo)+'" alt="">':'')+'<span>'+esc(nm)+(x.verified?ssVMark():'')+'</span><small>'+esc(x.partySize)+' '+(x.partySize===1?'traveler':'travelers')+(x.source?' · '+esc(x.source):'')+'</small>'+chip(REQ,x.status)+((x.guests&&x.guests.length)?'<div class="ac-ocontact ac-oguests"><b>Also travelling:</b> '+x.guests.map(esc).join(', ')+'</div>':'')+contact+'</li>';
-      }).join('')+'</ul>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
+      }).join('')+'</ul></details>':(t.status==='open'||t.status==='full'?'<p class="ac-onote">Nobody has joined yet. Share your link to get started.</p>':''))+
       (t.role==='co'
         ?'<p class="ac-oreward"><b>Rewards:</b> paid to '+esc(t.mainLeaderName||'the main leader')+', who shares them with you as you agree.</p>'
         :'<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+(t.coLeader&&t.coLeader.status==='approved'?' <span class="ac-cosplit">You share it with your co-leader as you agree.</span>':'')+'</p>'+payList(t.payouts)+
