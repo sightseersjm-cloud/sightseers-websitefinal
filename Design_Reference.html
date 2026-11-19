@@ -24694,6 +24694,7 @@ vtSessionAction=function(el,type){
             <p class="ac-lede" id="dashEmail"></p>
             <div class="ac-bchips">
               <span class="ac-bchip" id="acTierChip">Explorer tier</span>
+              <span class="ac-bchip" id="acVerifiedChip" style="display:none" title="You have travelled with Sight Seers"><i class="fas fa-circle-check" aria-hidden="true"></i> Verified traveller</span>
               <span class="ac-bchip">Travel style · <b id="dashStyle">Adventure</b></span>
               <span class="ac-bchip">Member since <b id="acSinceChip">2026</b></span>
             </div>
@@ -28540,6 +28541,22 @@ function logoutGuest(){
   localStorage.removeItem('ss_auth_token');
   setCurrentUser(null);
 }
+/* the Verified traveller badge: the server works it out (a finished confirmed trip), the page only shows it */
+var ssVerifiedAsked='';
+function ssVerifiedBadge(user){
+  var chip=document.getElementById('acVerifiedChip');
+  if(chip){chip.style.display=(user&&user.verifiedTraveller)?'':'none';chip.title=user&&user.tripsCompleted>1?user.tripsCompleted+' trips with Sight Seers':'You have travelled with Sight Seers';}
+  var tok='';try{tok=localStorage.getItem('ss_auth_token')||'';}catch(e){}
+  if(!user||!tok||tok.indexOf('guest_')===0||ssVerifiedAsked===(user.id||user.email))return;
+  ssVerifiedAsked=user.id||user.email;
+  fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({action:'me'})}).then(function(r){return r.ok?r.json():null;}).then(function(r){
+    if(!r||!r.user)return;
+    var u=getCurrentUser();if(!u)return;
+    u.verifiedTraveller=!!r.user.verifiedTraveller;u.tripsCompleted=r.user.tripsCompleted||0;
+    setCurrentUser(u);
+    var c=document.getElementById('acVerifiedChip');if(c){c.style.display=u.verifiedTraveller?'':'none';c.title=u.tripsCompleted>1?u.tripsCompleted+' trips with Sight Seers':'You have travelled with Sight Seers';}
+  }).catch(function(){});
+}
 function updateAccountUI(){
   let user=getCurrentUser();
   const hasToken=!!localStorage.getItem('ss_auth_token');
@@ -28562,6 +28579,7 @@ function updateAccountUI(){
     document.getElementById('dashCartCount').textContent=String(cart.reduce((s,i)=>s+i.qty,0));
     document.getElementById('dashMemberSince').textContent=new Date(user.createdAt||Date.now()).getFullYear();
     document.getElementById('dashStyle').textContent=user.style||'Adventure';
+    ssVerifiedBadge(user);
     if(!hasTravelPoints()) setTravelPoints(100); /* welcome bonus */
     refreshTravelClub();
     if(blogPanel) blogPanel.classList.add('on');
@@ -46573,6 +46591,8 @@ body.theme-night #p-account{--ac-ink:#e6eff8;--ac-mut:#b3c5d7;--ac-head:#fff;--a
 #p-account .ac-bchip{display:inline-block;padding:6px 12px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22)}
 #p-account .ac-bchip b{font-weight:800}
 #p-account #acTierChip{background:linear-gradient(135deg,var(--ac-o2),var(--ac-o));border-color:transparent}
+#p-account #acVerifiedChip{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.55)}
+#p-account #acVerifiedChip i{margin-right:6px;color:#7be0a4}
 #p-account .ac-signout{display:inline-flex;align-items:center;justify-content:center;margin-top:20px;height:42px;padding:0 22px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.08);color:#fff;font-size:12px!important;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .2s}
 #p-account .ac-signout:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
 #p-account .ac-signout:focus-visible{outline:3px solid #fff;outline-offset:3px}

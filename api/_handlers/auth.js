@@ -157,6 +157,7 @@ module.exports = async function handler(req, res) {
     }
     const token = tokenFor(user);
     const safe = publicUser(user);
+    try { Object.assign(safe, await require('../_lib/verified').statusFor(user)); } catch (e) { /* the badge is optional */ }
     return res.status(200).json({ ok: true, token, user: safe });
   }
 
@@ -168,6 +169,7 @@ module.exports = async function handler(req, res) {
     if (!user) return res.status(404).json({ error: 'Account not found' });
     const safe = publicUser(user);
     safe.perms = await permsOf(caller);
+    try { Object.assign(safe, await require('../_lib/verified').statusFor(user)); } catch (e) { /* the badge is optional */ }
     return res.status(200).json({ ok: true, user: safe });
   }
 
