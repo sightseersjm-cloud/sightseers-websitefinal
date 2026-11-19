@@ -17,6 +17,13 @@ module.exports = async function handler(req, res) {
     if (!user) return res.status(404).json({ error: 'Account not found' });
     try { await member.attachReferral(req, user); } catch (e) { /* tying a referral is optional */ }
     const settings = await ops.getSettings();
+    const demo = require('../_lib/demo');
+    if (demo.isDemo(user)) {
+      /* the showcase account: sample data, only for this account */
+      const ref = await member.referralInfo(user, Object.assign({}, settings, { referrals: true }));
+      const st = demo.stamps();
+      return res.status(200).json({ ok: true, demo: true, referral: Object.assign(ref, demo.referral), stamps: st, tripsCompleted: st.length, bonusPoints: demo.POINTS });
+    }
     const stamps = await member.stampsFor(user);
     return res.status(200).json({ ok: true, referral: await member.referralInfo(user, settings), stamps, tripsCompleted: stamps.length, bonusPoints: Math.max(0, Number(user.bonusPoints) || 0) });
   } catch (err) {

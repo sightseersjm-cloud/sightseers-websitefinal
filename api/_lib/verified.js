@@ -49,6 +49,8 @@ async function statusFor(user, now) {
   /* points given to an account (a referral reward, a gift) are kept on the account and added to what the member earns */
   out.pointsFloor = Math.max(0, Number(user.bonusPoints) || 0);
   if (houseEmails().has(lower(user.email))) { out.verifiedTraveller = true; out.pointsFloor += HOUSE_POINTS; }
+  const demo = require('./demo');
+  if (demo.isDemo(user)) { out.verifiedTraveller = true; out.tripsCompleted = demo.stamps(now).length; out.pointsFloor = Math.max(out.pointsFloor, demo.POINTS); }
   return out;
 }
 

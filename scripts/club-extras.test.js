@@ -102,6 +102,20 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   const me = await call('auth', 'POST', { action: 'me' }, cara.token);
   ok('the points show on the account as a bonus', me.body.user.pointsFloor === 120);
 
+  /* the showcase account */
+  const demo = await signup('Daine Demo', 'daine.allenn@gmail.com');
+  let dm = await call('member', 'GET', null, demo.token);
+  ok('the demo account shows sample stamps, points and referrals', dm.code === 200 && dm.body.demo === true && dm.body.stamps.length === 6 && dm.body.bonusPoints === 800 && dm.body.referral.joined === 3);
+  const dme = await call('auth', 'POST', { action: 'me' }, demo.token);
+  ok('the demo account is verified with Pioneer-level points', dme.body.user.verifiedTraveller === true && dme.body.user.pointsFloor >= 800 && dme.body.user.tripsCompleted === 6);
+  let dr = await call('reviews', 'GET', null, demo.token, { mine: '1' });
+  ok('the demo account has sample reviews and one trip to review', dr.body.demo === true && dr.body.mine.length === 2 && dr.body.eligible.length === 1);
+  const before = (await db.getCollection('reviews')).length;
+  dr = await call('reviews', 'POST', { action: 'create', refKey: dr.body.eligible[0].refKey, rating: 5, text: 'Trying the review form on the demo account.' }, demo.token);
+  ok('a demo review works on screen but saves nothing', dr.code === 201 && dr.body.demo === true && (await db.getCollection('reviews')).length === before);
+  const pubAll = await call('reviews', 'GET', null, null, { recent: '1' });
+  ok('demo reviews never appear on the public pages', !JSON.stringify(pubAll.body).includes('demo-r'));
+  ok('other accounts are not affected', (await call('member', 'GET', null, zed.token)).body.demo === undefined);
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

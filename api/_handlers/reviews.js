@@ -44,6 +44,7 @@ module.exports = async function handler(req, res) {
         if (!caller) return res.status(401).json({ error: 'Sign in required' });
         const user = (await db.getCollection('users')).find(u => u.id === caller.id);
         if (!user) return res.status(404).json({ error: 'Account not found' });
+        if (require('../_lib/demo').isDemo(user)) return res.status(200).json(Object.assign({ ok: true, demo: true }, require('../_lib/demo').reviewsFor()));
         const all = await db.getCollection(COLL);
         const mine = all.filter(r => r.userId === user.id);
         const done = await verified.finishedFor(user);
@@ -72,6 +73,10 @@ module.exports = async function handler(req, res) {
       if (!(rating >= 1 && rating <= 5)) return res.status(400).json({ error: 'Choose a rating from 1 to 5 stars.' });
       if (text.length < 10) return res.status(400).json({ error: 'Please write at least a sentence about your trip.' });
       const refKey = clip(body.refKey, 80);
+      /* the showcase account can try writing a review; nothing is saved or sent */
+      if (require('../_lib/demo').isDemo(user) && refKey.indexOf('demo:') === 0) {
+        return res.status(201).json({ ok: true, demo: true, review: { id: 'demo-new', name: 'You', title: refKey.slice(5), rating, text, status: 'pending', verified: true } });
+      }
       const trip = (await verified.finishedFor(user)).find(d => d.refKey === refKey);
       if (!trip) return res.status(403).json({ error: 'You can review a trip once it has finished.' });
       const all = await db.getCollection(COLL);

@@ -54300,7 +54300,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       if(!rating){msg.textContent='Choose a star rating first.';return;}
       if(String(text).trim().length<10){msg.textContent='Please write at least a sentence.';return;}
       X.busy=true;b.disabled=true;
-      api('reviews',{action:'create',refKey:card.getAttribute('data-cx-rev'),rating:rating,text:text}).then(function(){X.busy=false;load(true);},function(err){X.busy=false;b.disabled=false;msg.textContent=err.message;});
+      api('reviews',{action:'create',refKey:card.getAttribute('data-cx-rev'),rating:rating,text:text}).then(function(r){X.busy=false;if(r&&r.demo){b.disabled=false;msg.className='cx-msg ok';msg.textContent='Thank you! This is the demo account, so nothing was saved or sent.';return;}load(true);},function(err){X.busy=false;b.disabled=false;msg.textContent=err.message;});
     }
   });
 
