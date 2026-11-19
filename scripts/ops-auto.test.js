@@ -85,6 +85,11 @@ const dayOffset = d => new Date(NOW.getTime() + d * 86400000).toISOString().slic
   ok('a saved review link appears in the thank-you', /g\.page\/r\/example\/review/.test(rv.html));
   ok('a link that is not https is refused', (await ops.saveSettings({ reviewLink: 'javascript:alert(1)' })).reviewLink === '');
 
+  /* a verified returning traveller gets a welcome-back line */
+  await db.setCollection('bookings', (await db.getCollection('bookings')).concat([{ id: 'v1', name: 'Vera Verified', email: 'vera@example.com', tourName: 'Catamaran', status: 'completed', date: dayOffset(-30), createdAt: hoursAgo(900) }, { id: 'v2', name: 'Vera Verified', email: 'vera@example.com', tourName: 'Rafting', status: 'pending', createdAt: hoursAgo(30) }]));
+  sent.length = 0;
+  await ops.runDaily({ now: NOW });
+  ok('a verified guest gets the welcome-back line in a follow-up', to('vera@example.com').length === 1 && /Welcome back/.test(to('vera@example.com')[0].html) && !/Welcome back/.test(to('cara@example.com').map(m => m.html).join('')));
   /* the morning summary */
   await ops.saveSettings({ digest: true });
   sent.length = 0;

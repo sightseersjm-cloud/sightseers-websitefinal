@@ -47,11 +47,12 @@ function templateFor(settings, key) {
   return { subject: String(o.subject || d.subject).slice(0, 200), body: String(o.body || d.body).slice(0, 4000) };
 }
 
-function render(tpl, vars, buttonUrl) {
+function render(tpl, vars, buttonUrl, opts) {
   const sub = s => String(s).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
   const subject = sub(tpl.subject);
   const paras = String(tpl.body).split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
   let html = '', text = '';
+  if (opts && opts.welcomeBack && paras.length) paras.splice(1, 0, 'Welcome back. As a Verified Sight Seers traveller, you are one of our returning guests, and we appreciate you.');
   paras.forEach(p => {
     const b = p.match(/^\{button:([^}]{1,40})\}$/);
     if (b) {
@@ -152,9 +153,9 @@ async function syncCalendly(now, dryRun, fetchFn) {
 }
 
 /* ---------- the guest emails ---------- */
-async function guestMail(settings, key, to, vars, buttonUrl, extra) {
+async function guestMail(settings, key, to, vars, buttonUrl, extra, welcomeBack) {
   const tpl = templateFor(settings, key);
-  return Object.assign({ to, replyTo: 'info@sightseerscaribbean.com' }, render(tpl, vars, buttonUrl), extra || {});
+  return Object.assign({ to, replyTo: 'info@sightseerscaribbean.com' }, render(tpl, vars, buttonUrl, { welcomeBack: !!welcomeBack && key.indexOf('payment') !== 0 }), extra || {});
 }
 
 async function runDaily(opts) {
@@ -181,6 +182,8 @@ async function runDaily(opts) {
 
   const [bookings, invoices, waivers] = await Promise.all([db.getCollection('bookings'), db.getCollection('invoices'), db.getCollection('signed-waivers')]);
   const aiCalls = await db.getCollection('ai-calls');
+  let verifiedMail = new Set(); try { verifiedMail = await require('./verified').verifiedSet(bookings.map(b => b.email).concat(invoices.map(i => i.customerEmail)), now); } catch (e) { /* the badge is optional */ }
+  const isV = e => verifiedMail.has(String(e || '').trim().toLowerCase());
 
   /* 1. quiet leads */
   if (on('followups')) {
@@ -193,7 +196,7 @@ async function runDaily(opts) {
       if (stage === 1 && linked) continue;                        /* they already got the link from the call */
       const key = 'followup' + stage + ':' + b.id;
       const vars = { first: first(b.name), trip: b.tourName || b.stayName || 'your trip' };
-      const mail = await guestMail(settings, 'followup' + stage, b.email, vars, CALENDLY_LINK);
+      const mail = await guestMail(settings, 'followup' + stage, b.email, vars, CALENDLY_LINK, null, isV(b.email));
       if (await send(key, 'followup' + stage, mail)) summary.followups.push({ name: b.name, email: b.email, stage });
     }
   }
@@ -228,14 +231,14 @@ async function runDaily(opts) {
     const waiverUrl = SITE + '/waiver';
     if (on('waivers') && !signedEmails.has(String(b.email).toLowerCase())) {
       const k = ds === 7 ? 'waiver_week' : (ds === 2 ? 'waiver_last' : null);
-      if (k && await send(k + ':' + b.id, k, await guestMail(settings, k, b.email, vars, waiverUrl))) summary.waivers.push({ name: b.name, email: b.email, kind: k });
+      if (k && await send(k + ':' + b.id, k, await guestMail(settings, k, b.email, vars, waiverUrl, null, isV(b.email)))) summary.waivers.push({ name: b.name, email: b.email, kind: k });
     }
     if (on('arrival') && ds === 3) {
-      if (await send('arrival:' + b.id, 'arrival', await guestMail(settings, 'arrival', b.email, vars, waiverUrl))) summary.arrival.push({ name: b.name, email: b.email });
+      if (await send('arrival:' + b.id, 'arrival', await guestMail(settings, 'arrival', b.email, vars, waiverUrl, null, isV(b.email)))) summary.arrival.push({ name: b.name, email: b.email });
     }
     if (on('review') && de === -2) {
       const line = settings.reviewLink ? 'If you have a minute, we would be so grateful for a short review of your trip:\n' + settings.reviewLink : 'If you have a minute, reply and tell us how it went, what you loved and what we could do better.';
-      const mail = await guestMail(settings, 'review', b.email, Object.assign({ reviewLine: line }, vars), settings.reviewLink || SITE);
+      const mail = await guestMail(settings, 'review', b.email, Object.assign({ reviewLine: line }, vars), settings.reviewLink || SITE, null, isV(b.email));
       if (await send('review:' + b.id, 'review', mail)) summary.review.push({ name: b.name, email: b.email });
     }
   }
