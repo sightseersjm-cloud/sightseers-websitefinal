@@ -24699,6 +24699,7 @@ vtSessionAction=function(el,type){
             <p class="ac-lede" id="dashEmail"></p>
             <div class="ac-bchips">
               <span class="ac-bchip" id="acTierChip">Explorer tier</span>
+              <button type="button" class="ac-bchip" id="acPassportBtn" style="cursor:pointer">My passport</button>
               <span class="ac-bchip">Travel style · <b id="dashStyle">Adventure</b></span>
               <span class="ac-bchip">Member since <b id="acSinceChip">2026</b></span>
             </div>
@@ -54068,6 +54069,11 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-btn:disabled{opacity:.6;cursor:default}
 #p-account #acClubExtras .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
 #p-account #acClubExtras .cx-bookwrap{max-width:400px;margin:6px auto 0}
+#p-account #acClubExtras .cx-float{animation:cxFloat 7s ease-in-out infinite;transform-style:preserve-3d;will-change:transform}
+#p-account #acClubExtras .cx-float.tilt{animation:none;transition:transform .15s ease-out}
+#p-account #acClubExtras .cx-shadow{height:16px;margin:10px auto 0;width:68%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(6,40,70,.38),rgba(6,40,70,0) 70%);animation:cxShadow 7s ease-in-out infinite}
+@keyframes cxFloat{0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}25%{transform:translateY(-9px) rotateX(2deg) rotateY(-3deg)}50%{transform:translateY(-14px) rotateX(0) rotateY(0)}75%{transform:translateY(-7px) rotateX(-2deg) rotateY(3deg)}}
+@keyframes cxShadow{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.8);opacity:.55}}
 #p-account #acClubExtras .cx-book{position:relative;width:100%;aspect-ratio:3/4;perspective:1600px;outline:none;transition:transform .6s;transform:translateX(0)}
 #p-account #acClubExtras .cx-book:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.5)}
 #p-account #acClubExtras .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
@@ -54112,7 +54118,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
 #p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
 #p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
-@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet{transition:none}}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet{transition:none}#p-account #acClubExtras .cx-float,#p-account #acClubExtras .cx-shadow{animation:none}}
 #p-account #acClubExtras .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
 #p-account #acClubExtras .cx-rev:first-of-type{border-top:0}
 #p-account #acClubExtras .cx-stars{display:inline-flex;gap:2px}
@@ -54213,7 +54219,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var pages=bookPages(m),total=pages.length;
     X.pages=total;if(X.page>=total)X.page=total-1;if(X.page==null||X.page<0)X.page=0;
     var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div></div>';}).join('');
-    return '<div class="cx-bookwrap"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div>'+
+    return '<div class="cx-bookwrap"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
       '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div></div>';
   }
   function setBook(n){
@@ -54257,6 +54263,24 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     Promise.all([api('member'),api('reviews?mine=1')]).then(function(r){X.member=r[0];X.mine=r[1];paint();}).catch(function(){/* the cards stay hidden */});
   }
   window.ssClubExtras=function(){load(false);};
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#acPassportBtn');if(!b)return;
+    var tab=document.getElementById('acTab-club');if(tab)tab.click();
+    setTimeout(function(){var bk=document.getElementById('cxBook');if(bk){bk.scrollIntoView({behavior:'smooth',block:'center'});try{bk.focus({preventScroll:true});}catch(x){}}},250);
+  });
+  /* the book glides: it floats on its own, and tilts toward the pointer while you move over it */
+  (function(){
+    var fl=null;
+    function reset(){var f=document.getElementById('cxFloat');if(f){f.classList.remove('tilt');f.style.transform='';}}
+    document.addEventListener('pointermove',function(e){
+      if(e.pointerType==='touch')return;
+      var f=e.target.closest&&e.target.closest('#cxFloat');
+      if(!f){if(fl){reset();fl=null;}return;}
+      fl=f;var r=f.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      f.classList.add('tilt');f.style.transform='perspective(1400px) rotateY('+(x*14).toFixed(2)+'deg) rotateX('+(-y*10).toFixed(2)+'deg) translateY(-6px)';
+    });
+    document.addEventListener('pointerleave',reset,true);
+  })();
   /* swipe and arrow keys turn the pages too */
   (function(){var sx=null;
     document.addEventListener('touchstart',function(e){var bk=e.target.closest&&e.target.closest('#cxBook');sx=bk?e.touches[0].clientX:null;},{passive:true});
