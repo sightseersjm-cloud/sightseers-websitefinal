@@ -24847,18 +24847,18 @@ vtSessionAction=function(el,type){
 
             <!-- Group trips: trips you asked to join, and the organizer space -->
             <div class="ac-pane" id="acPane-groups" role="tabpanel" aria-labelledby="acTab-groups" hidden>
-              <div class="ac-section ac-gsec">
-                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Join a trip</span><h4>Your trip requests</h4><p>Trips you have asked to join, and where each one stands.</p></div><button type="button" class="ac-link" onclick="ssClubGo('departures')">See departures</button></div>
+              <details class="ac-section ac-gsec ac-gacc" data-gacc="reqs" open>
+                <summary class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Join a trip</span><h4>Your trip requests</h4><small class="ac-gsub" id="acGSubReqs"></small><p>Trips you have asked to join, and where each one stands.</p></div><button type="button" class="ac-link" onclick="ssClubGo('departures')">See departures</button><i class="ac-gchev" aria-hidden="true"></i></summary>
                 <div id="acGroupsReqs"></div>
-              </div>
-              <div class="ac-section ac-gsec">
-                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Lead a trip</span><h4>Your organizer space</h4><p>Your application, your trip pages, your recruits and the reward you agreed.</p></div></div>
+              </details>
+              <details class="ac-section ac-gsec ac-gacc" data-gacc="org" open>
+                <summary class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Lead a trip</span><h4>Your organizer space</h4><small class="ac-gsub" id="acGSubOrg"></small><p>Your application, your trip pages, your recruits and the reward you agreed.</p></div><i class="ac-gchev" aria-hidden="true"></i></summary>
                 <div id="acGroupsOrg"></div>
-              </div>
-              <div class="ac-section ac-gsec">
-                <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Before you go</span><h4>Travel insurance and eSIM</h4><p>Two things worth sorting out before you fly.</p></div></div>
+              </details>
+              <details class="ac-section ac-gsec ac-gacc" data-gacc="partners">
+                <summary class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Before you go</span><h4>Travel insurance and eSIM</h4><small class="ac-gsub" id="acGSubPartners"></small><p>Two things worth sorting out before you fly.</p></div><i class="ac-gchev" aria-hidden="true"></i></summary>
                 <div id="acGroupsPartners"></div>
-              </div>
+              </details>
             </div>
 
             <!-- Profile -->
@@ -49992,7 +49992,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
     if(!force&&grp.at&&Date.now()-grp.at<20000)return;
     grp.loading=true;reqs.innerHTML='<div class="ac-skel"></div>';org.innerHTML='<div class="ac-skel"></div>';
-    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[],d.partners);org.innerHTML=orgHtml(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
+    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[],d.partners);org.innerHTML=orgHtml(d);if(window.ssGroupSubs)ssGroupSubs(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
       .catch(function(err){reqs.innerHTML='<p class="ac-onote"><b>We could not load your trips.</b> '+esc(err.message||'Please try again.')+'</p>';org.innerHTML='';})
       .then(function(){grp.loading=false;});
   }
@@ -54082,6 +54082,14 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras{margin-top:22px;display:grid;gap:18px}
 #p-account #acClubExtras .cx-card{background:#fff;border:1px solid #dfe6ec;padding:22px;box-shadow:0 10px 26px -22px rgba(6,58,99,.45)}
 #p-account #acClubExtras .cx-card h4{margin:0 0 6px;font:700 22px 'Playfair Display',serif;color:#063a63}
+#p-account details.ac-gacc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;user-select:none;margin-bottom:0}
+#p-account details.ac-gacc>summary::-webkit-details-marker{display:none}
+#p-account details.ac-gacc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:4px}
+#p-account details.ac-gacc[open]>summary{margin-bottom:16px}
+#p-account .ac-gsub{display:block;margin:2px 0 6px;font:700 12.5px 'Raleway',sans-serif;color:#ef8731}
+#p-account .ac-gchev{flex:none;width:11px;height:11px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 6px 0 6px}
+#p-account details.ac-gacc[open]>summary .ac-gchev{transform:rotate(-135deg);margin:4px 6px 0 6px}
+#p-account details.ac-gacc>summary .ac-link{margin-left:auto}
 #p-account #acClubExtras .cx-acc{padding:0}
 #p-account #acClubExtras .cx-acc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;user-select:none}
 #p-account #acClubExtras .cx-acc>summary::-webkit-details-marker{display:none}
@@ -54314,7 +54322,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function memberKey(){try{var u=JSON.parse(localStorage.getItem('ss_current_user')||'null');return u&&(u.id||u.email)||'';}catch(e){return '';}}
   /* each card is a drop-down; which ones are open is remembered for the visit */
   function accOpen(k){try{var v=sessionStorage.getItem('cx_acc_'+k);if(v!==null)return v==='1';}catch(e){}return k==='passport';}
-  function acc(k,title,sub,body){return '<details class="cx-card cx-acc" data-acc="'+k+'"'+(accOpen(k)?' open':'')+'><summary><span class="cx-acct"><h4>'+title+'</h4><small>'+sub+'</small></span><i class="cx-chev" aria-hidden="true"></i></summary><div class="cx-accbody">'+body+'</div></details>';}
+  function acc(k,title,sub,body){return '<div class="cx-card"><h4>'+title+'</h4>'+body+'</div>';}   /* regular cards: the drop-downs live in the Group trips tab */
   document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('cx-acc')){try{sessionStorage.setItem('cx_acc_'+d.getAttribute('data-acc'),d.open?'1':'0');}catch(x){}if(d.open&&d.getAttribute('data-acc')==='passport')setBook(X.page||0);}},true);
   function paint(){
     var box=document.getElementById('acClubExtras');if(!box)return;
@@ -54363,6 +54371,21 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     },function(err){X.busy=false;btn.disabled=false;out.innerHTML='<p class="cx-msg">'+esc(err&&err.message||'Sorry, the video could not be made on this device.')+'</p>';});
   }
   window.ssClubExtras=function(){load(false);};
+  /* Group trips tab: each section is a drop-down; a short line says what is inside, and the open ones are remembered for the visit */
+  window.ssGroupSubs=function(d){
+    function set(id,t){var e=document.getElementById(id);if(e)e.textContent=t;}
+    var ints=(d.interests||[]).filter(function(i){return i.status!=='cancelled';}),trips=d.trips||[],joined=0;trips.forEach(function(t){joined+=(t.joined||0);});
+    set('acGSubReqs',ints.length?ints.length+(ints.length===1?' request':' requests'):'None yet');
+    var app=(d.applications||[])[0];
+    set('acGSubOrg',trips.length?trips.length+(trips.length===1?' trip you lead':' trips you lead')+' · '+joined+(joined===1?' traveller':' travellers'):(app?'Application: '+String(app.status).replace(/_/g,' '):'Not leading a trip yet'));
+    set('acGSubPartners','TME travel insurance and eSIM');
+  };
+  (function(){
+    function key(d){return 'ac_gacc_'+d.getAttribute('data-gacc');}
+    function restore(){[].forEach.call(document.querySelectorAll('details.ac-gacc'),function(d){try{var v=sessionStorage.getItem(key(d));if(v!==null)d.open=(v==='1');}catch(e){}});}
+    document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('ac-gacc')){try{sessionStorage.setItem(key(d),d.open?'1':'0');}catch(x){}}},true);
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);else restore();
+  })();
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('#acPassportBtn');if(!b)return;
     var tab=document.getElementById('acTab-club');if(tab)tab.click();
