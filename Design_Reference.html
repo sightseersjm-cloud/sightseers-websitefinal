@@ -54324,7 +54324,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var inv=acc('invite','Invite friends',esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.points)+' points each':''),'<p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
       '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
       '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p>');
-    var stamps=acc('passport','Your Travel Club passport',esc(st.length)+(st.length===1?' stamp':' stamps')+' in your book','<p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m));
+    var stamps='<div class="cx-card"><h4>Your Travel Club passport</h4><p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m)+'</div>';
     var rev='';
     if(mine.eligible.length){
       rev+='<p class="cx-sub">Tell other travellers how it went. Reviews are checked by our team before they appear.</p>'+mine.eligible.map(function(e){
