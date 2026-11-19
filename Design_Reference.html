@@ -13841,9 +13841,34 @@ body.theme-night #p-flagship-programs{
   #how .tc-steps li .tc-num{display:flex!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:-48px;top:0;width:36px;height:36px;border-radius:50%;background:#fff;border:2px solid #70c257;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#063a63;z-index:1}
   #how .tc-steps li:first-child .tc-num{background:#ef8731;border-color:#ef8731;color:#fff;box-shadow:0 0 0 6px rgba(239,135,49,.22)}
   #how .tc-steps li h3{font-size:19px;margin:4px 0 4px}
-  #how .tc-steps li p{font-size:14px;line-height:1.55}
+  #how .tc-steps li{cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  #how .tc-steps li p{font-size:14px;line-height:1.55;max-height:0;opacity:0;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.8,.2,1),opacity .35s ease;margin:0}
+  #how .tc-steps li.is-open p{max-height:220px;opacity:1;margin-top:8px}
+  #how .tc-steps li .tc-num{transition:transform .35s,background .35s,box-shadow .35s,color .35s}
+  #how .tc-steps li.is-open .tc-num{transform:scale(1.18);background:#ef8731;border-color:#ef8731;color:#fff;box-shadow:0 0 0 7px rgba(239,135,49,.22)}
+  #how .tc-steps li:active{transform:scale(.985)}
+  #how .tc-steps li:focus-visible{outline:2px solid #70c257;outline-offset:6px;border-radius:8px}
+}
+@media (min-width:701px){
+  #how .tc-steps li{transition:transform .3s,box-shadow .3s}
+  #how .tc-steps li:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(6,58,99,.14)}
 }
 </style>
+<script id="lead-timeline-interact">
+(function(){
+  function init(){
+    var items=document.querySelectorAll('#how .tc-steps li');
+    if(!items.length)return;
+    items.forEach(function(li,i){
+      li.setAttribute('tabindex','0');
+      if(i===0)li.classList.add('is-open');
+      li.addEventListener('click',function(){li.classList.toggle('is-open');});
+      li.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();li.classList.toggle('is-open');}});
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
     <div class="tc-sec" id="how">
       <span id="lead" aria-hidden="true"></span>
       <span class="tc-eyebrow">Lead a trip</span>
