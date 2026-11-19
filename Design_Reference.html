@@ -28604,8 +28604,9 @@ function ssUserKey(base){
   if(k!==base){try{if(localStorage.getItem(k)===null&&localStorage.getItem(base)!==null){localStorage.setItem(k,localStorage.getItem(base));localStorage.removeItem(base);}}catch(e){}}
   return k;
 }
-function getTravelPoints(){var n=0;try{n=parseInt(localStorage.getItem(ssUserKey('ss_travel_points'))||'0',10)||0;}catch(e){}var u=getCurrentUser();return Math.max(n,(u&&u.pointsFloor)|0);} /* an account can start above zero (Sight Seers' own accounts start at Voyager) */
-function setTravelPoints(n){try{localStorage.setItem(ssUserKey('ss_travel_points'),String(Math.max(0,n|0)));}catch(e){}}
+function ssPointsBonus(){var u=getCurrentUser();return Math.max(0,(u&&u.pointsFloor)|0);} /* an account can start with points already (Sight Seers' own accounts start at Voyager); they are added to what the member earns */
+function getTravelPoints(){var n=0;try{n=parseInt(localStorage.getItem(ssUserKey('ss_travel_points'))||'0',10)||0;}catch(e){}return n+ssPointsBonus();}
+function setTravelPoints(n){try{localStorage.setItem(ssUserKey('ss_travel_points'),String(Math.max(0,(n|0)-ssPointsBonus())));}catch(e){}}
 function hasTravelPoints(){try{return localStorage.getItem(ssUserKey('ss_travel_points'))!==null;}catch(e){return false;}}
 function awardPoints(n){
   if(!getCurrentUser())return;
