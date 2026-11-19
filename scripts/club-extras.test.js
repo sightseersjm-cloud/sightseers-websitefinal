@@ -10,7 +10,7 @@ const root = require('path').resolve(__dirname, '..') + '/';
 const db = require(root + 'api/_lib/db');
 const ops = require(root + 'api/_lib/ops-auto');
 const member = require(root + 'api/_lib/member');
-const H = { auth: require(root + 'api/_handlers/auth'), reviews: require(root + 'api/_handlers/reviews'), member: require(root + 'api/_handlers/member') };
+const H = { bookings: require(root + 'api/_handlers/bookings'), trips: require(root + 'api/_handlers/trips'), auth: require(root + 'api/_handlers/auth'), reviews: require(root + 'api/_handlers/reviews'), member: require(root + 'api/_handlers/member') };
 let fails = 0, n = 0; const ok = (name, cond) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if (!cond) fails++; };
 function call(h, method, body, token, query, headers) {
   return new Promise(r => {
@@ -115,6 +115,12 @@ const signup = async (name, email, headers) => (await call('auth', 'POST', { act
   ok('a demo review works on screen but saves nothing', dr.code === 201 && dr.body.demo === true && (await db.getCollection('reviews')).length === before);
   const pubAll = await call('reviews', 'GET', null, null, { recent: '1' });
   ok('demo reviews never appear on the public pages', !JSON.stringify(pubAll.body).includes('demo-r'));
+  const dbk = await call('bookings', 'GET', null, demo.token);
+  ok('the demo account has a sample trip history: finished, coming up and just sent', dbk.code === 200 && dbk.body.demo === true && dbk.body.bookings.length >= 18 && ['completed', 'confirmed', 'pending'].every(s => dbk.body.bookings.some(b => b.status === s)));
+  const dgt = await call('trips', 'GET', null, demo.token, { mine: '1' });
+  ok('the demo account leads sample trips with travellers who joined', dgt.code === 200 && dgt.body.trips.length === 2 && dgt.body.trips[0].travelers.length >= 5 && dgt.body.applications[0].status === 'approved' && dgt.body.interests.length === 2);
+  const zbk = await call('bookings', 'GET', null, zed.token);
+  ok('other accounts see only their own bookings', zbk.body.demo === undefined && zbk.body.bookings.length === 1);
   ok('other accounts are not affected', (await call('member', 'GET', null, zed.token)).body.demo === undefined);
   console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED');
   process.exit(fails ? 1 : 0);

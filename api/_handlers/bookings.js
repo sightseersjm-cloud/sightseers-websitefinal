@@ -13,6 +13,8 @@ module.exports = async function handler(req, res) {
 
       const bookings = await db.getCollection('bookings');
       if (await can(user, 'inbox')) return res.status(200).json({ ok: true, bookings });
+      /* the showcase account shows a sample trip history, only to itself */
+      try { const full = (await db.getCollection('users')).find(u => u.id === user.id); const demo = require('../_lib/demo'); if (demo.isDemo(full || user)) return res.status(200).json({ ok: true, demo: true, bookings: demo.bookings() }); } catch (e) { /* optional */ }
 
       const mine = bookings.filter(b => b.userId === user.id || b.email === user.email);
       return res.status(200).json({ ok: true, bookings: mine });

@@ -614,7 +614,9 @@ module.exports = async function handler(req, res) {
           if (t && t.groupLink) notices.push({ key: 'join:' + i.ref, kind: 'group', title: t.title, groupLink: t.groupLink, leaderName: t.organizerName || '' });
         });
         notices.sort((x, y) => (y.kind === 'adminapps' ? 1 : 0) - (x.kind === 'adminapps' ? 1 : 0));   /* the owner's applications come first */
-        return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: myApps, trips: myTrips, coInvites, interests: myInterests, notices, partners: publicPartners(await getPartnersDoc()) });
+        /* the showcase account: sample led trips with travellers, an approved application and joined trips, only for itself */
+        let demoSet = null; try { const dm = require('../_lib/demo'); if (dm.isDemo(me && me.email ? me : user)) demoSet = dm.groupTrips(); } catch (e) { demoSet = null; }
+        return res.status(200).json({ ok: true, profile: { passportCountry: me.passportCountry || '', passportExpiry: me.passportExpiry || '' }, applications: demoSet ? demoSet.applications : myApps, trips: demoSet ? demoSet.trips : myTrips, coInvites, interests: demoSet ? demoSet.interests : myInterests, notices: demoSet ? [] : notices, partners: publicPartners(await getPartnersDoc()) });
       }
 
       const [trips, interests, usersAll] = await Promise.all([db.getCollection(TRIPS), db.getCollection(INTERESTS), db.getCollection('users')]);

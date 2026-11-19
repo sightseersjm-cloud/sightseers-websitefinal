@@ -54138,6 +54138,13 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
 #p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
 #p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
+#p-account #acClubExtras .cx-vid{margin-top:18px;text-align:center}
+#p-account #acClubExtras .cx-btn--navy{background:#063a63}
+#p-account #acClubExtras .cx-vidhint{margin:8px 0 0;font-size:12.5px;color:#5b6b76}
+#p-account #acClubExtras .cx-vidbar{height:8px;background:#e3ebf2;margin:12px auto 0;max-width:320px;overflow:hidden}
+#p-account #acClubExtras .cx-vidbar i{display:block;height:100%;width:0;background:#ef8731;transition:width .2s linear}
+#p-account #acClubExtras .cx-vidout video{display:block;width:100%;max-width:300px;margin:12px auto 0;background:#04111e;box-shadow:0 10px 28px -12px rgba(6,40,70,.6)}
+#p-account #acClubExtras .cx-vidout .cx-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
 @media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet{transition:none}#p-account #acClubExtras .cx-float,#p-account #acClubExtras .cx-shadow{animation:none}}
 #p-account #acClubExtras .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
 #p-account #acClubExtras .cx-rev:first-of-type{border-top:0}
@@ -54252,7 +54259,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     X.pages=total;if(X.page>=total)X.page=total-1;if(X.page==null||X.page<0)X.page=0;
     var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div></div>';}).join('');
     return '<div class="cx-bookwrap"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
-      '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div></div>';
+      '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div>'+
+      '<div class="cx-vid"><button type="button" class="cx-btn cx-btn--navy" data-cx-video>Make my passport video</button><p class="cx-vidhint">A short clip for Instagram, TikTok or WhatsApp status.</p><div id="cxVidOut" aria-live="polite"></div></div></div>';
   }
   function setBook(n){
     var b=document.getElementById('cxBook');if(!b)return;
@@ -54294,6 +54302,24 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     X.asked=key;
     Promise.all([api('member'),api('reviews?mine=1')]).then(function(r){X.member=r[0];X.mine=r[1];paint();}).catch(function(){/* the cards stay hidden */});
   }
+  function makeVideo(btn){
+    var out=document.getElementById('cxVidOut');if(!out||X.busy)return;
+    var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(e){}
+    var m=X.member||{},tier=(typeof getTravelTier==='function'&&typeof getTravelPoints==='function')?getTravelTier(getTravelPoints()).name:'Explorer';
+    var data={name:(u&&u.name)||'Traveller',tier:tier,since:u&&u.createdAt?new Date(u.createdAt).getFullYear():'',verified:!!(u&&u.verifiedTraveller),code:(m.referral&&m.referral.code)||'',
+      photo:u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',stamps:(m.stamps||[]).slice().reverse()};
+    X.busy=true;btn.disabled=true;
+    out.className='cx-vidout';out.innerHTML='<p class="cx-vidhint" id="cxVidMsg">Making your video. Keep this page open for about 20 seconds.</p><div class="cx-vidbar"><i id="cxVidFill"></i></div>';
+    ssPassportVideo(data,function(p){var f=document.getElementById('cxVidFill');if(f)f.style.width=Math.round(p*100)+'%';}).then(function(r){
+      X.busy=false;btn.disabled=false;
+      var url=URL.createObjectURL(r.blob),name='my-sight-seers-passport.'+r.ext,file=null;
+      try{file=new File([r.blob],name,{type:r.blob.type});}catch(e){}
+      var canShare=!!(file&&navigator.canShare&&navigator.canShare({files:[file]}));
+      out.innerHTML='<video controls playsinline loop autoplay muted src="'+url+'"></video><div class="cx-row"><a class="cx-btn" download="'+name+'" href="'+url+'" style="text-decoration:none">Download video</a>'+(canShare?'<button type="button" class="cx-btn cx-btn--navy" data-cx-shareVideo>Share</button>':'')+'</div><p class="cx-vidhint">Post it with your invite link and friends who join earn you Travel Points.</p>';
+      var sb=out.querySelector('[data-cx-shareVideo]');
+      if(sb)sb.addEventListener('click',function(){navigator.share({files:[file],title:'My Sight Seers Travel Club passport',text:'My Travel Club passport. Join me: '+((m.referral&&m.referral.link)||'https://www.sightseerscaribbean.com')}).catch(function(){});});
+    },function(err){X.busy=false;btn.disabled=false;out.innerHTML='<p class="cx-msg">'+esc(err&&err.message||'Sorry, the video could not be made on this device.')+'</p>';});
+  }
   window.ssClubExtras=function(){load(false);};
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('#acPassportBtn');if(!b)return;
@@ -54322,6 +54348,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   })();
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('#acClubExtras button');if(!b)return;
+    if(b.hasAttribute('data-cx-video')){makeVideo(b);return;}
     if(b.hasAttribute('data-cx-book')){setBook((X.page||0)+(b.getAttribute('data-cx-book')==='next'?1:-1));return;}
     if(b.hasAttribute('data-cx-copy')){var inp=document.getElementById('cxRefLink');if(inp){try{navigator.clipboard.writeText(inp.value);}catch(x){inp.select();document.execCommand('copy');}b.textContent='Copied';setTimeout(function(){b.textContent='Copy link';},1600);}return;}
     var card=b.closest('[data-cx-rev]');
@@ -54437,6 +54464,197 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   MG.screens.visitors=function(){return screen();};
   MG.after.visitors=function(){if(!V.loading&&V.d===null){V.loading=true;load().then(function(){V.loading=false;if(S.screen==='visitors')rerender();});}};
   R.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||S.screen!=='visitors'||!b.dataset.vsDays)return;V.days=Number(b.dataset.vsDays);V.d=null;V.loading=true;rerender();load().then(function(){V.loading=false;rerender();});});
+})();
+</script>
+<script id="club-video-script">
+(function(){
+  'use strict';
+  /* "Make my passport video": a short vertical clip (1080 x 1920) of the member's passport gliding in, opening, and the stamps dropping onto the pages.
+     It is drawn on a canvas in the member's own browser and recorded there. Nothing is uploaded; the clip is theirs to download and share. */
+  var W=1080,H=1920,BW=470,BH=627,SC=2;
+  var PAPER='#f3ead2';
+  function loadImg(src){return new Promise(function(ok){var i=new Image();i.onload=function(){ok(i);};i.onerror=function(){ok(null);};i.src=src;});}
+  function ease(t){t=Math.max(0,Math.min(1,t));return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function easeOut(t){t=Math.max(0,Math.min(1,t));return 1-Math.pow(1-t,3);}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function mk(w,h){var c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+  function paper(ctx,w,h,left){
+    var g=ctx.createRadialGradient(w*.5,0,10,w*.5,h*.3,h);g.addColorStop(0,'#fbf6e8');g.addColorStop(1,'#eadfc0');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.strokeStyle='rgba(150,120,60,.08)';ctx.lineWidth=2*SC;for(var x=-h;x<w+h;x+=9*SC){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+h,h);ctx.stroke();}ctx.restore();
+    var sg=left?ctx.createLinearGradient(w,0,w-40*SC,0):ctx.createLinearGradient(0,0,40*SC,0);sg.addColorStop(0,'rgba(80,60,20,.35)');sg.addColorStop(1,'rgba(80,60,20,0)');ctx.fillStyle=sg;ctx.fillRect(left?w-40*SC:0,0,40*SC,h);
+  }
+  function txt(ctx,s,x,y,font,color,align,spacing){ctx.font=font;ctx.fillStyle=color;ctx.textAlign=align||'left';ctx.textBaseline='alphabetic';if('letterSpacing' in ctx)ctx.letterSpacing=(spacing||0)+'px';ctx.fillText(s,x,y);if('letterSpacing' in ctx)ctx.letterSpacing='0px';}
+  function checkMark(ctx,cx,cy,r){
+    ctx.save();ctx.translate(cx,cy);ctx.fillStyle='#1d9bf0';ctx.beginPath();for(var i=0;i<16;i++){var a=i/16*Math.PI*2,rr=i%2?r*.86:r;ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);}ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=r*.2;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(-r*.36,r*.02);ctx.lineTo(-r*.08,r*.3);ctx.lineTo(r*.4,-r*.28);ctx.stroke();ctx.restore();
+  }
+  function mrzLines(name,code,since){
+    var parts=String(name||'TRAVELLER').toUpperCase().replace(/[^A-Z ]+/g,'').trim().split(/\s+/).filter(Boolean),sur=parts.length>1?parts[parts.length-1]:parts[0]||'TRAVELLER',given=parts.length>1?parts.slice(0,-1).join('<'):'';
+    function pad(t){t=String(t);while(t.length<30)t+='<';return t.slice(0,30);}
+    return [pad('P<SSC'+sur+'<<'+given),pad('SSTC'+String(code||'').replace(/[^0-9A-Za-z]/g,'').toUpperCase()+'<<'+String(since||'').slice(-2)+'<<<<<')];
+  }
+  function stampImg(st,idx){
+    var svg=ssStampSvg(st,idx).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ').replace('width="100%"','width="420" height="420"').replace(/ href="#/g,' xlink:href="#').replace(/ role="img"[^>]*?aria-label="[^"]*"/,'');
+    return loadImg('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg));
+  }
+
+  window.ssPassportVideo=function(d,onProgress){
+    return new Promise(function(resolve,reject){
+      if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){reject(new Error('This browser cannot record a video. Try Chrome, or save the picture instead.'));return;}
+      var fontsReady=(document.fonts&&document.fonts.ready)||Promise.resolve();
+      var stamps=(d.stamps||[]).slice();/* oldest first, like the book */
+      var perPage=4,pages=[];for(var i=0;i<Math.max(1,Math.ceil(stamps.length/perPage));i++)pages.push(stamps.slice(i*perPage,(i+1)*perPage));
+      Promise.all([fontsReady,loadImg('/assets/ss-logo-white.png'),d.photo?loadImg(d.photo):Promise.resolve(null),Promise.all(stamps.map(function(s,i){return stampImg(s,i);}))]).then(function(res){
+        var logo=res[1],photo=res[2],imgs=res[3];
+        var PW=BW*SC,PH=BH*SC;
+        /* ---- the page pictures ---- */
+        var cover=mk(PW,PH),cx=cover.getContext('2d');
+        (function(){var g=cx.createRadialGradient(PW*.3,PH*.2,10,PW*.5,PH*.5,PH*.8);g.addColorStop(0,'#164a75');g.addColorStop(.55,'#0b2f4e');g.addColorStop(1,'#071d33');cx.fillStyle=g;cx.fillRect(0,0,PW,PH);
+          cx.globalAlpha=.16;cx.fillStyle='#fff';for(var y=0;y<PH;y+=5*SC)for(var x=0;x<PW;x+=5*SC){cx.fillRect(x,y,1.2*SC,1.2*SC);}cx.globalAlpha=1;
+          cx.strokeStyle='rgba(246,227,161,.3)';cx.lineWidth=2*SC;cx.strokeRect(14*SC,14*SC,PW-28*SC,PH-28*SC);
+          var gold=cx.createLinearGradient(0,0,PW,0);gold.addColorStop(0,'#f6e3a1');gold.addColorStop(.5,'#c9973a');gold.addColorStop(1,'#f1d98a');
+          if(logo){var lw0=PW*.62;cx.shadowColor='rgba(255,255,255,.35)';cx.shadowBlur=18*SC;cx.drawImage(logo,PW/2-lw0/2,PH*.30-lw0*logo.height/logo.width/2,lw0,lw0*logo.height/logo.width);cx.shadowBlur=0;}
+          txt(cx,'TRAVEL CLUB',PW/2,PH*.62,'800 '+(21*SC)+'px Raleway, Arial, sans-serif',gold,'center',6*SC);
+          txt(cx,'PASSPORT',PW/2,PH*.70,'700 '+(30*SC)+'px "Playfair Display", Georgia, serif',gold,'center',6*SC);
+          txt(cx,'MEMBER EDITION',PW/2,PH*.78,'700 '+(9*SC)+'px Raleway, Arial, sans-serif','rgba(246,227,161,.8)','center',4*SC);
+        })();
+        var insideL=mk(PW,PH),il=insideL.getContext('2d');paper(il,PW,PH,true);
+        (function(){txt(il,'THIS PASSPORT BELONGS TO',PW/2,PH*.42,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
+          var nm=String(d.name||'Traveller'),fs=26*SC;il.font='700 '+fs+'px "Playfair Display", Georgia, serif';while(il.measureText(nm).width>PW-60*SC&&fs>12*SC){fs-=2*SC;il.font='700 '+fs+'px "Playfair Display", Georgia, serif';}
+          txt(il,nm,PW/2,PH*.5,'700 '+fs+'px "Playfair Display", Georgia, serif','#063a63','center',0);
+          if(logo){il.globalAlpha=.1;il.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;il.drawImage(logo,PW/2-lw/2,PH*.62,lw,lw*logo.height/logo.width);il.filter='none';il.globalAlpha=1;}
+        })();
+        var idp=mk(PW,PH),ic=idp.getContext('2d');paper(ic,PW,PH,false);
+        (function(){txt(ic,'TRAVEL CLUB MEMBER',PW/2,36*SC,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
+          var px=18*SC,py=52*SC,pw=PW*.31,ph=pw*4/3;ic.fillStyle='#fff';ic.fillRect(px-3*SC,py-3*SC,pw+6*SC,ph+6*SC);
+          if(photo){ic.drawImage(photo,0,0,photo.width,photo.height,px,py,pw,ph);}else{var g=ic.createLinearGradient(px,py,px+pw,py+ph);g.addColorStop(0,'#f5a04b');g.addColorStop(1,'#ef8731');ic.fillStyle=g;ic.fillRect(px,py,pw,ph);txt(ic,String(d.name||'T').trim().charAt(0).toUpperCase(),px+pw/2,py+ph*.62,'800 '+(48*SC)+'px "Playfair Display", Georgia, serif','#fff','center',0);}
+          var x0=px+pw+16*SC,y=py+6*SC,lab=function(s,v,extra){txt(ic,s.toUpperCase(),x0,y,'800 '+(8.5*SC)+'px Raleway, Arial, sans-serif','#8a7a52','left',2.6*SC);y+=19*SC;txt(ic,v,x0,y,'700 '+(15*SC)+'px Raleway, Arial, sans-serif','#063a63','left',0);if(extra){ic.font='700 '+(15*SC)+'px Raleway, Arial, sans-serif';checkMark(ic,x0+ic.measureText(v).width+14*SC,y-5*SC,8*SC);}y+=28*SC;};
+          lab('Name',String(d.name||'Traveller'),d.verified);lab('Tier',String(d.tier||'Explorer'));lab('Member since',String(d.since||''));lab('Stamps',String(stamps.length));
+          var m=mrzLines(d.name,d.code,d.since);txt(ic,m[0],14*SC,PH-44*SC,'600 '+(12*SC)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);txt(ic,m[1],14*SC,PH-24*SC,'600 '+(12*SC)+'px "Courier New", monospace','rgba(58,58,58,.85)','left',0);
+        })();
+        var papers=pages.map(function(){var c=mk(PW,PH),x=c.getContext('2d');paper(x,PW,PH,false);txt(x,'VISAS & STAMPS',PW/2,36*SC,'800 '+(9*SC)+'px Raleway, Arial, sans-serif','#8a7a52','center',4*SC);
+          if(logo){x.globalAlpha=.07;x.filter='brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(1300%) hue-rotate(180deg)';var lw=PW*.5;x.drawImage(logo,PW/2-lw/2,PH-110*SC,lw,lw*logo.height/logo.width);x.filter='none';x.globalAlpha=1;}return c;});
+        var backs=mk(PW,PH);paper(backs.getContext('2d'),PW,PH,true);
+        /* sheets: cover, ID, then each stamp page; every sheet's back is a plain left page (the first one has the name) */
+        var sheets=[{front:cover,back:insideL},{front:idp,back:backs}].concat(papers.map(function(p){return {front:p,back:backs,stampPage:true};}));
+        var nStamp=pages.length,slowFrom=Math.max(0,nStamp-2);
+        /* ---- the timeline ---- */
+        var T=[];var t=0;
+        T.push({k:'intro',s:0,e:3.6});t=3.6;
+        T.push({k:'flip',sheet:0,s:t,e:t+1.2});t+=1.2;
+        T.push({k:'hold',sheet:1,s:t,e:t+2.0});t+=2.0;
+        T.push({k:'flip',sheet:1,s:t,e:t+1.1});t+=1.1;
+        for(var p=0;p<nStamp;p++){
+          var slow=p>=slowFrom,cnt=pages[p].length;
+          if(slow){T.push({k:'stamps',page:p,s:t,e:t+0.5+cnt*0.55+1.0});t+=0.5+cnt*0.55+1.0;}else{T.push({k:'quick',page:p,s:t,e:t+0.35});t+=0.35;}
+          if(p<nStamp-1){var fs=slow?0.9:0.32;T.push({k:'flip',sheet:2+p,s:t,e:t+fs});t+=fs;}
+        }
+        T.push({k:'outro',s:t,e:t+2.6});var TOTAL=t+2.6;
+        function seg(time){for(var i=0;i<T.length;i++)if(time>=T[i].s&&time<T[i].e)return T[i];return T[T.length-1];}
+        /* the open sheet index at a moment: sheets before it are flipped */
+        function state(time){
+          var flipped=0,flipping=-1,prog=0,stampPage=-1,stampT=0;
+          T.forEach(function(s){
+            if(s.k==='flip'){if(time>=s.e)flipped=s.sheet+1;else if(time>=s.s){flipping=s.sheet;prog=(time-s.s)/(s.e-s.s);}}
+            if(s.k==='stamps'&&time>=s.s&&time<s.e){stampPage=s.page;stampT=time-s.s;}
+          });
+          return {flipped:flipped,flipping:flipping,prog:prog,stampPage:stampPage,stampT:stampT};
+        }
+        /* ---- drawing ---- */
+        var cv=mk(W,H),ctx=cv.getContext('2d');
+        function drawSlices(c,bmp,x0,y0,ang,back){
+          /* a page turning about its spine at x0: columns are squeezed by the angle, with a little perspective and shading */
+          var N=90,cos=Math.cos(ang),sin=Math.sin(ang),sw=bmp.width/N;
+          for(var i=0;i<N;i++){
+            var u=i/N,x=u*BW,ux=(i+1)/N*BW;
+            var px=x0+(back?-1:1)*0; var X=x0+x*cos,X2=x0+ux*cos;
+            var persp=1/(1+Math.abs(sin)*u*.16),ph=BH*persp;
+            var sx=back?(N-1-i)*sw:i*sw;
+            var wdt=Math.abs(X2-X)+0.8;
+            c.drawImage(bmp,sx,0,sw,bmp.height,Math.min(X,X2)-.4,y0+(BH-ph)/2,wdt,ph);
+            var sh=Math.abs(sin)*.34*(0.4+u*.6);c.fillStyle='rgba(20,12,0,'+sh.toFixed(3)+')';c.fillRect(Math.min(X,X2)-.4,y0+(BH-ph)/2,wdt,ph);
+          }
+        }
+        function stampAnim(c,pi,time){
+          var list=pages[pi],gx=[.26,.74],gy=[.27,.70];
+          list.forEach(function(s,k){
+            var idx=pi*perPage+k,im=imgs[idx];if(!im)return;
+            var at=0.5+k*0.55,dt=time-at;if(dt<0)return;
+            var a=clamp(dt/.25,0,1),sc=1+(1-easeOut(clamp(dt/.35,0,1)))*.7,rot=((idx*37)%13-6)*1.2*Math.PI/180;
+            var cxp=BW*gx[k%2],cyp=BH*gy[Math.floor(k/2)],size=BW*.46;
+            c.save();c.globalAlpha=a*.95;c.globalCompositeOperation='multiply';c.translate(cxp,cyp);c.rotate(rot);c.scale(sc,sc);c.drawImage(im,-size/2,-size/2,size,size);c.restore();
+          });
+        }
+        function stampStatic(c,pi){var list=pages[pi];list.forEach(function(s,k){var im=imgs[pi*perPage+k];if(!im)return;var gx=[.26,.74],gy=[.27,.70],rot=(((pi*perPage+k)*37)%13-6)*1.2*Math.PI/180,size=BW*.46;c.save();c.globalAlpha=.95;c.globalCompositeOperation='multiply';c.translate(BW*gx[k%2],BH*gy[Math.floor(k/2)]);c.rotate(rot);c.drawImage(im,-size/2,-size/2,size,size);c.restore();});}
+        var coverTmp=mk(PW,PH),shineTmp=null;
+        function coverFrame(time){
+          var c=coverTmp.getContext('2d');c.clearRect(0,0,PW,PH);c.drawImage(cover,0,0);
+          if(logo){var lw=PW*.62,lh=lw*logo.height/logo.width,lx=PW/2-lw/2,ly=PH*.30-lh/2;
+            if(!shineTmp||shineTmp.width!==Math.ceil(lw)){shineTmp=mk(Math.ceil(lw),Math.ceil(lh));}
+            var o=shineTmp.getContext('2d');o.clearRect(0,0,shineTmp.width,shineTmp.height);o.globalCompositeOperation='source-over';o.drawImage(logo,0,0,lw,lh);o.globalCompositeOperation='source-in';
+            var sweep=((time*.5)%2.2)-.5,sg=o.createLinearGradient((sweep-.16)*lw,0,(sweep+.16)*lw,lh*.5);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,1)');sg.addColorStop(1,'rgba(255,255,255,0)');o.fillStyle=sg;o.fillRect(0,0,shineTmp.width,shineTmp.height);
+            c.save();c.shadowColor='rgba(255,255,255,.8)';c.shadowBlur=14*SC;c.drawImage(shineTmp,lx,ly);c.restore();}
+          return coverTmp;
+        }
+        function pageCanvas(si,time,st){/* the right-hand page with its stamps for this moment, as a canvas at the page size */
+          var sh=sheets[si];if(si===0)return coverFrame(time);if(!sh.stampPage)return sh.front;
+          var pi=si-2,c=mk(PW,PH),x=c.getContext('2d');x.drawImage(sh.front,0,0);x.save();x.scale(SC,SC);
+          if(st.stampPage===pi)stampAnim(x,pi,st.stampT);
+          else{var sg2=T.filter(function(q){return (q.k==='stamps'||q.k==='quick')&&q.page===pi;})[0];if(sg2&&(time>=sg2.e||sg2.k==='quick'))stampStatic(x,pi);}
+          x.restore();return c;
+        }
+        function frame(time){
+          var st=state(time),s=seg(time);
+          /* background */
+          var bg=ctx.createRadialGradient(W*.5,H*.38,60,W*.5,H*.5,H*.75);bg.addColorStop(0,'#134a78');bg.addColorStop(.55,'#0a2a47');bg.addColorStop(1,'#04111e');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+          for(var k=0;k<5;k++){var a=time*.25+k*1.3,gx=W*(.5+.38*Math.sin(a)),gy=H*(.45+.3*Math.cos(a*.8));var gr=ctx.createRadialGradient(gx,gy,0,gx,gy,380);gr.addColorStop(0,'rgba(120,190,255,.10)');gr.addColorStop(1,'rgba(120,190,255,0)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);}
+          /* the book: glide in, float, pan to the middle of the open spread */
+          var open=ease(clamp((time-T[1].s)/1.2,0,1)),sc=1.62-.54*open,intro=easeOut(time/1.5),floatY=Math.sin(time*1.4)*14,tilt=Math.sin(time*.9)*.018;   /* it zooms out as it opens so both pages fit */
+          var spineX=W/2-(BW*sc/2)*(1-open);   /* closed: the cover is centred; open: the two-page spread is centred */
+          var by=H*.5-(BH*sc)/2+floatY+(1-intro)*420,ox=0;
+          ctx.save();ctx.translate(spineX,by+BH*sc/2);ctx.rotate(tilt+(1-intro)*-.08);ctx.scale(sc*(.86+.14*intro),sc*(.86+.14*intro));ctx.translate(-0,-BH/2);
+          ctx.globalAlpha=Math.min(1,intro*1.6);
+          /* shadow */
+          ctx.save();ctx.filter='blur(26px)';ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(-BW*(open>0?1:0)+14,BH-8+26,BW*(open>0?2:1)-28,22);ctx.restore();
+          /* left side: flipped sheets (the last flipped one on top) */
+          if(st.flipped>0){var ls=st.flipped-1;ctx.drawImage(sheets[ls].back,-BW,0,BW,BH);}
+          /* right side: the next page(s) */
+          var rs=st.flipped;
+          if(rs<sheets.length){var rp=pageCanvas(rs,time,st);ctx.drawImage(rp,0,0,BW,BH);}
+          else{ctx.drawImage(sheets[sheets.length-1].back,0,0,BW,BH);}
+          /* the turning sheet */
+          if(st.flipping>=0){
+            var ang=ease(st.prog)*Math.PI,si=st.flipping,fr=ang<Math.PI/2;
+            if(fr)drawSlices(ctx,pageCanvas(si,time,st),0,0,ang,false);else drawSlices(ctx,sheets[si].back,0,0,ang,true);
+            if(!fr&&si+1<sheets.length){/* the page underneath keeps showing on the right (already drawn) */}
+          }
+          ctx.restore();
+          /* captions */
+          var capA=0,cap='';
+          if(time<3.4){cap='';}
+          if(s.k==='outro'){capA=easeOut((time-s.s)/.7);ctx.fillStyle='rgba(4,17,30,'+(.8*capA).toFixed(3)+')';ctx.fillRect(0,0,W,H);
+            ctx.globalAlpha=capA;if(logo){var lw2=W*.5;ctx.drawImage(logo,W/2-lw2/2,H*.27,lw2,lw2*logo.height/logo.width);}
+            txt(ctx,'MY TRAVEL CLUB PASSPORT',W/2,H*.5,'800 44px Raleway, Arial, sans-serif','#f6e3a1','center',6);
+            txt(ctx,stamps.length+(stamps.length===1?' stamp':' stamps')+' · '+(d.tier||'Explorer'),W/2,H*.5+70,'700 40px Raleway, Arial, sans-serif','#ffffff','center',1);
+            txt(ctx,'Join me on sightseerscaribbean.com',W/2,H*.5+170,'700 36px Raleway, Arial, sans-serif','rgba(255,255,255,.9)','center',0);
+            ctx.globalAlpha=1;}
+          else if(time>3.0&&time<T[1].s+0.2){}
+          if(s.k==='hold'||s.k==='stamps'||s.k==='quick'){var lab=s.k==='hold'?'Your Travel Club ID':'Every trip earns a stamp';ctx.globalAlpha=Math.min(1,(time-s.s)/.5)*.9;txt(ctx,lab.toUpperCase(),W/2,H*.12,'800 34px Raleway, Arial, sans-serif','#f6e3a1','center',8);ctx.globalAlpha=1;}
+          if(time<3.2){var ia=easeOut((time-1.2)/.8);ctx.globalAlpha=Math.max(0,ia);txt(ctx,'THE TRAVEL CLUB PASSPORT',W/2,H*.12,'800 34px Raleway, Arial, sans-serif','#f6e3a1','center',8);ctx.globalAlpha=1;}
+        }
+        /* ---- record it in real time ---- */
+        var stream=cv.captureStream(30),mime='';
+        ['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].some(function(m){if(MediaRecorder.isTypeSupported(m)){mime=m;return true;}return false;});
+        var rec;try{rec=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:6000000}:{videoBitsPerSecond:6000000});}catch(e){reject(e);return;}
+        var chunks=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+        rec.onstop=function(){var type=(rec.mimeType||mime||'video/webm').split(';')[0];resolve({blob:new Blob(chunks,{type:type}),ext:/mp4/.test(type)?'mp4':'webm',seconds:TOTAL});};
+        rec.onerror=function(e){reject(e.error||new Error('Recording failed'));};
+        frame(0);rec.start(250);
+        var t0=performance.now();
+        (function loop(){var el=(performance.now()-t0)/1000;if(el>=TOTAL){frame(TOTAL-.01);setTimeout(function(){rec.stop();},200);if(onProgress)onProgress(1);return;}frame(el);if(onProgress)onProgress(el/TOTAL);requestAnimationFrame(loop);})();
+      }).catch(reject);
+    });
+  };
 })();
 </script>
 <style id="manage-lists-style">
