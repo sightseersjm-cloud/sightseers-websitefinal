@@ -13759,7 +13759,6 @@ body.theme-night #p-flagship-programs{
 ════════════════════════════════════ -->
 <style id="tc-phone-wow">
 /* Travel Club on phones: a clear lead button, a gently moving hero, stat tiles and photo trip cards. Wide screens are untouched. */
-.tcd-photo{display:none}
 @keyframes tcRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes tcGlowA{to{transform:translate(18%,10%) scale(1.15)}}
 @keyframes tcGlowB{to{transform:translate(-16%,-8%) scale(1.12)}}
@@ -13776,19 +13775,7 @@ body.theme-night #p-flagship-programs{
 }
 @media(max-width:900px){
   #p-travel-club .tcd-in{padding-bottom:96px}
-  #p-travel-club .tcd-stats{grid-template-columns:repeat(3,1fr);gap:10px;border-top:0;padding-top:4px}
-  #p-travel-club .tcd-stats>div{display:block;text-align:center;padding:14px 6px;border-radius:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
-  #p-travel-club .tcd-stats dt{min-width:0;margin-bottom:6px}
-  #p-travel-club .tcd-stats dd{font-size:9.5px;letter-spacing:.08em}
-  #p-travel-club .tcd-side .tcd-cta{display:flex;justify-content:center;width:100%;border-radius:0;padding:15px 18px}
-  #p-travel-club .tcd-row{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;margin-bottom:14px;border:1px solid rgba(255,255,255,.22);border-radius:0;background:rgba(255,255,255,.08);overflow:hidden}
-  #p-travel-club .tcd-photo{display:block;position:relative;height:150px;background-size:cover;background-position:center}
-  #p-travel-club .tcd-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(4,31,53,.72),transparent 62%)}
-  #p-travel-club .tcd-dot{display:none}
-  #p-travel-club .tcd-date{padding:14px 16px 0}
-  #p-travel-club .tcd-main{padding:12px 16px 4px}
-  #p-travel-club .tcd-end{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px 16px;grid-column:auto}
-  #p-travel-club .tcd-go{display:inline-flex;align-items:center;padding:10px 16px;border-radius:0;background:#70c257;color:#06223a}
+  #p-travel-club .tcd-go{display:inline-block;margin-top:2px}
 }
 @media(prefers-reduced-motion:reduce){
   #p-travel-club .tc-band::before,#p-travel-club .tc-band::after,#p-travel-club .tc-band-in>*{animation:none}
@@ -49087,9 +49074,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var meta=[t.dateText,t.organizer?'Led by '+t.organizer.name:'',[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
     var href='/trip/'+encodeURIComponent(t.slug);
     var isFull=t.status==='full'||(t.seats&&t.seats.left===0);
-    /* the trip photo is a banner on phones (hidden on wide screens, where the row stays as it was) */
-    var ph=/^(\/api\/images\?file=[\w\/.\-]+|\/assets\/[\w\/.\-]+|https:\/\/[^\s"'<>()]+)$/.test(t.image||'')?'<span class="tcd-photo" aria-hidden="true" style="background-image:url('+esc(t.image)+')"></span>':'';
-    return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'" data-dest="'+esc(t.country||t.destination||'')+'" data-full="'+(isFull?'1':'0')+'">'+ph+'<span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
+    return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'" data-dest="'+esc(t.country||t.destination||'')+'" data-full="'+(isFull?'1':'0')+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
       '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
   }
   function depStats(list){
