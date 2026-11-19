@@ -54119,6 +54119,12 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-book:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.5)}
 #p-account #acClubExtras .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
 #p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper{position:absolute;inset:0}
+#p-account #acClubExtras .cx-back>.cx-paper{position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
+#p-account #acClubExtras .cx-bookwrap.wide{max-width:880px}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
+#p-account #acClubExtras .cx-endpage{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
+#p-account #acClubExtras .cx-msgpage .cx-note{margin:96px 22px 0}
 #p-account #acClubExtras .cx-sheet.flipped{transform:rotateY(-178deg)}
 #p-account #acClubExtras .cx-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:3px 8px 8px 3px;box-shadow:0 14px 30px -14px rgba(6,40,70,.55)}
 #p-account #acClubExtras .cx-back{transform:rotateY(180deg);border-radius:8px 3px 3px 8px}
@@ -54297,6 +54303,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var photo=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',code=(m.referral&&m.referral.code)||'';
     var st=(m.stamps||[]).slice().reverse(),pages=[]; /* oldest first, like a real passport: new stamps land on the latest page */
     pages.push('<div class="cx-cover"><div class="cx-logo" role="img" aria-label="Sight Seers Caribbean Adventures"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-gold cx-c2">TRAVEL CLUB</div><div class="cx-gold cx-c3">PASSPORT</div><div class="cx-c5"><i></i><span>MEMBER EDITION</span><i></i></div></div>');
+    pages.push('<div class="cx-paper cx-msgpage"><div class="cx-ph">&nbsp;</div><p class="cx-note">The Sight Seers Travel Club invites all whom it may concern to welcome the bearer of this passport, a traveller who loves the Caribbean, and to give every assistance and kindness the bearer may need along the way.</p></div>');
     var parts=String(name||'Traveller').trim().split(/\s+/).filter(Boolean),sur=parts.length>1?parts[parts.length-1]:parts[0]||'',given=parts.length>1?parts.slice(0,-1).join(' '):'';
     var imgHtml=photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>';
     pages.push('<div class="cx-paper cx-id"><div class="cx-idhead"><div><small>SIGHT SEERS TRAVEL CLUB</small><b>PASSPORT</b></div><div class="cx-idtype"><span>Type<i>P</i></span><span>Code<i>SSC</i></span></div></div>'+
@@ -54312,25 +54319,37 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     }
     return pages;
   }
+  function blankBack(){return '<div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div>';}
   function bookHtml(m){
-    var pages=bookPages(m),total=pages.length;
-    X.pages=total;if(X.page>=total)X.page=total-1;if(X.page==null||X.page<0)X.page=0;
-    var sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div><div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div><p class="cx-note">The Sight Seers Travel Club invites all whom it may concern to welcome the bearer of this passport, a traveller who loves the Caribbean, and to give every assistance and kindness the bearer may need along the way.</p></div></div>';}).join('');
-    return '<div class="cx-bookwrap"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
+    var pages=bookPages(m),wide=!!X.wide,sheets='',nSheets;
+    if(wide){
+      /* two sides to every sheet: cover and welcome note, then ID and the first stamp page, then stamps on both sides */
+      nSheets=Math.ceil(pages.length/2);X.max=nSheets;
+      for(var i=0;i<nSheets;i++){sheets+='<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+pages[2*i]+'</div>'+(pages[2*i+1]?'<div class="cx-face cx-back">'+pages[2*i+1]+'</div>':blankBack())+'</div>';}
+      sheets+='<div class="cx-endpage cx-paper" aria-hidden="true"></div>';
+    }else{
+      nSheets=pages.length;X.max=nSheets-1;
+      sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div>'+blankBack()+'</div>';}).join('');
+    }
+    X.pages=nSheets;if(X.page>X.max)X.page=X.max;if(X.page==null||X.page<0)X.page=0;
+    return '<div class="cx-bookwrap'+(wide?' wide':'')+'"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
       '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div>'+
       '<div class="cx-vid"><button type="button" class="cx-btn cx-btn--navy" data-cx-video>Make my passport video</button><p class="cx-vidhint">A short clip for Instagram, TikTok or WhatsApp status.</p><div id="cxVidOut" aria-live="polite"></div></div></div>';
   }
   function setBook(n){
     var b=document.getElementById('cxBook');if(!b)return;
-    var total=b.querySelectorAll('.cx-sheet').length;n=Math.max(0,Math.min(total-1,n));X.page=n;
-    [].forEach.call(b.querySelectorAll('.cx-sheet'),function(sh){var i=Number(sh.getAttribute('data-sheet')),flipped=i<n;sh.classList.toggle('flipped',flipped);sh.style.zIndex=String(flipped?i:total-i);});
+    var wide=!!X.wide,sheets=b.querySelectorAll('.cx-sheet'),count=sheets.length,max=wide?count:count-1;n=Math.max(0,Math.min(max,n));X.page=n;
+    [].forEach.call(sheets,function(sh){var i=Number(sh.getAttribute('data-sheet')),flipped=i<n;sh.classList.toggle('flipped',flipped);sh.style.zIndex=String(flipped?i+1:count-i+1);});
     b.classList.toggle('closed',n===0);
-    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':'Page '+n+' of '+(total-1);
-    [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===total-1);});
+    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':(wide?'Pages '+(2*n-1)+' and '+(2*n):'Page '+n+' of '+(count-1));
+    [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===max);});
   }
+  /* a computer shows the passport open as two pages; a phone shows one page at a time */
+  function wideNow(){return window.innerWidth>=960;}
+  var rsz=null;window.addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){if(X.member&&wideNow()!==!!X.wide){X.wide=wideNow();paint();}},200);});
 
   /* ---------- the member's own cards (Travel Club tab of the account page) ---------- */
-  var X={member:null,mine:null,asked:'',busy:false,page:0,pages:0};
+  var X={member:null,mine:null,asked:'',busy:false,page:0,pages:0,max:0,wide:false};
   function memberKey(){try{var u=JSON.parse(localStorage.getItem('ss_current_user')||'null');return u&&(u.id||u.email)||'';}catch(e){return '';}}
   /* each card is a drop-down; which ones are open is remembered for the visit */
   function accOpen(k){try{var v=sessionStorage.getItem('cx_acc_'+k);if(v!==null)return v==='1';}catch(e){}return k==='passport';}
@@ -54339,7 +54358,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function paint(){
     var box=document.getElementById('acClubExtras');if(!box)return;
     if(!X.member){box.hidden=true;return;}
-    box.hidden=false;
+    box.hidden=false;X.wide=wideNow();
     var m=X.member,r=m.referral||{},st=m.stamps||[],mine=X.mine||{eligible:[],mine:[]};
     var inv=acc('invite','Invite friends',esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.points)+' points each':''),'<p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
       '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
