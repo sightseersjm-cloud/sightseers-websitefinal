@@ -54082,6 +54082,18 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras{margin-top:22px;display:grid;gap:18px}
 #p-account #acClubExtras .cx-card{background:#fff;border:1px solid #dfe6ec;padding:22px;box-shadow:0 10px 26px -22px rgba(6,58,99,.45)}
 #p-account #acClubExtras .cx-card h4{margin:0 0 6px;font:700 22px 'Playfair Display',serif;color:#063a63}
+#p-account #acClubExtras .cx-acc{padding:0}
+#p-account #acClubExtras .cx-acc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;user-select:none}
+#p-account #acClubExtras .cx-acc>summary::-webkit-details-marker{display:none}
+#p-account #acClubExtras .cx-acc>summary:hover{background:#f6f9fb}
+#p-account #acClubExtras .cx-acc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:-2px}
+#p-account #acClubExtras .cx-acct h4{margin:0}
+#p-account #acClubExtras .cx-acct small{display:block;margin-top:3px;font:600 12.5px 'Raleway',sans-serif;color:#5b6b76}
+#p-account #acClubExtras .cx-chev{flex:none;width:11px;height:11px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 4px 0 0}
+#p-account #acClubExtras .cx-acc[open]>summary .cx-chev{transform:rotate(-135deg);margin:4px 4px 0 0}
+#p-account #acClubExtras .cx-acc[open]>summary{border-bottom:1px solid #e3ebf2}
+#p-account #acClubExtras .cx-accbody{padding:18px 22px 22px;animation:cxOpen .3s ease}
+@keyframes cxOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 #p-account #acClubExtras .cx-sub{margin:0 0 14px;color:#5b6b76;font-size:14px;line-height:1.55}
 #p-account #acClubExtras .cx-link{display:flex;gap:8px;flex-wrap:wrap}
 #p-account #acClubExtras .cx-link input{flex:1 1 240px;min-width:0;padding:11px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;background:#f6f9fb;color:#17323f}
@@ -54300,16 +54312,20 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   /* ---------- the member's own cards (Travel Club tab of the account page) ---------- */
   var X={member:null,mine:null,asked:'',busy:false,page:0,pages:0};
   function memberKey(){try{var u=JSON.parse(localStorage.getItem('ss_current_user')||'null');return u&&(u.id||u.email)||'';}catch(e){return '';}}
+  /* each card is a drop-down; which ones are open is remembered for the visit */
+  function accOpen(k){try{var v=sessionStorage.getItem('cx_acc_'+k);if(v!==null)return v==='1';}catch(e){}return k==='passport';}
+  function acc(k,title,sub,body){return '<details class="cx-card cx-acc" data-acc="'+k+'"'+(accOpen(k)?' open':'')+'><summary><span class="cx-acct"><h4>'+title+'</h4><small>'+sub+'</small></span><i class="cx-chev" aria-hidden="true"></i></summary><div class="cx-accbody">'+body+'</div></details>';}
+  document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('cx-acc')){try{sessionStorage.setItem('cx_acc_'+d.getAttribute('data-acc'),d.open?'1':'0');}catch(x){}if(d.open&&d.getAttribute('data-acc')==='passport')setBook(X.page||0);}},true);
   function paint(){
     var box=document.getElementById('acClubExtras');if(!box)return;
     if(!X.member){box.hidden=true;return;}
     box.hidden=false;
     var m=X.member,r=m.referral||{},st=m.stamps||[],mine=X.mine||{eligible:[],mine:[]};
-    var inv='<div class="cx-card"><h4>Invite friends</h4><p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
+    var inv=acc('invite','Invite friends',esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.points)+' points each':''),'<p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
       '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
-      '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p></div>';
-    var stamps='<div class="cx-card"><h4>Your Travel Club passport</h4><p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m)+'</div>';
-    var rev='<div class="cx-card"><h4>Your reviews</h4>';
+      '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p>');
+    var stamps=acc('passport','Your Travel Club passport',esc(st.length)+(st.length===1?' stamp':' stamps')+' in your book','<p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m));
+    var rev='';
     if(mine.eligible.length){
       rev+='<p class="cx-sub">Tell other travellers how it went. Reviews are checked by our team before they appear.</p>'+mine.eligible.map(function(e){
         return '<div class="cx-rev" data-cx-rev="'+esc(e.refKey)+'"><b>'+esc(e.title)+'</b> <small>'+esc(monthYear(e.on))+'</small><div><span class="cx-stars" role="group" aria-label="Your rating">'+[1,2,3,4,5].map(function(i){return '<button type="button" data-cx-star="'+i+'" aria-label="'+i+' star'+(i>1?'s':'')+'">★</button>';}).join('')+'</span></div>'+
@@ -54317,8 +54333,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     }
     if(mine.mine.length){rev+=mine.mine.map(function(v){return '<div class="cx-rev"><b>'+esc(v.title)+'</b> <span class="cx-chip'+(v.status==='approved'?' ok':'')+'">'+(v.status==='approved'?'Published':'Waiting for approval')+'</span><div class="cx-s" style="color:#ef8731;letter-spacing:2px">'+stars(v.rating)+'</div><p class="cx-sub" style="margin:4px 0 0">'+esc(v.text)+'</p></div>';}).join('');}
     if(!mine.eligible.length&&!mine.mine.length)rev+='<p class="cx-sub" style="margin:0">After your first finished trip you can leave a review here.</p>';
-    rev+='</div>';
-    box.innerHTML=inv+stamps+rev;
+    rev=acc('reviews','Your reviews',mine.eligible.length?esc(mine.eligible.length)+(mine.eligible.length===1?' trip':' trips')+' to review':(mine.mine.length?esc(mine.mine.length)+(mine.mine.length===1?' review':' reviews'):'After your first trip'),rev);
+    box.innerHTML=stamps+inv+rev;
     setBook(X.page||0);
   }
   function load(force){
