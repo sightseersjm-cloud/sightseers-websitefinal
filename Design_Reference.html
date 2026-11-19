@@ -54595,7 +54595,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       /* a soft sea bed under the whole clip */
       ocean:function(t,dur){
         var src=ac.createBufferSource();src.buffer=noise;src.loop=true;var fl=ac.createBiquadFilter();fl.type='lowpass';fl.frequency.value=650;
-        var g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.045,t+1.5);g.gain.setValueAtTime(.045,t+dur-1.6);g.gain.linearRampToValueAtTime(0,t+dur);
+        var g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.045,t+2.5);g.gain.setValueAtTime(.045,t+dur-1.6);g.gain.linearRampToValueAtTime(0,t+dur);
         var lfo=ac.createOscillator();lfo.frequency.value=.17;var lg=ac.createGain();lg.gain.value=.05;lfo.connect(lg);lg.connect(g.gain);
         src.connect(fl);fl.connect(g);g.connect(master);src.start(t);src.stop(t+dur+.1);lfo.start(t);lfo.stop(t+dur+.1);
       },
@@ -54603,7 +54603,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       pan:function(t,f,gain){[[1,1],[2,.45],[3,.14]].forEach(function(h){var o=ac.createOscillator();o.type=h[0]===1?'sine':'triangle';o.frequency.value=f*h[0];var g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime((gain||.3)*h[1],t+.006);g.gain.exponentialRampToValueAtTime(.0008,t+1.1/h[0]+.25);o.connect(g);g.connect(master);g.connect(echo);o.start(t);o.stop(t+1.5);});},
       /* a light Caribbean groove: reggae off-beat guitar, one-drop kick and rim, a rolling bass, shakers and a steel-pan tune (all made here, nothing is downloaded) */
       music:function(t0,dur){
-        var self=this,bus=ac.createGain();bus.gain.setValueAtTime(0,t0);bus.gain.linearRampToValueAtTime(1.15,t0+1.6);bus.gain.setValueAtTime(1.15,t0+dur-2.4);bus.gain.linearRampToValueAtTime(0,t0+dur);bus.connect(master);
+        var self=this,bus=ac.createGain();bus.gain.setValueAtTime(0,t0);bus.gain.setValueAtTime(0,t0+1.2);bus.gain.linearRampToValueAtTime(1.15,t0+4.0);bus.gain.setValueAtTime(1.15,t0+dur-2.4);bus.gain.linearRampToValueAtTime(0,t0+dur);bus.connect(master);
         var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;lp.connect(bus);
         function note(t,f,len,type,gain,out){var o=ac.createOscillator();o.type=type;o.frequency.value=f;var g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(gain,t+.008);g.gain.exponentialRampToValueAtTime(.0008,t+len);o.connect(g);g.connect(out||lp);o.start(t);o.stop(t+len+.05);}
         function hat(t,gain){var src=ac.createBufferSource();src.buffer=noise;var fl=ac.createBiquadFilter();fl.type='highpass';fl.frequency.value=6500;var g=ac.createGain();g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0008,t+.05);src.connect(fl);fl.connect(g);g.connect(bus);src.start(t,Math.random()*.5,.08);}
@@ -54618,10 +54618,12 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
             hat(te,.03);hat(te+eighth/2,.015);                                                      /* shaker */
           }
           note(tt,roots[ci],.5,'triangle',.34);note(tt+beat*2,roots[ci],.42,'triangle',.26);note(tt+beat*3+eighth,fifths[ci],.3,'triangle',.2);   /* bass */
-          note(tt+beat*2,95,.2,'sine',.3);burst(tt+beat*2,.05,'bandpass',1800,900,.09,1.5);          /* one-drop kick and rim */
+          if(b>=2){note(tt+beat*2,95,.2,'sine',.22);burst(tt+beat*2,.05,'bandpass',1800,900,.06,1.5);}          /* one-drop kick and rim, once the groove has settled */
           if(tt>t0+bar-.1)tunes[b%4].forEach(function(n){self.pan(tt+n[1]*eighth,n[0],.13);});        /* steel-pan tune after the first bar */
         }
       },
+      /* a soft two-note bell to open with: slow, clean attack, no noise, no pitch glide */
+      chime:function(t){[[659.25,0,.07],[987.77,.28,.055],[1318.5,.56,.04]].forEach(function(n){var o=ac.createOscillator();o.type='sine';o.frequency.value=n[0];var g=ac.createGain();g.gain.setValueAtTime(0,t+n[1]);g.gain.linearRampToValueAtTime(n[2],t+n[1]+.04);g.gain.exponentialRampToValueAtTime(.0006,t+n[1]+1.8);o.connect(g);g.connect(master);g.connect(echo);o.start(t+n[1]);o.stop(t+n[1]+2);});},
       sparkle:function(t){[2093,2637,3136].forEach(function(f,i){var o=ac.createOscillator();o.type='sine';o.frequency.value=f;var g=ac.createGain();g.gain.setValueAtTime(0,t+i*.07);g.gain.linearRampToValueAtTime(.08,t+i*.07+.01);g.gain.exponentialRampToValueAtTime(.0005,t+i*.07+.5);o.connect(g);g.connect(master);g.connect(echo);o.start(t+i*.07);o.stop(t+i*.07+.6);});}
     };
   }
@@ -54716,7 +54718,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         }
         T.push({k:'outro',s:t,e:t+2.6});var TOTAL=t+2.6;
         /* moments for the camera flash and the sounds */
-        var EV={flash:[],shutter:[],whoosh:[[.2,1.5]],thud:[],finder:null,swell:[.0,2.2],outro:0};
+        var EV={flash:[],shutter:[],whoosh:[],thud:[],finder:null,outro:0};
         T.forEach(function(q){
           if(q.k==='flip')EV.whoosh.push([q.s,q.e-q.s]);
           if(q.k==='hold'&&q.sheet===1){EV.finder=[q.s+.15,q.s+1.0];EV.shutter.push(q.s+1.0);EV.flash.push({t:q.s+1.0,peak:.95,dur:.45});}
@@ -54840,7 +54842,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         var t0=performance.now(),a0=0,onAudio=false;
         if(ac&&adest){try{
           var snd=makeSound(ac,adest);a0=ac.currentTime+.1;onAudio=true;
-          snd.swell(a0+EV.swell[0],EV.swell[1]);snd.ocean(a0,TOTAL);snd.music(a0,TOTAL);snd.sparkle(a0+1.9);[523.25,659.25,783.99,880,1046.5].forEach(function(f,i){snd.pan(a0+EV.outro+.45+i*.17,f,.3);});[523.25,783.99,1046.5].forEach(function(f){snd.pan(a0+EV.outro+1.4,f,.22);});EV.whoosh.forEach(function(w){snd.whoosh(a0+w[0],w[1]);});EV.shutter.forEach(function(x){snd.shutter(a0+x);});EV.thud.forEach(function(x){snd.thud(a0+x);});
+          snd.ocean(a0,TOTAL);snd.music(a0,TOTAL);snd.chime(a0+.7);snd.sparkle(a0+2.1);[523.25,659.25,783.99,880,1046.5].forEach(function(f,i){snd.pan(a0+EV.outro+.45+i*.17,f,.3);});[523.25,783.99,1046.5].forEach(function(f){snd.pan(a0+EV.outro+1.4,f,.22);});EV.whoosh.forEach(function(w){snd.whoosh(a0+w[0],w[1]);});EV.shutter.forEach(function(x){snd.shutter(a0+x);});EV.thud.forEach(function(x){snd.thud(a0+x);});
         }catch(e){}}
         (function loop(){var el=onAudio?(ac.currentTime-a0):(performance.now()-t0)/1000;if(el<0)el=0;if(el>=TOTAL){frame(TOTAL-.01);setTimeout(function(){rec.stop();},200);if(onProgress)onProgress(1);return;}frame(el);if(onProgress)onProgress(el/TOTAL);requestAnimationFrame(loop);})();
       }).catch(reject);
