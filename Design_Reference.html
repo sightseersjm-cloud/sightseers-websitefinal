@@ -17087,7 +17087,7 @@ body.theme-night .page .tag{
         <input type="hidden" id="b_funnelSource" value=""><input type="hidden" id="b_funnelLabel" value=""><div class="form-row"><div class="fg"><label for="b_dest">Destination *</label><select id="b_dest"><option value="">Select Destination</option><option>Jamaica</option><option>Barbados</option><option>Saint Lucia</option><option>The Bahamas</option><option>Belize</option><option>Dominican Republic</option><option>Curacao</option></select></div><div class="fg"><label for="b_type">Experience Type *</label><select id="b_type"><option value="">Select Experience Type</option><option>Water Experience</option><option>Land Experience</option><option>Zip-line / Canopy</option><option>ATV Adventures</option><option>Bamboo Rafting</option><option>Horseback Riding</option><option>Parasailing</option><option>Kayaking</option><option>Snorkeling / Scuba</option><option>Waterfalls Trip</option><option>Beach Trip</option><option>Efoil Surfboarding</option><option>MBA Experience</option><option>Seven Shores Society</option><option>Seven Shores Offsite</option><option>Luxury Getaway Weekend</option><option>Yacht Charters Tour</option><option>Yacht Charter</option><option>Greek Life Travel</option><option>School Tour Package</option><option>Villa &amp; Vacation Rental Booking</option><option>Airport Shuttle (NMIA/MBJ)</option><option>Executive Transfer</option><option>Group Transfer</option><option>Club Kingston / Club Mobay</option><option>Custom Package</option></select></div></div>
         <div class="form-row"><div class="fg" style="grid-column:1/-1"><label for="b_package">Selected Experience</label><input type="text" id="b_package" readonly></div></div>
         
-        <div class="form-row"><div class="fg"><label for="b_dt">Travel Date *</label><input type="date" id="b_dt" required></div><div class="fg"><label for="b_gs">Number of travellers * <span style="font-weight:500;opacity:.7">(5 or more)</span></label><input type="number" id="b_gs" min="5" step="1" value="5" inputmode="numeric" required></div></div>
+        <div class="form-row"><div class="fg"><label for="b_dt">Start date *</label><input type="date" id="b_dt" required></div><div class="fg"><label for="b_dt_end">End date *</label><input type="date" id="b_dt_end" required></div></div><div class="form-row"><div class="fg"><label for="b_gs">Number of travellers * <span style="font-weight:500;opacity:.7">(5 or more)</span></label><input type="number" id="b_gs" min="5" step="1" value="5" inputmode="numeric" required></div></div>
         <div class="form-row"><div class="fg"><label for="b_budget">Total trip budget (US$) *</label><input type="number" id="b_budget" min="1" step="1" inputmode="numeric" placeholder="Exact figure, e.g. 4500" required></div></div>
         <div class="fg"><label for="b_notes">Special Requests / Notes</label><textarea id="b_notes"></textarea></div>
         <div class="sp-more">
@@ -17102,7 +17102,7 @@ body.theme-night .page .tag{
             <input type="hidden" id="tpCall">
             <small class="tp-call-note" id="tpCallNote">Times are in your own time zone.</small>
           </div>
-          <input type="hidden" id="tpEmailP"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhoneP"><input type="hidden" id="tpArrival"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
+          <input type="hidden" id="tpEmailP"><input type="hidden" id="tpFullName"><input type="hidden" id="tpPhoneP"><input type="hidden" id="tpArrival"><input type="hidden" id="tpReturn"><input type="hidden" id="tpTravelers"><input type="hidden" id="tpBudget"><input type="hidden" id="tpAdditional">
         </div>
         
         <p class="mba-upsell-note" id="mbaUpsellNote" style="display:none;margin:0 0 18px;padding:14px 16px;border-radius:12px;background:rgba(239,135,49,.08);border:1px solid rgba(239,135,49,.35);font-size:13.5px;line-height:1.55">MBA add-ons are chosen on the MBA page and quoted with your package. Your planner confirms the hosts, date and details for your shore. Tell us in the notes above which industries or kinds of companies your group would like to visit, and your planner matches the visits to your interests.</p>
@@ -27549,7 +27549,8 @@ function ssInquiryOk(ids,from){
   var el=function(i){return document.getElementById(i)};
   var bad=function(id,msg){var f=el(id);if(f){f.style.outline='2px solid #e94560';try{f.focus();f.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}setTimeout(function(){f.style.outline=''},3500)}try{toast(msg)}catch(e){}return false;};
   var dt=el(ids.date)&&el(ids.date).value;
-  if(!dt)return bad(ids.date,'Please choose your travel date.');
+  if(!dt)return bad(ids.date,ids.dateEnd?'Please choose your start date.':'Please choose your travel date.');
+  if(ids.dateEnd){var de=el(ids.dateEnd)&&el(ids.dateEnd).value;if(!de)return bad(ids.dateEnd,'Please choose your end date.');if(de<dt)return bad(ids.dateEnd,'Your end date must be on or after your start date.');}
   var n=el(ids.party)?Number(el(ids.party).value):0;
   if(!(n>=5)||Math.floor(n)!==n)return bad(ids.party,'Please enter how many travellers, a whole number from 5 up.');
   if(ids.budget){var b=el(ids.budget)?Number(el(ids.budget).value):0;if(!(b>0))return bad(ids.budget,'Please enter your exact total budget in US dollars.');}
@@ -29314,6 +29315,7 @@ function getTripPlannerSummary(){
     ['Are you a Jamaican national?',read('tpJamaican')],
     ['Is anyone in your group a Jamaican national?',read('tpGroupJamaican')],
     ['Arrival date',read('tpArrival')],
+    ['Return date',read('tpReturn')],
     ['Length of trip',read('tpLength')],
     ['Number of travelers',read('tpTravelers')],
     ['What are you seeking for your trip?',read('tpSeeking')],
@@ -29338,7 +29340,7 @@ function copyTripPlannerSummary(){
   else{toast('Copy not available in this browser.');}
 }
 function clearTripPlannerFields(){
-  ['tpEmailP','tpFullName','tpPhoneP','tpJamaican','tpGroupJamaican','tpArrival','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall','tpCallDate','tpCallTime'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
+  ['tpEmailP','tpFullName','tpPhoneP','tpJamaican','tpGroupJamaican','tpArrival','tpReturn','tpLength','tpTravelers','tpSeeking','tpExcursions','tpTransport','tpPickup','tpHousing','tpFood','tpBudget','tpAdditional','tpCall','tpCallDate','tpCallTime'].forEach(id=>{const el=document.getElementById(id);if(el) el.value='';});
   refreshTripPlannerSummary();
 }
 function ssPlanningDepositPay(source,el){
@@ -29351,12 +29353,12 @@ function ssPlanningDepositPay(source,el){
     if(isBook){
       emailId='b_em';name=(val('b_fn')+' '+val('b_ln')).trim();email=val('b_em');phone=val('b_ph');
       var upsells=[].slice.call(document.querySelectorAll('#p-booking .upsell-section input:checked')).map(function(i){return i.value});
-      summary=[['Destination',val('b_dest')],['Experience type',val('b_type')],['Package',val('b_package')],['Preferred date',val('b_dt')],['Guests',val('b_gs')],['Budget',val('b_budget')],['Add-ons',upsells.join(', ')],['Notes',val('b_notes')]].filter(function(r){return r[1]}).map(function(r){return r[0]+': '+r[1]}).join('\n');
+      summary=[['Destination',val('b_dest')],['Experience type',val('b_type')],['Package',val('b_package')],['Start date',val('b_dt')],['End date',val('b_dt_end')],['Guests',val('b_gs')],['Budget',val('b_budget')],['Add-ons',upsells.join(', ')],['Notes',val('b_notes')]].filter(function(r){return r[1]}).map(function(r){return r[0]+': '+r[1]}).join('\n');
     }else{
       emailId='tpEmailP';name=val('tpFullName');email=val('tpEmailP');phone=val('tpPhoneP');
       summary=getTripPlannerSummary();if(!summary||summary.indexOf('Complete the fields above')===0)summary='';
     }
-    if(isBook&&!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return false;
+    if(isBook&&!ssInquiryOk({date:'b_dt',dateEnd:'b_dt_end',party:'b_gs',budget:'b_budget'}))return false;
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
       var ef=document.getElementById(emailId);if(ef){ef.style.border='2px solid #e94560';ef.focus();ef.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){ef.style.border=''},3000)}
       toast('Please add your email so we can send your package.');return false;
@@ -29459,7 +29461,7 @@ function submitStartPlanning(){
   var set=function(id,x){var e=document.getElementById(id);if(e)e.value=x||''};
   var email=v('b_em');
   if(!email){submitBook();return;}   /* submitBook highlights the email field */
-  set('tpEmailP',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhoneP',v('b_ph'));set('tpArrival',v('b_dt'));
+  set('tpEmailP',email);set('tpFullName',(v('b_fn')+' '+v('b_ln')).trim());set('tpPhoneP',v('b_ph'));set('tpArrival',v('b_dt'));set('tpReturn',v('b_dt_end'));
   set('tpTravelers',v('b_gs'));set('tpBudget',v('b_budget'));set('tpAdditional',v('b_notes'));
   var extras=['tpJamaican','tpGroupJamaican','tpTransport','tpPickup','tpExcursions','tpCall'].some(function(id){return v(id)});
   var summary=extras?getTripPlannerSummary():'';
@@ -29471,7 +29473,7 @@ function submitStartPlanning(){
   }
 }
 function submitBook(){
-  if(!ssInquiryOk({date:'b_dt',party:'b_gs',budget:'b_budget'}))return;
+  if(!ssInquiryOk({date:'b_dt',dateEnd:'b_dt_end',party:'b_gs',budget:'b_budget'}))return;
   if(!ssAccountGate(submitBook)) return;
   calculateUpsells();
   var upsells=[].slice.call(document.querySelectorAll('.upsell-section input:checked')).map(function(i){return i.value});
@@ -29488,6 +29490,7 @@ function submitBook(){
   var type=document.getElementById('b_type').value;
   var pkg=document.getElementById('b_package').value;
   var dt=document.getElementById('b_dt').value;
+  var dtEnd=(document.getElementById('b_dt_end')||{}).value||'';
   var gs=document.getElementById('b_gs').value;
   var budget=document.getElementById('b_budget')?document.getElementById('b_budget').value:'';
   var funnelSource=document.getElementById('b_funnelSource')?document.getElementById('b_funnelSource').value:'';
@@ -29513,6 +29516,7 @@ function submitBook(){
     phone:ph||'',
     tourName:(funnelLabel||pkg||type||'General Enquiry')+(dest?', '+dest:''),
     date:dt||'',
+    endDate:dtEnd||'',
     guests:Number(gs)||5,
     notes:notes+(funnelSource?' [Source: '+funnelSource+']':''),
     type:'tour',
@@ -29525,7 +29529,7 @@ function submitBook(){
       ssTrack('generate_lead',{form:'booking',method:'api'});
       try{ recordMemberBooking({tour:data.tourName,date:data.date,guests:data.guests,at:new Date().toISOString()}); if(getCurrentUser&&getCurrentUser()){ if(typeof awardPoints==='function')awardPoints(25); if(typeof refreshTravelClub==='function')refreshTravelClub(); } }catch(e){}
       if(btn){btn.innerHTML='Request Submitted!';btn.classList.add('success')}
-      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';document.getElementById('b_gs').value='5';if(document.getElementById('b_budget'))document.getElementById('b_budget').value='';if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
+      try{document.getElementById('b_fn').value='';document.getElementById('b_ln').value='';document.getElementById('b_em').value='';document.getElementById('b_ph').value='';document.getElementById('b_dest').selectedIndex=0;document.getElementById('b_type').selectedIndex=0;document.getElementById('b_package').value='';document.getElementById('b_dt').value='';if(document.getElementById('b_dt_end'))document.getElementById('b_dt_end').value='';document.getElementById('b_gs').value='5';if(document.getElementById('b_budget'))document.getElementById('b_budget').value='';if(notesField)notesField.value='';document.querySelectorAll('.upsell-section input:checked').forEach(function(c){c.checked=false});calculateUpsells()}catch(e){}
       setTimeout(function(){if(btn){btn.innerHTML=origBtn;btn.classList.remove('success');btn.style.pointerEvents=''}},4000);
     }).catch(function(err){
       toast(err&&err.message?err.message:'Something went wrong. Please try again.');

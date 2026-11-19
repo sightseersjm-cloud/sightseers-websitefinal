@@ -23,7 +23,7 @@ module.exports = async function handler(req, res) {
 
       if (action === 'create' || !action) {
         let user = getUser(req);
-        const { name, email, phone, tourId, tourName, date, guests, notes, type, stayId, stayName, checkIn, checkOut } = req.body || {};
+        const { name, email, phone, tourId, tourName, date, endDate, guests, notes, type, stayId, stayName, checkIn, checkOut } = req.body || {};
         if (!name || !email) return res.status(400).json({ error: 'Name and email required' });
 
         /* a guest who is not signed in gets a Sight Seers account for their email (as trip requests do), so the booking is on their profile */
@@ -61,6 +61,7 @@ module.exports = async function handler(req, res) {
           stayId: stayId || null,
           stayName: (stayName || '').trim(),
           date: date || '',
+          endDate: endDate || '',
           checkIn: checkIn || '',
           checkOut: checkOut || '',
           guests: guests || 1,
@@ -84,7 +85,7 @@ module.exports = async function handler(req, res) {
               ${isStay ? `
               <tr><td style="padding:8px;font-weight:bold">Check-in</td><td style="padding:8px">${escapeHtml(booking.checkIn || 'Not provided')}</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Check-out</td><td style="padding:8px">${escapeHtml(booking.checkOut || 'Not provided')}</td></tr>
-              ` : `<tr><td style="padding:8px;font-weight:bold">Date</td><td style="padding:8px">${escapeHtml(booking.date || 'Not provided')}</td></tr>`}
+              ` : `<tr><td style="padding:8px;font-weight:bold">Start date</td><td style="padding:8px">${escapeHtml(booking.date || 'Not provided')}</td></tr><tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">End date</td><td style="padding:8px">${escapeHtml(booking.endDate || 'Not provided')}</td></tr>`}
               <tr><td style="padding:8px;font-weight:bold">Guests</td><td style="padding:8px">${escapeHtml(booking.guests)}</td></tr>
               ${booking.notes ? `<tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold;vertical-align:top">Notes</td><td style="padding:8px">${escapeHtml(booking.notes)}</td></tr>` : ''}
               <tr><td style="padding:8px;font-weight:bold">Status</td><td style="padding:8px;color:#e67e22;font-weight:bold">Pending, action required</td></tr>

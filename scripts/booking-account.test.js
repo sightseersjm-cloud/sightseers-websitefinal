@@ -48,6 +48,10 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   r = await bookingPost({ action: 'create', name: 'Weak Pass', email: 'weak2@example.com', tourName: 'X', password: 'short' });
   ok('a short password is refused', r.code === 400 && /password/i.test(r.body.error || ''), r.body && r.body.error);
 
+  r = await bookingPost({ action: 'create', name: 'Dee Dates', email: 'dee@example.com', tourName: 'Blue Hole Escape', date: '2027-07-01', endDate: '2027-07-06', guests: 5 });
+  ok('a booking keeps its start and end dates', r.code === 201 && r.body.booking.date === '2027-07-01' && r.body.booking.endDate === '2027-07-06', r.body && r.body.error);
+  ok('the team email shows both dates', sent.some(m => /End date/.test(m.html || '') && /2027-07-06/.test(m.html || '')));
+
   console.log(fails ? fails + ' FAILED' : 'ALL PASSED');
   process.exit(fails ? 1 : 0);
 })();
