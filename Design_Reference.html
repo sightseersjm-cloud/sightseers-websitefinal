@@ -49678,7 +49678,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function infoBox(t){
     if(t.status==='closed')return '';
     var empty=!(t.descriptionText&&t.descriptionText.trim()),live=t.status==='open'||t.status==='full';
-    return '<details class="ac-infobox" data-info-box'+(empty?' open':'')+'><summary><span>Trip details for travelers<small>'+(empty?'tell people what your trip involves':'shown on your trip page')+'</small></span></summary>'+
+    return '<details class="ac-infobox" data-info-box><summary><span>Trip details for travelers<small>'+(empty?'tell people what your trip involves':'shown on your trip page')+'</small></span></summary>'+
       '<form class="ac-infoform" data-info-form data-info-id="'+esc(t.id)+'" data-travel-club-bound="1" novalidate>'+
       '<label>Summary <span>(one or two sentences, shown under the trip title)</span><input type="text" maxlength="300" data-info-summary value="'+esc(t.summary||'')+'"></label>'+
       '<label>What the trip involves <span>(where you go, what a day looks like, who it is for. Leave a blank line between paragraphs.)</span><textarea rows="8" maxlength="6000" data-info-desc>'+esc(t.descriptionText||'')+'</textarea></label>'+
