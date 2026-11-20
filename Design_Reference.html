@@ -9109,46 +9109,65 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 
 <!-- Mobile Nav -->
 <style id="mob-nav-redesign">
-@keyframes mobIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-#mobNav{background:radial-gradient(120% 55% at 100% 0%,rgba(112,194,87,.20),transparent 60%),radial-gradient(90% 45% at 0% 100%,rgba(239,135,49,.16),transparent 62%),linear-gradient(170deg,#073d68 0%,#042a48 100%)!important;padding:70px 22px 26px!important;font-family:'Raleway',-apple-system,'Segoe UI',sans-serif;counter-reset:mn}
-#mobNav::before{content:'Menu';position:absolute;top:28px;left:26px;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(255,255,255,.6);letter-spacing:.4px}
-#mobNav::after{content:'+1 (876) 465-0630  ·  info@sightseerscaribbean.com';display:block;margin-top:30px;text-align:center;font-size:.74rem;color:rgba(255,255,255,.5);letter-spacing:.4px}
-#mobNav .mob-close{position:absolute;top:16px!important;right:18px!important;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-size:0}
+@keyframes mobIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#mobNav{display:grid!important;grid-template-columns:1fr 1fr;grid-auto-flow:dense;gap:10px;align-content:start;background:#f2f6f9!important;padding:0 16px calc(30px + env(safe-area-inset-bottom))!important;font-family:'Raleway',-apple-system,'Segoe UI',sans-serif;color:#063a63}
+#mobNav::before,#mobNav::after{content:none!important;display:none!important}
+#mobNav .mob-top{grid-column:1/-1;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;width:calc(100% + 32px)!important;max-width:none!important;margin:0 0 0 -16px;padding:12px 16px;box-sizing:border-box;background:#fff;border-bottom:1px solid #dfe6ec}
+#mobNav .mob-logo{display:block;width:150px;height:34px;background:url(/assets/logo-wordmark.png) left center/contain no-repeat}
+#mobNav .mob-close{position:relative!important;top:auto!important;right:auto!important;left:auto!important;width:42px;height:42px;border-radius:2px;background:#fff;border:1px solid #dfe6ec;font-size:0;cursor:pointer;flex:none}
 #mobNav .mob-close i{display:none}
-#mobNav .mob-close::before,#mobNav .mob-close::after{content:'';position:absolute;left:50%;top:50%;width:17px;height:2px;border-radius:2px;background:#fff;transform:translate(-50%,-50%) rotate(45deg)}
+#mobNav .mob-close::before,#mobNav .mob-close::after{content:'';position:absolute;left:50%;top:50%;width:18px;height:2px;border-radius:2px;background:#063a63;transform:translate(-50%,-50%) rotate(45deg)}
 #mobNav .mob-close::after{transform:translate(-50%,-50%) rotate(-45deg)}
-#mobNav > a{display:flex!important;align-items:center;gap:12px;padding:12px 0!important;font-family:'Playfair Display',Georgia,serif!important;font-size:1.45rem!important;font-weight:600!important;line-height:1.1;color:#fff!important;border-bottom:1px solid rgba(255,255,255,.09)!important;counter-increment:mn}
-#mobNav > a::before{content:counter(mn,decimal-leading-zero);font-family:'Raleway',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:1.4px;color:#70c257;align-self:flex-start;margin-top:.7rem;min-width:22px}
-#mobNav > a:hover{color:#ef8731!important}
-#mobNav.open > a{animation:mobIn .55s cubic-bezier(.2,.8,.2,1) both}
-#mobNav.open > a:nth-of-type(2){animation-delay:.05s}
-#mobNav.open > a:nth-of-type(3){animation-delay:.10s}
-#mobNav.open > a:nth-of-type(4){animation-delay:.15s}
-#mobNav.open > a:nth-of-type(5){animation-delay:.20s}
-#mobNav.open > a:nth-of-type(6){animation-delay:.25s}
-#mobNav > a.mob-feature{counter-increment:none;margin:6px 0 20px;padding:14px 18px!important;border:0!important;border-radius:16px;background:linear-gradient(120deg,rgba(112,194,87,.24),rgba(239,135,49,.14));box-shadow:inset 0 0 0 1px rgba(166,227,143,.38);font-family:'Raleway',sans-serif!important;font-size:.8rem!important;font-weight:800!important;letter-spacing:2px;text-transform:uppercase;color:#d4f5bf!important}
-#mobNav > a.mob-feature::before{content:none}
-#mobNav > a.mob-feature::after{content:'\2192';margin-left:auto;font-size:1.15rem;letter-spacing:0;color:#fff}
-#mobNav > a.mob-group-toggle i{display:none!important}
-#mobNav > a.mob-group-toggle::after{content:'+';margin-left:auto;font-family:'Raleway',sans-serif;font-size:1.7rem;font-weight:300;line-height:1;color:#70c257;transition:transform .3s}
-#mobNav > a.mob-group-toggle.open::after{content:'\2013'}
-#mobNav .mob-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0}
-#mobNav .mob-group.open{padding:8px 0 16px;max-height:900px}
-#mobNav .mob-group a{display:block!important;padding:9px 11px!important;border:0!important;border-radius:10px;background:rgba(255,255,255,.06);font-family:'Raleway',sans-serif!important;font-size:.78rem!important;font-weight:600!important;line-height:1.3;color:rgba(255,255,255,.9)!important}
-#mobNav .mob-group a:hover{background:rgba(112,194,87,.22);color:#fff!important}
-#mobNav > a:nth-last-child(2){counter-increment:none;justify-content:center;margin-top:30px;padding:12px 18px!important;border:1px solid rgba(255,255,255,.24)!important;border-radius:999px;font-family:'Raleway',sans-serif!important;font-size:.74rem!important;font-weight:700!important;letter-spacing:1.6px;text-transform:uppercase;text-align:center;color:#fff!important}
-#mobNav > a:nth-last-child(2)::before{content:none}
-#mobNav > a:last-child{counter-increment:none;justify-content:center;margin-top:12px!important;padding:14px 18px!important;border:0!important;border-radius:999px;background:linear-gradient(120deg,#ef8731,#f5a05a);box-shadow:0 12px 24px rgba(239,135,49,.3);font-family:'Raleway',sans-serif!important;font-size:.8rem!important;font-weight:800!important;letter-spacing:1.6px;text-transform:uppercase;text-align:center;color:#fff!important}
-#mobNav > a:last-child::before{content:none}
-#mobNav > a:last-child:hover{background:linear-gradient(120deg,#d9712a,#ef8731)}
+#mobNav .mob-hero{grid-column:1/-1;margin-top:6px;padding:20px 18px 18px;color:#fff;border-radius:2px;background:radial-gradient(120% 90% at 100% 0%,rgba(112,194,87,.3),transparent 60%),radial-gradient(90% 80% at 0% 100%,rgba(239,135,49,.22),transparent 62%),linear-gradient(160deg,#073d68,#042a48)}
+#mobNav .mh-eyebrow{display:block;font:800 10px 'Raleway',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#a6e38f}
+#mobNav .mh-title{display:block;margin:8px 0 0;font:700 26px/1.1 'Playfair Display',Georgia,serif;color:#fff}
+#mobNav .mh-v{display:inline-grid;place-items:center;vertical-align:middle;width:20px;height:20px;margin-left:8px;border-radius:50%;background:#1d9bf0;color:#fff;font:800 12px/1 'Raleway',sans-serif}
+#mobNav .mh-sub{margin:8px 0 0;font-size:13px;line-height:1.5;color:rgba(255,255,255,.78)}
+#mobNav .mh-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#mobNav .mh-chip{padding:7px 12px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);font:700 12px 'Raleway',sans-serif;color:#fff}
+#mobNav .mh-chip.or{border-color:transparent;background:linear-gradient(135deg,#f5a04b,#ef8731)}
+#mobNav a.mh-btn{display:inline-block!important;margin-top:14px;padding:11px 18px!important;border:0!important;background:#fff;color:#063a63!important;font:800 11.5px 'Raleway',sans-serif!important;letter-spacing:.14em;text-transform:uppercase;border-radius:2px}
+#mobNav .mob-sec{grid-column:1/-1;margin:10px 2px -2px;font:800 10.5px 'Raleway',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#ef8731}
+#mobNav a.mob-tile{display:flex!important;flex-direction:column;justify-content:space-between;gap:12px;min-height:104px;padding:14px!important;position:relative;background:#fff;border:1px solid #dfe6ec!important;border-radius:2px;box-shadow:0 10px 22px -18px rgba(6,58,99,.6);color:#063a63!important;font-family:'Raleway',sans-serif!important;line-height:1.2;text-align:left;-webkit-tap-highlight-color:transparent}
+#mobNav a.mob-tile .mi{flex:none;display:grid;place-items:center;width:36px;height:36px;background:#063a63;color:#fff;font-size:15px;border-radius:2px}
+#mobNav a.mob-tile .mt{display:block;font:700 15px/1.2 'Raleway',sans-serif;color:#063a63}
+#mobNav a.mob-tile small{display:block;margin-top:3px;font:500 11.5px/1.35 'Raleway',sans-serif;color:#5b6b76}
+#mobNav a.mob-tile:active{background:#f6f9fb;transform:scale(.985)}
+#mobNav a.mob-tile.mob-group-toggle::after{content:'+';position:absolute;top:8px;right:12px;font:300 24px/1 'Raleway',sans-serif;color:#ef8731}
+#mobNav a.mob-tile.mob-group-toggle.open{border-color:#ef8731!important;box-shadow:0 10px 22px -16px rgba(239,135,49,.7)}
+#mobNav a.mob-tile.mob-group-toggle.open::after{content:'\2013'}
+#mobNav a.mob-tile.mob-group-toggle i{display:none!important}
+#mobNav a.mob-feature{grid-column:1/-1;flex-direction:row!important;align-items:center;min-height:0;gap:12px;padding:12px 14px!important;background:linear-gradient(120deg,#eaf6e4,#fff3e3);border-color:#bfe3b0!important}
+#mobNav a.mob-feature .mi{flex:none;width:30px;height:30px;font-size:13px;background:#3f9a2c}
+#mobNav a.mob-feature .mt{font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+#mobNav a.mob-feature::after{content:'\2192';margin-left:auto;font-size:18px;color:#063a63}
+#mobNav .mob-group{grid-column:1/-1;display:none;max-height:none;overflow:visible;grid-template-columns:1fr 1fr;gap:8px;padding:12px;background:#fff;border:1px solid #dfe6ec;border-top:3px solid #ef8731;border-radius:2px;box-shadow:0 12px 24px -18px rgba(6,58,99,.6)}
+#mobNav .mob-group.open{display:grid;animation:mobIn .3s ease both}
+#mobNav .mob-group a{display:block!important;padding:11px 12px!important;background:#f3f7fa;border:0!important;border-left:3px solid transparent!important;border-radius:0;font:600 13px/1.3 'Raleway',sans-serif!important;color:#063a63!important}
+#mobNav .mob-group a:active,#mobNav .mob-group a:hover{background:#e9f1f7;border-left-color:#ef8731!important}
+#mobNav a.mob-cta{grid-column:1/-1;display:flex!important;justify-content:center;margin-top:6px;padding:15px 18px!important;border:0!important;border-radius:2px;background:linear-gradient(120deg,#ef8731,#f5a05a);box-shadow:0 12px 24px rgba(239,135,49,.3);font:800 13px 'Raleway',sans-serif!important;letter-spacing:.16em;text-transform:uppercase;color:#fff!important;text-align:center}
+#mobNav .mob-contact{grid-column:1/-1;margin-top:4px;text-align:center;font-size:12px;line-height:1.7;color:#5b6b76}
+#mobNav .mob-contact a{display:inline!important;padding:0!important;border:0!important;font:inherit!important;color:#063a63!important;background:none}
+#mobNav.open > *{animation:mobIn .45s cubic-bezier(.2,.8,.2,1) both}
+#mobNav.open > .mob-group.open{animation:mobIn .3s ease both}
+#mobNav.open > :nth-child(3){animation-delay:.04s}#mobNav.open > :nth-child(4){animation-delay:.08s}#mobNav.open > :nth-child(5){animation-delay:.12s}#mobNav.open > :nth-child(6){animation-delay:.16s}
+@media(prefers-reduced-motion:reduce){#mobNav.open > *,#mobNav .mob-group.open{animation:none}}
 </style>
 <div class="mob-nav" id="mobNav">
-  <span class="mob-close" onclick="closeMob()"><i class="fas fa-times"></i></span>
-  <a href="#" onclick="nav('home');closeMob()">Home</a>
-  <a href="#" class="mob-feature" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
-  <a href="#" onclick="nav('travel-club');closeMob();return false;">Travel Club</a>
+  <div class="mob-top"><span class="mob-logo" role="img" aria-label="Sight Seers Caribbean Adventures"></span><span class="mob-close" onclick="closeMob()" aria-label="Close menu"><i class="fas fa-times"></i></span></div>
+  <div class="mob-hero" id="mobHero">
+    <span class="mh-eyebrow">Sight Seers Travel Club</span>
+    <strong class="mh-title" id="mobHeroTitle">Welcome to Sight Seers</strong>
+    <p class="mh-sub" id="mobHeroSub">Create a free account for your Travel Club passport, stamps and Travel Points.</p>
+    <div class="mh-chips" id="mobHeroChips"></div>
+    <a href="#" class="mh-btn" id="mobHeroBtn" onclick="nav('account');closeMob();return false;">Create account</a>
+  </div>
+  <div class="mob-sec">Explore</div>
+  <a href="#" class="mob-tile mob-feature" onclick="nav('flagship-programs');closeMob();return false;"><span class="mi"><i class="fas fa-star"></i></span><span class="mt">Flagship Programs</span></a>
+  <a href="#" class="mob-tile" onclick="nav('home');closeMob();return false;"><span class="mi"><i class="fas fa-home"></i></span><span><span class="mt">Home</span><small>Start here</small></span></a>
+  <a href="#" class="mob-tile" onclick="nav('travel-club');closeMob();return false;"><span class="mi"><i class="fas fa-users"></i></span><span><span class="mt">Travel Club</span><small>Lead a trip, earn stamps</small></span></a>
 
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Tours & Excursions <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <a href="#" class="mob-tile mob-group-toggle" onclick="toggleMobGroup(this);return false"><span class="mi"><i class="fas fa-map-marked-alt" style="display:inline!important"></i></span><span><span class="mt">Tours &amp; Excursions</span><small>Water, land and groups</small></span></a>
   <div class="mob-group">
     <a href="#" onclick="nav('tours');closeMob()">All Tours</a>
     <a href="#" onclick="nav('tours');closeMob()">Custom Packages</a>
@@ -9162,7 +9181,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="nav('waiver');closeMob();return false;">Sign a Waiver</a>
   </div>
 
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">Stays & Villas <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <a href="#" class="mob-tile mob-group-toggle" onclick="toggleMobGroup(this);return false"><span class="mi"><i class="fas fa-bed" style="display:inline!important"></i></span><span><span class="mt">Stays &amp; Villas</span><small>Seven islands</small></span></a>
   <div class="mob-group">
     <a href="#" onclick="openStayCountryPage('Jamaica','all');closeMob();return false;">Jamaica</a>
     <a href="#" onclick="openStayCountryPage('Barbados','all');closeMob();return false;">Barbados</a>
@@ -9173,8 +9192,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" onclick="openStayCountryPage('Curacao','all');closeMob();return false;">Curacao</a>
   </div>
 
-
-  <a href="#" class="mob-group-toggle" onclick="toggleMobGroup(this);return false">More <i class="fas fa-chevron-down" style="font-size:11px;margin-left:6px;transition:transform .3s"></i></a>
+  <a href="#" class="mob-tile mob-group-toggle" onclick="toggleMobGroup(this);return false"><span class="mi"><i class="fas fa-ellipsis-h" style="display:inline!important"></i></span><span><span class="mt">More</span><small>Gallery, blog, insurance</small></span></a>
   <div class="mob-group">
     <a href="#" onclick="nav('passport');closeMob()">Jamaican Passport Renewal</a>
     <a href="#" onclick="nav('about');closeMob()">About Us</a>
@@ -9187,8 +9205,9 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
     <a href="#" data-vtours-link onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
 
-  <a href="#" onclick="nav('account');closeMob()">Guest Account</a>
-  <a href="#" onclick="nav('booking');closeMob()" style="color:var(--orange);margin-top:20px;font-size:1.1em">Start Planning →</a>
+  <a href="#" class="mob-tile" id="mobAcctTile" onclick="nav('account');closeMob();return false;"><span class="mi"><i class="far fa-user"></i></span><span><span class="mt">Account</span><small>Passport and points</small></span></a>
+  <a href="#" class="mob-cta" onclick="nav('booking');closeMob();return false;">Start Planning &rarr;</a>
+  <div class="mob-contact"><a href="tel:+18764650630">+1 (876) 465-0630</a> &middot; <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a></div>
 </div>
 
 <!-- Cart Panel -->
@@ -29374,6 +29393,33 @@ function initReveal(){document.querySelectorAll('.reveal').forEach(el=>{if(el.ge
 window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('shadow',window.scrollY>50);document.getElementById('scrollTop').classList.toggle('vis',window.scrollY>400);initReveal();},{passive:true});
 
 /* ── MOBILE NAV ──────────────────── */
+/* the phone menu opens like a dashboard: a welcome card that shows the member's tier and points, or an invitation to create an account */
+function ssMobHero(){
+  var box=document.getElementById('mobHero');if(!box)return;
+  var u=null;try{u=(typeof getCurrentUser==='function')?getCurrentUser():null;}catch(e){}
+  var tok='';try{tok=localStorage.getItem('ss_auth_token')||'';}catch(e){}
+  var real=!!(u&&tok&&tok.indexOf('guest_')!==0);
+  var title=document.getElementById('mobHeroTitle'),sub=document.getElementById('mobHeroSub'),chips=document.getElementById('mobHeroChips'),btn=document.getElementById('mobHeroBtn'),acct=document.getElementById('mobAcctTile');
+  if(!title||!sub||!chips||!btn)return;
+  chips.textContent='';
+  if(real){
+    var first=String(u.name||'').trim().split(/\s+/)[0]||'traveller';
+    title.textContent='Welcome, '+first;
+    if(u.verifiedTraveller){var v=document.createElement('span');v.className='mh-v';v.textContent='✓';v.title='Verified traveller';title.appendChild(v);}
+    sub.style.display='none';
+    var pts=(typeof getTravelPoints==='function')?getTravelPoints():0,tier=(typeof getTravelTier==='function')?getTravelTier(pts).name:'Explorer';
+    var c1=document.createElement('span');c1.className='mh-chip or';c1.textContent=tier+' tier';chips.appendChild(c1);
+    var c2=document.createElement('span');c2.className='mh-chip';c2.textContent=Number(pts).toLocaleString()+' points';chips.appendChild(c2);
+    btn.textContent='Open dashboard';
+    if(acct){var s=acct.querySelector('.mt');if(s)s.textContent='My dashboard';}
+  }else{
+    title.textContent='Welcome to Sight Seers';
+    sub.style.display='';sub.textContent='Create a free account for your Travel Club passport, stamps and Travel Points.';
+    btn.textContent='Create account';
+    if(acct){var s2=acct.querySelector('.mt');if(s2)s2.textContent='Account';}
+  }
+}
+(function(){var n=document.getElementById('mobNav');if(!n||!window.MutationObserver)return;new MutationObserver(function(){if(n.classList.contains('open'))ssMobHero();}).observe(n,{attributes:true,attributeFilter:['class']});})();
 function openMob(){document.getElementById('mobNav').classList.add('open');}
 function closeMob(){document.getElementById('mobNav').classList.remove('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});}
 function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.contains('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});if(!isOpen){g.classList.add('open');el.classList.add('open');}}
