@@ -12,6 +12,8 @@ const MARKER = 'club-seeds';
 
 const SEEDS = [{
   key: 'summit-challenge',
+  /* led by the same account that leads this trip (found by its web address, or by its title) */
+  sameLeaderAs: { slug: 'legend-escape-weekend-jamaica', title: /legend escape weekend/i },
   trip: {
     title: 'The Summit Challenge',
     slug: 'the-summit-challenge',
@@ -62,7 +64,14 @@ async function ensureSeeds() {
   for (const s of SEEDS) {
     if (done.indexOf(s.key) > -1) continue;
     if (!trips.some(t => t.slug === s.trip.slug)) {
-      await db.addToCollection(TRIPS, Object.assign({ id: uid(), createdAt: new Date().toISOString(), applicationId: null }, s.trip));
+      const rec = Object.assign({ id: uid(), createdAt: new Date().toISOString(), applicationId: null }, s.trip);
+      /* take the leader details from the trip it should share a leader with, so that account runs this one too */
+      const src = s.sameLeaderAs && (trips.find(t => t.slug === s.sameLeaderAs.slug) || trips.find(t => s.sameLeaderAs.title.test(String(t.title || ''))));
+      if (src && (src.organizerUserId || src.organizerEmail || src.organizerName)) {
+        ['organizerUserId', 'organizerEmail', 'organizerName', 'organizerCommunity', 'organizerBio'].forEach(k => { if (src[k] !== undefined) rec[k] = src[k]; });
+        rec.showOrganizer = true;
+      }
+      await db.addToCollection(TRIPS, rec);
     }
     done.push(s.key); changed = true;
   }

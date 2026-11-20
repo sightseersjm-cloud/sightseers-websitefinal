@@ -28,7 +28,7 @@
     "test:ops": "node scripts/ops-auto.test.js",
     "test:verified": "node scripts/verified.test.js",
     "test:club-extras": "node scripts/club-extras.test.js",
-    "test:private": "node scripts/private-event.test.js"
+    "test:private": "node scripts/private-event.test.js && node scripts/private-event-leader.test.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",
