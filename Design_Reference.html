@@ -54112,6 +54112,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-acc[open]>summary{border-bottom:1px solid #e3ebf2}
 #p-account #acClubExtras .cx-accbody{padding:18px 22px 22px;animation:cxOpen .3s ease}
 @keyframes cxOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+#p-account #acClubExtras .cx-first{background:#fff7ec;border-left:3px solid #ef8731;padding:10px 12px;color:#17323f}
 #p-account #acClubExtras .cx-plist{list-style:none;margin:0;padding:0}
 #p-account #acClubExtras .cx-plist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #e3ebf2;font-size:14px;color:#17323f}
 #p-account #acClubExtras .cx-plist li small{color:#5b6b76}
@@ -54138,7 +54139,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-bookwrap:not(.wide) .cx-sheet.flipped{opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.4,.1,.2,1),opacity .25s .4s}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
-#p-account #acClubExtras .cx-endpage{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
+#p-account #acClubExtras .cx-endpage.cx-paper{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
 #p-account #acClubExtras .cx-msgpage .cx-note{margin:96px 22px 0}
 #p-account #acClubExtras .cx-sheet.flipped{transform:rotateY(-178deg)}
 #p-account #acClubExtras .cx-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:3px 8px 8px 3px;box-shadow:0 14px 30px -14px rgba(6,40,70,.55)}
@@ -54378,7 +54379,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var inv=acc('invite','Invite friends',esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.points)+' points each':''),'<p class="cx-sub">'+(r.active?'When a friend you invite takes their first trip with Sight Seers, you both earn <b>'+esc(r.points)+' Travel Points</b>.':'Share Sight Seers with friends who love to travel.')+' Your personal link:</p>'+
       '<div class="cx-link"><input id="cxRefLink" readonly value="'+esc(r.link||'')+'" aria-label="Your invite link"><button type="button" class="cx-btn" data-cx-copy>Copy link</button></div>'+
       '<p class="cx-stats">'+esc(r.joined||0)+(r.joined===1?' friend':' friends')+' joined'+(r.active?' · '+esc(r.rewarded||0)+' rewarded':'')+'</p>');
-    var stamps='<div class="cx-card"><h4>Your Travel Club passport</h4><p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+bookHtml(m)+'</div>';
+    var stamps='<div class="cx-card"><h4>Your Travel Club passport</h4><p class="cx-sub">Every trip you finish with Sight Seers earns a stamp. Tap Next, or swipe, to turn the pages.</p>'+((m.stamps||[]).length?'':'<p class="cx-sub cx-first"><b>No stamps yet.</b> Your first one lands after your first finished trip. Invite a friend with the link below and you both earn Travel Points.</p>')+bookHtml(m)+'</div>';
     var rev='';
     if(mine.eligible.length){
       rev+='<p class="cx-sub">Tell other travellers how it went. Reviews are checked by our team before they appear.</p>'+mine.eligible.map(function(e){
@@ -54882,7 +54883,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
             /* the address, last */
             ctx.globalAlpha=easeOut((ot-3.3)/.6);
             txt(ctx,'sightseerscaribbean.com',W/2,H*.9,'700 '+F(40)+'px Raleway, Arial, sans-serif','#ffffff','center',1);
-            txt(ctx,stamps.length+(stamps.length===1?' stamp':' stamps')+' · '+(d.tier||'Explorer'),W/2,H*.9+F(60),'600 '+F(32)+'px Raleway, Arial, sans-serif','rgba(255,255,255,.9)','center',0);
+            txt(ctx,(stamps.length?stamps.length+(stamps.length===1?' stamp':' stamps')+' · ':'')+(d.tier||'Explorer')+' member',W/2,H*.9+F(60),'600 '+F(32)+'px Raleway, Arial, sans-serif','rgba(255,255,255,.9)','center',0);
             ctx.globalAlpha=1;}
           else if(time>3.0&&time<T[1].s+0.2){}
           if(s.k==='hold'||s.k==='stamps'||s.k==='quick'){var lab=s.k==='hold'?'Your Travel Club ID':'Every trip earns a stamp';ctx.globalAlpha=Math.min(1,(time-s.s)/.5)*.9;txt(ctx,lab.toUpperCase(),W/2,H*.12,'800 '+F(34)+'px Raleway, Arial, sans-serif','#ffffff','center',F(8));ctx.globalAlpha=1;}
