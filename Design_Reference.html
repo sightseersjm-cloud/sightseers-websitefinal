@@ -9143,6 +9143,13 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 #mobNav .mob-group.open{display:grid;animation:mobIn .3s ease both}
 #mobNav .mob-group a{display:block!important;padding:13px 2px!important;background:none;border:0!important;border-bottom:1px solid rgba(255,255,255,.09)!important;border-radius:0;font:600 14px/1.3 'Raleway',sans-serif!important;color:rgba(255,255,255,.92)!important}
 #mobNav .mob-group a:active,#mobNav .mob-group a:hover{color:#ef8731!important}
+#mobNav .mob-group a.mob-subrow{grid-column:1/-1;display:flex!important;align-items:center;justify-content:space-between;padding:14px 2px!important;font:700 15px/1.2 'Raleway',sans-serif!important;color:#fff!important}
+#mobNav .mob-group a.mob-subrow::after{content:'+';font:300 24px/1 'Raleway',sans-serif;color:#a6e38f}
+#mobNav .mob-group a.mob-subrow.open{border-bottom-color:rgba(239,135,49,.7)!important}
+#mobNav .mob-group a.mob-subrow.open::after{content:'\2013';color:#ef8731}
+#mobNav .mob-sub{grid-column:1/-1;display:none;grid-template-columns:1fr 1fr;gap:0 18px;padding:0 0 6px 14px;border-left:2px solid rgba(239,135,49,.55)}
+#mobNav .mob-sub.open{display:grid;animation:mobIn .25s ease both}
+#mobNav .mob-sub a{font:500 13.5px/1.3 'Raleway',sans-serif!important;color:rgba(255,255,255,.85)!important}
 #mobNav a.mob-acct{display:block!important;margin-top:14px;padding:14px 16px!important;text-align:center;border:1px solid rgba(255,255,255,.35)!important;border-radius:2px;font:700 12px 'Raleway',sans-serif!important;letter-spacing:.16em;text-transform:uppercase;color:#fff!important}
 #mobNav a.mob-cta{display:block!important;margin-top:10px;padding:16px 18px!important;text-align:center;border:0!important;border-radius:2px;background:linear-gradient(120deg,#ef8731,#f5a05a);box-shadow:0 12px 24px rgba(239,135,49,.3);font:800 13px 'Raleway',sans-serif!important;letter-spacing:.16em;text-transform:uppercase;color:#fff!important}
 #mobNav .mob-contact{margin-top:16px;text-align:center;font-size:12px;line-height:1.7;color:rgba(255,255,255,.6)}
@@ -9174,20 +9181,25 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
     <div class="mh-chips" id="mobHeroChips"></div>
     <a href="#" class="mh-btn" id="mobHeroBtn" onclick="nav('account');closeMob();return false;">Create account</a>
   </div>
-  <div class="mob-sec">Menu</div>
   <a href="#" class="mob-row" onclick="nav('home');closeMob();return false;"><i class="n">01</i>Home</a>
   <a href="#" class="mob-row mob-feature" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
   <a href="#" class="mob-row" onclick="nav('travel-club');closeMob();return false;"><i class="n">02</i>Travel Club</a>
 
   <a href="#" class="mob-row mob-group-toggle" onclick="toggleMobGroup(this);return false"><i class="n">03</i>Tours &amp; Excursions</a>
   <div class="mob-group">
-    <a href="#" onclick="nav('tours');closeMob()">All Tours</a>
-    <a href="#" onclick="nav('tours');closeMob()">Custom Packages</a>
-    <a href="#" onclick="nav('school-tours');closeMob();return false;">School Tours</a>
-    <a href="#" onclick="nav('greek-life');closeMob();return false;">Greek Life Travel</a>
-    <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
-    <a href="#" onclick="nav('tours');closeMob()">Water Experiences</a>
-    <a href="#" onclick="nav('tours');closeMob()">Land Experiences</a>
+    <a href="#" class="mob-subrow mob-group-toggle" onclick="toggleMobSub(this);return false">Experiences</a>
+    <div class="mob-sub">
+      <a href="#" onclick="openToursFilter('all');closeMob();return false;">All Experiences</a>
+      <a href="#" onclick="openToursFilter('water');closeMob();return false;">Water Experiences</a>
+      <a href="#" onclick="openToursFilter('land');closeMob();return false;">Land Experiences</a>
+      <a href="#" onclick="openToursFilter('package');closeMob();return false;">Custom Packages</a>
+    </div>
+    <a href="#" class="mob-subrow mob-group-toggle" onclick="toggleMobSub(this);return false">Groups</a>
+    <div class="mob-sub">
+      <a href="#" onclick="nav('school-tours');closeMob();return false;">School Tours</a>
+      <a href="#" onclick="nav('greek-life');closeMob();return false;">Greek Life Travel</a>
+      <a href="#" onclick="nav('greek-life');closeMob();return false;">Custom Group Travel</a>
+    </div>
     <a href="#" onclick="nav('leaders-jamaica');closeMob();return false;">Leaders in Jamaica</a>
     <a href="#" onclick="nav('tent-rental');closeMob();return false;">Tent Rental</a>
     <a href="#" onclick="nav('waiver');closeMob();return false;">Sign a Waiver</a>
@@ -9217,7 +9229,6 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
     <a href="#" data-vtours-link onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
 
-  <a href="#" class="mob-acct" id="mobAcctTile" onclick="nav('account');closeMob();return false;"><span class="mt">Guest account</span></a>
   <a href="#" class="mob-cta" onclick="nav('booking');closeMob();return false;">Start Planning &rarr;</a>
   <div class="mob-contact"><a href="tel:+18764650630">+1 (876) 465-0630</a> &middot; <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a></div>
 </div>
@@ -29433,8 +29444,9 @@ function ssMobHero(){
 }
 (function(){var n=document.getElementById('mobNav');if(!n||!window.MutationObserver)return;new MutationObserver(function(){if(n.classList.contains('open'))ssMobHero();}).observe(n,{attributes:true,attributeFilter:['class']});})();
 function openMob(){document.getElementById('mobNav').classList.add('open');}
-function closeMob(){document.getElementById('mobNav').classList.remove('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});}
-function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.contains('open');document.querySelectorAll('.mob-group,.mob-group-toggle').forEach(function(e){e.classList.remove('open')});if(!isOpen){g.classList.add('open');el.classList.add('open');}}
+function closeMob(){document.getElementById('mobNav').classList.remove('open');document.querySelectorAll('.mob-group,.mob-group-toggle,.mob-sub').forEach(function(e){e.classList.remove('open')});}
+function toggleMobGroup(el){var g=el.nextElementSibling;var isOpen=g.classList.contains('open');document.querySelectorAll('.mob-group,.mob-group-toggle,.mob-sub').forEach(function(e){e.classList.remove('open')});if(!isOpen){g.classList.add('open');el.classList.add('open');}}
+function toggleMobSub(el){var s=el.nextElementSibling,was=s.classList.contains('open'),par=el.parentNode;par.querySelectorAll('.mob-sub,.mob-subrow').forEach(function(e){e.classList.remove('open')});if(!was){s.classList.add('open');el.classList.add('open');}}
 
 
 /* ── BOOKING FORM ────────────────── */
