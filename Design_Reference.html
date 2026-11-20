@@ -9152,6 +9152,21 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 #mobNav.open > .mob-group.open{animation:mobIn .3s ease both}
 #mobNav.open > :nth-child(3){animation-delay:.04s}#mobNav.open > :nth-child(4){animation-delay:.08s}#mobNav.open > :nth-child(5){animation-delay:.12s}#mobNav.open > :nth-child(6){animation-delay:.16s}
 @media(prefers-reduced-motion:reduce){#mobNav.open > *,#mobNav .mob-group.open{animation:none}}
+
+/* ---- the top bar on phones and tablets: a compact app bar with square buttons, like the dashboard ---- */
+@media(max-width:1024px){
+html body .navbar{background:#fff!important;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid #dfe6ec!important;box-shadow:0 10px 22px -20px rgba(6,58,99,.55)}
+html body .navbar .nav-wrap{min-height:62px!important;padding:9px 14px!important;gap:10px!important;align-items:center}
+html body .navbar .logo{display:flex;align-items:center}
+html body .navbar .logo-image{height:50px!important;width:auto!important;max-width:none!important;flex:none;object-fit:contain;filter:none!important;box-shadow:none!important;background:none!important}
+html body .navbar .nav-actions{gap:8px!important}
+html body .navbar .nav-actions .utility-link#n-account,html body .navbar .nav-actions .cart-icon,html body .navbar .nav-actions .hamburger{display:flex!important;align-items:center;justify-content:center;width:42px;height:42px;padding:0;margin:0;border:1px solid #dfe6ec;border-radius:2px;background:#fff;color:#063a63!important;font-size:16px;position:relative;flex:none;-webkit-tap-highlight-color:transparent}
+html body .navbar .nav-actions .hamburger{flex-direction:column;gap:4px}
+html body .navbar .nav-actions .hamburger span{width:18px;height:2px;background:#063a63}
+html body .navbar .nav-actions .utility-link#n-account:active,html body .navbar .nav-actions .cart-icon:active,html body .navbar .nav-actions .hamburger:active{background:#f3f7fa}
+html body .navbar #n-account .n-acc-img{border-radius:1px}
+html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizing:content-box}
+}
 </style>
 <div class="mob-nav" id="mobNav">
   <div class="mob-top"><span class="mob-logo" role="img" aria-label="Sight Seers Caribbean Adventures"></span><span class="mob-close" onclick="closeMob()" aria-label="Close menu"><i class="fas fa-times"></i></span></div>
