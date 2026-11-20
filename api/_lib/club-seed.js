@@ -34,10 +34,22 @@ const SUMMIT_V2 = {
   ]
 };
 
+const SUMMIT_V3 = {
+  summary: 'A private, Sight Seers led team challenge: climbing, laser tag, ATVs, a farm train and team games, scored across six challenges. Ten places.',
+  description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule: nobody wins alone. Every station needs the whole team to plan, communicate and back each other up, with your Sight Seers Team Lead guiding the day and keeping score.\n\nPoints are earned for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. The Summit Champions are crowned at the end, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. About four hours on site.',
+  included: [
+    'Six scored team challenges: a climbing wall relay, laser tag missions, a guided ATV convoy (a ride, not a race), a farm train tour with a team quiz, and a final round of team games',
+    'A Sight Seers Team Lead to guide the day and keep the score',
+    'Round trip coach transport',
+    'A branded team shirt'
+    
+  ]
+};
+
 const SEEDS = [{
   key: 'summit-challenge',
-  rev: 4,
-  previous: [SUMMIT_V1, SUMMIT_V2],
+  rev: 5,
+  previous: [SUMMIT_V1, SUMMIT_V2, SUMMIT_V3],
   /* rev 4: the date, a Day by day entry, and no inherited community line. Each change is only made where the field still has
      the value it was seeded with, so anything the owner changed is left alone. */
   migrations: [{ rev: 4, patch: (have, trip) => {
@@ -58,7 +70,7 @@ const SEEDS = [{
     dateText: 'December 10, 2026',
     startDate: '2026-12-10', endDate: '2026-12-10',
     summary: 'A private, Sight Seers led team challenge: climbing, laser tag, ATVs, a farm train and team games, scored across six challenges. Ten places.',
-    description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule: nobody wins alone. Every station needs the whole team to plan, communicate and back each other up, with your Sight Seers Team Lead guiding the day and keeping score.\n\nPoints are earned for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. The Summit Champions are crowned at the end, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. About four hours on site.',
+    description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule: nobody wins alone. Every station needs the whole team to plan, communicate and back each other up, with your Sight Seers Team Lead guiding the day and keeping score.\n\nPoints are earned for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. The winning team is crowned the Summit Champions at the end of the day. About four hours on site.',
     included: [
       'Six scored team challenges: a climbing wall relay, laser tag missions, a guided ATV convoy (a ride, not a race), a farm train tour with a team quiz, and a final round of team games',
       'A Sight Seers Team Lead to guide the day and keep the score',
