@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /manage
+Disallow: /verify/
 
 Sitemap: https://www.sightseerscaribbean.com/sitemap.xml
