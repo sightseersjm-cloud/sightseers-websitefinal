@@ -22,10 +22,22 @@ const SUMMIT_V1 = {
   ]
 };
 
+const SUMMIT_V2 = {
+  summary: 'A private, Sight Seers led team challenge: climbing, laser tag, ATVs, a farm train and team games, scored across six challenges. Ten places.',
+  description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule that never changes: nobody wins alone. Every station asks the whole team to plan, communicate and back each other up, from the first team chant to the final round.\n\nYou will tackle a climbing wall in a relay, plot your tactics through laser tag missions, ride a guided ATV convoy where teamwork counts and racing does not, take a farm train tour with a team quiz, and settle the score over giant Jenga, cornhole and table tennis. Your Sight Seers Team Lead guides every step and keeps the scoreboard, so the day runs smoothly and you can focus on the game.\n\nPoints are earned at every station for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. When the final scores are in, the Summit Champions are crowned, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. Allow about four hours on site.',
+  included: [
+    'Six scored team challenges: a climbing wall relay, laser tag missions, a guided ATV convoy (a ride, not a race), a farm train tour with a team quiz, and a final round of team games',
+    'A Sight Seers Team Lead to guide the day and keep the score',
+    'Round trip coach transport',
+    'A branded team shirt'
+    
+  ]
+};
+
 const SEEDS = [{
   key: 'summit-challenge',
-  rev: 2,
-  previous: [SUMMIT_V1],
+  rev: 3,
+  previous: [SUMMIT_V1, SUMMIT_V2],
   /* led by the same account that leads this trip (found by its web address, or by its title) */
   sameLeaderAs: { slug: 'legend-escape-weekend-jamaica', title: /legend escape weekend/i },
   trip: {
@@ -37,7 +49,7 @@ const SEEDS = [{
     dateText: 'TBA, date to be announced',
     startDate: '', endDate: '',
     summary: 'A private, Sight Seers led team challenge: climbing, laser tag, ATVs, a farm train and team games, scored across six challenges. Ten places.',
-    description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule that never changes: nobody wins alone. Every station asks the whole team to plan, communicate and back each other up, from the first team chant to the final round.\n\nYou will tackle a climbing wall in a relay, plot your tactics through laser tag missions, ride a guided ATV convoy where teamwork counts and racing does not, take a farm train tour with a team quiz, and settle the score over giant Jenga, cornhole and table tennis. Your Sight Seers Team Lead guides every step and keeps the scoreboard, so the day runs smoothly and you can focus on the game.\n\nPoints are earned at every station for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. When the final scores are in, the Summit Champions are crowned, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. Allow about four hours on site.',
+    description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule: nobody wins alone. Every station needs the whole team to plan, communicate and back each other up, with your Sight Seers Team Lead guiding the day and keeping score.\n\nPoints are earned for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. The Summit Champions are crowned at the end, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. About four hours on site.',
     included: [
       'Six scored team challenges: a climbing wall relay, laser tag missions, a guided ATV convoy (a ride, not a race), a farm train tour with a team quiz, and a final round of team games',
       'A Sight Seers Team Lead to guide the day and keep the score',

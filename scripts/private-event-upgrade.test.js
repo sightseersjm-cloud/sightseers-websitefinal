@@ -30,15 +30,21 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   await db.setDoc('club-seeds', { done: ['summit-challenge'] });
   let r = await call('trips', 'GET', '/api/trips');
   let t = r.body.trips.find(x => x.slug === 'the-summit-challenge');
-  ok('an unedited copy gets the richer wording', t && /turns a day out into a team sport/.test(t.description.join(' ')) && /Six scored team challenges/.test(t.included[0]));
+  ok('an unedited copy gets the current wording', t && /turns a day out into a team sport/.test(t.description.join(' ')) && t.description.length === 2 && /Six scored team challenges/.test(t.included[0]));
   ok('the place, seats and leader are untouched', t.private === true && t.seats.total === 10 && t.destination === '' && t.organizer.name === 'Sight Seers Caribbean Adventures');
+  /* a copy still on the second wording is upgraded too */
+  const v2 = seed.SEEDS[0].previous[1];
+  await db.updateInCollection('club-trips', 'old1', Object.assign({}, v2, { seedRev: 2, seedSnap: v2 }));
+  seed.resetForTests();
+  r = await call('trips', 'GET', '/api/trips'); t = r.body.trips.find(x => x.slug === 'the-summit-challenge');
+  ok('a copy on the previous wording is upgraded too', t && t.description.length === 2);
   /* the owner edits the text: a later upgrade must not overwrite it */
   const owner = (await call('auth', 'POST', '/api/auth', { action: 'signin', email: 'owner@example.com', password: 'OwnerPass123!' })).body.token;
   r = await call('trips', 'GET', '/api/trips?admin=1', null, owner);
   const cur = r.body.trips.find(x => x.slug === 'the-summit-challenge');
   r = await call('trips', 'POST', '/api/trips', { action: 'trip-save', id: cur.id, title: cur.title, slug: cur.slug, status: 'open', summary: cur.summary, description: 'My own words.', dateText: cur.dateText, included: cur.included.join('\n'), seatsTotal: 10, privateEvent: true, organizerName: cur.organizerName, showOrganizer: true }, owner);
   ok('the owner can save an edit', r.code === 200, JSON.stringify(r.body));
-  seed.SEEDS[0].rev = 3; seed.resetForTests();
+  seed.SEEDS[0].rev = 4; seed.resetForTests();
   r = await call('trips', 'GET', '/api/trips');
   t = r.body.trips.find(x => x.slug === 'the-summit-challenge');
   ok('an edited description is left alone', t && t.description.join(' ') === 'My own words.');
