@@ -54135,6 +54135,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper{position:absolute;inset:0}
 #p-account #acClubExtras .cx-back>.cx-paper{position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
 #p-account #acClubExtras .cx-bookwrap.wide{max-width:880px}
+#p-account #acClubExtras .cx-bookwrap:not(.wide) .cx-sheet.flipped{opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.4,.1,.2,1),opacity .25s .4s}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
 #p-account #acClubExtras .cx-endpage{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
@@ -54359,7 +54360,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===max);});
   }
   /* a computer shows the passport open as two pages; a phone shows one page at a time */
-  function wideNow(){return window.innerWidth>=960;}
+  function wideNow(){return window.innerWidth>=760;}
   var rsz=null;window.addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){if(X.member&&wideNow()!==!!X.wide){X.wide=wideNow();paint();}},200);});
 
   /* ---------- the member's own cards (Travel Club tab of the account page) ---------- */
@@ -54755,7 +54756,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
             T.push({k:'quick',s:t,e:t+.6});t+=.6;
           }else{T.push({k:'quick',s:t,e:t+.3});t+=.3;}
         }
-        T.push({k:'outro',s:t,e:t+2.6});var TOTAL=t+2.6;
+        T.push({k:'outro',s:t,e:t+4.6});var TOTAL=t+4.6;
         /* moments for the camera flash and the sounds */
         var EV={flash:[],shutter:[],whoosh:[],thud:[],finder:null,outro:0};
         T.forEach(function(q){
@@ -54820,13 +54821,13 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         }
         function faceCanvas(f,time,left){if(f.t==='cover')return coverFrame(time);if(f.t==='msg')return insideL;if(f.t==='id')return idp;if(f.t==='stamp')return stampPageCanvas(f.p,time);return left?blankL:blankR;}
         /* the background and the soft shadow are drawn once */
-        var bgC=mk(W,H);(function(){var g=bgC.getContext('2d'),bg=g.createRadialGradient(W*.5,H*.38,40,W*.5,H*.5,H*.75);bg.addColorStop(0,'#134a78');bg.addColorStop(.55,'#0a2a47');bg.addColorStop(1,'#04111e');g.fillStyle=bg;g.fillRect(0,0,W,H);})();
-        var shC=mk(400,60);(function(){var g=shC.getContext('2d');g.save();g.translate(200,30);g.scale(1,.16);var r=g.createRadialGradient(0,0,0,0,0,200);r.addColorStop(0,'rgba(0,0,0,.55)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.beginPath();g.arc(0,0,200,0,Math.PI*2);g.fill();g.restore();})();
+        var bgC=mk(W,H);(function(){var g=bgC.getContext('2d'),bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#f6a24d');bg.addColorStop(1,'#ee8533');g.fillStyle=bg;g.fillRect(0,0,W,H);})();
+        var shC=mk(400,60);(function(){var g=shC.getContext('2d');g.save();g.translate(200,30);g.scale(1,.16);var r=g.createRadialGradient(0,0,0,0,0,200);r.addColorStop(0,'rgba(90,40,0,.4)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.beginPath();g.arc(0,0,200,0,Math.PI*2);g.fill();g.restore();})();
         function frame(time){
           var st=state(time),s=seg(time);
           /* background: drawn once, with two soft lights drifting over it */
           ctx.drawImage(bgC,0,0);
-          for(var k=0;k<2;k++){var a=time*.25+k*2.1,gx=W*(.5+.38*Math.sin(a)),gy=H*(.45+.3*Math.cos(a*.8));var gr=ctx.createRadialGradient(gx,gy,0,gx,gy,260);gr.addColorStop(0,'rgba(120,190,255,.12)');gr.addColorStop(1,'rgba(120,190,255,0)');ctx.fillStyle=gr;ctx.fillRect(gx-260,gy-260,520,520);}
+          for(var k=0;k<2;k++){var a=time*.25+k*2.1,gx=W*(.5+.38*Math.sin(a)),gy=H*(.45+.3*Math.cos(a*.8));var gr=ctx.createRadialGradient(gx,gy,0,gx,gy,260);gr.addColorStop(0,'rgba(255,225,170,.22)');gr.addColorStop(1,'rgba(255,225,170,0)');ctx.fillStyle=gr;ctx.fillRect(gx-260,gy-260,520,520);}
           /* the book: glide in, float, pan to the middle of the open spread */
           /* the camera: on the right-hand page (cover and ID), then it pulls back to show both pages once the ID page turns */
           var f1=T.filter(function(q){return q.k==='flip'&&q.sheet===1;})[0],z=ease(clamp((time-f1.s)/(f1.e-f1.s),0,1));
@@ -54850,14 +54851,41 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           /* captions */
           var capA=0,cap='';
           if(time<3.4){cap='';}
-          if(s.k==='outro'){capA=easeOut((time-s.s)/.7);ctx.fillStyle='rgba(4,17,30,'+(.8*capA).toFixed(3)+')';ctx.fillRect(0,0,W,H);
-            ctx.globalAlpha=capA;if(logo){var lw2=W*.5;ctx.drawImage(logo,W/2-lw2/2,H*.27,lw2,lw2*logo.height/logo.width);}
-            txt(ctx,'MY TRAVEL CLUB PASSPORT',W/2,H*.5,'800 '+F(44)+'px Raleway, Arial, sans-serif','#f6e3a1','center',F(6));
-            txt(ctx,stamps.length+(stamps.length===1?' stamp':' stamps')+' · '+(d.tier||'Explorer'),W/2,H*.5+F(70),'700 '+F(40)+'px Raleway, Arial, sans-serif','#ffffff','center',1);
-            txt(ctx,'Join me on sightseerscaribbean.com',W/2,H*.5+F(170),'700 '+F(36)+'px Raleway, Arial, sans-serif','rgba(255,255,255,.9)','center',0);
+          if(s.k==='outro'){
+            capA=easeOut((time-s.s)/.5);
+            var og=ctx.createLinearGradient(0,0,W,H);og.addColorStop(0,'#f6a24d');og.addColorStop(1,'#ee8533');
+            ctx.globalAlpha=capA;ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
+            var ot=time-s.s;
+            /* the white logo at the top */
+            ctx.globalAlpha=easeOut((ot-.25)/.6);if(logo){var lw2=W*.34;ctx.drawImage(logo,W/2-lw2/2,H*.1,lw2,lw2*logo.height/logo.width);}
+            /* the words pop in one after another, big and white */
+            var lines=[['WHAT','ARE','YOU'],['WAITING','ON'],['TO','JOIN?']],wi=0,ly=H*.405,lh=F(150);
+            lines.forEach(function(ws){
+              var size=F(142),fnt='800 '+size+'px Raleway, Arial, sans-serif';ctx.font=fnt;if('letterSpacing' in ctx)ctx.letterSpacing='0px';
+              var gap=size*.28,widths=ws.map(function(w){return ctx.measureText(w).width;}),tot=widths.reduce(function(a,b){return a+b;},0)+gap*(ws.length-1),fit=Math.min(1,W*.9/tot);
+              var x=(W-tot*fit)/2;
+              ws.forEach(function(w,k){
+                var d=.55+wi*.34,pr=clamp((ot-d)/.45,0,1),pe=1-Math.pow(1-pr,3),ov=pr<1?1+Math.sin(pr*Math.PI)*.12:1;
+                if(pr>0){ctx.save();ctx.globalAlpha=pe;ctx.translate(x+widths[k]*fit/2,ly+(1-pe)*F(50));ctx.scale(fit*ov,fit*ov);ctx.shadowColor='rgba(120,50,0,.28)';ctx.shadowBlur=F(26);ctx.shadowOffsetY=F(8);
+                  ctx.font=fnt;ctx.fillStyle='#ffffff';ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText(w,0,0);ctx.restore();}
+                x+=(widths[k]+gap)*fit;wi++;
+              });
+              ly+=lh*fit;
+            });
+            /* the green tag swings in after the words */
+            var tg=clamp((ot-2.6)/.5,0,1),tgE=1-Math.pow(1-tg,3);
+            if(tg>0){ctx.save();ctx.globalAlpha=tgE;ctx.translate(W/2,ly+F(40));ctx.rotate(-.05);ctx.scale(.7+.3*tgE,.7+.3*tgE);
+              var label='SIGHT SEERS TRAVEL CLUB',lf='800 '+F(46)+'px Raleway, Arial, sans-serif';ctx.font=lf;if('letterSpacing' in ctx)ctx.letterSpacing=F(5)+'px';
+              var lw=ctx.measureText(label).width+F(80),lhh=F(96);
+              ctx.shadowColor='rgba(90,40,0,.3)';ctx.shadowBlur=F(24);ctx.shadowOffsetY=F(8);ctx.fillStyle='#62b84a';ctx.fillRect(-lw/2,-lhh/2,lw,lhh);ctx.shadowColor='transparent';
+              ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,0,F(3));if('letterSpacing' in ctx)ctx.letterSpacing='0px';ctx.restore();}
+            /* the address, last */
+            ctx.globalAlpha=easeOut((ot-3.3)/.6);
+            txt(ctx,'sightseerscaribbean.com',W/2,H*.9,'700 '+F(40)+'px Raleway, Arial, sans-serif','#ffffff','center',1);
+            txt(ctx,stamps.length+(stamps.length===1?' stamp':' stamps')+' · '+(d.tier||'Explorer'),W/2,H*.9+F(60),'600 '+F(32)+'px Raleway, Arial, sans-serif','rgba(255,255,255,.9)','center',0);
             ctx.globalAlpha=1;}
           else if(time>3.0&&time<T[1].s+0.2){}
-          if(s.k==='hold'||s.k==='stamps'||s.k==='quick'){var lab=s.k==='hold'?'Your Travel Club ID':'Every trip earns a stamp';ctx.globalAlpha=Math.min(1,(time-s.s)/.5)*.9;txt(ctx,lab.toUpperCase(),W/2,H*.12,'800 '+F(34)+'px Raleway, Arial, sans-serif','#f6e3a1','center',F(8));ctx.globalAlpha=1;}
+          if(s.k==='hold'||s.k==='stamps'||s.k==='quick'){var lab=s.k==='hold'?'Your Travel Club ID':'Every trip earns a stamp';ctx.globalAlpha=Math.min(1,(time-s.s)/.5)*.9;txt(ctx,lab.toUpperCase(),W/2,H*.12,'800 '+F(34)+'px Raleway, Arial, sans-serif','#ffffff','center',F(8));ctx.globalAlpha=1;}
           /* camera viewfinder just before the photo is taken, then the flash */
           if(EV.finder&&time>=EV.finder[0]&&time<EV.finder[1]+.1){
             var fa=Math.min(1,(time-EV.finder[0])/.2)*(time<EV.finder[1]?1:0),inset=F(34)*(1-Math.min(1,(time-EV.finder[0])/.35)),bx0=spineX-F(8)-inset,by0=by-F(8)-inset,bx1=spineX+BW*sc+F(8)+inset,by1=by+BH*sc+F(8)+inset,L=F(60);
@@ -54867,7 +54895,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
             ctx.restore();
           }
           var fl=flashAlpha(time);if(fl>0){ctx.save();ctx.fillStyle='rgba(255,255,255,'+fl.toFixed(3)+')';ctx.fillRect(0,0,W,H);ctx.restore();}
-          if(time<3.2){var ia=easeOut((time-1.2)/.8);ctx.globalAlpha=Math.max(0,ia);txt(ctx,'THE TRAVEL CLUB PASSPORT',W/2,H*.12,'800 '+F(34)+'px Raleway, Arial, sans-serif','#f6e3a1','center',F(8));ctx.globalAlpha=1;}
+          if(time<3.2){var ia=easeOut((time-1.2)/.8);ctx.globalAlpha=Math.max(0,ia);txt(ctx,'THE TRAVEL CLUB PASSPORT',W/2,H*.12,'800 '+F(34)+'px Raleway, Arial, sans-serif','#ffffff','center',F(8));ctx.globalAlpha=1;}
         }
         /* ---- record it in real time ---- */
         var stream=cv.captureStream(30),mime='';
