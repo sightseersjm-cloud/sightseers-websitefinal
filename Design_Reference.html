@@ -54271,34 +54271,34 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-travel-club #tcSample .tcs-card{padding:10px}
 }
 
-/* ---- ultra-real covers: pebbled leather, gold foil, pressed frame, spine groove, page edge ---- */
-#p-account #acClubExtras .cx-cover,#p-travel-club #tcSample .cx-cover{background:
- linear-gradient(112deg,rgba(255,255,255,0) 26%,rgba(255,255,255,.15) 40%,rgba(255,255,255,.04) 48%,rgba(255,255,255,0) 58%),
- linear-gradient(90deg,rgba(0,0,0,.6) 0,rgba(255,255,255,.12) 2.4%,rgba(0,0,0,.42) 5.2%,rgba(0,0,0,.08) 9%,rgba(0,0,0,0) 14%),
- radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%),
- radial-gradient(ellipse at 32% 18%,#1f5d93 0,#0e3558 52%,#06182b 100%);
- box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),inset 0 0 0 2px rgba(0,0,0,.35),inset 0 0 30px rgba(0,0,0,.5),inset 2px 0 0 rgba(255,255,255,.08);overflow:hidden}
-#p-account #acClubExtras .cx-cover::after,#p-travel-club #tcSample .cx-cover::after{content:'';position:absolute;inset:0;opacity:.62;mix-blend-mode:soft-light;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' seed='7' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23ffffff' surfaceScale='1.7'%3E%3CfeDistantLight azimuth='225' elevation='58'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/130px 130px;border-radius:inherit;pointer-events:none}
-#p-account #acClubExtras .cx-cover::before,#p-travel-club #tcSample .cx-cover::before{content:'';position:absolute;inset:15px 15px 15px 22px;border:1.6px solid;border-image:linear-gradient(135deg,#f9e9ae,#b88a2e 42%,#f3dc92 68%,#8f6a22) 1;outline:1px solid rgba(246,227,161,.32);outline-offset:5px;pointer-events:none;z-index:1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.55))}
-#p-account #acClubExtras .cx-gold,#p-travel-club #tcSample .cx-gold{background:linear-gradient(100deg,#7d5c1d 0%,#f8e7a6 17%,#c9973a 33%,#fff3c4 50%,#b8862b 66%,#f1d98a 82%,#8a6420 100%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 -1px 0 rgba(255,236,170,.4)) drop-shadow(0 1.6px 1px rgba(0,0,0,.75));animation:cxFoil 7s ease-in-out infinite alternate}
+/* ---- covers like a real passport: matte deep-navy cloth with a fine grain, gold foil title, emblem and chip symbol, no frame ---- */
+#p-account #acClubExtras .cx-cover,#p-travel-club #tcSample .cx-cover{position:absolute;inset:0;display:block;text-align:center;border-radius:4px 10px 10px 4px;overflow:hidden;background:
+ linear-gradient(90deg,rgba(0,0,0,.5) 0,rgba(255,255,255,.07) 2.2%,rgba(0,0,0,.32) 4.8%,rgba(0,0,0,0) 9%),
+ radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.05) 0,rgba(0,0,0,0) 60%),
+ radial-gradient(ellipse at 50% 38%,#1f2d57 0,#16223f 46%,#0a1126 100%);
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 0 26px rgba(0,0,0,.42)}
+#p-account #acClubExtras .cx-cover::after,#p-travel-club #tcSample .cx-cover::after{content:'';position:absolute;inset:0;opacity:.95;mix-blend-mode:soft-light;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='3' seed='5' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23ffffff' surfaceScale='1.1'%3E%3CfeDistantLight azimuth='225' elevation='62'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/110px 110px;border-radius:inherit;pointer-events:none}
+#p-account #acClubExtras .cx-cover::before,#p-travel-club #tcSample .cx-cover::before{display:none}
+#p-account #acClubExtras .cx-gold,#p-travel-club #tcSample .cx-gold{background:linear-gradient(100deg,#7d5c1d 0%,#f8e7a6 17%,#c9973a 33%,#fff3c4 50%,#b8862b 66%,#f1d98a 82%,#8a6420 100%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 -1px 0 rgba(255,236,170,.35)) drop-shadow(0 1.4px 1px rgba(0,0,0,.7));animation:cxFoil 7s ease-in-out infinite alternate}
 @keyframes cxFoil{from{background-position:0 0}to{background-position:100% 0}}
-#p-account #acClubExtras .cx-logo img,#p-travel-club #tcSample .cx-logo img{opacity:.96;filter:drop-shadow(0 -1px 0 rgba(255,255,255,.28)) drop-shadow(0 2px 1.5px rgba(0,0,0,.7));animation:none}
-#p-account #acClubExtras .cx-c5,#p-travel-club #tcSample .cx-c5{color:rgba(246,227,161,.85);filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))}
-#p-account #acClubExtras .cx-chip,#p-travel-club #tcSample .cx-emblem{width:34px;height:24px;margin-top:26px;border:1.6px solid;border-image:linear-gradient(135deg,#f9e9ae,#9b7222 55%,#f1d98a) 1;position:relative;z-index:1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6));opacity:.92}
-#p-account #acClubExtras .cx-chip::after,#p-travel-club #tcSample .cx-emblem::after{content:'';position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;border:1.6px solid #e9cf86}
-#p-account #acClubExtras .cx-backcover,#p-travel-club #tcSample .cx-backcover{background:
- linear-gradient(248deg,rgba(255,255,255,0) 26%,rgba(255,255,255,.13) 40%,rgba(255,255,255,0) 56%),
- linear-gradient(270deg,rgba(0,0,0,.6) 0,rgba(255,255,255,.12) 2.4%,rgba(0,0,0,.42) 5.2%,rgba(0,0,0,.08) 9%,rgba(0,0,0,0) 14%),
- radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%),
- radial-gradient(ellipse at 68% 18%,#1f5d93 0,#0e3558 52%,#06182b 100%);
- box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),inset 0 0 0 2px rgba(0,0,0,.35),inset 0 0 30px rgba(0,0,0,.5),inset -2px 0 0 rgba(255,255,255,.08)}
-#p-account #acClubExtras .cx-backcover::before,#p-travel-club #tcSample .cx-backcover::before{inset:15px 22px 15px 15px}
+#p-account #acClubExtras .cx-cover .cx-c3,#p-travel-club #tcSample .cx-cover .cx-c3{position:absolute;left:0;right:0;top:9%;font:700 11.5cqw/1 'Playfair Display',serif;letter-spacing:.07em}
+#p-account #acClubExtras .cx-cover .cx-logo,#p-travel-club #tcSample .cx-cover .cx-logo{position:absolute;left:50%;top:35%;width:56cqw;margin:0;transform:translateX(-50%);aspect-ratio:1000/204;}
+#p-account #acClubExtras .cx-cover .cx-logo img,#p-travel-club #tcSample .cx-cover .cx-logo img{display:block;width:100%;height:auto;visibility:visible;opacity:.97;filter:drop-shadow(0 -1px 0 rgba(255,255,255,.25)) drop-shadow(0 2px 1.5px rgba(0,0,0,.7))}
+#p-account #acClubExtras .cx-cover .cx-logo::after,#p-travel-club #tcSample .cx-cover .cx-logo::after{display:none}
+#p-account #acClubExtras .cx-cover .cx-c2,#p-travel-club #tcSample .cx-cover .cx-c2{position:absolute;left:0;right:0;top:57%;font:600 6.4cqw/1.1 'Playfair Display',serif;letter-spacing:.04em}
+#p-account #acClubExtras .cx-cover .cx-c5,#p-travel-club #tcSample .cx-cover .cx-c5{position:absolute;left:0;right:0;top:66%;justify-content:center;margin:0;font:700 max(7px,2.2cqw) 'Raleway',sans-serif;letter-spacing:.34em;color:rgba(231,206,138,.88);filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))}
+#p-account #acClubExtras .cx-cover .cx-c5 i,#p-travel-club #tcSample .cx-cover .cx-c5 i{display:none}
+#p-account #acClubExtras .cx-emblem,#p-travel-club #tcSample .cx-emblem{position:absolute;left:50%;bottom:8%;width:8.2cqw;height:5.6cqw;margin:0 0 0 -4.1cqw;border:.5cqw solid;border-image:linear-gradient(135deg,#f9e9ae,#9b7222 55%,#f1d98a) 1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6));opacity:.95}
+#p-account #acClubExtras .cx-emblem::after,#p-travel-club #tcSample .cx-emblem::after{content:'';position:absolute;left:50%;top:50%;width:2.6cqw;height:2.6cqw;margin:-1.3cqw 0 0 -1.3cqw;border-radius:50%;border:.45cqw solid #e9cf86}
+#p-account #acClubExtras .cx-backcover,#p-travel-club #tcSample .cx-backcover{border-radius:10px 4px 4px 10px;background:
+ linear-gradient(270deg,rgba(0,0,0,.5) 0,rgba(255,255,255,.07) 2.2%,rgba(0,0,0,.32) 4.8%,rgba(0,0,0,0) 9%),
+ radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.05) 0,rgba(0,0,0,0) 60%),
+ radial-gradient(ellipse at 50% 38%,#1f2d57 0,#16223f 46%,#0a1126 100%)}
+#p-account #acClubExtras .cx-backcover .cx-logo,#p-travel-club #tcSample .cx-backcover .cx-logo{top:42%;width:40cqw}
+#p-account #acClubExtras .cx-backcover .cx-c5,#p-travel-club #tcSample .cx-backcover .cx-c5{top:55%}
 #p-account #acClubExtras .cx-book::before,#p-travel-club #tcSample .cx-book::before{content:'';position:absolute;top:4px;bottom:4px;right:-5px;width:7px;border-radius:0 3px 3px 0;background:repeating-linear-gradient(180deg,#f3ead0 0 1px,#d9caa2 1px 2px);box-shadow:inset -2px 0 3px rgba(80,60,20,.35),1px 2px 4px rgba(0,0,0,.25);z-index:0}
 #p-account #acClubExtras .cx-book.ended::before,#p-travel-club #tcSample .cx-book.ended::before{display:none}
 @media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-gold,#p-travel-club #tcSample .cx-gold{animation:none}}
-#p-account #acClubExtras .cx-backcover .cx-c5,#p-travel-club #tcSample .cx-backcover .cx-c5{letter-spacing:.2em;font-size:7.5px;gap:7px}
-#p-account #acClubExtras .cx-backcover .cx-c5 i,#p-travel-club #tcSample .cx-backcover .cx-c5 i{width:14px}
-
 /* ---- ultra-real pages: fibre paper, the shadow at the spine, a curve of light, aged edges, laminated ID page, uneven stamp ink ---- */
 #p-account #acClubExtras .cx-paper,#p-travel-club #tcSample .cx-paper{background-color:#f6efdc;background-image:
  linear-gradient(90deg,rgba(70,48,12,.36) 0,rgba(70,48,12,.15) 3.5%,rgba(255,255,255,.17) 17%,rgba(255,255,255,0) 40%,rgba(90,70,30,.08) 100%),
@@ -54449,7 +54449,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var name=(u&&u.name)||'Traveller',tier=who?who.tier:(typeof getTravelTier==='function'&&typeof getTravelPoints==='function')?getTravelTier(getTravelPoints()).name:'Explorer',since=u&&u.createdAt?new Date(u.createdAt).getFullYear():'';
     var photo=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',code=(m.referral&&m.referral.code)||'';
     var st=(m.stamps||[]).slice().reverse(),pages=[]; /* oldest first, like a real passport: new stamps land on the latest page */
-    pages.push('<div class="cx-cover"><div class="cx-logo" role="img" aria-label="Sight Seers Caribbean Adventures"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-gold cx-c2">TRAVEL CLUB</div><div class="cx-gold cx-c3">PASSPORT</div><div class="cx-c5"><span>MEMBER EDITION</span></div><div class="cx-emblem" aria-hidden="true"></div></div>');
+    pages.push('<div class="cx-cover"><div class="cx-logo" role="img" aria-label="Sight Seers Caribbean Adventures"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-gold cx-c2">Travel Club</div><div class="cx-c5"><span>MEMBER EDITION</span></div><div class="cx-emblem" aria-hidden="true"></div></div>');
     pages.push('<div class="cx-paper cx-msgpage"><div class="cx-ph">&nbsp;</div><p class="cx-note">The Sight Seers Travel Club invites all whom it may concern to welcome the bearer of this passport, a traveller who loves the Caribbean, and to give every assistance and kindness the bearer may need along the way.</p></div>');
     var parts=String(name||'Traveller').trim().split(/\s+/).filter(Boolean),sur=parts.length>1?parts[parts.length-1]:parts[0]||'',given=parts.length>1?parts.slice(0,-1).join(' '):'';
     var imgHtml=photo?'<img src="'+esc(photo)+'" alt="">':'<span>'+esc(String(name).trim().charAt(0).toUpperCase())+'</span>';
@@ -54867,24 +54867,18 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         /* ---- the page pictures ---- */
         /* ---- the covers: pebbled leather, gold foil, a pressed frame, the spine groove and a soft sheen ---- */
         function leather(c,spineLeft){
-          var g=c.createRadialGradient(PW*(spineLeft?.32:.68),PH*.18,10,PW*.5,PH*.5,PH*.85);g.addColorStop(0,'#1f5d93');g.addColorStop(.52,'#0e3558');g.addColorStop(1,'#06182b');c.fillStyle=g;c.fillRect(0,0,PW,PH);
-          /* grain: noise made once at two sizes, laid on with "overlay" so it reads as leather, not static */
-          [[PW/2,PH/2,.5],[PW*.9,PH*.9,.22]].forEach(function(q){var w=Math.round(q[0]),h=Math.round(q[1]),nc=mk(w,h),nx=nc.getContext('2d'),id=nx.createImageData(w,h),d=id.data;
-            for(var i=0;i<d.length;i+=4){var v=128+(Math.random()-.5)*150;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255;}nx.putImageData(id,0,0);
-            c.save();c.globalAlpha=q[2];c.globalCompositeOperation='overlay';c.drawImage(nc,0,0,PW,PH);c.restore();});
-          var vg=c.createRadialGradient(PW*.5,PH*.5,PH*.28,PW*.5,PH*.5,PH*.78);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.5)');c.fillStyle=vg;c.fillRect(0,0,PW,PH);
-          /* the hinge groove along the spine */
-          var sw=PW*.13,sx=spineLeft?0:PW-sw,sg=c.createLinearGradient(spineLeft?0:PW,0,spineLeft?sw:PW-sw,0);
-          sg.addColorStop(0,'rgba(0,0,0,.6)');sg.addColorStop(.18,'rgba(255,255,255,.14)');sg.addColorStop(.4,'rgba(0,0,0,.42)');sg.addColorStop(.7,'rgba(0,0,0,.08)');sg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=sg;c.fillRect(sx,0,sw,PH);
-          /* light catching the cover */
-          var sh=c.createLinearGradient(spineLeft?PW*.1:PW*.9,0,spineLeft?PW*.9:PW*.1,PH*.5);sh.addColorStop(0,'rgba(255,255,255,0)');sh.addColorStop(.42,'rgba(255,255,255,.15)');sh.addColorStop(.52,'rgba(255,255,255,.04)');sh.addColorStop(.66,'rgba(255,255,255,0)');c.fillStyle=sh;c.fillRect(0,0,PW,PH);
-          /* pressed gold frame */
-          var fx=spineLeft?22*SC:15*SC,fx2=spineLeft?15*SC:22*SC,fg=c.createLinearGradient(0,0,PW,PH);fg.addColorStop(0,'#f9e9ae');fg.addColorStop(.42,'#b88a2e');fg.addColorStop(.68,'#f3dc92');fg.addColorStop(1,'#8f6a22');
-          c.save();c.shadowColor='rgba(0,0,0,.55)';c.shadowOffsetY=1.2*SC;c.shadowBlur=1.5*SC;c.strokeStyle=fg;c.lineWidth=1.8*SC;c.strokeRect(fx,15*SC,PW-fx-fx2,PH-30*SC);c.restore();
-          c.strokeStyle='rgba(246,227,161,.32)';c.lineWidth=1*SC;c.strokeRect(fx-5*SC,10*SC,PW-fx-fx2+10*SC,PH-20*SC);
-          /* a thin lit edge */
-          c.strokeStyle='rgba(255,255,255,.16)';c.lineWidth=1.2*SC;c.strokeRect(.6*SC,.6*SC,PW-1.2*SC,PH-1.2*SC);
+          /* matte deep-navy cloth: a soft glow in the middle, a fine grain, a light hinge groove, no frame */
+          var g=c.createRadialGradient(PW*.5,PH*.38,10,PW*.5,PH*.5,PH*.85);g.addColorStop(0,'#1f2d57');g.addColorStop(.46,'#16223f');g.addColorStop(1,'#0a1126');c.fillStyle=g;c.fillRect(0,0,PW,PH);
+          [[PW*.8,PH*.8,.5],[PW*.45,PH*.45,.2]].forEach(function(q){var w=Math.round(q[0]),h=Math.round(q[1]),nc=mk(w,h),nx=nc.getContext('2d'),id=nx.createImageData(w,h),d=id.data;
+            for(var i=0;i<d.length;i+=4){var v=128+(Math.random()-.5)*120;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255;}nx.putImageData(id,0,0);
+            c.save();c.globalAlpha=q[2];c.globalCompositeOperation='soft-light';c.drawImage(nc,0,0,PW,PH);c.restore();});
+          var vg=c.createRadialGradient(PW*.5,PH*.5,PH*.34,PW*.5,PH*.5,PH*.8);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.36)');c.fillStyle=vg;c.fillRect(0,0,PW,PH);
+          var sw=PW*.09,sx=spineLeft?0:PW-sw,sg=c.createLinearGradient(spineLeft?0:PW,0,spineLeft?sw:PW-sw,0);
+          sg.addColorStop(0,'rgba(0,0,0,.5)');sg.addColorStop(.24,'rgba(255,255,255,.07)');sg.addColorStop(.54,'rgba(0,0,0,.32)');sg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=sg;c.fillRect(sx,0,sw,PH);
+          c.strokeStyle='rgba(255,255,255,.07)';c.lineWidth=1.2*SC;c.strokeRect(.6*SC,.6*SC,PW-1.2*SC,PH-1.2*SC);
         }
+        /* the white logo, as it is */
+        function goldLogo(w){if(!logo)return null;var h=Math.round(w*logo.height/logo.width),gc=mk(Math.round(w),h),g=gc.getContext('2d');g.drawImage(logo,0,0,gc.width,h);return gc;}
         function foilText(c,s,x,y,font,align,spacing){
           c.font=font;if('letterSpacing' in c)c.letterSpacing=(spacing||0)+'px';var wd=c.measureText(s).width,x0=align==='center'?x-wd/2:x;if('letterSpacing' in c)c.letterSpacing='0px';
           var g=c.createLinearGradient(x0,y-30*SC,x0+wd,y+10*SC);g.addColorStop(0,'#7d5c1d');g.addColorStop(.18,'#f8e7a6');g.addColorStop(.36,'#c9973a');g.addColorStop(.54,'#fff3c4');g.addColorStop(.74,'#b8862b');g.addColorStop(1,'#f1d98a');
@@ -54894,16 +54888,15 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
           c.save();c.shadowColor='rgba(0,0,0,.6)';c.shadowOffsetY=SC;c.strokeStyle=g;c.lineWidth=1.8*SC;c.strokeRect(x-w/2,y-h/2,w,h);c.beginPath();c.arc(x,y,6*SC,0,Math.PI*2);c.strokeStyle='#e9cf86';c.stroke();c.restore();}
         var cover=mk(PW,PH),cx=cover.getContext('2d');
         (function(){leather(cx,true);
-          if(logo){var lw0=PW*.62;cx.save();cx.shadowColor='rgba(0,0,0,.7)';cx.shadowOffsetY=2*SC;cx.shadowBlur=2*SC;cx.drawImage(logo,PW/2-lw0/2,PH*.30-lw0*logo.height/logo.width/2,lw0,lw0*logo.height/logo.width);cx.restore();}
-          foilText(cx,'TRAVEL CLUB',PW/2,PH*.62,'800 '+(21*SC)+'px Raleway, Arial, sans-serif','center',6*SC);
-          foilText(cx,'PASSPORT',PW/2,PH*.70,'700 '+(30*SC)+'px "Playfair Display", Georgia, serif','center',6*SC);
-          txt(cx,'MEMBER EDITION',PW/2,PH*.78,'700 '+(9*SC)+'px Raleway, Arial, sans-serif','rgba(246,227,161,.85)','center',4*SC);
-          emblem(cx,PW/2,PH*.85);
+                    var gl=goldLogo(PW*.56);if(gl){cx.save();cx.shadowColor='rgba(0,0,0,.6)';cx.shadowOffsetY=1.5*SC;cx.shadowBlur=1.5*SC;cx.drawImage(gl,PW/2-gl.width/2,PH*.35,gl.width,gl.height);cx.restore();}
+          foilText(cx,'Travel Club',PW/2,PH*.57+PW*.064*.8,'600 '+(PW*.064)+'px "Playfair Display", Georgia, serif','center',PW*.064*.04);
+          txt(cx,'MEMBER EDITION',PW/2,PH*.66+PW*.022,'700 '+Math.max(9*SC*.8,PW*.022)+'px Raleway, Arial, sans-serif','rgba(231,206,138,.88)','center',PW*.022*.34);
+          emblem(cx,PW/2,PH*.92-PW*.028);
         })();
-        /* the navy back cover, with the logo and the address */
+        /* the navy back cover, with the gold logo and the address */
         var backC=mk(PW,PH);(function(){var bx=backC.getContext('2d');leather(bx,false);
-          if(logo){var lw0=PW*.4;bx.save();bx.shadowColor='rgba(0,0,0,.7)';bx.shadowOffsetY=2*SC;bx.shadowBlur=2*SC;bx.drawImage(logo,PW/2-lw0/2,PH*.46-lw0*logo.height/logo.width/2,lw0,lw0*logo.height/logo.width);bx.restore();}
-          txt(bx,'SIGHTSEERSCARIBBEAN.COM',PW/2,PH*.56,'700 '+(8*SC)+'px Raleway, Arial, sans-serif','rgba(246,227,161,.85)','center',2.6*SC);})();
+          var gl=goldLogo(PW*.4);if(gl){bx.save();bx.shadowColor='rgba(0,0,0,.6)';bx.shadowOffsetY=1.5*SC;bx.shadowBlur=1.5*SC;bx.drawImage(gl,PW/2-gl.width/2,PH*.42,gl.width,gl.height);bx.restore();}
+          txt(bx,'SIGHTSEERSCARIBBEAN.COM',PW/2,PH*.55+PW*.022,'700 '+Math.max(8*SC*.8,PW*.02)+'px Raleway, Arial, sans-serif','rgba(231,206,138,.88)','center',PW*.02*.2);})();
         function u(v){return v*SC;}
         function drawCover(c,img,x,y,w,h,fy){var sc2=Math.max(w/img.width,h/img.height),sw=w/sc2,sh=h/sc2,sx=(img.width-sw)/2,sy=(img.height-sh)*(fy==null?.22:fy);c.drawImage(img,sx,sy,sw,sh,x,y,w,h);}
         var insideL=mk(PW,PH),il=insideL.getContext('2d');paper(il,PW,PH,true);
@@ -55027,15 +55020,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
         }
         function stampStatic(c,pi){var list=pages[pi];list.forEach(function(s,k){var im=imgs[pi*perPage+k];if(!im)return;var gx=[.26,.74],gy=[.27,.70],rot=(((pi*perPage+k)*37)%13-6)*1.2*Math.PI/180,size=BW*.46;var jt=jit(pi*perPage+k);c.save();c.globalAlpha=jt.al;c.globalCompositeOperation='multiply';c.translate(BW*gx[k%2]+jt.dx,BH*gy[Math.floor(k/2)]+jt.dy);c.rotate(rot);c.drawImage(im,-size/2,-size/2,size,size);c.restore();});}
         var coverTmp=mk(PW,PH),shineTmp=null;
-        function coverFrame(time){
-          var c=coverTmp.getContext('2d');c.clearRect(0,0,PW,PH);c.drawImage(cover,0,0);
-          if(logo){var lw=PW*.62,lh=lw*logo.height/logo.width,lx=PW/2-lw/2,ly=PH*.30-lh/2;
-            if(!shineTmp||shineTmp.width!==Math.ceil(lw)){shineTmp=mk(Math.ceil(lw),Math.ceil(lh));}
-            var o=shineTmp.getContext('2d');o.clearRect(0,0,shineTmp.width,shineTmp.height);o.globalCompositeOperation='source-over';o.drawImage(logo,0,0,lw,lh);o.globalCompositeOperation='source-in';
-            var sweep=((time*.5)%2.2)-.5,sg=o.createLinearGradient((sweep-.16)*lw,0,(sweep+.16)*lw,lh*.5);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,1)');sg.addColorStop(1,'rgba(255,255,255,0)');o.fillStyle=sg;o.fillRect(0,0,shineTmp.width,shineTmp.height);
-            c.drawImage(shineTmp,lx,ly);}
-          return coverTmp;
-        }
+        function coverFrame(time){return cover;}
         var animTmp=mk(PW,PH),finals={};
         function finalStamp(p){if(finals[p])return finals[p];var c=mk(PW,PH),x=c.getContext('2d');x.drawImage(papers[p],0,0);x.save();x.scale(SC,SC);stampStatic(x,p);x.restore();finals[p]=c;return c;}
         function stampPageCanvas(p,time){/* blank until its stamps start, stamped one by one, then finished (made once and reused) */
