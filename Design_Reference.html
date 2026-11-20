@@ -54232,6 +54232,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-bnav .cx-btn,#p-travel-club #tcSample .cx-bnav .cx-btn{min-width:92px}
 #p-account #acClubExtras .cx-vid,#p-travel-club #tcSample .cx-vid{margin-top:18px;text-align:center}
 #p-account #acClubExtras .cx-btn--navy,#p-travel-club #tcSample .cx-btn--navy{background:#063a63}
+#p-account #acClubExtras .cx-btn--line,#p-travel-club #tcSample .cx-btn--line{background:#fff;color:#063a63;border:1.5px solid #063a63}
+#p-account #acClubExtras .cx-btn--pulse,#p-travel-club #tcSample .cx-btn--pulse{background:#063a63;color:#fff}
 #p-account #acClubExtras .cx-vidhint,#p-travel-club #tcSample .cx-vidhint{margin:8px 0 0;font-size:12.5px;color:#5b6b76}
 #p-account #acClubExtras .cx-vidbar,#p-travel-club #tcSample .cx-vidbar{height:8px;background:#e3ebf2;margin:12px auto 0;max-width:320px;overflow:hidden}
 #p-account #acClubExtras .cx-vidbar i,#p-travel-club #tcSample .cx-vidbar i{display:block;height:100%;width:0;background:#ef8731;transition:width .2s linear}
@@ -54464,7 +54466,12 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       var url=URL.createObjectURL(r.blob),name='my-sight-seers-passport.'+r.ext,file=null;
       try{file=new File([r.blob],name,{type:r.blob.type});}catch(e){}
       var canShare=!!(file&&navigator.canShare&&navigator.canShare({files:[file]}));
-      out.innerHTML='<video controls playsinline loop autoplay muted src="'+url+'"></video><div class="cx-row"><a class="cx-btn" download="'+name+'" href="'+url+'" style="text-decoration:none">Download video</a>'+(canShare?'<button type="button" class="cx-btn cx-btn--navy" data-cx-shareVideo>Share</button>':'')+'</div><p class="cx-vidhint">It has sound: tap the speaker on the video. Post it with your invite link and friends who join earn you Travel Points.</p>';
+      out.innerHTML='<video controls playsinline loop autoplay muted src="'+url+'"></video><div class="cx-row"><a class="cx-btn" download="'+name+'" href="'+url+'" style="text-decoration:none">Download video</a>'+(canShare?'<button type="button" class="cx-btn cx-btn--navy" data-cx-shareVideo>Share</button>':'')+'<button type="button" class="cx-btn cx-btn--line" data-cx-closeVideo>Close</button></div><p class="cx-vidhint" id="cxVidNote">It has sound: tap the speaker on the video. Post it with your invite link and friends who join earn you Travel Points.</p>';
+      /* the video can be closed once it is saved: the player goes away and the passport is back on its own */
+      function closeVid(){var v=out.querySelector('video');if(v){try{v.pause();}catch(e){}v.removeAttribute('src');}try{URL.revokeObjectURL(url);}catch(e){}out.innerHTML='';out.className='';}
+      var cb=out.querySelector('[data-cx-closeVideo]');if(cb)cb.addEventListener('click',closeVid);
+      var dl=out.querySelector('a[download]');
+      if(dl)dl.addEventListener('click',function(){var n=document.getElementById('cxVidNote');if(n)n.innerHTML='<b>Saved.</b> You can close this now.';var c=out.querySelector('[data-cx-closeVideo]');if(c){c.textContent='Done, close';c.classList.add('cx-btn--pulse');}});
       var sb=out.querySelector('[data-cx-shareVideo]');
       if(sb)sb.addEventListener('click',function(){navigator.share({files:[file],title:'My Sight Seers Travel Club passport',text:'My Travel Club passport. Join me: '+((m.referral&&m.referral.link)||'https://www.sightseerscaribbean.com')}).catch(function(){});});
     },function(err){X.busy=false;btn.disabled=false;out.innerHTML='<p class="cx-msg">'+esc(err&&err.message||'Sorry, the video could not be made on this device.')+'</p>';});
