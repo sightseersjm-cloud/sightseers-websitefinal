@@ -51426,6 +51426,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'inbox',t:'Enquiries and bookings',show:function(){return can('inbox');},bd:'inbox'},
       {id:'codes',t:'Leaders applications',show:function(){return can('inbox');}},
       {id:'invoices',t:'Invoices',show:function(){return S.user&&S.user.role==='admin';}},
+      {id:'receipts',t:'Receipts',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'aicalls',t:'AI calls',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'ops',t:'Automations',show:function(){return S.user&&S.user.role==='admin';}},
       {id:'reviews',t:'Reviews',show:function(){return S.user&&S.user.role==='admin';}},
@@ -51435,7 +51436,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       {id:'team',t:'Team and access',show:function(){return isOwner();}},
       {id:'me',t:'My sign-in',show:function(){return true;}}]}
   ];
-  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',aicalls:'AI calls',ops:'Automations',reviews:'Reviews',visitors:'Visitors',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
+  var TITLES={home:'Home',live:'Edit on the page',pages:'Pages and sections',photos:'Photo library',catalog:'Tours and experiences',packages:'Destination packages',stays:'Villas and stays',yachts:'Yacht charters',transfers:'Transfers',gallery:'Island Memories',blog:'Blog',trips:'Trips and Travel Club',inbox:'Enquiries and bookings',codes:'Leaders applications',invoices:'Invoices',receipts:'Receipts',aicalls:'AI calls',ops:'Automations',reviews:'Reviews',visitors:'Visitors',backup:'Backup and site check',team:'Team and access',me:'My sign-in'};
   function viewApp(){
     var nav='';
     NAV.forEach(function(g){
@@ -53986,6 +53987,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(i.status!=='paid')acts+=' <button type="button" class="mg-btn sm" data-iv-send="'+esc(i.id)+'">'+(i.status==='draft'?'Email to customer':'Email again')+'</button>';
     if(i.status!=='paid')acts+=' <button type="button" class="mg-btn sm ghost" data-iv-paid="'+esc(i.id)+'">Mark paid</button>';
     if(i.status==='draft')acts+=' <button type="button" class="mg-btn sm ghost" data-iv-edit="'+esc(i.id)+'">Edit</button> <button type="button" class="mg-btn sm ghost" data-iv-del="'+esc(i.id)+'">Delete draft</button>';
+    if(i.status!=='draft')acts+=' <button type="button" class="mg-btn sm ghost" data-go="receipts" data-rc-from="'+esc(JSON.stringify({id:i.id,number:i.number,customerName:i.customerName,customerEmail:i.customerEmail,customerAddress:i.customerAddress,description:i.description,items:i.items,discount:i.discount,total:i.total,paidBy:i.paidBy}))+'">Issue receipt</button>';
     return '<div class="mg-card iv-card"><div class="iv-row"><div><b>'+esc(i.number)+'</b> <span class="iv-meta">'+esc(i.customerName)+' &middot; '+esc(i.customerEmail)+'</span><div class="iv-meta">'+esc(i.description||'')+' &middot; Due '+esc(i.dueOn||'')+(i.sentAt?' &middot; Sent '+esc(String(i.sentAt).slice(0,10)):'')+(i.paidAt?' &middot; Paid '+esc(String(i.paidAt).slice(0,10))+' by '+esc(i.paidBy||''):'')+'</div></div>'+
       '<div style="text-align:right"><span class="iv-st '+st+'">'+label+'</span><div style="font-family:Georgia,serif;font-size:18px;color:var(--navy);margin-top:6px">'+money(i.total)+'</div></div></div>'+
       '<div class="iv-acts">'+acts+'</div></div>';
@@ -54029,6 +54031,136 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(d.ivDel){var i4=IV.list.filter(function(x){return x.id===d.ivDel;})[0];if(i4&&window.confirm('Delete the draft '+i4.number+'? This cannot be undone.'))run(b,function(){return api('invoices',{action:'delete',id:d.ivDel}).then(function(){return load().then(rerender);});});return;}
     if(d.ivPdf){var tok=null;try{tok=localStorage.getItem('ss_auth_token');}catch(x){}
       fetch('/api/invoices?pdf='+encodeURIComponent(d.ivPdf),{headers:tok?{Authorization:'Bearer '+tok}:{}}).then(function(r){if(!r.ok)throw new Error('Could not make the PDF.');return r.blob();}).then(function(bl){var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='Invoice.pdf';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},500);}).catch(function(err){msg(err.message,'err');});return;}
+  });
+})();
+</script>
+<style id="manage-receipts-style">
+#p-manage .rc-wrap{max-width:980px}
+#p-manage .rc-sum{display:flex;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--mut)}
+#p-manage .rc-sum b{color:var(--navy);font-family:Georgia,serif;font-size:17px}
+#p-manage .rc-sum .bal b{color:#c4691f}
+#p-manage .iv-st.void{background:#fbe5e2;color:#a5301f}
+#p-manage .rc-note{background:#f4f9f2;border-left:4px solid #70c257;padding:10px 14px;font-size:13px;color:#33424f;margin:0 0 14px}
+#p-manage .rc-note.warn{background:#fdf6ea;border-left-color:#ef8731}
+#p-manage .iv-lines .det{font-size:12.5px}
+</style>
+<script id="manage-receipts-script">
+(function(){
+  'use strict';
+  var MG=window.MG,R=document.getElementById('mgRoot');if(!MG||!R)return;
+  var S=MG.S,esc=MG.esc,api=MG.api;
+  var RC={list:null,err:'',busy:false,editing:null,signing:false,methods:['bank transfer','card','cash','cheque']};
+  var SYM={JMD:'J$',USD:'US$'};
+  function money(n,c){var v=Math.round((Number(n)||0)*100)/100;return (SYM[c]||'J$')+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function today(){return new Date().toISOString().slice(0,10);}
+  function blank(){return {invoiceId:'',bookingCode:'',customerName:'',careOf:'',customerEmail:'',customerAddress:'',title:'',currency:'JMD',items:[{description:'',detail:'',qty:1,unit:0}],discount:0,amountReceived:'',receivedOn:today(),method:'bank transfer',reference:'',balanceNote:''};}
+  function load(){return api('receipts').then(function(d){RC.list=d.receipts||[];RC.signing=!!d.signing;if(d.methods)RC.methods=d.methods;RC.err='';}).catch(function(e){RC.list=RC.list||[];RC.err=e.message||'Could not load receipts.';});}
+  function msg(t,type){var e=document.getElementById('rcMsg');if(e){e.textContent=t;e.className='mg-msg on '+(type||'err');}}
+  function rerender(){var p=document.getElementById('mgPage');if(p&&S.screen==='receipts'){var y=window.scrollY;p.innerHTML=MG.screens.receipts();window.scrollTo(0,y);}}
+  /* money already received against the same booking, in the same currency */
+  function prevPaid(code,cur){if(!code||!RC.list)return 0;return RC.list.filter(function(r){return r.status!=='void'&&r.bookingCode===code&&(r.currency||'JMD')===cur;}).reduce(function(s,r){return s+(Number(r.amountReceived)||0);},0);}
+  function totals(f){var t=0;f.items.forEach(function(l){t+=(Number(l.qty)||0)*(Number(l.unit)||0);});t=Math.round(t*100)/100;var tot=Math.max(0,t-(Number(f.discount)||0));var prev=prevPaid(String(f.bookingCode||'').toUpperCase(),f.currency);var rec=Number(f.amountReceived)||0;return {sub:t,total:tot,prev:prev,rec:rec,bal:Math.max(0,Math.round((tot-prev-rec)*100)/100)};}
+  function sumHtml(f){var t=totals(f);return '<span>Package total <b>'+money(t.total,f.currency)+'</b></span>'+(t.prev?'<span>Already received <b>'+money(t.prev,f.currency)+'</b></span>':'')+'<span>This payment <b>'+money(t.rec,f.currency)+'</b></span><span class="bal">Balance after this <b>'+money(t.bal,f.currency)+'</b></span>';}
+  function formHtml(f){
+    var lines=f.items.map(function(l,i){return '<tr><td><input data-rc-d="'+i+'" value="'+esc(l.description)+'" placeholder="What was paid for" maxlength="200"><input class="det" data-rc-x="'+i+'" value="'+esc(l.detail||'')+'" placeholder="Details shown under it (optional)" maxlength="200" style="margin-top:4px"></td><td><input class="num" data-rc-q="'+i+'" type="number" min="1" step="1" value="'+esc(l.qty)+'" inputmode="numeric"></td><td><input class="num" data-rc-u="'+i+'" type="number" min="0" step="0.01" value="'+esc(l.unit)+'" inputmode="decimal"></td><td><button type="button" class="mg-btn sm ghost" data-rc-rm="'+i+'">Remove</button></td></tr>';}).join('');
+    var opt=function(v,cur){return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(v.charAt(0).toUpperCase()+v.slice(1))+'</option>';};
+    return '<div class="iv-card"><h3 style="margin:0 0 12px;color:var(--navy)">New receipt</h3>'+
+      (f.invoiceId?'<p class="rc-note">Filled in from invoice '+esc(f.fromNumber||'')+'. Check the amount received and the payment details.</p>':'')+
+      '<div class="iv-grid">'+
+      '<div class="mg-fld"><label for="rcN">Received from</label><input id="rcN" maxlength="120" value="'+esc(f.customerName)+'" placeholder="Person or company"></div>'+
+      '<div class="mg-fld"><label for="rcC">Care of (optional)</label><input id="rcC" maxlength="120" value="'+esc(f.careOf)+'" placeholder="Contact person"></div>'+
+      '<div class="mg-fld"><label for="rcE">Email (optional, to send the receipt)</label><input id="rcE" type="email" maxlength="160" value="'+esc(f.customerEmail)+'"></div>'+
+      '<div class="mg-fld"><label for="rcB">Booking code (optional)</label><input id="rcB" maxlength="40" value="'+esc(f.bookingCode)+'" placeholder="Leave empty for the next number, or type a prefix such as SUM-SGS"></div>'+
+      '<div class="mg-fld wide"><label for="rcA">Address (optional, one line per row)</label><textarea id="rcA" rows="2" maxlength="300" style="width:100%;padding:9px 10px;border:1px solid var(--line);font:inherit;font-size:14px">'+esc(f.customerAddress)+'</textarea></div>'+
+      '<div class="mg-fld wide"><label for="rcT">What the payment is for</label><input id="rcT" maxlength="200" value="'+esc(f.title)+'" placeholder="e.g. The Summit Challenge: Corporate Team Event, St. Elizabeth · Team of 9"></div>'+
+      '<div class="mg-fld"><label for="rcCur">Currency</label><select id="rcCur">'+['JMD','USD'].map(function(c){return '<option value="'+c+'"'+(c===f.currency?' selected':'')+'>'+c+' ('+SYM[c]+')</option>';}).join('')+'</select></div>'+
+      '</div>'+
+      '<table class="iv-lines" style="table-layout:fixed"><colgroup><col><col style="width:80px"><col style="width:130px"><col style="width:100px"></colgroup><thead><tr><th>Description</th><th style="text-align:right">Qty</th><th style="text-align:right">Price</th><th></th></tr></thead><tbody>'+lines+'</tbody></table>'+
+      '<p><button type="button" class="mg-btn sm" data-rc-add="1">+ Add a line</button></p>'+
+      '<div class="iv-grid">'+
+      '<div class="mg-fld"><label for="rcDisc">Discount (optional)</label><input id="rcDisc" type="number" min="0" step="0.01" value="'+esc(f.discount)+'"></div>'+
+      '<div class="mg-fld"><label for="rcAmt">Amount received</label><input id="rcAmt" type="number" min="0" step="0.01" value="'+esc(f.amountReceived)+'"></div>'+
+      '<div class="mg-fld"><label for="rcOn">Date received</label><input id="rcOn" type="date" value="'+esc(f.receivedOn)+'"></div>'+
+      '<div class="mg-fld"><label for="rcM">Payment method</label><select id="rcM">'+RC.methods.map(function(m){return opt(m,f.method);}).join('')+'</select></div>'+
+      '<div class="mg-fld"><label for="rcR">Transaction reference (optional)</label><input id="rcR" maxlength="60" value="'+esc(f.reference)+'" placeholder="From the bank transfer"></div>'+
+      '<div class="mg-fld"><label for="rcBal">Note about the balance (optional)</label><input id="rcBal" maxlength="200" value="'+esc(f.balanceNote)+'" placeholder="e.g. The balance is due 14 days before the event."></div>'+
+      '</div>'+
+      '<div class="rc-sum" id="rcSum">'+sumHtml(f)+'</div>'+
+      '<p class="mg-hint" style="margin:12px 0 0">A receipt cannot be changed once it is issued. If something is wrong, void it and issue a new one.</p>'+
+      '<div class="iv-acts"><button type="button" class="mg-btn pri" data-rc-save="1" data-rc-and-send="1">Issue and email to customer</button><button type="button" class="mg-btn" data-rc-save="1">Issue receipt</button><button type="button" class="mg-btn ghost" data-rc-cancel="1">Cancel</button></div>'+
+      '<div class="mg-msg" id="rcMsg" role="alert"></div></div>';
+  }
+  function readForm(){
+    var v=function(id){var e=document.getElementById(id);return e?String(e.value||'').trim():'';};
+    var items=[];var n=document.querySelectorAll('[data-rc-d]').length;
+    for(var i=0;i<n;i++){var d=document.querySelector('[data-rc-d="'+i+'"]');if(!d)continue;items.push({description:d.value,detail:document.querySelector('[data-rc-x="'+i+'"]').value,qty:document.querySelector('[data-rc-q="'+i+'"]').value,unit:document.querySelector('[data-rc-u="'+i+'"]').value});}
+    var keep=RC.editing||{};
+    return {invoiceId:keep.invoiceId||'',fromNumber:keep.fromNumber||'',customerName:v('rcN'),careOf:v('rcC'),customerEmail:v('rcE'),bookingCode:v('rcB'),customerAddress:(document.getElementById('rcA')||{}).value||'',title:v('rcT'),currency:v('rcCur')||'JMD',items:items,discount:v('rcDisc'),amountReceived:v('rcAmt'),receivedOn:v('rcOn'),method:v('rcM'),reference:v('rcR'),balanceNote:v('rcBal')};
+  }
+  R.addEventListener('input',function(e){var t=e.target;if(!t||!t.closest||S.screen!=='receipts'||!RC.editing)return;if(t.closest('.iv-card')){var s=document.getElementById('rcSum');if(s)s.innerHTML=sumHtml(readForm());}});
+  R.addEventListener('change',function(e){if(S.screen!=='receipts'||!RC.editing)return;var s=document.getElementById('rcSum');if(s)s.innerHTML=sumHtml(readForm());});
+  function card(r){
+    var st=r.status==='void'?'void':r.balance>0?'sent':'paid';
+    var acts='<button type="button" class="mg-btn sm" data-rc-pdf="'+esc(r.id)+'">Download PDF</button>';
+    if(r.status!=='void'&&r.customerEmail)acts+=' <button type="button" class="mg-btn sm" data-rc-send="'+esc(r.id)+'">'+(r.sentAt?'Email again':'Email to customer')+'</button>';
+    acts+=' <a class="mg-btn sm ghost" href="'+esc(r.verifyUrl)+'" target="_blank" rel="noopener">Open check page</a> <button type="button" class="mg-btn sm ghost" data-rc-copy="'+esc(r.verifyUrl)+'">Copy check link</button>';
+    if(r.status!=='void')acts+=' <button type="button" class="mg-btn sm ghost" data-rc-void="'+esc(r.id)+'">Void</button>';
+    var meta=[r.title||'',r.bookingCode?'Booking '+r.bookingCode:'','Received '+(r.receivedOn||''),r.method||''].filter(Boolean).join(' &middot; ');
+    return '<div class="mg-card iv-card"><div class="iv-row"><div><b>'+esc(r.number)+'</b> <span class="iv-meta">'+esc(r.customerName)+(r.careOf?' c/o '+esc(r.careOf):'')+(r.customerEmail?' &middot; '+esc(r.customerEmail):'')+'</span><div class="iv-meta">'+meta+(r.sentAt?' &middot; Emailed '+esc(String(r.sentAt).slice(0,10)):'')+(r.status==='void'?' &middot; Voided '+esc(String(r.voidedAt||'').slice(0,10))+(r.voidReason?' ('+esc(r.voidReason)+')':''):'')+'</div></div>'+
+      '<div style="text-align:right"><span class="iv-st '+st+'">'+esc(r.label)+'</span><div style="font-family:Georgia,serif;font-size:18px;color:var(--navy);margin-top:6px">'+money(r.amountReceived,r.currency)+'</div><div class="iv-meta">'+(r.balance>0?'Balance '+money(r.balance,r.currency):'Total '+money(r.total,r.currency))+'</div></div></div>'+
+      '<div class="iv-acts">'+acts+'</div></div>';
+  }
+  function screen(){
+    var head='<h1>Receipts</h1><p class="mg-sub">Receipts for money received. Each one is numbered, carries the business stamp and a QR code that opens a check page on the website, and can be emailed with the PDF attached. Only admins can see this page.</p>';
+    if(RC.list===null)return head+'<p class="mg-sub">'+(RC.err?esc(RC.err):'Loading…')+'</p>';
+    var sign=RC.signing?'':'<p class="rc-note warn">Receipts are not digitally signed yet. To switch signing on, add RECEIPT_SIGN_P12 and RECEIPT_SIGN_PASSWORD in the website settings on Vercel.</p>';
+    if(RC.editing)return head+sign+formHtml(RC.editing);
+    var top='<p><button type="button" class="mg-btn pri" data-rc-new="1">+ New receipt</button></p><div class="mg-msg" id="rcMsg" role="alert"></div>';
+    return head+sign+top+(RC.list.length?RC.list.map(card).join(''):'<div class="mg-card mg-soon"><h3>No receipts yet</h3><p class="mg-hint" style="font-size:14px;margin:0">Press New receipt, or Issue receipt on an invoice.</p></div>');
+  }
+  MG.screens.receipts=function(){return '<div class="rc-wrap">'+screen()+'</div>';};
+  MG.after.receipts=function(){
+    if(MG.receiptFrom){RC.editing=MG.receiptFrom;MG.receiptFrom=null;}
+    if(!RC.loading&&RC.list===null){RC.loading=true;load().then(function(){RC.loading=false;if(S.screen==='receipts')rerender();});}
+    else if(RC.editing&&!document.getElementById('rcN'))rerender();
+  };
+  function run(b,fn){if(RC.busy)return;RC.busy=true;if(b)b.disabled=true;Promise.resolve().then(fn).then(function(){RC.busy=false;if(b)b.disabled=false;},function(e){RC.busy=false;if(b)b.disabled=false;msg(e.message||'That did not work. Try again.','err');});}
+  /* "Issue receipt" on an invoice: runs before the screen changes, so the form opens filled in */
+  R.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-rc-from]');if(!b)return;
+    var i=null;try{i=JSON.parse(b.getAttribute('data-rc-from'));}catch(x){}
+    if(!i)return;
+    var f=blank();
+    f.invoiceId=i.id||'';f.fromNumber=i.number||'';f.customerName=i.customerName||'';f.customerEmail=i.customerEmail||'';f.customerAddress=i.customerAddress||'';f.title=i.description||'';f.currency='USD';f.bookingCode=i.number||'';
+    f.items=(i.items||[]).map(function(l){return {description:l.description,detail:'',qty:l.qty,unit:l.unit};});if(!f.items.length)f.items=[{description:'',detail:'',qty:1,unit:0}];
+    f.discount=i.discount||0;f.amountReceived=i.total||'';f.method=i.paidBy==='card'?'card':'bank transfer';
+    MG.receiptFrom=f;RC.editing=f;
+  },true);
+  R.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||S.screen!=='receipts')return;var d=b.dataset;
+    if(d.rcNew){RC.editing=blank();rerender();return;}
+    if(d.rcCancel){RC.editing=null;rerender();return;}
+    if(d.rcAdd){var f=readForm();f.items.push({description:'',detail:'',qty:1,unit:0});RC.editing=f;rerender();return;}
+    if(d.rcRm){var g=readForm();g.items.splice(Number(d.rcRm),1);if(!g.items.length)g.items.push({description:'',detail:'',qty:1,unit:0});RC.editing=g;rerender();return;}
+    if(d.rcSave){
+      var body=readForm();var andSend=b.hasAttribute('data-rc-and-send');
+      var t=totals(body);
+      if(andSend&&(!body.customerEmail||body.customerEmail.indexOf('@')<1)){msg('Add the customer\'s email address first, or press Issue receipt.','err');return;}
+      if(!window.confirm('Issue a receipt for '+money(t.rec,body.currency)+' received from '+(body.customerName||'this customer')+'?'+(andSend?' It will be emailed to '+body.customerEmail+'.':'')+' A receipt cannot be changed once issued.'))return;
+      body.send=andSend;
+      run(b,function(){
+        return api('receipts',Object.assign({action:'create'},body)).then(function(r){RC.editing=null;return load().then(function(){rerender();msg('Receipt '+r.receipt.number+' issued'+(r.sent?' and emailed to '+body.customerEmail:'')+'.','ok');});},function(err){
+          if(err&&err.data&&err.data.saved){RC.editing=null;return load().then(function(){rerender();msg(err.message,'err');});}
+          throw err;
+        });
+      });
+      return;
+    }
+    if(d.rcSend){var r2=RC.list.filter(function(x){return x.id===d.rcSend;})[0];if(r2&&window.confirm('Email receipt '+r2.number+' to '+r2.customerEmail+' with the PDF attached?'))run(b,function(){return api('receipts',{action:'send',id:d.rcSend}).then(function(){return load().then(function(){rerender();msg('Emailed to '+r2.customerEmail+'.','ok');});});});return;}
+    if(d.rcVoid){var r3=RC.list.filter(function(x){return x.id===d.rcVoid;})[0];var why=window.prompt('Void receipt '+(r3?r3.number:'')+'? Its check page will show VOID. Type the reason:','Issued in error');if(why===null)return;run(b,function(){return api('receipts',{action:'void',id:d.rcVoid,reason:why}).then(function(){return load().then(function(){rerender();msg('Receipt voided.','ok');});});});return;}
+    if(d.rcCopy){var u=d.rcCopy;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){msg('Check link copied.','ok');},function(){window.prompt('Copy this link:',u);});return;}
+    if(d.rcPdf){var tok=null;try{tok=localStorage.getItem('ss_auth_token');}catch(x){}var r4=RC.list.filter(function(x){return x.id===d.rcPdf;})[0];
+      fetch('/api/receipts?pdf='+encodeURIComponent(d.rcPdf),{headers:tok?{Authorization:'Bearer '+tok}:{}}).then(function(r){if(!r.ok)throw new Error('Could not make the PDF.');return r.blob();}).then(function(bl){var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='Receipt-'+(r4?r4.number:'')+'.pdf';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},500);}).catch(function(err){msg(err.message,'err');});return;}
   });
 })();
 </script>
