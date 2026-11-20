@@ -13800,6 +13800,15 @@ body.theme-night #p-flagship-programs{
   </div></div>
 
   <div class="tc-wrap">
+    <div class="tc-sec" id="passport">
+      <span class="tc-eyebrow">Travel Club perk</span>
+      <h2 class="tc-h2">Your own Sight Seers Passport</h2>
+      <p class="tc-sub">Create a free account and you get your own Travel Club passport. It carries your name, your photo and your member number, and every trip you finish with us earns a stamp. Turn the pages of this sample to see how it looks.</p>
+      <div id="tcSample"><div class="cx-card tcs-card"><p class="tcs-tag">Sample passport &middot; made-up traveller</p><div id="tcSampleBook"></div>
+        <ul class="tcs-points"><li><b>A stamp for every trip</b><span>Each finished trip adds a stamp, with the place and the date.</span></li><li><b>Travel Points as you go</b><span>Welcome bonus, saving tours, booking requests and finished trips all add up.</span></li><li><b>A video to share</b><span>Make a short clip of your passport opening, ready for Instagram, TikTok or WhatsApp.</span></li></ul>
+        <div class="tcs-cta"><button type="button" class="tc-fbtn" onclick="nav('account')">Create your account</button></div></div></div>
+    </div>
+
     <div class="tc-sec" id="tcReviews" hidden>
       <h2 style="margin:0 0 14px;font:700 28px 'Playfair Display',serif;color:#063a63">What travellers say</h2>
       <div class="tc-card" style="padding:22px" id="tcReviewsBody"></div>
@@ -54088,10 +54097,20 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   });
 })();
 </script>
+<style id="tc-sample-style">
+#p-travel-club #tcSample .tcs-card{max-width:960px;margin:6px auto 0;padding:22px;text-align:center}
+#p-travel-club #tcSample .tcs-tag{display:inline-block;margin:0 0 16px;padding:5px 12px;background:#fff7ec;border:1px solid #f3c99b;color:#9a5a12;font:800 11px 'Raleway',sans-serif;letter-spacing:.14em;text-transform:uppercase}
+#p-travel-club #tcSample .tcs-points{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left}
+#p-travel-club #tcSample .tcs-points li{padding:14px 16px;background:#f6f9fb;border-left:3px solid #ef8731}
+#p-travel-club #tcSample .tcs-points b{display:block;margin-bottom:4px;color:#063a63;font:700 15px 'Raleway',sans-serif}
+#p-travel-club #tcSample .tcs-points span{color:#5b6b76;font-size:13.5px;line-height:1.5}
+#p-travel-club #tcSample .tcs-cta{margin-top:18px}
+@media(max-width:720px){#p-travel-club #tcSample .tcs-points{grid-template-columns:1fr}#p-travel-club #tcSample .tcs-card{padding:16px}}
+</style>
 <style id="club-extras-style">
 #p-account #acClubExtras{margin-top:22px;display:grid;gap:18px}
-#p-account #acClubExtras .cx-card{background:#fff;border:1px solid #dfe6ec;padding:22px;box-shadow:0 10px 26px -22px rgba(6,58,99,.45)}
-#p-account #acClubExtras .cx-card h4{margin:0 0 6px;font:700 22px 'Playfair Display',serif;color:#063a63}
+#p-account #acClubExtras .cx-card,#p-travel-club #tcSample .cx-card{background:#fff;border:1px solid #dfe6ec;padding:22px;box-shadow:0 10px 26px -22px rgba(6,58,99,.45)}
+#p-account #acClubExtras .cx-card h4,#p-travel-club #tcSample .cx-card h4{margin:0 0 6px;font:700 22px 'Playfair Display',serif;color:#063a63}
 #p-account details.ac-gacc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;user-select:none;margin-bottom:0}
 #p-account details.ac-gacc>summary::-webkit-details-marker{display:none}
 #p-account details.ac-gacc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:4px}
@@ -54100,127 +54119,127 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account .ac-gchev{flex:none;width:11px;height:11px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 6px 0 6px}
 #p-account details.ac-gacc[open]>summary .ac-gchev{transform:rotate(-135deg);margin:4px 6px 0 6px}
 #p-account details.ac-gacc>summary .ac-link{margin-left:auto}
-#p-account #acClubExtras .cx-acc{padding:0}
-#p-account #acClubExtras .cx-acc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;user-select:none}
-#p-account #acClubExtras .cx-acc>summary::-webkit-details-marker{display:none}
-#p-account #acClubExtras .cx-acc>summary:hover{background:#f6f9fb}
-#p-account #acClubExtras .cx-acc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:-2px}
-#p-account #acClubExtras .cx-acct h4{margin:0}
-#p-account #acClubExtras .cx-acct small{display:block;margin-top:3px;font:600 12.5px 'Raleway',sans-serif;color:#5b6b76}
-#p-account #acClubExtras .cx-chev{flex:none;width:11px;height:11px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 4px 0 0}
-#p-account #acClubExtras .cx-acc[open]>summary .cx-chev{transform:rotate(-135deg);margin:4px 4px 0 0}
-#p-account #acClubExtras .cx-acc[open]>summary{border-bottom:1px solid #e3ebf2}
-#p-account #acClubExtras .cx-accbody{padding:18px 22px 22px;animation:cxOpen .3s ease}
+#p-account #acClubExtras .cx-acc,#p-travel-club #tcSample .cx-acc{padding:0}
+#p-account #acClubExtras .cx-acc>summary,#p-travel-club #tcSample .cx-acc>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;user-select:none}
+#p-account #acClubExtras .cx-acc>summary::-webkit-details-marker,#p-travel-club #tcSample .cx-acc>summary::-webkit-details-marker{display:none}
+#p-account #acClubExtras .cx-acc>summary:hover,#p-travel-club #tcSample .cx-acc>summary:hover{background:#f6f9fb}
+#p-account #acClubExtras .cx-acc>summary:focus-visible,#p-travel-club #tcSample .cx-acc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:-2px}
+#p-account #acClubExtras .cx-acct h4,#p-travel-club #tcSample .cx-acct h4{margin:0}
+#p-account #acClubExtras .cx-acct small,#p-travel-club #tcSample .cx-acct small{display:block;margin-top:3px;font:600 12.5px 'Raleway',sans-serif;color:#5b6b76}
+#p-account #acClubExtras .cx-chev,#p-travel-club #tcSample .cx-chev{flex:none;width:11px;height:11px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 4px 0 0}
+#p-account #acClubExtras .cx-acc[open]>summary .cx-chev,#p-travel-club #tcSample .cx-acc[open]>summary .cx-chev{transform:rotate(-135deg);margin:4px 4px 0 0}
+#p-account #acClubExtras .cx-acc[open]>summary,#p-travel-club #tcSample .cx-acc[open]>summary{border-bottom:1px solid #e3ebf2}
+#p-account #acClubExtras .cx-accbody,#p-travel-club #tcSample .cx-accbody{padding:18px 22px 22px;animation:cxOpen .3s ease}
 @keyframes cxOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-#p-account #acClubExtras .cx-first{background:#fff7ec;border-left:3px solid #ef8731;padding:10px 12px;color:#17323f}
-#p-account #acClubExtras .cx-plist{list-style:none;margin:0;padding:0}
-#p-account #acClubExtras .cx-plist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #e3ebf2;font-size:14px;color:#17323f}
-#p-account #acClubExtras .cx-plist li small{color:#5b6b76}
-#p-account #acClubExtras .cx-plist em{font-style:normal;font-weight:700;color:#1d8a52}
-#p-account #acClubExtras .cx-plist em.neg{color:#b3261e}
-#p-account #acClubExtras .cx-sub{margin:0 0 14px;color:#5b6b76;font-size:14px;line-height:1.55}
-#p-account #acClubExtras .cx-link{display:flex;gap:8px;flex-wrap:wrap}
-#p-account #acClubExtras .cx-link input{flex:1 1 240px;min-width:0;padding:11px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;background:#f6f9fb;color:#17323f}
-#p-account #acClubExtras .cx-btn{padding:11px 18px;border:0;background:#ef8731;color:#fff;font:700 13px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
-#p-account #acClubExtras .cx-btn:disabled{opacity:.6;cursor:default}
-#p-account #acClubExtras .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
-#p-account #acClubExtras .cx-bookwrap{max-width:clamp(290px,calc((100vh - 230px) * .75),400px);margin:6px auto 0}
-#p-account #acClubExtras .cx-float{animation:cxFloat 7s ease-in-out infinite;transform-style:preserve-3d;will-change:transform}
-#p-account #acClubExtras .cx-float.tilt{animation:none;transition:transform .15s ease-out}
-#p-account #acClubExtras .cx-shadow{height:16px;margin:10px auto 0;width:68%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(6,40,70,.38),rgba(6,40,70,0) 70%);animation:cxShadow 7s ease-in-out infinite}
+#p-account #acClubExtras .cx-first,#p-travel-club #tcSample .cx-first{background:#fff7ec;border-left:3px solid #ef8731;padding:10px 12px;color:#17323f}
+#p-account #acClubExtras .cx-plist,#p-travel-club #tcSample .cx-plist{list-style:none;margin:0;padding:0}
+#p-account #acClubExtras .cx-plist li,#p-travel-club #tcSample .cx-plist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #e3ebf2;font-size:14px;color:#17323f}
+#p-account #acClubExtras .cx-plist li small,#p-travel-club #tcSample .cx-plist li small{color:#5b6b76}
+#p-account #acClubExtras .cx-plist em,#p-travel-club #tcSample .cx-plist em{font-style:normal;font-weight:700;color:#1d8a52}
+#p-account #acClubExtras .cx-plist em.neg,#p-travel-club #tcSample .cx-plist em.neg{color:#b3261e}
+#p-account #acClubExtras .cx-sub,#p-travel-club #tcSample .cx-sub{margin:0 0 14px;color:#5b6b76;font-size:14px;line-height:1.55}
+#p-account #acClubExtras .cx-link,#p-travel-club #tcSample .cx-link{display:flex;gap:8px;flex-wrap:wrap}
+#p-account #acClubExtras .cx-link input,#p-travel-club #tcSample .cx-link input{flex:1 1 240px;min-width:0;padding:11px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;background:#f6f9fb;color:#17323f}
+#p-account #acClubExtras .cx-btn,#p-travel-club #tcSample .cx-btn{padding:11px 18px;border:0;background:#ef8731;color:#fff;font:700 13px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+#p-account #acClubExtras .cx-btn:disabled,#p-travel-club #tcSample .cx-btn:disabled{opacity:.6;cursor:default}
+#p-account #acClubExtras .cx-stats,#p-travel-club #tcSample .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
+#p-account #acClubExtras .cx-bookwrap,#p-travel-club #tcSample .cx-bookwrap{max-width:clamp(290px,calc((100vh - 230px) * .75),400px);margin:6px auto 0}
+#p-account #acClubExtras .cx-float,#p-travel-club #tcSample .cx-float{animation:cxFloat 7s ease-in-out infinite;transform-style:preserve-3d;will-change:transform}
+#p-account #acClubExtras .cx-float.tilt,#p-travel-club #tcSample .cx-float.tilt{animation:none;transition:transform .15s ease-out}
+#p-account #acClubExtras .cx-shadow,#p-travel-club #tcSample .cx-shadow{height:16px;margin:10px auto 0;width:68%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(6,40,70,.38),rgba(6,40,70,0) 70%);animation:cxShadow 7s ease-in-out infinite}
 @keyframes cxFloat{0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}25%{transform:translateY(-9px) rotateX(2deg) rotateY(-3deg)}50%{transform:translateY(-14px) rotateX(0) rotateY(0)}75%{transform:translateY(-7px) rotateX(-2deg) rotateY(3deg)}}
 @keyframes cxShadow{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.8);opacity:.55}}
-#p-account #acClubExtras .cx-book{position:relative;width:100%;aspect-ratio:3/4;perspective:1600px;outline:none;transition:transform .6s;transform:translateX(0)}
-#p-account #acClubExtras .cx-book:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.5)}
-#p-account #acClubExtras .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
-#p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper{position:absolute;inset:0}
-#p-account #acClubExtras .cx-back>.cx-paper{position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
-#p-account #acClubExtras .cx-bookwrap.wide{max-width:clamp(540px,calc((100vh - 220px) * 1.5),880px)}
-#p-account #acClubExtras .cx-bookwrap:not(.wide) .cx-sheet.flipped{opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.4,.1,.2,1),opacity .25s .4s}
-#p-account #acClubExtras .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
-#p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
-#p-account #acClubExtras .cx-bookwrap.wide .cx-book.ended{transform:translateX(50%)}
-#p-account #acClubExtras .cx-backcover{border-radius:8px 3px 3px 8px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset -10px 0 18px -8px rgba(0,0,0,.6)}
-#p-account #acClubExtras .cx-endpaper{position:absolute;inset:0}
-#p-account #acClubExtras .cx-endpage.cx-paper{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
-#p-account #acClubExtras .cx-msgpage .cx-note{margin:96px 22px 0}
-#p-account #acClubExtras .cx-sheet.flipped{transform:rotateY(-178deg)}
-#p-account #acClubExtras .cx-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:3px 8px 8px 3px;box-shadow:0 14px 30px -14px rgba(6,40,70,.55)}
-#p-account #acClubExtras .cx-back{transform:rotateY(180deg);border-radius:8px 3px 3px 8px}
-#p-account #acClubExtras .cx-paper{background:#f6efdc;background-image:repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8);box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset 8px 0 14px -8px rgba(80,60,20,.3);padding:18px 16px;position:relative}
-#p-account #acClubExtras .cx-back.cx-paper{box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
-#p-account #acClubExtras .cx-ph{font:800 10px 'Raleway',sans-serif;letter-spacing:.3em;color:#8a7a52;text-align:center;margin:0 0 10px;text-transform:uppercase}
-#p-account #acClubExtras .cx-pn{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:700 11px 'Raleway',sans-serif;color:#8a7a52}
-#p-account #acClubExtras .cx-sgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
-#p-account #acClubExtras .cx-stamp{padding:0;border:0;background:none;mix-blend-mode:multiply}
-#p-account #acClubExtras .cx-stamp svg{display:block;width:100%;max-width:150px;margin:0 auto}
-#p-account #acClubExtras .cx-empty{margin:30px 8px;text-align:center;color:#8a7a52;font-size:14px;line-height:1.6;font-style:italic}
-#p-account #acClubExtras .cx-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;background:radial-gradient(ellipse at 30% 20%,#164a75 0,#0b2f4e 55%,#071d33 100%);border-radius:3px 8px 8px 3px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset 10px 0 18px -8px rgba(0,0,0,.6)}
-#p-account #acClubExtras .cx-cover::after{content:'';position:absolute;inset:0;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1.2px);background-size:5px 5px;border-radius:inherit;pointer-events:none}
-#p-account #acClubExtras .cx-gold{background:linear-gradient(135deg,#f6e3a1,#c9973a 50%,#f1d98a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:'Raleway',sans-serif;font-weight:800;text-shadow:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
-#p-account #acClubExtras .cx-logo{position:relative;width:62%;margin:0 auto 40px;z-index:1}
-#p-account #acClubExtras .cx-logo img{display:block;width:100%;height:auto;opacity:.92;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 2px 2px rgba(0,0,0,.55));animation:cxGlow 5s ease-in-out infinite}
-#p-account #acClubExtras .cx-logo::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 62%);background-size:260% 100%;background-position:160% 0;-webkit-mask:url(/assets/ss-logo-white.png) center/contain no-repeat;mask:url(/assets/ss-logo-white.png) center/contain no-repeat;animation:cxShine 4.8s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,.9))}
+#p-account #acClubExtras .cx-book,#p-travel-club #tcSample .cx-book{position:relative;width:100%;aspect-ratio:3/4;perspective:1600px;outline:none;transition:transform .6s;transform:translateX(0)}
+#p-account #acClubExtras .cx-book:focus-visible,#p-travel-club #tcSample .cx-book:focus-visible{box-shadow:0 0 0 3px rgba(239,135,49,.5)}
+#p-account #acClubExtras .cx-sheet,#p-travel-club #tcSample .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
+#p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper,#p-travel-club #tcSample .cx-front>.cx-paper,#p-travel-club #tcSample .cx-back.cx-paper{position:absolute;inset:0}
+#p-account #acClubExtras .cx-back>.cx-paper,#p-travel-club #tcSample .cx-back>.cx-paper{position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
+#p-account #acClubExtras .cx-bookwrap.wide,#p-travel-club #tcSample .cx-bookwrap.wide{max-width:clamp(540px,calc((100vh - 220px) * 1.5),880px)}
+#p-account #acClubExtras .cx-bookwrap:not(.wide) .cx-sheet.flipped,#p-travel-club #tcSample .cx-bookwrap:not(.wide) .cx-sheet.flipped{opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.4,.1,.2,1),opacity .25s .4s}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book,#p-travel-club #tcSample .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed,#p-travel-club #tcSample .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book.ended,#p-travel-club #tcSample .cx-bookwrap.wide .cx-book.ended{transform:translateX(50%)}
+#p-account #acClubExtras .cx-backcover,#p-travel-club #tcSample .cx-backcover{border-radius:8px 3px 3px 8px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset -10px 0 18px -8px rgba(0,0,0,.6)}
+#p-account #acClubExtras .cx-endpaper,#p-travel-club #tcSample .cx-endpaper{position:absolute;inset:0}
+#p-account #acClubExtras .cx-endpage.cx-paper,#p-travel-club #tcSample .cx-endpage.cx-paper{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
+#p-account #acClubExtras .cx-msgpage .cx-note,#p-travel-club #tcSample .cx-msgpage .cx-note{margin:96px 22px 0}
+#p-account #acClubExtras .cx-sheet.flipped,#p-travel-club #tcSample .cx-sheet.flipped{transform:rotateY(-178deg)}
+#p-account #acClubExtras .cx-face,#p-travel-club #tcSample .cx-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:3px 8px 8px 3px;box-shadow:0 14px 30px -14px rgba(6,40,70,.55)}
+#p-account #acClubExtras .cx-back,#p-travel-club #tcSample .cx-back{transform:rotateY(180deg);border-radius:8px 3px 3px 8px}
+#p-account #acClubExtras .cx-paper,#p-travel-club #tcSample .cx-paper{background:#f6efdc;background-image:repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8);box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset 8px 0 14px -8px rgba(80,60,20,.3);padding:18px 16px;position:relative}
+#p-account #acClubExtras .cx-back.cx-paper,#p-travel-club #tcSample .cx-back.cx-paper{box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
+#p-account #acClubExtras .cx-ph,#p-travel-club #tcSample .cx-ph{font:800 10px 'Raleway',sans-serif;letter-spacing:.3em;color:#8a7a52;text-align:center;margin:0 0 10px;text-transform:uppercase}
+#p-account #acClubExtras .cx-pn,#p-travel-club #tcSample .cx-pn{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:700 11px 'Raleway',sans-serif;color:#8a7a52}
+#p-account #acClubExtras .cx-sgrid,#p-travel-club #tcSample .cx-sgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
+#p-account #acClubExtras .cx-stamp,#p-travel-club #tcSample .cx-stamp{padding:0;border:0;background:none;mix-blend-mode:multiply}
+#p-account #acClubExtras .cx-stamp svg,#p-travel-club #tcSample .cx-stamp svg{display:block;width:100%;max-width:150px;margin:0 auto}
+#p-account #acClubExtras .cx-empty,#p-travel-club #tcSample .cx-empty{margin:30px 8px;text-align:center;color:#8a7a52;font-size:14px;line-height:1.6;font-style:italic}
+#p-account #acClubExtras .cx-cover,#p-travel-club #tcSample .cx-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;background:radial-gradient(ellipse at 30% 20%,#164a75 0,#0b2f4e 55%,#071d33 100%);border-radius:3px 8px 8px 3px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset 10px 0 18px -8px rgba(0,0,0,.6)}
+#p-account #acClubExtras .cx-cover::after,#p-travel-club #tcSample .cx-cover::after{content:'';position:absolute;inset:0;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1.2px);background-size:5px 5px;border-radius:inherit;pointer-events:none}
+#p-account #acClubExtras .cx-gold,#p-travel-club #tcSample .cx-gold{background:linear-gradient(135deg,#f6e3a1,#c9973a 50%,#f1d98a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:'Raleway',sans-serif;font-weight:800;text-shadow:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+#p-account #acClubExtras .cx-logo,#p-travel-club #tcSample .cx-logo{position:relative;width:62%;margin:0 auto 40px;z-index:1}
+#p-account #acClubExtras .cx-logo img,#p-travel-club #tcSample .cx-logo img{display:block;width:100%;height:auto;opacity:.92;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 2px 2px rgba(0,0,0,.55));animation:cxGlow 5s ease-in-out infinite}
+#p-account #acClubExtras .cx-logo::after,#p-travel-club #tcSample .cx-logo::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 62%);background-size:260% 100%;background-position:160% 0;-webkit-mask:url(/assets/ss-logo-white.png) center/contain no-repeat;mask:url(/assets/ss-logo-white.png) center/contain no-repeat;animation:cxShine 4.8s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,.9))}
 @keyframes cxShine{0%,18%{background-position:160% 0}62%,100%{background-position:-60% 0}}
 @keyframes cxGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(255,255,255,.22)) drop-shadow(0 2px 2px rgba(0,0,0,.55))}50%{filter:drop-shadow(0 0 18px rgba(255,255,255,.5)) drop-shadow(0 2px 2px rgba(0,0,0,.55))}}
-#p-account #acClubExtras .cx-c5{display:flex;align-items:center;gap:10px;margin-top:14px;color:rgba(246,227,161,.8);font:700 8.5px 'Raleway',sans-serif;letter-spacing:.34em}
-#p-account #acClubExtras .cx-c5 i{display:block;width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(246,227,161,.8))}
-#p-account #acClubExtras .cx-c5 i:last-child{transform:scaleX(-1)}
-#p-account #acClubExtras .cx-paper::after{content:'';position:absolute;left:24%;right:24%;bottom:46px;aspect-ratio:1000/204;background:#0b2f4e;opacity:.07;-webkit-mask:url(/assets/ss-logo-white.png) center/contain no-repeat;mask:url(/assets/ss-logo-white.png) center/contain no-repeat;pointer-events:none;mix-blend-mode:multiply}
-@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-logo img,#p-account #acClubExtras .cx-logo::after{animation:none}}
-#p-account #acClubExtras .cx-emb{width:30%;max-width:110px;margin:12px 0 8px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
-#p-account #acClubExtras .cx-c2{font-size:20px;letter-spacing:.28em}
-#p-account #acClubExtras .cx-c3{font:700 28px 'Playfair Display',serif;letter-spacing:.2em}
-#p-account #acClubExtras .cx-c4{font-size:9px;letter-spacing:.32em;margin-top:18px}
-#p-account #acClubExtras .cx-id{display:flex;flex-direction:column;background-image:repeating-radial-gradient(circle at 18% 28%,rgba(60,110,150,.10) 0 1.5px,transparent 1.5px 7px),repeating-radial-gradient(circle at 84% 70%,rgba(190,140,60,.10) 0 1.5px,transparent 1.5px 8px),repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8)}
-#p-account #acClubExtras .cx-idhead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.5px solid #063a63;padding-bottom:8px;margin-bottom:12px}
-#p-account #acClubExtras .cx-idhead small{display:block;font:800 8px 'Raleway',sans-serif;letter-spacing:.28em;color:#8a7a52}
-#p-account #acClubExtras .cx-idhead b{display:block;font:700 26px 'Playfair Display',serif;letter-spacing:.16em;color:#063a63;line-height:1.1}
-#p-account #acClubExtras .cx-idtype{display:flex;gap:12px}
-#p-account #acClubExtras .cx-idtype span{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;text-align:center}
-#p-account #acClubExtras .cx-idtype i{display:block;font:700 15px 'Raleway',sans-serif;letter-spacing:.06em;color:#063a63;font-style:normal;margin-top:2px}
-#p-account #acClubExtras .cx-id .cx-idrow{display:flex;gap:14px;align-items:flex-start}
-#p-account #acClubExtras .cx-idphoto{flex:none;width:37%;aspect-ratio:3/4;background:linear-gradient(135deg,#f5a04b,#ef8731);display:grid;place-items:center;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px #063a63,0 4px 10px rgba(0,0,0,.25)}
-#p-account #acClubExtras .cx-idphoto img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-#p-account #acClubExtras .cx-idphoto span{font:800 52px 'Playfair Display',serif;color:#fff}
-#p-account #acClubExtras .cx-id dl{margin:0;min-width:0;flex:1}
-#p-account #acClubExtras .cx-id dt{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;margin-top:9px}
-#p-account #acClubExtras .cx-id dt:first-child{margin-top:0}
-#p-account #acClubExtras .cx-id dd{margin:2px 0 0;font:700 14px 'Raleway',sans-serif;letter-spacing:.04em;color:#063a63;word-break:break-word}
-#p-account #acClubExtras .cx-idrow2{display:grid;grid-template-columns:1fr 1fr 1fr 52px;gap:10px;align-items:end;margin-top:10px}
-#p-account #acClubExtras .cx-ghost{width:48px;aspect-ratio:3/4;overflow:hidden;opacity:.28;filter:grayscale(1) contrast(1.15);justify-self:end;mix-blend-mode:multiply;border:1px solid rgba(6,58,99,.4)}
-#p-account #acClubExtras .cx-ghost img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-#p-account #acClubExtras .cx-ghost span{display:grid;place-items:center;height:100%;font:800 24px 'Playfair Display',serif;color:#063a63}
-#p-account #acClubExtras .cx-holo{height:20px;margin:12px -16px 0;flex:none;width:calc(100% + 32px);max-width:none;background:linear-gradient(100deg,#ffd0e6 0%,#c9efff 22%,#d8ffc9 44%,#fff0b8 66%,#e0ccff 88%,#ffd0e6 100%);background-size:240% 100%;opacity:.7;animation:cxHolo 6s linear infinite;border-top:1px solid rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.8)}
+#p-account #acClubExtras .cx-c5,#p-travel-club #tcSample .cx-c5{display:flex;align-items:center;gap:10px;margin-top:14px;color:rgba(246,227,161,.8);font:700 8.5px 'Raleway',sans-serif;letter-spacing:.34em}
+#p-account #acClubExtras .cx-c5 i,#p-travel-club #tcSample .cx-c5 i{display:block;width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(246,227,161,.8))}
+#p-account #acClubExtras .cx-c5 i:last-child,#p-travel-club #tcSample .cx-c5 i:last-child{transform:scaleX(-1)}
+#p-account #acClubExtras .cx-paper::after,#p-travel-club #tcSample .cx-paper::after{content:'';position:absolute;left:24%;right:24%;bottom:46px;aspect-ratio:1000/204;background:#0b2f4e;opacity:.07;-webkit-mask:url(/assets/ss-logo-white.png) center/contain no-repeat;mask:url(/assets/ss-logo-white.png) center/contain no-repeat;pointer-events:none;mix-blend-mode:multiply}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-logo img,#p-account #acClubExtras .cx-logo::after,#p-travel-club #tcSample .cx-logo img,#p-travel-club #tcSample .cx-logo::after{animation:none}}
+#p-account #acClubExtras .cx-emb,#p-travel-club #tcSample .cx-emb{width:30%;max-width:110px;margin:12px 0 8px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+#p-account #acClubExtras .cx-c2,#p-travel-club #tcSample .cx-c2{font-size:20px;letter-spacing:.28em}
+#p-account #acClubExtras .cx-c3,#p-travel-club #tcSample .cx-c3{font:700 28px 'Playfair Display',serif;letter-spacing:.2em}
+#p-account #acClubExtras .cx-c4,#p-travel-club #tcSample .cx-c4{font-size:9px;letter-spacing:.32em;margin-top:18px}
+#p-account #acClubExtras .cx-id,#p-travel-club #tcSample .cx-id{display:flex;flex-direction:column;background-image:repeating-radial-gradient(circle at 18% 28%,rgba(60,110,150,.10) 0 1.5px,transparent 1.5px 7px),repeating-radial-gradient(circle at 84% 70%,rgba(190,140,60,.10) 0 1.5px,transparent 1.5px 8px),repeating-linear-gradient(135deg,rgba(150,120,60,.07) 0 2px,transparent 2px 9px),radial-gradient(ellipse at 50% 0,#fbf6e8,#efe5c8)}
+#p-account #acClubExtras .cx-idhead,#p-travel-club #tcSample .cx-idhead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.5px solid #063a63;padding-bottom:8px;margin-bottom:12px}
+#p-account #acClubExtras .cx-idhead small,#p-travel-club #tcSample .cx-idhead small{display:block;font:800 8px 'Raleway',sans-serif;letter-spacing:.28em;color:#8a7a52}
+#p-account #acClubExtras .cx-idhead b,#p-travel-club #tcSample .cx-idhead b{display:block;font:700 26px 'Playfair Display',serif;letter-spacing:.16em;color:#063a63;line-height:1.1}
+#p-account #acClubExtras .cx-idtype,#p-travel-club #tcSample .cx-idtype{display:flex;gap:12px}
+#p-account #acClubExtras .cx-idtype span,#p-travel-club #tcSample .cx-idtype span{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;text-align:center}
+#p-account #acClubExtras .cx-idtype i,#p-travel-club #tcSample .cx-idtype i{display:block;font:700 15px 'Raleway',sans-serif;letter-spacing:.06em;color:#063a63;font-style:normal;margin-top:2px}
+#p-account #acClubExtras .cx-id .cx-idrow,#p-travel-club #tcSample .cx-id .cx-idrow{display:flex;gap:14px;align-items:flex-start}
+#p-account #acClubExtras .cx-idphoto,#p-travel-club #tcSample .cx-idphoto{flex:none;width:37%;aspect-ratio:3/4;background:linear-gradient(135deg,#f5a04b,#ef8731);display:grid;place-items:center;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px #063a63,0 4px 10px rgba(0,0,0,.25)}
+#p-account #acClubExtras .cx-idphoto img,#p-travel-club #tcSample .cx-idphoto img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+#p-account #acClubExtras .cx-idphoto span,#p-travel-club #tcSample .cx-idphoto span{font:800 52px 'Playfair Display',serif;color:#fff}
+#p-account #acClubExtras .cx-id dl,#p-travel-club #tcSample .cx-id dl{margin:0;min-width:0;flex:1}
+#p-account #acClubExtras .cx-id dt,#p-travel-club #tcSample .cx-id dt{font:800 7.5px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase;margin-top:9px}
+#p-account #acClubExtras .cx-id dt:first-child,#p-travel-club #tcSample .cx-id dt:first-child{margin-top:0}
+#p-account #acClubExtras .cx-id dd,#p-travel-club #tcSample .cx-id dd{margin:2px 0 0;font:700 14px 'Raleway',sans-serif;letter-spacing:.04em;color:#063a63;word-break:break-word}
+#p-account #acClubExtras .cx-idrow2,#p-travel-club #tcSample .cx-idrow2{display:grid;grid-template-columns:1fr 1fr 1fr 52px;gap:10px;align-items:end;margin-top:10px}
+#p-account #acClubExtras .cx-ghost,#p-travel-club #tcSample .cx-ghost{width:48px;aspect-ratio:3/4;overflow:hidden;opacity:.28;filter:grayscale(1) contrast(1.15);justify-self:end;mix-blend-mode:multiply;border:1px solid rgba(6,58,99,.4)}
+#p-account #acClubExtras .cx-ghost img,#p-travel-club #tcSample .cx-ghost img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+#p-account #acClubExtras .cx-ghost span,#p-travel-club #tcSample .cx-ghost span{display:grid;place-items:center;height:100%;font:800 24px 'Playfair Display',serif;color:#063a63}
+#p-account #acClubExtras .cx-holo,#p-travel-club #tcSample .cx-holo{height:20px;margin:12px -16px 0;flex:none;width:calc(100% + 32px);max-width:none;background:linear-gradient(100deg,#ffd0e6 0%,#c9efff 22%,#d8ffc9 44%,#fff0b8 66%,#e0ccff 88%,#ffd0e6 100%);background-size:240% 100%;opacity:.7;animation:cxHolo 6s linear infinite;border-top:1px solid rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.8)}
 @keyframes cxHolo{to{background-position:240% 0}}
-#p-account #acClubExtras .cx-sig{margin-top:10px;border-bottom:1px solid #063a63;padding-bottom:2px;position:relative;min-height:42px}
-#p-account #acClubExtras .cx-sig small{font:800 7px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase}
-#p-account #acClubExtras .cx-sig span{display:block;font:italic 30px/1.1 'Snell Roundhand','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;color:#1b3f8f;transform:rotate(-3deg);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#p-account #acClubExtras .cx-seal{position:absolute;right:16px;bottom:100px;width:46px;height:46px;border-radius:50%;border:2px solid rgba(29,100,160,.5);display:grid;place-items:center;font-size:22px;color:rgba(29,100,160,.55);transform:rotate(-14deg);box-shadow:inset 0 0 0 4px rgba(29,100,160,.12)}
-#p-account #acClubExtras .cx-note{margin:70px 18px 0;text-align:center;font:italic 14px/1.7 'Playfair Display',serif;color:#6f6240}
-@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-holo{animation:none}}
-#p-account #acClubExtras .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(8px,2.5vw,10.5px)/1.45 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
-#p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;position:sticky;bottom:12px;z-index:6;padding:8px 0;background:linear-gradient(to top,#fff 70%,rgba(255,255,255,0))}
-#p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
-#p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
-#p-account #acClubExtras .cx-vid{margin-top:18px;text-align:center}
-#p-account #acClubExtras .cx-btn--navy{background:#063a63}
-#p-account #acClubExtras .cx-vidhint{margin:8px 0 0;font-size:12.5px;color:#5b6b76}
-#p-account #acClubExtras .cx-vidbar{height:8px;background:#e3ebf2;margin:12px auto 0;max-width:320px;overflow:hidden}
-#p-account #acClubExtras .cx-vidbar i{display:block;height:100%;width:0;background:#ef8731;transition:width .2s linear}
-#p-account #acClubExtras .cx-vidout video{display:block;width:100%;max-width:300px;margin:12px auto 0;background:#04111e;box-shadow:0 10px 28px -12px rgba(6,40,70,.6)}
-#p-account #acClubExtras .cx-vidout .cx-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet{transition:none}#p-account #acClubExtras .cx-float,#p-account #acClubExtras .cx-shadow{animation:none}}
-#p-account #acClubExtras .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
-#p-account #acClubExtras .cx-rev:first-of-type{border-top:0}
-#p-account #acClubExtras .cx-stars{display:inline-flex;gap:2px}
-#p-account #acClubExtras .cx-stars button{background:none;border:0;padding:2px;font-size:26px;line-height:1;color:#c9d3da;cursor:pointer}
-#p-account #acClubExtras .cx-stars button.on{color:#ef8731}
-#p-account #acClubExtras textarea{width:100%;margin:8px 0;padding:10px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;resize:vertical}
-#p-account #acClubExtras .cx-chip{display:inline-block;padding:3px 10px;font-size:12px;font-weight:700;background:#fdf1e4;color:#a55a12}
-#p-account #acClubExtras .cx-chip.ok{background:#e6f4ea;color:#1f6b3a}
-#p-account #acClubExtras .cx-msg{min-height:18px;margin:6px 0 0;font-size:13px;color:#a02;}
-#p-account #acClubExtras .cx-msg.ok{color:#1f6b3a}
+#p-account #acClubExtras .cx-sig,#p-travel-club #tcSample .cx-sig{margin-top:10px;border-bottom:1px solid #063a63;padding-bottom:2px;position:relative;min-height:42px}
+#p-account #acClubExtras .cx-sig small,#p-travel-club #tcSample .cx-sig small{font:800 7px 'Raleway',sans-serif;letter-spacing:.2em;color:#8a7a52;text-transform:uppercase}
+#p-account #acClubExtras .cx-sig span,#p-travel-club #tcSample .cx-sig span{display:block;font:italic 30px/1.1 'Snell Roundhand','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;color:#1b3f8f;transform:rotate(-3deg);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-account #acClubExtras .cx-seal,#p-travel-club #tcSample .cx-seal{position:absolute;right:16px;bottom:100px;width:46px;height:46px;border-radius:50%;border:2px solid rgba(29,100,160,.5);display:grid;place-items:center;font-size:22px;color:rgba(29,100,160,.55);transform:rotate(-14deg);box-shadow:inset 0 0 0 4px rgba(29,100,160,.12)}
+#p-account #acClubExtras .cx-note,#p-travel-club #tcSample .cx-note{margin:70px 18px 0;text-align:center;font:italic 14px/1.7 'Playfair Display',serif;color:#6f6240}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-holo,#p-travel-club #tcSample .cx-holo{animation:none}}
+#p-account #acClubExtras .cx-mrz,#p-travel-club #tcSample .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(8px,2.5vw,10.5px)/1.45 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
+#p-account #acClubExtras .cx-bnav,#p-travel-club #tcSample .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;position:sticky;bottom:12px;z-index:6;padding:8px 0;background:linear-gradient(to top,#fff 70%,rgba(255,255,255,0))}
+#p-account #acClubExtras .cx-bnav span,#p-travel-club #tcSample .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
+#p-account #acClubExtras .cx-bnav .cx-btn,#p-travel-club #tcSample .cx-bnav .cx-btn{min-width:92px}
+#p-account #acClubExtras .cx-vid,#p-travel-club #tcSample .cx-vid{margin-top:18px;text-align:center}
+#p-account #acClubExtras .cx-btn--navy,#p-travel-club #tcSample .cx-btn--navy{background:#063a63}
+#p-account #acClubExtras .cx-vidhint,#p-travel-club #tcSample .cx-vidhint{margin:8px 0 0;font-size:12.5px;color:#5b6b76}
+#p-account #acClubExtras .cx-vidbar,#p-travel-club #tcSample .cx-vidbar{height:8px;background:#e3ebf2;margin:12px auto 0;max-width:320px;overflow:hidden}
+#p-account #acClubExtras .cx-vidbar i,#p-travel-club #tcSample .cx-vidbar i{display:block;height:100%;width:0;background:#ef8731;transition:width .2s linear}
+#p-account #acClubExtras .cx-vidout video,#p-travel-club #tcSample .cx-vidout video{display:block;width:100%;max-width:300px;margin:12px auto 0;background:#04111e;box-shadow:0 10px 28px -12px rgba(6,40,70,.6)}
+#p-account #acClubExtras .cx-vidout .cx-row,#p-travel-club #tcSample .cx-vidout .cx-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+@media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-sheet,#p-travel-club #tcSample .cx-sheet{transition:none}#p-account #acClubExtras .cx-float,#p-account #acClubExtras .cx-shadow,#p-travel-club #tcSample .cx-float,#p-travel-club #tcSample .cx-shadow{animation:none}}
+#p-account #acClubExtras .cx-rev,#p-travel-club #tcSample .cx-rev{border-top:1px solid #e3ebf2;padding:14px 0}
+#p-account #acClubExtras .cx-rev:first-of-type,#p-travel-club #tcSample .cx-rev:first-of-type{border-top:0}
+#p-account #acClubExtras .cx-stars,#p-travel-club #tcSample .cx-stars{display:inline-flex;gap:2px}
+#p-account #acClubExtras .cx-stars button,#p-travel-club #tcSample .cx-stars button{background:none;border:0;padding:2px;font-size:26px;line-height:1;color:#c9d3da;cursor:pointer}
+#p-account #acClubExtras .cx-stars button.on,#p-travel-club #tcSample .cx-stars button.on{color:#ef8731}
+#p-account #acClubExtras textarea,#p-travel-club #tcSample textarea{width:100%;margin:8px 0;padding:10px 12px;border:1px solid #cfd9e1;font:14px 'Raleway',sans-serif;resize:vertical}
+#p-account #acClubExtras .cx-chip,#p-travel-club #tcSample .cx-chip{display:inline-block;padding:3px 10px;font-size:12px;font-weight:700;background:#fdf1e4;color:#a55a12}
+#p-account #acClubExtras .cx-chip.ok,#p-travel-club #tcSample .cx-chip.ok{background:#e6f4ea;color:#1f6b3a}
+#p-account #acClubExtras .cx-msg,#p-travel-club #tcSample .cx-msg{min-height:18px;margin:6px 0 0;font-size:13px;color:#a02;}
+#p-account #acClubExtras .cx-msg.ok,#p-travel-club #tcSample .cx-msg.ok{color:#1f6b3a}
 .cx-pub{margin:0}
 .cx-pub .cx-avg{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:14px;color:#5b6b76}
 .cx-pub .cx-avg b{font:800 22px 'Raleway',sans-serif;color:#063a63}
@@ -54230,6 +54249,17 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 .cx-pub .cx-r p{margin:6px 0;color:#17323f;line-height:1.6}
 .cx-pub .cx-r small{color:#5b6b76}
 .cx-pub .cx-v{display:inline-block;width:1em;height:1em;vertical-align:-.15em;margin-left:.25em}
+@media(max-width:420px){
+#p-account #acClubExtras .cx-id .cx-idrow,#p-travel-club #tcSample .cx-id .cx-idrow{gap:10px}
+#p-account #acClubExtras .cx-id dd,#p-travel-club #tcSample .cx-id dd{font-size:12px}
+#p-account #acClubExtras .cx-id dt,#p-travel-club #tcSample .cx-id dt{margin-top:6px}
+#p-account #acClubExtras .cx-idrow2,#p-travel-club #tcSample .cx-idrow2{grid-template-columns:.7fr 1.5fr 1.3fr 34px;gap:6px;margin-top:6px}
+#p-account #acClubExtras .cx-idrow2 dd,#p-travel-club #tcSample .cx-idrow2 dd{font-size:10.5px;letter-spacing:0}
+#p-account #acClubExtras .cx-holo,#p-travel-club #tcSample .cx-holo{margin-top:8px;height:16px}
+#p-account #acClubExtras .cx-sig,#p-travel-club #tcSample .cx-sig{margin-top:6px;min-height:34px}
+#p-account #acClubExtras .cx-sig span,#p-travel-club #tcSample .cx-sig span{font-size:22px}
+#p-travel-club #tcSample .tcs-card{padding:10px}
+}
 </style>
 <script id="club-extras-script">
 (function(){
@@ -54316,9 +54346,10 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     function safe(t){return t.replace(/</g,'&lt;');}
     return safe(pad('P<SSC'+sur+'<<'+given))+'<br>'+safe(pad('SSTC'+String(code||'').replace(/[^0-9A-Za-z]/g,'').toUpperCase()+'<<'+String(since||'').slice(-2)+'<<<<<'));
   }
-  function bookPages(m){
+  function bookPages(m,who){
     var u=null;try{u=JSON.parse(localStorage.getItem('ss_current_user')||'null');}catch(e){}
-    var name=(u&&u.name)||'Traveller',tier=(typeof getTravelTier==='function'&&typeof getTravelPoints==='function')?getTravelTier(getTravelPoints()).name:'Explorer',since=u&&u.createdAt?new Date(u.createdAt).getFullYear():'';
+    if(who)u={name:who.name,createdAt:who.createdAt,avatarUrl:'',verifiedTraveller:!!who.verified};   /* the sample passport on the Travel Club page */
+    var name=(u&&u.name)||'Traveller',tier=who?who.tier:(typeof getTravelTier==='function'&&typeof getTravelPoints==='function')?getTravelTier(getTravelPoints()).name:'Explorer',since=u&&u.createdAt?new Date(u.createdAt).getFullYear():'';
     var photo=u&&/^(https:\/\/|\/api\/auth\/avatar\/)/.test(u.avatarUrl||'')?u.avatarUrl:'',code=(m.referral&&m.referral.code)||'';
     var st=(m.stamps||[]).slice().reverse(),pages=[]; /* oldest first, like a real passport: new stamps land on the latest page */
     pages.push('<div class="cx-cover"><div class="cx-logo" role="img" aria-label="Sight Seers Caribbean Adventures"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-gold cx-c2">TRAVEL CLUB</div><div class="cx-gold cx-c3">PASSPORT</div><div class="cx-c5"><i></i><span>MEMBER EDITION</span><i></i></div></div>');
@@ -54340,32 +54371,33 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
   function backCover(){return '<div class="cx-cover cx-backcover"><div class="cx-logo" style="width:40%;margin:0 auto 16px"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-c5"><i></i><span>SIGHTSEERSCARIBBEAN.COM</span><i></i></div></div>';}
   function blankBack(){return '<div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div>';}
-  function bookHtml(m){
-    var pages=bookPages(m),wide=!!X.wide,sheets='',nSheets;
+  function bookHtml(m,S,o){
+    S=S||X;o=o||{};var pre=o.pre||'cx',attr=o.attr||'data-cx-book';
+    var pages=bookPages(m,o.who),wide=!!S.wide,sheets='',nSheets;
     if(wide){
       /* two sides to every sheet: cover and welcome note, then ID and the first stamp page, then stamps on both sides */
-      nSheets=Math.ceil(pages.length/2);X.max=nSheets+1;
+      nSheets=Math.ceil(pages.length/2);S.max=nSheets+1;
       for(var i=0;i<nSheets;i++){sheets+='<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+pages[2*i]+'</div>'+(pages[2*i+1]?'<div class="cx-face cx-back">'+pages[2*i+1]+'</div>':blankBack())+'</div>';}
       /* the last leaf: plain paper inside, and the navy back cover outside, so the passport can be closed */
       sheets+='<div class="cx-sheet" data-sheet="'+nSheets+'"><div class="cx-face cx-front"><div class="cx-paper cx-endpaper"><div class="cx-ph">&nbsp;</div></div></div><div class="cx-face cx-back">'+backCover()+'</div></div>';
     }else{
-      nSheets=pages.length;X.max=nSheets-1;
       pages.push(backCover());
-      nSheets=pages.length;X.max=nSheets-1;
+      nSheets=pages.length;S.max=nSheets-1;
       sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div>'+blankBack()+'</div>';}).join('');
     }
-    X.pages=nSheets;if(X.page>X.max)X.page=X.max;if(X.page==null||X.page<0)X.page=0;
-    return '<div class="cx-bookwrap'+(wide?' wide':'')+'"><div class="cx-float" id="cxFloat"><div class="cx-book" id="cxBook" tabindex="0" aria-label="Your Travel Club passport. Use the arrows to turn the pages.">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
-      '<div class="cx-bnav"><button type="button" class="cx-btn" data-cx-book="prev" aria-label="Previous page">‹ Back</button><span id="cxBookPos"></span><button type="button" class="cx-btn" data-cx-book="next" aria-label="Next page">Next ›</button></div>'+
-      '<div class="cx-vid"><button type="button" class="cx-btn cx-btn--navy" data-cx-video>Make my passport video</button><p class="cx-vidhint">A short clip for Instagram, TikTok or WhatsApp status.</p><div id="cxVidOut" aria-live="polite"></div></div></div>';
+    S.pages=nSheets;if(S.page>S.max)S.page=S.max;if(S.page==null||S.page<0)S.page=0;
+    return '<div class="cx-bookwrap'+(wide?' wide':'')+'"><div class="cx-float" id="'+pre+'Float"><div class="cx-book" id="'+pre+'Book" tabindex="0" aria-label="'+(o.label||'Your Travel Club passport. Use the arrows to turn the pages.')+'">'+sheets+'</div></div><div class="cx-shadow" aria-hidden="true"></div>'+
+      '<div class="cx-bnav"><button type="button" class="cx-btn" '+attr+'="prev" aria-label="Previous page">‹ Back</button><span id="'+pre+'BookPos"></span><button type="button" class="cx-btn" '+attr+'="next" aria-label="Next page">Next ›</button></div>'+
+      (o.noVideo?'':'<div class="cx-vid"><button type="button" class="cx-btn cx-btn--navy" data-cx-video>Make my passport video</button><p class="cx-vidhint">A short clip for Instagram, TikTok or WhatsApp status.</p><div id="cxVidOut" aria-live="polite"></div></div>')+'</div>';
   }
-  function setBook(n){
-    var b=document.getElementById('cxBook');if(!b)return;
-    var wide=!!X.wide,sheets=b.querySelectorAll('.cx-sheet'),count=sheets.length,max=wide?count:count-1;n=Math.max(0,Math.min(max,n));X.page=n;
+  function setBook(n,S,o){
+    S=S||X;o=o||{};var pre=o.pre||'cx',attr=o.attr||'data-cx-book',b=document.getElementById(pre+'Book');if(!b)return;
+    var wide=!!S.wide,sheets=b.querySelectorAll('.cx-sheet'),count=sheets.length,max=wide?count:count-1;n=Math.max(0,Math.min(max,n));S.page=n;
     [].forEach.call(sheets,function(sh){var i=Number(sh.getAttribute('data-sheet')),flipped=i<n;sh.classList.toggle('flipped',flipped);sh.style.zIndex=String(flipped?i+1:count-i+1);});
     b.classList.toggle('closed',n===0);b.classList.toggle('ended',wide&&n===count);
-    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':(n===max?'Back cover':(wide?'Pages '+(2*n-1)+' and '+(2*n):'Page '+n+' of '+(count-1)));
-    [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===max);});
+    var pos=document.getElementById(pre+'BookPos');if(pos)pos.textContent=n===0?'Cover':(n===max?'Back cover':(wide?'Pages '+(2*n-1)+' and '+(2*n):'Page '+n+' of '+(count-1)));
+    var root=o.root||document.getElementById('acClubExtras');if(!root)return;
+    [].forEach.call(root.querySelectorAll('['+attr+']'),function(x){x.disabled=(x.getAttribute(attr)==='prev'&&n===0)||(x.getAttribute(attr)==='next'&&n===max);});
   }
   /* a computer shows the passport open as two pages; a phone shows one page at a time */
   function wideNow(){return window.innerWidth>=760;}
@@ -54429,6 +54461,38 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       if(sb)sb.addEventListener('click',function(){navigator.share({files:[file],title:'My Sight Seers Travel Club passport',text:'My Travel Club passport. Join me: '+((m.referral&&m.referral.link)||'https://www.sightseerscaribbean.com')}).catch(function(){});});
     },function(err){X.busy=false;btn.disabled=false;out.innerHTML='<p class="cx-msg">'+esc(err&&err.message||'Sorry, the video could not be made on this device.')+'</p>';});
   }
+
+  /* ---------- the sample passport on the Travel Club page: a made-up traveller, so visitors can see what theirs will look like ---------- */
+  (function(){
+    var SMP={page:0,pages:0,max:0,wide:false},OPT={pre:'tcs',attr:'data-tcs-book',noVideo:true,label:'A sample Sight Seers passport. Use the arrows to turn the pages.'};
+    OPT.who={name:'Sample Traveller',tier:'Voyager',createdAt:'2026-01-10',verified:true};
+    var STAMPS=[{"title": "Ocho Rios Villa Weekend", "country": "Jamaica", "on": "2026-11-05", "kind": "booking"}, {"title": "Pitons Boat Day", "country": "Saint Lucia", "on": "2026-10-09", "kind": "booking"}, {"title": "Catamaran Sunset Cruise", "country": "Jamaica", "on": "2026-09-12", "kind": "booking"}, {"title": "Swimming Pigs Day Trip", "country": "The Bahamas", "on": "2026-08-14", "kind": "booking"}, {"title": "Negril Group Week", "country": "Jamaica", "on": "2026-07-16", "kind": "club"}, {"title": "Great Blue Hole Flyover", "country": "Belize", "on": "2026-06-14", "kind": "booking"}, {"title": "Harrison Cave Tour", "country": "Barbados", "on": "2026-05-14", "kind": "booking"}, {"title": "Bamboo Rafting on the Martha Brae", "country": "Jamaica", "on": "2026-04-12", "kind": "booking"}],played=false,timers=[];
+    function box(){return document.getElementById('tcSampleBook');}
+    function paintSample(){
+      var b=box();if(!b)return;OPT.root=b;SMP.wide=wideNow();
+      b.innerHTML=bookHtml({stamps:STAMPS,referral:{code:'SAMPLE'}},SMP,OPT);
+      setBook(SMP.page||0,SMP,OPT);
+    }
+    function stopPlay(){timers.forEach(clearTimeout);timers=[];}
+    /* when the sample comes into view it opens by itself and turns a few pages, then waits for the visitor */
+    function autoplay(){
+      if(played)return;played=true;
+      [900,3000,5000].forEach(function(ms,i){timers.push(setTimeout(function(){setBook(i+1,SMP,OPT);},ms));});
+    }
+    window.ssSamplePassport=function(){paintSample();};
+    document.addEventListener('click',function(e){
+      var bt=e.target.closest&&e.target.closest('[data-tcs-book]');
+      if(bt){stopPlay();setBook((SMP.page||0)+(bt.getAttribute('data-tcs-book')==='next'?1:-1),SMP,OPT);return;}
+      var sh=e.target.closest&&e.target.closest('#tcsBook .cx-sheet');if(!sh||e.target.closest('button'))return;
+      stopPlay();var i=Number(sh.getAttribute('data-sheet'));if(i===(SMP.page||0))setBook(i+1,SMP,OPT);else if(i===(SMP.page||0)-1)setBook(i,SMP,OPT);
+    });
+    var rz=null;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){if(box()&&wideNow()!==!!SMP.wide)paintSample();},200);});
+    function start(){
+      paintSample();var b=box();if(!b)return;
+      if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting&&en.intersectionRatio>.3){autoplay();io.disconnect();}});},{threshold:[.3]});io.observe(b);}
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+  })();
   window.ssClubExtras=function(){load(false);};
   window.ssClubExtrasForce=function(){load(true);};
   /* Group trips tab: each section is a drop-down; a short line says what is inside, and the open ones are remembered for the visit */
@@ -54454,10 +54518,10 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   /* the book glides: it floats on its own, and tilts toward the pointer while you move over it */
   (function(){
     var fl=null;
-    function reset(){var f=document.getElementById('cxFloat');if(f){f.classList.remove('tilt');f.style.transform='';}}
+    function reset(){var f=fl;if(f){f.classList.remove('tilt');f.style.transform='';}}
     document.addEventListener('pointermove',function(e){
       if(e.pointerType==='touch')return;
-      var f=e.target.closest&&e.target.closest('#cxFloat');
+      var f=e.target.closest&&e.target.closest('.cx-float');
       if(!f){if(fl){reset();fl=null;}return;}
       fl=f;var r=f.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
       f.classList.add('tilt');f.style.transform='perspective(1400px) rotateY('+(x*14).toFixed(2)+'deg) rotateX('+(-y*10).toFixed(2)+'deg) translateY(-6px)';
