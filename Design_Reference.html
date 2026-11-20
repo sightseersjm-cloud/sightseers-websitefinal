@@ -49313,6 +49313,24 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var e=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.endDate||'');if(e&&d.getTime()>Date.UTC(+e[1],+e[2]-1,+e[3]))return '';
     try{return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'});}catch(x){return '';}
   }
+  /* the photo block: five or more photos show as three (a big one and two), the last with how many more there are; every photo opens in the viewer */
+  function tpPaintGal(gl,gw){
+    var vis=gl.length>4?gl.slice(0,3):gl;
+    $('tpGal').innerHTML=vis.map(function(g,gi){var more=(gl.length>4&&gi===2)?'<span class="tp-galmore" aria-hidden="true">+'+(gl.length-3)+'</span>':'';return '<button type="button" class="tp-galitem" data-gal-i="'+gi+'" aria-label="'+esc(more?('See all '+gl.length+' photos'):(g.alt||('Photo '+(gi+1))))+'"><img src="'+esc(g.url)+'" alt="'+esc(g.alt||'')+'" loading="lazy">'+more+'</button>';}).join('');
+    $('tpGal').setAttribute('data-n',vis.length);
+    (function(){var n=vis.length,rem=(n+3)%3,last=$('tpGal').lastElementChild;if(!last)return;if(n>4&&rem)last.classList.add(rem===2?'tp-gl-d2':'tp-gl-d3');if(n>2&&(n-1)%2===1)last.classList.add('tp-gl-m2');})();
+    window.__tpGal=gl;gw.hidden=false;
+  }
+  /* the big tile is a wide shape, so once the photos have loaded the first wide photo goes there and tall phone photos take the small tiles */
+  var tpGalTok=0;
+  function tpWideFirst(gl,gw){
+    var tok=++tpGalTok;
+    Promise.all(gl.map(function(g){return new Promise(function(ok){var im=new Image(),done=false;function f(){if(done)return;done=true;ok({g:g,w:im.naturalWidth,h:im.naturalHeight});}im.onload=f;im.onerror=f;setTimeout(f,2500);im.src=g.url;});})).then(function(rs){
+      if(tok!==tpGalTok)return;
+      var wide=-1;for(var i=0;i<rs.length;i++){if(rs[i].w&&rs[i].w/rs[i].h>=1.15){wide=i;break;}}
+      if(wide>0){var re=rs.slice(),w=re.splice(wide,1)[0];re.unshift(w);tpPaintGal(re.map(function(r){return r.g;}),gw);}
+    });
+  }
   function tpState(html){var s=$('tpState');s.innerHTML=html;s.hidden=false;$('tpLayout').hidden=true;}
   function renderTrip(){
     var slug=slugNow(),n=$('n-travel-club');if(n)n.classList.add('act');
@@ -49357,8 +49375,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(sd){var days=Math.ceil((Date.UTC(+sd[1],+sd[2]-1,+sd[3])-Date.now())/86400000);if(days>0)ph+='<div class="tp-pcard tp-pdays"><b>'+days+'</b><span>'+(days===1?'day':'days')+' to go</span></div>';}
     pu.innerHTML=ph;pu.hidden=!ph;
     var gw=$('tpGallery'),gl=(t.gallery||[]).filter(function(g){return /^(\/assets\/|\/api\/images\?file=|https:\/\/)/.test(g.url||'');});
-    if(gl.length){var vis=gl.length>4?gl.slice(0,3):gl;   /* five or more photos show as three (a big one and two), the last with how many more there are; every photo opens in the viewer */
-      $('tpGal').innerHTML=vis.map(function(g,gi){var more=(gl.length>4&&gi===2)?'<span class="tp-galmore" aria-hidden="true">+'+(gl.length-3)+'</span>':'';return '<button type="button" class="tp-galitem" data-gal-i="'+gi+'" aria-label="'+esc(more?('See all '+gl.length+' photos'):(g.alt||('Photo '+(gi+1))))+'"><img src="'+esc(g.url)+'" alt="'+esc(g.alt||'')+'" loading="lazy">'+more+'</button>';}).join('');$('tpGal').setAttribute('data-n',vis.length);(function(){var n=vis.length,rem=(n+3)%3,last=$('tpGal').lastElementChild;if(!last)return;if(n>4&&rem)last.classList.add(rem===2?'tp-gl-d2':'tp-gl-d3');if(n>2&&(n-1)%2===1)last.classList.add('tp-gl-m2');})();window.__tpGal=gl;gw.hidden=false;}
+    if(gl.length){tpPaintGal(gl,gw);tpWideFirst(gl,gw);}
     else{$('tpGal').innerHTML='';gw.hidden=true;window.__tpGal=[];}
     var sp=$('tpSponsor'),sps=t.sponsors||[];
     if(sps.length){
