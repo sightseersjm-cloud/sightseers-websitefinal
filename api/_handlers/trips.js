@@ -234,8 +234,10 @@ function publicTrip(t, interests, leader, coUser) {
     id: t.id,
     slug: t.slug,
     title: t.title,
-    destination: t.destination,
-    country: t.country,
+    destination: t.privateEvent ? '' : t.destination,
+    country: t.privateEvent ? '' : t.country,
+    private: !!t.privateEvent,
+    arrival: t.arrival || null,
     dateText: t.dateText,
     startDate: t.startDate,
     endDate: t.endDate,
@@ -251,7 +253,7 @@ function publicTrip(t, interests, leader, coUser) {
     paymentNote: t.paymentNote || PAYMENT_NOTE,
     status: t.status,
     seats: total ? { total, left: Math.max(0, total - taken) } : null,
-    led: !!(t.organizerName || t.organizerEmail),
+    led: !t.privateEvent && !!(t.organizerName || t.organizerEmail),
     sponsors: t.sponsors || [],
     gallery: t.gallery || [],
     organizer: t.showOrganizer && t.organizerName ? { name: t.organizerName + (coName ? ' & ' + coName : ''), mainName: t.organizerName, coName: coName, coPhoto: (coUser && coUser.avatarUrl) || '', community: t.organizerCommunity || '', bio: (leader && leader.bio) || t.organizerBio || '', photo: (leader && leader.avatarUrl) || '' } : null
@@ -289,6 +291,8 @@ function cleanTrip(b, existing, all) {
     organizerBio: str(b.organizerBio, 600),
     organizerEmail: lower(b.organizerEmail, 120),
     showOrganizer: !!b.showOrganizer,
+    /* a private event: the place is not shown on the public site (the owner still sees it) */
+    privateEvent: b.privateEvent !== undefined ? !!b.privateEvent : !!(existing && existing.privateEvent),
     reward: str(b.reward, 600),
     rewardStatus: oneOf(b.rewardStatus, REWARD_STATUS, 'not_set'),
     internalNote: str(b.internalNote, 1000),
@@ -513,6 +517,9 @@ module.exports = async function handler(req, res) {
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         return res.status(r.ok ? 200 : 400).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sight Seers</title><body style="margin:0;font-family:Arial,sans-serif;background:#f4f8fb;color:#062e4b"><div style="max-width:520px;margin:12vh auto;padding:28px;background:#fff;border-top:4px solid #ef8731"><h1 style="font-size:22px;margin:0 0 12px">' + (r.ok ? 'You are off the list' : 'Something went wrong') + '</h1><p style="line-height:1.6;color:#4a5d6e">' + msg + '</p><p><a href="/travel-club" style="color:#d96f12;font-weight:bold">Go to the Travel Club</a></p></div></body>');
       }
+
+      /* Sight Seers' own departures that ship with the site are added to the list once */
+      try { await require('../_lib/club-seed').ensureSeeds(); } catch (e) { console.error('club seed', e && e.message); }
 
       /* public pages (no sign-in) may be served from the edge for a couple of minutes: each answer costs several storage reads */
       const edge = () => { if (!(req.headers && req.headers.authorization)) res.setHeader('Cache-Control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=900'); };

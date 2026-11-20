@@ -44,7 +44,7 @@ function message(i, t) {
   const rows = [
     ['Trip', t.title],
     ['Dates', t.dateText],
-    ['Where', [t.destination, t.country].filter(Boolean).join(', ')],
+    ['Where', t.privateEvent ? 'Shared once your place is confirmed' : [t.destination, t.country].filter(Boolean).join(', ')],
     ['Price', t.priceText],
     ['Theme', t.theme],
     ['Led by', t.showOrganizer && t.organizerName ? t.organizerName + (t.organizerCommunity ? ' (' + t.organizerCommunity + ')' : '') : ''],

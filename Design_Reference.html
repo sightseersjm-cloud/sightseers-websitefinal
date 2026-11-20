@@ -49198,11 +49198,11 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<span class="tcd-tag">Open</span>';
   }
   function depCard(t,i){
-    var meta=[t.dateText,t.organizer?'Led by '+t.organizer.name:'',[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
+    var meta=[t.dateText,t.organizer?'Led by '+t.organizer.name:'',t.private?'Location shared once confirmed':[t.destination,t.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
     var href='/trip/'+encodeURIComponent(t.slug);
     var isFull=t.status==='full'||(t.seats&&t.seats.left===0);
     return '<a class="tcd-row" style="--i:'+i+'" href="'+href+'" data-trip="'+esc(t.slug)+'" data-dest="'+esc(t.country||t.destination||'')+'" data-full="'+(isFull?'1':'0')+'"><span class="tcd-dot" aria-hidden="true"></span><span class="tcd-date">'+depDate(t)+'</span>'+
-      '<span class="tcd-main">'+(t.theme?'<em class="tcd-theme">'+esc(t.theme)+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
+      '<span class="tcd-main">'+((t.private||t.theme)?'<em class="tcd-theme">'+esc([t.private?'Private event':'',t.theme].filter(Boolean).join(' · '))+'</em>':'')+'<strong>'+esc(t.title)+'</strong><small>'+esc(meta)+'</small></span><span class="tcd-end">'+(t.priceText?'<span class="tcd-price">'+esc(t.priceText)+'</span>':'')+depTag(t)+'<span class="tcd-go" aria-hidden="true">'+(t.status==='full'?'Join waitlist':'View trip')+' &rarr;</span></span></a>';
   }
   function depStats(list){
     var places=0,dests={};
@@ -49330,12 +49330,12 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   function fillTrip(t){
     var path='/trip/'+encodeURIComponent(t.slug),full=t.status==='full'||(t.seats&&t.seats.left===0);
     $('tpState').hidden=true;$('tpLayout').hidden=false;
-    $('tpKicker').textContent=full?'Travel Club trip · Waitlist':'Travel Club trip';
+    $('tpKicker').textContent=t.private?(full?'Private event · Waitlist':'Private event'):(full?'Travel Club trip · Waitlist':'Travel Club trip');
     $('tpTitle').textContent=t.title;$('tpLede').textContent=t.summary||'';
     /* days and nights from the trip's own dates */
     var dn='',sd=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.startDate||''),ed=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.endDate||'');
     if(sd&&ed){var nn=Math.round((Date.UTC(+ed[1],+ed[2]-1,+ed[3])-Date.UTC(+sd[1],+sd[2]-1,+sd[3]))/86400000);if(nn>=1&&nn<60)dn=(nn+1)+' days · '+nn+(nn===1?' night':' nights');}
-    var facts=[t.theme,t.dateText,dn,[t.destination,t.country].filter(function(x,i,a){return x&&a.indexOf(x)===i;}).join(', '),t.priceText].filter(Boolean);
+    var facts=[t.theme,t.dateText,dn,t.private?'Location shared once confirmed':[t.destination,t.country].filter(function(x,i,a){return x&&a.indexOf(x)===i;}).join(', '),t.priceText].filter(Boolean);
     $('tpFacts').innerHTML=facts.map(function(f){return '<li>'+esc(f)+'</li>';}).join('');
     /* the trip photo becomes the banner */
     var band=document.querySelector('#p-trip .tc-band--trip');
@@ -49360,7 +49360,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     var hasDesc=!!(t.description&&t.description.length),hasInc=!!(t.included&&t.included.length),hasNot=!!(t.notIncluded&&t.notIncluded.length),hasDays=!!(t.itinerary&&t.itinerary.length);
     $('tpDays').innerHTML=(t.itinerary||[]).map(function(d,i){var dt=dayDate(t,i);return '<li><i>'+(i+1)+'</i><div><b>Day '+(i+1)+(dt?' · '+esc(dt):'')+'</b>'+(d.title?'<strong>'+esc(d.title)+'</strong>':'')+(d.text?'<span>'+esc(d.text)+'</span>':'')+'</div></li>';}).join('');$('tpDaysWrap').hidden=!hasDays;
     $('tpDesc').innerHTML=(t.description||[]).map(function(p){return '<p>'+esc(p)+'</p>';}).join('');$('tpDescWrap').hidden=!hasDesc;
-    $('tpBy').textContent=hasDesc&&t.organizer?'Written by '+t.organizer.name:'';
+    $('tpBy').textContent=hasDesc&&t.organizer&&!t.private?'Written by '+t.organizer.name:'';
     var soon=$('tpSoon');soon.hidden=hasDesc||hasInc||hasNot||hasDays;
     soon.innerHTML=soon.hidden?'':'<h2>Trip details coming soon</h2><p>'+(t.organizer?esc(first(t.organizer.name))+' is adding what this trip involves.':'The details for this trip are being added.')+' You can still ask to join, and we will email you everything when it is confirmed.</p>';
     var inc=$('tpIncluded'),il=t.included||[],FOLD=6;
@@ -49378,17 +49378,18 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       org.innerHTML='<div class="tp-ohead">'+oph+'<div><span class="tc-eyebrow">Led by</span><strong>'+esc(t.organizer.name)+'</strong>'+(t.organizer.community?'<small>'+esc(t.organizer.community)+'</small>':'')+'</div></div>'+(t.organizer.bio?'<p class="tp-obio">'+esc(t.organizer.bio)+'</p>':'');org.hidden=false;}else{org.innerHTML='';org.hidden=true;}
     var dis=$('tpDisclose');
     if(t.led){dis.innerHTML='<b>Organizer reward.</b> '+(t.organizer?esc(t.organizer.mainName||t.organizer.name):'The organizer of this trip')+' receives a reward from Sight Seers for travelers who book this trip'+(t.organizer&&t.organizer.coName?', and shares it with '+esc(t.organizer.coName):'')+'. Sight Seers approved the trip, manages the bookings and runs the delivery.';dis.hidden=false;}else{dis.hidden=true;}
-    $('tpFormTitle').textContent=full?'Join the waitlist':'Ask to join this trip';
+    $('tpFormTitle').textContent=full?'Join the waitlist':(t.private?'Ask for a place':'Ask to join this trip');
     /* the password is only asked of guests who are not signed in yet */
     if($('tpPwWrap'))$('tpPwWrap').style.display=(function(){try{var k=localStorage.getItem('ss_auth_token')||'';return k&&k.indexOf('guest_')!==0?'none':'';}catch(e){return '';}})();
-    $('tpFormSub').textContent=full?'This trip is full right now. Tell us who would like a place and our team will be in touch if one opens.':'Tell us who is travelling. We reply by email to confirm availability and payment terms.';
-    $('tpBtn').textContent=full?'Join the waitlist':'Ask to join';$('tpBtn').disabled=false;
+    $('tpFormSub').textContent=full?'This trip is full right now. Tell us who would like a place and our team will be in touch if one opens.':(t.private?'This is a private event. Tell us who would like a place. We reply by email to confirm it and share the location and meeting point.':'Tell us who is travelling. We reply by email to confirm availability and payment terms.');
+    $('tpBtn').textContent=full?'Join the waitlist':(t.private?'Ask for a place':'Ask to join');$('tpBtn').disabled=false;
     $('tpForm').hidden=false;$('tpDone').hidden=true;setMsg($('tpStatus'),'','');
     $('tpPay').innerHTML=esc(t.paymentNote||'We confirm availability and payment terms with you by email before anything is charged.')+' Questions? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a>.';
     $('tpLink').value=SITE+path;$('tpShare').hidden=!navigator.share;
     prefill({name:'tpName',email:'tpEmail',phone:'tpPhone'});
     (function(){var pu=who();if(!pu)return;var ps=$('tpPassport');if(ps&&!ps.value&&pu.passportCountry){var known=[].some.call(ps.options,function(o){return o.value===pu.passportCountry;});ps.value=known?pu.passportCountry:'__other';if(!known){$('tpPassportOther').value=pu.passportCountry;$('tpPassportOther').hidden=false;}}if($('tpPassportExp')&&!$('tpPassportExp').value&&pu.passportExpiry)$('tpPassportExp').value=pu.passportExpiry;})();
     setMeta(t.title+' | Sight Seers Travel Club',(t.summary||('Join '+t.title+' with Sight Seers.')).slice(0,200),path);
+    try{var rb=document.querySelector('meta[name="robots"]');if(t.private){if(!rb){rb=document.createElement('meta');rb.setAttribute('name','robots');document.head.appendChild(rb);}rb.setAttribute('content','noindex,nofollow');rb.setAttribute('data-private','1');}else if(rb&&rb.getAttribute('data-private')){rb.parentNode.removeChild(rb);}}catch(e){}
     track('travel_club_trip_view',{trip:t.slug});
     tpBar(t);
   }
@@ -53176,7 +53177,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   }
 
   /* ---------- trips ---------- */
-  var BLANK={id:'',title:'',slug:'',status:'draft',destination:'',country:'',dateText:'',startDate:'',endDate:'',summary:'',description:'',included:[],notIncluded:[],itinerary:[],theme:'',image:'',imageAlt:'',priceText:'',paymentNote:'',seatsTotal:0,organizerName:'',organizerCommunity:'',organizerEmail:'',organizerBio:'',showOrganizer:true,reward:'',rewardStatus:'not_set',internalNote:''};
+  var BLANK={id:'',title:'',slug:'',status:'draft',destination:'',country:'',dateText:'',startDate:'',endDate:'',summary:'',description:'',included:[],notIncluded:[],itinerary:[],theme:'',image:'',imageAlt:'',priceText:'',paymentNote:'',seatsTotal:0,organizerName:'',organizerCommunity:'',organizerEmail:'',organizerBio:'',showOrganizer:true,privateEvent:false,reward:'',rewardStatus:'not_set',internalNote:''};
   function tripForm(t){
     var k=t.id||'new',st=CL.data.statuses,id=function(n){return 'clT_'+n+'_'+k;};
     return '<div class="cl-grid">'
@@ -53191,7 +53192,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       +'<div class="mg-fld full cl-gal"><label>More photos for the trip page <span style="font-weight:500">(optional, up to twelve)</span></label><div class="mg-hint" style="margin:0 0 8px">They show as a photo section on the trip page. Guests can tap one to see it large. Add a short description for each so people using screen readers know what is in it.</div><div data-gal-list="'+esc(k)+'">'+(t.gallery||[]).map(function(g){return galRow(g);}).join('')+'</div><div class="cl-acts"><button type="button" class="mg-btn ghost" data-cl-galadd="'+esc(k)+'">+ Add photo</button></div></div>'
       +fld('Photo description',id('imageAlt'),t.imageAlt)+fld('Seats in total',id('seatsTotal'),t.seatsTotal||0,{type:'number',min:0,help:'0 shows no seat count. Confirmed and booked travelers come off it automatically.'})+fld('Payment note',id('paymentNote'),t.paymentNote,{full:true,help:'Leave empty for the standard note: we confirm availability and payment terms before anything is charged.'})
       +fld('Organizer name',id('organizerName'),t.organizerName)+fld('Organizer community',id('organizerCommunity'),t.organizerCommunity)+fld('Organizer email (their account email)',id('organizerEmail'),t.organizerEmail,{type:'email',help:'They see this trip in their account when they sign in with that email.'})
-      +fld('Show the organizer on the trip page',id('showOrganizer'),t.showOrganizer,{type:'check'})+fld('Organizer bio (public)',id('organizerBio'),t.organizerBio,{type:'textarea'})
+      +fld('Private event: hide the location on the public site',id('privateEvent'),t.privateEvent,{type:'check'})+fld('Show the organizer on the trip page',id('showOrganizer'),t.showOrganizer,{type:'check'})+fld('Organizer bio (public)',id('organizerBio'),t.organizerBio,{type:'textarea'})
       +fld('Agreed reward (private: only you and the organizer see it)',id('reward'),t.reward,{type:'textarea',help:'Whatever you agreed in writing. Nothing is invented or shown publicly.'})+fld('Reward status',id('rewardStatus'),t.rewardStatus,{type:'select',options:st.reward})
       +'<div class="cl-full cl-spons"><h3 style="margin:14px 0 4px">Sponsors (optional)</h3><p class="mg-hint" style="margin:0 0 8px">Brands that back this trip. They show by name under "Sponsored by" in the trip information, a Sponsored tag on the departures list, and on the leader\'s dashboard. Add as many as you have (up to six), or none.</p><div data-sp-list="'+esc(k)+'">'+(t.sponsors||[]).map(function(sp){return spRow(sp);}).join('')+'</div><div class="cl-acts"><button type="button" class="mg-btn ghost" data-cl-spadd="'+esc(k)+'">+ Add sponsor</button><button type="button" class="mg-btn ghost" data-cl-legend="'+esc(k)+'">+ Add Legend Lager (Wisynco Group)</button></div></div>'
       +fld('WhatsApp group or channel link (the leader can also add this)',id('groupLink'),t.groupLink||'',{full:true,type:'url',ph:'https://chat.whatsapp.com/...',help:'Shown to everyone who joined. Changing it here does not send emails; the leader adding it from their dashboard does.'})+fld('Internal note (private)',id('internalNote'),t.internalNote,{type:'textarea'})
@@ -53223,7 +53224,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
   function readSponsors(k){var box=document.querySelector('[data-sp-list="'+k+'"]');if(!box)return undefined;return [].map.call(box.querySelectorAll('.cl-sprow'),function(r){var o={};[].forEach.call(r.querySelectorAll('[data-sp]'),function(i){o[i.getAttribute('data-sp')]=i.value.trim();});return o;});}
   function readTrip(k){
     var g=function(n){return val('clT_'+n+'_'+k);};
-    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink'),sponsors:readSponsors(k),gallery:readGallery(k)};
+    return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),privateEvent:g('privateEvent'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink'),sponsors:readSponsors(k),gallery:readGallery(k)};
   }
 
   /* ---------- traveler requests ---------- */
