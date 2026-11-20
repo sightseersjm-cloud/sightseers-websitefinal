@@ -1333,7 +1333,11 @@ module.exports = async function handler(req, res) {
         if (!i) return res.status(404).json({ error: 'Request not found.' });
         const status = oneOf(body.status, INTEREST_STATUS, null);
         if (!status) return res.status(400).json({ error: 'Choose a status.' });
-        const saved = await db.updateInCollection(INTERESTS, i.id, { status, note: str(body.note, 1000) });
+        const patch = { status, note: str(body.note, 1000) };
+        /* the roster columns the owner fills in: shirt size, and whether the waiver and medical form has come back */
+        if (body.shirtSize !== undefined) patch.shirtSize = str(body.shirtSize, 12);
+        if (body.formsDone !== undefined) patch.formsDone = !!body.formsDone;
+        const saved = await db.updateInCollection(INTERESTS, i.id, patch);
         if (status !== i.status) {
           await log('traveler', i.name + ' is now ' + status + ' on ' + (i.tripTitle || 'a departure alert'), i.ref);
           if (body.notify !== false) { const tt = i.tripId ? (await db.getCollection(TRIPS)).find(x => x.id === i.tripId) : null; await interestStatusMails(saved, tt); }

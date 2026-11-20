@@ -53227,15 +53227,37 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return {id:k==='new'?undefined:k,title:g('title'),slug:g('slug'),status:g('status'),destination:g('destination'),country:g('country'),dateText:g('dateText'),startDate:g('startDate'),endDate:g('endDate'),summary:g('summary'),description:g('description'),included:g('included'),notIncluded:g('notIncluded'),itinerary:window.ssDays.read($('clT_days_'+k)),theme:g('theme'),image:g('image'),imageAlt:g('imageAlt'),priceText:g('priceText'),paymentNote:g('paymentNote'),seatsTotal:g('seatsTotal'),organizerName:g('organizerName'),organizerCommunity:g('organizerCommunity'),organizerEmail:g('organizerEmail'),organizerBio:g('organizerBio'),showOrganizer:g('showOrganizer'),privateEvent:g('privateEvent'),reward:g('reward'),rewardStatus:g('rewardStatus'),internalNote:g('internalNote'),groupLink:g('groupLink'),sponsors:readSponsors(k),gallery:readGallery(k)};
   }
 
+  /* ---------- the roster of a trip: who is in, with their contact details, shirt size and forms ---------- */
+  function rosterRows(t,list){
+    return list.filter(function(i){return i.status==='confirmed'||i.status==='booked';}).sort(function(a,b){return String(a.name).localeCompare(String(b.name));});
+  }
+  function rosterCard(t,list){
+    var rows=rosterRows(t,list),taken=rows.reduce(function(n,i){return n+(i.partySize||1);},0),waiting=list.filter(function(i){return i.status==='new'||i.status==='contacted'||i.status==='waitlist';}).length;
+    var head='<div class="mg-card" style="margin:14px 0;padding:18px 20px"><h3 style="margin:0 0 4px;color:var(--navy)">Roster: '+esc(t.title)+'</h3><p class="mg-hint" style="margin:0 0 10px">'+esc(t.dateText||'')+' · <b>'+taken+(t.seatsTotal?' of '+t.seatsTotal:'')+' places taken</b> (confirmed and booked)'+(waiting?' · '+waiting+' waiting to be confirmed':'')+'. Change someone\'s status below to move them on or off the roster.</p>';
+    if(!rows.length)return head+'<p class="mg-hint" style="margin:0">Nobody is on the roster yet. People who ask for a place appear in the list below as new. Set them to confirmed when you have agreed it with them.</p></div>';
+    return head+'<div style="overflow-x:auto"><table class="iv-lines"><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Shirt</th><th>Forms</th><th>Status</th></tr></thead><tbody>'+rows.map(function(i,k){
+      return '<tr><td>'+(k+1)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(i.email)+'</td><td>'+esc(i.phone||'')+'</td><td>'+esc(i.shirtSize||'')+'</td><td>'+(i.formsDone?'Received':'Not yet')+'</td><td>'+esc(i.status)+'</td></tr>';}).join('')+'</tbody></table></div>'
+      +'<div class="cl-acts" style="margin-top:12px"><button type="button" class="mg-btn pri" data-cl-roster-csv="'+esc(t.id)+'">Download roster (Excel)</button> <button type="button" class="mg-btn" data-cl-roster-print="'+esc(t.id)+'">Print roster</button></div></div>';
+  }
+  function rosterCsv(t,list){
+    var rows=rosterRows(t,list),out=[['No.','Name','Email','Phone','Shirt size','Waiver and medical form','Status','Note']].concat(rows.map(function(i,k){return [k+1,i.name,i.email,i.phone||'',i.shirtSize||'',i.formsDone?'Received':'Not yet',i.status,i.note||''];}));
+    return '﻿'+out.map(function(r){return r.map(csvCell).join(',');}).join('\r\n');
+  }
+  function rosterPrint(t,list){
+    var rows=rosterRows(t,list),w=window.open('','_blank');if(!w)return false;
+    w.document.write('<!doctype html><meta charset="utf-8"><title>Roster: '+esc(t.title)+'</title><style>body{font-family:Arial,sans-serif;margin:28px;color:#10222f}h1{font-size:22px;margin:0 0 4px}p{margin:0 0 14px;color:#555}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bbb;padding:8px 10px;text-align:left;font-size:13px}th{background:#eef3f7}</style><h1>Roster: '+esc(t.title)+'</h1><p>'+esc(t.dateText||'')+' · '+rows.length+' on the roster · Sight Seers Caribbean Adventures</p><table><thead><tr><th>No.</th><th>Name</th><th>Email</th><th>Phone</th><th>Shirt</th><th>Forms</th><th>Present</th></tr></thead><tbody>'+rows.map(function(i,k){return '<tr><td>'+(k+1)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.email)+'</td><td>'+esc(i.phone||'')+'</td><td>'+esc(i.shirtSize||'')+'</td><td>'+(i.formsDone?'Received':'')+'</td><td></td></tr>';}).join('')+'</tbody></table>');
+    w.document.close();setTimeout(function(){try{w.focus();w.print();}catch(e){}},300);return true;
+  }
   /* ---------- traveler requests ---------- */
   function reqs(){
     var d=CL.data,opts='<option value="all">All requests</option><option value="alert"'+(CL.filter==='alert'?' selected':'')+'>Departure alerts (no trip)</option>'+d.trips.map(function(t){return '<option value="'+t.id+'"'+(CL.filter===t.id?' selected':'')+'>'+esc(t.title)+'</option>';}).join('');
     var list=d.interests.filter(function(i){return CL.filter==='all'||(CL.filter==='alert'?!i.tripId:i.tripId===CL.filter);}).sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
     return '<div class="mg-fld" style="max-width:420px"><label for="clFilter">Show</label><select id="clFilter">'+opts+'</select></div>'
+      +(function(){var rt=CL.filter!=='all'&&CL.filter!=='alert'?d.trips.filter(function(x){return x.id===CL.filter;})[0]:null;return rt?rosterCard(rt,list):'';})()
       +(list.length?list.map(function(i){
         var kv=[['Email','<a href="mailto:'+esc(i.email)+'">'+esc(i.email)+'</a>'],['Phone',esc(i.phone||'')],['Also travelling',esc((i.guests||[]).join(', '))],['Message',esc(i.message||'')],['Came from',esc(i.source||'')]];
         return det('int'+i.id,'<span class="s"><b>'+esc(i.name)+' · '+esc(i.partySize)+' traveler'+(i.partySize===1?'':'s')+'</b><small>'+esc(i.ref)+' · '+esc(i.tripTitle||'Departure alert')+' · '+esc(dt(i.createdAt))+'</small></span>'+chip(INTCHIP,i.status)+delBtn('int',i.id,i.name),
-          '<dl class="cl-kv">'+kv.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>';}).join('')+'</dl><div class="cl-grid">'+fld('Status','clI_st_'+i.id,i.status,{type:'select',options:d.statuses.interest})+fld('Internal note (private)','clI_note_'+i.id,i.note||'')+'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-int="'+i.id+'">Save</button></div>');
+          '<dl class="cl-kv">'+kv.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>';}).join('')+'</dl><div class="cl-grid">'+fld('Status','clI_st_'+i.id,i.status,{type:'select',options:d.statuses.interest})+fld('Internal note (private)','clI_note_'+i.id,i.note||'')+(i.tripId?fld('Shirt size (roster)','clI_shirt_'+i.id,i.shirtSize||'')+fld('Waiver and medical form received (roster)','clI_forms_'+i.id,!!i.formsDone,{type:'check'}):'')+'</div><div class="cl-acts"><button type="button" class="mg-btn pri" data-cl-int="'+i.id+'">Save</button></div>');
       }).join(''):'<div class="mg-card mg-soon"><p class="mg-hint" style="font-size:14px;margin:0">No requests here yet.</p></div>');
   }
 
@@ -53412,7 +53434,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
       var id=ds.clReview,st=ds.st,dr=$('clDraft_'+id),nt=$('clNotify_'+id),pb=$('clPub_'+id);busy(t);
       call('application-review',{id:id,status:st,reply:val('clRep_'+id),note:val('clNote_'+id),createTrip:st==='approved'&&dr&&dr.checked&&!dr.disabled,publish:st==='approved'&&!!pb&&pb.checked&&!pb.disabled,notify:nt?nt.checked:true}).then(function(res){
         CL.open={};if(res.trip)CL.tab='trips';return reload(res.trip?(res.trip.status==='open'?'Approved. The trip is on the departure board. Open it under Trips to add the dates, photo and details.':'Approved. A draft trip was created: add its summary and dates, then use Publish to put it on the departure board.'):'Application updated.');}).catch(function(err){fail(t,err);});return;}
-    if(ds.clInt){var iid=ds.clInt;busy(t,'Saving…');call('interest-update',{id:iid,status:val('clI_st_'+iid),note:val('clI_note_'+iid)}).then(function(){return reload('Request updated.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clInt){var iid=ds.clInt;busy(t,'Saving…');call('interest-update',{id:iid,status:val('clI_st_'+iid),note:val('clI_note_'+iid),shirtSize:document.getElementById('clI_shirt_'+iid)?val('clI_shirt_'+iid):undefined,formsDone:document.getElementById('clI_forms_'+iid)?val('clI_forms_'+iid):undefined}).then(function(){return reload('Request updated.');}).catch(function(err){fail(t,err);});return;}
+    if(ds.clRosterCsv||ds.clRosterPrint){var rid2=ds.clRosterCsv||ds.clRosterPrint,rt2=CL.data.trips.filter(function(x){return x.id===rid2;})[0],rl2=CL.data.interests.filter(function(i){return i.tripId===rid2;});if(rt2){if(ds.clRosterCsv)download('roster-'+String(rt2.slug||'trip')+'-'+new Date().toISOString().slice(0,10)+'.csv',rosterCsv(rt2,rl2));else rosterPrint(rt2,rl2);}return;}
     if(ds.clCsv){if(ds.clCsv==='accounts')download('sight-seers-accounts.csv',accountsCsv());else{download('sight-seers-newsletter-'+new Date().toISOString().slice(0,10)+'.csv',newsCsv());say('Downloaded. Import the file into your email tool.','ok');}return;}
     if(ds.clReset){
       var rsId=ds.clReset,rsAc=(D.accounts||[]).filter(function(x){return x.id===rsId;})[0];if(!rsAc)return;var rsEm=String(rsAc.email||'').toLowerCase();

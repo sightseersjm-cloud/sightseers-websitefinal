@@ -36,7 +36,7 @@ const SEEDS = [{
     paymentNote: '',
     seatsTotal: 10,
     organizerName: 'K. Stout',
-    organizerCommunity: 'With Sight Seers Caribbean Adventures',
+    organizerCommunity: 'The team is led by Sight Seers Caribbean Adventures',
     organizerBio: '',
     organizerEmail: '',
     showOrganizer: true,
