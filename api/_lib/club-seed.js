@@ -36,8 +36,17 @@ const SUMMIT_V2 = {
 
 const SEEDS = [{
   key: 'summit-challenge',
-  rev: 3,
+  rev: 4,
   previous: [SUMMIT_V1, SUMMIT_V2],
+  /* rev 4: the date, a Day by day entry, and no inherited community line. Each change is only made where the field still has
+     the value it was seeded with, so anything the owner changed is left alone. */
+  migrations: [{ rev: 4, patch: (have, trip) => {
+    const out = {};
+    if ((have.dateText === 'TBA, date to be announced') && !have.startDate) { out.dateText = trip.dateText; out.startDate = trip.startDate; out.endDate = trip.endDate; }
+    if (!Array.isArray(have.itinerary) || !have.itinerary.length) out.itinerary = trip.itinerary;
+    if (have.organizerCommunity === 'Legend Escape Weekend') out.organizerCommunity = '';
+    return out;
+  } }],
   /* led by the same account that leads this trip (found by its web address, or by its title) */
   sameLeaderAs: { slug: 'legend-escape-weekend-jamaica', title: /legend escape weekend/i },
   trip: {
@@ -46,8 +55,8 @@ const SEEDS = [{
     status: 'open',
     destination: '',
     country: 'Jamaica',
-    dateText: 'TBA, date to be announced',
-    startDate: '', endDate: '',
+    dateText: 'December 10, 2026',
+    startDate: '2026-12-10', endDate: '2026-12-10',
     summary: 'A private, Sight Seers led team challenge: climbing, laser tag, ATVs, a farm train and team games, scored across six challenges. Ten places.',
     description: 'The Summit Challenge turns a day out into a team sport. Two teams, six challenges and one rule: nobody wins alone. Every station needs the whole team to plan, communicate and back each other up, with your Sight Seers Team Lead guiding the day and keeping score.\n\nPoints are earned for speed, accuracy and teamwork, and the closing round counts double, so there is always a comeback to chase. The Summit Champions are crowned at the end, with awards for Most Valuable Player, Best Team Spirit and Safe Rider. About four hours on site.',
     included: [
@@ -57,7 +66,7 @@ const SEEDS = [{
       'A branded team shirt'
     ],
     notIncluded: ['Meals and refreshments'],
-    itinerary: [],
+    itinerary: [{ title: 'Challenge day', text: 'Meet at the meeting point shared once you are confirmed and ride the coach to base camp. Set your team chant, then take on the climbing wall relay, laser tag missions, the guided ATV convoy, the farm train quiz and the final round of team games. Final scores are announced and the Summit Champions are crowned.' }],
     theme: 'Adventure',
     image: '', imageAlt: '',
     priceText: '',
@@ -95,13 +104,20 @@ async function ensureSeeds() {
       const now = { summary: s.trip.summary, description: s.trip.description, included: s.trip.included };
       await db.updateInCollection(TRIPS, have.id, Object.assign({ seedRev: s.rev, seedSnap: now }, now));
     }
+    const cur = trips.find(x => x.slug === s.trip.slug);
+    if (cur) {
+      const fromRev = cur.seedRev || 1;
+      let patch = null;
+      (s.migrations || []).filter(m => m.rev > fromRev && m.rev <= s.rev).forEach(m => { patch = Object.assign(patch || {}, m.patch(cur, s.trip)); });
+      if (patch !== null) await db.updateInCollection(TRIPS, cur.id, Object.assign({ seedRev: s.rev }, patch));
+    }
     if (done.indexOf(s.key) > -1) continue;
     if (!trips.some(t => t.slug === s.trip.slug)) {
       const rec = Object.assign({ id: uid(), createdAt: new Date().toISOString(), applicationId: null, seedRev: s.rev, seedSnap: { summary: s.trip.summary, description: s.trip.description, included: s.trip.included } }, s.trip);
       /* take the leader details from the trip it should share a leader with, so that account runs this one too */
       const src = s.sameLeaderAs && (trips.find(t => t.slug === s.sameLeaderAs.slug) || trips.find(t => s.sameLeaderAs.title.test(String(t.title || ''))));
       if (src && (src.organizerUserId || src.organizerEmail || src.organizerName)) {
-        ['organizerUserId', 'organizerEmail', 'organizerName', 'organizerCommunity', 'organizerBio'].forEach(k => { if (src[k] !== undefined) rec[k] = src[k]; });
+        ['organizerUserId', 'organizerEmail', 'organizerName', 'organizerBio'].forEach(k => { if (src[k] !== undefined) rec[k] = src[k]; });
         rec.showOrganizer = true;
       }
       await db.addToCollection(TRIPS, rec);

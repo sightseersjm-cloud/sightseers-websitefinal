@@ -30,7 +30,7 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   ok('the place is not shown to the public', t && t.destination === '' && t.country === '');
   ok('it is led by Sight Seers Caribbean Adventures, with no other leader names', t && t.organizer && t.organizer.name === 'Sight Seers Caribbean Adventures' && !t.organizer.coName && !/stout|ashley/i.test(JSON.stringify(t)));
   ok('no organizer reward line is shown for it', t && t.led === false);
-  ok('no price and no dates are made up', t && t.priceText === '' && t.startDate === '' && /TBA/.test(t.dateText));
+  ok('it has its date, a Day by day entry, and no price is made up', t && t.priceText === '' && t.startDate === '2026-12-10' && t.dateText === 'December 10, 2026' && t.itinerary.length === 1);
   ok('what to bring reaches the trip page', t && t.arrival && /water bottle/.test(t.arrival.bring));
   ok('the public text never names the place', !/mandeville|st\.? elizabeth/i.test(JSON.stringify(r.body)));
   ok('the public text has no client names or prices', !/rohane|kurt|J\$|167,300|SS-2026/i.test(JSON.stringify(r.body)));
