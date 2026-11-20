@@ -9118,15 +9118,6 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 #mobNav .mob-close i{display:none}
 #mobNav .mob-close::before,#mobNav .mob-close::after{content:'';position:absolute;left:50%;top:50%;width:18px;height:2px;border-radius:2px;background:#fff;transform:translate(-50%,-50%) rotate(45deg)}
 #mobNav .mob-close::after{transform:translate(-50%,-50%) rotate(-45deg)}
-#mobNav .mob-hero{margin:14px 0 6px;padding:14px 16px;border:1px solid rgba(166,227,143,.35);border-radius:2px;background:linear-gradient(120deg,rgba(112,194,87,.22),rgba(239,135,49,.14))}
-#mobNav .mh-eyebrow{display:block;font:800 10px 'Raleway',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#a6e38f}
-#mobNav .mh-title{display:block;margin:6px 0 0;font:700 21px/1.15 'Playfair Display',Georgia,serif;color:#fff}
-#mobNav .mh-v{display:inline-grid;place-items:center;vertical-align:middle;width:18px;height:18px;margin-left:7px;border-radius:50%;background:#1d9bf0;color:#fff;font:800 11px/1 'Raleway',sans-serif}
-#mobNav .mh-sub{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.78)}
-#mobNav .mh-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-#mobNav .mh-chip{padding:6px 11px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);font:700 12px 'Raleway',sans-serif;color:#fff}
-#mobNav .mh-chip.or{border-color:transparent;background:linear-gradient(135deg,#f5a04b,#ef8731)}
-#mobNav a.mh-btn{display:inline-block!important;margin-top:12px;padding:10px 16px!important;border:0!important;background:#fff;color:#063a63!important;font:800 11px 'Raleway',sans-serif!important;letter-spacing:.14em;text-transform:uppercase;border-radius:2px}
 #mobNav .mob-sec{margin:16px 2px 4px;font:800 10px 'Raleway',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#a6e38f}
 #mobNav a.mob-row{display:flex!important;align-items:center;gap:14px;margin:0;padding:17px 2px!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.14)!important;border-radius:0;background:none;color:#fff!important;font-family:'Playfair Display',Georgia,serif!important;font-size:21px!important;font-weight:600!important;line-height:1.15;text-align:left;-webkit-tap-highlight-color:transparent}
 #mobNav a.mob-row i.n{font:800 10px 'Raleway',sans-serif;letter-spacing:.2em;color:#a6e38f;min-width:20px}
@@ -9154,7 +9145,7 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
 #mobNav a.mob-cta{display:block!important;margin-top:10px;padding:16px 18px!important;text-align:center;border:0!important;border-radius:2px;background:linear-gradient(120deg,#ef8731,#f5a05a);box-shadow:0 12px 24px rgba(239,135,49,.3);font:800 13px 'Raleway',sans-serif!important;letter-spacing:.16em;text-transform:uppercase;color:#fff!important}
 #mobNav .mob-contact{margin-top:16px;text-align:center;font-size:12px;line-height:1.7;color:rgba(255,255,255,.6)}
 #mobNav .mob-contact a{display:inline!important;padding:0!important;border:0!important;background:none;font:inherit!important;color:rgba(255,255,255,.85)!important}
-#mobNav.open > .mob-hero,#mobNav.open > .mob-row,#mobNav.open > .mob-acct,#mobNav.open > .mob-cta{animation:mobIn .45s cubic-bezier(.2,.8,.2,1) both}
+#mobNav.open > .mob-row,#mobNav.open > .mob-acct,#mobNav.open > .mob-cta{animation:mobIn .45s cubic-bezier(.2,.8,.2,1) both}
 @media(prefers-reduced-motion:reduce){#mobNav.open > *,#mobNav .mob-group.open{animation:none}}
 
 /* ---- the top bar on phones and tablets: a compact app bar with square buttons, like the dashboard ---- */
@@ -9174,13 +9165,6 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
 </style>
 <div class="mob-nav" id="mobNav">
   <div class="mob-top"><span class="mob-logo" role="img" aria-label="Sight Seers Caribbean Adventures"></span><span class="mob-close" onclick="closeMob()" aria-label="Close menu"><i class="fas fa-times"></i></span></div>
-  <div class="mob-hero" id="mobHero">
-    <span class="mh-eyebrow">Sight Seers Travel Club</span>
-    <strong class="mh-title" id="mobHeroTitle">Welcome to Sight Seers</strong>
-    <p class="mh-sub" id="mobHeroSub">Create a free account for your Travel Club passport, stamps and Travel Points.</p>
-    <div class="mh-chips" id="mobHeroChips"></div>
-    <a href="#" class="mh-btn" id="mobHeroBtn" onclick="nav('account');closeMob();return false;">Create account</a>
-  </div>
   <a href="#" class="mob-row" onclick="nav('home');closeMob();return false;"><i class="n">01</i>Home</a>
   <a href="#" class="mob-row mob-feature" onclick="nav('flagship-programs');closeMob();return false;">Flagship Programs</a>
   <a href="#" class="mob-row" onclick="nav('travel-club');closeMob();return false;"><i class="n">02</i>Travel Club</a>
@@ -9229,6 +9213,7 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
     <a href="#" data-vtours-link onclick="nav('vtours');closeMob()">V-Tours</a>
   </div>
 
+  <a href="#" class="mob-acct" id="mobAcctTile" onclick="nav('account');closeMob();return false;"><span class="mt">Guest account</span></a>
   <a href="#" class="mob-cta" onclick="nav('booking');closeMob();return false;">Start Planning &rarr;</a>
   <div class="mob-contact"><a href="tel:+18764650630">+1 (876) 465-0630</a> &middot; <a href="mailto:info@sightseerscaribbean.com">info@sightseerscaribbean.com</a></div>
 </div>
@@ -29416,31 +29401,13 @@ function initReveal(){document.querySelectorAll('.reveal').forEach(el=>{if(el.ge
 window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('shadow',window.scrollY>50);document.getElementById('scrollTop').classList.toggle('vis',window.scrollY>400);initReveal();},{passive:true});
 
 /* ── MOBILE NAV ──────────────────── */
-/* the phone menu opens like a dashboard: a welcome card that shows the member's tier and points, or an invitation to create an account */
+/* the phone menu's account button says My dashboard once someone is signed in */
 function ssMobHero(){
-  var box=document.getElementById('mobHero');if(!box)return;
+  var acct=document.getElementById('mobAcctTile');if(!acct)return;
   var u=null;try{u=(typeof getCurrentUser==='function')?getCurrentUser():null;}catch(e){}
   var tok='';try{tok=localStorage.getItem('ss_auth_token')||'';}catch(e){}
-  var real=!!(u&&tok&&tok.indexOf('guest_')!==0);
-  var title=document.getElementById('mobHeroTitle'),sub=document.getElementById('mobHeroSub'),chips=document.getElementById('mobHeroChips'),btn=document.getElementById('mobHeroBtn'),acct=document.getElementById('mobAcctTile');
-  if(!title||!sub||!chips||!btn)return;
-  chips.textContent='';
-  if(real){
-    var first=String(u.name||'').trim().split(/\s+/)[0]||'traveller';
-    title.textContent='Welcome, '+first;
-    if(u.verifiedTraveller){var v=document.createElement('span');v.className='mh-v';v.textContent='✓';v.title='Verified traveller';title.appendChild(v);}
-    sub.style.display='none';
-    var pts=(typeof getTravelPoints==='function')?getTravelPoints():0,tier=(typeof getTravelTier==='function')?getTravelTier(pts).name:'Explorer';
-    var c1=document.createElement('span');c1.className='mh-chip or';c1.textContent=tier+' tier';chips.appendChild(c1);
-    var c2=document.createElement('span');c2.className='mh-chip';c2.textContent=Number(pts).toLocaleString()+' points';chips.appendChild(c2);
-    btn.textContent='Open dashboard';
-    if(acct){var s=acct.querySelector('.mt');if(s)s.textContent='My dashboard';}
-  }else{
-    title.textContent='Welcome to Sight Seers';
-    sub.style.display='';sub.textContent='Create a free account for your Travel Club passport, stamps and Travel Points.';
-    btn.textContent='Create account';
-    if(acct){var s2=acct.querySelector('.mt');if(s2)s2.textContent='Guest account';}
-  }
+  var real=!!(u&&tok&&tok.indexOf('guest_')!==0),s=acct.querySelector('.mt');
+  if(s)s.textContent=real?'My dashboard':'Guest account';
 }
 (function(){var n=document.getElementById('mobNav');if(!n||!window.MutationObserver)return;new MutationObserver(function(){if(n.classList.contains('open'))ssMobHero();}).observe(n,{attributes:true,attributeFilter:['class']});})();
 function openMob(){document.getElementById('mobNav').classList.add('open');}
