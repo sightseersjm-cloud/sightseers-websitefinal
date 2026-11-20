@@ -48372,6 +48372,15 @@ body.theme-night #p-account .ac-reflogo{filter:invert(1) brightness(1.15)}
 #p-account .ac-bar i.ask{background:linear-gradient(90deg,#f5a04b,#ef8731);z-index:1}
 #p-account .ac-bar i.book{background:#3f9d58;z-index:2}
 @media(max-width:560px){#p-account .ac-ans{grid-template-columns:1fr}#p-account .ac-track li{font-size:11.5px}#p-account .ac-app{padding:16px}}
+#p-account details.ac-tripacc>summary{list-style:none;cursor:pointer;user-select:none}
+#p-account details.ac-tripacc>summary::-webkit-details-marker{display:none}
+#p-account details.ac-tripacc>summary:focus-visible{outline:2px solid #ef8731;outline-offset:3px}
+#p-account details.ac-otrip[open]>summary{margin-bottom:14px}
+#p-account .ac-tsr{display:inline-flex;align-items:center;gap:12px}
+#p-account .ac-tchev{flex:none;width:10px;height:10px;border-right:2.5px solid #ef8731;border-bottom:2.5px solid #ef8731;transform:rotate(45deg);transition:transform .25s;margin:-4px 4px 0 2px}
+#p-account details.ac-tripacc[open]>summary .ac-tchev{transform:rotate(-135deg);margin:4px 4px 0 2px}
+#p-account details.ac-greqitem>summary.ac-grow{margin:0}
+#p-account details.ac-greqitem[open]>summary.ac-grow{border-bottom-color:transparent}
 #p-account .ac-otrip{padding:20px;background:var(--ac-soft);border:1px solid var(--ac-line);margin-top:14px}
 #p-account .ac-otrip:first-child{margin-top:0}
 #p-account .ac-ohead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -49704,7 +49713,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     return '<div class="ac-greq">'+list.map(function(i){
       var title=i.tripSlug?'<a href="/trip/'+esc(i.tripSlug)+'" data-trip="'+esc(i.tripSlug)+'">'+esc(i.tripTitle||'Travel Club trip')+'</a>':'Travel Club departure alert';
       var chat=i.groupLink?'<a class="ac-chatbtn" href="'+esc(i.groupLink)+'" target="_blank" rel="noopener noreferrer">Join the group chat</a>':(i.tripSlug&&i.status!=='cancelled'&&i.status!=='waitlist'?'<span class="ac-chatsoon">Group chat link coming from '+esc(i.leaderName||'your leader')+'</span>':'');
-      return '<div class="ac-greqitem"><div class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'</div>'+updList(i.updates,false)+checklist(i,pt)+'</div>';
+      return '<details class="ac-greqitem ac-tripacc" data-tacc="req'+esc(i.ref)+'"><summary class="ac-grow"><div><strong>'+title+'</strong><span class="ac-gmeta">'+esc(i.ref)+' · '+esc(i.partySize)+' '+(i.partySize===1?'traveler':'travelers')+' · '+esc(dt(i.createdAt))+(i.leaderName?' · led by '+esc(i.leaderName):'')+'</span>'+chat+'</div>'+chip(REQ,i.status)+'<i class="ac-tchev" aria-hidden="true"></i></summary>'+updList(i.updates,false)+checklist(i,pt)+'</details>';
     }).join('')+'</div>'+lb;
   }
   function whoSub(tr){var people=0,booked=0;tr.forEach(function(x){var n=x.partySize||1;people+=n;if(x.status==='booked')booked+=n;});return people+(people===1?' traveler':' travelers')+(booked?' · '+booked+' booked':'');}
@@ -49963,8 +49972,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
   }
   function orgTrip(t,idx){
     var link=SITE+t.url,c=t.counts||{},tr=t.travelers||[];
-    return '<div class="ac-otrip" data-otrip="'+idx+'" data-base="'+esc(link)+'" data-ttl="'+esc(t.title)+'" data-dates="'+esc(t.dateText||'')+'" data-dest="'+esc(t.destination||'')+'">'+
-      '<div class="ac-ohead"><div><h5>'+esc(t.title)+(t.role==='co'?' <span class="ac-corole">Co-leader</span>':'')+'</h5><small>'+esc([t.dateText,t.destination].filter(Boolean).join(' · ')||'Dates to be added')+(t.role==='co'&&t.mainLeaderName?' · with '+esc(t.mainLeaderName):'')+'</small></div>'+chip(TRIPST,t.status)+'</div>'+
+    return '<details class="ac-otrip ac-tripacc" data-tacc="trip'+esc(t.id||idx)+'" data-otrip="'+idx+'" data-base="'+esc(link)+'" data-ttl="'+esc(t.title)+'" data-dates="'+esc(t.dateText||'')+'" data-dest="'+esc(t.destination||'')+'">'+
+      '<summary class="ac-ohead"><div><h5>'+esc(t.title)+(t.role==='co'?' <span class="ac-corole">Co-leader</span>':'')+'</h5><small>'+esc([t.dateText,t.destination].filter(Boolean).join(' · ')||'Dates to be added')+(t.role==='co'&&t.mainLeaderName?' · with '+esc(t.mainLeaderName):'')+'</small></div><span class="ac-tsr">'+chip(TRIPST,t.status)+'<i class="ac-tchev" aria-hidden="true"></i></span></summary>'+
       (t.status==='open'||t.status==='full'?
         '<div class="ac-oshare"><input type="text" readonly value="'+esc(link)+'" aria-label="Your trip link"><button type="button" class="ac-sbtn" data-ocopy>Copy link</button><a class="ac-sbtn" href="'+esc(t.url)+'" data-trip="'+esc(t.slug)+'" style="text-decoration:none">Open page</a></div>'+
         '<div class="ac-otag"><label for="acTag'+idx+'">Track where sign-ups come from:</label><input id="acTag'+idx+'" type="text" maxlength="30" placeholder="e.g. instagram" data-otag><span>Adds a tag to your link.</span></div>'+'<p class="ac-onote ac-oone">Each person joins for themselves through your link, so every traveler appears on your roster with their own name.</p>'+inviteKit(idx)
@@ -49985,7 +49994,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         ?'<p class="ac-oreward"><b>Rewards:</b> paid to '+esc(t.mainLeaderName||'the main leader')+', who shares them with you as you agree.</p>'
         :'<p class="ac-oreward"><b>Your reward:</b> '+(t.reward&&t.reward.text?esc(t.reward.text)+' &middot; <b>'+esc(RWD[t.reward.status]||'To be agreed')+'</b>':'To be agreed with Sight Seers in writing')+(t.coLeader&&t.coLeader.status==='approved'?' <span class="ac-cosplit">You share it with your co-leader as you agree.</span>':'')+'</p>'+payList(t.payouts)+
       '<div class="ac-delrow"><button type="button" class="ac-sbtn ac-dangerbtn" data-trip-del="'+esc(t.id)+'" data-trip-title="'+esc(t.title)+'" data-trip-joined="'+(t.joined||0)+'">Delete trip</button><span class="ac-invmsg" role="status"></span></div>')+
-    '</div>';
+    '</details>';
   }
   var PTAG={insurance:'Protection',esim:'Connectivity',esim2:'Connectivity'};
   function partnerCard(k,p){
@@ -50035,6 +50044,10 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     else if(!trips.length&&a&&a.status==='declined')out+='<button type="button" class="ac-cta" style="margin-top:14px" onclick="ssClubApply()">Apply again</button>';
     return out;
   }
+  /* each trip card is a drop-down; the open ones are remembered for the visit */
+  function tripAccKey(d){return 'ac_tacc_'+d.getAttribute('data-tacc');}
+  function tripAccRestore(){[].forEach.call(document.querySelectorAll('details.ac-tripacc'),function(d){try{if(sessionStorage.getItem(tripAccKey(d))==='1')d.open=true;}catch(e){}});}
+  document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('ac-tripacc')){try{sessionStorage.setItem(tripAccKey(d),d.open?'1':'0');}catch(x){}}},true);
   var grp={at:0,loading:false};
   function fillGroups(force){
     var pane=$('acPane-groups');if(!pane||grp.loading)return;
@@ -50047,7 +50060,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     }
     if(!force&&grp.at&&Date.now()-grp.at<20000)return;
     grp.loading=true;reqs.innerHTML='<div class="ac-skel"></div>';org.innerHTML='<div class="ac-skel"></div>';
-    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[],d.partners);org.innerHTML=orgHtml(d);if(window.ssGroupSubs)ssGroupSubs(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
+    api('trips?mine=1').then(function(d){grp.at=Date.now();showNotices(d.notices);reqs.innerHTML=reqRows(d.interests||[],d.partners);org.innerHTML=orgHtml(d);tripAccRestore();if(window.ssGroupSubs)ssGroupSubs(d);var pe=$('acGroupsPartners');if(pe)pe.innerHTML=partnersHtml(d.partners);})
       .catch(function(err){reqs.innerHTML='<p class="ac-onote"><b>We could not load your trips.</b> '+esc(err.message||'Please try again.')+'</p>';org.innerHTML='';})
       .then(function(){grp.loading=false;});
   }
