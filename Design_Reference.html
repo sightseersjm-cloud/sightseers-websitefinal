@@ -14012,6 +14012,7 @@ body.theme-night #p-flagship-programs{
 #p-trip .tp-gal[data-n="1"] .tp-galitem{aspect-ratio:16/9}
 @media(min-width:641px){#p-trip .tp-gl-d2{grid-column:span 2}#p-trip .tp-gl-d3{grid-column:span 3}}
 @media(max-width:640px){#p-trip .tp-gl-m2{grid-column:span 2}}
+#p-trip .tp-galmore{position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,22,38,.58);color:#fff;font:800 clamp(22px,3vw,32px) 'Raleway',sans-serif;letter-spacing:.02em}
 #p-trip .tp-galitem img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
 #p-trip .tp-galitem:hover img{transform:scale(1.05)}
 #p-trip .tp-gal:not([data-n="1"]):not([data-n="2"]):not([data-n="4"]) .tp-galitem:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
@@ -49356,7 +49357,8 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     if(sd){var days=Math.ceil((Date.UTC(+sd[1],+sd[2]-1,+sd[3])-Date.now())/86400000);if(days>0)ph+='<div class="tp-pcard tp-pdays"><b>'+days+'</b><span>'+(days===1?'day':'days')+' to go</span></div>';}
     pu.innerHTML=ph;pu.hidden=!ph;
     var gw=$('tpGallery'),gl=(t.gallery||[]).filter(function(g){return /^(\/assets\/|\/api\/images\?file=|https:\/\/)/.test(g.url||'');});
-    if(gl.length){$('tpGal').innerHTML=gl.map(function(g,gi){return '<button type="button" class="tp-galitem" data-gal-i="'+gi+'" aria-label="'+esc(g.alt||('Photo '+(gi+1)))+'"><img src="'+esc(g.url)+'" alt="'+esc(g.alt||'')+'" loading="lazy"></button>';}).join('');$('tpGal').setAttribute('data-n',gl.length);(function(){var n=gl.length,rem=(n+3)%3,last=$('tpGal').lastElementChild;if(!last)return;if(n>4&&rem)last.classList.add(rem===2?'tp-gl-d2':'tp-gl-d3');if(n>2&&(n-1)%2===1)last.classList.add('tp-gl-m2');})();window.__tpGal=gl;gw.hidden=false;}
+    if(gl.length){var vis=gl.length>4?gl.slice(0,3):gl;   /* five or more photos show as three (a big one and two), the last with how many more there are; every photo opens in the viewer */
+      $('tpGal').innerHTML=vis.map(function(g,gi){var more=(gl.length>4&&gi===2)?'<span class="tp-galmore" aria-hidden="true">+'+(gl.length-3)+'</span>':'';return '<button type="button" class="tp-galitem" data-gal-i="'+gi+'" aria-label="'+esc(more?('See all '+gl.length+' photos'):(g.alt||('Photo '+(gi+1))))+'"><img src="'+esc(g.url)+'" alt="'+esc(g.alt||'')+'" loading="lazy">'+more+'</button>';}).join('');$('tpGal').setAttribute('data-n',vis.length);(function(){var n=vis.length,rem=(n+3)%3,last=$('tpGal').lastElementChild;if(!last)return;if(n>4&&rem)last.classList.add(rem===2?'tp-gl-d2':'tp-gl-d3');if(n>2&&(n-1)%2===1)last.classList.add('tp-gl-m2');})();window.__tpGal=gl;gw.hidden=false;}
     else{$('tpGal').innerHTML='';gw.hidden=true;window.__tpGal=[];}
     var sp=$('tpSponsor'),sps=t.sponsors||[];
     if(sps.length){
