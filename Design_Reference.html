@@ -54124,7 +54124,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-btn{padding:11px 18px;border:0;background:#ef8731;color:#fff;font:700 13px 'Raleway',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
 #p-account #acClubExtras .cx-btn:disabled{opacity:.6;cursor:default}
 #p-account #acClubExtras .cx-stats{margin:12px 0 0;color:#063a63;font-size:14px;font-weight:600}
-#p-account #acClubExtras .cx-bookwrap{max-width:400px;margin:6px auto 0}
+#p-account #acClubExtras .cx-bookwrap{max-width:clamp(290px,calc((100vh - 230px) * .75),400px);margin:6px auto 0}
 #p-account #acClubExtras .cx-float{animation:cxFloat 7s ease-in-out infinite;transform-style:preserve-3d;will-change:transform}
 #p-account #acClubExtras .cx-float.tilt{animation:none;transition:transform .15s ease-out}
 #p-account #acClubExtras .cx-shadow{height:16px;margin:10px auto 0;width:68%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(6,40,70,.38),rgba(6,40,70,0) 70%);animation:cxShadow 7s ease-in-out infinite}
@@ -54135,10 +54135,13 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,.1,.2,1);cursor:pointer}
 #p-account #acClubExtras .cx-front>.cx-paper,#p-account #acClubExtras .cx-back.cx-paper{position:absolute;inset:0}
 #p-account #acClubExtras .cx-back>.cx-paper{position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(120,90,30,.14),inset -8px 0 14px -8px rgba(80,60,20,.3)}
-#p-account #acClubExtras .cx-bookwrap.wide{max-width:880px}
+#p-account #acClubExtras .cx-bookwrap.wide{max-width:clamp(540px,calc((100vh - 220px) * 1.5),880px)}
 #p-account #acClubExtras .cx-bookwrap:not(.wide) .cx-sheet.flipped{opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.4,.1,.2,1),opacity .25s .4s}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book{width:50%;margin-left:50%;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
 #p-account #acClubExtras .cx-bookwrap.wide .cx-book.closed{transform:translateX(-50%)}
+#p-account #acClubExtras .cx-bookwrap.wide .cx-book.ended{transform:translateX(50%)}
+#p-account #acClubExtras .cx-backcover{border-radius:8px 3px 3px 8px;box-shadow:inset 0 0 0 7px rgba(0,0,0,.18),inset 0 0 0 9px rgba(246,227,161,.25),inset -10px 0 18px -8px rgba(0,0,0,.6)}
+#p-account #acClubExtras .cx-endpaper{position:absolute;inset:0}
 #p-account #acClubExtras .cx-endpage.cx-paper{position:absolute;inset:0;z-index:0;border-radius:3px 8px 8px 3px}
 #p-account #acClubExtras .cx-msgpage .cx-note{margin:96px 22px 0}
 #p-account #acClubExtras .cx-sheet.flipped{transform:rotateY(-178deg)}
@@ -54197,7 +54200,7 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
 #p-account #acClubExtras .cx-note{margin:70px 18px 0;text-align:center;font:italic 14px/1.7 'Playfair Display',serif;color:#6f6240}
 @media(prefers-reduced-motion:reduce){#p-account #acClubExtras .cx-holo{animation:none}}
 #p-account #acClubExtras .cx-mrz{position:absolute;left:12px;right:12px;bottom:14px;font:600 clamp(8px,2.5vw,10.5px)/1.45 'Courier New',monospace;letter-spacing:.02em;color:#3a3a3a;opacity:.85;overflow:hidden;white-space:nowrap}
-#p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+#p-account #acClubExtras .cx-bnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;position:sticky;bottom:12px;z-index:6;padding:8px 0;background:linear-gradient(to top,#fff 70%,rgba(255,255,255,0))}
 #p-account #acClubExtras .cx-bnav span{font:700 13px 'Raleway',sans-serif;color:#063a63}
 #p-account #acClubExtras .cx-bnav .cx-btn{min-width:92px}
 #p-account #acClubExtras .cx-vid{margin-top:18px;text-align:center}
@@ -54335,15 +54338,19 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     }
     return pages;
   }
+  function backCover(){return '<div class="cx-cover cx-backcover"><div class="cx-logo" style="width:40%;margin:0 auto 16px"><img src="/assets/ss-logo-white.png" alt="" width="1000" height="204"></div><div class="cx-c5"><i></i><span>SIGHTSEERSCARIBBEAN.COM</span><i></i></div></div>';}
   function blankBack(){return '<div class="cx-face cx-back cx-paper"><div class="cx-ph">&nbsp;</div></div>';}
   function bookHtml(m){
     var pages=bookPages(m),wide=!!X.wide,sheets='',nSheets;
     if(wide){
       /* two sides to every sheet: cover and welcome note, then ID and the first stamp page, then stamps on both sides */
-      nSheets=Math.ceil(pages.length/2);X.max=nSheets;
+      nSheets=Math.ceil(pages.length/2);X.max=nSheets+1;
       for(var i=0;i<nSheets;i++){sheets+='<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+pages[2*i]+'</div>'+(pages[2*i+1]?'<div class="cx-face cx-back">'+pages[2*i+1]+'</div>':blankBack())+'</div>';}
-      sheets+='<div class="cx-endpage cx-paper" aria-hidden="true"></div>';
+      /* the last leaf: plain paper inside, and the navy back cover outside, so the passport can be closed */
+      sheets+='<div class="cx-sheet" data-sheet="'+nSheets+'"><div class="cx-face cx-front"><div class="cx-paper cx-endpaper"><div class="cx-ph">&nbsp;</div></div></div><div class="cx-face cx-back">'+backCover()+'</div></div>';
     }else{
+      nSheets=pages.length;X.max=nSheets-1;
+      pages.push(backCover());
       nSheets=pages.length;X.max=nSheets-1;
       sheets=pages.map(function(h,i){return '<div class="cx-sheet" data-sheet="'+i+'"><div class="cx-face cx-front">'+h+'</div>'+blankBack()+'</div>';}).join('');
     }
@@ -54356,8 +54363,8 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     var b=document.getElementById('cxBook');if(!b)return;
     var wide=!!X.wide,sheets=b.querySelectorAll('.cx-sheet'),count=sheets.length,max=wide?count:count-1;n=Math.max(0,Math.min(max,n));X.page=n;
     [].forEach.call(sheets,function(sh){var i=Number(sh.getAttribute('data-sheet')),flipped=i<n;sh.classList.toggle('flipped',flipped);sh.style.zIndex=String(flipped?i+1:count-i+1);});
-    b.classList.toggle('closed',n===0);
-    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':(wide?'Pages '+(2*n-1)+' and '+(2*n):'Page '+n+' of '+(count-1));
+    b.classList.toggle('closed',n===0);b.classList.toggle('ended',wide&&n===count);
+    var pos=document.getElementById('cxBookPos');if(pos)pos.textContent=n===0?'Cover':(n===max?'Back cover':(wide?'Pages '+(2*n-1)+' and '+(2*n):'Page '+n+' of '+(count-1)));
     [].forEach.call(document.querySelectorAll('#acClubExtras [data-cx-book]'),function(x){x.disabled=(x.getAttribute('data-cx-book')==='prev'&&n===0)||(x.getAttribute('data-cx-book')==='next'&&n===max);});
   }
   /* a computer shows the passport open as two pages; a phone shows one page at a time */
