@@ -28,13 +28,19 @@
     "test:ops": "node scripts/ops-auto.test.js",
     "test:verified": "node scripts/verified.test.js",
     "test:club-extras": "node scripts/club-extras.test.js",
-    "test:private": "node scripts/private-event.test.js && node scripts/private-event-leader.test.js && node scripts/private-event-upgrade.test.js"
+    "test:private": "node scripts/private-event.test.js && node scripts/private-event-leader.test.js && node scripts/private-event-upgrade.test.js",
+    "test:receipt": "node scripts/receipt.test.js"
   },
   "dependencies": {
+    "@signpdf/placeholder-plain": "^3.2.4",
+    "@signpdf/signer-p12": "^3.2.4",
+    "@signpdf/signpdf": "^3.2.4",
     "@vercel/blob": "^2.4.0",
     "html-minifier-terser": "^7.2.0",
+    "node-forge": "^1.3.1",
     "pdf-lib": "^1.17.1",
-    "pdfkit": "^0.15.1"
+    "pdfkit": "^0.15.1",
+    "qrcode": "^1.5.4"
   },
   "engines": {
     "node": "24.x"

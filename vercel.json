@@ -114,6 +114,10 @@
       "destination": "/api/tour-page?slug=:slug"
     },
     {
+      "source": "/verify/:code",
+      "destination": "/api/receipt-verify?code=:code"
+    },
+    {
       "source": "/((?!api/|logos/|panos/|models/|assets/|vendor/|virtual-tours(?:$|/)|.*\\.[a-zA-Z0-9]+$).*)",
       "destination": "/index.html"
     }

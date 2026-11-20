@@ -28,6 +28,8 @@ const handlers = {
   'inbox':           require('./_handlers/inbox'),
   'leaders-waiver':  require('./_handlers/leaders-waiver'),
   'invoices':        require('./_handlers/invoices'),
+  'receipts':        require('./_handlers/receipts'),
+  'receipt-verify':  require('./_handlers/receipt-verify'),
   'ai-calls':        require('./_handlers/ai-calls'),
   'ops-auto':        require('./_handlers/ops-auto'),
   'member':          require('./_handlers/member'),
@@ -71,6 +73,12 @@ module.exports = async function router(req, res) {
     segment = 'tour-page';
     let slug = tourPage[1]; try { slug = decodeURIComponent(slug); } catch (e) { /* keep as is */ }
     req.query = Object.assign({}, req.query || {}, { slug });
+  }
+  /* /verify/<code> is rewritten to this function (see vercel.json): the public check a receipt's QR code opens */
+  const verify = /^\/verify\/([^/]+)\/?$/.exec(path);
+  if (verify) {
+    segment = 'receipt-verify';
+    req.query = Object.assign({}, req.query || {}, { code: verify[1] });
   }
   const handler = handlers[segment];
 
