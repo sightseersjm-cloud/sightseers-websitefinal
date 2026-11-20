@@ -10,15 +10,15 @@
     },
     {
       "id": "summit",
-      "label": "The Summit Challenge (St. Elizabeth, Jamaica)",
-      "activities": "The Summit Challenge, a timed team event in St. Elizabeth, Jamaica, organised by Sight Seers Caribbean Adventures (\"Sight Seers\"). It includes a climbing relay, laser tag, an ATV ride, a train tour and team games, and travel by coach, including the connector service, between the meeting point and the venue. Some activities are provided by third-party venue operators and guides",
+      "label": "The Summit Challenge",
+      "activities": "The Summit Challenge, a scored team event, organised by Sight Seers Caribbean Adventures (\"Sight Seers\"). It includes a climbing relay, laser tag, an ATV ride, a train tour and team games, and travel by coach, including the connector service, between the meeting point and the venue. Some activities are provided by third-party venue operators and guides",
       "apparel": true,
       "bring": [
         "Comfortable activewear suited to climbing and laser tag",
         "Closed toe athletic shoes",
         "A refillable water bottle",
         "Sunscreen and insect repellent",
-        "Snacks, as food stops in the area are limited"
+        "Snacks, as food stops can be limited"
       ]
     }
   ],

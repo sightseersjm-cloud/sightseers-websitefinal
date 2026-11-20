@@ -592,6 +592,7 @@ module.exports = async function handler(req, res) {
             const passport = me.passportCountry || i.passportCountry || '', expiry = me.passportExpiry || i.passportExpiry || '';
             const open = i.status !== 'cancelled' && i.status !== 'waitlist';
             return { guests: i.guests || [], ref: i.ref, tripSlug: i.tripSlug, tripTitle: i.tripTitle, status: i.status, partySize: i.partySize, createdAt: i.createdAt,
+              waiverSignedAt: i.waiverSignedAt || '', waiverEvent: t && /summit/i.test((t.slug || '') + ' ' + (t.title || '')) && t.privateEvent ? 'summit' : 'group-trip',
               leaderName: t && t.organizerName ? t.organizerName : '', dateText: t ? t.dateText || '' : '', groupLink: open && t ? t.groupLink || '' : '', shareContact: !!i.shareContact,
               tripCountry: t ? t.country || '' : '', tripStart: t ? t.startDate || '' : '', tripEnd: t ? t.endDate || '' : '', tripImage: t ? t.image || '' : '', tripDestination: t ? t.destination || '' : '', tripTheme: t ? t.theme || '' : '', passport, passportExpiry: expiry, checklist: i.checklist || {},
               entry: t && open ? entryLib.pick(dests, t.country, passport) : null,
