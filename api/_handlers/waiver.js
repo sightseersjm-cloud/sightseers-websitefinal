@@ -124,7 +124,7 @@ module.exports = async function handler(req, res) {
       replyTo: 'info@sightseerscaribbean.com',
       subject: 'Your signed waiver: Sight Seers Caribbean Adventures',
       html: '<div style="font-family:sans-serif;max-width:560px;color:#17323f"><h2 style="color:#063a63">Thank you, ' + escapeHtml(name.split(' ')[0]) + '.</h2>' +
-        '<p>We have your signed waiver for <b>' + escapeHtml(ev.label) + '</b>' + (ref ? ' (booking reference ' + escapeHtml(ref) + ')' : '') + '. Your signed copy is attached to this email. Please keep it for your records.</p>' +
+        '<p>We have your signed waiver for <b>' + escapeHtml(ev.label) + '</b>' + (ref ? ' (booking reference ' + escapeHtml(ref) + ')' : '') + '. Your signed copy is attached to this email. Please keep it for your records. Sight Seers keeps a signed copy on file too.</p>' +
         '<p style="font-size:13px;color:#5b6b76">If anything in it is wrong, reply to this email or contact us on +1 (876) 465-0630 or info@sightseerscaribbean.com.</p>' +
         '<p style="font-size:13px;color:#5b6b76">Sight Seers Caribbean Adventures</p></div>',
       attachments
