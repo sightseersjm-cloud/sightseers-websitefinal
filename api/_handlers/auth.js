@@ -3,10 +3,9 @@ const { hashPassword, verifyPassword, validatePassword, createToken, requireAuth
 const { sendEmail, BUSINESS_EMAIL } = require('../_lib/email');
 const social = require('../_lib/social');
 const { geo } = require('../_lib/geo');
-const knownGuest = require('../_lib/known-guest');
-
 /* every email is compared trimmed and in lower case, however it was typed or stored */
-const normEmail = knownGuest.normEmail;
+const normEmail = v => String(v == null ? '' : v).trim().toLowerCase();
+const MAX_RESET_TRIES = 5;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const RESET_TTL = 30 * 60 * 1000;
 
@@ -255,6 +254,8 @@ module.exports = async function handler(req, res) {
 
   // Step 1 of self-service reset: email a 6-digit code. A guest who has no account yet but is known from a form
   // (trip request, application, booking, waiver, message, newsletter) gets a code too: entering it opens their account.
+  /* Forgot password: only existing accounts get a code. The reply is always the same, so the form never says
+     whether an email has an account. New accounts are made through Sign up, never through a reset. */
   if (action === 'request-reset') {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -265,47 +266,31 @@ module.exports = async function handler(req, res) {
     }
     const users = await db.getCollection('users');
     const acct = users.find(u => normEmail(u.email) === cleanEmail);
-    const code = String(require('crypto').randomInt(100000, 1000000));
-    let name = '', newAccount = false;
-    if (acct) {
-      await db.updateInCollection('users', acct.id, { resetCode: code, resetExpires: Date.now() + RESET_TTL, resetTries: 0 });
-      name = acct.name || '';
-    } else {
-      const guest = await knownGuest.find(cleanEmail);
-      if (!guest) {
-        console.log('Password reset asked for an email with no account and no request on file.');
-        return res.status(200).json({ ok: true, sent: false, noAccount: true });
-      }
-      await knownGuest.savePending(guest, code, RESET_TTL);
-      name = guest.name || '';
-      newAccount = true;
-      console.log('Password reset for a guest with no account yet (known from a ' + guest.source + '); the code will open their account.');
+    if (!acct) {
+      console.log('Password reset asked for an email with no account.');
+      return res.status(200).json({ ok: true });
     }
-    const firstName = require('../_lib/auth').escapeHtml((name || 'there').split(' ')[0]);
-    const intro = newAccount
-      ? `Hi ${firstName}, use this code to set your password and open your Sight Seers Travel Club account. Your trip requests and bookings made with this email will be on your profile. It expires in 30 minutes.`
-      : `Hi ${firstName}, use this code to reset your Sight Seers Travel Club password. It expires in 30 minutes.`;
+    const code = String(require('crypto').randomInt(100000, 1000000));
+    await db.updateInCollection('users', acct.id, { resetCode: code, resetExpires: Date.now() + RESET_TTL, resetTries: 0 });
+    const firstName = require('../_lib/auth').escapeHtml((acct.name || 'there').split(' ')[0]);
     let mail = null;
     try {
       mail = await sendEmail({
         to: cleanEmail,
-        subject: `Your Sight Seers ${newAccount ? 'account' : 'password reset'} code: ${code}`,
+        subject: `Your Sight Seers password reset code: ${code}`,
         html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;color:#1a2b3f">
-          <h2 style="color:#0a3557">${newAccount ? 'Set your password' : 'Password reset'}</h2>
-          <p>${intro}</p>
+          <h2 style="color:#0a3557">Password reset</h2>
+          <p>Hi ${firstName}, use this code to reset your Sight Seers Travel Club password. It expires in 30 minutes.</p>
           <p style="font-size:32px;font-weight:800;letter-spacing:8px;color:#0d6e96;background:#f4f7fa;border-radius:12px;padding:18px;text-align:center">${code}</p>
-          <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email. Nothing changes unless the code is entered.</p>
+          <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email. Your password stays the same.</p>
         </div>`
       });
     } catch (e) { console.error('Reset code email error:', e && e.message); }
-    if (!mail || mail.ok === false) {
-      console.error('Reset code email failed:', mail ? (mail.status || mail.error) : 'no email service (RESEND_API_KEY missing)');
-      return res.status(200).json({ ok: true, sent: false, emailFailed: true });
-    }
-    return res.status(200).json({ ok: true, sent: true, newAccount });
+    if (!mail || mail.ok === false) console.error('Reset code email failed:', mail ? (mail.status || mail.error) : 'no email service (RESEND_API_KEY missing)');
+    return res.status(200).json({ ok: true });
   }
 
-  // Step 2 of self-service reset: verify the code and set a new password (or, for a known guest, open the account).
+  // Step 2 of self-service reset: verify the code and set a new password on the existing account.
   if (action === 'reset-password') {
     const { email, code, newPassword } = req.body;
     if (!email || !code || !newPassword) return res.status(400).json({ error: 'Email, code and new password are required' });
@@ -318,59 +303,18 @@ module.exports = async function handler(req, res) {
     const cleanEmail = normEmail(email);
     const codeIn = String(code).trim();
     const WRONG = 'That reset code is not correct.';
-    const EXPIRED = 'That reset code has expired. Please request a new one.';
-    const TOO_MANY = 'Too many wrong codes. Please request a new code.';
     const users = await db.getCollection('users');
     const acct = users.find(u => normEmail(u.email) === cleanEmail);
-
-    if (acct) {
-      if (!acct.resetCode) return res.status(400).json({ error: WRONG });
-      if ((acct.resetTries || 0) >= knownGuest.MAX_TRIES) return res.status(400).json({ error: TOO_MANY });
-      if (!sameSecret(codeIn, String(acct.resetCode))) {
-        await db.updateInCollection('users', acct.id, { resetTries: (acct.resetTries || 0) + 1 });
-        return res.status(400).json({ error: WRONG });
-      }
-      if (!acct.resetExpires || Date.now() > acct.resetExpires) return res.status(400).json({ error: EXPIRED });
-      const u = await db.updateInCollection('users', acct.id, { passwordHash: hashPassword(String(newPassword)), resetCode: undefined, resetExpires: undefined, resetTries: undefined, inviteCode: undefined });
-      if (!u) return res.status(404).json({ error: 'Account not found' });
-      try { await knownGuest.clearPending(cleanEmail); } catch (e) { /* optional */ }
-      return res.status(200).json({ ok: true, token: tokenFor(u), user: publicUser(u) });
+    if (!acct || !acct.resetCode) return res.status(400).json({ error: WRONG });
+    if ((acct.resetTries || 0) >= MAX_RESET_TRIES) return res.status(400).json({ error: 'Too many wrong codes. Please request a new code.' });
+    if (!sameSecret(codeIn, String(acct.resetCode))) {
+      await db.updateInCollection('users', acct.id, { resetTries: (acct.resetTries || 0) + 1 });
+      return res.status(400).json({ error: WRONG });
     }
-
-    /* no account: the code was sent to a guest known from a form; the right code proves the email is theirs */
-    const check = await knownGuest.checkPending(cleanEmail, codeIn);
-    if (check.error) return res.status(400).json({ error: check.error === 'expired' ? EXPIRED : check.error === 'tries' ? TOO_MANY : WRONG });
-    const g = check.guest;
-    const all = await db.getCollectionForWrite('users');
-    let user = all.find(u => normEmail(u.email) === cleanEmail);
-    if (user) {
-      /* an account appeared for this email meanwhile: the code still proves the email, so set its password */
-      user.passwordHash = hashPassword(String(newPassword));
-      user.updatedAt = new Date().toISOString();
-    } else {
-      user = {
-        id: uid(),
-        name: String(g.name || cleanEmail.split('@')[0]).trim().slice(0, 100),
-        email: cleanEmail,
-        passwordHash: hashPassword(String(newPassword)),
-        phone: String(g.phone || '').trim().slice(0, 30),
-        style: 'Adventure',
-        role: 'guest',
-        provider: 'reset-code',
-        country: geo(req).country, city: geo(req).city,
-        createdAt: new Date().toISOString()
-      };
-      all.push(user);
-    }
-    await db.setCollection('users', all);
-    await knownGuest.clearPending(cleanEmail);
-    const esc = require('../_lib/auth').escapeHtml;
-    sendEmail({
-      to: BUSINESS_EMAIL,
-      subject: `New member: ${user.name} (${user.email}) opened their account with Forgot password`,
-      html: `<p><strong>${esc(user.name)}</strong> opened their account by setting a password with an emailed code.</p><p>Email: ${esc(user.email)}</p><p>Known from: ${esc(g.source || 'a form')}</p>`
-    }).catch(() => {});
-    return res.status(200).json({ ok: true, created: true, token: tokenFor(user), user: publicUser(user) });
+    if (!acct.resetExpires || Date.now() > acct.resetExpires) return res.status(400).json({ error: 'That reset code has expired. Please request a new one.' });
+    const u = await db.updateInCollection('users', acct.id, { passwordHash: hashPassword(String(newPassword)), resetCode: undefined, resetExpires: undefined, resetTries: undefined, inviteCode: undefined });
+    if (!u) return res.status(404).json({ error: 'Account not found' });
+    return res.status(200).json({ ok: true, token: tokenFor(u), user: publicUser(u) });
   }
 
 
