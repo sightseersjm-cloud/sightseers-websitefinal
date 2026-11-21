@@ -1,0 +1,22 @@
+const Module = require('module'); const store = new Map();
+const blob = { put: async (p, b) => { store.set(p, Buffer.from(b)); return {}; }, get: async p => store.has(p) ? { statusCode: 200, stream: new Response(store.get(p)).body } : { statusCode: 404 }, del: async p => { store.delete(p); }, list: async () => ({ blobs: [] }) };
+const o = Module._load; Module._load = function (r, ...a) { return r === '@vercel/blob' ? blob : o.call(this, r, ...a); };
+Object.assign(process.env, { BLOB_READ_WRITE_TOKEN: 'x', JWT_SECRET: 'test-secret-test-secret-test-secret-12345', RESEND_API_KEY: 'rk' });
+const sent = []; global.fetch = async (u, op) => { sent.push(JSON.parse(op.body)); return { ok: true, status: 200, json: async () => ({ id: 'x' }) }; };
+const h = require('/home/user/sightseers-websitefinal/api/_handlers/auth');
+const call = (body) => new Promise(r => { const res = { status(c) { this.c = c; return this; }, json(x) { r({ c: this.c, b: x }); }, setHeader() {}, end() { r({}); } }; h({ method: 'POST', url: '/api/auth', query: {}, headers: { host: 'x', 'x-forwarded-for': '1.1.1.1' }, body }, res); });
+let fails = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FAIL ') + n + (x ? '  ' + x : '')); if (!c) fails++; };
+(async () => {
+  let r = await call({ action: 'signup', name: 'Daine Allen', email: 'Daine.Allenn@Gmail.com', password: 'Passw0rdTest1', phone: '1' }); ok('an account exists', r.c === 201);
+  sent.length = 0;
+  r = await call({ action: 'request-reset', email: ' DAINE.ALLENN@gmail.com ' });
+  ok('a reset code is emailed, even with capitals and spaces', r.b.sent === true && sent.some(m => /reset code/.test(m.subject) && (m.to || []).includes('daine.allenn@gmail.com')), JSON.stringify(r.b));
+  const code = (sent.find(m => /reset code/.test(m.subject)).subject.match(/(\d{6})/) || [])[1];
+  r = await call({ action: 'reset-password', email: 'daine.allenn@gmail.com', code, newPassword: 'NewPassw0rdTest9' });
+  ok('the code sets a new password and signs them in', r.c === 200 && !!r.b.token, JSON.stringify(r.b).slice(0, 120));
+  r = await call({ action: 'signin', email: 'daine.allenn@gmail.com', password: 'NewPassw0rdTest9' }); ok('the new password works', r.c === 200);
+  r = await call({ action: 'request-reset', email: 'nobody@example.com' }); ok('an unknown email is told so', r.b.noAccount === true && r.b.sent === false);
+  global.fetch = async () => ({ ok: false, status: 422, json: async () => ({ message: 'bad' }) });
+  r = await call({ action: 'request-reset', email: 'daine.allenn@gmail.com' }); ok('a failed email is reported, not hidden', r.b.emailFailed === true && r.b.sent === false);
+  console.log(fails ? '\n' + fails + ' FAILED' : '\nALL PASSED'); process.exit(fails ? 1 : 0);
+})().catch(e => { console.error(e); process.exit(1); });

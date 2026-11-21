@@ -257,15 +257,19 @@ module.exports = async function handler(req, res) {
     const cleanEmail = String(email).trim().toLowerCase();
     const users = await db.getCollection('users');
     const idx = users.findIndex(u => String(u.email || '').trim().toLowerCase() === cleanEmail);
-    // Only send if the account exists, but always return ok so we don't reveal which emails are registered.
-    if (idx !== -1) {
-      const code = String(Math.floor(100000 + Math.random() * 900000));
-      users[idx].resetCode = code;
-      users[idx].resetExpires = Date.now() + 30 * 60 * 1000; // 30 minutes
-      await db.setCollection('users', users);
-      const firstName = (users[idx].name || 'there').split(' ')[0];
-      sendEmail({
-        to: cleanEmail,
+    if (idx === -1) {
+      console.log('Password reset asked for an email with no account.');
+      return res.status(200).json({ ok: true, sent: false, noAccount: true });
+    }
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    users[idx].resetCode = code;
+    users[idx].resetExpires = Date.now() + 30 * 60 * 1000; // 30 minutes
+    await db.setCollection('users', users);
+    const firstName = (users[idx].name || 'there').split(' ')[0];
+    let mail = null;
+    try {
+      mail = await sendEmail({
+        to: String(users[idx].email).trim().toLowerCase(),
         subject: `Your Sight Seers password reset code: ${code}`,
         html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;color:#1a2b3f">
           <h2 style="color:#0a3557">Password reset</h2>
@@ -273,11 +277,13 @@ module.exports = async function handler(req, res) {
           <p style="font-size:32px;font-weight:800;letter-spacing:8px;color:#0d6e96;background:#f4f7fa;border-radius:12px;padding:18px;text-align:center">${code}</p>
           <p style="color:#6b7a8d;font-size:13px">If you didn't request this, you can safely ignore this email. Your password stays the same.</p>
         </div>`
-      }).then(r => { if (r && r.ok === false) console.error('Reset code email failed:', r.status); }).catch(e => console.error('Reset code email error:', e && e.message));
-    } else {
-      console.log('Password reset asked for an email with no account.');
+      });
+    } catch (e) { console.error('Reset code email error:', e && e.message); }
+    if (!mail || mail.ok === false) {
+      console.error('Reset code email failed:', mail && mail.status);
+      return res.status(200).json({ ok: true, sent: false, emailFailed: true });
     }
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, sent: true });
   }
 
   // Step 2 of self-service reset: verify the code and set a new password.
