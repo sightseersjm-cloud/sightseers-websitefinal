@@ -1,5 +1,5 @@
 {
-  "version": "draft-1",
+  "version": "draft-2",
   "status": "Draft wording written by Claude, not reviewed by a lawyer",
   "events": [
     {
@@ -48,15 +48,27 @@
     },
     {
       "h": "Release",
-      "t": "To the fullest extent the law allows, I release and agree not to hold Sight Seers, its owners, directors, employees, guides, Team Leads, contractors and agents, and the venue, transport and activity operators it works with (together, \"the Released Parties\"), responsible for any injury, illness, death, loss, or damage to me or my belongings that happens because of my taking part or the travel connected to it, including injury caused by the ordinary negligence of a Released Party. I also agree not to bring a claim for such loss."
+      "t": "To the fullest extent the law allows, I release and agree not to hold Sight Seers, its owners, directors, employees, guides, Team Leads, contractors and agents, and the venue, transport and activity operators it works with (together, \"the Released Parties\"), responsible for any injury, illness, death, loss, or damage to me or my belongings that happens because of my taking part or the travel connected to it, including injury caused by the ordinary negligence of a Released Party, and whether the claim is framed as negligence, breach of contract, breach of a legal duty or accident. I understand that by signing I am giving up my right to sue for such loss. This release also covers the successors and assigns of the Released Parties."
     },
     {
       "h": "What this does not cover",
       "t": "This waiver does not limit anyone's liability where the law does not allow it to be limited, including liability for death or personal injury caused by gross negligence or deliberate wrongdoing."
     },
     {
+      "h": "Heirs and representatives",
+      "t": "This waiver is also binding on my next of kin, personal representatives, heirs and beneficiaries, so that no one can bring a claim on my behalf for loss I have released here."
+    },
+    {
+      "h": "Indemnity",
+      "t": "I agree to cover the Released Parties for any costs, expenses or claims they face because of something I do, or fail to do, that causes injury or damage to another person or to property while I am taking part, and for any claim brought by someone else because of my participation."
+    },
+    {
+      "h": "If part of this is struck out",
+      "t": "If any part of this waiver is found to be invalid or cannot be enforced, the rest of it still applies in full."
+    },
+    {
       "h": "Emergency treatment",
-      "t": "If I am injured or become ill, I allow Sight Seers and the Team Lead to arrange first aid and emergency medical care for me, and I will be responsible for the cost of any treatment or transport that is not paid by someone else. Sight Seers is not a medical provider."
+      "t": "I understand some activities may be far from medical help, and that the Team Lead can give first aid until professional help arrives. If I am injured or become ill, I allow Sight Seers and the Team Lead to arrange first aid and emergency medical care for me, and I will be responsible for the cost of any treatment or transport that is not paid by someone else. Sight Seers is not a medical provider."
     },
     {
       "h": "Insurance",
@@ -72,7 +84,7 @@
     },
     {
       "h": "Governing law",
-      "t": "This waiver is governed by the laws of Jamaica."
+      "t": "This waiver is governed by the laws of Jamaica, and I accept the jurisdiction of the courts of Jamaica."
     },
     {
       "h": "Understanding",

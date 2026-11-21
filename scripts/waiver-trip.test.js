@@ -20,7 +20,7 @@ function call(h, method, url, body, token) {
 }
 let fails = 0; const ok = (name, cond, extra) => { console.log((cond ? 'PASS ' : 'FAIL ') + name + (extra ? '  ' + extra : '')); if (!cond) fails++; };
 const PDF = 'JVBERi0xLjMK' + 'A'.repeat(3000);
-const sign = (o) => call('waiver', 'POST', '/api/waiver', Object.assign({ name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', event: 'summit', agreed: true, over18: true, pdfBase64: PDF, version: 'draft-1' }, o || {}));
+const sign = (o) => call('waiver', 'POST', '/api/waiver', Object.assign({ name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', event: 'summit', agreed: true, over18: true, pdfBase64: PDF, version: 'draft-2' }, o || {}));
 
 (async () => {
   const owner = (await call('auth', 'POST', '/api/auth', { action: 'signin', email: 'owner@example.com', password: 'OwnerPass123!' })).body.token;
