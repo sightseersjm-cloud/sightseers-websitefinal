@@ -31,20 +31,30 @@ async function setCollection(name, items) {
   await setDoc(name, items);
 }
 
+/* A read for a change: a missing collection is empty, but a read that FAILED (storage busy, network, a bad file)
+   throws, so a change never writes a one-item list over a whole collection (for example every account). */
+async function getCollectionForWrite(name) {
+  const result = await get(BASE + name + '.json', { access: 'private', useCache: false });
+  if (!result || !result.stream) return [];
+  const doc = await new Response(result.stream).json();
+  if (!Array.isArray(doc)) throw new Error('Collection ' + name + ' is not a list; not overwriting it');
+  return doc;
+}
+
 async function findInCollection(name, predicate) {
   const items = await getCollection(name);
   return items.find(predicate) || null;
 }
 
 async function addToCollection(name, item) {
-  const items = await getCollection(name);
+  const items = await getCollectionForWrite(name);
   items.push(item);
   await setCollection(name, items);
   return item;
 }
 
 async function updateInCollection(name, id, updates) {
-  const items = await getCollection(name);
+  const items = await getCollectionForWrite(name);
   const idx = items.findIndex(i => i.id === id);
   if (idx === -1) return null;
   items[idx] = { ...items[idx], ...updates, updatedAt: new Date().toISOString() };
@@ -53,7 +63,7 @@ async function updateInCollection(name, id, updates) {
 }
 
 async function removeFromCollection(name, id) {
-  const items = await getCollection(name);
+  const items = await getCollectionForWrite(name);
   const filtered = items.filter(i => i.id !== id);
   if (filtered.length === items.length) return false;
   await setCollection(name, filtered);
@@ -73,7 +83,7 @@ async function deleteBlob(url) {
 }
 
 module.exports = {
-  getDoc, setDoc, getCollection, setCollection,
+  getDoc, setDoc, getCollection, setCollection, getCollectionForWrite,
   findInCollection, addToCollection, updateInCollection, removeFromCollection,
   listImages, deleteBlob
 };

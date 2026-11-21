@@ -91,7 +91,7 @@ async function callback(name, req, res, q, deps) {
 
   const { db, createToken, tokenFor, hashPassword, uid, sendEmail, BUSINESS_EMAIL } = deps;
   const users = await db.getCollection('users');
-  let user = users.find(u => u.email === email);
+  let user = users.find(u => String(u.email || '').trim().toLowerCase() === email);
   if (!user) {
     user = {
       id: uid(), name: String((claims && claims.name) || email.split('@')[0]).trim().slice(0, 100), email,

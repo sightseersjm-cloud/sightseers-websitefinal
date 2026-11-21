@@ -175,7 +175,7 @@ function tokenFor(u) {
 
 /* an account as it may leave the server: never the password, reset code or two-step secret */
 function publicUser(u) {
-  const { passwordHash, resetCode, resetExpires, totpSecret, totpPending, ...rest } = u || {};
+  const { passwordHash, resetCode, resetExpires, resetTries, totpSecret, totpPending, ...rest } = u || {};
   return rest;
 }
 

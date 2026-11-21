@@ -768,7 +768,7 @@ module.exports = async function handler(req, res) {
       if (!rec.userId) {
         try {
           const users = await db.getCollection('users');
-          const found = users.find(u => u.email === rec.email);
+          const found = users.find(u => lower(u.email, 200) === rec.email);
           if (found) rec.userId = found.id;
           else {
             if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }

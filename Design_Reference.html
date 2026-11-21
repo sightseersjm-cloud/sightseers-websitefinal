@@ -44001,11 +44001,11 @@ function vtXRStatus(msg){
       if(!S()||!S().requestPasswordReset){ setStatus('Still loading, try again in a moment.'); return; }
       var btn=this; btn.disabled=true; btn.textContent='Sending…'; setStatus('');
       S().requestPasswordReset(email).then(function(res){
-        if(res&&res.noAccount){ setStatus('We could not find an account with that email. Check the spelling, try the email you used for your trip request, or create an account.'); return; }
+        if(res&&res.noAccount){ setStatus('We could not find an account or any trip request with that email. Check the spelling, try the email you used for your trip request, or create an account.'); return; }
         if(res&&res.emailFailed){ setStatus('We could not send the code just now. Please try again in a minute, or email info@sightseerscaribbean.com and we will help.'); return; }
         ov.querySelector('#ssResetStep1').style.display='none';
         ov.querySelector('#ssResetStep2').style.display='block';
-        ov.querySelector('#ssResetSub').textContent='We sent a 6-digit code to '+email+'. Enter it below with your new password. It expires in 30 minutes.';
+        ov.querySelector('#ssResetSub').textContent=(res&&res.newAccount)?('We found your requests under '+email+' and sent a 6-digit code there. Enter it below and choose a password to open your account. It expires in 30 minutes.'):('We sent a 6-digit code to '+email+'. Enter it below with your new password. It expires in 30 minutes.');
         addEye(ov.querySelector('#ssResetPass'));
         setStatus('Code sent. Check your email, including spam or promotions.',true);
       }).catch(function(err){ setStatus((err&&err.message)||'Could not send the code. Please try again.'); })
@@ -44018,8 +44018,8 @@ function vtXRStatus(msg){
       if(!code||!pass){ setStatus('Enter the code and a new password.'); return; }
       if(!S()||!S().resetPassword){ setStatus('Still loading, try again in a moment.'); return; }
       var btn=this; btn.disabled=true; btn.textContent='Resetting…'; setStatus('');
-      S().resetPassword(email, code, pass).then(function(){
-        setStatus('Password reset, you\'re signed in.',true);
+      S().resetPassword(email, code, pass).then(function(res){
+        setStatus((res&&res.created)?'Your account is ready, you\'re signed in.':'Password reset, you\'re signed in.',true);
         if(window.toast) toast('Password updated. Welcome back!');
         setTimeout(close,900);
       }).catch(function(err){ setStatus((err&&err.message)||'Could not reset. Check your code and try again.'); })
