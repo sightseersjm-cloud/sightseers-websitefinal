@@ -51524,6 +51524,9 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     return '<h1>Team and access</h1><p class="mg-sub">Give each person only what they need. Changes take effect straight away.</p>'
       +'<div class="mg-grid g3" style="margin-bottom:18px"><div class="mg-role" style="border-color:var(--orange)"><b>Owner</b><small>Everything, including the team and sign-in settings.</small></div>'+roleCards+'</div>'
       +'<div class="mg-card mg-tw"><table><tr><th>Person</th><th>Role</th>'+T.perms.map(function(p){return '<th class="c">'+esc(PERM_LABEL[p].split(' ')[0])+'</th>';}).join('')+'<th>Status</th><th></th></tr>'+rows+'</table></div>'
+      +'<h2>Reset an account password</h2><div class="mg-card" style="padding:20px;max-width:620px"><p class="mg-hint" style="margin:0 0 6px">For a member or team member who cannot get back in. Type their account email and a new password, then give it to them and ask them to change it after they sign in.</p>'
+      +'<div class="mg-fld"><label for="mgRpEmail">Account email</label><input id="mgRpEmail" type="email" autocomplete="off"></div><div class="mg-fld"><label for="mgRpPw">New password (8 or more characters, with a capital letter, a small letter and a number)</label><input id="mgRpPw" type="text" autocomplete="off"></div>'
+      +'<button type="button" class="mg-btn pri" data-pw-reset="1">Set new password</button><div class="mg-msg" id="mgRpMsg" role="alert"></div></div>'
       +'<h2>Invite someone</h2><div class="mg-card" style="padding:20px;max-width:620px"><form id="mgInviteForm" novalidate>'
       +'<div class="mg-fld"><label for="mgIName">Name</label><input id="mgIName" autocomplete="off"></div><div class="mg-fld"><label for="mgIEmail">Email</label><input id="mgIEmail" type="email" autocomplete="off"></div>'
       +'<div class="mg-fld"><label for="mgIRole">Role</label><select id="mgIRole">'+T.presets.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.label)+'</option>';}).join('')+'<option value="custom">Custom: choose what they can do</option></select></div>'
@@ -51656,6 +51659,10 @@ html:has(#p-manage.on),body:has(#p-manage.on){overflow:visible!important}
     if(t.id==='mgMenu'){document.getElementById('mgSb').classList.toggle('open');return;}
     if(t.id==='mgOut')return signOut();
     if(t.dataset.copy){try{navigator.clipboard.writeText(t.dataset.copy);t.textContent='Copied';}catch(x){}return;}
+    if(t.dataset.pwReset){var em=(document.getElementById('mgRpEmail')||{}).value||'',pw=(document.getElementById('mgRpPw')||{}).value||'',rm=document.getElementById('mgRpMsg');
+      if(!em.trim()||!pw){rm.textContent='Type the account email and a new password.';rm.className='mg-msg on err';return;}
+      if(!confirm('Set a new password for '+em.trim()+'? Their old password will stop working.'))return;
+      auth('admin-reset-password',{email:em.trim(),newPassword:pw}).then(function(){rm.textContent='Done. The new password works for '+em.trim()+' now.';rm.className='mg-msg on ok';document.getElementById('mgRpPw').value='';}).catch(function(err){rm.textContent=err.message||'Could not change it.';rm.className='mg-msg on err';});return;}
     if(t.dataset.teamOff){auth('team-update',{id:t.dataset.teamOff,disabled:t.dataset.to==='1'}).then(loadTeam).catch(function(err){alert(err.message);});return;}
     if(t.dataset.teamRm){if(confirm('Remove this person from the team? They keep a normal account but lose all admin access.'))auth('team-remove',{id:t.dataset.teamRm}).then(loadTeam).catch(function(err){alert(err.message);});return;}
     if(t.dataset.teamEdit){openEdit(t.dataset.teamEdit);return;}

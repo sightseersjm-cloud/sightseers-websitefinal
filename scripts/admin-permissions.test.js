@@ -45,11 +45,18 @@ let fails=0;const ok=(name,cond,extra)=>{console.log((cond?'PASS ':'FAIL ')+name
  ok('signup never makes an admin',r.body.user.role==='guest');
  ok('member cannot read the inbox',(await call('inbox','GET','/api/inbox',{},guest)).code===403);
  // switch a person off, change a role, remove
+ // the owner can reset an account's password by email; nobody else can
+ r=await call('auth','POST','/api/auth',{action:'admin-reset-password',email:'marcus@example.com',newPassword:'ExcursionTest2026'});ok('a reset needs the owner',r.code===401||r.code===403);
+ r=await call('auth','POST','/api/auth',{action:'admin-reset-password',email:'marcus@example.com',newPassword:'short'},owner);ok('a weak password is refused',r.code===400);
+ r=await call('auth','POST','/api/auth',{action:'admin-reset-password',email:'nobody@example.com',newPassword:'ExcursionTest2026'},owner);ok('an unknown email is refused',r.code===404);
+ r=await call('auth','POST','/api/auth',{action:'admin-reset-password',email:'Marcus@Example.com',newPassword:'ExcursionTest2026'},owner);ok('the owner resets a password by email',r.code===200,r.body&&r.body.error);
+ r=await call('auth','POST','/api/auth',{action:'signin',email:'marcus@example.com',password:'ExcursionTest2026'});ok('the new password signs them in',r.code===200&&!!r.body.token,r.body&&r.body.error);
+ r=await call('auth','POST','/api/auth',{action:'signin',email:'marcus@example.com',password:'Marcus12345!'});ok('the old password stops working',r.code!==200);
  const team=(await call('auth','POST','/api/auth',{action:'team-list'},owner)).body;ok('team list shows owner and 2 team members',team.team.length===3,JSON.stringify(team.team.map(t=>t.email+':'+t.role)));
  const marcusId=team.team.find(t=>t.email==='marcus@example.com').id;
  await call('auth','POST','/api/auth',{action:'team-update',id:marcusId,disabled:true},owner);
  ok('switched-off person is locked out at once',(await call('content','POST','/api/content',{},staff)).code===403);
- ok('switched-off person cannot sign in',(await call('auth','POST','/api/auth',{action:'signin',email:'marcus@example.com',password:'Marcus12345!'})).code===403);
+ ok('switched-off person cannot sign in',(await call('auth','POST','/api/auth',{action:'signin',email:'marcus@example.com',password:'ExcursionTest2026'})).code===403);
  await call('auth','POST','/api/auth',{action:'team-update',id:marcusId,disabled:false,preset:'blog'},owner);
  ok('role change takes effect at once (blog writer loses pages)',(await call('content','POST','/api/content',{},staff)).code===403);
  await call('auth','POST','/api/auth',{action:'team-remove',id:marcusId},owner);

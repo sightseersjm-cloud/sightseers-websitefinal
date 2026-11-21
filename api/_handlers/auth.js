@@ -501,13 +501,14 @@ module.exports = async function handler(req, res) {
     const admin = await requireOwner(req, res);
     if (!admin) return;
     const { id, newPassword } = req.body;
-    if (!id || !newPassword) return res.status(400).json({ error: 'Account ID and new password required' });
+    const mail = String(req.body.email || '').trim().toLowerCase();
+    if ((!id && !mail) || !newPassword) return res.status(400).json({ error: 'The account (ID or email) and a new password are required' });
 
     const pwError = validatePassword(String(newPassword));
     if (pwError) return res.status(400).json({ error: pwError });
 
     const users = await db.getCollection('users');
-    const idx = users.findIndex(u => u.id === id);
+    const idx = users.findIndex(u => id ? u.id === id : String(u.email || '').toLowerCase() === mail);
     if (idx === -1) return res.status(404).json({ error: 'Account not found' });
 
     users[idx].passwordHash = hashPassword(String(newPassword));
