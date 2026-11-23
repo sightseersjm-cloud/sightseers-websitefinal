@@ -48,7 +48,7 @@ const SUMMIT_V3 = {
 
 const SEEDS = [{
   key: 'summit-challenge',
-  rev: 5,
+  rev: 6,
   previous: [SUMMIT_V1, SUMMIT_V2, SUMMIT_V3],
   /* rev 4: the date, a Day by day entry, and no inherited community line. Each change is only made where the field still has
      the value it was seeded with, so anything the owner changed is left alone. */
@@ -58,6 +58,11 @@ const SEEDS = [{
     if (!Array.isArray(have.itinerary) || !have.itinerary.length) out.itinerary = trip.itinerary;
     if (have.organizerCommunity === 'Legend Escape Weekend') out.organizerCommunity = '';
     return out;
+  } }, { rev: 6, patch: (have, trip) => {
+    /* rev 6: the shoes line in What to bring shows in red (a line starting with ! is highlighted), only if the list is unchanged */
+    const arr = have.arrival || {};
+    const old = 'Comfortable activewear\nClosed toe athletic shoes\nA refillable water bottle\nSunscreen and insect repellent\nSnacks';
+    return arr.bring === old ? { arrival: Object.assign({}, arr, { bring: trip.arrival.bring }) } : {};
   } }],
   /* led by the same account that leads this trip (found by its web address, or by its title) */
   sameLeaderAs: { slug: 'legend-escape-weekend-jamaica', title: /legend escape weekend/i },
@@ -94,7 +99,7 @@ const SEEDS = [{
     privateEvent: true,
     arrival: {
       getting: 'The meeting point is shared once your place is confirmed. Please arrive 15 minutes before departure.',
-      bring: 'Comfortable activewear\nClosed toe athletic shoes\nA refillable water bottle\nSunscreen and insect repellent\nSnacks',
+      bring: 'Comfortable activewear\n!Closed toe athletic shoes\nA refillable water bottle\nSunscreen and insect repellent\nSnacks',
       before: 'Complete a short waiver and medical form before the day.\nShare your shirt size when your place is confirmed.'
     },
     groupLink: '', sponsors: [], gallery: []
