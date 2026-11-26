@@ -9336,7 +9336,10 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
 .gr-stars{color:#fbbc04;letter-spacing:2px;font-size:14px;line-height:1.2}
 .gr-score small{display:block;color:#6a7a86;font-size:12px;margin-top:2px}
 .gr-all{margin-left:10px;color:#063a63;font-weight:700;font-size:13px;text-decoration:none;border-bottom:2px solid #ef8731;padding-bottom:2px;white-space:nowrap}
-.gr-track{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start;padding:6px 0 10px}
+.gr-track{display:flex;gap:18px;align-items:flex-start;overflow-x:auto;overflow-y:visible;scroll-snap-type:x mandatory;scroll-padding:0 24px;scrollbar-width:none;padding:14px 24px 64px;margin:-14px -24px -44px;width:calc(100% + 48px);max-width:none;box-sizing:border-box}
+.gr-track::-webkit-scrollbar{display:none}
+.gr-track>.gr-card{flex:0 0 calc((100% - 54px)/4);min-width:0;scroll-snap-align:start}
+.gr-guest{margin-left:auto;color:#7a8a96;font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
 .gr-card{background:#fff;border:1px solid #e3ebe6;border-radius:16px;padding:18px 18px 16px;box-shadow:0 22px 48px rgba(6,58,99,.13),0 4px 12px rgba(6,58,99,.05);display:flex;flex-direction:column;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
 .gr-card:hover,.gr-card.open{border-color:rgba(239,135,49,.55);box-shadow:0 30px 60px rgba(6,58,99,.18),0 6px 16px rgba(6,58,99,.06)}
 .gr-card:hover{transform:translateY(-4px)}
@@ -9353,13 +9356,18 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
 .gr-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
 .gr-more{background:none;border:0;padding:0;color:#063a63;font-weight:700;font-size:13px;cursor:pointer;border-bottom:2px solid #ef8731}
 .gr-tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#ef8731}
-.gr-nav{display:none}
+.gr-nav{display:none;align-items:center;justify-content:center;gap:16px;margin-top:14px;position:relative;z-index:3}
+.gr-sec.gr-scroll .gr-nav{display:flex}
+.gr-sec.gr-scroll .gr-track{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 32px,#000 calc(100% - 32px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 32px,#000 calc(100% - 32px),transparent 100%)}
+.gr-arrow{width:40px;height:40px;border-radius:50%;border:1px solid rgba(6,58,99,.25);background:#fff;color:#063a63;font-size:16px;cursor:pointer;box-shadow:0 6px 14px rgba(6,58,99,.08)}
+.gr-arrow:hover{border-color:#ef8731;color:#ef8731}
+.gr-dots{display:flex;gap:7px}.gr-dots i{width:7px;height:7px;border-radius:50%;background:#c9d6de;transition:all .25s}.gr-dots i.on{background:#ef8731;width:18px;border-radius:4px}
 @media(max-width:1000px){
  .gr-track{display:flex;overflow-x:auto;overflow-y:visible;scroll-snap-type:x mandatory;gap:14px;padding:12px 24px 56px;margin:0 -24px -30px;width:calc(100% + 48px);max-width:none;box-sizing:border-box;scrollbar-width:none}
  .gr-card,.gr-card:hover,.gr-card.open{box-shadow:0 12px 26px rgba(6,58,99,.12),0 2px 6px rgba(6,58,99,.05)!important;transform:none!important}
  .gr-card.open{border-color:rgba(239,135,49,.55)}
  .gr-track::-webkit-scrollbar{display:none}
- .gr-card{flex:0 0 82%;scroll-snap-align:center}
+ .gr-track>.gr-card{flex:0 0 82%;scroll-snap-align:center}
  .gr-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px}
  .gr-arrow{width:40px;height:40px;border-radius:50%;border:1px solid rgba(6,58,99,.25);background:#fff;color:#063a63;font-size:16px;cursor:pointer;box-shadow:0 6px 14px rgba(6,58,99,.08)}
  .gr-dots{display:flex;gap:7px}.gr-dots i{width:7px;height:7px;border-radius:50%;background:#c9d6de}.gr-dots i.on{background:#ef8731;width:18px;border-radius:4px}
@@ -9375,6 +9383,10 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
       <h3>&ldquo;Exceeded my expectations&rdquo;</h3>
       <p>&ldquo;Tours were adventurous, yet personalized as to my interest especially foods. Thoroughly enjoyed the escovich red snapper and the roasted yam and saltfish. The recommendations for places to stay and beaches to visit exceeded my expectations.&rdquo;</p>
       <div class="gr-foot"><button class="gr-more" type="button">Read more</button><span class="gr-tag">Tours</span></div></article>
+    <article class="gr-card"><div class="gr-top"><span class="gr-av" style="background:#0a7f8c">M</span><div><div class="gr-name">Madison B.</div><div class="gr-stars">★★★★★</div></div><span class="gr-guest">Guest review</span></div>
+      <h3>&ldquo;Literally the best Friendsgiving ever!!&rdquo;</h3>
+      <p>&ldquo;Literally the best Friendsgiving ever!! The food was incredible, our chef was amazing, and the whole atmosphere at the cabin was a dream. The ride up was a little rocky, but totally expected and so worth it. We seriously didn&rsquo;t want to leave! Definitely booking with you guys again!&rdquo;</p>
+      <div class="gr-foot"><button class="gr-more" type="button">Read more</button><span class="gr-tag">Friendsgiving</span></div></article>
     <article class="gr-card"><div class="gr-top"><span class="gr-av" style="background:#ef8731">C</span><div><div class="gr-name">C. J.</div><div class="gr-stars">★★★★★</div></div><span class="gr-g" title="Google review"><i class="fab fa-google"></i></span></div>
       <h3>&ldquo;The food recommendations were top tier&rdquo;</h3>
       <p>&ldquo;Loved the experience with Sight Seers! The tours were tailored to variety of ages in our group, the food recommendations were top tier; especially the authentic local stalls one would never find on our own. &hellip; Having access to the lounge on our departure was the perfect ending to our trip. We will definitely book again and look forward to many more experiences!&rdquo;</p>
@@ -9388,14 +9400,18 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
       <p>&ldquo;Excellent service! They handled my passport renewal every step of the way. Fast, affordable, and very transparent. The whole process was smooth and stress-free. Highly recommend!&rdquo;</p>
       <div class="gr-foot"><button class="gr-more" type="button">Read more</button><span class="gr-tag">Passport renewal</span></div></article>
   </div>
-  <div class="gr-nav"><button class="gr-arrow" type="button" data-dir="-1" aria-label="Previous review">&larr;</button><div class="gr-dots"><i class="on"></i><i></i><i></i><i></i></div><button class="gr-arrow" type="button" data-dir="1" aria-label="Next review">&rarr;</button></div>
+  <div class="gr-nav"><button class="gr-arrow" type="button" data-dir="-1" aria-label="Previous review">&larr;</button><div class="gr-dots"></div><button class="gr-arrow" type="button" data-dir="1" aria-label="Next review">&rarr;</button></div>
 </div>
 <script>
-(function(){var s=document.getElementById('googleReviews');if(!s)return;var t=s.querySelector('#grTrack'),cards=[].slice.call(t.children),dots=[].slice.call(s.querySelectorAll('.gr-dots i'));
-cards.forEach(function(c){var b=c.querySelector('.gr-more'),p=c.querySelector('p');if(p.scrollHeight<=p.clientHeight+2&&!c.classList.contains('open')){b.style.visibility='hidden';}b.addEventListener('click',function(){var o=c.classList.toggle('open');b.textContent=o?'Show less':'Read more';});});
-function cur(){var w=cards[0].getBoundingClientRect().width+14;return Math.round(t.scrollLeft/w);}
-s.querySelectorAll('.gr-arrow').forEach(function(a){a.addEventListener('click',function(){var i=Math.max(0,Math.min(cards.length-1,cur()+(+a.dataset.dir)));cards[i].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});});});
-t.addEventListener('scroll',function(){var i=cur();dots.forEach(function(d,k){d.classList.toggle('on',k===i);});},{passive:true});})();
+(function(){var s=document.getElementById('googleReviews');if(!s)return;var t=s.querySelector('#grTrack'),cards=[].slice.call(t.children),dw=s.querySelector('.gr-dots'),dots=[];
+cards.forEach(function(c){var b=c.querySelector('.gr-more'),p=c.querySelector('p');if(p.scrollHeight<=p.clientHeight+2){b.style.visibility='hidden';}b.addEventListener('click',function(){var o=c.classList.toggle('open');b.textContent=o?'Show less':'Read more';});});
+function step(){return cards.length>1?(cards[1].offsetLeft-cards[0].offsetLeft)||1:1;}
+function maxI(){return Math.max(0,Math.round((t.scrollWidth-t.clientWidth)/step()));}
+function cur(){return Math.min(maxI(),Math.round(t.scrollLeft/step()));}
+function mark(){var i=cur();dots.forEach(function(d,k){d.classList.toggle('on',k===i);});}
+function build(){var n=maxI()+1;s.classList.toggle('gr-scroll',n>1);dw.innerHTML='';dots=[];for(var k=0;k<n;k++){var d=document.createElement('i');dw.appendChild(d);dots.push(d);}mark();}
+s.querySelectorAll('.gr-arrow').forEach(function(a){a.addEventListener('click',function(){var i=Math.max(0,Math.min(maxI(),cur()+(+a.dataset.dir)));t.scrollTo({left:i*step(),behavior:'smooth'});});});
+t.addEventListener('scroll',mark,{passive:true});window.addEventListener('resize',build);window.addEventListener('load',build);build();})();
 </script>
 </section>
 
