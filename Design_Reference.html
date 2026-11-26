@@ -9336,8 +9336,13 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
 .gr-stars{color:#fbbc04;letter-spacing:2px;font-size:14px;line-height:1.2}
 .gr-score small{display:block;color:#6a7a86;font-size:12px;margin-top:2px}
 .gr-all{margin-left:10px;color:#063a63;font-weight:700;font-size:13px;text-decoration:none;border-bottom:2px solid #ef8731;padding-bottom:2px;white-space:nowrap}
-.gr-track{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
-.gr-card{background:#fff;border:1px solid #e3ebe6;border-radius:16px;padding:18px 18px 16px;box-shadow:0 10px 26px rgba(6,58,99,.06);display:flex;flex-direction:column}
+.gr-track{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start;padding:6px 0 10px}
+.gr-card{background:#fff;border:1px solid #e3ebe6;border-radius:16px;padding:18px 18px 16px;box-shadow:0 22px 48px rgba(6,58,99,.13),0 4px 12px rgba(6,58,99,.05);display:flex;flex-direction:column;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.gr-card:hover,.gr-card.open{border-color:rgba(239,135,49,.55);box-shadow:0 30px 60px rgba(6,58,99,.18),0 6px 16px rgba(6,58,99,.06)}
+.gr-card:hover{transform:translateY(-4px)}
+#googleReviews .gr-card p,#googleReviews .gr-card:hover p{color:#3f5160;opacity:1}
+#googleReviews .gr-card::after{opacity:0!important;background:none!important}
+.gr-sec{padding-bottom:70px}
 .gr-top{display:flex;align-items:center;gap:10px}
 .gr-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;flex:none}
 .gr-name{font-weight:700;color:#063a63;font-size:14px}
@@ -9350,7 +9355,7 @@ html body .navbar .cart-count{top:-7px;right:-7px;border:2px solid #fff;box-sizi
 .gr-tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#ef8731}
 .gr-nav{display:none}
 @media(max-width:1000px){
- .gr-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:2px 24px 10px;margin:0 -24px;scrollbar-width:none}
+ .gr-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:10px 24px 34px;margin:0 -24px;scrollbar-width:none}
  .gr-track::-webkit-scrollbar{display:none}
  .gr-card{flex:0 0 82%;scroll-snap-align:center}
  .gr-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px}
