@@ -9414,8 +9414,17 @@ function maxI(){return Math.max(0,Math.round((t.scrollWidth-t.clientWidth)/step(
 function cur(){return Math.min(maxI(),Math.round(t.scrollLeft/step()));}
 function mark(){var i=cur();dots.forEach(function(d,k){d.classList.toggle('on',k===i);});}
 function build(){var n=maxI()+1;s.classList.toggle('gr-scroll',n>1);dw.innerHTML='';dots=[];for(var k=0;k<n;k++){var d=document.createElement('i');dw.appendChild(d);dots.push(d);}mark();}
-s.querySelectorAll('.gr-arrow').forEach(function(a){a.addEventListener('click',function(){var i=Math.max(0,Math.min(maxI(),cur()+(+a.dataset.dir)));t.scrollTo({left:i*step(),behavior:'smooth'});});});
-t.addEventListener('scroll',mark,{passive:true});window.addEventListener('resize',build);window.addEventListener('load',build);build();})();
+/* auto-slide: one review every few seconds, looping; pauses on hover, touch or an open review; stops for good once the visitor uses the arrows or swipes */
+var auto=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),paused=false,onScreen=false,timer=null,autoScrolling=false;
+function stopAuto(){auto=false;clearInterval(timer);timer=null;}
+function tick(){if(!auto||paused||!onScreen||document.hidden||s.querySelector('.gr-card.open'))return;var m=maxI();if(m<1)return;var i=cur()>=m?0:cur()+1;autoScrolling=true;t.scrollTo({left:i*step(),behavior:'smooth'});setTimeout(function(){autoScrolling=false;},900);}
+function startAuto(){if(auto&&!timer)timer=setInterval(tick,4500);}
+s.querySelectorAll('.gr-arrow').forEach(function(a){a.addEventListener('click',function(){stopAuto();var i=Math.max(0,Math.min(maxI(),cur()+(+a.dataset.dir)));t.scrollTo({left:i*step(),behavior:'smooth'});});});
+s.addEventListener('mouseenter',function(){paused=true;});s.addEventListener('mouseleave',function(){paused=false;});
+t.addEventListener('touchstart',function(){paused=true;},{passive:true});t.addEventListener('touchend',function(){setTimeout(function(){paused=false;},2500);},{passive:true});
+t.addEventListener('touchmove',function(){stopAuto();},{passive:true});t.addEventListener('wheel',function(e){if(Math.abs(e.deltaX)>Math.abs(e.deltaY))stopAuto();},{passive:true});
+if('IntersectionObserver' in window){new IntersectionObserver(function(es){onScreen=es[0].isIntersecting;},{threshold:.35}).observe(t);}else{onScreen=true;}
+t.addEventListener('scroll',mark,{passive:true});window.addEventListener('resize',build);window.addEventListener('load',build);build();startAuto();})();
 </script>
 </section>
 
