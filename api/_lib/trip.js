@@ -140,16 +140,30 @@ function detailTable(rows) {
   return `<table style="border-collapse:collapse;width:100%;margin:8px 0 16px">${rows.filter(r => r[1]).map((r, i) =>
     `<tr${i % 2 ? ' style="background:#f6faf7"' : ''}><td style="padding:8px 9px;font-weight:bold;width:150px;color:#063a63;vertical-align:top">${esc(r[0])}</td><td style="padding:8px 9px;color:#333;white-space:pre-wrap">${esc(r[1])}</td></tr>`).join('')}</table>`;
 }
+/* the branded header and footer every guest email shares: logo, brand stripe, contact details and socials */
+const LOGO_URL = 'https://www.sightseerscaribbean.com/assets/ss-logo-email.png';
+function emailHeader(heading) {
+  return `<div style="background:#063a63;background:linear-gradient(135deg,#042c4d 0%,#063a63 55%,#0a5678 100%);color:#fff;padding:26px 28px 24px;border-radius:16px 16px 0 0">
+      <img src="${LOGO_URL}" alt="Sight Seers Caribbean Adventures" height="34" style="display:block;height:34px;width:auto;border:0">
+      <h2 style="margin:18px 0 0;font-size:26px;line-height:1.2;font-family:Georgia,'Times New Roman',serif;font-weight:700;color:#fff">${esc(heading)}</h2>
+    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%"><tr><td style="height:5px;line-height:5px;font-size:0;background:#063a63;width:20%">&nbsp;</td><td style="height:5px;line-height:5px;font-size:0;background:#ef8731;width:40%">&nbsp;</td><td style="height:5px;line-height:5px;font-size:0;background:#70c257;width:40%">&nbsp;</td></tr></table>`;
+}
+function emailFooter() {
+  return `<div style="margin-top:20px;padding:16px 18px;background:#063a63;border-radius:12px;color:#fff;font-size:13px;line-height:1.7">
+        <b style="font-size:14px;color:#fff">Sight Seers Caribbean Adventures</b><br>
+        +1 (876) 465-0630 &middot; <a href="mailto:info@sightseerscaribbean.com" style="color:#fff">info@sightseerscaribbean.com</a><br>
+        <a href="https://www.sightseerscaribbean.com" style="color:#f6b26b;font-weight:700;text-decoration:none">sightseerscaribbean.com</a>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;color:#cfdbe6">Follow us on all social media platforms: <b style="color:#fff">@SIGHTSEERS.CARIBBEAN</b></div>
+      </div>`;
+}
 function shell(heading, bodyHtml, footNote) {
   return `
-  <div style="font-family:sans-serif;max-width:620px;margin:0 auto">
-    <div style="background:linear-gradient(135deg,#063a63,#0a5678);color:#fff;padding:26px 24px;border-radius:16px 16px 0 0">
-      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#70c257;font-weight:800">Sight Seers Caribbean Adventures</div>
-      <h2 style="margin:8px 0 0;font-size:22px">${esc(heading)}</h2>
-    </div>
-    <div style="border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:24px;color:#5a6d7e;font-size:14px;line-height:1.65">
+  <div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto">
+    ${emailHeader(heading)}
+    <div style="background:#fff;border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:26px 28px;color:#5a6d7e;font-size:14px;line-height:1.65">
       ${bodyHtml}
-      <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
+      ${emailFooter()}
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">${footNote == null ? 'Estimates use “from” prices and are confirmed by our team. Villa stays, meals and gratuities are quoted separately.' : esc(footNote)}</p>
   </div>`;
@@ -161,9 +175,9 @@ function welcomeNote() {
       <td style="width:62px;vertical-align:top;padding:0 14px 0 0"><img src="https://www.sightseerscaribbean.com/assets/team/daine.jpg" width="54" height="54" alt="Daineroy Allen" style="display:block;width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #fff"></td>
       <td style="vertical-align:top">
         <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#ef8731;font-weight:800;margin-bottom:6px">A note from Daine</div>
-        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Thank you for choosing to travel with us. I started Sight Seers to share the Caribbean the way I first fell in love with it: with good company, great food and people who make every island feel like home. That is exactly what I want for your group.</p>
-        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Our team is already working on the details, so all you have to do is look forward to the trip. If there is ever anything you need, just reply to this email. I look forward to welcoming you.</p>
-        <div style="color:#063a63;font-size:14px;font-weight:700;font-style:italic">Daineroy Allen</div>
+        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Welcome to the Sight Seers family, and thank you for trusting us with your trip. From the moment you land, we want you and your group to feel at home, surrounded by good company, great food and people who will look after you like family.</p>
+        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Our team is already taking care of the details, so all you have to do is count down the days. If there&rsquo;s anything you need along the way, big or small, just reply to this email. We can&rsquo;t wait to welcome you.</p>
+        <div style="color:#063a63;font-size:15px;font-weight:700;font-style:italic;font-family:Georgia,'Times New Roman',serif">Daineroy Allen</div>
         <div style="color:#5a6d7e;font-size:12px">Founder and Managing Director</div>
       </td></tr></table>
   </div>`;
@@ -203,5 +217,5 @@ function stripeRequest(method, path, params) {
 
 module.exports = {
   CATALOG, MIN_GUESTS, MAX_GUESTS, VAN_CAPACITY, DEPOSIT_RATE, DEPOSIT_MIN, AUDIENCES,
-  quote, cleanContact, cleanPrefs, ref, esc, money, summaryTable, detailTable, shell, tripRows, stripeRequest, welcomeNote
+  quote, cleanContact, cleanPrefs, ref, esc, money, summaryTable, detailTable, shell, tripRows, stripeRequest, welcomeNote, emailHeader, emailFooter
 };

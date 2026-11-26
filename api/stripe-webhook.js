@@ -18,12 +18,9 @@ function money(cents) { return '$' + ((cents || 0) / 100).toFixed(2); }
 // Branded confirmation email, styled like the tent-rental / booking confirmations.
 function confirmationHtml(title, itemsLine, amount) {
   return `
-  <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-    <div style="background:linear-gradient(135deg,#063a63,#0a5678);color:#fff;padding:26px 24px;border-radius:16px 16px 0 0">
-      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#70c257;font-weight:800">Sight Seers Caribbean · V-Tours</div>
-      <h2 style="margin:8px 0 0;font-size:22px">Booking confirmed 🎉</h2>
-    </div>
-    <div style="border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+  <div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto">
+    ${trip.emailHeader('Your virtual tour is booked')}
+    <div style="background:#fff;border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:26px 28px">
       <p style="color:#5a6d7e;font-size:15px;line-height:1.6">Thank you for booking your virtual tour experience! Your payment was received and your spot is confirmed.</p>
       <table style="border-collapse:collapse;width:100%;margin:14px 0">
         <tr><td style="padding:9px;font-weight:bold;width:130px;color:#063a63">Experience</td><td style="padding:9px;color:#333">${title}</td></tr>
@@ -31,7 +28,7 @@ function confirmationHtml(title, itemsLine, amount) {
         <tr><td style="padding:9px;font-weight:bold;color:#063a63">Amount paid</td><td style="padding:9px;color:#333"><b>${amount}</b></td></tr>
       </table>
       <p style="color:#5a6d7e;font-size:13px;line-height:1.6">We'll email you the join link and any details ahead of your session. Questions? Just reply to this email.</p>
-      <div style="margin-top:20px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
+      ${trip.emailFooter()}
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Virtual tour booking via sightseerscaribbean.com</p>
   </div>`;
@@ -173,12 +170,9 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
     `<tr><td style="padding:10px 9px;border-bottom:1px solid #eef3f0;vertical-align:top;white-space:nowrap"><b style="color:#063a63">Day ${d.n}</b></td><td style="padding:10px 9px;border-bottom:1px solid #eef3f0">${slot(d.am)}${slot(d.pm)}${d.food ? '<div style="color:#4a8a2e;font-size:12px;font-weight:bold;margin-top:4px">Food stop: ' + d.food + '</div>' : ''}</td></tr>`
   ).join('');
   return `
-  <div style="font-family:sans-serif;max-width:620px;margin:0 auto">
-    <div style="background:linear-gradient(135deg,#063a63,#0a5678);color:#fff;padding:26px 24px;border-radius:16px 16px 0 0">
-      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#70c257;font-weight:800">Sight Seers Caribbean Adventures</div>
-      <h2 style="margin:8px 0 0;font-size:22px">Booking confirmed 🎉</h2>
-    </div>
-    <div style="border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:24px">
+  <div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto">
+    ${trip.emailHeader('Your booking is confirmed')}
+    <div style="background:#fff;border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:26px 28px">
       <p style="color:#5a6d7e;font-size:15px;line-height:1.6">Thank you for booking the <b>${pkg.title}</b>. Your payment was received and your trip is confirmed. Your full day-by-day itinerary and receipt are attached as a PDF.</p>
       ${trip.welcomeNote()}
       <table style="border-collapse:collapse;width:100%;margin:10px 0 16px">
@@ -192,7 +186,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
       <table style="border-collapse:collapse;width:100%">${days}</table>
       <p style="color:#5a6d7e;font-size:12px;line-height:1.6;margin-top:14px">Transport is not included, except the round-trip airport pickup and drop-off on the Jamaica (Montego Bay) and Saint Lucia packages and any private driver days you added, which are in the amount above. For other airport transfers, ask us for a rate. Meals and entry fees are not included unless an excursion says so. Excursion prices shown are per-person "from" guides; final tailoring (dates, group size and villa stays) is confirmed by our team, who will be in touch shortly.</p>
       <div style="margin-top:18px;padding:14px 16px;background:#fff7ec;border:1px solid #f3d3a6;border-radius:12px;color:#17323f;font-size:13px;line-height:1.6"><b>Every traveller signs a waiver before the trip.</b> Each person in your group opens this link, completes their details and medical form, and signs on screen. A signed copy is emailed to them and to us.<br><a href="${waiverLink(pkg, ref)}" style="display:inline-block;margin-top:8px;background:#ef8731;color:#fff;font-weight:bold;text-decoration:none;padding:9px 18px;border-radius:99px">Sign your waiver</a></div>
-      <div style="margin-top:18px;padding:14px 16px;background:rgba(112,194,87,.08);border-radius:12px;color:#063a63;font-size:13px"><b>Sight Seers Caribbean Adventures</b><br>+1 (876) 465-0630 · info@sightseerscaribbean.com</div>
+      ${trip.emailFooter()}
     </div>
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">Booking via sightseerscaribbean.com</p>
   </div>`;
