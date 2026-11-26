@@ -9007,6 +9007,33 @@ body.theme-night .logo-image{border:none!important;border-radius:0!important;pad
   body.theme-night .nav-back:active{background:#14587f}
 }
 </style>
+<style id="ss-responsive-fixes">
+/* Responsive fixes from the all-screen audit (320px phones to 1920px desktops). Kept last so they win. */
+/* Contact and Booking: let the columns shrink so the heading and text keep their side margins on small phones */
+html body .bp-wrap>*{min-width:0}
+@media (max-width:640px){html body .bp-wrap{padding-left:18px;padding-right:18px}}
+@media (max-width:900px){html body .bp-wrap{grid-template-columns:minmax(0,1fr)}}
+/* Home newsletter: stack the email box and Subscribe button on small phones */
+@media (max-width:420px){html body .nl-form{flex-wrap:wrap}html body .nl-form .nl-input{flex:1 1 100%;min-width:0}html body .nl-form .nl-submit{flex:1 1 100%;width:100%}}
+/* Discover Jamaica: the parish chips scroll sideways inside the screen instead of running off it */
+html body .discover-jm-toolbar>*{min-width:0}
+@media (max-width:1100px){html body .discover-jm-chiprow{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-bottom:6px;max-width:100%}html body .discover-jm-chiprow>*{flex:0 0 auto}}
+/* Passport renewal: one column on phones and small tablets, and the cards never exceed the screen */
+@media (max-width:900px){html body .passport-grid{grid-template-columns:minmax(0,1fr)!important}}
+html body .passport-grid>*,html body .passport-card{min-width:0;max-width:100%;box-sizing:border-box}
+/* Tours group trip form: the date and budget boxes fit their panel on tablets */
+html body #p-tours .gb-req>*,html body #p-tours .gb-two>*{min-width:0}
+html body #p-tours .gb-req input{width:100%;min-width:0;box-sizing:border-box}
+@media (max-width:1200px){html body #p-tours .gb-req{grid-template-columns:minmax(0,1fr)}}
+/* About: keep the "Years of Excellence" badge inside the screen on tablets */
+@media (max-width:1100px){html body .about-badge{left:0}}
+/* Villas: listing cards keep a side margin on the smallest phones */
+html body .stays-grid{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+html body .stays-grid>*{min-width:0;max-width:100%}
+html body .stay-card img{max-width:100%}
+html body #p-stays .stays-grid,html body #p-staycountry .stays-grid{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))!important}
+@media (max-width:700px){html body .stays-grid,html body #p-stays .stays-grid,html body #p-staycountry .stays-grid{grid-template-columns:minmax(0,1fr)!important}}
+</style>
 </head>
 <body>
 
