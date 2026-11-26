@@ -64,7 +64,7 @@ async function handleGroupTripPaid(session, email, amountPaid) {
       replyTo: BUSINESS_EMAIL,
       subject: 'Your group trip deposit is confirmed: ' + refCode,
       html: trip.shell('Deposit received', `<p>Thank you, ${trip.esc(contactName.split(' ')[0])}. Your deposit has been received and your trip is now being planned. Within one business day a trip planner will confirm your dates, the final itinerary and the remaining balance with you.</p>
-        ${trip.detailTable(paidRows.concat(rows))}<h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Your selections</h3>${summary}`)
+        ${trip.welcomeNote()}${trip.detailTable(paidRows.concat(rows))}<h3 style="color:#063a63;margin:4px 0 0;font-size:16px">Your selections</h3>${summary}`)
     });
   }
   await sendEmail({
@@ -112,8 +112,8 @@ async function handlePlanningDeposit(session, email, amountPaid) {
       subject: 'We received your US$15 planning deposit' + (rec ? ': ' + rec.ref : ''),
       html: trip.shell('Planning deposit received',
         rec
-          ? `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received and our team is reviewing your preferences to build your custom package. The US$15 is credited toward your booking.</p>${trip.detailTable([['Reference', rec.ref], ['Deposit received', money(amountPaid)]])}${prefs}`
-          : `<p>Thank you, ${trip.esc(first)}. Your US$15 planning deposit has been received and is credited toward your booking. Your planner will now build your custom package and be in touch. If you have not shared your trip details with us yet, just reply to this email.</p>${trip.detailTable([['Deposit received', money(amountPaid)]])}`,
+          ? `<p>Thank you, ${trip.esc(first)}. Your US$15 deposit has been received and our team is reviewing your preferences to build your custom package. The US$15 is credited toward your booking.</p>${trip.welcomeNote()}${trip.detailTable([['Reference', rec.ref], ['Deposit received', money(amountPaid)]])}${prefs}`
+          : `<p>Thank you, ${trip.esc(first)}. Your US$15 planning deposit has been received and is credited toward your booking. Your planner will now build your custom package and be in touch. If you have not shared your trip details with us yet, just reply to this email.</p>${trip.welcomeNote()}${trip.detailTable([['Deposit received', money(amountPaid)]])}`,
         PLANNING_FOOT)
     });
   }
@@ -180,6 +180,7 @@ function packageConfirmationHtml(pkg, amount, ref, addons) {
     </div>
     <div style="border:1px solid #e0e7e3;border-top:none;border-radius:0 0 16px 16px;padding:24px">
       <p style="color:#5a6d7e;font-size:15px;line-height:1.6">Thank you for booking the <b>${pkg.title}</b>. Your payment was received and your trip is confirmed. Your full day-by-day itinerary and receipt are attached as a PDF.</p>
+      ${trip.welcomeNote()}
       <table style="border-collapse:collapse;width:100%;margin:10px 0 16px">
         <tr><td style="padding:8px 9px;font-weight:bold;width:150px;color:#063a63">Package</td><td style="padding:8px 9px;color:#333">${pkg.title}</td></tr>
         <tr style="background:#f6faf7"><td style="padding:8px 9px;font-weight:bold;color:#063a63">Booking reference</td><td style="padding:8px 9px;color:#333">${ref}</td></tr>

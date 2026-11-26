@@ -154,6 +154,20 @@ function shell(heading, bodyHtml, footNote) {
     <p style="color:#9aa7b2;font-size:11px;text-align:center;margin-top:14px">${footNote == null ? 'Estimates use “from” prices and are confirmed by our team. Villa stays, meals and gratuities are quoted separately.' : esc(footNote)}</p>
   </div>`;
 }
+/* a short personal welcome from the founder, added to the emails that confirm a real trip */
+function welcomeNote() {
+  return `<div style="margin:6px 0 18px;padding:18px 20px;background:#f6faf7;border-left:4px solid #ef8731;border-radius:12px">
+    <table role="presentation" style="border-collapse:collapse;width:100%"><tr>
+      <td style="width:62px;vertical-align:top;padding:0 14px 0 0"><img src="https://www.sightseerscaribbean.com/assets/team/daine.jpg" width="54" height="54" alt="Daineroy Allen" style="display:block;width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #fff"></td>
+      <td style="vertical-align:top">
+        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#ef8731;font-weight:800;margin-bottom:6px">A note from Daine</div>
+        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Thank you for choosing to travel with us. I started Sight Seers to share the Caribbean the way I first fell in love with it: with good company, great food and people who make every island feel like home. That is exactly what I want for your group.</p>
+        <p style="margin:0 0 10px;color:#17323f;font-size:14px;line-height:1.7">Our team is already working on the details, so all you have to do is look forward to the trip. If there is ever anything you need, just reply to this email. I look forward to welcoming you.</p>
+        <div style="color:#063a63;font-size:14px;font-weight:700;font-style:italic">Daineroy Allen</div>
+        <div style="color:#5a6d7e;font-size:12px">Founder and Managing Director</div>
+      </td></tr></table>
+  </div>`;
+}
 function tripRows(rec) {
   const p = rec.prefs || {};
   return [
@@ -189,5 +203,5 @@ function stripeRequest(method, path, params) {
 
 module.exports = {
   CATALOG, MIN_GUESTS, MAX_GUESTS, VAN_CAPACITY, DEPOSIT_RATE, DEPOSIT_MIN, AUDIENCES,
-  quote, cleanContact, cleanPrefs, ref, esc, money, summaryTable, detailTable, shell, tripRows, stripeRequest
+  quote, cleanContact, cleanPrefs, ref, esc, money, summaryTable, detailTable, shell, tripRows, stripeRequest, welcomeNote
 };

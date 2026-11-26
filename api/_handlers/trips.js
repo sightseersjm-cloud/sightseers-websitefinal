@@ -420,7 +420,7 @@ const INTEREST_COPY = {
 function interestStatusMails(i, t) {
   const c = INTEREST_COPY[i.status];
   if (!c) return Promise.resolve();
-  const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${c[1]}</p>${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
+  const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${c[1]}</p>${(i.status === 'confirmed' || i.status === 'booked') ? trip.welcomeNote() : ''}${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
   if (i.status === 'booked' && t) leaderEmails(t).filter(e => e !== i.email).forEach(leaderEmail => {
     jobs.push(safe('booked leader', mail(leaderEmail, 'A traveler booked: ' + t.title, 'A traveler booked', `<p>${trip.esc(firstName(i.name))} is now booked on <b>${trip.esc(t.title)}</b>.</p>${trip.detailTable([['Travelers', String(i.partySize)]])}`)));
   });
