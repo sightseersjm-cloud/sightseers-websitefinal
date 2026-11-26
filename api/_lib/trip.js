@@ -152,7 +152,7 @@ function emailHeader(heading) {
 function emailFooter() {
   return `<div style="margin-top:20px;padding:16px 18px;background:#063a63;border-radius:12px;color:#fff;font-size:13px;line-height:1.7">
         <b style="font-size:14px;color:#fff">Sight Seers Caribbean Adventures</b><br>
-        +1 (876) 465-0630 &middot; <a href="mailto:info@sightseerscaribbean.com" style="color:#fff">info@sightseerscaribbean.com</a><br>
+        +1 (876) 465-0630 (JM) &middot; +1 (347) 291-6868 (US)<br><a href="mailto:info@sightseerscaribbean.com" style="color:#fff">info@sightseerscaribbean.com</a><br>
         <a href="https://www.sightseerscaribbean.com" style="color:#f6b26b;font-weight:700;text-decoration:none">sightseerscaribbean.com</a>
         <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;color:#cfdbe6">Follow us on all social media platforms: <b style="color:#fff">@SIGHTSEERS.CARIBBEAN</b></div>
       </div>`;

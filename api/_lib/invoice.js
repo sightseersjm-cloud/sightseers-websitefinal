@@ -6,7 +6,7 @@ const trip = require('./trip');
 
 /* the Sight Seers wordmark, embedded so it shows in email and offline. Generated from public/assets/logo-wordmark.png */
 const LOGO = require('fs').readFileSync(require('path').join(__dirname, 'invoice-logo.txt'), 'utf8').trim();
-const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-0630', email: 'info@sightseerscaribbean.com', site: 'sightseerscaribbean.com' };
+const BIZ = { name: 'Sight Seers Caribbean Adventures', phone: '+1 (876) 465-0630 (JM) / +1 (347) 291-6868 (US)', email: 'info@sightseerscaribbean.com', site: 'sightseerscaribbean.com' };
 
 /* Bank accounts shown on every invoice. All are business accounts. JMMB accounts are in the company's name; CIBC shows the
    account holder's name on every account, as the bank does for business accounts.

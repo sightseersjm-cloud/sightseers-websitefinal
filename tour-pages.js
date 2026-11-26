@@ -200,7 +200,7 @@ function renderPage(t, ctx) {
       ? `${price.line}. That is a "from" price: your planner confirms the final price for your date, group size and pickup before you pay anything.`
       : 'This experience is priced on request. Send an inquiry with your dates and group size and a planner will quote it.'],
     ['How long does it take?', isTime(t.duration) ? `Plan for ${t.duration}. Your planner confirms the schedule and pickup time for your date.` : 'Your planner confirms the exact schedule and pickup time for your date.'],
-    ['How do I book it?', `Tap "Request this experience", tell us your dates and group size, and a planner replies within one business day. You can also WhatsApp or call ${PHONE.show}.`],
+    ['How do I book it?', `Tap "Request this experience", tell us your dates and group size, and a planner replies within one business day. You can also WhatsApp or call ${PHONE.show}, or call our US line on +1 (347) 291-6868.`],
     ['Can I book it for a group?', 'Yes. Sight Seers Caribbean plans trips for groups of 5 to 60 across the Caribbean. Add your group size to the inquiry and your planner confirms availability and pricing.']
   ];
   const slugJs = JSON.stringify('exp-' + slug).replace(/</g, '\\u003c');
@@ -293,7 +293,7 @@ ${CSS}
         <a class="btn btn-ghost" href="${esc(wa)}" target="_blank" rel="noopener" data-cta="quote">WhatsApp a planner</a>
       </div>
       <p class="note">A planner replies within one business day. "From" prices are confirmed for your date and group size, so you know the total before you commit.</p>
-      <p class="contact">Call <a href="tel:${PHONE.tel}" data-cta="quote">${PHONE.show}</a><br>or email <a href="mailto:${EMAIL}" data-cta="quote">${EMAIL}</a><br>${HOURS}.</p>
+      <p class="contact">Call <a href="tel:${PHONE.tel}" data-cta="quote">${PHONE.show}</a> or <a href="tel:+13472916868" data-cta="quote">+1 (347) 291-6868</a> (US)<br>or email <a href="mailto:${EMAIL}" data-cta="quote">${EMAIL}</a><br>${HOURS}.</p>
     </div></aside>
   </div></section>
 

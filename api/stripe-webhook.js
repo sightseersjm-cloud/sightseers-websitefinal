@@ -248,7 +248,7 @@ async function buildItineraryPdf(pkg, session, amountStr, addons) {
   y -= 4; page.drawRectangle({ x:40, y, width:W-80, height:1, color:rgb(.87,.91,.89) }); y -= 16;
   page.drawText('Transport is not included, except the Jamaica (Montego Bay) and Saint Lucia packages\' airport pickup and drop-off and any driver days you added. Excursion prices are "from"', { x:40, y, size:8.5, font, color:grey }); y -= 12;
   page.drawText('guides; final tailoring (dates, group size and villa stays) is confirmed by our team.', { x:40, y, size:8.5, font, color:grey }); y -= 20;
-  page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
+  page.drawText('Sight Seers Caribbean Adventures  ·  +1 (876) 465-0630  ·  +1 (347) 291-6868  ·  info@sightseerscaribbean.com', { x:40, y, size:9, font:bold, color:navy });
   const bytes = await doc.save();
   return Buffer.from(bytes).toString('base64');
 }
