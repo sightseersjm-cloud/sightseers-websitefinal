@@ -129,6 +129,16 @@ function join(ev, body, user) {
   const team = place(ev, { name, gender });
   if (team && team.error) return team;
   const member = { name, gender, team, at: new Date().toISOString() };
+  /* the Wild Card's team is decided by the same spin: the team with fewer of their gender, otherwise chance */
+  if (team === 'wc') {
+    let opts = ['g', 'o'];
+    if (gender) {
+      const cnt = t => (ev.members || []).filter(x => x.team === t && x.gender === gender).length;
+      const lo = Math.min(cnt('g'), cnt('o'));
+      opts = opts.filter(t => cnt(t) === lo);
+    }
+    ev.wildTeam = opts[rand(opts.length)]; ev.wildTeamAt = member.at;
+  }
   if (uid) member.userId = uid;
   if (user && user.email) member.email = String(user.email).slice(0, 120);
   ev.members = (ev.members || []).concat([member]);
@@ -154,6 +164,27 @@ function setWildTeam(ev, team) {
   return { ok: true, member: ev.members.find(x => x.team === 'wc') };
 }
 
+/* the line a Summit Challenge confirmation email carries: their team if they have spun, otherwise a way to spin */
+const SPIN_URL = 'https://www.sightseerscaribbean.com/team-draw';
+function confirmationBlock(ev, email) {
+  const esc = x => String(x == null ? '' : x).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const key = String(email || '').trim().toLowerCase();
+  const m = ev && key ? (ev.members || []).find(x => String(x.email || '').toLowerCase() === key) : null;
+  const box = inner => '<div style="margin:18px 0;padding:16px 18px;border-radius:12px;background:#f4fbf6;border:1px solid #dde8df;font-family:sans-serif">' + inner + '</div>';
+  const btn = (url, label) => '<a href="' + url + '" style="display:inline-block;margin-top:10px;background:#ef8731;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px">' + label + '</a>';
+  if (m) {
+    const team = m.team === 'wc' ? 'Wild Card' + (ev.wildTeam ? ', joining the ' + ev.teams[ev.wildTeam] : '') : ev.teams[m.team];
+    return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Your team</div>' +
+      '<div style="font-size:20px;font-weight:700;color:#063a63;margin-top:4px">' + esc(team) + '</div>' +
+      '<div style="font-size:14px;color:#5b6b76;margin-top:2px">' + (m.shirtSize ? 'Shirt size ' + esc(m.shirtSize) : 'Shirt size not chosen yet') + '</div>' +
+      (m.shirtSize ? '' : btn(SPIN_URL, 'Choose your shirt size')));
+  }
+  return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Next step</div>' +
+    '<div style="font-size:18px;font-weight:700;color:#063a63;margin-top:4px">Spin for your team</div>' +
+    '<div style="font-size:14px;color:#5b6b76;margin-top:2px">Sign in to your Sight Seers account, spin once to join the Green Giants or the Orange Blaze, then choose your shirt size.</div>' +
+    btn(SPIN_URL, 'Spin for your team'));
+}
+
 /* what anyone with the link may see */
 function publicEvent(ev) {
   return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt, wildTeam: ev.wildTeam || '',
@@ -165,6 +196,7 @@ module.exports.SUMMIT = SUMMIT;
 module.exports.rosterGender = rosterGender;
 module.exports.setSize = setSize;
 module.exports.setWildTeam = setWildTeam;
+module.exports.confirmationBlock = confirmationBlock;
 module.exports.SIZES = SIZES;
 module.exports.newEvent = newEvent;
 module.exports.place = place;

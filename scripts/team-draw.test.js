@@ -72,5 +72,17 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
 { const ev = Object.assign({ members: [{ name: 'Kurt Stout', team: 'g', email: 'k@x.com', userId: 'u', gender: 'M', shirtSize: 'L' }] }, T.SUMMIT);
   const pm = T.publicEvent(ev).members[0];
   ok(pm.name === 'Kurt' && !pm.email && !pm.gender && !pm.shirtSize && !pm.userId, 'the page shows first names only, nothing private'); }
+// the Wild Card's team comes from the spin
+{ let seen = new Set();
+  for (let k = 0; k < 200; k++) { const ev = Object.assign({ members: [] }, T.SUMMIT);
+    for (let i = 0; i < 9; i++) T.join(ev, {}, { id: 'u' + i, name: 'P' + i });
+    ok(ev.wildTeam === 'g' || ev.wildTeam === 'o', 'the Wild Card gets a team from the spin'); seen.add(ev.wildTeam); }
+  ok(seen.size === 2, 'either team can get the Wild Card'); }
+// confirmation email block
+{ const ev = Object.assign({ members: [{ name: 'Kurt Stout', email: 'K@x.com', team: 'o', shirtSize: 'L' }, { name: 'W', email: 'w@x.com', team: 'wc' }], wildTeam: 'g' }, T.SUMMIT);
+  const a = T.confirmationBlock(ev, 'k@x.com'), b2 = T.confirmationBlock(ev, 'new@x.com'), w = T.confirmationBlock(ev, 'w@x.com');
+  ok(/Orange Blaze/.test(a) && /Shirt size L/.test(a) && !/Spin for your team/.test(a), 'a spun traveller sees their team and size');
+  ok(/Spin for your team/.test(b2) && /team-draw/.test(b2), 'a traveller who has not spun gets the spin button');
+  ok(/Wild Card, joining the Green Giants/.test(w) && /Choose your shirt size/.test(w), 'the Wild Card sees their team and a size button'); }
 console.log(fails ? fails + ' failed' : 'team draw: all passed');
 process.exit(fails ? 1 : 0);

@@ -59,6 +59,7 @@ const { geo } = require('../_lib/geo');
 const auto = require('../_lib/club-auto');
 const updates = require('../_lib/club-updates');
 const entryLib = require('../_lib/club-entry');
+const teamDraw = require('../_lib/team-draw');
 const payouts = require('../_lib/club-payouts');
 
 const TRIPS = 'club-trips';
@@ -417,10 +418,21 @@ const INTEREST_COPY = {
   cancelled: ['Your trip request was cancelled', 'Your request for this trip has been cancelled. If this is a surprise, just reply to this email and we will sort it out.'],
   waitlist: ['You are on the waitlist', 'The trip is full right now. You are on the waitlist and we will email you the moment a place opens.']
 };
-function interestStatusMails(i, t) {
+/* The Summit Challenge: a confirmed traveller's email shows their team, or a button to spin for one */
+async function summitTeamBlock(i, t) {
+  const slug = (t && t.slug) || i.tripSlug || '';
+  if (slug !== 'the-summit-challenge' || (i.status !== 'confirmed' && i.status !== 'booked')) return '';
+  let ev = null;
+  try { ev = await db.getDoc('team-events/' + teamDraw.SUMMIT.id); } catch (e) { ev = null; }
+  return teamDraw.confirmationBlock(ev || Object.assign({ members: [] }, teamDraw.SUMMIT), i.email);
+}
+async function interestStatusMails(i, t) {
   const c = INTEREST_COPY[i.status];
-  if (!c) return Promise.resolve();
-  const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${c[1]}</p>${(i.status === 'confirmed' || i.status === 'booked') ? trip.welcomeNote() : ''}${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
+  if (!c) return;
+  const teamBlock = await summitTeamBlock(i, t).catch(() => '');
+  /* The Summit Challenge is paid for by the company, so its confirmation says nothing about payment, only the next step */
+  const line = teamBlock ? 'Your place on The Summit Challenge on Thursday 10 December is confirmed, and everything is already taken care of.' + (/Spin for your team/.test(teamBlock) ? ' Your next step is to spin for your team.' : ' Your team is below.') : c[1];
+  const jobs = [safe('interest status', mail(i.email, c[0] + (i.tripTitle ? ': ' + i.tripTitle : ''), c[0], `<p>Hi ${trip.esc(firstName(i.name))},</p><p>${line}</p>${(i.status === 'confirmed' || i.status === 'booked') ? trip.welcomeNote() : ''}${teamBlock}${trip.detailTable([['Reference', i.ref], ['Trip', i.tripTitle], ['Travelers', String(i.partySize)]])}${i.status !== 'cancelled' && t && hasGroupLink(t) ? '<p>Your group chat:</p>' + button(t.groupLink, 'Join the group chat') : ''}${button(SITE + '/account', 'Open my dashboard')}`))];
   if (i.status === 'booked' && t) leaderEmails(t).filter(e => e !== i.email).forEach(leaderEmail => {
     jobs.push(safe('booked leader', mail(leaderEmail, 'A traveler booked: ' + t.title, 'A traveler booked', `<p>${trip.esc(firstName(i.name))} is now booked on <b>${trip.esc(t.title)}</b>.</p>${trip.detailTable([['Travelers', String(i.partySize)]])}`)));
   });

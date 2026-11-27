@@ -23,7 +23,7 @@ async function loadEvent(id) {
 const mine = (ev, user) => user ? (ev.members || []).find(x => x.userId === String(user.id)) || null : null;
 const strip = m => m ? { name: m.name, team: m.team, at: m.at, shirtSize: m.shirtSize || '' } : null;
 
-const tn = (ev, t) => t === 'wc' ? 'the Wild Card' : 'the ' + ev.teams[t];
+const tn = (ev, t) => t === 'wc' ? 'the Wild Card' + (ev.wildTeam ? ' (joining the ' + ev.teams[ev.wildTeam] + ')' : '') : 'the ' + ev.teams[t];
 async function notify(ev, m) {
   const left = ev.size - ev.members.length, e = auth.escapeHtml;
   const rows = ['g', 'o', 'wc'].map(t => '<tr><td style="padding:6px 10px;font-weight:bold">' + e(t === 'wc' ? 'Wild Card' : ev.teams[t]) + '</td><td style="padding:6px 10px">' +
@@ -39,10 +39,10 @@ async function notify(ev, m) {
     });
     if (m.email) await sendEmail({
       to: m.email,
-      subject: 'You’re on ' + tn(ev, m.team) + ': ' + ev.title,
+      subject: (m.team === 'wc' ? 'You’re the Wild Card, joining the ' + (ev.teams[ev.wildTeam] || '') : 'You’re on ' + tn(ev, m.team)) + ': ' + ev.title,
       html: '<div style="font-family:sans-serif;color:#17323f"><h2 style="color:#063a63">' + (m.team === 'wc' ? 'You’re the Wild Card!' : 'You’re on ' + e(tn(ev, m.team)) + '!') + '</h2>' +
         '<p>Hi ' + e(m.name) + ', thanks for spinning for ' + e(ev.title) + '.</p>' +
-        '<p>' + (m.team === 'wc' ? 'At pickup, the two teams battle for you with a coin flip or hand wrestle, and the winning team gets you.' : 'Your shirt will have ' + e(ev.teams[m.team]) + ' on the back.') + '</p>' +
+        '<p>' + (m.team === 'wc' ? 'The wheel picked you as the Wild Card, and you’re joining the ' + e(ev.teams[ev.wildTeam] || '') + '. Your shirt will have ' + e(ev.teams[ev.wildTeam] || '') + ' on the back.' : 'Your shirt will have ' + e(ev.teams[m.team]) + ' on the back.') + '</p>' +
         '<p>You can see the teams any time at <a href="https://www.sightseerscaribbean.com/team-draw">sightseerscaribbean.com/team-draw</a>.</p>' +
         '<p>Sight Seers Caribbean Adventures</p></div>'
     });
