@@ -1,120 +1,148 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Team Draw | Sight Seers Caribbean Adventures</title>
+<title>Team Spin | Sight Seers Caribbean Adventures</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Sight Seers team draw: split your group into two teams and a Wild Card, live.">
+<meta name="description" content="Spin for your team: Sight Seers places everyone fairly into two teams and a Wild Card.">
 <link rel="icon" href="/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-/* VOICE: game-show reveal, friendly and quick
-   IDEA: a draw board at a team day pickup
-   PICTURE: three team boards that fill as names land
+/* VOICE: game-show spin, friendly and quick
+   IDEA: a prize wheel at a team day check-in
+   PICTURE: the wheel, landing on your team
    COLOUR and TYPE: Sight Seers navy ground, green, orange, gold for the Wild Card; Poppins
-   LAYOUT: names box, one big button, boards below */
-:root{color-scheme:dark;--bg:#0e1b3e;--panel:#152754;--ink:#f3f5fb;--mute:#b8c0d6;--g:#4fa83d;--o:#ef8535;--gold:#f2c14e}
+   LAYOUT: your card and the wheel side by side, the teams below */
+:root{color-scheme:dark;--bg:#0e1b3e;--panel:#152754;--ink:#f3f5fb;--mute:#b8c0d6;--g:#4fa83d;--o:#ef8535;--gold:#f2c14e;--line:#2a3d70}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Poppins,system-ui,sans-serif;overflow-x:clip}
-.wrap{max-width:1100px;margin:0 auto;padding:clamp(22px,4vw,48px) max(5vw,16px)}
-h1{font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0;font-weight:800;text-wrap:balance}
-.sub{color:var(--mute);margin:8px 0 0;max-width:640px}
-.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;margin-top:26px;align-items:start}
-label{display:block;font-weight:600;margin-bottom:6px}
-textarea{width:100%;height:250px;border-radius:12px;border:1px solid #2a3d70;background:var(--panel);color:var(--ink);font:16px/1.7 Poppins,sans-serif;padding:12px 14px;resize:vertical}
-textarea:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.count{font-size:14px;color:var(--mute);margin-top:6px}.count.ok{color:var(--g)}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-button{min-height:48px;border:0;border-radius:12px;padding:0 20px;font:600 16px Poppins,sans-serif;cursor:pointer}
-.go{background:var(--o);color:#fff;font-size:18px;padding:0 28px}.go:disabled{opacity:.45;cursor:not-allowed}
-.ghost{background:transparent;color:var(--ink);border:1px solid #3a4d82}
-.boards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.bd{background:var(--panel);border-radius:16px;padding:16px;min-height:250px;border-top:6px solid var(--c)}
-.bd h2{font-size:20px;margin:0 0 4px;color:var(--c)}.bd .n{font-size:13px;color:var(--mute);margin-bottom:10px}
-.bd ul{list-style:none;margin:0;padding:0}
-.bd li{background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;margin-top:8px;font-weight:600;animation:pop .45s ease-out}
-.wc li{background:var(--gold);color:#13213f;font-size:20px;text-align:center;padding:18px 12px}
-@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
-.stage{margin-top:22px;text-align:center;min-height:64px;font-size:clamp(22px,4vw,34px);font-weight:800}
-.stage small{display:block;font-size:14px;color:var(--mute);font-weight:400}
-.note{color:var(--mute);font-size:14px;margin-top:22px}
 .hd{display:flex;align-items:center;justify-content:space-between;padding:16px max(5vw,16px);border-bottom:1px solid #22356a}.hd img{height:34px;display:block}.hd span{color:var(--mute);font-size:14px}
-.tn{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-input{width:100%;min-height:46px;border-radius:12px;border:1px solid #2a3d70;background:var(--panel);color:var(--ink);font:16px Poppins,sans-serif;padding:0 12px}
-input:focus{outline:3px solid var(--gold);outline-offset:2px}
-.note a{color:var(--ink)}
-.wc.off{opacity:.35}
-@media(max-width:820px){.top{grid-template-columns:1fr}.boards{grid-template-columns:1fr}.bd{min-height:auto}}
-@media(prefers-reduced-motion:reduce){.bd li{animation:none}}
+.wrap{max-width:1100px;margin:0 auto;padding:clamp(22px,4vw,44px) max(5vw,16px)}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0;font-weight:800;text-wrap:balance}
+.sub{color:var(--mute);margin:8px 0 0;max-width:660px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;margin-top:26px;align-items:center}
+.card{background:var(--panel);border-radius:18px;padding:22px;border:1px solid var(--line)}
+.card h2{font-size:22px;margin:0 0 6px}.card p{margin:6px 0;color:var(--mute)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+button,.btn{min-height:48px;border:0;border-radius:12px;padding:0 22px;font:600 16px Poppins,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.go{background:var(--o);color:#fff;font-size:18px}.go:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent;color:var(--ink);border:1px solid #3a4d82}
+button:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.seg{display:flex;gap:8px;margin-top:10px}.seg button{flex:1;background:transparent;color:var(--ink);border:1px solid #3a4d82}
+.seg button[aria-pressed=true]{background:var(--ink);color:#13213f;border-color:var(--ink)}
+.err{color:#ffb4a1;font-size:14px;margin-top:10px;min-height:20px}
+.res{font-size:clamp(26px,4vw,36px);font-weight:800;line-height:1.1;margin:4px 0 6px}
+.wheelbox{position:relative;width:min(380px,100%);aspect-ratio:1;margin:0 auto}
+.wheel{width:100%;height:100%;border-radius:50%;border:8px solid #fff;box-shadow:0 18px 40px rgba(0,0,0,.35);transition:transform 4.2s cubic-bezier(.12,.7,.16,1)}
+.wheel svg{width:100%;height:100%;display:block}
+.pin{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:30px solid #fff;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+.hub{position:absolute;inset:38%;border-radius:50%;background:var(--bg);border:5px solid #fff;display:grid;place-items:center;font-weight:800;font-size:13px;text-align:center;line-height:1.1}
+.boards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.bd{background:var(--panel);border-radius:16px;padding:16px;border-top:6px solid var(--c)}
+.bd h3{font-size:20px;margin:0;color:var(--c)}.bd .n{font-size:13px;color:var(--mute);margin:2px 0 8px}
+.bd ul{list-style:none;margin:0;padding:0}.bd li{background:rgba(255,255,255,.06);border-radius:10px;padding:9px 12px;margin-top:7px;font-weight:600}
+.bd li.me{outline:2px solid var(--gold)}.bd li.open{background:transparent;border:1px dashed #3a4d82;color:var(--mute);font-weight:400}
+.wc li:not(.open){background:var(--gold);color:#13213f}
+.status{margin-top:22px;color:var(--mute);font-size:14px}
+.note{color:var(--mute);font-size:14px;margin-top:20px;max-width:820px}.note a{color:var(--ink)}
+@media(max-width:820px){.top{grid-template-columns:1fr}.boards{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.wheel{transition:none}}
 </style></head><body>
-<header class="hd"><a href="/" aria-label="Sight Seers Caribbean Adventures home"><img src="/assets/ss-logo-white.png" alt="Sight Seers Caribbean Adventures"></a><span>Team Draw</span></header>
+<header class="hd"><a href="/" aria-label="Sight Seers Caribbean Adventures home"><img src="/assets/ss-logo-white.png" alt="Sight Seers Caribbean Adventures"></a><span>Team Spin</span></header>
 <div class="wrap">
-<h1 id="ttl">The Summit Challenge: Team Draw</h1>
-<p class="sub">Type everyone’s names and press Draw. With an odd number, the board picks the Wild Card first, then deals everyone else into two equal teams.</p>
+<h1 id="ttl">The Summit Challenge: Spin for Your Team</h1>
+<p class="sub">Sign in to your Sight Seers account and spin once. The wheel places you on a team, keeping the teams level and balanced between men and women, with one Wild Card for the ninth place.</p>
 <div class="top">
-<div>
-<div class="tn"><div><label for="t1">Team 1</label><input id="t1" value="Green Giants"></div><div><label for="t2">Team 2</label><input id="t2" value="Orange Blaze"></div></div>
-<label for="names">Names (one per line)</label>
-<textarea id="names" placeholder="Type one name per line"></textarea>
-<div class="count" id="count">0 names</div>
-<div class="btns"><button class="go" id="go" disabled>Draw the teams</button><button class="ghost" id="copy" hidden>Copy results</button></div>
-<div class="count" id="msg" role="status"></div>
+<div class="card" id="card" aria-live="polite"><p>Loading…</p></div>
+<div><div class="wheelbox"><div class="pin"></div><div class="wheel" id="wheel"></div><div class="hub">SPIN</div></div></div>
 </div>
-<div>
 <div class="boards">
-<div class="bd wc" id="wcb" style="--c:var(--gold)"><h2>⭐ Wild Card</h2><div class="n">Joins a team at pickup</div><ul id="b-wc"></ul></div>
-<div class="bd" style="--c:var(--g)"><h2 id="h-g">Green Giants</h2><div class="n" id="n-g"></div><ul id="b-g"></ul></div>
-<div class="bd" style="--c:var(--o)"><h2 id="h-o">Orange Blaze</h2><div class="n" id="n-o"></div><ul id="b-o"></ul></div>
+<div class="bd wc" style="--c:var(--gold)"><h3>⭐ Wild Card</h3><div class="n">Won at pickup by a coin flip or hand wrestle</div><ul id="b-wc"></ul></div>
+<div class="bd" style="--c:var(--g)"><h3 id="h-g">Green Giants</h3><div class="n" id="n-g"></div><ul id="b-g"></ul></div>
+<div class="bd" style="--c:var(--o)"><h3 id="h-o">Orange Blaze</h3><div class="n" id="n-o"></div><ul id="b-o"></ul></div>
 </div>
-<div class="stage" id="stage" aria-live="polite"></div>
-</div>
-</div>
-<p class="note">Sight Seers Caribbean Adventures · <a href="/">sightseerscaribbean.com</a><br><b>Keeping it fair:</b> every draw is random, made on the device running it, and nobody can choose the result. Run it live on a video call or record the screen, and the first draw counts. Each result shows its draw number and time, so a redraw is easy to spot.</p>
+<div class="status" id="status"></div>
+<p class="note"><b>Keeping it fair:</b> the Sight Seers website makes every placement, not the person spinning, and records it with the time. Each account spins once, and the result cannot be changed. Everyone with the link sees the same teams.<br>Sight Seers Caribbean Adventures · <a href="/">sightseerscaribbean.com</a></p>
 </div>
 <script>
 {
 const $=id=>document.getElementById(id);
-const ta=$('names'),go=$('go'),copy=$('copy'),stage=$('stage'),msg=$('msg'),t1=$('t1'),t2=$('t2');
-let result=null,busy=false,draws=0;
-const list=()=>ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
-const tn=()=>({g:t1.value.trim()||'Team 1',o:t2.value.trim()||'Team 2'});
-const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function per(n){return Math.floor((n%2?n-1:n)/2)}
-function upd(){const n=list().length,c=$('count'),T=tn();
-  $('h-g').textContent=T.g;$('h-o').textContent=T.o;
-  c.textContent=n+' name'+(n===1?'':'s')+(n<3?' (add at least 3)':n%2?' · '+per(n)+' a team plus a Wild Card':' · '+per(n)+' a team, no Wild Card');
-  c.className='count'+(n>=3?' ok':'');$('wcb').classList.toggle('off',n>=3&&n%2===0);
-  if(!busy&&!result){$('n-g').textContent='0 of '+per(n);$('n-o').textContent='0 of '+per(n)}
-  go.disabled=n<3||busy}
-function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const r=new Uint32Array(1);crypto.getRandomValues(r);const j=r[0]%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
-function add(id,name){const li=document.createElement('li');li.textContent=name;$(id).appendChild(li)}
-async function draw(){
-  const names=list(),n=names.length;if(n<3)return;
-  const T=tn(),k=per(n),odd=n%2===1;
-  busy=true;upd();copy.hidden=true;msg.textContent='';t1.disabled=t2.disabled=ta.disabled=true;
-  ['b-wc','b-g','b-o'].forEach(id=>$(id).innerHTML='');$('n-g').textContent='0 of '+k;$('n-o').textContent='0 of '+k;
-  draws++;const when=new Date().toLocaleString([], {dateStyle:'medium',timeStyle:'short'});const s=shuffle(names);result={wc:odd?s[0]:'',g:[],o:[],T,draws,when};
-  let start=0;
-  if(odd){
-    for(let i=0;i<14;i++){stage.innerHTML=esc(names[i%n])+'<small>Drawing the Wild Card…</small>';await wait(90+i*12)}
-    stage.innerHTML='⭐ '+esc(s[0])+'<small>is the Wild Card!</small>';add('b-wc',s[0]);await wait(1500);start=1;
-  }
-  for(let i=start;i<n;i++){
-    const team=(i-start)%2?'o':'g',nm=s[i];
-    stage.innerHTML=esc(nm)+'<small>joins the '+esc(T[team])+'</small>';
-    await wait(650);add('b-'+team,nm);result[team].push(nm);
-    $('n-'+team).textContent=result[team].length+' of '+k;await wait(450);
-  }
-  stage.innerHTML='Teams are set!<small>Draw '+draws+' · '+esc(when)+(draws>1?' · this page has been drawn '+draws+' times':'')+(odd?'<br>The Wild Card is won by a coin flip or hand wrestle at pickup.':'')+'</small>';
-  busy=false;t1.disabled=t2.disabled=ta.disabled=false;upd();go.textContent='Draw again';copy.hidden=false;
+const EVENT=(new URLSearchParams(location.search).get('e')||'summit-challenge').replace(/[^A-Za-z0-9-]/g,'');
+const SEGS=['g','o','g','o','g','o','g','o','wc'];
+const COL={g:'#4fa83d',o:'#ef8535',wc:'#f2c14e'};
+let ev=null,me=null,gender='',busy=false,rot=0;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const token=()=>{try{return localStorage.getItem('ss_auth_token')||''}catch(e){return ''}};
+const acct=()=>{try{return JSON.parse(localStorage.getItem('ss_current_user')||'null')}catch(e){return null}};
+const tname=t=>t==='wc'?'Wild Card':(ev&&ev.teams[t])||t;
+function drawWheel(){
+  const n=SEGS.length,R=100;let p='';
+  SEGS.forEach((t,i)=>{const a0=(i/n)*2*Math.PI-Math.PI/2,a1=((i+1)/n)*2*Math.PI-Math.PI/2;
+    const x0=R+R*Math.cos(a0),y0=R+R*Math.sin(a0),x1=R+R*Math.cos(a1),y1=R+R*Math.sin(a1);
+    p+=`<path d="M${R},${R} L${x0.toFixed(2)},${y0.toFixed(2)} A${R},${R} 0 0 1 ${x1.toFixed(2)},${y1.toFixed(2)} Z" fill="${COL[t]}" stroke="#fff" stroke-width="1.2"/>`;
+    const am=(a0+a1)/2,tx=R+R*.68*Math.cos(am),ty=R+R*.68*Math.sin(am),deg=am*180/Math.PI+90;
+    p+=`<text x="${tx.toFixed(2)}" y="${ty.toFixed(2)}" transform="rotate(${deg.toFixed(1)} ${tx.toFixed(2)} ${ty.toFixed(2)})" text-anchor="middle" dominant-baseline="middle" font-family="Poppins" font-weight="800" font-size="${t==='wc'?9:8}" fill="${t==='wc'?'#13213f':'#fff'}">${t==='wc'?'⭐ WILD':t==='g'?'GREEN':'ORANGE'}</text>`});
+  $('wheel').innerHTML=`<svg viewBox="0 0 200 200" aria-hidden="true">${p}</svg>`;
 }
-go.addEventListener('click',draw);
-[ta,t1,t2].forEach(el=>el.addEventListener('input',()=>{result=null;upd()}));
-copy.addEventListener('click',async()=>{
-  if(!result)return;const T=result.T;
-  const t=document.getElementById('ttl').textContent+'\nDraw '+result.draws+' · '+result.when+'\n\n'+(result.wc?'Wild Card: '+result.wc+'\n\n':'')+T.g+':\n'+result.g.map(n=>'• '+n).join('\n')+'\n\n'+T.o+':\n'+result.o.map(n=>'• '+n).join('\n');
-  try{await navigator.clipboard.writeText(t);msg.textContent='Copied. Paste it in the group chat.'}catch(e){msg.textContent='Copy was blocked; take a screenshot instead.'}
-});
-upd();
+function spinTo(team){
+  const idx=SEGS.map((t,i)=>t===team?i:-1).filter(i=>i>=0);const i=idx[Math.floor(Math.random()*idx.length)];
+  const seg=360/SEGS.length,centre=i*seg+seg/2,jitter=(Math.random()-.5)*seg*.6;
+  const target=360-centre-jitter;rot=rot-(rot%360)+360*6+target;
+  $('wheel').style.transform=`rotate(${rot}deg)`;
+  return new Promise(r=>setTimeout(r,matchMedia('(prefers-reduced-motion: reduce)').matches?50:4300));
+}
+function renderBoards(){
+  if(!ev)return;const per=Math.floor(ev.size/2),wcs=ev.size%2;
+  $('h-g').textContent=ev.teams.g;$('h-o').textContent=ev.teams.o;$('ttl').textContent=ev.title+': Spin for Your Team';
+  for(const t of ['g','o','wc']){
+    const cap=t==='wc'?wcs:per,list=ev.members.filter(m=>m.team===t);
+    let h=list.map(m=>`<li class="${me&&m.name===me.name?'me':''}">${esc(m.name)}</li>`).join('');
+    for(let k=list.length;k<cap;k++)h+='<li class="open">Open place</li>';
+    $('b-'+t).innerHTML=h;
+    if(t!=='wc'){const w=list.filter(m=>m.gender==='F').length,mm=list.length-w;$('n-'+t).textContent=`${list.length} of ${cap} · ${w} ${w===1?'woman':'women'}, ${mm} ${mm===1?'man':'men'}`}
+  }
+  const left=ev.size-ev.members.length;
+  $('status').textContent=left?`${ev.members.length} of ${ev.size} places taken · ${left} still to spin`:'All places are taken. Teams are set!';
+}
+function renderCard(msg){
+  const c=$('card'),u=acct(),signed=!!token();
+  if(me){
+    const wc=me.team==='wc';
+    c.innerHTML=`<p>${esc(me.name)}, you’re…</p><div class="res" style="color:${COL[me.team]}">${wc?'⭐ The Wild Card!':'On the '+esc(tname(me.team))+'!'}</div>
+    <p>${wc?'At pickup, the two teams battle for you with a coin flip or hand wrestle. The winning team gets you.':'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!'}</p>
+    <div class="btns"><a class="btn ghost" href="/account">Go to my account</a></div>`;return}
+  if(!ev){c.innerHTML='<p>'+esc(msg||'Loading…')+'</p>';return}
+  if(ev.members.length>=ev.size){c.innerHTML='<h2>All places are taken</h2><p>Every place on the teams has been filled. If you think you should be on the list, contact your team leader.</p>';return}
+  if(!signed){
+    c.innerHTML=`<h2>Sign in to spin</h2><p>Create your free Sight Seers account, or sign in, then come back to spin for your team. It takes a minute.</p>
+    <div class="btns"><a class="btn go" id="toAcct" href="/account">Create my account</a><a class="btn ghost" id="toSign" href="/account">Sign in</a></div><div class="err">${esc(msg||'')}</div>`;
+    for(const id of ['toAcct','toSign'])$(id).addEventListener('click',()=>{try{localStorage.setItem('ss_return_to',location.pathname+location.search)}catch(e){}});
+    return}
+  c.innerHTML=`<h2>Hi ${esc((u&&u.name)||'there')}, ready to spin?</h2><p>You can spin once. Choose one:</p>
+  <div class="seg" role="group" aria-label="Gender"><button id="gF" aria-pressed="${gender==='F'}">Female</button><button id="gM" aria-pressed="${gender==='M'}">Male</button></div>
+  <div class="btns"><button class="go" id="spin" ${gender&&!busy?'':'disabled'}>Spin the wheel</button></div><div class="err" id="err">${esc(msg||'')}</div>`;
+  $('gF').addEventListener('click',()=>{gender='F';renderCard()});$('gM').addEventListener('click',()=>{gender='M';renderCard()});
+  $('spin').addEventListener('click',spin);
+}
+async function api(method,body){
+  const h={'Content-Type':'application/json'},t=token();if(t)h.Authorization='Bearer '+t;
+  const r=await fetch('/api/team-draw'+(method==='GET'?'?event='+encodeURIComponent(EVENT):''),{method,headers:h,body:body?JSON.stringify(body):undefined});
+  let j={};try{j=await r.json()}catch(e){}
+  return {ok:r.ok,status:r.status,j};
+}
+async function load(){
+  try{const r=await api('GET');if(!r.ok){renderCard(r.j.error||'Could not load the teams.');return}
+    ev=r.j.event;if(r.j.me)me=r.j.me;renderBoards();if(!busy)renderCard()}catch(e){renderCard('Could not reach the website. Check your connection and refresh.')}
+}
+async function spin(){
+  if(busy||!gender)return;busy=true;renderCard();
+  try{
+    const r=await api('POST',{action:'join',event:EVENT,gender});
+    if(r.status===401){try{localStorage.removeItem('ss_auth_token')}catch(e){}busy=false;renderCard('Your sign-in has expired. Please sign in again.');return}
+    if(!r.ok){busy=false;if(r.j.event){ev=r.j.event;renderBoards()}renderCard(r.j.error||'Something went wrong. Please try again.');return}
+    if(!r.j.already)await spinTo(r.j.me.team);
+    me=r.j.me;ev=r.j.event;busy=false;renderBoards();renderCard();
+  }catch(e){busy=false;renderCard('Could not reach the website. Check your connection and try again.')}
+}
+drawWheel();load();setInterval(()=>{if(!busy)load()},20000);
 }
 </script>
 </body></html>

@@ -1,0 +1,133 @@
+/**
+ * Team draw for group challenges: two equal teams, balanced by gender, plus a Wild Card when the group is odd.
+ * The draw runs here on the server, so whoever presses Draw cannot shape the result, and every draw is kept with its time.
+ */
+const crypto = require('crypto');
+
+const MAX_PEOPLE = 60;
+const clean = (s, max) => String(s == null ? '' : s).replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
+
+function rand(n) { return crypto.randomInt(n); }
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* checks what the page sends; returns { error } or the cleaned request */
+function parse(body) {
+  body = body || {};
+  const title = clean(body.title, 80) || 'Team Draw';
+  const teams = { g: clean(body.team1, 40) || 'Team 1', o: clean(body.team2, 40) || 'Team 2' };
+  if (teams.g.toLowerCase() === teams.o.toLowerCase()) return { error: 'Give the two teams different names.' };
+  const raw = Array.isArray(body.people) ? body.people : [];
+  if (raw.length > MAX_PEOPLE) return { error: 'A draw can have up to ' + MAX_PEOPLE + ' people.' };
+  const people = [], seen = new Set();
+  for (const p of raw) {
+    const name = clean(p && p.name, 40);
+    if (!name) continue;
+    const gender = p.gender === 'M' || p.gender === 'F' ? p.gender : '';
+    if (!gender) return { error: 'Choose male or female for ' + name + '.' };
+    const key = name.toLowerCase();
+    if (seen.has(key)) return { error: name + ' is listed twice. Add a surname or initial to tell them apart.' };
+    seen.add(key);
+    people.push({ name, gender });
+  }
+  if (people.length < 3) return { error: 'Add at least 3 people.' };
+  return { title, teams, people };
+}
+
+/* the draw: the Wild Card comes from whichever gender has an odd number, then each gender is dealt evenly across the teams */
+function draw(people) {
+  const groups = { F: shuffle(people.filter(p => p.gender === 'F')), M: shuffle(people.filter(p => p.gender === 'M')) };
+  let wildCard = null;
+  if (people.length % 2 === 1) {
+    const odd = groups.F.length % 2 === 1 ? 'F' : 'M';
+    wildCard = groups[odd].shift();
+  }
+  const g = [], o = [];
+  const first = rand(2) ? 'g' : 'o';
+  const order = rand(2) ? ['F', 'M'] : ['M', 'F'];
+  let start = first;
+  for (const gen of order) {
+    const list = groups[gen];
+    list.forEach((p, i) => ((i % 2 === 0) === (start === 'g') ? g : o).push(p));
+    /* if this gender had an odd number, the next gender starts on the other team so the sizes stay level */
+    if (list.length % 2 === 1) start = start === 'g' ? 'o' : 'g';
+  }
+  const gs = shuffle(g), os = shuffle(o), reveal = [];
+  for (let i = 0; i < Math.max(gs.length, os.length); i++) {
+    if (gs[i]) reveal.push({ name: gs[i].name, team: 'g' });
+    if (os[i]) reveal.push({ name: os[i].name, team: 'o' });
+  }
+  return { wildCard, g: gs, o: os, reveal };
+}
+
+function makeId() { return crypto.randomBytes(8).toString('base64url').replace(/[^A-Za-z0-9]/g, '').slice(0, 10).padEnd(10, 'x'); }
+
+function record(req) {
+  const result = draw(req.people);
+  return { id: makeId(), title: req.title, teams: req.teams, createdAt: new Date().toISOString(), count: req.people.length, result };
+}
+
+module.exports = { parse, draw, record, makeId, MAX_PEOPLE };
+
+/* ---- sign-up spins: each person joins on their own and the server places them ---- */
+
+const SUMMIT = { id: 'summit-challenge', title: 'The Summit Challenge', teams: { g: 'Green Giants', o: 'Orange Blaze' }, size: 9 };
+
+function newEvent(body) {
+  body = body || {};
+  const size = Math.round(Number(body.size));
+  if (!(size >= 3 && size <= MAX_PEOPLE)) return { error: 'Group size must be between 3 and ' + MAX_PEOPLE + '.' };
+  const teams = { g: clean(body.team1, 40) || 'Team 1', o: clean(body.team2, 40) || 'Team 2' };
+  if (teams.g.toLowerCase() === teams.o.toLowerCase()) return { error: 'Give the two teams different names.' };
+  return { id: makeId(), title: clean(body.title, 80) || 'Team Draw', teams, size, createdAt: new Date().toISOString(), members: [] };
+}
+
+function caps(ev) { const per = Math.floor(ev.size / 2); return { g: per, o: per, wc: ev.size % 2 }; }
+
+/* places one person: keeps the teams level and each gender split as evenly as it can,
+   and gives every sign-up the same chance of being the Wild Card */
+function place(ev, person) {
+  const c = caps(ev), m = ev.members || [];
+  const n = t => m.filter(x => x.team === t).length;
+  const ng = (t, gen) => m.filter(x => x.team === t && x.gender === gen).length;
+  const left = ev.size - m.length;
+  if (left <= 0) return { error: 'All the places are taken.' };
+  if (c.wc && n('wc') === 0 && rand(left) === 0) return 'wc';
+  let teams = ['g', 'o'].filter(t => n(t) < c[t]);
+  if (!teams.length) return 'wc';
+  /* the gender rule first, then the smaller team, then chance */
+  const minG = Math.min(...teams.map(t => ng(t, person.gender)));
+  teams = teams.filter(t => ng(t, person.gender) === minG);
+  const minN = Math.min(...teams.map(n));
+  teams = teams.filter(t => n(t) === minN);
+  return teams[rand(teams.length)];
+}
+
+function join(ev, body, user) {
+  const name = clean((user && user.name) || (body && body.name), 40);
+  const gender = body && (body.gender === 'M' || body.gender === 'F') ? body.gender : '';
+  const uid = user && user.id ? String(user.id) : '';
+  const found = (ev.members || []).find(x => (uid && x.userId === uid) || (!uid && x.name.toLowerCase() === name.toLowerCase()));
+  if (found) return { member: found, already: true };
+  if (!name) return { error: 'Add your name to your account first.' };
+  if (!gender) return { error: 'Choose male or female.' };
+  if ((ev.members || []).some(x => x.name.toLowerCase() === name.toLowerCase())) return { error: 'Someone named ' + name + ' has already spun. Add your surname to your account name and try again.' };
+  const team = place(ev, { name, gender });
+  if (team && team.error) return team;
+  const member = { name, gender, team, at: new Date().toISOString() };
+  if (uid) member.userId = uid;
+  ev.members = (ev.members || []).concat([member]);
+  return { member };
+}
+
+/* what anyone with the link may see */
+function publicEvent(ev) {
+  return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt,
+    members: (ev.members || []).map(x => ({ name: x.name, gender: x.gender, team: x.team, at: x.at })) };
+}
+
+module.exports.SUMMIT = SUMMIT;
+module.exports.newEvent = newEvent;
+module.exports.place = place;
+module.exports.join = join;
+module.exports.caps = caps;
+module.exports.publicEvent = publicEvent;

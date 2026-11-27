@@ -28,6 +28,8 @@
     try { if (token) localStorage.setItem(TOKEN_KEY, token); else localStorage.removeItem(TOKEN_KEY); } catch (e) {}
     /* signing in counts as activity */
     if (token && typeof idleTouch === 'function') { try { idleTouch(true); } catch (e) {} }
+    /* a page that sent the visitor to sign in (the team spin) gets them back once they are signed in */
+    if (token) { try { var back = localStorage.getItem('ss_return_to'); if (back && /^\/team-draw(\?|$)/.test(back)) { localStorage.removeItem('ss_return_to'); setTimeout(function () { location.href = back; }, 400); } } catch (e) {} }
   }
 
   function authHeaders() {

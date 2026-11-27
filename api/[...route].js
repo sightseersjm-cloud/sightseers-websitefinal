@@ -30,6 +30,7 @@ const handlers = {
   'invoices':        require('./_handlers/invoices'),
   'receipts':        require('./_handlers/receipts'),
   'receipt-verify':  require('./_handlers/receipt-verify'),
+  'team-draw':       require('./_handlers/team-draw'),
   'ai-calls':        require('./_handlers/ai-calls'),
   'ops-auto':        require('./_handlers/ops-auto'),
   'member':          require('./_handlers/member'),
