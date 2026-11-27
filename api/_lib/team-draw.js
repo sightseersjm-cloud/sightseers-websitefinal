@@ -181,7 +181,7 @@ function confirmationBlock(ev, email) {
     return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Your team</div>' +
       '<div style="font-size:20px;font-weight:700;color:#063a63;margin-top:4px">' + esc(team) + '</div>' +
       '<div style="font-size:14px;color:#5b6b76;margin-top:2px">' + (m.shirtSize ? 'Shirt size ' + esc(m.shirtSize) : 'Shirt size not chosen yet') + '</div>' +
-      (m.shirtSize ? '' : btn(SPIN_URL, 'Choose your shirt size')));
+      (m.shirtSize ? btn(SPIN_URL, 'See who’s on your team') : btn(SPIN_URL, 'Choose your shirt size')));
   }
   return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Next step</div>' +
     '<div style="font-size:18px;font-weight:700;color:#063a63;margin-top:4px">Spin for your team</div>' +
