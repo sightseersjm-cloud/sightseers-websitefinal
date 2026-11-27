@@ -97,14 +97,14 @@ function newEvent(body) {
 function caps(ev) { const per = Math.floor(ev.size / 2); return { g: per, o: per, wc: ev.size % 2 }; }
 
 /* places one person: keeps the teams level and each gender split as evenly as it can,
-   and gives every sign-up the same chance of being the Wild Card */
+   and makes the last person to spin the Wild Card */
 function place(ev, person) {
   const c = caps(ev), m = ev.members || [];
   const n = t => m.filter(x => x.team === t).length;
   const ng = (t, gen) => m.filter(x => x.team === t && x.gender === gen).length;
   const left = ev.size - m.length;
   if (left <= 0) return { error: 'All the places are taken.' };
-  if (c.wc && n('wc') === 0 && rand(left) === 0) return 'wc';
+  /* the Wild Card is the last person to spin: everyone before them fills the two teams */
   let teams = ['g', 'o'].filter(t => n(t) < c[t]);
   if (!teams.length) return 'wc';
   /* the gender rule first, then the smaller team, then chance */

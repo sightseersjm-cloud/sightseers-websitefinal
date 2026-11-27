@@ -40,11 +40,11 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   const adm = (r.body.trips || []).find(x => x.slug === 'the-summit-challenge');
   ok('the owner still sees the stored place and can edit it', r.code === 200 && adm && adm.country === 'Jamaica' && adm.privateEvent === true);
   /* people join, the owner confirms them, and they appear on the roster with the columns the owner fills in */
-  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', consent: true, tripSlug: 'the-summit-challenge' });
+  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   ok('a guest can ask for a place on the Summit Challenge', r.code === 200 && r.body.ok && r.body.ref, JSON.stringify(r.body));
-  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', consent: true, tripSlug: 'the-summit-challenge' });
+  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   ok('asking twice does not add her twice', r.code === 200 && r.body.already === true);
-  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ben Clarke', email: 'ben@example.com', consent: true, tripSlug: 'the-summit-challenge' });
+  r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ben Clarke', email: 'ben@example.com', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   r = await call('trips', 'GET', '/api/trips');
   ok('a request alone does not take a place', r.body.trips.find(x => x.slug === 'the-summit-challenge').seats.left === 10);
   r = await call('trips', 'GET', '/api/trips?admin=1', null, owner);

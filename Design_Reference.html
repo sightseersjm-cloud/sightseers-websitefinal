@@ -14657,7 +14657,7 @@ body.theme-night #p-flagship-programs{
 <section class="td-hero">
   <span class="td-kicker">The Summit Challenge · Team Spin</span>
   <h1 class="td-h1">Spin for <em>your team</em></h1>
-  <p class="td-lede">Sign in to your Sight Seers account and spin once. The wheel places you on a team, or picks you as the Wild Card and spins again for your team. Then choose your shirt size and you’re set.</p>
+  <p class="td-lede">Sign in to your Sight Seers account and spin once. The wheel places you on the Green Giants or the Orange Blaze, and the last person to spin becomes the Wild Card. Then choose your shirt size and you’re set.</p>
 </section>
 <div class="td-wrap">
   <div class="td-top">
@@ -14665,7 +14665,7 @@ body.theme-night #p-flagship-programs{
     <div><div class="td-wheelbox"><div class="td-rim"></div><div class="td-pin"></div><div class="td-wheel" id="td-wheel"></div><div class="td-gloss"></div><div class="td-hub"><span>SPIN</span></div></div></div>
   </div>
   <div class="td-boards">
-    <div class="td-bd td-wc" style="--c:var(--td-gold)"><h3>⭐ Wild Card</h3><div class="td-n" id="td-n-wc">The spin decides which team they join</div><ul id="td-b-wc"></ul></div>
+    <div class="td-bd td-wc" style="--c:var(--td-gold)"><h3>⭐ Wild Card</h3><div class="td-n" id="td-n-wc">The last person to spin, and the wheel picks their team</div><ul id="td-b-wc"></ul></div>
     <div class="td-bd" style="--c:var(--td-green)"><h3 id="td-h-g">Green Giants</h3><div class="td-n" id="td-n-g"></div><ul id="td-b-g"></ul></div>
     <div class="td-bd" style="--c:var(--td-orange)"><h3 id="td-h-o">Orange Blaze</h3><div class="td-n" id="td-n-o"></div><ul id="td-b-o"></ul></div>
   </div>
@@ -14679,6 +14679,7 @@ body.theme-night #p-flagship-programs{
   function $(id){return document.getElementById(id)}
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function token(){try{return localStorage.getItem('ss_auth_token')||''}catch(e){return ''}}
+  function joinRef(){try{return JSON.parse(sessionStorage.getItem('ss_spin_ref')||'null')}catch(e){return null}}
   function acct(){try{return JSON.parse(localStorage.getItem('ss_current_user')||'null')}catch(e){return null}}
   function eventId(){var e='';try{e=new URLSearchParams(location.search).get('e')||''}catch(x){}return (e||'summit-challenge').replace(/[^A-Za-z0-9-]/g,'')}
   function tname(t){return t==='wc'?'Wild Card':(ev&&ev.teams[t])||t}
@@ -14710,7 +14711,7 @@ body.theme-night #p-flagship-programs{
       $('td-b-'+t).innerHTML=h;
       if(t!=='wc'){$('td-n-'+t).textContent=list.length+' of '+cap+' places'}
     });
-    $('td-n-wc').textContent=ev.wildTeam?'Joins the '+ev.teams[ev.wildTeam]:'The spin decides which team they join';
+    $('td-n-wc').textContent=ev.wildTeam?'Joins the '+ev.teams[ev.wildTeam]:'The last person to spin, and the wheel picks their team';
     var left=ev.size-ev.members.length;
     $('td-status').textContent=left?(ev.members.length+' of '+ev.size+' places taken · '+left+' still to spin'):'All places are taken. Teams are set!';
   }
@@ -14722,15 +14723,20 @@ body.theme-night #p-flagship-programs{
   function renderCard(msg){
     var c=$('td-card');if(!c)return;var u=acct(),signed=!!token();
     if(me){var wc=me.team==='wc';
-      c.innerHTML='<div class="td-eyebrow">Your team</div><p style="margin-top:6px">'+esc(me.name)+', you’re…</p><div class="td-res" style="color:'+(wc?'#b98309':COL[me.team])+'">'+(wc?'★ Wild Card'+(ev&&ev.wildTeam?': '+esc(ev.teams[ev.wildTeam])+'!':'!'):'On the '+esc(tname(me.team))+'!')+'</div><p>'+(wc?(ev&&ev.wildTeam?'The wheel picked you as the Wild Card, and you’re joining the '+esc(ev.teams[ev.wildTeam])+'. Your shirt will have '+esc(ev.teams[ev.wildTeam])+' on the back.':'You’re the Wild Card.'):'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!')+'</p>'+sizeBlock()+'<div class="td-err">'+esc(msg||'')+'</div>';
+      c.innerHTML='<div class="td-eyebrow">Your team</div><p style="margin-top:6px">'+esc(me.name)+', you’re…</p><div class="td-res" style="color:'+(wc?'#b98309':COL[me.team])+'">'+(wc?'★ Wild Card'+(ev&&ev.wildTeam?': '+esc(ev.teams[ev.wildTeam])+'!':'!'):'On the '+esc(tname(me.team))+'!')+'</div><p>'+(wc?(ev&&ev.wildTeam?'You’re the last to spin, so you’re the Wild Card, joining the '+esc(ev.teams[ev.wildTeam])+'. Your shirt will have '+esc(ev.teams[ev.wildTeam])+' on the back.':'You’re the Wild Card.'):'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!')+'</p>'+sizeBlock()+'<div class="td-err">'+esc(msg||'')+'</div>';
       var ed=$('td-size-edit');if(ed)ed.addEventListener('click',function(){editSize=true;pickSize=me.shirtSize||'';renderCard()});
       Array.prototype.forEach.call(c.querySelectorAll('[data-size]'),function(bt){bt.addEventListener('click',function(){pickSize=bt.getAttribute('data-size');renderCard()})});
       var sv=$('td-size-save');if(sv)sv.addEventListener('click',saveSize);
       return}
     if(!ev){c.innerHTML='<p>'+esc(msg||'Loading the teams…')+'</p>';return}
     if(ev.members.length>=ev.size){c.innerHTML='<div class="td-eyebrow">Teams are set</div><h2 class="td-h2">All places are taken</h2><p>Every place on the teams has been filled. If you think you should be on the list, contact your team leader.</p>';return}
+    var jr=joinRef();
+    if(!signed&&jr){
+      c.innerHTML='<div class="td-eyebrow">You’re in!</div><h2 class="td-h2">Thanks, '+esc(String(jr.name||'').split(' ')[0]||'there')+'. Now spin for your team</h2><p>One spin places you on the Green Giants or the Orange Blaze, and the last person to spin becomes the Wild Card. Then choose your shirt size and you’re done.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-spin" '+(busy?'disabled':'')+'>Spin the wheel</button></div><div class="td-err">'+esc(msg||'')+'</div>';
+      $('td-spin').addEventListener('click',spin);
+      return}
     if(!signed){
-      c.innerHTML='<div class="td-eyebrow">The Summit Challenge</div><h2 class="td-h2">Spin for your team</h2><p>One spin each. The wheel places you on the Green Giants or the Orange Blaze, or picks you as the Wild Card.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-spin-out">Spin the wheel</button></div><div class="td-err">'+esc(msg||'')+'</div>';
+      c.innerHTML='<div class="td-eyebrow">The Summit Challenge</div><h2 class="td-h2">Spin for your team</h2><p>One spin each. The wheel places you on the Green Giants or the Orange Blaze. The last person to spin becomes the Wild Card.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-spin-out">Spin the wheel</button></div><div class="td-err">'+esc(msg||'')+'</div>';
       $('td-spin-out').addEventListener('click',openJoin);
       return}
     if(u&&u.role==='admin'){c.innerHTML='<div class="td-eyebrow">Admin view</div><h2 class="td-h2">You’re signed in as an admin</h2><p>Admins don’t spin, so no place is taken. You get an email for every spin and shirt size.</p><div class="td-err">'+esc(msg||'')+'</div>';return}
@@ -14758,8 +14764,9 @@ body.theme-night #p-flagship-programs{
     }).catch(function(){busy=false;renderCard('Could not reach the website. Please try again.')});
   }
   function api(method,body){
-    var h={'Content-Type':'application/json'},t=token();if(t)h.Authorization='Bearer '+t;
-    return fetch('/api/team-draw'+(method==='GET'?'?event='+encodeURIComponent(eventId()):''),{method:method,headers:h,body:body?JSON.stringify(body):undefined})
+    var h={'Content-Type':'application/json'},t=token(),jr=t?null:joinRef(),qs='';if(t)h.Authorization='Bearer '+t;
+    if(jr){if(body){body.interestRef=jr.ref;body.email=jr.email}else qs='&ref='+encodeURIComponent(jr.ref)+'&email='+encodeURIComponent(jr.email)}
+    return fetch('/api/team-draw'+(method==='GET'?'?event='+encodeURIComponent(eventId())+qs:''),{method:method,headers:h,body:body?JSON.stringify(body):undefined})
       .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {ok:r.ok,status:r.status,j:j}})});
   }
   function load(){
@@ -14774,7 +14781,7 @@ body.theme-night #p-flagship-programs{
       return (r.j.already?Promise.resolve():spinTo(r.j.me.team)).then(function(){
         if(r.j.already||r.j.me.team!=='wc')return;
         var c=$('td-card'),wt=r.j.event.wildTeam,names=[r.j.event.teams.g,r.j.event.teams.o],k=0;
-        c.innerHTML='<div class="td-eyebrow">★ Wild Card</div><h2 class="td-h2">The wheel picked you as the Wild Card!</h2><p>Now spinning for your team…</p><div class="td-res" id="td-flip" style="color:#063a63">'+esc(names[0])+'</div>';
+        c.innerHTML='<div class="td-eyebrow">★ Wild Card</div><h2 class="td-h2">You’re the last to spin, so you’re the Wild Card!</h2><p>Now spinning for your team…</p><div class="td-res" id="td-flip" style="color:#063a63">'+esc(names[0])+'</div>';
         return new Promise(function(res){var iv=setInterval(function(){k++;var el=$('td-flip');if(el){el.textContent=names[k%2];el.style.color=k%2?COL.o:COL.g}if(k>=13){clearInterval(iv);if(el){el.textContent=r.j.event.teams[wt];el.style.color=COL[wt]}setTimeout(res,900)}},140+k*10)});
       }).then(function(){me=r.j.me;ev=r.j.event;busy=false;renderBoards();renderCard()});
     }).catch(function(){busy=false;renderCard('Could not reach the website. Check your connection and try again.')});
@@ -14787,7 +14794,7 @@ body.theme-night #p-flagship-programs{
       box.hidden=false;
       box.innerHTML='<div style="margin:18px 0;padding:18px 20px;border-radius:16px;background:#fff;border:1px solid #dfe6ec;border-left:5px solid '+col+';box-shadow:0 12px 26px rgba(6,58,99,.06);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">'+
         '<div><div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4fae3f">'+esc(e.title)+' · Your team</div>'+
-        '<div style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;color:'+col+';margin-top:2px">'+(wc?'★ The Wild Card':esc(e.teams[m.team]))+'</div>'+
+        '<div style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;color:'+col+';margin-top:2px">'+(wc?'★ Wild Card'+(e.wildTeam?' · '+esc(e.teams[e.wildTeam]):''):esc(e.teams[m.team]))+'</div>'+
         '<div style="font-size:13px;color:#5b6b76">'+(m.shirtSize?'Shirt size '+esc(m.shirtSize):'Shirt size not chosen yet')+'</div></div>'+
         '<button type="button" onclick="nav(\'team-draw\')" style="min-height:44px;padding:0 20px;border:1.5px solid #063a63;background:#fff;color:#063a63;font:800 12px Raleway,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer">'+(m.shirtSize?'See the teams':'Choose your size')+'</button></div>';
     }).catch(function(){});
@@ -49809,10 +49816,12 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
     $('tpFormTitle').textContent=full?'Join the waitlist':(t.private?'Ask for a place':'Ask to join this trip');
     /* the password is only asked of guests who are not signed in yet */
     if($('tpPwWrap'))$('tpPwWrap').style.display=(function(){try{var k=localStorage.getItem('ss_auth_token')||'';return k&&k.indexOf('guest_')!==0?'none':'';}catch(e){return '';}})();
+    /* The Summit Challenge: joiners create a password, so they are signed in and part of the Travel Club from the start */
+    try{var pl=$('tpPwWrap')&&$('tpPwWrap').querySelector('label');if(pl){pl.innerHTML=t.slug==='the-summit-challenge'?'Create a password for your Sight Seers account':'Create a password to track your requests <small>(optional)</small>';}}catch(x){}
     $('tpFormSub').textContent=full?'This trip is full right now. Tell us who would like a place and our team will be in touch if one opens.':(t.private?'This is a private event. Tell us who would like a place. We reply by email to confirm it and share the location and meeting point.':'Tell us who is travelling. We reply by email to confirm availability and payment terms.');
     $('tpBtn').textContent=full?'Join the waitlist':(t.private?'Ask for a place':'Ask to join');$('tpBtn').disabled=false;
     $('tpForm').hidden=false;$('tpDone').hidden=true;setMsg($('tpStatus'),'','');
-    $('tpPay').innerHTML=esc(t.paymentNote||'We confirm availability and payment terms with you by email before anything is charged.')+' Questions? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> (US: <a href="tel:+13472916868">+1 (347) 291-6868</a>).';
+    $('tpPay').innerHTML=(t.slug==='the-summit-challenge'?'Everything is taken care of by your company. After you join, you spin for your team and choose your shirt size.':esc(t.paymentNote||'We confirm availability and payment terms with you by email before anything is charged.'))+' Questions? Call or text <a href="tel:+18764650630">+1 (876) 465-0630</a> (US: <a href="tel:+13472916868">+1 (347) 291-6868</a>).';
     $('tpLink').value=SITE+path;$('tpShare').hidden=!navigator.share;
     prefill({name:'tpName',email:'tpEmail',phone:'tpPhone'});
     (function(){var pu=who();if(!pu)return;var ps=$('tpPassport');if(ps&&!ps.value&&pu.passportCountry){var known=[].some.call(ps.options,function(o){return o.value===pu.passportCountry;});ps.value=known?pu.passportCountry:'__other';if(!known){$('tpPassportOther').value=pu.passportCountry;$('tpPassportOther').hidden=false;}}if($('tpPassportExp')&&!$('tpPassportExp').value&&pu.passportExpiry)$('tpPassportExp').value=pu.passportExpiry;})();
@@ -49859,6 +49868,7 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
       if(name.length<2){bad('tpName',1);setMsg(st,'Please add your name.','err');$('tpName').focus();return;}
       if(!EMAIL.test(email)){bad('tpEmail',1);setMsg(st,'Please add a valid email address.','err');$('tpEmail').focus();return;}
       if(!$('tpConsent').checked){setMsg(st,'Please tick the box so we can contact you about this trip.','err');return;}
+      if(cur.slug==='the-summit-challenge'&&$('tpPwWrap')&&$('tpPwWrap').style.display!=='none'&&($('tpPw').value||'').length<8){setMsg(st,'Please create a password of at least 8 characters for your Sight Seers account.','err');$('tpPw').focus();return;}
       var src='';try{src=(new URLSearchParams(location.search).get('src')||'').replace(/[^\w\-]/g,'').slice(0,40);}catch(x){}
       var tpPass=$('tpPassport').value==='__other'?($('tpPassportOther').value||'').trim():$('tpPassport').value,tpExp=($('tpPassportExp').value||'').trim();
       if($('tpPassport').value==='__other'&&!tpPass){setMsg(st,'Type the country on your passport, or choose one from the list.','err');$('tpPassportOther').focus();return;}
@@ -49868,6 +49878,13 @@ body.theme-night #p-account .ac-soc{background:#0c2b46;color:#fff;border-color:r
         /* a new account (or a password the guest chose) signs them in on this device, so the request is on their profile */
         try{if(res.token&&res.user){localStorage.setItem('ss_auth_token',res.token);localStorage.setItem('ss_current_user',JSON.stringify(res.user));document.dispatchEvent(new CustomEvent('ss-account-updated',{detail:{user:res.user}}));}}catch(x){}
         var d=$('tpDone');
+        if(cur.slug==='the-summit-challenge'&&res.ref&&!res.waitlist){
+          try{sessionStorage.setItem('ss_spin_ref',JSON.stringify({ref:res.ref,email:email,name:name}))}catch(x){}
+          d.innerHTML='<h3>You’re in, '+esc(first(name))+'!</h3><p>Your place on The Summit Challenge is booked in. Now spin for your team and choose your shirt size.</p><p><button type="button" class="tc-fbtn tc-fbtn--wide" onclick="nav(\'team-draw\')">Spin for your team</button></p>';
+          $('tpForm').hidden=true;d.hidden=false;track('travel_club_interest',{trip:cur.slug});
+          setTimeout(function(){try{nav('team-draw')}catch(x){}},1600);
+          return;
+        }
         d.innerHTML='<h3>'+(res.waitlist?'You are on the waitlist':res.already?'We already have your request':'Your request is in')+'</h3>'+
           '<p>Thanks, '+esc(first(name))+'. '+(res.waitlist?'Our team will be in touch if a place opens.':'We will email you at <b>'+esc(email)+'</b> to confirm availability and payment terms.')+'</p>'+
           (res.ref?'<p><span class="tc-ref">'+esc(res.ref)+'</span></p>':'')+'<p>Nothing is charged until we have confirmed those terms with you.</p><p>Your trip and its group chat will show on your dashboard once you sign in with <b>'+esc(email)+'</b>.</p>'+

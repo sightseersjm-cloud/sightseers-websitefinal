@@ -30,7 +30,7 @@ const sign = (o) => call('waiver', 'POST', '/api/waiver', Object.assign({ name: 
   ok('the Summit waiver wording does not name the place', sm && !/elizabeth|jamaica/i.test(JSON.stringify(sm)));
   await call('trips', 'GET', '/api/trips');
   /* a member asks to join, then signs from the dashboard */
-  let r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', consent: true, tripSlug: 'the-summit-challenge' });
+  let r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   ok('a member asks to join the Summit Challenge', r.code === 200 && r.body.ref, JSON.stringify(r.body));
   const ref = r.body.ref;
   r = await call('trips', 'GET', '/api/trips?admin=1', null, owner);

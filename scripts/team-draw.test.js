@@ -43,7 +43,7 @@ for (let k = 0; k < 3000; k++) {
   ok(T.join(ev, { name: 'Late', gender: 'F' }).error, 'a tenth person is told the places are taken');
   ok(T.join(ev, { name: 'p3', gender: 'F' }).already, 'signing up again shows the same team');
 }
-ok(wcAt.every(c => c > 230 && c < 440), 'each sign-up position is about equally likely to be the Wild Card: ' + wcAt.join(','));
+ok(wcAt[8] === 3000 && wcAt.slice(0, 8).every(c => c === 0), 'the last person to spin is always the Wild Card: ' + wcAt.join(','));
 ok(T.newEvent({ size: 2 }).error && !T.newEvent({ size: 9, team1: 'A', team2: 'B' }).error, 'new sign-up checks the size');
 ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only for odd groups');
 

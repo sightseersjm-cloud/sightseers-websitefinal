@@ -20,6 +20,19 @@ async function loadEvent(id) {
   if (id === T.SUMMIT.id) return Object.assign({ createdAt: '2026-11-26T00:00:00.000Z', members: [] }, T.SUMMIT);
   return null;
 }
+/* someone who has just asked to join The Summit Challenge can spin straight away with their request reference and email */
+async function spinner(req, b) {
+  const user = auth.getUser(req);
+  if (user) return user;
+  const ref = String(b.interestRef || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 30);
+  const email = String(b.email || '').trim().toLowerCase().slice(0, 120);
+  if (!ref || !email) return null;
+  let list = [];
+  try { list = await db.getCollection('club-interests'); } catch (e) { list = []; }
+  const rec = list.find(i => i.ref === ref && String(i.email || '').toLowerCase() === email && i.tripSlug === 'the-summit-challenge' && i.status !== 'cancelled' && i.status !== 'waitlist');
+  if (!rec) return null;
+  return { id: rec.userId || ('req-' + rec.ref), name: rec.name, email: rec.email, role: 'guest' };
+}
 const mine = (ev, user) => user ? (ev.members || []).find(x => x.userId === String(user.id)) || null : null;
 const strip = m => m ? { name: m.name, team: m.team, at: m.at, shirtSize: m.shirtSize || '' } : null;
 
@@ -42,7 +55,7 @@ async function notify(ev, m) {
       subject: (m.team === 'wc' ? 'You’re the Wild Card, joining the ' + (ev.teams[ev.wildTeam] || '') : 'You’re on ' + tn(ev, m.team)) + ': ' + ev.title,
       html: '<div style="font-family:sans-serif;color:#17323f"><h2 style="color:#063a63">' + (m.team === 'wc' ? 'You’re the Wild Card!' : 'You’re on ' + e(tn(ev, m.team)) + '!') + '</h2>' +
         '<p>Hi ' + e(m.name) + ', thanks for spinning for ' + e(ev.title) + '.</p>' +
-        '<p>' + (m.team === 'wc' ? 'The wheel picked you as the Wild Card, and you’re joining the ' + e(ev.teams[ev.wildTeam] || '') + '. Your shirt will have ' + e(ev.teams[ev.wildTeam] || '') + ' on the back.' : 'Your shirt will have ' + e(ev.teams[m.team]) + ' on the back.') + '</p>' +
+        '<p>' + (m.team === 'wc' ? 'You were the last to spin, so you’re the Wild Card, joining the ' + e(ev.teams[ev.wildTeam] || '') + '. Your shirt will have ' + e(ev.teams[ev.wildTeam] || '') + ' on the back.' : 'Your shirt will have ' + e(ev.teams[m.team]) + ' on the back.') + '</p>' +
         '<p>You can see the teams any time at <a href="https://www.sightseerscaribbean.com/team-draw">sightseerscaribbean.com/team-draw</a>.</p>' +
         '<p>Sight Seers Caribbean Adventures</p></div>'
     });
@@ -70,7 +83,8 @@ module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
     const ev = await loadEvent(cleanId(q.event || T.SUMMIT.id));
     if (!ev) return res.status(404).json({ error: 'That team spin could not be found. Check the link with whoever sent it.' });
-    return res.status(200).json({ event: T.publicEvent(ev), me: strip(mine(ev, auth.getUser(req))) });
+    const who = auth.getUser(req) || (q.ref && q.email ? await spinner(req, { interestRef: q.ref, email: q.email }) : null);
+    return res.status(200).json({ event: T.publicEvent(ev), me: strip(mine(ev, who)) });
   }
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   if (b.action === 'event') {
@@ -81,7 +95,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ event: T.publicEvent(ev) });
   }
   if (b.action === 'join') {
-    const user = auth.getUser(req);
+    const user = await spinner(req, b);
     if (!user) return res.status(401).json({ error: 'Sign in or create your free account to spin for your team.', signIn: true });
     if (user.role === 'admin') return res.status(403).json({ error: 'Admins don’t spin, so no place is taken.' });
     const id = cleanId(b.event || T.SUMMIT.id);
@@ -114,7 +128,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ event: T.publicEvent(ev) });
   }
   if (b.action === 'size') {
-    const user = auth.getUser(req);
+    const user = await spinner(req, b);
     if (!user) return res.status(401).json({ error: 'Please sign in again.', signIn: true });
     const id = cleanId(b.event || T.SUMMIT.id);
     const ev = await loadEvent(id);

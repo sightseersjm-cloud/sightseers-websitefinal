@@ -375,7 +375,7 @@ function interestMails(rec, t, extra) {
     ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')], ['Message', rec.message], ['Came from', rec.source], ['Led by', t && t.organizerName], ['Shares contact with leader', t ? (rec.shareContact ? 'Yes' : 'No') : '']];
   const led = t && t.organizerName ? ' It is led by ' + trip.esc(t.organizerName) + '.' : '';
   const guestBody = t
-    ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
+    ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${t.slug === 'the-summit-challenge' ? 'Everything is taken care of by your company. Your next step is to spin for your team and choose your shirt size at <a href="https://www.sightseerscaribbean.com/team-draw">sightseerscaribbean.com/team-draw</a>.' : trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
     : `<p>Thanks, ${trip.esc(firstName(rec.name))}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
   const jobs = [
     safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
@@ -697,6 +697,8 @@ module.exports = async function handler(req, res) {
           if (found) user = found;
           else {
             const pw = typeof body.password === 'string' ? body.password : '';
+            /* The Summit Challenge: a new joiner creates a password, so they are signed in and part of the Travel Club */
+            if (!pw && t && t.slug === 'the-summit-challenge') return res.status(400).json({ error: 'Please create a password of at least 8 characters for your Sight Seers account.' });
             if (pw) { const pwErr = validatePassword(pw); if (pwErr) return res.status(400).json({ error: pwErr }); }
             const acct = { id: uid(), name: contact.name, email: contact.email, passwordHash: hashPassword(pw || (crypto.randomBytes(18).toString('hex') + 'Aa1')), phone: contact.phone || '', style: 'Adventure', role: 'guest', provider: pw ? 'trip-request' : 'trip-request-link', country: geo(req).country, city: geo(req).city, createdAt: new Date().toISOString() };
             await db.addToCollection('users', acct);
