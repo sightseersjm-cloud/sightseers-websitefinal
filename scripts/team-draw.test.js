@@ -84,5 +84,12 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
   ok(/Orange Blaze/.test(a) && /Shirt size L/.test(a) && !/Spin for your team/.test(a), 'a spun traveller sees their team and size');
   ok(/Spin for your team/.test(b2) && /team-draw/.test(b2), 'a traveller who has not spun gets the spin button');
   ok(/Wild Card, joining the Green Giants/.test(w) && /Choose your shirt size/.test(w), 'the Wild Card sees their team and a size button'); }
+// the first eight spins are mixed up: the order of teams varies, but they still finish 4 and 4
+{ const orders = new Set();
+  for (let k = 0; k < 500; k++) { const ev = Object.assign({ members: [] }, T.SUMMIT);
+    for (let i = 0; i < 9; i++) T.join(ev, {}, { id: 'u' + i, name: 'P' + i });
+    orders.add(ev.members.slice(0, 8).map(m => m.team).join('')); }
+  ok(orders.size > 30, 'many different team orders across the first eight spins (' + orders.size + ')');
+  ok([...orders].some(o => o.startsWith('gg')) && [...orders].some(o => o.startsWith('oo')), 'two in a row to the same team can happen'); }
 console.log(fails ? fails + ' failed' : 'team draw: all passed');
 process.exit(fails ? 1 : 0);

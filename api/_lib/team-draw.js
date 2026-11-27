@@ -107,14 +107,18 @@ function place(ev, person) {
   /* the Wild Card is the last person to spin: everyone before them fills the two teams */
   let teams = ['g', 'o'].filter(t => n(t) < c[t]);
   if (!teams.length) return 'wc';
-  /* the gender rule first, then the smaller team, then chance */
+  /* the gender rule first (only when the private roster gives one) */
   if (person.gender) {
     const minG = Math.min(...teams.map(t => ng(t, person.gender)));
     teams = teams.filter(t => ng(t, person.gender) === minG);
   }
-  const minN = Math.min(...teams.map(n));
-  teams = teams.filter(t => n(t) === minN);
-  return teams[rand(teams.length)];
+  /* then chance, weighted by the open places on each team: like drawing one of the remaining team slots from a hat,
+     so the order is mixed up but the teams still finish level */
+  if (teams.length === 1) return teams[0];
+  const open = teams.map(t => c[t] - n(t)), total = open.reduce((a, b) => a + b, 0);
+  let r = rand(total);
+  for (let k = 0; k < teams.length; k++) { if (r < open[k]) return teams[k]; r -= open[k]; }
+  return teams[teams.length - 1];
 }
 
 function join(ev, body, user) {
