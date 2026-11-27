@@ -14582,6 +14582,196 @@ body.theme-night #p-flagship-programs{
 <!-- ════════════════════════════════════
      PARTICIPANT WAIVER (page)
 ════════════════════════════════════ -->
+<div class="page" id="p-team-draw">
+<style>
+  #p-team-draw{--td-navy:#063a63;--td-orange:#ef8731;--td-green:#4fae3f;--td-gold:#e9b23a;--td-ink:#17323f;--td-mut:#5b6b76;--td-hair:#dfe6ec;color:var(--td-ink)}
+  #p-team-draw .td-hero{text-align:center;padding:56px 24px 48px;color:#fff;background:radial-gradient(60% 120% at 85% 0,rgba(112,194,87,.35),transparent 60%),linear-gradient(135deg,#063a63,#0d5b6e)}
+  #p-team-draw .td-kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#9fdc85;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:999px;margin:0 0 16px}
+  #p-team-draw .td-h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(32px,5vw,50px);line-height:1.1;margin:0 0 14px}
+  #p-team-draw .td-h1 em{color:#8fd36f;font-style:italic}
+  #p-team-draw .td-lede{max-width:62ch;margin:0 auto;color:rgba(255,255,255,.88);font-size:clamp(15px,1.9vw,17px);line-height:1.65}
+  #p-team-draw .td-wrap{max-width:1080px;margin:0 auto;padding:34px 20px 70px}
+  #p-team-draw .td-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
+  #p-team-draw .td-card{background:linear-gradient(180deg,#ffffff 0,#f8fbfd 100%);border:1px solid var(--td-hair);border-radius:18px;padding:26px;box-shadow:0 18px 38px rgba(6,58,99,.10),inset 0 1px 0 #fff}
+  #p-team-draw .td-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--td-green)}
+  #p-team-draw .td-h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--td-navy);margin:4px 0 8px;line-height:1.2}
+  #p-team-draw .td-card p{color:var(--td-mut);font-size:15px;line-height:1.7;margin:6px 0}
+  #p-team-draw .td-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  #p-team-draw .td-btn{min-height:46px;padding:0 24px;border:0;border-radius:0;font:800 12px 'Raleway',sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+  #p-team-draw .td-go{background:linear-gradient(180deg,#ffa75a 0,#ef8731 52%,#d96f1b 100%);color:#fff;box-shadow:0 10px 22px rgba(239,135,49,.35),inset 0 1px 0 rgba(255,255,255,.45)}
+  #p-team-draw .td-go:not(:disabled):hover{filter:brightness(1.05);transform:translateY(-1px)}
+  #p-team-draw .td-go:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+  #p-team-draw .td-line{background:#fff;color:var(--td-navy);border:1.5px solid var(--td-navy)}
+  #p-team-draw .td-btn:focus-visible,#p-team-draw .td-seg button:focus-visible{outline:3px solid var(--td-gold);outline-offset:2px}
+  #p-team-draw .td-seg{display:flex;gap:10px;margin-top:12px}
+  #p-team-draw .td-seg button{flex:1;min-height:46px;border:1.5px solid var(--td-hair);background:#fff;color:var(--td-navy);font:700 15px 'Raleway',sans-serif;border-radius:12px}
+  #p-team-draw .td-seg button[aria-pressed=true]{border-color:var(--td-navy);background:var(--td-navy);color:#fff}
+  #p-team-draw .td-err{color:#b4441c;font-size:14px;margin-top:10px;min-height:20px}
+  #p-team-draw .td-res{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,38px);font-weight:700;line-height:1.1;margin:4px 0 8px}
+  #p-team-draw .td-wheelbox{position:relative;width:min(380px,100%);aspect-ratio:1;margin:0 auto}
+  #p-team-draw .td-rim{position:absolute;inset:-12px;border-radius:50%;background:conic-gradient(from 20deg,#f6f9fc,#c9d6e2,#ffffff,#9fb3c6,#f2f6fa,#c4d2df,#ffffff,#a9bccd,#f6f9fc);box-shadow:0 26px 50px rgba(6,58,99,.28),inset 0 2px 3px rgba(255,255,255,.9),inset 0 -3px 6px rgba(6,58,99,.25)}
+  #p-team-draw .td-wheel{position:relative;width:100%;height:100%;border-radius:50%;box-shadow:inset 0 0 0 3px rgba(255,255,255,.9),0 0 0 2px rgba(6,58,99,.25);transition:transform 4.2s cubic-bezier(.12,.7,.16,1)}
+  #p-team-draw .td-gloss{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(120% 80% at 30% 12%,rgba(255,255,255,.62) 0,rgba(255,255,255,.22) 28%,rgba(255,255,255,0) 46%),radial-gradient(circle at 50% 50%,rgba(0,0,0,0) 58%,rgba(6,30,52,.28) 100%);box-shadow:inset 0 8px 18px rgba(255,255,255,.35),inset 0 -12px 24px rgba(6,30,52,.25)}
+  #p-team-draw .td-wheel svg{width:100%;height:100%;display:block}
+  #p-team-draw .td-pin{position:absolute;top:-24px;left:50%;transform:translateX(-50%);width:34px;height:44px;z-index:3;background:linear-gradient(160deg,#ffb46b,#ef8731 45%,#b9560f);clip-path:polygon(50% 100%,0 28%,12% 6%,50% 0,88% 6%,100% 28%);filter:drop-shadow(0 4px 4px rgba(0,0,0,.3))}
+  #p-team-draw .td-pin::after{content:'';position:absolute;left:30%;top:10%;width:28%;height:26%;border-radius:50%;background:rgba(255,255,255,.65)}
+  #p-team-draw .td-hub{position:absolute;inset:37%;border-radius:50%;z-index:2;background:radial-gradient(circle at 35% 28%,#2b78ad 0,#0b4a7a 45%,#042a49 100%);border:4px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 -6px 12px rgba(0,0,0,.35);display:grid;place-items:center;font:800 13px 'Raleway',sans-serif;letter-spacing:2.5px;color:#fff;overflow:hidden}
+  #p-team-draw .td-hub::before{content:'';position:absolute;left:14%;top:6%;width:72%;height:42%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0))}
+  #p-team-draw .td-hub span{position:relative}
+  #p-team-draw .td-boards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:34px}
+  #p-team-draw .td-bd{background:#fff;border:1px solid var(--td-hair);border-radius:18px;padding:18px;border-top:5px solid var(--c);box-shadow:0 12px 26px rgba(6,58,99,.06)}
+  #p-team-draw .td-bd h3{font-family:'Playfair Display',serif;font-size:22px;margin:0;color:var(--td-navy)}
+  #p-team-draw .td-bd .td-n{font-size:13px;color:var(--td-mut);margin:2px 0 8px}
+  #p-team-draw .td-bd ul{list-style:none;margin:0;padding:0}
+  #p-team-draw .td-bd li{background:#f4f7fa;border-radius:10px;padding:9px 12px;margin-top:7px;font-weight:700;color:var(--td-ink)}
+  #p-team-draw .td-bd li.me{outline:2px solid var(--td-gold)}
+  #p-team-draw .td-bd li.open{background:transparent;border:1px dashed #c9d4dd;color:var(--td-mut);font-weight:500}
+  #p-team-draw .td-wc li:not(.open){background:#fdf3d7}
+  #p-team-draw .td-status{margin-top:18px;color:var(--td-mut);font-size:14px}
+  #p-team-draw .td-fair{margin-top:22px;background:#f4fbf6;border:1px solid #dde8df;border-radius:14px;padding:14px 18px;font-size:14px;color:var(--td-mut);line-height:1.7}
+  #p-team-draw .td-fair b{color:var(--td-navy)}
+  #p-team-draw .td-sizes{display:flex;flex-wrap:wrap;gap:8px}
+  #p-team-draw .td-sizes button{min-width:52px;min-height:44px;border:1.5px solid var(--td-hair);background:#fff;color:var(--td-navy);font:700 14px 'Raleway',sans-serif;border-radius:10px;cursor:pointer}
+  #p-team-draw .td-sizes button[aria-pressed=true]{border-color:var(--td-navy);background:var(--td-navy);color:#fff}
+  #p-team-draw .td-size-done{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:12px;background:#f4fbf6;border:1px solid #dde8df}
+  #p-team-draw .td-size-done span{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--td-mut)}
+  #p-team-draw .td-size-done b{font-size:20px;color:var(--td-navy)}
+  #p-team-draw .td-mini{margin-left:auto;background:none;border:0;color:var(--td-navy);font:700 13px 'Raleway',sans-serif;text-decoration:underline;cursor:pointer;min-height:36px}
+  @media(max-width:860px){#p-team-draw .td-top{grid-template-columns:1fr}#p-team-draw .td-boards{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){#p-team-draw .td-wheel{transition:none}}
+  body.theme-night #p-team-draw .td-card,body.theme-night #p-team-draw .td-bd{background:#13283d;border-color:#24425c}
+  body.theme-night #p-team-draw .td-h2,body.theme-night #p-team-draw .td-bd h3{color:#e9f1f7}
+  body.theme-night #p-team-draw .td-bd li{background:#1b3550;color:#e9f1f7}
+  body.theme-night #p-team-draw .td-fair{background:#13283d;border-color:#24425c}
+</style>
+<section class="td-hero">
+  <span class="td-kicker">The Summit Challenge · Team Spin</span>
+  <h1 class="td-h1">Spin for <em>your team</em></h1>
+  <p class="td-lede">Sign in to your Sight Seers account and spin once. The wheel places you on a team, keeping the teams level, with one Wild Card. Then choose your shirt size and you’re set.</p>
+</section>
+<div class="td-wrap">
+  <div class="td-top">
+    <div class="td-card" id="td-card" aria-live="polite"><p>Loading the teams…</p></div>
+    <div><div class="td-wheelbox"><div class="td-rim"></div><div class="td-pin"></div><div class="td-wheel" id="td-wheel"></div><div class="td-gloss"></div><div class="td-hub"><span>SPIN</span></div></div></div>
+  </div>
+  <div class="td-boards">
+    <div class="td-bd td-wc" style="--c:var(--td-gold)"><h3>⭐ Wild Card</h3><div class="td-n">Won at pickup by a coin flip or hand wrestle</div><ul id="td-b-wc"></ul></div>
+    <div class="td-bd" style="--c:var(--td-green)"><h3 id="td-h-g">Green Giants</h3><div class="td-n" id="td-n-g"></div><ul id="td-b-g"></ul></div>
+    <div class="td-bd" style="--c:var(--td-orange)"><h3 id="td-h-o">Orange Blaze</h3><div class="td-n" id="td-n-o"></div><ul id="td-b-o"></ul></div>
+  </div>
+  <div class="td-status" id="td-status"></div>
+  <div class="td-fair"><b>Keeping it fair:</b> the Sight Seers website makes every placement, not the person spinning, and records it with the time. Each account spins once, and the result cannot be changed. Everyone sees the same teams.</div>
+</div>
+<script>
+(function(){
+  var SEGS=['g','o','g','o','g','o','g','o','wc'],COL={g:'#4fae3f',o:'#ef8731',wc:'#e9b23a'};
+  var ev=null,me=null,busy=false,rot=0,timer=null,drawn=false;
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function token(){try{return localStorage.getItem('ss_auth_token')||''}catch(e){return ''}}
+  function acct(){try{return JSON.parse(localStorage.getItem('ss_current_user')||'null')}catch(e){return null}}
+  function eventId(){var e='';try{e=new URLSearchParams(location.search).get('e')||''}catch(x){}return (e||'summit-challenge').replace(/[^A-Za-z0-9-]/g,'')}
+  function tname(t){return t==='wc'?'Wild Card':(ev&&ev.teams[t])||t}
+  function drawWheel(){
+    if(drawn)return;drawn=true;var n=SEGS.length,R=100,p='';
+    SEGS.forEach(function(t,i){var a0=(i/n)*2*Math.PI-Math.PI/2,a1=((i+1)/n)*2*Math.PI-Math.PI/2;
+      var x0=R+R*Math.cos(a0),y0=R+R*Math.sin(a0),x1=R+R*Math.cos(a1),y1=R+R*Math.sin(a1);
+      p+='<path d="M'+R+','+R+' L'+x0.toFixed(2)+','+y0.toFixed(2)+' A'+R+','+R+' 0 0 1 '+x1.toFixed(2)+','+y1.toFixed(2)+' Z" fill="'+COL[t]+'" stroke="#fff" stroke-width="1.2"/>';
+      var am=(a0+a1)/2,tx=R+R*.68*Math.cos(am),ty=R+R*.68*Math.sin(am),deg=am*180/Math.PI+90;
+      var L=t==='wc'?['★ WILD','CARD']:t==='g'?['GREEN','GIANTS']:['ORANGE','BLAZE'];
+      p+='<text transform="rotate('+deg.toFixed(1)+' '+tx.toFixed(2)+' '+ty.toFixed(2)+')" text-anchor="middle" font-family="Raleway,sans-serif" font-weight="800" font-size="6.6" letter-spacing=".5" fill="'+(t==='wc'?'#063a63':'#fff')+'"><tspan x="'+tx.toFixed(2)+'" y="'+(ty-1.6).toFixed(2)+'">'+L[0]+'</tspan><tspan x="'+tx.toFixed(2)+'" y="'+(ty+6.2).toFixed(2)+'">'+L[1]+'</tspan></text>'});
+    var defs='<defs>'+['g','o','wc'].map(function(t){var c=COL[t];return '<radialGradient id="tdg-'+t+'" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="'+c+'" stop-opacity=".85"/><stop offset=".75" stop-color="'+c+'"/><stop offset="1" stop-color="'+c+'" stop-opacity=".92"/></radialGradient>'}).join('')+'</defs>';
+    $('td-wheel').innerHTML='<svg viewBox="0 0 200 200" aria-hidden="true">'+defs+p.replace(/fill="(#4fae3f|#ef8731|#e9b23a)" stroke/g,function(m,c){var t=c==='#4fae3f'?'g':c==='#ef8731'?'o':'wc';return 'fill="url(#tdg-'+t+')" stroke'})+'</svg>';
+  }
+  function spinTo(team){
+    var idx=[];SEGS.forEach(function(t,i){if(t===team)idx.push(i)});var i=idx[Math.floor(Math.random()*idx.length)];
+    var seg=360/SEGS.length,centre=i*seg+seg/2,jitter=(Math.random()-.5)*seg*.6;
+    rot=rot-(rot%360)+360*6+(360-centre-jitter);$('td-wheel').style.transform='rotate('+rot+'deg)';
+    var still=false;try{still=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+    return new Promise(function(r){setTimeout(r,still?50:4300)});
+  }
+  function renderBoards(){
+    if(!ev)return;var per=Math.floor(ev.size/2),wcs=ev.size%2;
+    $('td-h-g').textContent=ev.teams.g;$('td-h-o').textContent=ev.teams.o;
+    ['g','o','wc'].forEach(function(t){
+      var cap=t==='wc'?wcs:per,list=ev.members.filter(function(m){return m.team===t}),h='';
+      list.forEach(function(m){h+='<li class="'+(me&&m.name===me.name?'me':'')+'">'+esc(m.name)+'</li>'});
+      for(var k=list.length;k<cap;k++)h+='<li class="open">Open place</li>';
+      $('td-b-'+t).innerHTML=h;
+      if(t!=='wc'){$('td-n-'+t).textContent=list.length+' of '+cap+' places'}
+    });
+    var left=ev.size-ev.members.length;
+    $('td-status').textContent=left?(ev.members.length+' of '+ev.size+' places taken · '+left+' still to spin'):'All places are taken. Teams are set!';
+  }
+  var SIZES=['XS','S','M','L','XL','2XL','3XL'],pickSize='',editSize=false;
+  function sizeBlock(){
+    if(me.shirtSize&&!editSize)return '<div class="td-size-done"><span>Shirt size</span><b>'+esc(me.shirtSize)+'</b><button type="button" class="td-mini" id="td-size-edit">Change</button></div>';
+    return '<div class="td-size"><div class="td-eyebrow" style="margin-top:14px">Last step</div><p style="margin:4px 0 8px;color:var(--td-ink);font-weight:700">Choose your shirt size</p><div class="td-sizes" role="group" aria-label="Shirt size">'+SIZES.map(function(z){return '<button type="button" data-size="'+z+'" aria-pressed="'+(pickSize===z)+'">'+z+'</button>'}).join('')+'</div><div class="td-btns"><button class="td-btn td-go" type="button" id="td-size-save" '+(pickSize&&!busy?'':'disabled')+'>Save my size</button></div></div>';
+  }
+  function renderCard(msg){
+    var c=$('td-card');if(!c)return;var u=acct(),signed=!!token();
+    if(me){var wc=me.team==='wc';
+      c.innerHTML='<div class="td-eyebrow">Your team</div><p style="margin-top:6px">'+esc(me.name)+', you’re…</p><div class="td-res" style="color:'+(wc?'#b98309':COL[me.team])+'">'+(wc?'★ The Wild Card!':'On the '+esc(tname(me.team))+'!')+'</div><p>'+(wc?'At pickup, the two teams battle for you with a coin flip or hand wrestle. The winning team gets you.':'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!')+'</p>'+sizeBlock()+'<div class="td-err">'+esc(msg||'')+'</div>';
+      var ed=$('td-size-edit');if(ed)ed.addEventListener('click',function(){editSize=true;pickSize=me.shirtSize||'';renderCard()});
+      Array.prototype.forEach.call(c.querySelectorAll('[data-size]'),function(bt){bt.addEventListener('click',function(){pickSize=bt.getAttribute('data-size');renderCard()})});
+      var sv=$('td-size-save');if(sv)sv.addEventListener('click',saveSize);
+      return}
+    if(!ev){c.innerHTML='<p>'+esc(msg||'Loading the teams…')+'</p>';return}
+    if(ev.members.length>=ev.size){c.innerHTML='<div class="td-eyebrow">Teams are set</div><h2 class="td-h2">All places are taken</h2><p>Every place on the teams has been filled. If you think you should be on the list, contact your team leader.</p>';return}
+    if(!signed){
+      c.innerHTML='<div class="td-eyebrow">Step 1</div><h2 class="td-h2">Sign in to spin</h2><p>Create your free Sight Seers account, or sign in, and you’ll come straight back here to spin for your team.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-acct">Create my account</button><button class="td-btn td-line" type="button" id="td-sign">Sign in</button></div><div class="td-err">'+esc(msg||'')+'</div>';
+      ['td-acct','td-sign'].forEach(function(id){$(id).addEventListener('click',function(){try{localStorage.setItem('ss_return_to',location.pathname+location.search)}catch(e){}nav('account')})});
+      return}
+    c.innerHTML='<div class="td-eyebrow">Step 2</div><h2 class="td-h2">Hi '+esc((u&&u.name)||'there')+', ready to spin?</h2><p>You get one spin, and your team is saved to your account.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-spin" '+(busy?'disabled':'')+'>Spin the wheel</button></div><div class="td-err">'+esc(msg||'')+'</div>';
+    $('td-spin').addEventListener('click',spin);
+  }
+  function saveSize(){
+    if(busy||!pickSize)return;busy=true;renderCard();
+    api('POST',{action:'size',event:eventId(),size:pickSize}).then(function(r){busy=false;
+      if(!r.ok){renderCard(r.j.error||'Could not save your size. Please try again.');return}
+      me=r.j.me;ev=r.j.event;editSize=false;renderBoards();renderCard();
+    }).catch(function(){busy=false;renderCard('Could not reach the website. Please try again.')});
+  }
+  function api(method,body){
+    var h={'Content-Type':'application/json'},t=token();if(t)h.Authorization='Bearer '+t;
+    return fetch('/api/team-draw'+(method==='GET'?'?event='+encodeURIComponent(eventId()):''),{method:method,headers:h,body:body?JSON.stringify(body):undefined})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {ok:r.ok,status:r.status,j:j}})});
+  }
+  function load(){
+    return api('GET').then(function(r){if(!r.ok){renderCard(r.j.error||'Could not load the teams.');return}
+      ev=r.j.event;me=r.j.me||null;renderBoards();if(!busy)renderCard()}).catch(function(){renderCard('Could not reach the website. Check your connection and refresh.')});
+  }
+  function spin(){
+    if(busy)return;busy=true;renderCard();
+    api('POST',{action:'join',event:eventId()}).then(function(r){
+      if(r.status===401){busy=false;renderCard('Your sign-in has expired. Please sign in again.');return}
+      if(!r.ok){busy=false;if(r.j.event){ev=r.j.event;renderBoards()}renderCard(r.j.error||'Something went wrong. Please try again.');return}
+      return (r.j.already?Promise.resolve():spinTo(r.j.me.team)).then(function(){me=r.j.me;ev=r.j.event;busy=false;renderBoards();renderCard()});
+    }).catch(function(){busy=false;renderCard('Could not reach the website. Check your connection and try again.')});
+  }
+  window.tdAccountCard=function(){
+    var box=$('acTeamSpin');if(!box||!token())return;
+    api('GET').then(function(r){
+      var m=r.ok&&r.j.me;if(!m){box.hidden=true;return}
+      var e=r.j.event,wc=m.team==='wc',col=wc?'#b98309':COL[m.team];
+      box.hidden=false;
+      box.innerHTML='<div style="margin:18px 0;padding:18px 20px;border-radius:16px;background:#fff;border:1px solid #dfe6ec;border-left:5px solid '+col+';box-shadow:0 12px 26px rgba(6,58,99,.06);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">'+
+        '<div><div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4fae3f">'+esc(e.title)+' · Your team</div>'+
+        '<div style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;color:'+col+';margin-top:2px">'+(wc?'★ The Wild Card':esc(e.teams[m.team]))+'</div>'+
+        '<div style="font-size:13px;color:#5b6b76">'+(m.shirtSize?'Shirt size '+esc(m.shirtSize):'Shirt size not chosen yet')+'</div></div>'+
+        '<button type="button" onclick="nav(\'team-draw\')" style="min-height:44px;padding:0 20px;border:1.5px solid #063a63;background:#fff;color:#063a63;font:800 12px Raleway,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer">'+(m.shirtSize?'See the teams':'Choose your size')+'</button></div>';
+    }).catch(function(){});
+  };
+  window.initTeamSpin=function(){
+    try{var rb=document.querySelector('meta[name="robots"]');if(!rb){rb=document.createElement('meta');rb.setAttribute('name','robots');document.head.appendChild(rb);}rb.setAttribute('content','noindex,nofollow');rb.setAttribute('data-private','1');}catch(e){}
+    drawWheel();load();
+    if(timer)clearInterval(timer);
+    timer=setInterval(function(){var pg=$('p-team-draw');if(!pg||!pg.classList.contains('on')){clearInterval(timer);timer=null;return}if(!busy)load()},20000);
+  };
+})();
+</script>
+</div>
+
 <div class="page" id="p-waiver">
 <style>
   #p-waiver{--wv-navy:#063a63;--wv-orange:#ef8731;--wv-green:#4fae3f;--wv-ink:#17323f;--wv-mut:#5b6b76;--wv-hair:#dfe6ec;--wv-fill:#f4f7fa;color:var(--wv-ink)}
@@ -24967,6 +25157,7 @@ vtSessionAction=function(el,type){
               <div class="g-next" id="acNext" aria-live="polite"></div>
               <div class="g-short" id="acShort"></div>
               <p class="g-also" id="acAlso"></p>
+              <div id="acTeamSpin" hidden></div>
 
               <div class="ac-section">
                 <div class="ac-sec-head"><div><span class="ac-eyebrow ac-eyebrow--dark">Picked for you</span><h4 id="acPickTitle">Experiences to explore</h4><p id="acPickSub">Based on your travel style.</p></div><button type="button" class="ac-link" onclick="nav('tours')">See all tours</button></div>
@@ -29238,6 +29429,7 @@ var SS_ROUTES = {
   'manage':'/manage',
   'tent-rental':'/tent-rental',
   'waiver':'/waiver',
+  'team-draw':'/team-draw',
   'destinations':'/destinations',
   'discoverjamaica':'/discover-jamaica',
   'landmark':'/landmark-experiences',
@@ -29278,6 +29470,7 @@ var SS_META = {
   'shore-leave':['Shore Leave: Jamaica for Undergraduates | Sight Seers','Adventure, culture and fun in Jamaica for undergraduates from the US, Canada and abroad. Waterfalls, catamaran sails, music and food, planned for your group.'],
   'mba-voyages':['MBA Class Trips & Alumni Voyages, Caribbean | Seven Shores','MBA class trips, alumni reunions and leadership retreats across seven Caribbean shores: yacht days, villa dinners and curated networking for 12 to 60.'],
   'tent-rental':['Tent Rental Agreement | Sight Seers Caribbean','Rent a two-person camping tent from Sight Seers Caribbean Adventures. Complete and sign the rental agreement online.'],
+  'team-draw':['Team Spin | The Summit Challenge | Sight Seers','Sign in to your Sight Seers account and spin for your team. The website places everyone fairly into two teams and a Wild Card.'],
   'waiver':['Participant Waiver | Sight Seers Caribbean','Sign your Sight Seers participant waiver and medical form online. A signed copy is emailed to you and to our team.'],
   'destinations':['Caribbean Group Travel Destinations | Sight Seers Caribbean','Plan a group trip to Jamaica, Barbados, Saint Lucia, The Bahamas, Belize, Curacao or the Dominican Republic with 5-day packages from US$300 per person.'],
   'discoverjamaica':['Discover Jamaica, Travel Guide & Experiences','A local guide to Jamaica: where to go, what to do, and how to plan a trip that goes beyond the resort strip.'],
@@ -29432,6 +29625,12 @@ function nav(id,opts={}){
   }
   if(id==='waiver'){
     try{ initWaiver(); }catch(e){}
+  }
+  if(id==='team-draw'){
+    try{ initTeamSpin(); }catch(e){}
+  }
+  if(id==='account'){
+    setTimeout(function(){try{ tdAccountCard(); }catch(e){}},900);
   }
   if(id==='stays'){
     renderStays();

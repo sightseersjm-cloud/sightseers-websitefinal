@@ -70,7 +70,20 @@ module.exports = { parse, draw, record, makeId, MAX_PEOPLE };
 
 /* ---- sign-up spins: each person joins on their own and the server places them ---- */
 
-const SUMMIT = { id: 'summit-challenge', title: 'The Summit Challenge', teams: { g: 'Green Giants', o: 'Orange Blaze' }, size: 9 };
+/* The roster is kept here in the code and never shown on the site: each person's email (or full name) and M or F,
+   so the spin can balance the teams without asking anyone. People not listed are placed by team size only. */
+const SUMMIT_ROSTER = {
+  // 'name@example.com': 'F',
+  // 'First Last': 'M',
+};
+const SUMMIT = { id: 'summit-challenge', title: 'The Summit Challenge', teams: { g: 'Green Giants', o: 'Orange Blaze' }, size: 9, roster: SUMMIT_ROSTER };
+
+function rosterGender(ev, user, name) {
+  const r = (ev && ev.roster) || {};
+  const keys = Object.keys(r).reduce((m, k) => { m[k.trim().toLowerCase()] = r[k]; return m; }, {});
+  const g = keys[String((user && user.email) || '').trim().toLowerCase()] || keys[String(name || '').trim().toLowerCase()] || '';
+  return g === 'M' || g === 'F' ? g : '';
+}
 
 function newEvent(body) {
   body = body || {};
@@ -95,8 +108,10 @@ function place(ev, person) {
   let teams = ['g', 'o'].filter(t => n(t) < c[t]);
   if (!teams.length) return 'wc';
   /* the gender rule first, then the smaller team, then chance */
-  const minG = Math.min(...teams.map(t => ng(t, person.gender)));
-  teams = teams.filter(t => ng(t, person.gender) === minG);
+  if (person.gender) {
+    const minG = Math.min(...teams.map(t => ng(t, person.gender)));
+    teams = teams.filter(t => ng(t, person.gender) === minG);
+  }
   const minN = Math.min(...teams.map(n));
   teams = teams.filter(t => n(t) === minN);
   return teams[rand(teams.length)];
@@ -104,28 +119,43 @@ function place(ev, person) {
 
 function join(ev, body, user) {
   const name = clean((user && user.name) || (body && body.name), 40);
-  const gender = body && (body.gender === 'M' || body.gender === 'F') ? body.gender : '';
   const uid = user && user.id ? String(user.id) : '';
   const found = (ev.members || []).find(x => (uid && x.userId === uid) || (!uid && x.name.toLowerCase() === name.toLowerCase()));
   if (found) return { member: found, already: true };
   if (!name) return { error: 'Add your name to your account first.' };
-  if (!gender) return { error: 'Choose male or female.' };
   if ((ev.members || []).some(x => x.name.toLowerCase() === name.toLowerCase())) return { error: 'Someone named ' + name + ' has already spun. Add your surname to your account name and try again.' };
+  /* gender comes from the private roster in the code; a test or older caller may still pass it */
+  const gender = rosterGender(ev, user, name) || (body && (body.gender === 'M' || body.gender === 'F') ? body.gender : '');
   const team = place(ev, { name, gender });
   if (team && team.error) return team;
   const member = { name, gender, team, at: new Date().toISOString() };
   if (uid) member.userId = uid;
+  if (user && user.email) member.email = String(user.email).slice(0, 120);
   ev.members = (ev.members || []).concat([member]);
   return { member };
+}
+
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+function setSize(ev, user, size) {
+  const sz = String(size || '').trim().toUpperCase();
+  if (SIZES.indexOf(sz) === -1) return { error: 'Choose a shirt size.' };
+  const uid = user && user.id ? String(user.id) : '';
+  const m = (ev.members || []).find(x => uid && x.userId === uid);
+  if (!m) return { error: 'Spin for your team first.' };
+  m.shirtSize = sz; m.sizeAt = new Date().toISOString();
+  return { member: m };
 }
 
 /* what anyone with the link may see */
 function publicEvent(ev) {
   return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt,
-    members: (ev.members || []).map(x => ({ name: x.name, gender: x.gender, team: x.team, at: x.at })) };
+    members: (ev.members || []).map(x => ({ name: x.name, team: x.team, at: x.at })) };
 }
 
 module.exports.SUMMIT = SUMMIT;
+module.exports.rosterGender = rosterGender;
+module.exports.setSize = setSize;
+module.exports.SIZES = SIZES;
 module.exports.newEvent = newEvent;
 module.exports.place = place;
 module.exports.join = join;

@@ -8,18 +8,60 @@
 const db = require('../_lib/db');
 const auth = require('../_lib/auth');
 const T = require('../_lib/team-draw');
+const { sendEmail } = require('../_lib/email');
 
 const evKey = id => 'team-events/' + id;
 const cleanId = v => String(v || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 40);
 
 async function loadEvent(id) {
   const doc = await db.getDoc(evKey(id));
-  if (doc) return doc;
+  /* the Summit roster lives in the code, so a change to it applies to the saved event too */
+  if (doc) { if (id === T.SUMMIT.id) doc.roster = T.SUMMIT.roster; return doc; }
   if (id === T.SUMMIT.id) return Object.assign({ createdAt: '2026-11-26T00:00:00.000Z', members: [] }, T.SUMMIT);
   return null;
 }
 const mine = (ev, user) => user ? (ev.members || []).find(x => x.userId === String(user.id)) || null : null;
-const strip = m => m ? { name: m.name, gender: m.gender, team: m.team, at: m.at } : null;
+const strip = m => m ? { name: m.name, team: m.team, at: m.at, shirtSize: m.shirtSize || '' } : null;
+
+const tn = (ev, t) => t === 'wc' ? 'the Wild Card' : 'the ' + ev.teams[t];
+async function notify(ev, m) {
+  const left = ev.size - ev.members.length, e = auth.escapeHtml;
+  const rows = ['g', 'o', 'wc'].map(t => '<tr><td style="padding:6px 10px;font-weight:bold">' + e(t === 'wc' ? 'Wild Card' : ev.teams[t]) + '</td><td style="padding:6px 10px">' +
+    (ev.members.filter(x => x.team === t).map(x => e(x.name)).join(', ') || '<span style="color:#888">none yet</span>') + '</td></tr>').join('');
+  try {
+    await sendEmail({
+      subject: e(ev.title) + ' team spin: ' + e(m.name) + ' is on ' + e(tn(ev, m.team)),
+      html: '<h2 style="color:#063a63;font-family:sans-serif">' + e(m.name) + ' spun for a team</h2>' +
+        '<p style="font-family:sans-serif">' + e(m.name) + (m.email ? ' (' + e(m.email) + ')' : '') + ' is on <b>' + e(tn(ev, m.team)) + '</b>. ' +
+        (left ? left + ' of ' + ev.size + ' places still to spin.' : 'All places are taken, the teams are set.') + '</p>' +
+        '<table style="border-collapse:collapse;font-family:sans-serif">' + rows + '</table>' +
+        '<p style="font-family:sans-serif"><a href="https://www.sightseerscaribbean.com/team-draw">See the teams</a></p>'
+    });
+    if (m.email) await sendEmail({
+      to: m.email,
+      subject: 'You’re on ' + tn(ev, m.team) + ': ' + ev.title,
+      html: '<div style="font-family:sans-serif;color:#17323f"><h2 style="color:#063a63">' + (m.team === 'wc' ? 'You’re the Wild Card!' : 'You’re on ' + e(tn(ev, m.team)) + '!') + '</h2>' +
+        '<p>Hi ' + e(m.name) + ', thanks for spinning for ' + e(ev.title) + '.</p>' +
+        '<p>' + (m.team === 'wc' ? 'At pickup, the two teams battle for you with a coin flip or hand wrestle, and the winning team gets you.' : 'Your shirt will have ' + e(ev.teams[m.team]) + ' on the back.') + '</p>' +
+        '<p>You can see the teams any time at <a href="https://www.sightseerscaribbean.com/team-draw">sightseerscaribbean.com/team-draw</a>.</p>' +
+        '<p>Sight Seers Caribbean Adventures</p></div>'
+    });
+  } catch (err) { console.error('team spin email', err && err.message); }
+}
+
+async function sizeEmail(ev, m) {
+  const e = auth.escapeHtml, given = ev.members.filter(x => x.shirtSize);
+  const rows = ev.members.map(x => '<tr><td style="padding:6px 10px">' + e(x.name) + '</td><td style="padding:6px 10px">' + e(x.team === 'wc' ? 'Wild Card' : ev.teams[x.team]) +
+    '</td><td style="padding:6px 10px;font-weight:bold">' + e(x.shirtSize || '-') + '</td></tr>').join('');
+  try {
+    await sendEmail({
+      subject: e(ev.title) + ' shirt size: ' + e(m.name) + ' is ' + e(m.shirtSize),
+      html: '<h2 style="color:#063a63;font-family:sans-serif">' + e(m.name) + ' chose shirt size ' + e(m.shirtSize) + '</h2>' +
+        '<p style="font-family:sans-serif">' + given.length + ' of ' + ev.size + ' sizes in so far.</p>' +
+        '<table style="border-collapse:collapse;font-family:sans-serif"><tr><th style="text-align:left;padding:6px 10px">Name</th><th style="text-align:left;padding:6px 10px">Team</th><th style="text-align:left;padding:6px 10px">Size</th></tr>' + rows + '</table>'
+    });
+  } catch (err) { console.error('team size email', err && err.message); }
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -46,8 +88,25 @@ module.exports = async function handler(req, res) {
     if (!ev) return res.status(404).json({ error: 'That team spin could not be found.' });
     const r = T.join(ev, b, user);
     if (r.error) return res.status(400).json({ error: r.error, event: T.publicEvent(ev) });
-    if (!r.already) await db.setDoc(evKey(id), ev);
+    if (!r.already) {
+      const saved = Object.assign({}, ev); delete saved.roster;
+      await db.setDoc(evKey(id), saved);
+      await notify(ev, r.member);
+    }
     return res.status(200).json({ me: strip(r.member), already: !!r.already, event: T.publicEvent(ev) });
+  }
+  if (b.action === 'size') {
+    const user = auth.getUser(req);
+    if (!user) return res.status(401).json({ error: 'Please sign in again.', signIn: true });
+    const id = cleanId(b.event || T.SUMMIT.id);
+    const ev = await loadEvent(id);
+    if (!ev) return res.status(404).json({ error: 'That team spin could not be found.' });
+    const r = T.setSize(ev, user, b.size);
+    if (r.error) return res.status(400).json({ error: r.error });
+    const saved = Object.assign({}, ev); delete saved.roster;
+    await db.setDoc(evKey(id), saved);
+    await sizeEmail(ev, r.member);
+    return res.status(200).json({ me: strip(r.member), event: T.publicEvent(ev) });
   }
   return res.status(400).json({ error: 'Unknown request.' });
 };

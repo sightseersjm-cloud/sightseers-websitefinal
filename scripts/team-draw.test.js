@@ -53,6 +53,16 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
   ok(a.member && a.member.name === 'Kimberly Brown' && a.member.userId === 'u1', 'name comes from the account');
   ok(T.join(ev, { gender: 'M' }, { id: 'u1', name: 'Kimberly Brown' }).already, 'the same account cannot spin twice');
   ok(T.join(ev, { gender: 'F' }, { id: 'u2', name: 'kimberly brown' }).error, 'a second account with the same name is asked to add a surname');
-  ok(T.join(ev, {}, { id: 'u3', name: 'Ann' }).error, 'gender is needed for a first spin'); }
+  ok(!T.join(ev, {}, { id: 'u3', name: 'Ann' }).error, 'no gender question: an unlisted person is still placed'); }
+// the private roster gives the gender, by email or by name
+{ const ev = Object.assign({ members: [] }, T.SUMMIT, { roster: { 'kim@x.com': 'F', 'Andre Hall': 'M' } });
+  ok(T.rosterGender(ev, { email: 'KIM@x.com' }, '') === 'F' && T.rosterGender(ev, {}, 'andre hall') === 'M' && T.rosterGender(ev, {}, 'Zed') === '', 'roster lookup by email or name');
+  ok(T.join(ev, {}, { id: 'k', name: 'Kim', email: 'kim@x.com' }).member.gender === 'F', 'spin uses the roster gender'); }
+// shirt sizes
+{ const ev = Object.assign({ members: [] }, T.SUMMIT);
+  T.join(ev, {}, { id: 'a', name: 'Amy' });
+  ok(T.setSize(ev, { id: 'a' }, 'm').member.shirtSize === 'M', 'shirt size saved, upper case');
+  ok(T.setSize(ev, { id: 'a' }, 'XXXL').error, 'unknown size refused');
+  ok(T.setSize(ev, { id: 'zz' }, 'M').error, 'size needs a spin first'); }
 console.log(fails ? fails + ' failed' : 'team draw: all passed');
 process.exit(fails ? 1 : 0);
