@@ -14631,7 +14631,7 @@ body.theme-night #p-flagship-programs{
   #p-team-draw .td-fair{margin-top:22px;background:#f4fbf6;border:1px solid #dde8df;border-radius:14px;padding:14px 18px;font-size:14px;color:var(--td-mut);line-height:1.7}
   #p-team-draw .td-fair b{color:var(--td-navy)}
   #p-team-draw .td-sizes{display:flex;flex-wrap:wrap;gap:8px}
-  #p-team-draw .td-sizes button{min-width:52px;min-height:44px;border:1.5px solid var(--td-hair);background:#fff;color:var(--td-navy);font:700 14px 'Raleway',sans-serif;border-radius:10px;cursor:pointer}
+  #p-team-draw .td-sizes button{padding:0 12px;min-width:52px;min-height:44px;border:1.5px solid var(--td-hair);background:#fff;color:var(--td-navy);font:700 14px 'Raleway',sans-serif;border-radius:10px;cursor:pointer}
   #p-team-draw .td-sizes button[aria-pressed=true]{border-color:var(--td-navy);background:var(--td-navy);color:#fff}
   #p-team-draw .td-size-done{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:12px;background:#f4fbf6;border:1px solid #dde8df}
   #p-team-draw .td-size-done span{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--td-mut)}
@@ -14655,7 +14655,7 @@ body.theme-night #p-flagship-programs{
     <div><div class="td-wheelbox"><div class="td-rim"></div><div class="td-pin"></div><div class="td-wheel" id="td-wheel"></div><div class="td-gloss"></div><div class="td-hub"><span>SPIN</span></div></div></div>
   </div>
   <div class="td-boards">
-    <div class="td-bd td-wc" style="--c:var(--td-gold)"><h3>⭐ Wild Card</h3><div class="td-n">Won at pickup by a coin flip or hand wrestle</div><ul id="td-b-wc"></ul></div>
+    <div class="td-bd td-wc" style="--c:var(--td-gold)"><h3>⭐ Wild Card</h3><div class="td-n" id="td-n-wc">Won at pickup by a coin flip or hand wrestle</div><ul id="td-b-wc"></ul><div id="td-wc-admin"></div></div>
     <div class="td-bd" style="--c:var(--td-green)"><h3 id="td-h-g">Green Giants</h3><div class="td-n" id="td-n-g"></div><ul id="td-b-g"></ul></div>
     <div class="td-bd" style="--c:var(--td-orange)"><h3 id="td-h-o">Orange Blaze</h3><div class="td-n" id="td-n-o"></div><ul id="td-b-o"></ul></div>
   </div>
@@ -14700,6 +14700,16 @@ body.theme-night #p-flagship-programs{
       $('td-b-'+t).innerHTML=h;
       if(t!=='wc'){$('td-n-'+t).textContent=list.length+' of '+cap+' places'}
     });
+    $('td-n-wc').textContent=ev.wildTeam?'Joins the '+ev.teams[ev.wildTeam]:'Won at pickup by a coin flip or hand wrestle';
+    var u0=acct(),adm=$('td-wc-admin'),hasWc=ev.members.some(function(m){return m.team==='wc'});
+    if(adm){
+      if(u0&&u0.role==='admin'&&hasWc){
+        adm.innerHTML='<div style="margin-top:12px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--td-mut)">Admin: Wild Card joins</div><div class="td-sizes" style="margin-top:6px"><button type="button" data-wt="g" aria-pressed="'+(ev.wildTeam==='g')+'">'+esc(ev.teams.g)+'</button><button type="button" data-wt="o" aria-pressed="'+(ev.wildTeam==='o')+'">'+esc(ev.teams.o)+'</button></div>';
+        Array.prototype.forEach.call(adm.querySelectorAll('[data-wt]'),function(bt){bt.addEventListener('click',function(){
+          var wt=bt.getAttribute('data-wt');api('POST',{action:'wildcard',event:eventId(),team:wt}).then(function(r){if(r.ok){ev=r.j.event;renderBoards();renderCard()}else{alertBox(r.j.error)}});
+        })});
+      }else adm.innerHTML='';
+    }
     var left=ev.size-ev.members.length;
     $('td-status').textContent=left?(ev.members.length+' of '+ev.size+' places taken · '+left+' still to spin'):'All places are taken. Teams are set!';
   }
@@ -14711,7 +14721,7 @@ body.theme-night #p-flagship-programs{
   function renderCard(msg){
     var c=$('td-card');if(!c)return;var u=acct(),signed=!!token();
     if(me){var wc=me.team==='wc';
-      c.innerHTML='<div class="td-eyebrow">Your team</div><p style="margin-top:6px">'+esc(me.name)+', you’re…</p><div class="td-res" style="color:'+(wc?'#b98309':COL[me.team])+'">'+(wc?'★ The Wild Card!':'On the '+esc(tname(me.team))+'!')+'</div><p>'+(wc?'At pickup, the two teams battle for you with a coin flip or hand wrestle. The winning team gets you.':'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!')+'</p>'+sizeBlock()+'<div class="td-err">'+esc(msg||'')+'</div>';
+      c.innerHTML='<div class="td-eyebrow">Your team</div><p style="margin-top:6px">'+esc(me.name)+', you’re…</p><div class="td-res" style="color:'+(wc?'#b98309':COL[me.team])+'">'+(wc?'★ The Wild Card!':'On the '+esc(tname(me.team))+'!')+'</div><p>'+(wc?(ev&&ev.wildTeam?'The Wild Card has been decided: you’re joining the '+esc(ev.teams[ev.wildTeam])+'!':'At pickup, the two teams battle for you with a coin flip or hand wrestle. The winning team gets you.'):'Your shirt will have '+esc(tname(me.team))+' on the back. See you on 10 December!')+'</p>'+sizeBlock()+'<div class="td-err">'+esc(msg||'')+'</div>';
       var ed=$('td-size-edit');if(ed)ed.addEventListener('click',function(){editSize=true;pickSize=me.shirtSize||'';renderCard()});
       Array.prototype.forEach.call(c.querySelectorAll('[data-size]'),function(bt){bt.addEventListener('click',function(){pickSize=bt.getAttribute('data-size');renderCard()})});
       var sv=$('td-size-save');if(sv)sv.addEventListener('click',saveSize);
@@ -14722,9 +14732,11 @@ body.theme-night #p-flagship-programs{
       c.innerHTML='<div class="td-eyebrow">Step 1</div><h2 class="td-h2">Sign in to spin</h2><p>Create your free Sight Seers account, or sign in, and you’ll come straight back here to spin for your team.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-acct">Create my account</button><button class="td-btn td-line" type="button" id="td-sign">Sign in</button></div><div class="td-err">'+esc(msg||'')+'</div>';
       ['td-acct','td-sign'].forEach(function(id){$(id).addEventListener('click',function(){try{localStorage.setItem('ss_return_to',location.pathname+location.search)}catch(e){}nav('account')})});
       return}
+    if(u&&u.role==='admin'){c.innerHTML='<div class="td-eyebrow">Admin view</div><h2 class="td-h2">You’re signed in as an admin</h2><p>Admins don’t spin, so no place is taken. After the coin flip or hand wrestle at pickup, choose which team the Wild Card joins under the Wild Card box. The Wild Card gets an email.</p><div class="td-err">'+esc(msg||'')+'</div>';return}
     c.innerHTML='<div class="td-eyebrow">Step 2</div><h2 class="td-h2">Hi '+esc((u&&u.name)||'there')+', ready to spin?</h2><p>You get one spin, and your team is saved to your account.</p><div class="td-btns"><button class="td-btn td-go" type="button" id="td-spin" '+(busy?'disabled':'')+'>Spin the wheel</button></div><div class="td-err">'+esc(msg||'')+'</div>';
     $('td-spin').addEventListener('click',spin);
   }
+  function alertBox(m){var st=$('td-status');if(st)st.textContent=m||'Could not save that. Please try again.'}
   function saveSize(){
     if(busy||!pickSize)return;busy=true;renderCard();
     api('POST',{action:'size',event:eventId(),size:pickSize}).then(function(r){busy=false;

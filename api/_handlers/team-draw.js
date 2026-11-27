@@ -83,6 +83,7 @@ module.exports = async function handler(req, res) {
   if (b.action === 'join') {
     const user = auth.getUser(req);
     if (!user) return res.status(401).json({ error: 'Sign in or create your free account to spin for your team.', signIn: true });
+    if (user.role === 'admin') return res.status(403).json({ error: 'Admins don’t spin, so no place is taken.' });
     const id = cleanId(b.event || T.SUMMIT.id);
     const ev = await loadEvent(id);
     if (!ev) return res.status(404).json({ error: 'That team spin could not be found.' });
@@ -94,6 +95,23 @@ module.exports = async function handler(req, res) {
       await notify(ev, r.member);
     }
     return res.status(200).json({ me: strip(r.member), already: !!r.already, event: T.publicEvent(ev) });
+  }
+  if (b.action === 'wildcard') {
+    const admin = auth.requireAdmin(req, res); if (!admin) return;
+    const id = cleanId(b.event || T.SUMMIT.id);
+    const ev = await loadEvent(id);
+    if (!ev) return res.status(404).json({ error: 'That team spin could not be found.' });
+    const r = T.setWildTeam(ev, b.team);
+    if (r.error) return res.status(400).json({ error: r.error });
+    const saved = Object.assign({}, ev); delete saved.roster;
+    await db.setDoc(evKey(id), saved);
+    if (b.team && r.member && r.member.email) {
+      try {
+        await sendEmail({ to: r.member.email, subject: 'Your Wild Card team: the ' + ev.teams[b.team] + ', ' + ev.title,
+          html: '<div style="font-family:sans-serif;color:#17323f"><h2 style="color:#063a63">You’re joining the ' + auth.escapeHtml(ev.teams[b.team]) + '!</h2><p>Hi ' + auth.escapeHtml(r.member.name) + ', the Wild Card has been decided: you’re on the ' + auth.escapeHtml(ev.teams[b.team]) + ' for ' + auth.escapeHtml(ev.title) + '.</p><p>Sight Seers Caribbean Adventures</p></div>' });
+      } catch (e) { console.error('wild card email', e && e.message); }
+    }
+    return res.status(200).json({ event: T.publicEvent(ev) });
   }
   if (b.action === 'size') {
     const user = auth.getUser(req);

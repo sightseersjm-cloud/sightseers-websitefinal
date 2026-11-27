@@ -64,5 +64,10 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
   ok(T.setSize(ev, { id: 'a' }, 'm').member.shirtSize === 'M', 'shirt size saved, upper case');
   ok(T.setSize(ev, { id: 'a' }, 'XXXL').error, 'unknown size refused');
   ok(T.setSize(ev, { id: 'zz' }, 'M').error, 'size needs a spin first'); }
+// the admin places the Wild Card
+{ const ev = Object.assign({ members: [] }, T.SUMMIT);
+  ok(T.setWildTeam(ev, 'g').error, 'no Wild Card yet');
+  ev.members.push({ name: 'W', team: 'wc' });
+  ok(T.setWildTeam(ev, 'x').error && !T.setWildTeam(ev, 'o').error && T.publicEvent(ev).wildTeam === 'o', 'Wild Card joins the chosen team'); }
 console.log(fails ? fails + ' failed' : 'team draw: all passed');
 process.exit(fails ? 1 : 0);

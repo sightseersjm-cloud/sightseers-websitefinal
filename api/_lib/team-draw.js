@@ -146,15 +146,24 @@ function setSize(ev, user, size) {
   return { member: m };
 }
 
+/* the admin decides which team the Wild Card joins, after the coin flip or hand wrestle at pickup */
+function setWildTeam(ev, team) {
+  if (team !== 'g' && team !== 'o' && team !== '') return { error: 'Choose a team.' };
+  if (!(ev.members || []).some(x => x.team === 'wc')) return { error: 'Nobody has the Wild Card yet.' };
+  ev.wildTeam = team; ev.wildTeamAt = new Date().toISOString();
+  return { ok: true, member: ev.members.find(x => x.team === 'wc') };
+}
+
 /* what anyone with the link may see */
 function publicEvent(ev) {
-  return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt,
+  return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt, wildTeam: ev.wildTeam || '',
     members: (ev.members || []).map(x => ({ name: x.name, team: x.team, at: x.at })) };
 }
 
 module.exports.SUMMIT = SUMMIT;
 module.exports.rosterGender = rosterGender;
 module.exports.setSize = setSize;
+module.exports.setWildTeam = setWildTeam;
 module.exports.SIZES = SIZES;
 module.exports.newEvent = newEvent;
 module.exports.place = place;
