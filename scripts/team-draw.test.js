@@ -81,9 +81,9 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
 // confirmation email block
 { const ev = Object.assign({ members: [{ name: 'Kurt Stout', email: 'K@x.com', team: 'o', shirtSize: 'L' }, { name: 'W', email: 'w@x.com', team: 'wc' }], wildTeam: 'g' }, T.SUMMIT);
   const a = T.confirmationBlock(ev, 'k@x.com'), b2 = T.confirmationBlock(ev, 'new@x.com'), w = T.confirmationBlock(ev, 'w@x.com');
-  ok(/Orange Blaze/.test(a) && /Shirt size L/.test(a) && !/Spin for your team/.test(a) && /See who’s on your team/.test(a) && /team-draw/.test(a), 'a spun traveller sees their team, size and a link to the board');
+  ok(/Orange Blaze/.test(a) && /Shirt size L/.test(a) && !/Spin for your team/.test(a) && /See the teams/.test(a) && /team-draw/.test(a), 'a spun traveller sees their team, size and a link to the board');
   ok(/Spin for your team/.test(b2) && /team-draw/.test(b2), 'a traveller who has not spun gets the spin button');
-  ok(/Wild Card, joining the Green Giants/.test(w) && /Choose your shirt size/.test(w), 'the Wild Card sees their team and a size button'); }
+  ok(/Wild Card, joining the Green Giants/.test(w) && /Choose your size/.test(w), 'the Wild Card sees their team and a size button'); }
 // the first eight spins are mixed up: the order of teams varies, but they still finish 4 and 4
 { const orders = new Set();
   for (let k = 0; k < 500; k++) { const ev = Object.assign({ members: [] }, T.SUMMIT);

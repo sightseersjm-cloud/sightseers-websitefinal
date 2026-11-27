@@ -178,10 +178,17 @@ function confirmationBlock(ev, email) {
   const btn = (url, label) => '<a href="' + url + '" style="display:inline-block;margin-top:10px;background:#ef8731;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px">' + label + '</a>';
   if (m) {
     const team = m.team === 'wc' ? 'Wild Card' + (ev.wildTeam ? ', joining the ' + ev.teams[ev.wildTeam] : '') : ev.teams[m.team];
-    return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Your team</div>' +
-      '<div style="font-size:20px;font-weight:700;color:#063a63;margin-top:4px">' + esc(team) + '</div>' +
-      '<div style="font-size:14px;color:#5b6b76;margin-top:2px">' + (m.shirtSize ? 'Shirt size ' + esc(m.shirtSize) : 'Shirt size not chosen yet') + '</div>' +
-      (m.shirtSize ? btn(SPIN_URL, 'See who’s on your team') : btn(SPIN_URL, 'Choose your shirt size')));
+    const link = m.shirtSize ? ['See the teams'] : ['Choose your size'];
+    /* team on the left, the button on the right (a table, so it holds in every email app) */
+    return box('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>' +
+      '<td style="vertical-align:middle;padding:0">' +
+        '<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Your team</div>' +
+        '<div style="font-size:20px;font-weight:700;color:#063a63;margin-top:4px">' + esc(team) + '</div>' +
+        '<div style="font-size:14px;color:#5b6b76;margin-top:2px">' + (m.shirtSize ? 'Shirt size ' + esc(m.shirtSize) : 'Shirt size not chosen yet') + '</div>' +
+      '</td>' +
+      '<td style="vertical-align:middle;text-align:right;padding:0 0 0 12px;white-space:nowrap">' +
+        '<a href="' + SPIN_URL + '" style="display:inline-block;background:#ef8731;color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 18px;border-radius:999px">' + link[0] + '</a>' +
+      '</td></tr></table>');
   }
   return box('<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4fae3f">Next step</div>' +
     '<div style="font-size:18px;font-weight:700;color:#063a63;margin-top:4px">Spin for your team</div>' +
