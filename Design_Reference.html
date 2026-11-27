@@ -14799,6 +14799,14 @@ body.theme-night #p-flagship-programs{
         '<button type="button" onclick="nav(\'team-draw\')" style="min-height:44px;padding:0 20px;border:1.5px solid #063a63;background:#fff;color:#063a63;font:800 12px Raleway,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer">'+(m.shirtSize?'See the teams':'Choose your size')+'</button></div>';
     }).catch(function(){});
   };
+  /* a new joiner who leaves before finishing (spin and size) gets their confirmation email straight away; otherwise it goes when they save their size */
+  var beaconSent=false;
+  function leaveBeacon(){
+    var jr=joinRef();if(beaconSent||!jr||(me&&me.shirtSize))return;beaconSent=true;
+    try{navigator.sendBeacon('/api/team-draw',JSON.stringify({action:'confirm-now',event:eventId(),interestRef:jr.ref,email:jr.email}))}catch(e){}
+  }
+  window.addEventListener('pagehide',leaveBeacon);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')leaveBeacon()});
   window.initTeamSpin=function(){
     try{var rb=document.querySelector('meta[name="robots"]');if(!rb){rb=document.createElement('meta');rb.setAttribute('name','robots');document.head.appendChild(rb);}rb.setAttribute('content','noindex,nofollow');rb.setAttribute('data-private','1');}catch(e){}
     drawWheel();load();

@@ -719,7 +719,7 @@ module.exports = async function handler(req, res) {
       };
       /* The Summit Challenge is a private company event: everyone who asks to join through its page is confirmed straight away */
       const autoConfirm = !!(t && t.slug === 'the-summit-challenge' && rec.status === 'new');
-      if (autoConfirm) { rec.status = 'confirmed'; rec.confirmedAt = rec.createdAt; }
+      if (autoConfirm) { rec.status = 'confirmed'; rec.confirmedAt = rec.createdAt; rec.confirmMailPending = true; }
       await db.addToCollection(INTERESTS, rec);
       let goalLine = '', goalHit = null;
       if (t) {
@@ -734,9 +734,10 @@ module.exports = async function handler(req, res) {
         }
       }
       await log('joined', rec.name + ' ' + (rec.status === 'waitlist' ? 'joined the waitlist for ' : 'joined ') + (t ? t.title : 'the departure alert list') + (rec.partySize > 1 ? ' (' + rec.partySize + ' travelers)' : ''), rec.ref);
-      /* a confirmed Summit joiner gets the confirmation (with the spin step) in place of the request email; the team is still told */
+      /* a confirmed Summit joiner gets the confirmation in place of the request email; the team is still told.
+         It waits for their spin, so it can show their team: it goes when they spin, when they leave the page without spinning,
+         or with the daily job */
       await interestMails(rec, t, { goalLine, noGuest: autoConfirm });
-      if (autoConfirm) await interestStatusMails(rec, t);
       if (newAccount) {
         const how = session
           ? '<p>Your password is the one you chose.</p>'
@@ -1373,5 +1374,22 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 };
+
+/* The Summit Challenge confirmation that waits for the spin. match: { email, ref }; olderThanMs: for the daily job */
+async function sendSummitConfirmations(match, olderThanMs) {
+  match = match || {};
+  const email = String(match.email || '').trim().toLowerCase(), ref = String(match.ref || '').trim();
+  const list = await db.getCollection(INTERESTS);
+  const due = list.filter(i => i.confirmMailPending && i.tripSlug === 'the-summit-challenge' && i.status === 'confirmed' &&
+    (olderThanMs != null ? (Date.now() - (Date.parse(i.createdAt) || 0) > olderThanMs) : ((email && String(i.email || '').toLowerCase() === email) || (ref && i.ref === ref))));
+  if (!due.length) return 0;
+  const trips = await db.getCollection(TRIPS);
+  for (const i of due) {
+    await db.updateInCollection(INTERESTS, i.id, { confirmMailPending: false, confirmMailSentAt: new Date().toISOString() });
+    await interestStatusMails(Object.assign({}, i, { confirmMailPending: false }), trips.find(x => x.id === i.tripId) || null);
+  }
+  return due.length;
+}
+module.exports.sendSummitConfirmations = sendSummitConfirmations;
 
 module.exports.constants = { TRIP_STATUS, APP_STATUS, INTEREST_STATUS, REWARD_STATUS, COMMUNITY_TYPES, GROUP_SIZES, AUDIENCE_SIZES, CHANNELS, EXPERIENCE, STYLES, PAYMENT_NOTE };

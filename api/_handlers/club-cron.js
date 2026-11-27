@@ -22,7 +22,10 @@ module.exports = async function handler(req, res) {
     /* the follow-up, reminder and summary emails the owner switched on in Admin, Automations (a failure here never stops the Travel Club job) */
     let ops = null;
     try { ops = (await require('../_lib/ops-auto').runDaily({})).counts; } catch (e) { console.error('ops cron', e && e.stack || e); }
-    return res.status(200).json({ ok: true, at: summary.at, counts: summary.counts, ops });
+    /* Summit Challenge confirmations still waiting for a spin go out with the daily job */
+    let summit = 0;
+    try { summit = await require('./trips').sendSummitConfirmations({}, 30 * 60 * 1000); } catch (e) { console.error('summit cron', e && e.message); }
+    return res.status(200).json({ ok: true, at: summary.at, counts: summary.counts, ops, summit });
   } catch (e) {
     console.error('club cron', e && e.stack || e);
     return res.status(500).json({ error: 'The daily job failed.' });

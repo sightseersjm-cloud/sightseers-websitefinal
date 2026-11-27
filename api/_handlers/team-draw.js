@@ -9,6 +9,8 @@ const db = require('../_lib/db');
 const auth = require('../_lib/auth');
 const T = require('../_lib/team-draw');
 const { sendEmail } = require('../_lib/email');
+/* the Summit confirmation email waits for the spin (see trips.js) */
+const summitConfirm = (m) => { try { return require('./trips').sendSummitConfirmations(m); } catch (e) { console.error('summit confirm', e && e.message); return 0; } };
 
 const evKey = id => 'team-events/' + id;
 const cleanId = v => String(v || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 40);
@@ -110,6 +112,13 @@ module.exports = async function handler(req, res) {
     }
     return res.status(200).json({ me: strip(r.member), already: !!r.already, event: T.publicEvent(ev) });
   }
+  if (b.action === 'confirm-now') {
+    /* the joiner left the spin page without spinning: send their confirmation now, with the spin step */
+    const who = await spinner(req, b);
+    if (!who) return res.status(200).json({ ok: true });
+    try { await summitConfirm({ email: who.email, ref: b.interestRef }); } catch (e) { console.error('summit confirm', e && e.message); }
+    return res.status(200).json({ ok: true });
+  }
   if (b.action === 'wildcard') {
     const admin = auth.requireAdmin(req, res); if (!admin) return;
     const id = cleanId(b.event || T.SUMMIT.id);
@@ -138,6 +147,8 @@ module.exports = async function handler(req, res) {
     const saved = Object.assign({}, ev); delete saved.roster;
     await db.setDoc(evKey(id), saved);
     await sizeEmail(ev, r.member);
+    /* a new Summit joiner's confirmation goes once they have their team and size */
+    try { await summitConfirm({ email: r.member.email, ref: b.interestRef }); } catch (e) { console.error('summit confirm', e && e.message); }
     return res.status(200).json({ me: strip(r.member), event: T.publicEvent(ev) });
   }
   return res.status(400).json({ error: 'Unknown request.' });

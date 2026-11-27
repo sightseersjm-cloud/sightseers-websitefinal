@@ -42,6 +42,16 @@ const post = (b, t) => call('trips', 'POST', '/api/trips', b, t);
   /* people join, the owner confirms them, and they appear on the roster with the columns the owner fills in */
   r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', phone: '+1 876 555 0101', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   ok('a guest can ask for a place on the Summit Challenge', r.code === 200 && r.body.ok && r.body.ref, JSON.stringify(r.body));
+  { const adaRef = r.body.ref;
+    ok('her confirmation waits for her spin', !mailsTo('ada@example.com').some(m => /Your place is confirmed/.test(m.subject)));
+    H.draw = H.draw || require(root + 'api/_handlers/team-draw');
+    const sp = await call('draw', 'POST', '/api/team-draw', { action: 'join', event: 'summit-challenge', interestRef: adaRef, email: 'ada@example.com' });
+    ok('she can spin straight after joining with her reference', sp.code === 200 && sp.body.me && ['g', 'o', 'wc'].includes(sp.body.me.team), JSON.stringify(sp.body));
+    ok('no confirmation yet: she has not chosen her size', !mailsTo('ada@example.com').some(m => /Your place is confirmed/.test(m.subject)));
+    await call('draw', 'POST', '/api/team-draw', { action: 'size', event: 'summit-challenge', interestRef: adaRef, email: 'ada@example.com', size: 'M' });
+    const conf = mailsTo('ada@example.com').filter(m => /Your place is confirmed/.test(m.subject));
+    ok('after her spin and size she gets one confirmation, with her team, her size, the note and no spin button', conf.length === 1 && /Your team/.test(conf[0].html) && /Shirt size M/.test(conf[0].html) && !/>Spin for your team</.test(conf[0].html) && /A note from Daine/.test(conf[0].html));
+    ok('the confirmation says nothing about payment', conf.length === 1 && !/payment/i.test(conf[0].html)); }
   r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ada Brown', email: 'ada@example.com', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
   ok('asking twice does not add her twice', r.code === 200 && r.body.already === true);
   r = await call('trips', 'POST', '/api/trips', { action: 'interest', name: 'Ben Clarke', email: 'ben@example.com', consent: true, tripSlug: 'the-summit-challenge', password: 'Summit2026pass' });
