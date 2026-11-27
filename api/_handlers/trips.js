@@ -378,7 +378,7 @@ function interestMails(rec, t, extra) {
     ? `<p>Thanks, ${trip.esc(firstName(rec.name))}. You are in for <b>${trip.esc(t.title)}</b>.${led} ${t.slug === 'the-summit-challenge' ? 'Everything is taken care of by your company. Your next step is to spin for your team and choose your shirt size at <a href="https://www.sightseerscaribbean.com/team-draw">sightseerscaribbean.com/team-draw</a>.' : trip.esc(t.paymentNote || PAYMENT_NOTE)}</p>${trip.detailTable([['Reference', rec.ref], ['Trip', t.title], ['Dates', t.dateText], ['Travelers', String(rec.partySize)], ['Also travelling', (rec.guests || []).join(', ')]])}<p>${rec.status === 'waitlist' ? 'The trip is full, so you are on the waitlist and we will email you if a place opens.' : (hasGroupLink(t) ? 'The group chat is ready. Open your dashboard to join it.' : 'When the group chat is ready, we will email you the link and it will also show on your dashboard.')}</p>${button(SITE + '/account', 'Open my dashboard')}`
     : `<p>Thanks, ${trip.esc(firstName(rec.name))}. We will email you as soon as a Travel Club departure opens. Nothing is charged and there is nothing else you need to do.</p>${trip.detailTable([['Reference', rec.ref], ['Travelers', String(rec.partySize)]])}`;
   const jobs = [
-    safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody)),
+    ...(extra.noGuest ? [] : [safe('interest guest', mail(rec.email, t ? 'You are in: ' + t.title : 'You are on the Travel Club list', t ? 'Your trip request' : 'Travel Club', guestBody))]),
     ...(guestOnly ? [] : [safe('interest admin', adminMail('[' + rec.ref + '] Travel Club ' + (t ? 'request: ' + t.title : 'departure alert'), 'New Travel Club request', `<p>A traveler asked to join${t ? '' : ' a future'} trip.</p>${trip.detailTable(rows)}`, rec.email))])
   ];
   if (!guestOnly && t) leaderEmails(t).filter(e => e !== rec.email).forEach(leaderEmail => {
@@ -717,6 +717,9 @@ module.exports = async function handler(req, res) {
         userId: user ? user.id : null,
         status: full ? 'waitlist' : 'new', note: '', createdAt: new Date().toISOString()
       };
+      /* The Summit Challenge is a private company event: everyone who asks to join through its page is confirmed straight away */
+      const autoConfirm = !!(t && t.slug === 'the-summit-challenge' && rec.status === 'new');
+      if (autoConfirm) { rec.status = 'confirmed'; rec.confirmedAt = rec.createdAt; }
       await db.addToCollection(INTERESTS, rec);
       let goalLine = '', goalHit = null;
       if (t) {
@@ -731,7 +734,9 @@ module.exports = async function handler(req, res) {
         }
       }
       await log('joined', rec.name + ' ' + (rec.status === 'waitlist' ? 'joined the waitlist for ' : 'joined ') + (t ? t.title : 'the departure alert list') + (rec.partySize > 1 ? ' (' + rec.partySize + ' travelers)' : ''), rec.ref);
-      await interestMails(rec, t, { goalLine });
+      /* a confirmed Summit joiner gets the confirmation (with the spin step) in place of the request email; the team is still told */
+      await interestMails(rec, t, { goalLine, noGuest: autoConfirm });
+      if (autoConfirm) await interestStatusMails(rec, t);
       if (newAccount) {
         const how = session
           ? '<p>Your password is the one you chose.</p>'
