@@ -14695,7 +14695,7 @@ body.theme-night #p-flagship-programs{
     $('td-h-g').textContent=ev.teams.g;$('td-h-o').textContent=ev.teams.o;
     ['g','o','wc'].forEach(function(t){
       var cap=t==='wc'?wcs:per,list=ev.members.filter(function(m){return m.team===t}),h='';
-      list.forEach(function(m){h+='<li class="'+(me&&m.name===me.name?'me':'')+'">'+esc(m.name)+'</li>'});
+      var mf=me?String(me.name||'').split(' ')[0]:'';list.forEach(function(m){h+='<li class="'+(me&&m.team===me.team&&m.name===mf?'me':'')+'">'+esc(m.name)+'</li>'});
       for(var k=list.length;k<cap;k++)h+='<li class="open">Open place</li>';
       $('td-b-'+t).innerHTML=h;
       if(t!=='wc'){$('td-n-'+t).textContent=list.length+' of '+cap+' places'}

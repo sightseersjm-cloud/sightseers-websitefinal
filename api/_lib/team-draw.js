@@ -157,7 +157,8 @@ function setWildTeam(ev, team) {
 /* what anyone with the link may see */
 function publicEvent(ev) {
   return { id: ev.id, title: ev.title, teams: ev.teams, size: ev.size, createdAt: ev.createdAt, wildTeam: ev.wildTeam || '',
-    members: (ev.members || []).map(x => ({ name: x.name, team: x.team, at: x.at })) };
+    /* first names only on the page; the full names go to the team by email */
+    members: (ev.members || []).map(x => ({ name: String(x.name || '').split(' ')[0], team: x.team, at: x.at })) };
 }
 
 module.exports.SUMMIT = SUMMIT;

@@ -69,5 +69,8 @@ ok(T.caps({ size: 8 }).wc === 0 && T.caps({ size: 9 }).wc === 1, 'Wild Card only
   ok(T.setWildTeam(ev, 'g').error, 'no Wild Card yet');
   ev.members.push({ name: 'W', team: 'wc' });
   ok(T.setWildTeam(ev, 'x').error && !T.setWildTeam(ev, 'o').error && T.publicEvent(ev).wildTeam === 'o', 'Wild Card joins the chosen team'); }
+{ const ev = Object.assign({ members: [{ name: 'Kurt Stout', team: 'g', email: 'k@x.com', userId: 'u', gender: 'M', shirtSize: 'L' }] }, T.SUMMIT);
+  const pm = T.publicEvent(ev).members[0];
+  ok(pm.name === 'Kurt' && !pm.email && !pm.gender && !pm.shirtSize && !pm.userId, 'the page shows first names only, nothing private'); }
 console.log(fails ? fails + ' failed' : 'team draw: all passed');
 process.exit(fails ? 1 : 0);
